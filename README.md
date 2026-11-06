@@ -6,6 +6,8 @@ Authority for the lifecycle core: Jira BT-10 decisions, read 2026-11-06. The dev
 
 Open `places/BrickToads.rbxlx` in Roblox Studio. Press Play to check the empty scene: Output should show `[BrickToads] server ready; lifecycle core loaded` and `[BrickToads] client ready`. Stop returns to Edit mode. The lifecycle module is loaded on the server but has no actor adapter or exposed remotes.
 
+For the separate combat/respawn stand, run `python tools/build_combat_stand.py` and open `build/CombatStand.rbxlx`. Its source is under `src/stand/`; it keeps the blank starter place separate. Controls, experimental tuning and the acceptance matrix are documented in [the stand runbook](docs/stand/RUNBOOK.md). This stand is a technical test scene, not the completed first game level.
+
 All project files live under the `bricktoads` repository folder:
 
 ```text

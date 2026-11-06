@@ -32,7 +32,8 @@ class StandBuildTests(unittest.TestCase):
         for name, item in scripts.items():
             path = ROOT / ("src/server/RunLifecycle.lua" if name == "RunLifecycle" else
                            f"src/stand/server/{name}{'.server' if name == 'Stand' else ''}.lua")
-            self.assertEqual(item.findtext("Properties/ProtectedString[@name='Source']"), path.read_text())
+            self.assertEqual(item.findtext("Properties/ProtectedString[@name='Source']"),
+                             path.read_text(encoding="utf-8"))
             self.assertEqual(item.get("class"), "Script" if name == "Stand" else "ModuleScript")
 
     def test_client_is_local_and_core_is_not_replicated(self):
@@ -40,7 +41,7 @@ class StandBuildTests(unittest.TestCase):
         client = tree.find("./Item[@class='StarterPlayer']/Item/Item[@class='LocalScript']")
         self.assertIsNotNone(client)
         self.assertEqual(client.findtext("Properties/ProtectedString[@name='Source']"),
-                         (ROOT / "src/stand/client/Stand.client.lua").read_text())
+                         (ROOT / "src/stand/client/Stand.client.lua").read_text(encoding="utf-8"))
         replicated = tree.find("./Item[@class='ReplicatedStorage']")
         self.assertEqual(replicated.findall(".//ProtectedString"), [])
 
@@ -62,7 +63,8 @@ class StandBuildTests(unittest.TestCase):
 
     def test_verified_core_unchanged(self):
         raw = (ROOT / "src/server/RunLifecycle.lua").read_bytes()
-        self.assertEqual(hashlib.sha1(f"blob {len(raw)}\0".encode()+raw).hexdigest(),
+        canonical = raw.replace(b"\r\n", b"\n")
+        self.assertEqual(hashlib.sha1(f"blob {len(canonical)}\0".encode()+canonical).hexdigest(),
                          "274e59f2bfe347e4496fdad7c9f617b2c32aa271")
 
     def test_runtime_sources_exist(self):

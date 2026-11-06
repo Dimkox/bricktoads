@@ -30,6 +30,7 @@ jobs:
           find src/stand tests/stand -name '*.lua' -print0 | while IFS= read -r -d '' file; do
             /tmp/bricktoads-luau/luau-compile "$file" > /dev/null
           done
+          /tmp/bricktoads-luau/luau-compile tools/studio_launch_combat_acceptance.luau > /dev/null
       - name: Native Luau behavioral contracts
         shell: bash
         run: |

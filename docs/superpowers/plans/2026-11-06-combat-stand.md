@@ -50,4 +50,6 @@ Files: tools/build_combat_stand.py, test_combat_stand.py, run_stand_lua54.py; te
 - [x] Build deterministic standalone XML place, check embedded sources exactly and absence of remote asset dependencies/ROM.
 - [x] Preserve source evidence and derive compact test fixtures without changing archived observations.
 - [x] Review complete branch; fresh full test execution; package only changed/new files.
-- [ ] Publish new branch/PR through GitHub API; verify remote hashes, actual CI result and unchanged main. Report remaining engine gate accurately.
+- [x] Publish new branch/PR through GitHub API; verify remote hashes, actual CI result and unchanged main. Report remaining engine gate accurately.
+
+Publication verified: branch `bt-18-combat-stand`, source commit `924668513253f152e9d3048d0bec6a1d8a39ab7c`, [draft PR #2](https://github.com/Dimkox/bricktoads/pull/2). Native [combat stand CI](https://github.com/Dimkox/bricktoads/actions/runs/42221602845) and [project checks](https://github.com/Dimkox/bricktoads/actions/runs/42221602824) completed successfully. Subsequent Studio MCP acceptance is recorded separately from this implementation plan; passing pure contracts does not imply every engine scenario passed.
