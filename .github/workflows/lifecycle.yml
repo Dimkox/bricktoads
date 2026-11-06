@@ -1,0 +1,31 @@
+name: Lifecycle contracts
+on:
+  push:
+    branches: ['bt-18-lifecycle-core']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install pinned Luau CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/bricktoads-luau
+          curl --fail --location --retry 2 --output /tmp/luau.zip https://github.com/luau-lang/luau/releases/download/0.745/luau-ubuntu.zip
+          echo '186e5ddaa2b048ebc7390c11ed1b00c04e7d3beaffed429250329e3575d2ece2  /tmp/luau.zip' | sha256sum --check
+          unzip -q /tmp/luau.zip -d /tmp/bricktoads-luau
+          chmod +x /tmp/bricktoads-luau/luau
+      - name: Native Luau contract tests
+        run: /tmp/bricktoads-luau/luau tests/run.luau
+      - name: Structural build tests
+        run: python3 tools/test_build.py
+      - name: Serialize Studio contract-test place
+        run: python3 tools/build_test_place.py
