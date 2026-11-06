@@ -28,8 +28,8 @@ class BuildTests(unittest.TestCase):
         service = services["ServerScriptService"]
         modules = {i.findtext("Properties/string[@name='Name']"): i for i in service.findall("Item")}
         self.assertEqual(set(modules), {"RunLifecycle", "LifecycleSpec", "RunContractTests"})
-        self.assertEqual(modules["RunLifecycle"].findtext("Properties/ProtectedString[@name='Source']"), (ROOT/"src/server/RunLifecycle.lua").read_text())
-        self.assertEqual(modules["LifecycleSpec"].findtext("Properties/ProtectedString[@name='Source']"), (ROOT/"tests/Lifecycle.spec.lua").read_text())
+        self.assertEqual(modules["RunLifecycle"].findtext("Properties/ProtectedString[@name='Source']"), (ROOT/"src/server/RunLifecycle.lua").read_text(encoding="utf-8"))
+        self.assertEqual(modules["LifecycleSpec"].findtext("Properties/ProtectedString[@name='Source']"), (ROOT/"tests/Lifecycle.spec.lua").read_text(encoding="utf-8"))
         bootstrap = modules["RunContractTests"].findtext("Properties/ProtectedString[@name='Source']")
         self.assertIn('IsStudio()', bootstrap)
         self.assertIn('CharacterAutoLoads = false', bootstrap)

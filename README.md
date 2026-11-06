@@ -1,6 +1,55 @@
-# Brick Toads — lifecycle core, first implementation slice
+# Brick Toads — Studio starter and lifecycle core
 
-Authority: Jira BT-10 decisions, read 2026-11-06. This branch is **not a playable Roblox level**. It adds server-domain logic and reproducible evidence to the previously README-only repository. Do not publish the test place as the game.
+Authority for the lifecycle core: Jira BT-10 decisions, read 2026-11-06. The development place is an empty baseplate with a spawn and source entry points. Gameplay, original levels, characters and combat integration are still outstanding. The separate contract-test place must not be published as the game.
+
+## Open the project
+
+Open `places/BrickToads.rbxlx` in Roblox Studio. Press Play to check the empty scene: Output should show `[BrickToads] server ready; lifecycle core loaded` and `[BrickToads] client ready`. Stop returns to Edit mode. The lifecycle module is loaded on the server but has no actor adapter or exposed remotes.
+
+All project files live under the `bricktoads` repository folder:
+
+```text
+bricktoads/
+  src/
+    server/        # BrickToadsServer.server.luau and private RunLifecycle.lua
+    client/        # BrickToadsClient.client.luau
+    shared/        # BrickToadsConfig.luau, replicated project metadata
+  places/          # BrickToads.rbxlx, the generated development place snapshot
+  tests/           # Lifecycle behavior suite and CLI entry point
+  tools/           # Python place builders and structural build tests
+  docs/            # Design, implementation and Studio setup documentation
+  reports/         # Recorded verification results
+  research/        # Existing research and provenance evidence
+  .github/         # CI workflow
+  .tools/          # Local Python/Luau runtimes, ignored by Git
+  build/           # Generated contract-test place and temporary results, ignored
+```
+
+## Rebuild the development place
+
+Use Python 3.10+ and native Luau CLI 0.745. No Rojo, Wally or third-party Python packages are required. The configured Windows workspace keeps portable Python 3.13.9 and Luau 0.745 inside `.tools/`; these executables are local and are not committed.
+
+```powershell
+# Run from the bricktoads folder on this Windows workspace.
+& .\.tools\python-3.13.9\python.exe tools/build_bricktoads_place.py
+& .\.tools\python-3.13.9\python.exe tools/test_bricktoads_place.py
+& .\.tools\python-3.13.9\python.exe tools/test_build.py
+& .\.tools\luau-0.745\luau.exe tests/run.luau
+```
+
+On another machine with Python and Luau on PATH:
+
+```sh
+python3 tools/build_bricktoads_place.py
+python3 tools/test_bricktoads_place.py
+python3 tools/build_bricktoads_place.py --check
+```
+
+The builder maps `src/server` to `ServerScriptService.BrickToads`, `src/shared` to `ReplicatedStorage.BrickToads`, and `src/client` to `StarterPlayer.StarterPlayerScripts.BrickToads`. Subfolders remain folders; `.server.lua`/`.server.luau` become Scripts, `.client.lua`/`.client.luau` become LocalScripts, and other `.lua`/`.luau` files become ModuleScripts. Duplicate instance names fail the build. Server scripts outside `src/server` also fail the build, so a misplaced server entry point cannot be replicated to clients.
+
+Edit code under `src/`, rebuild, then reopen the place in Studio to pick up changes. This is an explicit build workflow, not a live two-way sync. Rebuilding replaces the scene snapshot with the blank baseplate/spawn definition in `tools/build_bricktoads_place.py`; save future hand-authored levels separately before rebuilding. Commit the regenerated place with its source changes; CI uses `--check` to detect a stale snapshot. Contract tests are never included in the development place.
+
+Official portable tool downloads: [Python 3.13.9 embeddable Windows x64](https://www.python.org/ftp/python/3.13.9/python-3.13.9-embed-amd64.zip) (SHA-256 `91d828c2da3a029b41699e918674a0cb379c02cf20dab9c501306885f837402a`) and [Luau 0.745 Windows](https://github.com/luau-lang/luau/releases/download/0.745/luau-windows.zip) (SHA-256 `5afe2fd5db34a045a2e4261ec0ea3144da6346ff38808726d5ac6e06115081c6`). Verify archives before extracting them into `.tools/python-3.13.9` and `.tools/luau-0.745` respectively.
 
 ## Included
 - Fixed roster of 1–3 independently owned heroes, including identical templates.

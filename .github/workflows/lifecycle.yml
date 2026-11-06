@@ -1,7 +1,7 @@
-name: Lifecycle contracts
+name: BrickToads checks
 on:
   push:
-    branches: ['bt-18-lifecycle-core']
+    branches: ['main', 'bt-18-lifecycle-core']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -27,5 +27,9 @@ jobs:
         run: /tmp/bricktoads-luau/luau tests/run.luau
       - name: Structural build tests
         run: python3 tools/test_build.py
+      - name: Development place build tests
+        run: python3 tools/test_bricktoads_place.py
+      - name: Verify development place matches sources
+        run: python3 tools/build_bricktoads_place.py --check
       - name: Serialize Studio contract-test place
         run: python3 tools/build_test_place.py
