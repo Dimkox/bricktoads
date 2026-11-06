@@ -1,0 +1,32 @@
+-- Pure arithmetic and policy checks; these do not simulate Roblox physics.
+return function(Combat)
+    assert(type(Combat.damage) == "function", "Combat.damage must be implemented")
+    local count = 0
+    local function eq(a, b) assert(a == b, tostring(a) .. " ~= " .. tostring(b)); count = count + 1 end
+    local v = Combat.hit(47, "Punch", nil)
+    eq(v.rawLife, 43); eq(v.profile, 18); eq(v.dying, false); eq(Combat.recover(v.rawLife), 47)
+    v = Combat.hit(47, "Dash", nil); eq(v.rawLife, 31); eq(v.profile, 22)
+    v = Combat.hit(16, "Dash", nil); eq(v.rawLife, 15); eq(v.profile, 22)
+    v = Combat.hit(15, "Dash", nil); eq(v.rawLife, 0); eq(v.profile, 21); eq(v.dying, true)
+    local raw, dying = Combat.damage(4, 4); eq(raw, 0); eq(dying, false)
+    raw, dying = Combat.damage(3, 4); eq(raw, 0); eq(dying, true)
+    eq(Combat.recover(0), 7); eq(Combat.hearts(47), 5); eq(Combat.hearts(0), 0)
+    eq(Combat.hearts(43), 215 / 47)
+    v = Combat.hit(47, "Punch", "Normal")
+    eq(v.rawLife, 47); eq(v.dying, false); eq(v.impulse, true); eq(v.recover, false)
+    v = Combat.hit(15, "Dash", "Normal"); eq(v.rawLife, 15); eq(v.dying, false)
+    v = Combat.hit(47, "Punch", "Emergency"); eq(v.impulse, false); eq(v.rawLife, 47)
+    eq(pcall(Combat.hit, 0/0, "Punch"), false)
+    eq(pcall(Combat.hit, 48, "Punch"), false)
+    eq(pcall(Combat.hit, 47, "Forged"), false)
+    -- Independent rows from the previously verified common-routine table, not a hitbox proof.
+    local expected4 = {0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,15,15,15,15,16,17,18,19,20,21,22,23,24,25,26,27,31,31,31,31,32,33,34,35,36,37,38,39,40,41,42,43}
+    local expected16 = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31}
+    for old = 0, 47 do
+        local a, dead = Combat.damage(old, 4); eq(a, expected4[old+1]); eq(dead, old < 4)
+        a, dead = Combat.damage(old, 16); eq(a, expected16[old+1]); eq(dead, old < 16)
+        a, dead = Combat.damage(old, 255); eq(a, 0); eq(dead, true)
+    end
+    print("PASS Combat: " .. count .. " assertions")
+    return count
+end
