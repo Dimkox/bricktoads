@@ -37,5 +37,5 @@ Files: `tools/build_test_place.py`, `tools/test_build.py`, `.github/workflows/li
 - [x] Verify generated place structure and embedded-source hashes.
 - [x] Record native runtime availability, test commands, exact versions and not-run engine scenarios.
 - [x] Review boundaries and all changed files; rerun the suite.
-- [ ] Publish only new/changed source, tests and evidence to an isolated branch/PR, not main.
-- [ ] Add Jira evidence without closing whole implementation tasks.
+- [x] Publish only new/changed source, tests and evidence to an isolated branch/PR, not main.
+- [x] Add Jira evidence without closing whole implementation tasks.
