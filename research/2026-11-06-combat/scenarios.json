@@ -1,0 +1,1306 @@
+[
+  {
+    "id": "PUNCH-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 165,
+        "y": 376,
+        "z": 144,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        47
+      ],
+      "targetReserve": 3,
+      "profile": 18,
+      "animation": 4,
+      "finalX": 169
+    }
+  },
+  {
+    "id": "PROTECTED-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 165,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "deathTimer": 127
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3,
+      "protected": true,
+      "finalX": 165
+    }
+  },
+  {
+    "id": "DASH-L47-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 47
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p1": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 180
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        31
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    }
+  },
+  {
+    "id": "DASH-L16-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 16
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p1": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 180
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        16,
+        15
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    }
+  },
+  {
+    "id": "DASH-L15-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 15
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p1": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 180
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        15,
+        0
+      ],
+      "targetReserve": 3,
+      "profile": 21,
+      "animation": 22
+    }
+  },
+  {
+    "id": "EDGE-HIT-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 1574,
+        "y": 280,
+        "z": 16,
+        "flags": 0
+      },
+      {
+        "x": 1598,
+        "y": 280,
+        "z": 16,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "b"
+        ]
+      },
+      {
+        "frames": 200
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        0,
+        47
+      ],
+      "targetReserve": 2,
+      "profile": 18,
+      "animation": 4,
+      "fall": true
+    },
+    "camera": 1450
+  },
+  {
+    "id": "EDGE-IDLE-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 1574,
+        "y": 280,
+        "z": 16,
+        "flags": 0
+      },
+      {
+        "x": 1598,
+        "y": 280,
+        "z": 16,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 201
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3,
+      "finalX": 1598
+    },
+    "camera": 1450
+  },
+  {
+    "id": "EDGE-PROTECTED-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 1574,
+        "y": 280,
+        "z": 16,
+        "flags": 0
+      },
+      {
+        "x": 1598,
+        "y": 280,
+        "z": 16,
+        "flags": 64,
+        "deathTimer": 127
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "b"
+        ]
+      },
+      {
+        "frames": 200
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3,
+      "protected": true,
+      "finalX": 1598
+    },
+    "camera": 1450
+  },
+  {
+    "id": "CAMERA-LEFT-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 46,
+        "y": 376,
+        "z": 144,
+        "flags": 64
+      },
+      {
+        "x": 22,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        47
+      ],
+      "targetReserve": 3,
+      "profile": 18,
+      "animation": 4,
+      "cameraClamp": true,
+      "finalX": 22
+    }
+  },
+  {
+    "id": "Y-BOUND-9-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 165,
+        "y": 385,
+        "z": 144,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        47
+      ],
+      "targetReserve": 3,
+      "profile": 18,
+      "animation": 4
+    }
+  },
+  {
+    "id": "Y-BOUND-10-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 165,
+        "y": 386,
+        "z": 144,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3
+    }
+  },
+  {
+    "id": "CONTROL-NPC-L47-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 47
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p1": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 60
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        31
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    },
+    "isolate": false
+  },
+  {
+    "id": "CONTROL-NPC-L16-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 16
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p1": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 60
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        16,
+        15
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    },
+    "isolate": false
+  },
+  {
+    "id": "CONTROL-NPC-L15-P1-P2",
+    "attacker": 0,
+    "players": [
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 15
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p1": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p1": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 60
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        15,
+        0
+      ],
+      "targetReserve": 3,
+      "profile": 21,
+      "animation": 22
+    },
+    "isolate": false
+  },
+  {
+    "id": "PUNCH-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 165,
+        "y": 376,
+        "z": 144,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        47
+      ],
+      "targetReserve": 3,
+      "profile": 18,
+      "animation": 4,
+      "finalX": 137
+    }
+  },
+  {
+    "id": "PROTECTED-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0,
+        "deathTimer": 127
+      },
+      {
+        "x": 165,
+        "y": 376,
+        "z": 144,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3,
+      "protected": true,
+      "finalX": 141
+    }
+  },
+  {
+    "id": "DASH-L47-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 47
+      },
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p2": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 180
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        31
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    }
+  },
+  {
+    "id": "DASH-L16-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 16
+      },
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p2": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 180
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        16,
+        15
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    }
+  },
+  {
+    "id": "DASH-L15-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 15
+      },
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p2": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 180
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        15,
+        0
+      ],
+      "targetReserve": 3,
+      "profile": 21,
+      "animation": 22
+    }
+  },
+  {
+    "id": "EDGE-HIT-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 1598,
+        "y": 280,
+        "z": 16,
+        "flags": 64
+      },
+      {
+        "x": 1574,
+        "y": 280,
+        "z": 16,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "b"
+        ]
+      },
+      {
+        "frames": 200
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        0,
+        47
+      ],
+      "targetReserve": 2,
+      "profile": 18,
+      "animation": 4,
+      "fall": true
+    },
+    "camera": 1450
+  },
+  {
+    "id": "EDGE-IDLE-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 1598,
+        "y": 280,
+        "z": 16,
+        "flags": 64
+      },
+      {
+        "x": 1574,
+        "y": 280,
+        "z": 16,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 201
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3,
+      "finalX": 1598
+    },
+    "camera": 1450
+  },
+  {
+    "id": "EDGE-PROTECTED-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 1598,
+        "y": 280,
+        "z": 16,
+        "flags": 64,
+        "deathTimer": 127
+      },
+      {
+        "x": 1574,
+        "y": 280,
+        "z": 16,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "b"
+        ]
+      },
+      {
+        "frames": 200
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3,
+      "protected": true,
+      "finalX": 1598
+    },
+    "camera": 1450
+  },
+  {
+    "id": "CAMERA-LEFT-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 22,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      },
+      {
+        "x": 46,
+        "y": 376,
+        "z": 144,
+        "flags": 64
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        47
+      ],
+      "targetReserve": 3,
+      "profile": 18,
+      "animation": 4,
+      "cameraClamp": true,
+      "finalX": 22
+    }
+  },
+  {
+    "id": "Y-BOUND-9-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 165,
+        "y": 385,
+        "z": 144,
+        "flags": 64
+      },
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        43,
+        47
+      ],
+      "targetReserve": 3,
+      "profile": 18,
+      "animation": 4
+    }
+  },
+  {
+    "id": "Y-BOUND-10-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 165,
+        "y": 386,
+        "z": 144,
+        "flags": 64
+      },
+      {
+        "x": 141,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "b"
+        ]
+      },
+      {
+        "frames": 79
+      }
+    ],
+    "expected": {
+      "hitCount": 0,
+      "lifeHistory": [
+        47
+      ],
+      "targetReserve": 3
+    }
+  },
+  {
+    "id": "CONTROL-NPC-L47-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 47
+      },
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p2": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 60
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        47,
+        31
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    },
+    "isolate": false
+  },
+  {
+    "id": "CONTROL-NPC-L16-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 16
+      },
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p2": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 60
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        16,
+        15
+      ],
+      "targetReserve": 3,
+      "profile": 22,
+      "animation": 22
+    },
+    "isolate": false
+  },
+  {
+    "id": "CONTROL-NPC-L15-P2-P1",
+    "attacker": 1,
+    "players": [
+      {
+        "x": 140,
+        "y": 376,
+        "z": 144,
+        "flags": 64,
+        "life": 15
+      },
+      {
+        "x": 80,
+        "y": 376,
+        "z": 144,
+        "flags": 0
+      }
+    ],
+    "phases": [
+      {
+        "frames": 1,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 3
+      },
+      {
+        "frames": 12,
+        "p2": [
+          "right"
+        ]
+      },
+      {
+        "frames": 1,
+        "p2": [
+          "right",
+          "b"
+        ]
+      },
+      {
+        "frames": 60
+      }
+    ],
+    "expected": {
+      "hitCount": 1,
+      "lifeHistory": [
+        15,
+        0
+      ],
+      "targetReserve": 3,
+      "profile": 21,
+      "animation": 22
+    },
+    "isolate": false
+  }
+]

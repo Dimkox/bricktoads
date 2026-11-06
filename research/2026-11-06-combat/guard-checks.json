@@ -1,0 +1,29 @@
+{
+  "allExpectedFailuresObserved": true,
+  "checks": [
+    {
+      "test": "profile-rejection",
+      "expectedFailureObserved": true,
+      "exitCode": 1,
+      "matchedDiagnostic": "profile byte offset",
+      "stdout": "{\"scenarios\":1,\"pass\":0,\"fail\":1,\"replays\":3}\n",
+      "stderr": "FAIL PUNCH-P1-P2: AssertionError [ERR_ASSERTION]: PUNCH-P1-P2: profile byte offset\n\n90 !== 95\n\n"
+    },
+    {
+      "test": "rom-rejection",
+      "expectedFailureObserved": true,
+      "exitCode": 1,
+      "matchedDiagnostic": "ROM hash",
+      "stdout": "",
+      "stderr": "AssertionError [ERR_ASSERTION]: ROM hash\n+ actual - expected\n\n+ '7d37318146ba7fba95f7a094e9f69815183a42d9755e2f93c4ebd7e38ba7dd84'\n- '677330f45a1249d24d003792a4674c93f836be57fd18b57125306efe82f3cda8'\n\n    at main (file:///tmp/tmp4yrfxua4/rom-rejection/reproduce.mjs:65:12)\n    at file:///tmp/tmp4yrfxua4/rom-rejection/reproduce.mjs:168:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n"
+    },
+    {
+      "test": "source-rejection",
+      "expectedFailureObserved": true,
+      "exitCode": 1,
+      "matchedDiagnostic": "Source hash",
+      "stdout": "",
+      "stderr": "AssertionError [ERR_ASSERTION]: Source hash: emulation/harness.mjs\n+ actual - expected\n\n+ 'd56509a3da484cd24df24d8da518aa7359ddae984aaed678175516e2a11b5c39'\n- '0000000000000000000000000000000000000000000000000000000000000000'\n\n    at main (file:///tmp/tmp4yrfxua4/source-rejection/reproduce.mjs:66:60)\n    at file:///tmp/tmp4yrfxua4/source-rejection/reproduce.mjs:168:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n"
+    }
+  ]
+}

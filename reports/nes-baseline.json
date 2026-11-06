@@ -1,0 +1,45 @@
+{
+  "checked_at_utc": "2026-11-06T08:39:48.184305+00:00",
+  "rom_sha256": "677330f45a1249d24d003792a4674c93f836be57fd18b57125306efe82f3cda8",
+  "archive_sha256": "07ef2d81fc5a74ba257797e6be30d08df8d5b397f188db7d7c8bb5ef13a4251e",
+  "manifest_entries": 6289,
+  "original_tree_modified_entries_after_runs": [],
+  "versions": {
+    "python": "3.13.5",
+    "node": "v22.16.0",
+    "cc": "cc (Debian 14.2.0-19) 14.2.0",
+    "emulator": "vendored jsnes 2.1.0; b8a45d088e922b6abcd87c4eb1b7237919e9d3d2"
+  },
+  "commands": [
+    {
+      "command": "python3 verify_package.py --rebuild",
+      "exit_code": 0,
+      "scope": "manifest, JSON, HTML links, exact ASM rebuild in temporary directory"
+    },
+    {
+      "command": "node /mnt/data/nes-work/verify_damage_formula.mjs",
+      "exit_code": 0,
+      "scope": "controlled common CPU damage routine; output copy, no source writes"
+    }
+  ],
+  "file_hashes": {
+    "manifest.json": "0a36f30fac84b762b7bc36a30ae17056ce103db59efa1eb67e15929c66971d11",
+    "verify_package.py": "58e6dfb7ff4c39c21094ff75750f25d27086fcdc7391bf130c9280db5ecec0bd",
+    "verify_damage_formula.mjs": "2adff633e5749239a1b75eee0d3e179b81d177f50d26282c3014ed65f8b73336",
+    "catalog/game_catalog.json": "a731b9d3923b5ed4cb090186702145559a808944eea2e18ed2f2b329afce9bc2",
+    "catalog/game_catalog_integrated.json": "a731b9d3923b5ed4cb090186702145559a808944eea2e18ed2f2b329afce9bc2",
+    "catalog/game_catalog_research_snapshot.json": "c4d4c9cc7fa908bf12dc26ccb6a0df71ac54bfc5af5f38b20d34cccaed8a7ca2"
+  },
+  "historical_report_findings": [
+    "combat_parameter_verification main_catalog_unchanged hash applies to game_catalog_research_snapshot.json, not the integrated/current catalog.",
+    "catalog_verification references missing report_ru.txt; historical prose is semantic_research_snapshot_ru.txt. Source reports were not rewritten."
+  ],
+  "not_proven": [
+    "natural P1/P2 combat traces",
+    "all special damage callers",
+    "knockback and dangerous edge behavior",
+    "boss victories",
+    "enemy population totals",
+    "Roblox equivalence"
+  ]
+}
