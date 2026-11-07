@@ -17,7 +17,7 @@ local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=re
 local state=Instance.new('RemoteEvent'); state.Name='State'; state.Parent=remotes
 local fault,lastBroadcast=nil,0
 local function replicationFocus(player)
-    local slot=controller.ownerSlots[player.UserId]
+    local slot=controller:controlledSlot(player.UserId)
     local actor=slot and world.actors[slot]
     if not actor or not actor.root.Parent then
         actor=nil
@@ -49,7 +49,8 @@ intent.OnServerEvent:Connect(function(player,payload)
     if player.Parent~=Players or fault then return end
     local ok,code=xpcall(function() return controller:handle(player,payload,Players:GetPlayers()) end,debug.traceback)
     if not ok then fault=tostring(code); warn('[BrickToads] '..fault); return end
-    if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero') then
+    if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
+        or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy') then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)
@@ -58,7 +59,7 @@ RunService.Heartbeat:Connect(function(dt)
     if not fault then
         local ok,err=xpcall(function()
             controller:step(at,dt)
-            if controller.current then world:updatePresentation(controller.current,dt) end
+            if controller.current then world:updatePresentation(controller.current,dt,controller.director.enemies) end
         end,debug.traceback)
         if not ok then fault=tostring(err); warn('[BrickToads] '..fault) end
     end

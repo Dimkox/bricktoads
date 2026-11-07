@@ -4,19 +4,21 @@ Playable Roblox prototype: choose Mr. Green, Mr. Yellow or Mr. Brown, clear the 
 
 ## Play
 
-Open `places/BrickToadsPlayable.rbxlx` in Roblox Studio and press Play. The level is generated when the server starts. Choose a hero and press **Начать игру**. Solo, duo and trio start immediately; identical hero choices are allowed.
+Open `places/BrickToadsPlayable.rbxlx` in Roblox Studio and press Play. The level is generated when the server starts. Choose **Герой**, **Противник** or **Наблюдать**. The first selected hero presses **Начать игру**. Solo, duo and trio start immediately; identical hero choices are allowed.
 
 - **WASD** — move and face a direction.
 - **F** — punch; **R** — heavy strike; **Space** — jump.
 - Touch devices have a movement stick and attack/jump buttons.
 - Heroes have five hearts and three successful respawns. A living hero with zero respawns can keep playing.
 - Ordinary sentries have three hearts and one life. Clear both encounters to open the guardian arena.
+- To play an enemy, choose **Противник**, wait for the hero to start, then select an available sentry. You take its existing body and current health. Move/jump normally and use **F** or the attack button for its ordinary strike; the hero's heavy strike is unavailable.
+- A sentry becomes unavailable after its first accepted attack or an accepted hero attack directed at it, including a miss. A dead human enemy cannot take another sentry in this run/level. A separate new game resets that limit.
 - Reflect the guardian's orange projectiles with an attack. Three returned projectiles open the exit.
 - Victory/defeat returns to the selection screen. The host starts the next game manually.
 
 All three templates have the same capabilities. The server fixes the 1–3 hero roster at Start; later arrivals spectate this run. Health, collisions, enemy AI, projectiles and respawns are server-owned.
 
-This is an original playable prototype. Enemy damage, timing, geometry and the boss adaptation remain provisional. Human enemy roles, boss queues, multiple groups/levels and complete source-mechanics transfer are still outstanding. Additional enemy options are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
+This is an original playable prototype. Enemy damage, timing, geometry and the boss adaptation remain provisional. Ordinary human-enemy control is implemented for this group's current level. Boss queues, multiple groups/levels and complete source-mechanics transfer are still outstanding. Additional enemy combat abilities are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
 
 ## Source structure
 

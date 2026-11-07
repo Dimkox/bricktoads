@@ -1,0 +1,450 @@
+{
+  "scope": "Two real Studio clients; one hero and one ordinary human enemy",
+  "environment": {
+    "studioVersion": "0.746.0.7461269",
+    "placeId": 117412694427208,
+    "visibility": "PRIVATE"
+  },
+  "preparation": "The second NPC was temporarily anchored to isolate the human enemy's hit. It was restored to normal server physics afterward. No hero health or resource values were set by test code.",
+  "before": {
+    "models": 3,
+    "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:enemy:1:-1",
+    "position": [
+      -24,
+      3,
+      -6
+    ],
+    "preparation": "Second NPC anchored only to isolate hero damage from the human-controlled enemy",
+    "hearts": 3
+  },
+  "claimed": {
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:actor:2",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "01ed813e-ea1f-4101-83d5-12185a6b3100",
+    "enemyRole": {
+      "connected": true,
+      "enemyId": -1,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 3,
+      "maxHearts": 3,
+      "status": "Alive",
+      "template": "Sentry",
+      "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:enemy:1:-1",
+      "name": "Ржавый дозорный"
+    },
+    "canSelect": false,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Enemy",
+        "displayName": "Player2"
+      }
+    ],
+    "heroOnline": 1,
+    "online": 2,
+    "now": 1794019570.118003,
+    "canStart": false,
+    "selectedTemplate": "Mr. Green",
+    "enemyUnavailableReason": "ENEMY_ALREADY_OWNED",
+    "preference": "Enemy",
+    "host": -1
+  },
+  "heroBeforeHit": {
+    "mine": 1,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:actor:2",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "01ed813e-ea1f-4101-83d5-12185a6b3100",
+    "canSelect": false,
+    "heroOnline": 1,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Enemy",
+        "displayName": "Player2"
+      }
+    ],
+    "online": 2,
+    "now": 1794019593.783836,
+    "canStart": false,
+    "selectedTemplate": "Mr. Green",
+    "enemyUnavailableReason": "HERO_LOCKED",
+    "preference": "Hero",
+    "host": -1
+  },
+  "heroAfterHit": {
+    "mine": 1,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 3.297872340425532,
+        "rawLife": 31,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:actor:2",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "01ed813e-ea1f-4101-83d5-12185a6b3100",
+    "canSelect": false,
+    "notice": "REACTION",
+    "heroOnline": 1,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Enemy",
+        "displayName": "Player2"
+      }
+    ],
+    "online": 2,
+    "now": 1794019599.683919,
+    "canStart": false,
+    "selectedTemplate": "Mr. Green",
+    "enemyUnavailableReason": "HERO_LOCKED",
+    "preference": "Hero",
+    "host": -1
+  },
+  "deathInput": {
+    "status": "ENEMY_DEAD",
+    "health": [
+      {
+        "hearts": 3,
+        "tick": 1
+      },
+      {
+        "hearts": 2,
+        "tick": 11
+      },
+      {
+        "hearts": 1,
+        "tick": 17
+      },
+      {
+        "hearts": 0,
+        "tick": 23
+      }
+    ],
+    "method": "valid hero Move/Punch client inputs"
+  },
+  "dead": {
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 3.297872340425532,
+        "rawLife": 31,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:actor:2",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 0,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": true
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "01ed813e-ea1f-4101-83d5-12185a6b3100",
+    "enemyRole": {
+      "connected": true,
+      "enemyId": -1,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 0,
+      "maxHearts": 3,
+      "status": "Dead",
+      "template": "Sentry",
+      "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:enemy:1:-1",
+      "name": "Ржавый дозорный"
+    },
+    "canSelect": false,
+    "notice": "ENEMY_LIFE_SPENT",
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Enemy",
+        "displayName": "Player2"
+      }
+    ],
+    "heroOnline": 1,
+    "online": 2,
+    "now": 1794019691.446375,
+    "canStart": false,
+    "selectedTemplate": "Mr. Green",
+    "enemyUnavailableReason": "ENEMY_LIFE_SPENT",
+    "preference": "Enemy",
+    "host": -1
+  },
+  "identityAfterDeath": {
+    "models": 3,
+    "hearts": 0,
+    "sameRoot": true,
+    "actorId": "01ed813e-ea1f-4101-83d5-12185a6b3100:enemy:1:-1",
+    "sameBody": true
+  },
+  "newGameReset": {
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "79330052-d188-4bbf-8533-6e4adeaa0a57:actor:2",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "79330052-d188-4bbf-8533-6e4adeaa0a57",
+    "enemyRole": {
+      "connected": true,
+      "enemyId": -1,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 3,
+      "maxHearts": 3,
+      "status": "Alive",
+      "template": "Sentry",
+      "actorId": "79330052-d188-4bbf-8533-6e4adeaa0a57:enemy:1:-1",
+      "name": "Ржавый дозорный"
+    },
+    "canSelect": false,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Enemy",
+        "displayName": "Player2"
+      }
+    ],
+    "heroOnline": 1,
+    "online": 2,
+    "now": 1794020026.122181,
+    "canStart": false,
+    "selectedTemplate": "Mr. Green",
+    "enemyUnavailableReason": "ENEMY_ALREADY_OWNED",
+    "preference": "Enemy",
+    "host": -1
+  },
+  "actualSameUserReconnect": "NOT_RUN"
+}

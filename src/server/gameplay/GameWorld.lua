@@ -395,6 +395,35 @@ function World:position(id)
     return {x = p.X, y = p.Y, z = p.Z}
 end
 
+function World:enemyIdentity(id,actorId,ownerName)
+    local actor=self.actors[id]
+    if not actor or self.enemyKinds[id]~='Drone' then return end
+    actor.model:SetAttribute('ActorId',actorId)
+    actor.model:SetAttribute('ControlledByPlayer',ownerName~=nil)
+    if ownerName then
+        local board=actor.root:FindFirstChild('OwnerNameplate')
+        if board then board.Text.Text=ownerName
+        else
+            local text=label(actor.root,ownerName,220,Vector3.new(0,5.7,0))
+            text.TextSize=14; text.TextColor3=COLORS.amber; text.Parent.Name='OwnerNameplate'
+        end
+    end
+end
+
+function World:move(id,x,z)
+    local actor=self.actors[id]
+    if actor and self.enemyKinds[id]=='Drone' and not actor.humanoid.PlatformStand then
+        actor.humanoid.WalkSpeed=self.config.Enemy.speed
+    end
+    self._base.move(self,id,x,z)
+end
+
+function World:setReaction(id,active)
+    self._base.setReaction(self,id,active)
+    local actor=self.actors[id]
+    if actor and self.enemyKinds[id]=='Drone' then actor.humanoid.WalkSpeed=active and 0 or self.config.Enemy.speed end
+end
+
 function World:face(id, targetId)
     local a, b = self.actors[id], self.actors[targetId]
     if not a or not b or not a.root.Parent or not b.root.Parent then return end
@@ -517,7 +546,7 @@ function World:removeProjectile(id)
     end
 end
 
-function World:updatePresentation(session, dt)
+function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
     local blend = 1 - math.exp(-dt * 18)
@@ -539,12 +568,14 @@ function World:updatePresentation(session, dt)
             actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * 0.8
             local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * 0.5 or 0
             local combat = session and session.combat and session.combat[id]
-            if combat and combat.attack then
+            local enemy = enemies and enemies[id]
+            local attack = (combat and combat.attack) or (enemy and enemy.windup)
+            if attack then
                 actor.attackPoseUntil = self.presentationTime + 0.17
-                actor.attackPoseAction = combat.attack.action
+                actor.attackPoseAction = attack.action or 'Punch'
             end
             local attacking = actor.attackPoseUntil and self.presentationTime < actor.attackPoseUntil
-            local reacting = combat and combat.reactionEnd ~= nil
+            local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil

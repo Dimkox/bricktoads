@@ -19,12 +19,16 @@ local C = {
 }
 local templates = {"Mr. Green", "Mr. Yellow", "Mr. Brown"}
 local heroColors = {[templates[1]] = C.green, [templates[2]] = C.yellow, [templates[3]] = C.brown}
-local snapshot, mine, identity = nil, nil, nil
+local snapshot, mine, controlled, identity = nil, nil, nil, nil
 local sequence = 0
 local keys, touchVector, dragging = {}, Vector2.zero, nil
 local pendingTemplate, pendingAt = nil, 0
+local pendingRole, pendingRoleAt = nil, 0
+local pendingEnemy, pendingEnemyAt = nil, 0
+local choosingEnemy, watchingAfterDeath = true, false
 local actionPending, actionAt = false, 0
 local width, height = 900, 650
+local render, layout
 
 local function make(className, name, parent, props)
     local item = Instance.new(className)
@@ -39,6 +43,7 @@ end
 local function stroke(parent, color, thickness)
     return make("UIStroke", "Outline", parent, {
         Color = color or C.line, Thickness = thickness or 1, Transparency = 0.55,
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
     })
 end
 local function frame(parent, name, color)
@@ -105,12 +110,28 @@ local resultAccent = frame(resultBanner, "Accent", C.lime)
 corner(resultAccent, 3)
 local resultTitle = label(resultBanner, "ResultTitle", "ТРАКТ ПРОЙДЕН", 23, C.lime, true)
 local resultDetail = label(resultBanner, "ResultDetail", "", 15, C.text)
+local rolePicker = frame(scroll, "RolePreference", C.panel)
+rolePicker.LayoutOrder = 3
+corner(rolePicker, 16)
+local roleTitle = label(rolePicker, "Heading", "ВАША РОЛЬ", 13, C.lime, true)
+local roleNote = label(rolePicker, "Help", "", 13, C.muted)
+local roleButtons = {}
+for i, choice in ipairs({{role = "Hero", text = "Герой"}, {role = "Enemy", text = "Противник"}, {role = "Spectator", text = "Наблюдать"}}) do
+    local role = choice.role
+    local item = button(rolePicker, role, choice.text, C.card, function()
+        if not snapshot or snapshot.status == "Active" or snapshot.canSelect == false or pendingRole then return end
+        if (snapshot.preference or "Hero") == role then return end
+        pendingRole, pendingRoleAt = role, os.clock()
+        intent:FireServer({kind = "SelectRole", role = role})
+    end)
+    roleButtons[i] = {button = item, role = role, text = choice.text, outline = stroke(item, C.line, 1)}
+end
 local selectionHeading = frame(scroll, "ChooseHero")
-selectionHeading.LayoutOrder, selectionHeading.BackgroundTransparency = 3, 1
+selectionHeading.LayoutOrder, selectionHeading.BackgroundTransparency = 4, 1
 local chooseTitle = label(selectionHeading, "Heading", "ВЫБЕРИТЕ ГЕРОЯ", 13, C.lime, true)
 local chooseNote = label(selectionHeading, "EqualAbilities", "Одинаковые способности. Можно выбрать одного героя всей командой.", 14, C.muted)
 local cardsContainer = frame(scroll, "HeroCards")
-cardsContainer.LayoutOrder, cardsContainer.BackgroundTransparency = 4, 1
+cardsContainer.LayoutOrder, cardsContainer.BackgroundTransparency = 5, 1
 local heroCards = {}
 
 -- Original asset-free portraits remain readable at small phone sizes.
@@ -138,7 +159,7 @@ local function toadPortrait(parent, color)
 end
 for i, template in ipairs(templates) do
     local card = button(cardsContainer, "Hero" .. i, "", C.card, function()
-        if not snapshot or not snapshot.canSelect or pendingTemplate then return end
+        if not snapshot or not snapshot.canSelect or (snapshot.preference or "Hero") ~= "Hero" or pendingTemplate then return end
         if snapshot.selectedTemplate == template then return end
         pendingTemplate, pendingAt = template, os.clock()
         intent:FireServer({kind = "SelectHero", template = template})
@@ -154,13 +175,13 @@ for i, template in ipairs(templates) do
     }
 end
 local party = frame(scroll, "Party", C.panel)
-party.LayoutOrder = 5
+party.LayoutOrder = 6
 corner(party, 16)
-local partyTitle = label(party, "PartyTitle", "КОМАНДА · 1–3 ИГРОКА", 13, C.muted, true)
+local partyTitle = label(party, "PartyTitle", "УЧАСТНИКИ", 13, C.muted, true)
 local partyCount = label(party, "PartyCount", "", 13, C.lime, true)
 partyCount.TextXAlignment = Enum.TextXAlignment.Right
 local partyRows = {}
-for i = 1, 3 do
+local function addPartyRow(i)
     local dot = frame(party, "PlayerColor" .. i, C.line)
     corner(dot, 4)
     local owner = label(party, "Owner" .. i, "", 15, C.text, true)
@@ -169,6 +190,7 @@ for i = 1, 3 do
     choice.TextWrapped, choice.TextTruncate = false, Enum.TextTruncate.AtEnd
     partyRows[i] = {dot = dot, owner = owner, choice = choice}
 end
+for i = 1, 3 do addPartyRow(i) end
 local partyNote = label(party, "PartyNote", "", 13, C.muted)
 -- The primary action stays visible while the hero choices scroll on phones.
 local footer = frame(shell, "StartArea", C.ink)
@@ -214,6 +236,24 @@ for slot = 1, 3 do
     heroRows[slot] = {row = row, stripe = stripe, owner = owner, status = status,
         returns = returns, fills = fills}
 end
+local enemyStatus = frame(hud, "EnemyStatus", C.ink)
+enemyStatus.BackgroundTransparency, enemyStatus.Visible = 0.12, false
+corner(enemyStatus, 12)
+local enemyStripe = frame(enemyStatus, "EnemyColor", C.red)
+corner(enemyStripe, 3)
+local enemyOwner = label(enemyStatus, "Owner", "", 14, C.text, true)
+enemyOwner.TextWrapped, enemyOwner.TextTruncate = false, Enum.TextTruncate.AtEnd
+local enemyLife = label(enemyStatus, "OneLife", "Одна жизнь", 12, C.muted)
+local enemyHearts = {}
+for i = 1, 3 do
+    local heart = label(enemyStatus, "Heart" .. i, "♥", 23, C.line)
+    local clip = frame(heart, "FillClip")
+    clip.BackgroundTransparency, clip.ClipsDescendants = 1, true
+    clip.Size = UDim2.fromScale(1, 1)
+    local fill = label(clip, "Fill", "♥", 23, C.red)
+    fill.Size = UDim2.fromOffset(24, 27)
+    enemyHearts[i] = {heart = heart, clip = clip, fill = fill}
+end
 local objective = frame(hud, "Objective", C.ink)
 objective.BackgroundTransparency = 0.1
 corner(objective, 14)
@@ -225,18 +265,39 @@ spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5,
 corner(spectator, 14)
 local spectatorText = label(spectator, "Message", "Вы наблюдаете · состав этой игры уже закреплён.", 14, C.text)
 spectatorText.TextXAlignment = Enum.TextXAlignment.Center
+local enemyChoiceTitle = label(spectator, "EnemyChoiceTitle", "ВЫБЕРИТЕ ПРОТИВНИКА", 13, C.red, true)
+local enemyChoiceNote = label(spectator, "EnemyChoiceNote", "", 12, C.muted)
+local enemyOffers = make("ScrollingFrame", "EnemyOffers", spectator, {
+    BackgroundTransparency = 1, BorderSizePixel = 0, CanvasSize = UDim2.new(),
+    AutomaticCanvasSize = Enum.AutomaticSize.Y, ScrollBarThickness = 3,
+    ScrollBarImageColor3 = C.muted, ScrollingDirection = Enum.ScrollingDirection.Y,
+})
+make("UIListLayout", "OfferLayout", enemyOffers, {SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 6)})
+make("UIPadding", "OfferPadding", enemyOffers, {PaddingRight = UDim.new(0, 6), PaddingBottom = UDim.new(0, 3)})
+local offerButtons = {}
+local watchButton = button(spectator, "Watch", "Наблюдать", C.card, function()
+    choosingEnemy, watchingAfterDeath = false, true
+    render()
+    layout()
+end)
+local chooseEnemyButton = button(spectator, "ChooseEnemy", "Выбрать противника", C.card, function()
+    choosingEnemy = true
+    render()
+    layout()
+end)
 local controls = frame(hud, "Controls")
 controls.BackgroundTransparency, controls.Size = 1, UDim2.fromScale(1, 1)
 local function playable()
-    return snapshot and snapshot.status == "Active" and mine and mine.status == "Alive"
-        and mine.connected == true and not mine.dying and not snapshot.fault
+    return snapshot and snapshot.status == "Active" and controlled and controlled.status == "Alive"
+        and controlled.connected == true and not controlled.dying and not snapshot.fault
 end
 local function send(kind, extra)
-    if not playable() or not snapshot.runId or not mine.actorId then return end
+    if not playable() or not snapshot.runId or not controlled.actorId then return end
+    if snapshot.enemyRole and kind == "Attack" and extra and extra.attack ~= "Punch" then return end
     sequence += 1
-    local packet = {kind = kind, runId = snapshot.runId, actorId = mine.actorId,
-        attempt = mine.attempt, levelEpoch = snapshot.levelEpoch,
-        connectionEpoch = mine.connectionEpoch, seq = sequence}
+    local packet = {kind = kind, runId = snapshot.runId, actorId = controlled.actorId,
+        attempt = controlled.attempt, levelEpoch = snapshot.levelEpoch,
+        connectionEpoch = controlled.connectionEpoch, seq = sequence}
     for key, value in pairs(extra or {}) do packet[key] = value end
     intent:FireServer(packet)
 end
@@ -295,8 +356,71 @@ local noticeMessages = {
     ACTIVE_RUN = "Смена героя доступна перед следующей игрой.", ALREADY_ACTIVE = "Игра уже началась.",
     ROSTER_FULL = "Команда собрана. Можно наблюдать за игрой.", NO_PLAYERS = "Ждём участников команды.",
     START_FAILED = "Не удалось начать игру. Попробуйте ещё раз.",
+    BAD_ROLE = "Выберите роль перед началом игры.",
+    HERO_LOCKED = "В этой игре вы герой. Сменить роль можно перед новой игрой.",
+    ENEMY_LIFE_SPENT = "Ваша единственная жизнь закончилась. Наблюдайте до следующей игры.",
+    RUN_CLOSED = "Выбор противника закрыт. Роль можно сменить перед новой игрой.",
+    NO_ENEMY_AVAILABLE = "Свободных дозорных нет. Вступившего в бой выбрать уже нельзя.",
+    ENEMY_ENGAGED = "Этот дозорный уже вступил в бой. Выберите другого из списка.",
+    ENEMY_OCCUPIED = "Этим дозорным уже управляет другой игрок.",
+    ENEMY_DEAD = "Этот дозорный погиб. Выберите другого из списка.",
+    UNKNOWN_ENEMY = "Этот дозорный больше недоступен. Выберите другого из списка.",
+    ENEMY_ALREADY_OWNED = "Вы уже выбрали дозорного. У него одна жизнь.",
 }
+local function enemyChoiceAllowed()
+    local reason = snapshot and snapshot.enemyUnavailableReason
+    return snapshot and snapshot.status == "Active" and not mine and not snapshot.enemyRole
+        and (reason == nil or reason == "NO_ENEMY_AVAILABLE")
+end
+local function renderOffers()
+    local seen = {}
+    for i, offer in ipairs(snapshot and snapshot.enemyOffers or {}) do
+        local id, actorId = offer.enemyId, offer.actorId
+        local key = tostring(id) .. ":" .. tostring(actorId)
+        seen[key] = true
+        local item = offerButtons[key]
+        if not item then
+            item = button(enemyOffers, "ClaimEnemy" .. tostring(id), "", C.card, function()
+                if not enemyChoiceAllowed() or snapshot.enemyUnavailableReason or pendingEnemy then return end
+                for _, current in ipairs(snapshot.enemyOffers or {}) do
+                    if current.enemyId == id and current.actorId == actorId then
+                        pendingEnemy, pendingEnemyAt = id, os.clock()
+                        intent:FireServer({kind = "ClaimEnemy", runId = snapshot.runId,
+                            levelEpoch = snapshot.levelEpoch, enemyId = id})
+                        render()
+                        return
+                    end
+                end
+            end)
+            item.TextSize = 14
+            item.Size = UDim2.new(1, 0, 0, 44)
+            offerButtons[key] = item
+        end
+        item.LayoutOrder = i
+        item.Text = (offer.name or "Дозорный") .. " · " .. tostring(offer.hearts or 0)
+            .. "/" .. tostring(offer.maxHearts or 3) .. " ♥  ·  " .. (pendingEnemy == id and "Выбираем…" or "Выбрать")
+        item.TextColor3 = pendingEnemy and C.muted or C.text
+        item.Selectable = enemyChoiceAllowed() == true and not snapshot.enemyUnavailableReason and not pendingEnemy
+    end
+    for key, item in pairs(offerButtons) do
+        if not seen[key] then item:Destroy(); offerButtons[key] = nil end
+    end
+end
 local function renderSelection()
+    local preference = snapshot and snapshot.preference or "Hero"
+    selectionHeading.Visible, cardsContainer.Visible = preference == "Hero", preference == "Hero"
+    roleNote.Text = preference == "Enemy" and "После старта выберите свободного дозорного до его первого боя. Три сердца, одна жизнь."
+        or (preference == "Spectator" and "Наблюдайте за героями. Во время игры можно выбрать свободного дозорного."
+            or "В команду входят 1–3 героя. Первый герой начинает игру.")
+    for _, choice in ipairs(roleButtons) do
+        local selected = preference == choice.role
+        choice.outline.Color = selected and C.lime or C.line
+        choice.outline.Thickness, choice.outline.Transparency = selected and 2 or 1, selected and 0 or 0.55
+        choice.button.BackgroundColor3 = selected and Color3.fromRGB(43, 63, 65) or C.card
+        choice.button.TextColor3 = selected and C.lime or C.text
+        choice.button.Text = (selected and "✓ " or "") .. choice.text .. (pendingRole == choice.role and "…" or "")
+        choice.button.Selectable = snapshot ~= nil and snapshot.status ~= "Active" and snapshot.canSelect ~= false and not pendingRole
+    end
     for _, card in ipairs(heroCards) do
         local selected = snapshot and snapshot.selectedTemplate == card.template
         card.outline.Color = selected and heroColors[card.template] or C.line
@@ -309,7 +433,7 @@ local function renderSelection()
         card.button.Selectable = snapshot ~= nil and snapshot.canSelect == true
     end
 end
-local function render()
+render = function()
     local active = snapshot and snapshot.status == "Active"
     local completed = snapshot and (snapshot.status == "Won" or snapshot.status == "Lost")
     overlay.Visible, hud.Visible, controls.Visible = not active, active == true, playable() == true
@@ -317,36 +441,51 @@ local function render()
     resultBanner.Visible = completed == true
     if completed then
         local won = snapshot.status == "Won"
-        resultTitle.Text = won and "ТРАКТ ПРОЙДЕН!" or "КОМАНДА ВЫБЫЛА"
-        resultTitle.TextColor3, resultAccent.BackgroundColor3 = won and C.lime or C.red, won and C.lime or C.red
-        resultDetail.Text = won and "Страж побеждён. Ворота открыты — команда добралась до выхода."
-            or "Возвраты закончились. Выберите героев и попробуйте пройти тракт ещё раз."
+        local enemyPerspective = snapshot.enemyRole ~= nil
+        local success = (enemyPerspective and not won) or (not enemyPerspective and won)
+        resultTitle.Text = enemyPerspective and (won and "ГЕРОИ ПРОШЛИ ТРАКТ" or "ГЕРОИ ОСТАНОВЛЕНЫ")
+            or (won and "ТРАКТ ПРОЙДЕН!" or "КОМАНДА ВЫБЫЛА")
+        resultTitle.TextColor3, resultAccent.BackgroundColor3 = success and C.lime or C.red, success and C.lime or C.red
+        if enemyPerspective then
+            resultDetail.Text = won and "Герои победили стража и открыли ворота. Выберите роль для следующей игры."
+                or "Герои потратили все возвраты. Тракт остался под охраной."
+        else
+            resultDetail.Text = won and "Страж побеждён. Ворота открыты — команда добралась до выхода."
+                or "Возвраты героев закончились. Выберите роли и попробуйте пройти тракт ещё раз."
+        end
         intro.Text, chooseTitle.Text = "Следующая попытка начинается по кнопке «Новая игра».", "ГЕРОЙ ДЛЯ СЛЕДУЮЩЕЙ ИГРЫ"
     else
         intro.Text, chooseTitle.Text = "Соберите команду, пройдите тракт и откройте ворота.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     renderSelection()
     local owners = snapshot and snapshot.lobby or {}
-    partyCount.Text = snapshot and (tostring(math.min(#owners, 3)) .. " / 3") or ""
+    local heroOnline = 0
+    for _, owner in ipairs(owners) do if (owner.preference or "Hero") == "Hero" then heroOnline += 1 end end
+    heroOnline = snapshot and snapshot.heroOnline or heroOnline
+    partyCount.Text = snapshot and (tostring(math.min(heroOnline, 3)) .. " / 3 героя") or ""
+    for i = #partyRows + 1, #owners do addPartyRow(i) end
     for i, row in ipairs(partyRows) do
         local owner = owners[i]
         row.dot.Visible, row.owner.Visible, row.choice.Visible = owner ~= nil, owner ~= nil, owner ~= nil
         if owner then
-            row.dot.BackgroundColor3 = heroColors[owner.template] or C.green
+            local preference = owner.preference or "Hero"
+            row.dot.BackgroundColor3 = preference == "Enemy" and C.red
+                or (preference == "Spectator" and C.muted or heroColors[owner.template] or C.green)
             row.owner.Text = (owner.displayName or owner.username or "Игрок") .. (owner.userId == player.UserId and " · вы" or "")
-            row.choice.Text = owner.template or "Mr. Green"
+            row.choice.Text = preference == "Enemy" and "Противник · выбор после старта"
+                or (preference == "Spectator" and "Наблюдатель" or (owner.template or "Mr. Green"))
         end
     end
-    local online = snapshot and snapshot.online or 0
-    partyNote.Text = online > 3 and ("Ещё наблюдают: " .. tostring(online - 3))
-        or (snapshot and "После старта состав команды закрепляется до конца игры." or "Подключаемся к игре…")
+    partyNote.Text = snapshot and (heroOnline == 0 and "Нужен хотя бы один герой, чтобы начать игру."
+        or "Состав героев закрепляется при старте. Противник выбирает дозорного во время игры.") or "Подключаемся к игре…"
     startButton.Visible = not snapshot or snapshot.canStart == true
     startButton.BackgroundColor3, startButton.TextColor3 = snapshot and snapshot.canStart and C.lime or C.line,
         snapshot and snapshot.canStart and C.ink or C.text
     startButton.Text = actionPending and "Начинаем…" or (completed and "Новая игра" or "Начать игру")
     if not snapshot then startButton.Text = "Подключаемся…" end
     waitLabel.Text = not snapshot and "Ждём ответ игры…" or (snapshot.canStart
-        and "Можно играть одному, вдвоём или втроём." or ("Ожидаем: " .. hostName() .. " начнёт игру."))
+        and "Можно играть одному, вдвоём или втроём." or (snapshot.host == nil
+            and "Выберите роль героя, чтобы начать игру." or ("Ожидаем: " .. hostName() .. " начнёт игру.")))
     menuNotice.Text = snapshot and (noticeMessages[snapshot.notice] or "") or ""
     for i, row in ipairs(heroRows) do
         local hero = snapshot and snapshot.heroes and snapshot.heroes[i]
@@ -366,12 +505,29 @@ local function render()
             for n, heart in ipairs(row.fills) do heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1) end
         end
     end
+    local enemy = snapshot and snapshot.enemyRole
+    roster.Visible, enemyStatus.Visible = enemy == nil, enemy ~= nil
+    if enemy then
+        enemyOwner.Text = player.DisplayName .. " · противник"
+        enemyLife.Text = enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи")
+        enemyLife.TextColor3 = enemy.status == "Dead" and C.red or C.muted
+        for n, heart in ipairs(enemyHearts) do
+            heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
+        end
+    end
+    dash.Visible = enemy == nil
     local level = snapshot and snapshot.level or {}
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
     stageLabel.Text = isBoss and "СТРАЖ ТРАКТА" or "ЗАТОПЛЕННЫЙ ТРАКТ"
-    objectiveLabel.Text = level.objective or "Пройдите тракт и доберитесь до ворот."
+    objectiveLabel.Text = enemy and "Остановите героев" or (level.objective or "Пройдите тракт и доберитесь до ворот.")
     local hits = tonumber(level.bossHits) or 0
-    if isBoss or hits > 0 then
+    if enemy then
+        local aliveHeroes = 0
+        for _, hero in ipairs(snapshot.heroes or {}) do
+            if hero.status == "Alive" and not hero.dying and (tonumber(hero.hearts) or 0) > 0 then aliveHeroes += 1 end
+        end
+        bossLabel.Text = "Героев в бою: " .. tostring(aliveHeroes)
+    elseif isBoss or hits > 0 then
         bossLabel.Text = "Отражено снарядов: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
     else
         local alive = 0
@@ -381,11 +537,31 @@ local function render()
         bossLabel.Text = alive > 0 and ("Противников впереди: " .. tostring(alive)) or "Ударьте снаряд стража, чтобы отразить его."
     end
     spectator.Visible = active == true and not playable()
-    spectatorText.Text = mine and mine.status ~= "Eliminated" and mine.connected
-        and "Герой возвращается… Состав этой игры уже закреплён." or "Вы наблюдаете · состав этой игры уже закреплён."
+    local canChoose = enemyChoiceAllowed()
+    local expanded = canChoose and choosingEnemy
+    local enemyDead = enemy and enemy.status == "Dead"
+    enemyChoiceTitle.Visible, enemyChoiceNote.Visible, enemyOffers.Visible = expanded == true, expanded == true, expanded == true
+    watchButton.Visible = expanded == true or (enemyDead == true and not watchingAfterDeath)
+    chooseEnemyButton.Visible = canChoose == true and not choosingEnemy
+    if enemyDead then
+        spectatorText.Text = watchingAfterDeath and "Вы наблюдаете. Новую роль можно выбрать перед следующей игрой."
+            or noticeMessages.ENEMY_LIFE_SPENT
+    elseif mine then
+        spectatorText.Text = mine.status ~= "Eliminated" and mine.connected and "Герой возвращается…"
+            or (noticeMessages[snapshot.enemyUnavailableReason] or noticeMessages.HERO_LOCKED)
+    elseif enemy then
+        spectatorText.Text = "Связь с дозорным восстанавливается…"
+    elseif expanded then
+        spectatorText.Text = "Три сердца · одна жизнь · без возвратов"
+    else
+        spectatorText.Text = noticeMessages[snapshot and snapshot.enemyUnavailableReason] or "Вы наблюдаете за игрой."
+    end
+    enemyChoiceNote.Text = snapshot and (noticeMessages[snapshot.notice] or noticeMessages[snapshot.enemyUnavailableReason])
+        or "Вы управляете выбранным дозорным до конца его жизни."
+    renderOffers()
 end
 
-local function layout()
+layout = function()
     width, height = safe.AbsoluteSize.X, safe.AbsoluteSize.Y
     if width < 1 or height < 1 then return end
     local compact, portrait = width < 620, height > width
@@ -413,6 +589,16 @@ local function layout()
     position(resultTitle, 18, 10, contentWidth - 36, 34)
     resultTitle.TextSize = compact and 21 or 23
     position(resultDetail, 18, 47, contentWidth - 36, compact and 52 or 42)
+    rolePicker.Size = UDim2.new(1, 0, 0, shortLandscape and 104 or (compact and 132 or 116))
+    position(roleTitle, 14, shortLandscape and 6 or 9, contentWidth - 28, 18)
+    local roleWidth = (contentWidth - 40) / 3
+    for i, choice in ipairs(roleButtons) do
+        position(choice.button, 14 + (i - 1) * (roleWidth + 6), shortLandscape and 28 or 34,
+            roleWidth, shortLandscape and 34 or 40)
+        choice.button.TextSize = width < 360 and 11 or (compact and 13 or 14)
+    end
+    position(roleNote, 14, shortLandscape and 67 or 80, contentWidth - 28, shortLandscape and 30 or (compact and 44 or 28))
+    roleNote.TextSize = shortLandscape and 12 or 13
     selectionHeading.Size = UDim2.new(1, 0, 0, shortLandscape and 34 or (compact and 64 or 49))
     position(chooseTitle, 0, 0, contentWidth, 20)
     position(chooseNote, 0, 24, contentWidth, compact and 38 or 22)
@@ -448,12 +634,12 @@ local function layout()
             card.name.TextSize, card.detail.TextSize = 21, 13
         end
     end
-    local owners = snapshot and math.min(#(snapshot.lobby or {}), 3) or 1
-    local rowHeight, noteHeight = compact and 42 or 35, compact and 38 or 22
+    local owners = snapshot and #(snapshot.lobby or {}) or 1
+    local rowHeight, noteHeight = compact and 42 or 35, compact and 52 or 38
     party.Size = UDim2.new(1, 0, 0, 48 + math.max(owners, 1) * rowHeight + noteHeight)
-    position(partyTitle, 16, 12, contentWidth - 90, 20)
+    position(partyTitle, 16, 12, contentWidth - 156, 20)
     partyTitle.TextSize = width < 350 and 11 or 13
-    position(partyCount, contentWidth - 66, 12, 48, 20)
+    position(partyCount, contentWidth - 136, 12, 120, 20)
     for i, row in ipairs(partyRows) do
         local y = 42 + (i - 1) * rowHeight
         position(row.dot, 16, y + 7, 8, 8)
@@ -461,8 +647,8 @@ local function layout()
             position(row.owner, 34, y, contentWidth - 50, 20)
             position(row.choice, 34, y + 20, contentWidth - 50, 17)
         else
-            position(row.owner, 34, y, contentWidth - 200, 24)
-            position(row.choice, contentWidth - 152, y, 136, 24)
+            position(row.owner, 34, y, contentWidth - 260, 24)
+            position(row.choice, contentWidth - 222, y, 206, 24)
         end
         row.choice.TextXAlignment = compact and Enum.TextXAlignment.Left or Enum.TextXAlignment.Right
     end
@@ -485,7 +671,12 @@ local function layout()
     local rosterWidth = portrait and (width - inset * 2) or math.min(292, width * 0.43)
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
-    local rosterHeight = count * (rowHeightHUD + gap)
+    local enemy = snapshot and snapshot.enemyRole
+    local enemyStatusHeight = short and 57 or 72
+    local rosterHeight = enemy and (enemyStatusHeight + gap) or count * (rowHeightHUD + gap)
+    if not enemy and enemyChoiceAllowed() and choosingEnemy and height < 620 then
+        roster.Visible, rosterHeight = false, 0
+    elseif not enemy then roster.Visible = true end
     position(roster, inset, inset, rosterWidth, rosterHeight)
     for i, row in ipairs(heroRows) do
         position(row.row, 0, (i - 1) * (rowHeightHUD + gap), rosterWidth, rowHeightHUD)
@@ -498,6 +689,16 @@ local function layout()
             position(heart.heart, 10 + (n - 1) * 22, short and 21 or 29, 22, 25)
             heart.heart.TextSize, heart.fill.TextSize = short and 19 or 21, short and 19 or 21
         end
+    end
+    position(enemyStatus, inset, inset, rosterWidth, enemyStatusHeight)
+    position(enemyStripe, 0, 9, 3, enemyStatusHeight - 18)
+    position(enemyOwner, 11, short and 3 or 6, rosterWidth - 22, 20)
+    enemyOwner.TextSize = short and 12 or 14
+    position(enemyLife, 94, short and 28 or 35, rosterWidth - 106, 22)
+    enemyLife.TextSize = short and 11 or 12
+    for n, heart in ipairs(enemyHearts) do
+        position(heart.heart, 10 + (n - 1) * 25, short and 26 or 32, 24, 27)
+        heart.heart.TextSize, heart.fill.TextSize = short and 21 or 23, short and 21 or 23
     end
     if portrait then
         position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 100)
@@ -514,7 +715,7 @@ local function layout()
     local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
     actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, actionHeight)
     local half = (controlWidth - 8) / 2
-    position(punch, 0, 0, half, topHeight)
+    position(punch, 0, 0, enemy and controlWidth or half, topHeight)
     position(dash, half + 8, 0, half, topHeight)
     position(jump, 0, topHeight + 8, controlWidth, short and 41 or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
@@ -525,9 +726,25 @@ local function layout()
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
     pad.Visible, keyboardHint.Visible = isTouch, not isTouch
     keyboardHint.Position, keyboardHint.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(190, 36)
-    spectator.Position = UDim2.new(0.5, 0, 1, -20)
-    spectator.Size = UDim2.fromOffset(math.min(500, width - inset * 2), 64)
-    spectatorText.Position, spectatorText.Size = UDim2.fromOffset(15, 6), UDim2.new(1, -30, 1, -12)
+    local expanded = enemyChoiceAllowed() and choosingEnemy
+    local deadPrompt = enemy and enemy.status == "Dead" and not watchingAfterDeath
+    local spectatorWidth = math.min(500, width - inset * 2)
+    local spectatorHeight = expanded and (short and 192 or 256) or ((chooseEnemyButton.Visible or deadPrompt) and 116 or 74)
+    spectator.Position = UDim2.new(0.5, 0, 1, -bottom)
+    spectator.Size = UDim2.fromOffset(spectatorWidth, spectatorHeight)
+    if expanded then
+        position(enemyChoiceTitle, 14, 9, spectatorWidth - 28, 19)
+        position(spectatorText, 14, 31, spectatorWidth - 28, 19)
+        position(enemyChoiceNote, 14, 52, spectatorWidth - 28, short and 32 or 38)
+        position(enemyOffers, 14, short and 88 or 95, spectatorWidth - 28, spectatorHeight - (short and 136 or 143))
+        position(watchButton, 14, spectatorHeight - 43, spectatorWidth - 28, 34)
+        spectatorText.TextSize = short and 12 or 13
+    else
+        position(spectatorText, 14, 7, spectatorWidth - 28, spectatorHeight > 74 and 59 or 60)
+        position(watchButton, 14, spectatorHeight - 43, spectatorWidth - 28, 34)
+        position(chooseEnemyButton, 14, spectatorHeight - 43, spectatorWidth - 28, 34)
+        spectatorText.TextSize = short and 12 or 14
+    end
 end
 
 local function dragTo(input)
@@ -582,7 +799,7 @@ local function findCameraActor()
             if id then byId[id] = model end
         end
     end
-    if mine and mine.status == "Alive" and byId[mine.actorId] then return byId[mine.actorId] end
+    if controlled and controlled.status == "Alive" and byId[controlled.actorId] then return byId[controlled.actorId] end
     for _, hero in ipairs(snapshot and snapshot.heroes or {}) do
         if hero.status == "Alive" and hero.connected and byId[hero.actorId] then return byId[hero.actorId] end
     end
@@ -595,13 +812,24 @@ stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
+    local previousRunId = snapshot and snapshot.runId
+    local previousLevelEpoch = snapshot and snapshot.levelEpoch
     snapshot, mine = data, nil
     for _, hero in ipairs(data.heroes or {}) do if hero.slot == data.mine then mine = hero; break end end
-    local nextIdentity = mine and table.concat({tostring(data.runId), tostring(data.levelEpoch),
-        tostring(mine.actorId), tostring(mine.attempt), tostring(mine.connectionEpoch)}, ":") or nil
+    controlled = mine or data.enemyRole
+    local nextIdentity = controlled and table.concat({tostring(data.runId), tostring(data.levelEpoch),
+        tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
     if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; resetInput()
     elseif wasPlayable and not playable() then resetInput() end
+    if previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
+        choosingEnemy, watchingAfterDeath = data.preference ~= "Spectator", false
+        pendingEnemy = nil
+        cameraPoint = nil
+        resetInput()
+    end
     if pendingTemplate and (data.selectedTemplate == pendingTemplate or data.notice) then pendingTemplate = nil end
+    if pendingRole and (data.preference == pendingRole or data.notice) then pendingRole = nil end
+    if pendingEnemy and (data.enemyRole or data.notice) then pendingEnemy = nil end
     if previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
     actionPending = false
     cameraActor = findCameraActor()
@@ -630,6 +858,16 @@ RunService.RenderStepped:Connect(function(dt)
             pendingTemplate = nil
             intent:FireServer({kind = "Sync"})
             renderSelection()
+        end
+        if pendingRole and os.clock() - pendingRoleAt > 4 then
+            pendingRole = nil
+            intent:FireServer({kind = "Sync"})
+            renderSelection()
+        end
+        if pendingEnemy and os.clock() - pendingEnemyAt > 4 then
+            pendingEnemy = nil
+            intent:FireServer({kind = "Sync"})
+            render()
         end
         if actionPending and os.clock() - actionAt > 4 then actionPending = false; render() end
     end

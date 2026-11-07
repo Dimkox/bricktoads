@@ -2,6 +2,7 @@
 -- Enemy arithmetic/timing are provisional; hero damage/shields use the tested Session.
 local Director={}
 Director.__index=Director
+local function finite(n) return type(n)=='number' and n==n and n>-math.huge and n<math.huge end
 local function distance(a,b)
     if not a or not b then return math.huge end
     return math.sqrt((a.x-b.x)^2+(a.y-b.y)^2+(a.z-b.z)^2)
@@ -17,8 +18,10 @@ local objectives={Approach='Разбейте дозор у старых воро
     Won='Тракт пройден',Lost='Команда выбыла'}
 
 function Director.new(session,world,Combat,config)
-    local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},
-        stage='Approach',now=session.now or 0,bossHits=0,serial=0},Director)
+    local profile=config.Attacks[config.Enemy.attack]
+    local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
+        stage='Approach',now=session.now or 0,bossHits=0,serial=0,
+        strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height}},Director)
     self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}})
     return self
 end
@@ -26,8 +29,108 @@ function Director:_wave(stage,roster)
     self.stage=stage; self.world:stage(stage)
     for _,r in ipairs(roster) do
         assert(self.world:spawnEnemy(r.id,'Drone',{x=r.x,y=3,z=r.z}),'Enemy spawn failed')
-        self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false}
+        local actorId=self.session.state.runId..':enemy:'..self.session.state.levelEpoch..':'..r.id
+        self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false,
+            actorId=actorId,name='Ржавый дозорный'}
+        self.world:enemyIdentity(r.id,actorId)
         self.world:enemyHealth(r.id,self.config.Enemy.hearts,self.config.Enemy.hearts)
+    end
+end
+function Director:claim(userId,enemyId)
+    local owned=self.byUserId[userId]
+    if owned then
+        if self.enemies[owned].dead then return 'ENEMY_LIFE_SPENT' end
+        if owned==enemyId then return 'OK' end
+        return 'ENEMY_ALREADY_OWNED'
+    end
+    if self.result or self.session.state.status~='Active' then return 'RUN_CLOSED' end
+    local e=self.enemies[enemyId]
+    if not e then return 'UNKNOWN_ENEMY' end
+    if not e.dead and self.world:hazard(enemyId) then self:_kill(enemyId) end
+    if e.dead then return 'ENEMY_DEAD' end
+    if e.ownerUserId then return 'ENEMY_OCCUPIED' end
+    if e.engaged then return 'ENEMY_ENGAGED' end
+    e.ownerUserId=userId; e.connected=true; e.connectionEpoch=1; e.lastSeq=0
+    self.byUserId[userId]=enemyId
+    self.world:move(enemyId,0,0)
+    self.world:enemyIdentity(enemyId,e.actorId,self.ownerNames[userId])
+    return 'OK'
+end
+function Director:connection(userId,connected)
+    local id=self.byUserId[userId]; local e=id and self.enemies[id]
+    if not e then return 'UNKNOWN_ENEMY' end
+    if type(connected)~='boolean' then return 'INVALID_CONNECTION' end
+    if e.connected==connected then return 'NO_CHANGE' end
+    e.connected=connected; e.connectionEpoch+=1; e.lastSeq=0; e.lastMove=nil
+    self.world:move(id,0,0)
+    return 'OK'
+end
+function Director:controlled(userId)
+    local id=self.byUserId[userId]; local e=id and self.enemies[id]
+    if not e then return nil end
+    return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
+        connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
+        maxHearts=self.config.Enemy.hearts,template='Sentry',name=e.name}
+end
+function Director:available(userId)
+    local offers={}
+    if self.byUserId[userId] or self.result or self.session.state.status~='Active' then return offers end
+    for id,e in pairs(self.enemies) do
+        if not e.dead and not e.engaged and not e.ownerUserId and not self.world:hazard(id) then
+            offers[#offers+1]={enemyId=id,actorId=e.actorId,name=e.name,hearts=e.health,maxHearts=self.config.Enemy.hearts}
+        end
+    end
+    table.sort(offers,function(a,b) return a.enemyId>b.enemyId end)
+    return offers
+end
+function Director:closeTargetForAttack(targetIds)
+    for _,id in ipairs(targetIds) do
+        local e=self.enemies[id]
+        if e and not e.dead and not (e.reactionUntil and self.now<e.reactionUntil) then e.engaged=true; return end
+        local h=self.session.state.heroes[id]
+        local c=self.session.combat[id]
+        if h and h.status=='Alive' and not c.deathAt and not c.reactionEnd then return end
+        local ball=self.projectiles[id]
+        if (ball and not ball.reflected) or (id==-99 and self.stage=='Boss') then return end
+    end
+end
+function Director:command(userId,payload,now,validator)
+    local id=self.byUserId[userId]; local e=id and self.enemies[id]
+    if not e then return 'UNKNOWN_ENEMY' end
+    if type(validator)~='function' or not validator(payload) then return 'INVALID_INTENT' end
+    if payload.kind~='Move' and payload.kind~='Jump' and payload.kind~='Attack' then return 'INVALID_INTENT' end
+    if payload.kind=='Attack' and payload.attack~='Punch' then return 'INVALID_INTENT' end
+    if payload.runId~=self.session.state.runId then return 'WRONG_RUN' end
+    if self.result or self.session.state.status~='Active' then return 'RUN_CLOSED' end
+    if not e.connected then return 'OFFLINE' end
+    if e.dead then return 'NOT_ALIVE' end
+    if payload.actorId~=e.actorId or payload.attempt~=1 or payload.levelEpoch~=self.session.state.levelEpoch then return 'STALE_ACTOR' end
+    if payload.connectionEpoch~=e.connectionEpoch then return 'STALE_CONNECTION' end
+    if payload.seq<=e.lastSeq then return 'STALE_SEQUENCE' end
+    if not finite(now) or now<0 then return 'INVALID_TIME' end
+    if now<self.now then return 'TIME_REVERSED' end
+    self.now=now; e.lastSeq=payload.seq
+    if e.reactionUntil then return 'REACTION' end
+    if payload.kind=='Move' then
+        e.lastMove=now; self.world:move(id,payload.x,payload.z)
+    elseif payload.kind=='Jump' then self.world:jump(id)
+    else
+        if e.windup or now<e.nextAttack then return 'COOLDOWN' end
+        self:_beginStrike(id,e)
+    end
+    return 'OK'
+end
+function Director:_beginStrike(id,e)
+    e.engaged=true; e.windup={at=self.now+self.config.Enemy.windup}
+    self.world:move(id,0,0); self.world:cue(id,true)
+end
+function Director:_resolveStrike(id,e)
+    e.windup=nil; e.nextAttack=self.now+self.config.Enemy.cooldown
+    for _,target in ipairs(self.world:targets(id,self.strikeProfile)) do
+        local hit=false
+        if self.enemies[target] then hit=self:hit(id,target,self.config.Enemy.attack)
+        elseif self.session.state.heroes[target] then hit=self.session:_hit(id,target,self.config.Enemy.attack) end
+        if hit then break end
     end
 end
 function Director:_boss()
@@ -95,25 +198,21 @@ function Director:_enemies()
                     e.reactionUntil=nil; self.world:setReaction(id,false)
                 end
                 if not e.reactionUntil then
-                    local target,range=self:_nearest(self.world:position(id))
                     if e.windup then
                         self.world:move(id,0,0)
-                        if self.now>=e.windup.at then
-                            local victim=e.windup.target; e.windup=nil
-                            local h=self.session.state.heroes[victim]
-                            if h and h.status=='Alive' and distance(self.world:position(id),self.world:position(victim))<=self.config.Enemy.range+1 then
-                                self.world:face(id,victim)
-                                self.session:_hit(id,victim,self.config.Enemy.attack)
-                            end
-                            e.nextAttack=self.now+self.config.Enemy.cooldown
+                        if self.now>=e.windup.at then self:_resolveStrike(id,e) end
+                    elseif e.ownerUserId then
+                        if e.lastMove and self.now-e.lastMove>=(self.config.MoveTimeout or .35) then
+                            e.lastMove=nil; self.world:move(id,0,0)
                         end
-                    elseif target and range<=self.config.Enemy.range and self.now>=e.nextAttack then
-                        e.engaged=true
-                        e.windup={target=target,at=self.now+self.config.Enemy.windup}
-                        self.world:face(id,target); self.world:move(id,0,0); self.world:cue(id,true)
-                    elseif target and range>self.config.Enemy.range*.8 then
-                        self.world:enemyMove(id,target,self.config.Enemy.speed)
-                    else self.world:move(id,0,0) end
+                    else
+                        local target,range=self:_nearest(self.world:position(id))
+                        if target and range<=self.config.Enemy.range and self.now>=e.nextAttack then
+                            self.world:face(id,target); self:_beginStrike(id,e)
+                        elseif target and range>self.config.Enemy.range*.8 then
+                            self.world:enemyMove(id,target,self.config.Enemy.speed)
+                        else self.world:move(id,0,0) end
+                    end
                 end
             end
         end
