@@ -25,6 +25,8 @@ jobs:
           chmod +x /tmp/bricktoads-luau/luau
       - name: Native Luau contract tests
         run: /tmp/bricktoads-luau/luau tests/run.luau
+      - name: Playable game contracts
+        run: /tmp/bricktoads-luau/luau tests/run_gameplay.luau
       - name: Structural build tests
         run: python3 tools/test_build.py
       - name: Development place build tests
