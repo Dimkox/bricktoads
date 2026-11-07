@@ -14,7 +14,7 @@
 
 | Проверка | Фактический результат | Что это доказывает |
 |---|---|---|
-| Исходный настоящий Stand Source, сервисы/транспорт — doubles | 1 PASS /5 FAIL, `gateway-baseline-fail.txt` | Повтор входа менял epoch1→3; старый объект принимал свежую атаку; получал State; возвращался в host; дублировал account при старте |
+| Исходный настоящий Stand Source, сервисы/транспорт — doubles | 1 PASS /5 FAIL, `gateway-baseline-fail.txt` | Повтор входа менял epoch1→3; старый объект принимал свежую атаку; получал State; возвращался в host; новое актуальное подключение не признавалось host |
 | Промежуточный gateway до Parent guards | 6 PASS /2 FAIL, `departed-object-fail.txt` | Поздний join отсутствующего объекта и команда уже ушедшего current ещё принимались |
 | Финальный настоящий Stand Source с теми же doubles | **14 PASS /0 FAIL**, `gateway-contracts-pass.txt` | Авторизация/рассылка/состав, текущие ресурсы, две защиты, старый epoch, pending attack, один отложенный respawn и spectator |
 | ConnectionRegistry + настоящие Core/Session, fake objects/World | **18 PASS /0 FAIL**, `registry-contracts-pass.txt` | Точная идентичность, idempotency, отсутствие fallback, порядок, Life31 без лечения, оба shield deadlines, pending attack и один offline-death respawn |
