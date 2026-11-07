@@ -36,6 +36,8 @@ jobs:
         run: |
           set -euo pipefail
           /tmp/bricktoads-luau/luau tests/run_stand.luau | tee build/stand-contracts.log
+          /tmp/bricktoads-luau/luau tests/run_connections.luau | tee build/connection-contracts.log
+          python3 tools/test_stand_gateway.py --luau /tmp/bricktoads-luau/luau | tee build/gateway-contracts.log
       - name: Structural stand build tests
         run: python3 tools/test_combat_stand.py
       - name: Serialize and verify standalone place
@@ -51,4 +53,6 @@ jobs:
             build/CombatStand.rbxlx
             build/CombatStand.sha256
             build/stand-contracts.log
+            build/connection-contracts.log
+            build/gateway-contracts.log
           if-no-files-found: error

@@ -1,0 +1,14 @@
+C:/Users/User/Documents/bricktoads/tests/stand/StandGateway.spec.lua:68: Gateway contract failures
+stacktrace:
+[C] function assert
+C:/Users/User/Documents/bricktoads/tests/stand/StandGateway.spec.lua:68
+C:/Users/User/Documents/bricktoads/build/stand-gateway-contracts.luau:173
+PASS duplicate PlayerAdded cannot reset connection epoch or sequence
+PASS superseded Player cannot use the replacements current actor and epoch
+PASS superseded Player receives no role State or Sync reply
+PASS current replacement removal never revives old host
+PASS roster contains one owner per UserId during overlap
+PASS late removal and repeated current removal cannot disconnect twice
+FAIL delayed join callback for an already removed unknown object is ignored: C:/Users/User/Documents/bricktoads/tests/stand/StandGateway.spec.lua:3: table: 0x0000000000a99ac0 ~= nil
+FAIL departed current object cannot command before its removal callback: C:/Users/User/Documents/bricktoads/tests/stand/StandGateway.spec.lua:3: 5 ~= 4
+Gateway contracts: 6 PASS, 2 FAIL; fake transport, NOT real reconnect

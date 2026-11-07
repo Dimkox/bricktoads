@@ -9,23 +9,24 @@ local Core=require(script.Parent.RunLifecycle)
 local Combat=require(script.Parent.Combat)
 local Session=require(script.Parent.Session)
 local World=require(script.Parent.RobloxWorld)
+local ConnectionRegistry=require(script.Parent.ConnectionRegistry)
+local connections=ConnectionRegistry.new()
 local world=World.new(Config)
 local remotes=Instance.new("Folder"); remotes.Name="CombatStand"; remotes.Parent=ReplicatedStorage
 local intent=Instance.new("RemoteEvent"); intent.Name="Intent"; intent.Parent=remotes
 local stateRemote=Instance.new("RemoteEvent"); stateRemote.Name="State"; stateRemote.Parent=remotes
-local current,ownerSlots,arrivals,buckets,notices=nil,{},{},{},{}
-local joinSerial,lastBroadcast,fault=0,0,nil
+local current,ownerSlots,buckets,notices=nil,{},{},{}
+local lastBroadcast,fault=0,nil
 local function now() return workspace:GetServerTimeNow() end
 local function online()
-    local result=Players:GetPlayers()
-    table.sort(result,function(a,b) return (arrivals[a] or 0)<(arrivals[b] or 0) end)
-    return result
+    return connections:online(Players:GetPlayers())
 end
 local function logger(row)
     print("[BT-STAND] "..HttpService:JSONEncode(row))
     if row.kind=="Hit" then world:cue(row.userId,row.data.blocked) end
 end
 local function broadcast(requester)
+    if requester and not connections:isCurrent(requester) then return end
     local list=online()
     local snapshot=current and current:snapshot() or {status="Lobby",heroes={},now=now()}
     snapshot.calibration=Config.Calibration; snapshot.online=#list
@@ -58,7 +59,8 @@ local function begin(player)
     return "OK"
 end
 local function joined(player)
-    joinSerial=joinSerial+1; arrivals[player]=joinSerial
+    if player.Parent~=Players then return end
+    if not connections:join(player) then return end
     if player.Character then player.Character:Destroy(); player.Character=nil end
     local slot=ownerSlots[player.UserId]
     if current and slot and current.state.status=="Active" then
@@ -69,17 +71,16 @@ local function joined(player)
 end
 Players.PlayerAdded:Connect(joined)
 Players.PlayerRemoving:Connect(function(player)
+    local changed=connections:remove(player)
     local slot=ownerSlots[player.UserId]
-    -- A late removal from an older connection must not disconnect a newer Player object.
-    local replacement=false
-    for _,p in ipairs(Players:GetPlayers()) do
-        if p~=player and p.UserId==player.UserId and (arrivals[p] or 0)>(arrivals[player] or 0) then replacement=true end
-    end
-    if current and slot and current.state.status=="Active" and not replacement then current:connection(slot,false,now()) end
-    arrivals[player]=nil; buckets[player]=nil; notices[player]=nil
+    if changed and current and slot and current.state.status=="Active" then current:connection(slot,false,now()) end
+    buckets[player]=nil; notices[player]=nil
 end)
 for _,player in ipairs(Players:GetPlayers()) do joined(player) end
 intent.OnServerEvent:Connect(function(player,payload)
+    -- Roblox supplies the sender object; a matching UserId/epoch is insufficient
+    -- when an old and a new connection briefly overlap.
+    if player.Parent~=Players or not connections:isCurrent(player) then return end
     local at=now()
     local bucket=buckets[player] or {tokens=Config.MaxIntentRate,last=at}
     bucket.tokens=math.min(Config.MaxIntentRate,bucket.tokens+(at-bucket.last)*Config.MaxIntentRate)

@@ -9,7 +9,7 @@ import unittest
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-SERVER = {"Combat", "Config", "Session", "RobloxWorld", "Stand", "RunLifecycle"}
+SERVER = {"Combat", "Config", "ConnectionRegistry", "Session", "RobloxWorld", "Stand", "RunLifecycle"}
 
 
 class StandBuildTests(unittest.TestCase):

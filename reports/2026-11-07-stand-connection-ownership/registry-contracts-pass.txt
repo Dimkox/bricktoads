@@ -1,0 +1,20 @@
+PASS unknown objects have no connection authority
+PASS first join is current and duplicate join is a no-op
+PASS a fresh object replaces the same account's current object
+PASS superseded object's removal cannot disconnect the replacement
+PASS current removal changes authority exactly once
+PASS departing replacement never falls back to old object
+PASS known superseded or removed objects never revive through add replay
+PASS a genuinely new object can return after all old objects leave
+PASS different accounts including Studio negative IDs are independent
+PASS authority uses exact object identity even for equal fake objects
+PASS online filters stale/unknown duplicates and sorts without changing input
+PASS online only returns current objects present in the supplied population
+PASS late new account is online without replacing an existing account
+PASS separate registries do not share object lifecycle
+PASS binding returns a damaged live hero without healing or a new appearance
+PASS binding replacement does not cancel an already accepted attack
+PASS binding preserves current life, actor, reserve and both shield deadlines
+PASS binding reconnects an offline dead hero with exactly one successful respawn
+ConnectionRegistry tests: 18 PASS, 0 FAIL
+PASS native Luau connection contracts; actual same-account transport NOT RUN
