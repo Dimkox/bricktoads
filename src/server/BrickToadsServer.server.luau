@@ -10,7 +10,7 @@ local config=require(gameplay.GameConfig)(require(runtime.Config))
 local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config)
 local controller=require(gameplay.GameController).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
-    Config=config,Director=require(gameplay.LevelDirector),clock=function() return workspace:GetServerTimeNow() end,
+    Config=config,Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),clock=function() return workspace:GetServerTimeNow() end,
     guid=function() return HttpService:GenerateGUID(false) end},world)
 local remotes=Instance.new('Folder'); remotes.Name='BrickToadsGame'; remotes.Parent=ReplicatedStorage
 local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=remotes
@@ -50,7 +50,8 @@ intent.OnServerEvent:Connect(function(player,payload)
     local ok,code=xpcall(function() return controller:handle(player,payload,Players:GetPlayers()) end,debug.traceback)
     if not ok then fault=tostring(code); warn('[BrickToads] '..fault); return end
     if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
-        or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView') then
+        or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView'
+        or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss') then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)

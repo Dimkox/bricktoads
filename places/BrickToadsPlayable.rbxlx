@@ -91,7 +91,7 @@ local config=require(gameplay.GameConfig)(require(runtime.Config))
 local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config)
 local controller=require(gameplay.GameController).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
-    Config=config,Director=require(gameplay.LevelDirector),clock=function() return workspace:GetServerTimeNow() end,
+    Config=config,Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),clock=function() return workspace:GetServerTimeNow() end,
     guid=function() return HttpService:GenerateGUID(false) end},world)
 local remotes=Instance.new('Folder'); remotes.Name='BrickToadsGame'; remotes.Parent=ReplicatedStorage
 local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=remotes
@@ -131,7 +131,8 @@ intent.OnServerEvent:Connect(function(player,payload)
     local ok,code=xpcall(function() return controller:handle(player,payload,Players:GetPlayers()) end,debug.traceback)
     if not ok then fault=tostring(code); warn('[BrickToads] '..fault); return end
     if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
-        or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView') then
+        or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView'
+        or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss') then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)
@@ -447,6 +448,228 @@ return Core
         </Properties>
         <Item class="ModuleScript" referent="BT10">
           <Properties>
+            <string name="Name">BossQueue</string>
+            <ProtectedString name="Source">-- Server-owned FIFO selection. Slots may compete, but each user has one queue/role state.
+-- All methods are synchronous; eligibility is supplied by the authoritative controller.
+-- The eligibility callback must not yield, mutate this queue, or reenter its methods.
+local BossQueue={}
+BossQueue.__index=BossQueue
+
+local function finite(value)
+    return type(value)=='number' and value==value and value&gt;-math.huge and value&lt;math.huge
+end
+local function identifier(value)
+    return type(value)=='string' and #value&gt;0 and #value&lt;=160
+end
+local function validUser(userId)
+    -- Studio clients use negative IDs; the server has already authenticated the identity.
+    return finite(userId) and userId%1==0 and math.abs(userId)&lt;=9007199254740991
+end
+
+function BossQueue.new(options,eligible)
+    options=options or {}
+    local inviteSeconds=options.inviteSeconds or 10
+    local connectSeconds=options.connectSeconds or 15
+    assert(finite(inviteSeconds) and inviteSeconds&gt;0,'Invalid invitation duration')
+    assert(finite(connectSeconds) and connectSeconds&gt;0,'Invalid connection duration')
+    assert(eligible==nil or type(eligible)=='function','Invalid eligibility callback')
+    return setmetatable({inviteSeconds=inviteSeconds,connectSeconds=connectSeconds,
+        eligible=eligible or function() return true end,entries={},waiting={},slots={},slotOrder={},serial=0,now=0},BossQueue)
+end
+
+function BossQueue:_removeWaiting(entry)
+    local waiting=self.waiting[entry.bossId]
+    if not waiting then return end
+    for index,userId in ipairs(waiting) do
+        if userId==entry.userId then table.remove(waiting,index); return end
+    end
+end
+
+function BossQueue:_release(entry)
+    local slot=entry.slotId and self.slots[entry.slotId]
+    if slot and slot.userId==entry.userId then slot.userId=nil end
+    entry.slotId=nil; entry.offerId=nil; entry.deadline=nil
+end
+
+function BossQueue:_forget(entry)
+    self:_removeWaiting(entry)
+    self:_release(entry)
+    self.entries[entry.userId]=nil
+end
+
+function BossQueue:_rotate(entry)
+    self:_removeWaiting(entry)
+    self:_release(entry)
+    entry.state='Queued'
+    local waiting=self.waiting[entry.bossId]
+    waiting[#waiting+1]=entry.userId
+end
+
+function BossQueue:_fill()
+    -- Registration order is stable even when slot identifiers sort differently.
+    for _,slot in ipairs(self.slotOrder) do
+        if slot.state=='Open' and not slot.userId then
+            for _,userId in ipairs(self.waiting[slot.bossId] or {}) do
+                local entry=self.entries[userId]
+                if entry and entry.state=='Queued' and not slot.tried[userId] and self.eligible(userId,slot.context) then
+                    self.serial+=1
+                    entry.state='Invited'; entry.slotId=slot.id
+                    entry.offerId='boss-offer:'..self.serial; entry.deadline=self.now+self.inviteSeconds
+                    slot.userId=userId; slot.tried[userId]=true
+                    break
+                end
+            end
+        end
+    end
+end
+
+function BossQueue:_advance(now)
+    if not finite(now) or now&lt;0 then return 'INVALID_TIME' end
+    -- A delayed caller cannot roll back deadlines already observed by the server.
+    self.now=math.max(self.now,now)
+    for _,slot in ipairs(self.slotOrder) do
+        if slot.state=='Open' and slot.userId then
+            local entry=self.entries[slot.userId]
+            if not entry or entry.slotId~=slot.id then
+                slot.userId=nil
+            elseif (entry.deadline and self.now&gt;=entry.deadline) or not self.eligible(entry.userId,slot.context) then
+                if entry.state=='Invited' then self:_rotate(entry)
+                else self:_forget(entry) end
+            end
+        end
+    end
+    self:_fill()
+    return 'OK'
+end
+
+function BossQueue:register(slotId,bossId,context,now)
+    if not identifier(slotId) then return 'INVALID_SLOT' end
+    if not identifier(bossId) then return 'INVALID_BOSS' end
+    local result=self:_advance(now); if result~='OK' then return result end
+    if self.slots[slotId] then return 'SLOT_EXISTS' end
+    local slot={id=slotId,bossId=bossId,context=context,state='Open',tried={}}
+    self.slots[slotId]=slot; self.slotOrder[#self.slotOrder+1]=slot
+    self:_fill()
+    return 'OK'
+end
+
+function BossQueue:select(userId,bossId,now)
+    if not validUser(userId) then return 'INVALID_USER' end
+    if not identifier(bossId) then return 'INVALID_BOSS' end
+    local result=self:_advance(now); if result~='OK' then return result end
+    local entry=self.entries[userId]
+    if entry and entry.bossId==bossId then return 'OK' end
+    if entry and (entry.state=='Accepted' or entry.state=='Ready' or entry.state=='Active') then return 'ROLE_RESERVED' end
+    if not self.eligible(userId,nil) then return 'INELIGIBLE' end
+    if entry then self:_forget(entry) end
+    entry={userId=userId,bossId=bossId,state='Queued'}
+    self.entries[userId]=entry
+    local waiting=self.waiting[bossId]
+    if not waiting then waiting={}; self.waiting[bossId]=waiting end
+    waiting[#waiting+1]=userId
+    self:_fill()
+    return 'OK'
+end
+
+function BossQueue:cancel(userId,now)
+    if not validUser(userId) then return 'INVALID_USER' end
+    local result=self:_advance(now); if result~='OK' then return result end
+    local entry=self.entries[userId]
+    if not entry then return 'OK' end
+    if entry.state=='Active' then return 'ROLE_ACTIVE' end
+    self:_forget(entry); self:_fill()
+    return 'OK'
+end
+
+function BossQueue:reply(userId,offerId,accepted,now)
+    if not validUser(userId) then return 'INVALID_USER' end
+    if not identifier(offerId) then return 'INVALID_OFFER' end
+    if type(accepted)~='boolean' then return 'INVALID_REPLY' end
+    local result=self:_advance(now); if result~='OK' then return result end
+    local entry=self.entries[userId]
+    if not entry or entry.offerId~=offerId then return 'STALE_OFFER' end
+    if entry.state~='Invited' then
+        if accepted and (entry.state=='Accepted' or entry.state=='Ready' or entry.state=='Active') then return 'OK' end
+        return 'STALE_OFFER'
+    end
+    if accepted then
+        self:_removeWaiting(entry)
+        entry.state='Accepted'; entry.deadline=self.now+self.connectSeconds
+    else
+        -- tried is retained by the slot, so this entry can only serve a future slot.
+        self:_rotate(entry)
+    end
+    self:_fill()
+    return 'OK'
+end
+
+function BossQueue:connect(userId,offerId,now)
+    if not validUser(userId) then return 'INVALID_USER' end
+    if not identifier(offerId) then return 'INVALID_OFFER' end
+    local result=self:_advance(now); if result~='OK' then return result end
+    local entry=self.entries[userId]
+    if not entry or entry.offerId~=offerId then return 'STALE_OFFER' end
+    if entry.state=='Ready' or entry.state=='Active' then return 'OK' end
+    if entry.state~='Accepted' then return 'STALE_OFFER' end
+    entry.state='Ready'; entry.deadline=nil
+    return 'OK'
+end
+
+function BossQueue:step(now)
+    return self:_advance(now)
+end
+
+function BossQueue:start(slotId,now)
+    local result=self:_advance(now); if result~='OK' then return nil,result end
+    local slot=self.slots[slotId]
+    if not slot then return nil,'UNKNOWN_SLOT' end
+    if slot.state=='Closed' then return nil,'SLOT_CLOSED' end
+    if slot.state=='NPC' then return {state='NPC'} end
+    if slot.state=='Human' then return {state='Human',userId=slot.userId} end
+    local entry=slot.userId and self.entries[slot.userId]
+    if entry then
+        if entry.state~='Ready' then return {state='Waiting'} end
+        entry.state='Active'; slot.state='Human'
+        return {state='Human',userId=entry.userId}
+    end
+    slot.state='NPC'
+    return {state='NPC'}
+end
+
+function BossQueue:close(slotId,now)
+    if not finite(now) or now&lt;0 then return 'INVALID_TIME' end
+    local slot=self.slots[slotId]
+    if not slot then return 'UNKNOWN_SLOT' end
+    -- Close before processing deadlines: expiry must not rotate this owner or
+    -- create a replacement offer that closing would immediately discard.
+    if slot.userId then
+        local entry=self.entries[slot.userId]
+        if entry then self:_forget(entry) end
+    end
+    slot.userId=nil; slot.state='Closed'
+    return self:_advance(now)
+end
+
+function BossQueue:view(userId,now)
+    local result=self:_advance(now); if result~='OK' then return {state='None'},result end
+    local entry=self.entries[userId]
+    if not entry then return {state='None'} end
+    local view={state=entry.state,bossId=entry.bossId,offerId=entry.offerId,
+        slotId=entry.slotId,deadline=entry.deadline}
+    if entry.state=='Queued' or entry.state=='Invited' then
+        for position,id in ipairs(self.waiting[entry.bossId]) do
+            if id==userId then view.position=position; break end
+        end
+    end
+    return view
+end
+
+return BossQueue
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT11">
+          <Properties>
             <string name="Name">GameConfig</string>
             <ProtectedString name="Source">-- Original playable prototype calibration. Resource limits are canonical.
 -- Enemy damage and spatial/timing values still need the full source transfer.
@@ -455,12 +678,13 @@ return function(base)
     config.Calibration='PLAYABLE_PROTOTYPE'
     config.Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
+    config.BossQueue={inviteSeconds=10,connectSeconds=15}
     return config
 end
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT11">
+        <Item class="ModuleScript" referent="BT12">
           <Properties>
             <string name="Name">GameController</string>
             <ProtectedString name="Source">-- One playable group. Player identity comes from the server, never from payload fields.
@@ -475,7 +699,25 @@ local function exact(payload,allowed)
     return true
 end
 function Controller.new(deps,world)
-    return setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={}},Controller)
+    local self=setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={}},Controller)
+    if deps.BossQueue then
+        self.bossQueue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
+            return self:_bossEligible(userId,context)
+        end)
+    end
+    return self
+end
+function Controller:_bossEligible(userId,context)
+    if not self.current or self:_open() then return true end
+    if self.ownerSlots[userId] then return false end
+    local role=self.director:controlled(userId)
+    return not role or role.status~='Alive' or role.template=='Boss'
+end
+function Controller:_bossSelection(player)
+    if not self:_open() and self.ownerSlots[player.UserId] then return 'HERO_LOCKED' end
+    local role=not self:_open() and self.director:controlled(player.UserId)
+    if role and role.status=='Alive' then return 'ROLE_ACTIVE' end
+    return 'OK'
 end
 function Controller:_heroes(players)
     local heroes={}
@@ -487,6 +729,8 @@ end
 function Controller:_enemyName(player)
     self.director.ownerNames=self.director.ownerNames or {}
     self.director.ownerNames[player.UserId]=player.DisplayName..' @'..player.Name
+    self.director.ownerConnections=self.director.ownerConnections or {}
+    self.director.ownerConnections[player.UserId]=true
     local role=self.director:controlled(player.UserId)
     if role and role.status=='Alive' and self.world.enemyIdentity then
         self.world:enemyIdentity(role.enemyId,role.actorId,self.director.ownerNames[player.UserId])
@@ -494,6 +738,7 @@ function Controller:_enemyName(player)
 end
 function Controller:join(player)
     if not self.connections:join(player) then return end
+    if self.director then self:_enemyName(player) end
     local slot=self.ownerSlots[player.UserId]
     if self.current and slot and self.current.state.status=='Active' and not self.director.result then
         if self.current.state.heroes[slot].connected then self.current:connection(slot,false,self.deps.clock()) end
@@ -510,6 +755,10 @@ function Controller:join(player)
 end
 function Controller:leave(player)
     local changed=self.connections:remove(player)
+    if changed and self.director then
+        self.director.ownerConnections=self.director.ownerConnections or {}
+        self.director.ownerConnections[player.UserId]=false
+    end
     local slot=self.ownerSlots[player.UserId]
     if changed and self.current and slot and self.current.state.status=='Active' and not self.director.result then
         self.current:connection(slot,false,self.deps.clock())
@@ -525,6 +774,8 @@ function Controller:_begin(player,players)
     if #online==0 then return 'NO_HERO' end
     if online[1]~=player then return 'HOST_ONLY' end
     if not self:_open() then return 'RUN_ACTIVE' end
+    local at=self.deps.clock()
+    if self.bossQueue and self.bossSlot then self.bossQueue:close(self.bossSlot,at) end
     self.world:clearActors(); self.ownerSlots={}; self.owners={}; self.viewChoices={}
     local roster={}
     for index=1,math.min(3,#online) do
@@ -540,6 +791,13 @@ function Controller:_begin(player,players)
     end)
     self.current:step(self.deps.clock())
     self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config)
+    for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end
+    if self.bossQueue then
+        self.bossSlot=self.current.state.runId..':guardian:'..self.current.state.levelEpoch
+        self.bossQueue:register(self.bossSlot,'CausewayGuardian',{
+            runId=self.current.state.runId,groupId=self.current.state.groupId,levelEpoch=self.current.state.levelEpoch},at)
+        self.director.bossGate=function(now) return self.bossQueue:start(self.bossSlot,now) end
+    end
     local originalHit=self.current._hit
     local director=self.director
     self.current._hit=function(session,attacker,target,action)
@@ -575,7 +833,34 @@ function Controller:handle(player,payload,players)
     elseif payload.kind=='SelectRole' then
         if not exact(payload,{kind=true,role=true}) or not roles[payload.role] then return 'INVALID_INTENT' end
         if not self:_open() then code='RUN_ACTIVE'
-        else self.preferences[player.UserId]=payload.role; code='OK' end
+        else
+            if self.bossQueue then self.bossQueue:cancel(player.UserId,at) end
+            self.preferences[player.UserId]=payload.role; code='OK'
+        end
+    elseif payload.kind=='QueueBoss' then
+        if not exact(payload,{kind=true,bossId=true}) or payload.bossId~='CausewayGuardian' then return 'INVALID_INTENT' end
+        code=self:_bossSelection(player)
+        if code=='OK' then
+            code=self.bossQueue and self.bossQueue:select(player.UserId,payload.bossId,at) or 'UNAVAILABLE'
+            if code=='OK' then
+                self.preferences[player.UserId]='Spectator'; self.viewChoices[player.UserId]='Spectating'
+                if self.director then self:_enemyName(player) end
+            end
+        end
+    elseif payload.kind=='CancelBossQueue' then
+        if not exact(payload,{kind=true}) then return 'INVALID_INTENT' end
+        code=self.bossQueue and self.bossQueue:cancel(player.UserId,at) or 'UNAVAILABLE'
+    elseif payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss' then
+        local reply=payload.kind=='ReplyBoss'
+        if not exact(payload,reply and {kind=true,offerId=true,accepted=true} or {kind=true,offerId=true})
+            or type(payload.offerId)~='string' or #payload.offerId==0 or #payload.offerId&gt;160
+            or (reply and type(payload.accepted)~='boolean') then return 'INVALID_INTENT' end
+        code=self:_bossSelection(player)
+        if code=='OK' then
+            if not self.bossQueue then code='UNAVAILABLE'
+            elseif reply then code=self.bossQueue:reply(player.UserId,payload.offerId,payload.accepted,at)
+            else code=self.bossQueue:connect(player.UserId,payload.offerId,at) end
+        end
     elseif payload.kind=='ChooseView' then
         if not exact(payload,{kind=true,runId=true,levelEpoch=true,view=true})
             or type(payload.runId)~='string' or #payload.runId==0 or #payload.runId&gt;160
@@ -605,10 +890,17 @@ function Controller:handle(player,payload,players)
         elseif payload.levelEpoch~=self.current.state.levelEpoch then code='STALE_LEVEL'
         elseif self.ownerSlots[player.UserId] then code='HERO_LOCKED'
         else
-            self:_enemyName(player)
-            self.director.now=at
-            code=self.director:claim(player.UserId,payload.enemyId)
-            if code=='OK' then self.viewChoices[player.UserId]=nil end
+            local queue=self.bossQueue and self.bossQueue:view(player.UserId,at)
+            if queue and (queue.state=='Accepted' or queue.state=='Ready' or queue.state=='Active') then code='ROLE_RESERVED'
+            else
+                self:_enemyName(player)
+                self.director.now=at
+                code=self.director:claim(player.UserId,payload.enemyId)
+                if code=='OK' then
+                    if self.bossQueue then self.bossQueue:cancel(player.UserId,at) end
+                    self.viewChoices[player.UserId]=nil
+                end
+            end
         end
     elseif self.current then
         local slot=self.ownerSlots[player.UserId]
@@ -627,9 +919,13 @@ function Controller:handle(player,payload,players)
     return code
 end
 function Controller:step(now,dt)
+    if self.bossQueue then self.bossQueue:step(now) end
     if not self.current or self.finished then return end
     self.director.now=now
     self.current:step(now); self.director:step(now,dt)
+    if self.bossQueue and self.bossSlot and (self.director.stage=='Exit' or self.director.result) then
+        self.bossQueue:close(self.bossSlot,now)
+    end
     if self.director.result then
         self.finished=true
         for _,id in ipairs(self.current.order) do
@@ -683,13 +979,17 @@ function Controller:snapshot(player,players)
         if #data.enemyOffers==0 then data.enemyUnavailableReason='NO_ENEMY_AVAILABLE' end
     end
     data.notice=self.notices[player]
+    if self.bossQueue then
+        data.bossQueue=self.bossQueue:view(player.UserId,self.deps.clock())
+        data.bossQueue.available=self:_bossSelection(player)=='OK'
+    end
     return data
 end
 return Controller
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT12">
+        <Item class="ModuleScript" referent="BT13">
           <Properties>
             <string name="Name">GameWorld</string>
             <ProtectedString name="Source">-- Original first-level presentation. Combat and hero physics stay in BaseWorld.
@@ -1063,7 +1363,7 @@ function World:spawnEnemy(id, kind, positionTable)
     local isBoss = string.lower(tostring(kind)) == "boss"
     self.origins[id] = Vector3.new(x, y, z)
     self.names[id] = isBoss and "Страж переправы" or "Ржавый дозорный"
-    if not self._base.spawn(self, id, id, nil, isBoss, "Mr. Brown") then return false end
+    if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
     -- BaseWorld's ordinary spawn is deliberately y=3, so preserve the supplied
@@ -1104,14 +1404,14 @@ end
 
 function World:enemyIdentity(id,actorId,ownerName)
     local actor=self.actors[id]
-    if not actor or self.enemyKinds[id]~='Drone' then return end
+    if not actor or (self.enemyKinds[id]~='Drone' and self.enemyKinds[id]~='Boss') then return end
     actor.model:SetAttribute('ActorId',actorId)
     actor.model:SetAttribute('ControlledByPlayer',ownerName~=nil)
     if ownerName then
         local board=actor.root:FindFirstChild('OwnerNameplate')
         if board then board.Text.Text=ownerName
         else
-            local text=label(actor.root,ownerName,220,Vector3.new(0,5.7,0))
+            local text=label(actor.root,ownerName,220,Vector3.new(0,self.enemyKinds[id]=='Boss' and 10.2 or 5.7,0))
             text.TextSize=14; text.TextColor3=COLORS.amber; text.Parent.Name='OwnerNameplate'
         end
     end
@@ -1137,6 +1437,14 @@ function World:face(id, targetId)
     local p, q = a.root.Position, b.root.Position
     local flat = Vector3.new(q.X - p.X, 0, q.Z - p.Z)
     if flat.Magnitude &gt; 0.05 then a.root.CFrame = CFrame.lookAt(p, p + flat) end
+end
+
+function World:aim(id,x,z)
+    local actor=self.actors[id]
+    if actor and actor.root.Parent and actor.humanoid.Health&gt;0 and x*x+z*z&gt;0 then
+        local position=actor.root.Position
+        actor.root.CFrame=CFrame.lookAt(position,position+Vector3.new(x,0,z))
+    end
 end
 
 function World:enemyMove(id, targetId, speed)
@@ -1181,7 +1489,7 @@ end
 function World:stage(name)
     self.stageName = name
     self.folder:SetAttribute("Stage", name)
-    local progress = ({Approach = 0, Courtyard = 1, Boss = 2, Exit = 3, Won = 3, Lost = -1})[name] or 0
+    local progress = ({Approach = 0, Courtyard = 1, BossReady = 1, Boss = 2, Exit = 3, Won = 3, Lost = -1})[name] or 0
     for index, gate in ipairs(self.gates) do
         local open = progress &gt;= index
         gate.beam.CanCollide = not open
@@ -1314,7 +1622,7 @@ return World
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT13">
+        <Item class="ModuleScript" referent="BT14">
           <Properties>
             <string name="Name">LevelDirector</string>
             <ProtectedString name="Source">-- Original prototype encounters. All decisions run on the server.
@@ -1333,6 +1641,7 @@ local function towards(a,b,amount)
     return {x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t}
 end
 local objectives={Approach='Разбейте дозор у старых ворот',Courtyard='Освободите внутренний двор',
+    BossReady='Назначаем стража: ожидаем ответ приглашённого игрока',
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
@@ -1363,6 +1672,7 @@ function Director:claim(userId,enemyId)
         return 'ENEMY_ALREADY_OWNED'
     end
     if self.result or self.session.state.status~='Active' then return 'RUN_CLOSED' end
+    if enemyId==-99 then return 'UNKNOWN_ENEMY' end
     local e=self.enemies[enemyId]
     if not e then return 'UNKNOWN_ENEMY' end
     if not e.dead and self.world:hazard(enemyId) then self:_kill(enemyId) end
@@ -1389,13 +1699,14 @@ function Director:controlled(userId)
     if not e then return nil end
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
-        maxHearts=self.config.Enemy.hearts,template='Sentry',name=e.name}
+        maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
+        template=e.boss and 'Boss' or 'Sentry',name=e.name}
 end
 function Director:available(userId)
     local offers={}
     if self.byUserId[userId] or self.result or self.session.state.status~='Active' then return offers end
     for id,e in pairs(self.enemies) do
-        if not e.dead and not e.engaged and not e.ownerUserId and not self.world:hazard(id) then
+        if not e.boss and not e.dead and not e.engaged and not e.ownerUserId and not self.world:hazard(id) then
             offers[#offers+1]={enemyId=id,actorId=e.actorId,name=e.name,hearts=e.health,maxHearts=self.config.Enemy.hearts}
         end
     end
@@ -1419,16 +1730,32 @@ function Director:command(userId,payload,now,validator)
     if type(validator)~='function' or not validator(payload) then return 'INVALID_INTENT' end
     if payload.kind~='Move' and payload.kind~='Jump' and payload.kind~='Attack' then return 'INVALID_INTENT' end
     if payload.kind=='Attack' and payload.attack~='Punch' then return 'INVALID_INTENT' end
+    if e.boss and payload.kind=='Jump' then return 'INVALID_INTENT' end
     if payload.runId~=self.session.state.runId then return 'WRONG_RUN' end
     if self.result or self.session.state.status~='Active' then return 'RUN_CLOSED' end
     if not e.connected then return 'OFFLINE' end
     if e.dead then return 'NOT_ALIVE' end
+    if e.boss and self.world:hazard(id) then self:_kill(id); return 'NOT_ALIVE' end
     if payload.actorId~=e.actorId or payload.attempt~=1 or payload.levelEpoch~=self.session.state.levelEpoch then return 'STALE_ACTOR' end
     if payload.connectionEpoch~=e.connectionEpoch then return 'STALE_CONNECTION' end
     if payload.seq&lt;=e.lastSeq then return 'STALE_SEQUENCE' end
     if not finite(now) or now&lt;0 then return 'INVALID_TIME' end
     if now&lt;self.now then return 'TIME_REVERSED' end
     self.now=now; e.lastSeq=payload.seq
+    if e.boss then
+        if self.stage~='Boss' then return 'RUN_CLOSED' end
+        if payload.kind=='Move' then
+            local length=math.sqrt(payload.x^2+payload.z^2)
+            if length&gt;0 then
+                e.aim={x=payload.x/length,z=payload.z/length}
+                if self.world.aim then self.world:aim(id,e.aim.x,e.aim.z) end
+            end
+        else
+            if now&lt;self.nextShot then return 'COOLDOWN' end
+            self:_shoot(nil,e.aim); self.nextShot=now+self.config.Boss.interval
+        end
+        return 'OK'
+    end
     if e.reactionUntil then return 'REACTION' end
     if payload.kind=='Move' then
         e.lastMove=now; self.world:move(id,payload.x,payload.z)
@@ -1453,8 +1780,22 @@ function Director:_resolveStrike(id,e)
     end
 end
 function Director:_boss()
+    local controller=self.bossGate and self.bossGate(self.now) or {state='NPC'}
+    if controller.state=='Waiting' then
+        self.stage='BossReady'; self.world:stage('BossReady'); return
+    end
     self.stage='Boss'; self.world:stage('Boss')
     assert(self.world:spawnEnemy(-99,'Boss',{x=82,y=3,z=0}),'Boss spawn failed')
+    local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
+    local e={boss=true,actorId=actorId,health=self.config.Boss.hits,name='Страж переправы',aim={x=-1,z=0}}
+    self.enemies[-99]=e
+    if controller.state=='Human' then
+        e.ownerUserId=controller.userId
+        e.connected=self.ownerConnections==nil or self.ownerConnections[controller.userId]~=false
+        e.connectionEpoch=1; e.lastSeq=0
+        self.byUserId[controller.userId]=-99
+    end
+    self.world:enemyIdentity(-99,actorId,e.ownerUserId and self.ownerNames[e.ownerUserId])
     self.world:enemyHealth(-99,self.config.Boss.hits,self.config.Boss.hits)
     self.nextShot=self.now+1.8
 end
@@ -1465,8 +1806,11 @@ function Director:_kill(id)
     local e=self.enemies[id]
     if not e or e.dead then return end
     e.dead=true; e.windup=nil; e.health=0
-    self.world:enemyHealth(id,0,self.config.Enemy.hearts)
+    self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
     self.world:kill(id)
+    if e.boss then
+        self.stage='Exit'; self.world:stage('Exit')
+    end
 end
 function Director:hit(attacker,target,action)
     if self.result then return false end
@@ -1479,7 +1823,15 @@ function Director:hit(attacker,target,action)
         self.world:cue(attacker,false)
         return true
     end
-    if target==-99 and self.stage=='Boss' then self.world:cue(-99,true); return true end
+    if target==-99 then
+        if self.stage~='Boss' then return false end
+        self.world:cue(-99,true)
+        if self.config.Impulses then
+            local profile=action=='Dash' and 22 or 18
+            self.world:impulse(-99,attacker,self.config.Impulses[profile],profile)
+        end
+        return true
+    end
     local e=self.enemies[target]
     if not e or e.dead or (e.reactionUntil and self.now&lt;e.reactionUntil) then return false end
     e.engaged=true; e.windup=nil
@@ -1541,23 +1893,32 @@ function Director:_enemies()
         elseif self.stage=='Courtyard' then self:_boss() end
     end
 end
+function Director:_shoot(target,aim)
+    local origin=self.world:position(-99)
+    if not origin then return end
+    local destination=aim and {x=origin.x+aim.x*self.config.Boss.aggroRange,y=origin.y,z=origin.z+aim.z*self.config.Boss.aggroRange}
+        or self.world:position(target)
+    if not origin or not destination then return end
+    if target then self.world:face(-99,target) end
+    self.world:cue(-99,true)
+    self.serial+=1
+    local id=-1000-self.serial
+    local start=towards(origin,destination,5)
+    self.projectiles[id]={position=start,direction=destination,created=self.now,target=target,reflected=false}
+    self.world:projectile(id,start,false)
+end
 function Director:_projectiles(dt)
-    if self.stage=='Boss' and self.now&gt;=self.nextShot then
+    local boss=self.enemies[-99]
+    if self.stage=='Boss' and boss and not boss.ownerUserId and self.now&gt;=self.nextShot then
         local target,range=self:_nearest(self.world:position(-99))
         if target and range&lt;=self.config.Boss.aggroRange then
-            self.world:face(-99,target); self.world:cue(-99,true)
-            local origin=self.world:position(-99)
-            local destination=self.world:position(target)
-            self.serial+=1
-            local id=-1000-self.serial
-            local start=towards(origin,destination,5)
-            self.projectiles[id]={position=start,direction=destination,created=self.now,target=target,reflected=false}
-            self.world:projectile(id,start,false)
+            self:_shoot(target)
         end
         self.nextShot=self.now+self.config.Boss.interval
     end
     local remove={}
     for id,p in pairs(self.projectiles) do
+        if self.stage~='Boss' then break end
         local destination=p.reflected and self.world:position(-99) or p.direction
         if not destination or self.now-(p.reflectedAt or p.created)&gt;self.config.Boss.projectileLife then remove[#remove+1]=id
         else
@@ -1566,10 +1927,11 @@ function Director:_projectiles(dt)
             self.world:projectile(id,p.position,p.reflected)
             if p.reflected and self.stage=='Boss' and distance(p.position,destination)&lt;2.5 then
                 self.bossHits+=1; self.world:cue(-99,false)
+                boss.health=self.config.Boss.hits-self.bossHits
                 self.world:enemyHealth(-99,self.config.Boss.hits-self.bossHits,self.config.Boss.hits)
                 remove[#remove+1]=id
                 if self.bossHits&gt;=self.config.Boss.hits then
-                    self.world:kill(-99); self.stage='Exit'; self.world:stage('Exit')
+                    self:_kill(-99)
                 end
             elseif not p.reflected then
                 local hit=false
@@ -1595,6 +1957,8 @@ function Director:step(now,dt)
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
     end
     if self.stage=='Approach' or self.stage=='Courtyard' then self:_enemies() end
+    if self.stage=='BossReady' then self:_boss() end
+    if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
     if self.stage=='Exit' then
         for _,id in ipairs(self.session.order) do
@@ -1607,7 +1971,8 @@ end
 function Director:snapshot()
     local enemies={}
     for id,e in pairs(self.enemies) do
-        enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=self.config.Enemy.hearts,dead=e.dead==true,attacking=e.windup~=nil}
+        enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
+            dead=e.dead==true,attacking=e.windup~=nil}
     end
     table.sort(enemies,function(a,b) return a.id&gt;b.id end)
     return {stage=self.stage,objective=objectives[self.stage],enemies=enemies,bossHits=self.bossHits,
@@ -1618,11 +1983,11 @@ return Director
           </Properties>
         </Item>
       </Item>
-      <Item class="Folder" referent="BT14">
+      <Item class="Folder" referent="BT15">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT15">
+        <Item class="ModuleScript" referent="BT16">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
@@ -1672,7 +2037,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT16">
+        <Item class="ModuleScript" referent="BT17">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -1961,7 +2326,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT17">
+        <Item class="ModuleScript" referent="BT18">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -1991,7 +2356,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT18">
+        <Item class="ModuleScript" referent="BT19">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -2051,7 +2416,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT19">
+        <Item class="ModuleScript" referent="BT20">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -2317,15 +2682,15 @@ return World
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT20">
+  <Item class="ReplicatedStorage" referent="BT21">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT21">
+    <Item class="Folder" referent="BT22">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT22">
+      <Item class="ModuleScript" referent="BT23">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -2337,19 +2702,226 @@ return table.freeze({
       </Item>
     </Item>
   </Item>
-  <Item class="StarterPlayer" referent="BT23">
+  <Item class="StarterPlayer" referent="BT24">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT24">
+    <Item class="StarterPlayerScripts" referent="BT25">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT25">
+      <Item class="Folder" referent="BT26">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="LocalScript" referent="BT26">
+        <Item class="ModuleScript" referent="BT27">
+          <Properties>
+            <string name="Name">BossQueuePanel</string>
+            <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
+local BossQueuePanel = {}
+BossQueuePanel.__index = BossQueuePanel
+
+local function make(className, name, parent, properties)
+    local item = Instance.new(className)
+    item.Name = name
+    for key, value in pairs(properties or {}) do item[key] = value end
+    item.Parent = parent
+    return item
+end
+
+local function position(item, x, y, width, height)
+    item.Position, item.Size = UDim2.fromOffset(x, y), UDim2.fromOffset(width, height)
+end
+
+function BossQueuePanel.new(menuParent, hudParent, sendIntent, colors)
+    local self = setmetatable({menuParent = menuParent, hudParent = hudParent,
+        sendIntent = sendIntent, colors = colors, compact = false}, BossQueuePanel)
+    self.card = make("Frame", "BossQueue", menuParent, {
+        BackgroundColor3 = colors.panel, BorderSizePixel = 0, LayoutOrder = 7, Visible = false,
+    })
+    make("UICorner", "Corner", self.card, {CornerRadius = UDim.new(0, 14)})
+    local function text(name, size, color, bold)
+        return make("TextLabel", name, self.card, {
+            BackgroundTransparency = 1, Text = "", TextColor3 = color,
+            Font = bold and Enum.Font.GothamBold or Enum.Font.Gotham, TextSize = size,
+            TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Center,
+            TextWrapped = true,
+        })
+    end
+    self.heading = text("Heading", 12, colors.yellow, true)
+    self.heading.Text = "ОЧЕРЕДЬ БОССА"
+    self.name = text("Guardian", 19, colors.text, true)
+    self.name.Text = "Страж переправы"
+    self.status = text("QueueStatus", 13, colors.yellow, true)
+    self.status.TextXAlignment = Enum.TextXAlignment.Right
+    self.detail = text("Detail", 13, colors.muted, false)
+    self.note = text("RoleNote", 12, colors.muted, false)
+    self.note.Text = "Очередь не даёт роль сразу и не добавляет стражу здоровье."
+    local function action(name, callback)
+        local item = make("TextButton", name, self.card, {
+            BackgroundColor3 = colors.card, BorderSizePixel = 0, Text = "",
+            TextColor3 = colors.text, Font = Enum.Font.GothamBold, TextSize = 14,
+            TextWrapped = true, AutoButtonColor = false,
+        })
+        make("UICorner", "Corner", item, {CornerRadius = UDim.new(0, 10)})
+        item.Activated:Connect(callback)
+        return item
+    end
+    self.primary = action("QueueAction", function() self:_activate(true) end)
+    self.secondary = action("DeclineInvitation", function() self:_activate(false) end)
+    return self
+end
+
+function BossQueuePanel:_remaining()
+    return math.max(0, math.ceil((tonumber(self.queue and self.queue.deadline) or 0) - workspace:GetServerTimeNow()))
+end
+
+function BossQueuePanel:_activate(primary)
+    if not self.card.Visible or self.pending or not self.queue then return end
+    local state, packet = self.queue.state, nil
+    if state == "Invited" and self.queue.offerId and self:_remaining() &gt; 0 then
+        packet = {kind = "ReplyBoss", offerId = self.queue.offerId, accepted = primary}
+    elseif primary and state == "None" and self.queue.available == true then
+        packet = {kind = "QueueBoss", bossId = "CausewayGuardian"}
+    elseif primary and (state == "Queued" or state == "Accepted" or state == "Ready") then
+        packet = {kind = "CancelBossQueue"}
+    end
+    if not packet then return end
+    self.pending, self.pendingAt = state, os.clock()
+    self.sendIntent(packet)
+    self:_draw()
+end
+
+function BossQueuePanel:update(data, hero)
+    local old = self.queue
+    self.queue = data and data.bossQueue
+    local queue, active = self.queue, data and data.status == "Active"
+    local livingEnemy = data and data.enemyRole and data.enemyRole.status ~= "Dead"
+    local eligibleContext = data ~= nil and (not active or (not hero and not livingEnemy))
+    self.card.Visible = queue ~= nil and eligibleContext
+    self.compact = active == true and data.view ~= "Menu"
+    self.card.Parent = self.compact and self.hudParent or self.menuParent
+    if not queue or not old or old.state ~= queue.state or old.offerId ~= queue.offerId then
+        self.pending = nil
+    end
+    if not queue or queue.offerId ~= self.ackOffer then
+        self.ackOffer, self.ackCount, self.ackAt = queue and queue.offerId, 0, nil
+        self.expiredOffer = nil
+    end
+    self:step()
+end
+
+function BossQueuePanel:_draw()
+    local queue = self.queue
+    if not queue then return end
+    local state, colors = queue.state, self.colors
+    local seconds = self:_remaining()
+    local timed = state == "Invited" or state == "Accepted"
+    local enabled, primaryText = false, "Недоступно"
+    self.secondary.Visible = state == "Invited"
+    if state == "Queued" then
+        self.status.Text = "В очереди" .. (queue.position and " · №" .. tostring(queue.position) or "")
+        self.detail.Text = "Выбор обычного противника отменит ожидание."
+        primaryText, enabled = "Покинуть очередь", true
+    elseif state == "Invited" then
+        self.status.Text = "Приглашение · " .. seconds .. " с"
+        self.detail.Text = self.compact and "Примите приглашение до конца таймера."
+            or "Встреча со стражем ждёт вашего ответа. Примите приглашение до конца таймера."
+        primaryText, enabled = "Принять", seconds &gt; 0
+    elseif state == "Accepted" then
+        self.status.Text = "Подключение · " .. seconds .. " с"
+        self.detail.Text = "Подключаем автоматически… роль зарезервирована."
+        primaryText, enabled = "Отменить", true
+    elseif state == "Ready" then
+        self.status.Text = "Готово к бою"
+        self.detail.Text = "Страж закреплён за вами. Ждём начала встречи."
+        primaryText, enabled = "Отменить", true
+    elseif state == "Active" then
+        self.status.Text = "В бою"
+        self.detail.Text = "Вы управляете стражем переправы."
+        primaryText = "Роль назначена"
+    else
+        self.status.Text = queue.available == true and "Можно записаться" or "Недоступно"
+        self.detail.Text = queue.available == true and (self.compact and "Ждите приглашения перед встречей со стражем."
+            or "Встаньте в очередь и примите приглашение перед встречей героев со стражем.")
+            or "Очередь сейчас недоступна для вашей роли."
+        primaryText, enabled = "Ждать стража", queue.available == true
+    end
+    if timed and seconds == 0 then
+        self.status.Text, self.detail.Text = "Время вышло", "Ждём подтверждения сервера…"
+        enabled = false
+    end
+    if self.pending then primaryText = "Отправляем…" end
+    enabled = enabled and not self.pending
+    self.primary.Text, self.primary.Active, self.primary.Selectable = primaryText, enabled, enabled
+    self.primary.BackgroundColor3 = enabled and colors.yellow or colors.card
+    self.primary.TextColor3 = enabled and colors.ink or colors.muted
+    self.secondary.Text = "Отказаться"
+    self.secondary.Active, self.secondary.Selectable = enabled, enabled
+    self.secondary.TextColor3 = enabled and colors.text or colors.muted
+end
+
+function BossQueuePanel:step()
+    local queue = self.queue
+    if not queue then return end
+    if self.pending and os.clock() - self.pendingAt &gt; 4 then
+        self.pending = nil
+        self.sendIntent({kind = "Sync"})
+    end
+    if queue.state == "Accepted" and not self.pending and queue.offerId and self:_remaining() &gt; 0
+        and (self.ackCount or 0) &lt; 3 and (not self.ackAt or os.clock() - self.ackAt &gt;= 2) then
+        self.ackCount, self.ackAt = (self.ackCount or 0) + 1, os.clock()
+        self.sendIntent({kind = "ConnectBoss", offerId = queue.offerId})
+    end
+    if (queue.state == "Invited" or queue.state == "Accepted") and self:_remaining() == 0
+        and queue.offerId and self.expiredOffer ~= queue.offerId then
+        self.expiredOffer = queue.offerId
+        self.sendIntent({kind = "Sync"})
+    end
+    -- Only text and interaction state change each frame; geometry is owned by the main layout.
+    if self.card.Visible then self:_draw() end
+end
+
+function BossQueuePanel:layout(width, compact, x, y)
+    if not self.card.Visible then return 0 end
+    self.compact = compact
+    self.heading.Visible, self.note.Visible = not compact, not compact
+    local height = compact and 100 or (width &lt; 420 and 202 or 178)
+    if compact then
+        position(self.card, x or 0, y or 0, width, height)
+        position(self.name, 12, 6, width * 0.43, 23)
+        self.name.TextSize = width &lt; 360 and 13 or 15
+        position(self.status, width * 0.43 + 12, 6, width * 0.57 - 24, 23)
+        self.status.TextSize = width &lt; 360 and 11 or 12
+        position(self.detail, 12, 29, width - 24, 22)
+        self.detail.TextSize = width &lt; 360 and 11 or 12
+    else
+        self.card.Size = UDim2.new(1, 0, 0, height)
+        position(self.heading, 14, 10, width - 28, 18)
+        position(self.name, 14, 31, width - 28, 25)
+        self.name.TextSize = 19
+        position(self.status, 14, 57, width - 28, 20)
+        self.status.TextSize = 13
+        self.status.TextXAlignment = Enum.TextXAlignment.Left
+        position(self.detail, 14, 80, width - 28, width &lt; 420 and 38 or 22)
+        self.detail.TextSize = 13
+        position(self.note, 14, width &lt; 420 and 120 or 104, width - 28, width &lt; 420 and 30 or 20)
+    end
+    if compact then self.status.TextXAlignment = Enum.TextXAlignment.Right end
+    local inset, gap, buttonHeight = compact and 12 or 14, 8, compact and 40 or 42
+    local innerWidth = width - inset * 2
+    local half = (innerWidth - gap) / 2
+    position(self.primary, inset, height - buttonHeight - 9, self.secondary.Visible and half or innerWidth, buttonHeight)
+    position(self.secondary, inset + half + gap, height - buttonHeight - 9, half, buttonHeight)
+    self.primary.TextSize, self.secondary.TextSize = compact and 13 or 14, compact and 13 or 14
+    return height
+end
+
+return BossQueuePanel
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="LocalScript" referent="BT28">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -2363,6 +2935,7 @@ local remotes = ReplicatedStorage:WaitForChild("BrickToadsGame")
 local intent = remotes:WaitForChild("Intent")
 local stateRemote = remotes:WaitForChild("State")
 local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
+local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
 local spectatorCamera = SpectatorCamera.new()
 
 local C = {
@@ -2579,6 +3152,7 @@ menuNotice.TextXAlignment = Enum.TextXAlignment.Center
 
 local hud = frame(safe, "HUD")
 hud.BackgroundTransparency, hud.Size, hud.Visible = 1, UDim2.fromScale(1, 1), false
+local bossQueue = BossQueuePanel.new(scroll, hud, function(packet) intent:FireServer(packet) end, C)
 local roster = frame(hud, "HeroRoster")
 roster.BackgroundTransparency = 1
 local heroRows = {}
@@ -2681,6 +3255,7 @@ end
 local function send(kind, extra)
     if not playable() or not snapshot.runId or not controlled.actorId then return end
     if snapshot.enemyRole and kind == "Attack" and extra and extra.attack ~= "Punch" then return end
+    if snapshot.enemyRole and snapshot.enemyRole.template == "Boss" and kind == "Jump" then return end
     sequence += 1
     local packet = {kind = kind, runId = snapshot.runId, actorId = controlled.actorId,
         attempt = controlled.attempt, levelEpoch = snapshot.levelEpoch,
@@ -2786,11 +3361,17 @@ local noticeMessages = {
     ENEMY_DEAD = "Этот дозорный погиб. Выберите другого из списка.",
     UNKNOWN_ENEMY = "Этот дозорный больше недоступен. Выберите другого из списка.",
     ENEMY_ALREADY_OWNED = "Вы уже выбрали дозорного. У него одна жизнь.",
+    INELIGIBLE = "Очередь стража сейчас недоступна для вашей роли.",
+    ROLE_ACTIVE = "Вы уже управляете живым противником.",
+    ROLE_RESERVED = "Приглашение стража уже принято. Сначала отмените его в очереди.",
+    STALE_OFFER = "Это приглашение больше недоступно. Очередь обновляется.",
 }
 local function enemyChoiceAllowed()
     local reason = snapshot and snapshot.enemyUnavailableReason
+    local queue = snapshot and snapshot.bossQueue
+    local reserved = queue and (queue.state == "Accepted" or queue.state == "Ready" or queue.state == "Active")
     return snapshot and snapshot.status == "Active" and not mine and not snapshot.enemyRole
-        and (reason == nil or reason == "NO_ENEMY_AVAILABLE")
+        and not reserved and (reason == nil or reason == "NO_ENEMY_AVAILABLE")
 end
 local function renderOffers()
     local seen = {}
@@ -2879,13 +3460,15 @@ render = function()
         intro.Text, chooseTitle.Text = "Следующая попытка начинается по кнопке «Новая игра».", "ГЕРОЙ ДЛЯ СЛЕДУЮЩЕЙ ИГРЫ"
     elseif personalMenu then
         intro.Text = snapshot.enemyRole and snapshot.enemyRole.status == "Dead"
-            and "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой."
+            and (snapshot.enemyRole.template == "Boss" and "Страж побеждён. Можно продолжить наблюдать за этой игрой."
+                or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
         intro.Text, chooseTitle.Text = "Соберите команду, пройдите тракт и откройте ворота.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
+    bossQueue:update(snapshot, mine)
     local owners = snapshot and snapshot.lobby or {}
     local heroOnline = 0
     for _, owner in ipairs(owners) do if (owner.preference or "Hero") == "Hero" then heroOnline += 1 end end
@@ -2939,19 +3522,24 @@ render = function()
         end
     end
     local enemy = snapshot and snapshot.enemyRole
+    local controlledBoss = enemy and enemy.template == "Boss"
     roster.Visible, enemyStatus.Visible = enemy == nil, enemy ~= nil
     if enemy then
-        enemyOwner.Text = player.DisplayName .. " · противник"
-        enemyLife.Text = enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи")
+        enemyOwner.Text = controlledBoss and ((enemy.name or "Страж переправы") .. " · вы") or (player.DisplayName .. " · противник")
+        enemyLife.Text = controlledBoss and (enemy.status == "Dead" and "Страж побеждён"
+            or (enemy.connected and (tostring(enemy.hearts or 0) .. " / " .. tostring(enemy.maxHearts or 3) .. " ♥") or "Страж · нет связи"))
+            or (enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи"))
         enemyLife.TextColor3 = enemy.status == "Dead" and C.red or C.muted
         for n, heart in ipairs(enemyHearts) do
             heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
         end
     end
     dash.Visible = enemy == nil
+    jump.Visible = not controlledBoss
+    keyboardHint.Text = controlledBoss and "W A S D  ·  прицел" or "W A S D  ·  движение"
     local level = snapshot and snapshot.level or {}
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
-    stageLabel.Text = isBoss and "СТРАЖ ТРАКТА" or "ЗАТОПЛЕННЫЙ ТРАКТ"
+    stageLabel.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ"
     objectiveLabel.Text = enemy and "Остановите героев" or (level.objective or "Пройдите тракт и доберитесь до ворот.")
     local hits = tonumber(level.bossHits) or 0
     if enemy then
@@ -2995,7 +3583,7 @@ render = function()
     chooseEnemyButton.Visible = canChoose == true and not choosingEnemy and not choice and not personalMenu
     if enemyDead then
         spectatorText.Text = snapshot.view == "Spectating" and "Вы наблюдаете. Новую роль можно выбрать перед следующей игрой."
-            or noticeMessages.ENEMY_LIFE_SPENT
+            or (controlledBoss and "Страж побеждён. Можно наблюдать за продолжающейся игрой." or noticeMessages.ENEMY_LIFE_SPENT)
     elseif choice then
         spectatorText.Text = "Вы выбыли. Группа продолжает игру — наблюдать или перейти в меню?"
     elseif mine then
@@ -3003,7 +3591,7 @@ render = function()
             or (snapshot.view == "Spectating" and "Вы наблюдаете за продолжающейся игрой."
                 or (noticeMessages[snapshot.enemyUnavailableReason] or noticeMessages.HERO_LOCKED))
     elseif enemy then
-        spectatorText.Text = "Связь с дозорным восстанавливается…"
+        spectatorText.Text = controlledBoss and "Связь со стражем восстанавливается…" or "Связь с дозорным восстанавливается…"
     elseif expanded then
         spectatorText.Text = "Три сердца · одна жизнь · без возвратов"
     else
@@ -3127,6 +3715,7 @@ layout = function()
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
     local enemy = snapshot and snapshot.enemyRole
+    local controlledBoss = enemy and enemy.template == "Boss"
     local enemyStatusHeight = short and 57 or 72
     local rosterHeight = enemy and (enemyStatusHeight + gap) or count * (rowHeightHUD + gap)
     if not enemy and enemyChoiceAllowed() and choosingEnemy and height &lt; 620 then
@@ -3155,6 +3744,7 @@ layout = function()
         position(heart.heart, 10 + (n - 1) * 25, short and 26 or 32, 24, 27)
         heart.heart.TextSize, heart.fill.TextSize = short and 21 or 23, short and 21 or 23
     end
+    objective.Visible = true
     if portrait then
         position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 100)
     else
@@ -3168,14 +3758,15 @@ layout = function()
     bossLabel.TextSize = short and 11 or 12
     local bottom, controlWidth = short and 12 or 20, width &lt; 360 and 146 or 162
     local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
-    actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, actionHeight)
+    actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
     local half = (controlWidth - 8) / 2
     position(punch, 0, 0, enemy and controlWidth or half, topHeight)
     position(dash, half + 8, 0, half, topHeight)
     position(jump, 0, topHeight + 8, controlWidth, short and 41 or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
     local isTouch = UserInputService.TouchEnabled
-    punch.Text, dash.Text = isTouch and "УДАР" or "УДАР\nF", isTouch and "ТАРАН" or "ТАРАН\nR"
+    punch.Text = controlledBoss and (isTouch and "СНАРЯД" or "СНАРЯД\nF") or (isTouch and "УДАР" or "УДАР\nF")
+    dash.Text = isTouch and "ТАРАН" or "ТАРАН\nR"
     jump.Text = isTouch and "ПРЫЖОК" or "ПРЫЖОК · SPACE"
     local padSize = short and 104 or (width &lt; 360 and 106 or 122)
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
@@ -3187,12 +3778,35 @@ layout = function()
     local hasViewButtons = watchButton.Visible or personalMenuButton.Visible or chooseEnemyButton.Visible
     local spectatorHeight = expanded and (short and 224 or 274) or (hasCameraButtons and 158 or (hasViewButtons and 116 or 74))
     local cameraPadSize = short and 104 or (width &lt; 360 and 106 or 116)
-    local compactCameraPanel = shortLandscape and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
+    local compactCameraPanel = not portrait and short and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
     if compactCameraPanel then
         spectatorWidth = math.min(spectatorWidth, width - 2 * (inset + cameraPadSize + 12))
         spectatorHeight = 122
     end
     local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
+    if bossQueue.card.Visible then
+        if bossQueue.compact then
+            local queueX, queueWidth = objective.Position.X.Offset, objective.Size.X.Offset
+            local queueY = objective.Position.Y.Offset + objective.Size.Y.Offset + 8
+            local spectatorTop = height - bottom - cameraBottom - spectatorHeight
+            if portrait and queueY + 108 &gt; spectatorTop then
+                -- The observer queue replaces the tall roster when a phone needs that space.
+                roster.Visible = false
+                position(objective, inset, inset, width - inset * 2, short and 92 or 100)
+                queueY = inset + objective.Size.Y.Offset + 8
+            end
+            if queueY + 108 &gt; spectatorTop then
+                -- On very shallow windows retain the queue and its invitation buttons above observation.
+                objective.Visible = false
+                queueY = inset
+                local available = height - bottom - cameraBottom - queueY - 108
+                spectatorHeight = math.min(spectatorHeight, math.max(150, available))
+            end
+            bossQueue:layout(queueWidth, true, queueX, queueY)
+        else
+            bossQueue:layout(contentWidth, false)
+        end
+    end
     spectator.Position = UDim2.new(0.5, 0, 1, -bottom - cameraBottom)
     spectator.Size = UDim2.fromOffset(spectatorWidth, spectatorHeight)
     cameraPad.Position, cameraPad.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(cameraPadSize, cameraPadSize)
@@ -3209,6 +3823,7 @@ layout = function()
     local innerWidth, gapButtons = spectatorWidth - 28, 8
     local halfButton = (innerWidth - gapButtons) / 2
     local bottomRow = spectatorHeight - 54
+    spectatorText.Visible = true
     if expanded then
         position(enemyChoiceTitle, 14, 9, spectatorWidth - 28, 19)
         position(spectatorText, 14, 31, spectatorWidth - 28, 19)
@@ -3217,6 +3832,11 @@ layout = function()
         position(watchButton, 14, bottomRow, personalMenuButton.Visible and halfButton or innerWidth, 44)
         position(personalMenuButton, 14 + halfButton + gapButtons, bottomRow, halfButton, 44)
         spectatorText.TextSize = short and 12 or 13
+        if spectatorHeight &lt; 200 then
+            spectatorText.Visible = false
+            position(enemyChoiceNote, 14, 30, spectatorWidth - 28, 25)
+            position(enemyOffers, 14, 59, spectatorWidth - 28, spectatorHeight - 121)
+        end
     else
         position(spectatorText, 14, 7, spectatorWidth - 28, hasViewButtons and 44 or 60)
         position(nextHeroButton, 14, 55, halfButton, 44)
@@ -3367,6 +3987,7 @@ task.spawn(function()
 end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
+    bossQueue:step()
     moveElapsed, syncElapsed = moveElapsed + dt, syncElapsed + dt
     if syncElapsed &gt;= 2 then
         syncElapsed = 0
@@ -3416,7 +4037,7 @@ intent:FireServer({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT27">
+        <Item class="ModuleScript" referent="BT29">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.

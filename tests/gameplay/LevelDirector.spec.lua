@@ -275,6 +275,80 @@ return function(Director,Session,Core,Combat,baseConfig,FakeWorld)
         assert(d:claim(71,-1)=='ENEMY_DEAD' and d:claim(72,-2)=='ENEMY_DEAD')
         assert(d:controlled(71)==nil and d:controlled(72)==nil,'A failed claim must not spend a life')
     end)
+    test('boss gate waits before spawning and assigns one existing-profile human guardian',function()
+        local d,w=fixture(); local state='Waiting'
+        d.bossGate=function() return {state=state,userId=71} end
+        clearWave(d); clearWave(d)
+        assert(d.stage=='BossReady' and not w.actors[-99],'Pending invitation must precede the encounter')
+        local spawns=w.spawns; d:step(d.now+1,.1)
+        assert(w.spawns==spawns and not w.actors[-99])
+        state='Human'; d:step(d.now+.1,.1)
+        local role=d:controlled(71)
+        assert(d.stage=='Boss' and role and role.template=='Boss' and role.enemyId==-99)
+        assert(role.hearts==d.config.Boss.hits and role.maxHearts==d.config.Boss.hits)
+        assert(role.actorId==w.actors[-99].actorId)
+        d:step(d.now+.1,.1); assert(w.spawns==spawns+1,'One slot creates one boss')
+    end)
+    test('human guardian aims and fires only validated input with NPC projectile calibration',function()
+        local d,w=fixture(); d.bossGate=function() return {state='Human',userId=71} end
+        clearWave(d); clearWave(d); w.positions[1]={x=68,y=3,z=0}
+        d:step(d.now+3,.1); assert(next(d.projectiles)==nil,'A human guardian never auto-fires')
+        local function command(kind,seq,fields)
+            local role=d:controlled(71); local p={kind=kind,runId='run-enemies',levelEpoch=1,actorId=role.actorId,
+                attempt=1,connectionEpoch=role.connectionEpoch,seq=seq}
+            for k,v in pairs(fields or {}) do p[k]=v end
+            return d:command(71,p,d.now,validate)
+        end
+        assert(command('Jump',1)=='INVALID_INTENT')
+        assert(command('Attack',1,{attack='Dash'})=='INVALID_INTENT')
+        assert(command('Move',1,{x=-1,z=0})=='OK')
+        assert(command('Attack',2,{attack='Punch'})=='OK')
+        local id,ball=next(d.projectiles)
+        assert(id and ball.direction.x<w.positions[-99].x and not ball.reflected)
+        assert(command('Attack',3,{attack='Punch'})=='COOLDOWN')
+        local original=w.actors[-99]; d:connection(71,false)
+        local epoch=d:controlled(71).connectionEpoch
+        local x=ball.position.x; d:step(d.now+.1,.1)
+        assert(ball.position.x<x,'Accepted projectile continues after disconnection')
+        assert(command('Attack',4,{attack='Punch'})=='OFFLINE')
+        assert(d:hit(1,id,'Punch'))
+        for _=1,15 do d:step(d.now+.1,.1) end
+        assert(d.bossHits==1 and d:controlled(71).hearts==2,'Offline boss remains vulnerable')
+        d:connection(71,true)
+        assert(d:controlled(71).connectionEpoch==epoch+1 and w.actors[-99]==original)
+        assert(d:controlled(71).hearts==2,'Returning controller cannot heal the boss')
+    end)
+    test('physical guardian death ends its role and does not permit late commands or respawn',function()
+        local d,w=fixture(); d.bossGate=function() return {state='Human',userId=71} end
+        clearWave(d); clearWave(d); local body=w.actors[-99]
+        w.hazards={[-99]='Fall'}; d:step(d.now+.1,.1)
+        assert(d.stage=='Exit' and d:controlled(71).status=='Dead' and d:controlled(71).hearts==0)
+        assert(d.bossHits==0,'A physical death is not three reflected hits')
+        local spawns=w.spawns; d:connection(71,false); d:connection(71,true); d:step(d.now+3,.1)
+        assert(w.spawns==spawns and w.actors[-99]==body,'Reconnect cannot recreate a dead guardian')
+    end)
+    test('guardian input cannot fire through an already missing physical body',function()
+        local d,w=fixture(); d.bossGate=function() return {state='Human',userId=71} end
+        clearWave(d); clearWave(d); d.now+=3
+        local role=d:controlled(71); w.hazards={[-99]='ActorMissing'}; w.positions[-99]=nil
+        local p={kind='Attack',attack='Punch',seq=1,runId='run-enemies',levelEpoch=1,
+            actorId=role.actorId,attempt=1,connectionEpoch=role.connectionEpoch}
+        assert(d:command(71,p,d.now,validate)=='NOT_ALIVE')
+        assert(next(d.projectiles)==nil and d:controlled(71).status=='Dead')
+    end)
+    test('guardian death cancels later outbound impacts in the same server tick',function()
+        local d,w=fixture(); clearWave(d); clearWave(d)
+        w.positions[1]={x=68,y=3,z=0}; d.bossHits=2; d.enemies[-99].health=1
+        d.projectiles={[-1001]={},[-1002]={}}
+        local order={}; for id in pairs(d.projectiles) do order[#order+1]=id end
+        d.projectiles[order[1]]={position=table.clone(w.positions[-99]),direction=w.positions[1],
+            created=d.now,reflected=true,reflectedAt=d.now}
+        d.projectiles[order[2]]={position=table.clone(w.positions[1]),direction=w.positions[1],created=d.now,reflected=false}
+        d:step(d.now+.01,.01)
+        assert(d.stage=='Exit' and d.enemies[-99].dead)
+        assert(w.hits==0,'No projectile may hit after guardian defeat, even later in the same tick')
+        assert(next(d.projectiles)==nil,'Encounter completion clears every remaining projectile')
+    end)
     if Session then
         local function realSessionFixture()
             local d,w=fixture(); local config=table.clone(baseConfig)

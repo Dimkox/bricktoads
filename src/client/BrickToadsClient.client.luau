@@ -9,6 +9,7 @@ local remotes = ReplicatedStorage:WaitForChild("BrickToadsGame")
 local intent = remotes:WaitForChild("Intent")
 local stateRemote = remotes:WaitForChild("State")
 local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
+local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
 local spectatorCamera = SpectatorCamera.new()
 
 local C = {
@@ -225,6 +226,7 @@ menuNotice.TextXAlignment = Enum.TextXAlignment.Center
 
 local hud = frame(safe, "HUD")
 hud.BackgroundTransparency, hud.Size, hud.Visible = 1, UDim2.fromScale(1, 1), false
+local bossQueue = BossQueuePanel.new(scroll, hud, function(packet) intent:FireServer(packet) end, C)
 local roster = frame(hud, "HeroRoster")
 roster.BackgroundTransparency = 1
 local heroRows = {}
@@ -327,6 +329,7 @@ end
 local function send(kind, extra)
     if not playable() or not snapshot.runId or not controlled.actorId then return end
     if snapshot.enemyRole and kind == "Attack" and extra and extra.attack ~= "Punch" then return end
+    if snapshot.enemyRole and snapshot.enemyRole.template == "Boss" and kind == "Jump" then return end
     sequence += 1
     local packet = {kind = kind, runId = snapshot.runId, actorId = controlled.actorId,
         attempt = controlled.attempt, levelEpoch = snapshot.levelEpoch,
@@ -432,11 +435,17 @@ local noticeMessages = {
     ENEMY_DEAD = "Этот дозорный погиб. Выберите другого из списка.",
     UNKNOWN_ENEMY = "Этот дозорный больше недоступен. Выберите другого из списка.",
     ENEMY_ALREADY_OWNED = "Вы уже выбрали дозорного. У него одна жизнь.",
+    INELIGIBLE = "Очередь стража сейчас недоступна для вашей роли.",
+    ROLE_ACTIVE = "Вы уже управляете живым противником.",
+    ROLE_RESERVED = "Приглашение стража уже принято. Сначала отмените его в очереди.",
+    STALE_OFFER = "Это приглашение больше недоступно. Очередь обновляется.",
 }
 local function enemyChoiceAllowed()
     local reason = snapshot and snapshot.enemyUnavailableReason
+    local queue = snapshot and snapshot.bossQueue
+    local reserved = queue and (queue.state == "Accepted" or queue.state == "Ready" or queue.state == "Active")
     return snapshot and snapshot.status == "Active" and not mine and not snapshot.enemyRole
-        and (reason == nil or reason == "NO_ENEMY_AVAILABLE")
+        and not reserved and (reason == nil or reason == "NO_ENEMY_AVAILABLE")
 end
 local function renderOffers()
     local seen = {}
@@ -525,13 +534,15 @@ render = function()
         intro.Text, chooseTitle.Text = "Следующая попытка начинается по кнопке «Новая игра».", "ГЕРОЙ ДЛЯ СЛЕДУЮЩЕЙ ИГРЫ"
     elseif personalMenu then
         intro.Text = snapshot.enemyRole and snapshot.enemyRole.status == "Dead"
-            and "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой."
+            and (snapshot.enemyRole.template == "Boss" and "Страж побеждён. Можно продолжить наблюдать за этой игрой."
+                or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
         intro.Text, chooseTitle.Text = "Соберите команду, пройдите тракт и откройте ворота.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
+    bossQueue:update(snapshot, mine)
     local owners = snapshot and snapshot.lobby or {}
     local heroOnline = 0
     for _, owner in ipairs(owners) do if (owner.preference or "Hero") == "Hero" then heroOnline += 1 end end
@@ -585,19 +596,24 @@ render = function()
         end
     end
     local enemy = snapshot and snapshot.enemyRole
+    local controlledBoss = enemy and enemy.template == "Boss"
     roster.Visible, enemyStatus.Visible = enemy == nil, enemy ~= nil
     if enemy then
-        enemyOwner.Text = player.DisplayName .. " · противник"
-        enemyLife.Text = enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи")
+        enemyOwner.Text = controlledBoss and ((enemy.name or "Страж переправы") .. " · вы") or (player.DisplayName .. " · противник")
+        enemyLife.Text = controlledBoss and (enemy.status == "Dead" and "Страж побеждён"
+            or (enemy.connected and (tostring(enemy.hearts or 0) .. " / " .. tostring(enemy.maxHearts or 3) .. " ♥") or "Страж · нет связи"))
+            or (enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи"))
         enemyLife.TextColor3 = enemy.status == "Dead" and C.red or C.muted
         for n, heart in ipairs(enemyHearts) do
             heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
         end
     end
     dash.Visible = enemy == nil
+    jump.Visible = not controlledBoss
+    keyboardHint.Text = controlledBoss and "W A S D  ·  прицел" or "W A S D  ·  движение"
     local level = snapshot and snapshot.level or {}
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
-    stageLabel.Text = isBoss and "СТРАЖ ТРАКТА" or "ЗАТОПЛЕННЫЙ ТРАКТ"
+    stageLabel.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ"
     objectiveLabel.Text = enemy and "Остановите героев" or (level.objective or "Пройдите тракт и доберитесь до ворот.")
     local hits = tonumber(level.bossHits) or 0
     if enemy then
@@ -641,7 +657,7 @@ render = function()
     chooseEnemyButton.Visible = canChoose == true and not choosingEnemy and not choice and not personalMenu
     if enemyDead then
         spectatorText.Text = snapshot.view == "Spectating" and "Вы наблюдаете. Новую роль можно выбрать перед следующей игрой."
-            or noticeMessages.ENEMY_LIFE_SPENT
+            or (controlledBoss and "Страж побеждён. Можно наблюдать за продолжающейся игрой." or noticeMessages.ENEMY_LIFE_SPENT)
     elseif choice then
         spectatorText.Text = "Вы выбыли. Группа продолжает игру — наблюдать или перейти в меню?"
     elseif mine then
@@ -649,7 +665,7 @@ render = function()
             or (snapshot.view == "Spectating" and "Вы наблюдаете за продолжающейся игрой."
                 or (noticeMessages[snapshot.enemyUnavailableReason] or noticeMessages.HERO_LOCKED))
     elseif enemy then
-        spectatorText.Text = "Связь с дозорным восстанавливается…"
+        spectatorText.Text = controlledBoss and "Связь со стражем восстанавливается…" or "Связь с дозорным восстанавливается…"
     elseif expanded then
         spectatorText.Text = "Три сердца · одна жизнь · без возвратов"
     else
@@ -773,6 +789,7 @@ layout = function()
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
     local enemy = snapshot and snapshot.enemyRole
+    local controlledBoss = enemy and enemy.template == "Boss"
     local enemyStatusHeight = short and 57 or 72
     local rosterHeight = enemy and (enemyStatusHeight + gap) or count * (rowHeightHUD + gap)
     if not enemy and enemyChoiceAllowed() and choosingEnemy and height < 620 then
@@ -801,6 +818,7 @@ layout = function()
         position(heart.heart, 10 + (n - 1) * 25, short and 26 or 32, 24, 27)
         heart.heart.TextSize, heart.fill.TextSize = short and 21 or 23, short and 21 or 23
     end
+    objective.Visible = true
     if portrait then
         position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 100)
     else
@@ -814,14 +832,15 @@ layout = function()
     bossLabel.TextSize = short and 11 or 12
     local bottom, controlWidth = short and 12 or 20, width < 360 and 146 or 162
     local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
-    actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, actionHeight)
+    actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
     local half = (controlWidth - 8) / 2
     position(punch, 0, 0, enemy and controlWidth or half, topHeight)
     position(dash, half + 8, 0, half, topHeight)
     position(jump, 0, topHeight + 8, controlWidth, short and 41 or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
     local isTouch = UserInputService.TouchEnabled
-    punch.Text, dash.Text = isTouch and "УДАР" or "УДАР\nF", isTouch and "ТАРАН" or "ТАРАН\nR"
+    punch.Text = controlledBoss and (isTouch and "СНАРЯД" or "СНАРЯД\nF") or (isTouch and "УДАР" or "УДАР\nF")
+    dash.Text = isTouch and "ТАРАН" or "ТАРАН\nR"
     jump.Text = isTouch and "ПРЫЖОК" or "ПРЫЖОК · SPACE"
     local padSize = short and 104 or (width < 360 and 106 or 122)
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
@@ -833,12 +852,35 @@ layout = function()
     local hasViewButtons = watchButton.Visible or personalMenuButton.Visible or chooseEnemyButton.Visible
     local spectatorHeight = expanded and (short and 224 or 274) or (hasCameraButtons and 158 or (hasViewButtons and 116 or 74))
     local cameraPadSize = short and 104 or (width < 360 and 106 or 116)
-    local compactCameraPanel = shortLandscape and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
+    local compactCameraPanel = not portrait and short and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
     if compactCameraPanel then
         spectatorWidth = math.min(spectatorWidth, width - 2 * (inset + cameraPadSize + 12))
         spectatorHeight = 122
     end
     local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
+    if bossQueue.card.Visible then
+        if bossQueue.compact then
+            local queueX, queueWidth = objective.Position.X.Offset, objective.Size.X.Offset
+            local queueY = objective.Position.Y.Offset + objective.Size.Y.Offset + 8
+            local spectatorTop = height - bottom - cameraBottom - spectatorHeight
+            if portrait and queueY + 108 > spectatorTop then
+                -- The observer queue replaces the tall roster when a phone needs that space.
+                roster.Visible = false
+                position(objective, inset, inset, width - inset * 2, short and 92 or 100)
+                queueY = inset + objective.Size.Y.Offset + 8
+            end
+            if queueY + 108 > spectatorTop then
+                -- On very shallow windows retain the queue and its invitation buttons above observation.
+                objective.Visible = false
+                queueY = inset
+                local available = height - bottom - cameraBottom - queueY - 108
+                spectatorHeight = math.min(spectatorHeight, math.max(150, available))
+            end
+            bossQueue:layout(queueWidth, true, queueX, queueY)
+        else
+            bossQueue:layout(contentWidth, false)
+        end
+    end
     spectator.Position = UDim2.new(0.5, 0, 1, -bottom - cameraBottom)
     spectator.Size = UDim2.fromOffset(spectatorWidth, spectatorHeight)
     cameraPad.Position, cameraPad.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(cameraPadSize, cameraPadSize)
@@ -855,6 +897,7 @@ layout = function()
     local innerWidth, gapButtons = spectatorWidth - 28, 8
     local halfButton = (innerWidth - gapButtons) / 2
     local bottomRow = spectatorHeight - 54
+    spectatorText.Visible = true
     if expanded then
         position(enemyChoiceTitle, 14, 9, spectatorWidth - 28, 19)
         position(spectatorText, 14, 31, spectatorWidth - 28, 19)
@@ -863,6 +906,11 @@ layout = function()
         position(watchButton, 14, bottomRow, personalMenuButton.Visible and halfButton or innerWidth, 44)
         position(personalMenuButton, 14 + halfButton + gapButtons, bottomRow, halfButton, 44)
         spectatorText.TextSize = short and 12 or 13
+        if spectatorHeight < 200 then
+            spectatorText.Visible = false
+            position(enemyChoiceNote, 14, 30, spectatorWidth - 28, 25)
+            position(enemyOffers, 14, 59, spectatorWidth - 28, spectatorHeight - 121)
+        end
     else
         position(spectatorText, 14, 7, spectatorWidth - 28, hasViewButtons and 44 or 60)
         position(nextHeroButton, 14, 55, halfButton, 44)
@@ -1013,6 +1061,7 @@ task.spawn(function()
 end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
+    bossQueue:step()
     moveElapsed, syncElapsed = moveElapsed + dt, syncElapsed + dt
     if syncElapsed >= 2 then
         syncElapsed = 0

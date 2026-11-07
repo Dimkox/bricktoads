@@ -1,4 +1,4 @@
-return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Director)
+return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Director,BossQueue)
     local passed=0
     local function test(name,fn) fn(); passed+=1; print('PASS '..name) end
     local function fixture(realDirector)
@@ -32,7 +32,7 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
                 available=function() return {} end,controlled=function() return nil end,connection=function() end,
                 closeTargetForAttack=function() end}
         end}
-        local c=Controller.new({Core=Core,Combat=Combat,Session=Session,Registry=Registry,Config=Config,Director=realDirector and Director or fakeDirector,
+        local c=Controller.new({Core=Core,Combat=Combat,Session=Session,Registry=Registry,Config=Config,BossQueue=BossQueue,Director=realDirector and Director or fakeDirector,
             clock=function() return clock end,guid=function() serial+=1; return 'game-'..serial end},world)
         local list={}
         local function player(id,name)
@@ -364,5 +364,86 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
         assert(bounds and bounds.minX==-90 and bounds.maxX==130 and bounds.minY==7 and bounds.maxY==52
             and bounds.minZ==-49 and bounds.maxZ==49,'Camera bounds must come from the active world')
     end)
+    if BossQueue then
+        local function queue(send,p) return send(p,{kind='QueueBoss',bossId='CausewayGuardian'}) end
+        local function accept(c,list,send,p)
+            local offer=c:snapshot(p,list).bossQueue
+            assert(offer.state=='Invited' and type(offer.offerId)=='string')
+            assert(send(p,{kind='ReplyBoss',offerId=offer.offerId,accepted=true})=='OK')
+            assert(c:snapshot(p,list).bossQueue.state=='Accepted')
+            assert(send(p,{kind='ConnectBoss',offerId=offer.offerId})=='OK')
+            assert(c:snapshot(p,list).bossQueue.state=='Ready')
+        end
+        test('boss selection waits FIFO and removes the applicant from the next hero roster',function()
+            local c,list,add,send=fixture(true); local hero,boss=add(10),add(20)
+            assert(queue(send,boss)=='OK','Boss choice must be implemented')
+            assert(c:snapshot(boss,list).bossQueue.state=='Queued')
+            assert(c:snapshot(boss,list).preference=='Spectator')
+            assert(send(hero,{kind='Start'})=='OK' and #c.current.order==1)
+            accept(c,list,send,boss); c.director:_boss()
+            assert(c:snapshot(boss,list).bossQueue.state=='Active')
+            assert(c:snapshot(boss,list).enemyRole.template=='Boss' and c:controlledSlot(boss.UserId)==-99)
+            assert(c.world.actors[-99].ownerName=='Hero20 @User20','New director must retain the assigned owner name')
+        end)
+        test('boss wait rejects active or eliminated same-run heroes and living ordinary enemies',function()
+            local c,list,add,send,_,hero,enemy=enemyFixture()
+            assert(queue(send,hero)=='HERO_LOCKED')
+            c.current.state.heroes[1].status='Eliminated'; assert(queue(send,hero)=='HERO_LOCKED')
+            assert(claim(c,send,enemy)=='OK' and queue(send,enemy)=='ROLE_ACTIVE')
+            c:leave(enemy); local fresh=add(enemy.UserId,'Returned')
+            assert(queue(send,fresh)=='ROLE_ACTIVE','Offline body retains role ownership')
+        end)
+        test('successful ordinary claim cancels waiting while failed claims preserve it',function()
+            local c,list,_,send,_,_,enemy=enemyFixture()
+            assert(queue(send,enemy)=='OK'); local offer=c:snapshot(enemy,list).bossQueue
+            c.director.enemies[-1].engaged=true
+            assert(claim(c,send,enemy,-1)=='ENEMY_ENGAGED')
+            assert(c:snapshot(enemy,list).bossQueue.offerId==offer.offerId)
+            assert(claim(c,send,enemy,-2)=='OK' and c:snapshot(enemy,list).bossQueue.state=='None')
+            assert(send(enemy,{kind='ReplyBoss',offerId=offer.offerId,accepted=true})~='OK')
+        end)
+        test('accepted boss reserve excludes ordinary claim and cannot silently enter the hero roster',function()
+            local c,list,_,send,_,_,enemy=enemyFixture(); assert(queue(send,enemy)=='OK')
+            accept(c,list,send,enemy)
+            assert(claim(c,send,enemy,-1)=='ROLE_RESERVED' and not c.director:controlled(enemy.UserId))
+            assert(send(enemy,{kind='CancelBossQueue'})=='OK')
+            assert(claim(c,send,enemy,-1)=='OK')
+        end)
+        test('boss gateway validates sender and exact invitation payloads',function()
+            local c,list,add,send=fixture(true); local hero,boss=add(10),add(20)
+            assert(send(boss,{kind='QueueBoss',bossId='Other'})=='INVALID_INTENT')
+            assert(send(boss,{kind='QueueBoss',bossId='CausewayGuardian',userId=10})=='INVALID_INTENT')
+            queue(send,boss); send(hero,{kind='Start'})
+            local offer=c:snapshot(boss,list).bossQueue; local fresh=add(20,'Returned')
+            assert(send(boss,{kind='ReplyBoss',offerId=offer.offerId,accepted=true})=='STALE_CONNECTION')
+            assert(send(fresh,{kind='ReplyBoss',offerId=offer.offerId,accepted='yes'})=='INVALID_INTENT')
+            assert(send(fresh,{kind='ConnectBoss',offerId={}})=='INVALID_INTENT')
+            assert(c:snapshot(fresh,list).bossQueue.deadline==offer.deadline,'Reconnect never extends invitation')
+        end)
+        test('boss invitation expires into NPC once and a late reply never replaces it',function()
+            local c,list,_,send,tick,_,enemy=enemyFixture(); queue(send,enemy)
+            local offer=c:snapshot(enemy,list).bossQueue
+            c.director:_boss(); assert(c.director.stage=='BossReady' and not c.world.actors[-99])
+            tick(10.1); assert(c.director.stage=='Boss' and not c.director:controlled(enemy.UserId))
+            local body=c.world.actors[-99]
+            assert(send(enemy,{kind='ReplyBoss',offerId=offer.offerId,accepted=true})~='OK')
+            tick(.1); assert(c.world.actors[-99]==body and not c.director:controlled(enemy.UserId))
+        end)
+        test('dead guardian releases its assignment without restoring its body or queue',function()
+            local c,list,_,send,tick,_,enemy=enemyFixture(); queue(send,enemy); accept(c,list,send,enemy)
+            c.director:_boss(); c.director:_kill(-99); tick(.1)
+            assert(c:snapshot(enemy,list).bossQueue.state=='None')
+            assert(c:snapshot(enemy,list).enemyRole.status=='Dead' and #c:snapshot(enemy,list).enemyOffers==0)
+        end)
+        test('ready owner disconnects before guardian spawn without creating a false online controller',function()
+            local c,list,add,send,_,_,enemy=enemyFixture(); queue(send,enemy); accept(c,list,send,enemy)
+            c:leave(enemy); c.director:_boss()
+            assert(c.director:controlled(enemy.UserId).connected==false,'Reserved offline owner must spawn disconnected')
+            local body=c.world.actors[-99]; c.director.enemies[-99].health=2
+            local fresh=add(enemy.UserId,'Returned')
+            assert(c:snapshot(fresh,list).enemyRole.connected and c:snapshot(fresh,list).enemyRole.hearts==2)
+            assert(c.world.actors[-99]==body and send(enemy,{kind='Sync'})=='STALE_CONNECTION')
+        end)
+    end
     print('GameController: '..passed..' PASS')
 end

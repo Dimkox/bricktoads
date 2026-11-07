@@ -369,7 +369,7 @@ function World:spawnEnemy(id, kind, positionTable)
     local isBoss = string.lower(tostring(kind)) == "boss"
     self.origins[id] = Vector3.new(x, y, z)
     self.names[id] = isBoss and "Страж переправы" or "Ржавый дозорный"
-    if not self._base.spawn(self, id, id, nil, isBoss, "Mr. Brown") then return false end
+    if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
     -- BaseWorld's ordinary spawn is deliberately y=3, so preserve the supplied
@@ -410,14 +410,14 @@ end
 
 function World:enemyIdentity(id,actorId,ownerName)
     local actor=self.actors[id]
-    if not actor or self.enemyKinds[id]~='Drone' then return end
+    if not actor or (self.enemyKinds[id]~='Drone' and self.enemyKinds[id]~='Boss') then return end
     actor.model:SetAttribute('ActorId',actorId)
     actor.model:SetAttribute('ControlledByPlayer',ownerName~=nil)
     if ownerName then
         local board=actor.root:FindFirstChild('OwnerNameplate')
         if board then board.Text.Text=ownerName
         else
-            local text=label(actor.root,ownerName,220,Vector3.new(0,5.7,0))
+            local text=label(actor.root,ownerName,220,Vector3.new(0,self.enemyKinds[id]=='Boss' and 10.2 or 5.7,0))
             text.TextSize=14; text.TextColor3=COLORS.amber; text.Parent.Name='OwnerNameplate'
         end
     end
@@ -443,6 +443,14 @@ function World:face(id, targetId)
     local p, q = a.root.Position, b.root.Position
     local flat = Vector3.new(q.X - p.X, 0, q.Z - p.Z)
     if flat.Magnitude > 0.05 then a.root.CFrame = CFrame.lookAt(p, p + flat) end
+end
+
+function World:aim(id,x,z)
+    local actor=self.actors[id]
+    if actor and actor.root.Parent and actor.humanoid.Health>0 and x*x+z*z>0 then
+        local position=actor.root.Position
+        actor.root.CFrame=CFrame.lookAt(position,position+Vector3.new(x,0,z))
+    end
 end
 
 function World:enemyMove(id, targetId, speed)
@@ -487,7 +495,7 @@ end
 function World:stage(name)
     self.stageName = name
     self.folder:SetAttribute("Stage", name)
-    local progress = ({Approach = 0, Courtyard = 1, Boss = 2, Exit = 3, Won = 3, Lost = -1})[name] or 0
+    local progress = ({Approach = 0, Courtyard = 1, BossReady = 1, Boss = 2, Exit = 3, Won = 3, Lost = -1})[name] or 0
     for index, gate in ipairs(self.gates) do
         local open = progress >= index
         gate.beam.CanCollide = not open

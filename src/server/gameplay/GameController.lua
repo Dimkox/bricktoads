@@ -10,7 +10,25 @@ local function exact(payload,allowed)
     return true
 end
 function Controller.new(deps,world)
-    return setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={}},Controller)
+    local self=setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={}},Controller)
+    if deps.BossQueue then
+        self.bossQueue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
+            return self:_bossEligible(userId,context)
+        end)
+    end
+    return self
+end
+function Controller:_bossEligible(userId,context)
+    if not self.current or self:_open() then return true end
+    if self.ownerSlots[userId] then return false end
+    local role=self.director:controlled(userId)
+    return not role or role.status~='Alive' or role.template=='Boss'
+end
+function Controller:_bossSelection(player)
+    if not self:_open() and self.ownerSlots[player.UserId] then return 'HERO_LOCKED' end
+    local role=not self:_open() and self.director:controlled(player.UserId)
+    if role and role.status=='Alive' then return 'ROLE_ACTIVE' end
+    return 'OK'
 end
 function Controller:_heroes(players)
     local heroes={}
@@ -22,6 +40,8 @@ end
 function Controller:_enemyName(player)
     self.director.ownerNames=self.director.ownerNames or {}
     self.director.ownerNames[player.UserId]=player.DisplayName..' @'..player.Name
+    self.director.ownerConnections=self.director.ownerConnections or {}
+    self.director.ownerConnections[player.UserId]=true
     local role=self.director:controlled(player.UserId)
     if role and role.status=='Alive' and self.world.enemyIdentity then
         self.world:enemyIdentity(role.enemyId,role.actorId,self.director.ownerNames[player.UserId])
@@ -29,6 +49,7 @@ function Controller:_enemyName(player)
 end
 function Controller:join(player)
     if not self.connections:join(player) then return end
+    if self.director then self:_enemyName(player) end
     local slot=self.ownerSlots[player.UserId]
     if self.current and slot and self.current.state.status=='Active' and not self.director.result then
         if self.current.state.heroes[slot].connected then self.current:connection(slot,false,self.deps.clock()) end
@@ -45,6 +66,10 @@ function Controller:join(player)
 end
 function Controller:leave(player)
     local changed=self.connections:remove(player)
+    if changed and self.director then
+        self.director.ownerConnections=self.director.ownerConnections or {}
+        self.director.ownerConnections[player.UserId]=false
+    end
     local slot=self.ownerSlots[player.UserId]
     if changed and self.current and slot and self.current.state.status=='Active' and not self.director.result then
         self.current:connection(slot,false,self.deps.clock())
@@ -60,6 +85,8 @@ function Controller:_begin(player,players)
     if #online==0 then return 'NO_HERO' end
     if online[1]~=player then return 'HOST_ONLY' end
     if not self:_open() then return 'RUN_ACTIVE' end
+    local at=self.deps.clock()
+    if self.bossQueue and self.bossSlot then self.bossQueue:close(self.bossSlot,at) end
     self.world:clearActors(); self.ownerSlots={}; self.owners={}; self.viewChoices={}
     local roster={}
     for index=1,math.min(3,#online) do
@@ -75,6 +102,13 @@ function Controller:_begin(player,players)
     end)
     self.current:step(self.deps.clock())
     self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config)
+    for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end
+    if self.bossQueue then
+        self.bossSlot=self.current.state.runId..':guardian:'..self.current.state.levelEpoch
+        self.bossQueue:register(self.bossSlot,'CausewayGuardian',{
+            runId=self.current.state.runId,groupId=self.current.state.groupId,levelEpoch=self.current.state.levelEpoch},at)
+        self.director.bossGate=function(now) return self.bossQueue:start(self.bossSlot,now) end
+    end
     local originalHit=self.current._hit
     local director=self.director
     self.current._hit=function(session,attacker,target,action)
@@ -110,7 +144,34 @@ function Controller:handle(player,payload,players)
     elseif payload.kind=='SelectRole' then
         if not exact(payload,{kind=true,role=true}) or not roles[payload.role] then return 'INVALID_INTENT' end
         if not self:_open() then code='RUN_ACTIVE'
-        else self.preferences[player.UserId]=payload.role; code='OK' end
+        else
+            if self.bossQueue then self.bossQueue:cancel(player.UserId,at) end
+            self.preferences[player.UserId]=payload.role; code='OK'
+        end
+    elseif payload.kind=='QueueBoss' then
+        if not exact(payload,{kind=true,bossId=true}) or payload.bossId~='CausewayGuardian' then return 'INVALID_INTENT' end
+        code=self:_bossSelection(player)
+        if code=='OK' then
+            code=self.bossQueue and self.bossQueue:select(player.UserId,payload.bossId,at) or 'UNAVAILABLE'
+            if code=='OK' then
+                self.preferences[player.UserId]='Spectator'; self.viewChoices[player.UserId]='Spectating'
+                if self.director then self:_enemyName(player) end
+            end
+        end
+    elseif payload.kind=='CancelBossQueue' then
+        if not exact(payload,{kind=true}) then return 'INVALID_INTENT' end
+        code=self.bossQueue and self.bossQueue:cancel(player.UserId,at) or 'UNAVAILABLE'
+    elseif payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss' then
+        local reply=payload.kind=='ReplyBoss'
+        if not exact(payload,reply and {kind=true,offerId=true,accepted=true} or {kind=true,offerId=true})
+            or type(payload.offerId)~='string' or #payload.offerId==0 or #payload.offerId>160
+            or (reply and type(payload.accepted)~='boolean') then return 'INVALID_INTENT' end
+        code=self:_bossSelection(player)
+        if code=='OK' then
+            if not self.bossQueue then code='UNAVAILABLE'
+            elseif reply then code=self.bossQueue:reply(player.UserId,payload.offerId,payload.accepted,at)
+            else code=self.bossQueue:connect(player.UserId,payload.offerId,at) end
+        end
     elseif payload.kind=='ChooseView' then
         if not exact(payload,{kind=true,runId=true,levelEpoch=true,view=true})
             or type(payload.runId)~='string' or #payload.runId==0 or #payload.runId>160
@@ -140,10 +201,17 @@ function Controller:handle(player,payload,players)
         elseif payload.levelEpoch~=self.current.state.levelEpoch then code='STALE_LEVEL'
         elseif self.ownerSlots[player.UserId] then code='HERO_LOCKED'
         else
-            self:_enemyName(player)
-            self.director.now=at
-            code=self.director:claim(player.UserId,payload.enemyId)
-            if code=='OK' then self.viewChoices[player.UserId]=nil end
+            local queue=self.bossQueue and self.bossQueue:view(player.UserId,at)
+            if queue and (queue.state=='Accepted' or queue.state=='Ready' or queue.state=='Active') then code='ROLE_RESERVED'
+            else
+                self:_enemyName(player)
+                self.director.now=at
+                code=self.director:claim(player.UserId,payload.enemyId)
+                if code=='OK' then
+                    if self.bossQueue then self.bossQueue:cancel(player.UserId,at) end
+                    self.viewChoices[player.UserId]=nil
+                end
+            end
         end
     elseif self.current then
         local slot=self.ownerSlots[player.UserId]
@@ -162,9 +230,13 @@ function Controller:handle(player,payload,players)
     return code
 end
 function Controller:step(now,dt)
+    if self.bossQueue then self.bossQueue:step(now) end
     if not self.current or self.finished then return end
     self.director.now=now
     self.current:step(now); self.director:step(now,dt)
+    if self.bossQueue and self.bossSlot and (self.director.stage=='Exit' or self.director.result) then
+        self.bossQueue:close(self.bossSlot,now)
+    end
     if self.director.result then
         self.finished=true
         for _,id in ipairs(self.current.order) do
@@ -218,6 +290,10 @@ function Controller:snapshot(player,players)
         if #data.enemyOffers==0 then data.enemyUnavailableReason='NO_ENEMY_AVAILABLE' end
     end
     data.notice=self.notices[player]
+    if self.bossQueue then
+        data.bossQueue=self.bossQueue:view(player.UserId,self.deps.clock())
+        data.bossQueue.available=self:_bossSelection(player)=='OK'
+    end
     return data
 end
 return Controller

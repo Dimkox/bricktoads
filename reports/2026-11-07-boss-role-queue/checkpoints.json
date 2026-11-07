@@ -1,0 +1,70 @@
+{
+  "secondReflectedHit": {
+    "role": {
+      "connected": true,
+      "enemyId": -99,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 1,
+      "maxHearts": 3,
+      "status": "Alive",
+      "template": "Boss",
+      "actorId": "de9e348b-04df-432b-9876-1c102ed7e0a0:boss:1",
+      "name": "Страж переправы"
+    },
+    "hits": 2,
+    "stage": "Boss",
+    "queue": {
+      "state": "Active",
+      "available": false,
+      "offerId": "boss-offer:1",
+      "slotId": "de9e348b-04df-432b-9876-1c102ed7e0a0:guardian:1",
+      "bossId": "CausewayGuardian"
+    }
+  },
+  "thirdReflectedHit": {
+    "role": {
+      "connected": true,
+      "enemyId": -99,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 0,
+      "maxHearts": 3,
+      "status": "Dead",
+      "template": "Boss",
+      "actorId": "de9e348b-04df-432b-9876-1c102ed7e0a0:boss:1",
+      "name": "Страж переправы"
+    },
+    "hits": 3,
+    "stage": "Exit",
+    "queue": {
+      "state": "None",
+      "available": true
+    }
+  },
+  "unlockedExit": {
+    "heroes": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "de9e348b-04df-432b-9876-1c102ed7e0a0:actor:2",
+        "dying": false
+      }
+    ],
+    "status": "Won",
+    "stage": "Won",
+    "runId": "de9e348b-04df-432b-9876-1c102ed7e0a0",
+    "hits": 3
+  }
+}

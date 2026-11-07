@@ -14,6 +14,7 @@ local function towards(a,b,amount)
     return {x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t}
 end
 local objectives={Approach='Разбейте дозор у старых ворот',Courtyard='Освободите внутренний двор',
+    BossReady='Назначаем стража: ожидаем ответ приглашённого игрока',
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
@@ -44,6 +45,7 @@ function Director:claim(userId,enemyId)
         return 'ENEMY_ALREADY_OWNED'
     end
     if self.result or self.session.state.status~='Active' then return 'RUN_CLOSED' end
+    if enemyId==-99 then return 'UNKNOWN_ENEMY' end
     local e=self.enemies[enemyId]
     if not e then return 'UNKNOWN_ENEMY' end
     if not e.dead and self.world:hazard(enemyId) then self:_kill(enemyId) end
@@ -70,13 +72,14 @@ function Director:controlled(userId)
     if not e then return nil end
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
-        maxHearts=self.config.Enemy.hearts,template='Sentry',name=e.name}
+        maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
+        template=e.boss and 'Boss' or 'Sentry',name=e.name}
 end
 function Director:available(userId)
     local offers={}
     if self.byUserId[userId] or self.result or self.session.state.status~='Active' then return offers end
     for id,e in pairs(self.enemies) do
-        if not e.dead and not e.engaged and not e.ownerUserId and not self.world:hazard(id) then
+        if not e.boss and not e.dead and not e.engaged and not e.ownerUserId and not self.world:hazard(id) then
             offers[#offers+1]={enemyId=id,actorId=e.actorId,name=e.name,hearts=e.health,maxHearts=self.config.Enemy.hearts}
         end
     end
@@ -100,16 +103,32 @@ function Director:command(userId,payload,now,validator)
     if type(validator)~='function' or not validator(payload) then return 'INVALID_INTENT' end
     if payload.kind~='Move' and payload.kind~='Jump' and payload.kind~='Attack' then return 'INVALID_INTENT' end
     if payload.kind=='Attack' and payload.attack~='Punch' then return 'INVALID_INTENT' end
+    if e.boss and payload.kind=='Jump' then return 'INVALID_INTENT' end
     if payload.runId~=self.session.state.runId then return 'WRONG_RUN' end
     if self.result or self.session.state.status~='Active' then return 'RUN_CLOSED' end
     if not e.connected then return 'OFFLINE' end
     if e.dead then return 'NOT_ALIVE' end
+    if e.boss and self.world:hazard(id) then self:_kill(id); return 'NOT_ALIVE' end
     if payload.actorId~=e.actorId or payload.attempt~=1 or payload.levelEpoch~=self.session.state.levelEpoch then return 'STALE_ACTOR' end
     if payload.connectionEpoch~=e.connectionEpoch then return 'STALE_CONNECTION' end
     if payload.seq<=e.lastSeq then return 'STALE_SEQUENCE' end
     if not finite(now) or now<0 then return 'INVALID_TIME' end
     if now<self.now then return 'TIME_REVERSED' end
     self.now=now; e.lastSeq=payload.seq
+    if e.boss then
+        if self.stage~='Boss' then return 'RUN_CLOSED' end
+        if payload.kind=='Move' then
+            local length=math.sqrt(payload.x^2+payload.z^2)
+            if length>0 then
+                e.aim={x=payload.x/length,z=payload.z/length}
+                if self.world.aim then self.world:aim(id,e.aim.x,e.aim.z) end
+            end
+        else
+            if now<self.nextShot then return 'COOLDOWN' end
+            self:_shoot(nil,e.aim); self.nextShot=now+self.config.Boss.interval
+        end
+        return 'OK'
+    end
     if e.reactionUntil then return 'REACTION' end
     if payload.kind=='Move' then
         e.lastMove=now; self.world:move(id,payload.x,payload.z)
@@ -134,8 +153,22 @@ function Director:_resolveStrike(id,e)
     end
 end
 function Director:_boss()
+    local controller=self.bossGate and self.bossGate(self.now) or {state='NPC'}
+    if controller.state=='Waiting' then
+        self.stage='BossReady'; self.world:stage('BossReady'); return
+    end
     self.stage='Boss'; self.world:stage('Boss')
     assert(self.world:spawnEnemy(-99,'Boss',{x=82,y=3,z=0}),'Boss spawn failed')
+    local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
+    local e={boss=true,actorId=actorId,health=self.config.Boss.hits,name='Страж переправы',aim={x=-1,z=0}}
+    self.enemies[-99]=e
+    if controller.state=='Human' then
+        e.ownerUserId=controller.userId
+        e.connected=self.ownerConnections==nil or self.ownerConnections[controller.userId]~=false
+        e.connectionEpoch=1; e.lastSeq=0
+        self.byUserId[controller.userId]=-99
+    end
+    self.world:enemyIdentity(-99,actorId,e.ownerUserId and self.ownerNames[e.ownerUserId])
     self.world:enemyHealth(-99,self.config.Boss.hits,self.config.Boss.hits)
     self.nextShot=self.now+1.8
 end
@@ -146,8 +179,11 @@ function Director:_kill(id)
     local e=self.enemies[id]
     if not e or e.dead then return end
     e.dead=true; e.windup=nil; e.health=0
-    self.world:enemyHealth(id,0,self.config.Enemy.hearts)
+    self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
     self.world:kill(id)
+    if e.boss then
+        self.stage='Exit'; self.world:stage('Exit')
+    end
 end
 function Director:hit(attacker,target,action)
     if self.result then return false end
@@ -160,7 +196,15 @@ function Director:hit(attacker,target,action)
         self.world:cue(attacker,false)
         return true
     end
-    if target==-99 and self.stage=='Boss' then self.world:cue(-99,true); return true end
+    if target==-99 then
+        if self.stage~='Boss' then return false end
+        self.world:cue(-99,true)
+        if self.config.Impulses then
+            local profile=action=='Dash' and 22 or 18
+            self.world:impulse(-99,attacker,self.config.Impulses[profile],profile)
+        end
+        return true
+    end
     local e=self.enemies[target]
     if not e or e.dead or (e.reactionUntil and self.now<e.reactionUntil) then return false end
     e.engaged=true; e.windup=nil
@@ -222,23 +266,32 @@ function Director:_enemies()
         elseif self.stage=='Courtyard' then self:_boss() end
     end
 end
+function Director:_shoot(target,aim)
+    local origin=self.world:position(-99)
+    if not origin then return end
+    local destination=aim and {x=origin.x+aim.x*self.config.Boss.aggroRange,y=origin.y,z=origin.z+aim.z*self.config.Boss.aggroRange}
+        or self.world:position(target)
+    if not origin or not destination then return end
+    if target then self.world:face(-99,target) end
+    self.world:cue(-99,true)
+    self.serial+=1
+    local id=-1000-self.serial
+    local start=towards(origin,destination,5)
+    self.projectiles[id]={position=start,direction=destination,created=self.now,target=target,reflected=false}
+    self.world:projectile(id,start,false)
+end
 function Director:_projectiles(dt)
-    if self.stage=='Boss' and self.now>=self.nextShot then
+    local boss=self.enemies[-99]
+    if self.stage=='Boss' and boss and not boss.ownerUserId and self.now>=self.nextShot then
         local target,range=self:_nearest(self.world:position(-99))
         if target and range<=self.config.Boss.aggroRange then
-            self.world:face(-99,target); self.world:cue(-99,true)
-            local origin=self.world:position(-99)
-            local destination=self.world:position(target)
-            self.serial+=1
-            local id=-1000-self.serial
-            local start=towards(origin,destination,5)
-            self.projectiles[id]={position=start,direction=destination,created=self.now,target=target,reflected=false}
-            self.world:projectile(id,start,false)
+            self:_shoot(target)
         end
         self.nextShot=self.now+self.config.Boss.interval
     end
     local remove={}
     for id,p in pairs(self.projectiles) do
+        if self.stage~='Boss' then break end
         local destination=p.reflected and self.world:position(-99) or p.direction
         if not destination or self.now-(p.reflectedAt or p.created)>self.config.Boss.projectileLife then remove[#remove+1]=id
         else
@@ -247,10 +300,11 @@ function Director:_projectiles(dt)
             self.world:projectile(id,p.position,p.reflected)
             if p.reflected and self.stage=='Boss' and distance(p.position,destination)<2.5 then
                 self.bossHits+=1; self.world:cue(-99,false)
+                boss.health=self.config.Boss.hits-self.bossHits
                 self.world:enemyHealth(-99,self.config.Boss.hits-self.bossHits,self.config.Boss.hits)
                 remove[#remove+1]=id
                 if self.bossHits>=self.config.Boss.hits then
-                    self.world:kill(-99); self.stage='Exit'; self.world:stage('Exit')
+                    self:_kill(-99)
                 end
             elseif not p.reflected then
                 local hit=false
@@ -276,6 +330,8 @@ function Director:step(now,dt)
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
     end
     if self.stage=='Approach' or self.stage=='Courtyard' then self:_enemies() end
+    if self.stage=='BossReady' then self:_boss() end
+    if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
     if self.stage=='Exit' then
         for _,id in ipairs(self.session.order) do
@@ -288,7 +344,8 @@ end
 function Director:snapshot()
     local enemies={}
     for id,e in pairs(self.enemies) do
-        enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=self.config.Enemy.hearts,dead=e.dead==true,attacking=e.windup~=nil}
+        enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
+            dead=e.dead==true,attacking=e.windup~=nil}
     end
     table.sort(enemies,function(a,b) return a.id>b.id end)
     return {stage=self.stage,objective=objectives[self.stage],enemies=enemies,bossHits=self.bossHits,
