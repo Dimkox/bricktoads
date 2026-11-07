@@ -102,7 +102,7 @@ function Controller:_begin(player,players)
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
     end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end
@@ -222,7 +222,10 @@ function Controller:handle(player,payload,players)
         if self:_open() then code='RUN_CLOSED'
         elseif slot then
             code=self.current:intent(slot,payload,at)
-            if code=='OK' and payload.kind=='Attack' then
+            local accepted=self.current.combat[slot].attack
+            local actor=self.current.state.heroes[slot].actorId
+            if code=='OK' and payload.kind=='Attack' and accepted
+                and accepted.actorId==actor and accepted.action==payload.attack then
                 self.director.now=at
                 self.director:closeTargetForAttack(self.world:targets(slot,self.deps.Config.Attacks[payload.attack]))
             end

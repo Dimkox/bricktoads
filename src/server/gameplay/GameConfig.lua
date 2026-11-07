@@ -8,6 +8,8 @@ return function(base,level)
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}
     config.Level=level
+    -- Studs, seconds and radians/second; not claimed original NES timing.
+    config.HealingFlies={range=6,height=3,facingDot=.25,windup=.16,bobHeight=.25,bobSpeed=2}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
         config.Boss.interval=1.6

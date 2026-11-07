@@ -10,7 +10,7 @@ local config=require(gameplay.GameConfig)(require(runtime.Config),require(gamepl
 local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
-    GuardianPattern=require(gameplay.GuardianPattern),
+    GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor

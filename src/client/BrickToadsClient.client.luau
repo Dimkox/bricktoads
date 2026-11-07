@@ -125,7 +125,7 @@ local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Шесть районов, разрывы и страж переправы. Пройдите тракт вместе.", 16, C.muted)
+local intro = label(header, "Intro", "Шесть районов и страж. Ловите мух языком, чтобы восстановить здоровье.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -569,7 +569,7 @@ render = function()
                 or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
-        intro.Text, chooseTitle.Text = "Шесть районов, разрывы и страж переправы. Пройдите тракт вместе.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Шесть районов и страж. Ловите мух языком, чтобы восстановить здоровье.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()

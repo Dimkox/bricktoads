@@ -165,6 +165,18 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
         c.world.targetsFor[1]={}
         assert(claim(c,send,enemy)=='ENEMY_ENGAGED')
     end)
+    test('successful contextual primary action does not engage an unrelated ordinary enemy',function()
+        local c,_,_,send,_,hero,enemy=enemyFixture()
+        c.world.targetsFor[1]={-1}
+        -- Use the real Session contextual shortcut shared by tongues and pickups.
+        c.director.interact=function() return 'OK' end
+        local h=c.current.state.heroes[1]
+        assert(send(hero,{kind='Attack',attack='Punch',runId=c.current.state.runId,actorId=h.actorId,attempt=h.attempt,
+            levelEpoch=1,connectionEpoch=h.connectionEpoch,seq=1})=='OK')
+        assert(c.current.combat[1].attack==nil,'A contextual action must not schedule an ordinary Punch')
+        assert(not c.director.enemies[-1].engaged,'Catching food or handling a ball must not close an untouched enemy offer')
+        assert(claim(c,send,enemy)=='OK','The same untouched enemy must remain available to another player')
+    end)
     test('attack lock uses acceptance time when the first target reaction just expired',function()
         local c,_,_,send,_,hero,enemy=enemyFixture()
         c.world.targetsFor[1]={-1,-2}

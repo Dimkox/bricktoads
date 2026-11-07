@@ -18,12 +18,14 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config,GuardianPattern)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height}},Director)
-    if self.route then self:_enterZone(1)
+    if self.route then
+        self.flies=HealingFlies and HealingFlies.new(session,world,config)
+        self:_enterZone(1)
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
 end
@@ -41,6 +43,7 @@ function Director:_wave(stage,roster)
 end
 function Director:_enterZone(index)
     self.zoneIndex=index
+    if self.flies then self.flies:activate(index) end
     self.world:progress(index,false)
     self:_wave('Route',self.route.zones[index].enemies)
 end
@@ -53,13 +56,21 @@ function Director:_zoneReached()
     return false
 end
 function Director:interaction(slot)
-    return self.guardian and self.stage=='Boss' and self.guardian:interaction(slot) or {available=false}
+    if self.guardian and self.stage=='Boss' then
+        local interaction=self.guardian:interaction(slot)
+        if interaction.available then return interaction end
+    end
+    return self.flies and self.flies:interaction(slot) or {available=false}
 end
 function Director:interact(slot,now,attack)
-    if not self.guardian or self.stage~='Boss' then return 'NO_INTERACTION' end
-    if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
     self.now=now
-    return self.guardian:interact(slot,now)
+    if self.guardian and self.stage=='Boss' then
+        if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
+        local result=self.guardian:interact(slot,now)
+        if result~='NO_INTERACTION' then return result end
+    end
+    if attack~='Punch' then return 'NO_INTERACTION' end
+    return self.flies and self.flies:interact(slot,now) or 'NO_INTERACTION'
 end
 function Director:claim(userId,enemyId)
     local owned=self.byUserId[userId]
@@ -364,8 +375,9 @@ function Director:_projectiles(dt)
     end
 end
 function Director:step(now,dt)
-    if self.result then return end
+    if self.result then if self.flies then self.flies:close() end;return end
     self.now=now
+    if self.flies then self.flies:step(now) end
     if self.session.state.status=='Lost' then
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
     end
@@ -376,7 +388,9 @@ function Director:step(now,dt)
     if self.stage=='Exit' then
         for _,id in ipairs(self.session.order) do
             if self.session.state.heroes[id].status=='Alive' and not self.session.combat[id].deathAt and self.world:atExit(id) then
-                self.result='Won'; self.stage='Won'; self.world:stage('Won'); break
+                self.result='Won'; self.stage='Won'; self.world:stage('Won')
+                if self.flies then self.flies:close() end
+                break
             end
         end
     end
@@ -394,6 +408,7 @@ function Director:snapshot()
     elseif self.route and self.stage=='Boss' then objective='Уклоняйтесь. Возьмите тяжёлый шар и бросьте в стража.' end
     return {stage=self.stage,objective=objective,enemies=enemies,bossHits=self.bossHits,
         bossMax=self.config.Boss.hits,result=self.result,zoneIndex=self.zoneIndex,zoneCount=self.route and #self.route.zones,
-        zoneName=zone and zone.name,bossMechanic=self.route and 'PickupThrow',bossRawLife=self.enemies[-99] and self.enemies[-99].rawLife}
+        zoneName=zone and zone.name,bossMechanic=self.route and 'PickupThrow',bossRawLife=self.enemies[-99] and self.enemies[-99].rawLife,
+        healingFlies=self.flies and self.flies:snapshot()}
 end
 return Director

@@ -11,6 +11,7 @@ Use **Группы** / **Выбрать команду** to create an independen
 - **WASD** — move and face a direction.
 - **F** — punch, pick up a nearby ground ball, or throw the ball you are carrying. The primary button shows **ВЗЯТЬ ШАР** / **БРОСИТЬ ШАР** when that interaction is available. **R** — heavy strike; **Space** — jump. The heavy strike is unavailable while carrying a ball.
 - Touch devices have a movement stick and attack/jump buttons.
+- In the stone courtyard, then on the long bridge, six healing flies appear in a two-then-four sequence. Face a nearby fly and use **F** / **ЛОВИТЬ МУХУ** to catch it with your tongue. A successful catch consumes it once and adds8 raw Life, capped at47 (about0.85 displayed heart); it does not restore respawns. A full-health catch still consumes the fly.
 - Heroes have five hearts and three successful respawns. A living hero with zero respawns can keep playing.
 - The six districts contain a static roster of 13 ordinary actors: nine pigs, two walkers and two dragons. They have distinct original silhouettes and currently share the provisional three-heart, one-life combat profile. This source-classified roster is not a verified natural-play population or a claim of complete species mechanics.
 - Advance by defeating the current district's enemies and physically reaching its far side. Empty traversal sections still require crossing their gaps and reaching the next gate. Respawns use unlocked route supports.
@@ -27,9 +28,11 @@ Use **Группы** / **Выбрать команду** to create an independen
 
 All three templates have the same capabilities. The server fixes the 1–3 hero roster at Start; later arrivals spectate this run. Health, collisions, enemy AI, projectiles and respawns are server-owned.
 
-This is an original playable prototype. Enemy damage, timing, geometry and the boss adaptation remain provisional. Ordinary human-enemy control, the guardian queue and up to four independent local groups are implemented for the current level. Multiple levels, cross-server boss routing and complete source-mechanics transfer remain outstanding. This does not implement cross-server discovery. Additional enemy combat abilities are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
+This is an original playable prototype. Enemy damage, timing and geometry remain provisional. The guardian pickup/throw chain and fly healing arithmetic are source-backed; their Roblox distances, timing and presentation are explicit calibration. Ordinary human-enemy control, the guardian queue and up to four independent local groups are implemented for the current level. Multiple levels, cross-server boss routing and complete source-mechanics transfer remain outstanding. This does not implement cross-server discovery. Additional enemy combat abilities are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
 
 ## Current route acceptance
+
+The added fly capture/healing was checked with three actual Studio clients in two groups and with the phone primary button in emulation. These prepared checks and their limits are recorded in the [healing flies report](reports/2026-11-07-healing-flies/README.md).
 
 The six-district route, all five physical gap landings, the three pickup/throw guardian hits and the earned exit were checked on the final sources in Studio. Ordinary NPCs were cleared by a separate QA listener to isolate traversal; hero movement, health and respawns were not edited. See [the current route report](reports/2026-11-07-first-level-route/README.md) for the exact evidence and remaining limits.
 
@@ -72,6 +75,7 @@ python tools/test_bricktoads_place.py
 luau tests/run_gameplay.luau
 luau tests/run_level_route.luau
 luau tests/run_guardian.luau
+luau tests/run_healing_flies.luau
 luau tests/run.luau
 luau tests/run_stand.luau
 luau tests/run_connections.luau

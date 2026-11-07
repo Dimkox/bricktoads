@@ -1,4 +1,4 @@
-return function(Director,Definition,Config)
+return function(Director,Definition,Config,Flies)
     local passed=0
     local function test(name,fn) fn(); passed+=1; print('PASS '..name) end
     local function fixture()
@@ -14,6 +14,8 @@ return function(Director,Definition,Config)
         function w:enemyMove() end
         function w:face() end
         function w:cue() end
+        function w:healingFly(id,p) self.food=self.food or {};self.food[id]=p and table.clone(p) or nil end
+        function w:canCatchFly() return true end
         function w:setReaction() end
         function w:impulse() self.impulses+=1 end
         function w:kill(id) self.actors[id].dead=true end
@@ -30,7 +32,7 @@ return function(Director,Definition,Config)
             return {step=function() end,hit=function(_,_,target) return target==-99 end,
                 interaction=function() return {available=false} end,interact=function() return 'NO_INTERACTION' end}
         end}
-        return Director.new(s,w,{},Config,pattern),w,s
+        return Director.new(s,w,{},Config,pattern,Flies),w,s
     end
     local function clear(d)
         local ids={};for id,e in pairs(d.enemies) do if not e.dead and not e.boss then ids[#ids+1]=id end end
@@ -88,6 +90,17 @@ return function(Director,Definition,Config)
     test('lost run closes the route before later districts spawn',function()
         local d,w,s=fixture();s.state.status='Lost';clear(d);reach(w,Definition.zones[1].exit);d:step(1,.1)
         assert(d.result=='Lost' and #w.spawns==3)
+    end)
+    test('route activates its two then four flies and clears them on closure',function()
+        local d,w,s=fixture()
+        assert(d.flies and d:snapshot().healingFlies.total==6,'production route must compose food mechanics')
+        assert(not w.food or next(w.food)==nil)
+        for i=1,2 do clear(d);reach(w,Definition.zones[i].exit);d:step(i,.1) end
+        assert(d:snapshot().healingFlies.active==2 and w.food['courtyard-fly-1'])
+        for i=3,5 do clear(d);reach(w,Definition.zones[i].exit);d:step(i,.1) end
+        assert(d:snapshot().healingFlies.active==6 and w.food['bridge-fly-4'])
+        s.state.status='Lost';d:step(7,.1)
+        assert(next(w.food)==nil and d:snapshot().healingFlies.active==0)
     end)
     print('LevelRoute: '..passed..' passed')
 end

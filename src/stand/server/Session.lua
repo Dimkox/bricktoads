@@ -186,6 +186,9 @@ function Session:_hit(attacker, target, action)
         c.rawLife=result.rawLife
     end
     if result.impulse then
+        -- Pending contextual actions must still see an interrupt after recovery
+        -- has cleared reactionEnd during a later (possibly long) server step.
+        c.reactionEpoch=(c.reactionEpoch or 0)+1
         c.attack=nil
         c.recover=result.recover
         c.reactionEnd=self.now+cfg.reaction

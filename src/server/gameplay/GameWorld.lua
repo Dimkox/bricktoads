@@ -458,6 +458,13 @@ function World.new(BaseWorld, config, options)
     self.folder:SetAttribute("LevelName", "Затопленный тракт")
     self.folder:SetAttribute("OriginalArt", true)
     self.enemyKinds = {}
+    self.healingFlyFolder = Instance.new("Folder")
+    self.healingFlyFolder.Name = "HealingFlies"
+    self.healingFlyFolder.Parent = self.folder
+    self.healingEffectFolder = Instance.new("Folder")
+    self.healingEffectFolder.Name = "HealingEffects"
+    self.healingEffectFolder.Parent = self.folder
+    self.healingFlyVisuals, self.healingEffects = {}, {}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + translation,
         [2] = Vector3.new(-65, 3, 0) + translation,
@@ -844,9 +851,106 @@ function World:removeProjectile(id)
     end
 end
 
+-- Collectibles are presentation only: they never enter the combat actor table.
+function World:healingFly(id, position)
+    local fly = self.healingFlyVisuals[id]
+    if not position then
+        if fly then fly.model:Destroy(); self.healingFlyVisuals[id] = nil end
+        return
+    end
+    local physical = Vector3.new(position.x, position.y, position.z) + self.offset
+    if not fly then
+        local model = Instance.new("Model")
+        model.Name = "HealingFly_" .. tostring(id)
+        model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
+        model:SetAttribute("CollectibleId", id)
+        model:SetAttribute("CollectibleKind", "HealingFly")
+        model:SetAttribute("CanCatch", true)
+        fly = {model = model, parts = {}, wings = {}}
+        local function piece(name, size, offset, color, shape, material)
+            local p = part(model, name, size, CFrame.new(physical) * offset, color, material, false)
+            p.CanQuery = false
+            if shape then p.Shape = shape end
+            fly.parts[#fly.parts + 1] = {part = p, offset = offset}
+            return p
+        end
+        fly.root = piece("FlyBody", Vector3.new(.85,.65,1.1), CFrame.new(), COLORS.mint,
+            Enum.PartType.Ball, Enum.Material.Neon)
+        piece("FlyHead", Vector3.new(.65,.6,.55), CFrame.new(0,.07,-.65), COLORS.moss, Enum.PartType.Ball)
+        for _,side in ipairs({-1,1}) do
+            piece("FlyEye", Vector3.new(.2,.25,.2), CFrame.new(side*.24,.18,-.89), COLORS.amber,
+                Enum.PartType.Ball, Enum.Material.Neon)
+            local offset = CFrame.new(side*.66,.24,.04) * CFrame.Angles(0,side*.35,side*.25)
+            local wing = piece(side<0 and "LeftWing" or "RightWing", Vector3.new(1.05,.1,.72), offset,
+                Color3.fromRGB(209,245,230), Enum.PartType.Ball)
+            wing.Transparency = .3
+            fly.wings[#fly.wings + 1] = {part = wing, offset = offset, side = side}
+        end
+        local aura = piece("HealingAura", Vector3.new(1.7,1.7,1.7), CFrame.new(), COLORS.mint,
+            Enum.PartType.Ball, Enum.Material.ForceField)
+        aura.Transparency = .84
+        pointLight(fly.root, COLORS.mint, 7, .55)
+        local text = label(fly.root, "МУХА  ·  ЛЕЧЕНИЕ", 170, Vector3.new(0,1.6,0))
+        text.TextSize = 13
+        text.TextColor3 = COLORS.mint
+        text.Parent.MaxDistance = 38
+        model.PrimaryPart = fly.root
+        model.Parent = self.healingFlyFolder
+        self.healingFlyVisuals[id] = fly
+    end
+    for _,piece in ipairs(fly.parts) do piece.part.CFrame = CFrame.new(physical) * piece.offset end
+end
+
+function World:canCatchFly(heroSlot, position, range, height, facingDot)
+    local actor = self.actors[heroSlot]
+    if not actor or not actor.root.Parent then return false end
+    local physical = Vector3.new(position.x, position.y, position.z) + self.offset
+    local delta = physical - actor.root.Position
+    if math.abs(delta.Y) > height or delta.Magnitude > range then return false end
+    local horizontal = math.sqrt(delta.X*delta.X + delta.Z*delta.Z)
+    if horizontal < .000001 then return true end
+    local look = actor.root.CFrame.LookVector
+    local lookLength = math.sqrt(look.X*look.X + look.Z*look.Z)
+    return lookLength > .000001
+        and (look.X*delta.X + look.Z*delta.Z) / (lookLength*horizontal) >= facingDot
+end
+
+function World:catchFly(heroSlot, flyId)
+    local fly, actor = self.healingFlyVisuals[flyId], self.actors[heroSlot]
+    if not fly then return false end
+    local destination = fly.root.Position
+    self:healingFly(flyId, nil)
+    if not actor or not actor.root.Parent then return true end
+    local head = actor.model:FindFirstChild("Head") or actor.root
+    local mouth = (head.CFrame * CFrame.new(0,-.28,-.94)).Position
+    local delta = destination - mouth
+    local midpoint = Vector3.new((mouth.X+destination.X)/2, (mouth.Y+destination.Y)/2, (mouth.Z+destination.Z)/2)
+    local model = Instance.new("Model")
+    model.Name = "HealingCatch_" .. tostring(heroSlot)
+    model:SetAttribute("CollectibleId", flyId)
+    local tongue = part(model, "Tongue", Vector3.new(.13,.13,math.max(delta.Magnitude,.1)),
+        CFrame.lookAt(midpoint, destination), Color3.fromRGB(255,145,158), Enum.Material.Neon, false)
+    tongue.CanQuery = false
+    local flash = ball(model, "HealingFlash", Vector3.new(.7,.7,.7), CFrame.new(mouth), COLORS.mint, Enum.Material.Neon)
+    flash.CanQuery = false
+    flash.Transparency = .35
+    model.Parent = self.healingEffectFolder
+    self.healingEffects[model] = (self.presentationTime or 0) + .22
+    return true
+end
+
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
+    for model,expiresAt in pairs(self.healingEffects) do
+        if self.presentationTime >= expiresAt then model:Destroy(); self.healingEffects[model] = nil end
+    end
+    for _,fly in pairs(self.healingFlyVisuals) do
+        for _,wing in ipairs(fly.wings) do
+            wing.part.CFrame = CFrame.new(fly.root.Position) * wing.offset
+                * CFrame.Angles(0,0,math.sin(self.presentationTime*32)*.35*wing.side)
+        end
+    end
     local blend = 1 - math.exp(-dt * 18)
     for id, actor in pairs(self.actors) do
         if id > -1000 and actor.root.Parent and self.enemyKinds[id] ~= "Boss" then
@@ -893,6 +997,9 @@ end
 function World:clearActors()
     self._base.clearActors(self)
     self.enemyKinds = {}
+    self.healingFlyFolder:ClearAllChildren()
+    self.healingEffectFolder:ClearAllChildren()
+    self.healingFlyVisuals, self.healingEffects = {}, {}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + self.offset,
         [2] = Vector3.new(-65, 3, 0) + self.offset,
