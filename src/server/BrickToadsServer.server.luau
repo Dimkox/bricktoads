@@ -7,16 +7,33 @@ Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
 local config=require(gameplay.GameConfig)(require(runtime.Config))
-local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config)
-local controller=require(gameplay.GameController).new({Core=require(script.Parent.RunLifecycle),
+local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
-    Config=config,Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),clock=function() return workspace:GetServerTimeNow() end,
-    guid=function() return HttpService:GenerateGUID(false) end},world)
+    Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
+    clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
+    function(index,groupId)
+        -- Migrate this runtime's older saved preview once; its unscoped floor
+        -- would otherwise overlap the first group's independently owned arena.
+        if index==1 then
+            local legacy=workspace:FindFirstChild('BrickToadsWorld')
+            if legacy and legacy:GetAttribute('OriginalArt')==true
+                and legacy:GetAttribute('LevelName')=='Затопленный тракт' and legacy:GetAttribute('GroupId')==nil then
+                legacy:Destroy()
+            end
+        end
+        local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config,{
+            name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing}})
+        world.folder:SetAttribute('GroupId',groupId)
+        return world
+    end)
 local remotes=Instance.new('Folder'); remotes.Name='BrickToadsGame'; remotes.Parent=ReplicatedStorage
 local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=remotes
 local state=Instance.new('RemoteEvent'); state.Name='State'; state.Parent=remotes
 local fault,lastBroadcast=nil,0
 local function replicationFocus(player)
+    local group=controller:selected(player)
+    if not group then return end
+    local world=group.world
     local slot=controller:controlledSlot(player.UserId)
     local actor=slot and world.actors[slot]
     if not actor or not actor.root.Parent then
@@ -51,7 +68,8 @@ intent.OnServerEvent:Connect(function(player,payload)
     if not ok then fault=tostring(code); warn('[BrickToads] '..fault); return end
     if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
         or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView'
-        or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss') then
+        or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss'
+        or payload.kind=='CreateGroup' or payload.kind=='JoinGroup') then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)
@@ -60,7 +78,11 @@ RunService.Heartbeat:Connect(function(dt)
     if not fault then
         local ok,err=xpcall(function()
             controller:step(at,dt)
-            if controller.current then world:updatePresentation(controller.current,dt,controller.director.enemies) end
+            for _,id in ipairs(controller.order) do
+                local group=controller.groups[id]
+                local run=group.controller
+                if run.current then group.world:updatePresentation(run.current,dt,run.director.enemies) end
+            end
         end,debug.traceback)
         if not ok then fault=tostring(err); warn('[BrickToads] '..fault) end
     end

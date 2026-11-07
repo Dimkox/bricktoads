@@ -1,4 +1,4 @@
--- One playable group. Player identity comes from the server, never from payload fields.
+-- One group's runtime. Player identity comes from the server, never from payload fields.
 local Controller={}
 Controller.__index=Controller
 local templates={['Mr. Green']=true,['Mr. Yellow']=true,['Mr. Brown']=true}
@@ -11,7 +11,8 @@ local function exact(payload,allowed)
 end
 function Controller.new(deps,world)
     local self=setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={}},Controller)
-    if deps.BossQueue then
+    if deps.SharedBossQueue then self.bossQueue=deps.SharedBossQueue
+    elseif deps.BossQueue then
         self.bossQueue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
             return self:_bossEligible(userId,context)
         end)
@@ -99,7 +100,7 @@ function Controller:_begin(player,players)
     end
     self.current=self.deps.Session.new(self.deps.Core,self.deps.Combat,self.deps.Config,roster,self.deps.guid(),self.world,function(row)
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
-    end)
+    end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
     self.current:step(self.deps.clock())
     self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config)
     for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end

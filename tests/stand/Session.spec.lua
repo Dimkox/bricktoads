@@ -335,6 +335,13 @@ return function(Core, Combat, Session, Config, World)
         eq(s:snapshot().heroes[1].view,'Menu'); eq(s.state.heroes[1].respawns,0)
         eq(w.spawns,spawns); eq(s.state.heroes[2].actorId,teammate)
     end)
+    test("game sessions accept explicit group and level identities without changing stand defaults",function()
+        local world=World.new()
+        local s=Session.new(Core,Combat,Config,{{userId=1,template='Mr. Green'}},'game-context',world,nil,
+            {groupId='group-two',levelId='causeway'})
+        eq(s.state.groupId,'group-two'); eq(s.state.levelId,'causeway'); eq(s.state.runId,'game-context')
+        local original=setup(1); eq(original.state.groupId,'combat-stand'); eq(original.state.levelId,'stand-1')
+    end)
     print("Session tests: "..passed.." PASS, "..failed.." FAIL")
     assert(failed==0, "Session contracts failed")
     return passed

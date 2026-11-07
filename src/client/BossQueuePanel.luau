@@ -75,6 +75,10 @@ end
 
 function BossQueuePanel:update(data, hero)
     local old = self.queue
+    if data and self.groupId ~= data.groupId then
+        self.pending, self.ackOffer, self.expiredOffer = nil, nil, nil
+    end
+    self.groupId = data and data.groupId
     self.queue = data and data.bossQueue
     local queue, active = self.queue, data and data.status == "Active"
     local livingEnemy = data and data.enemyRole and data.enemyRole.status ~= "Dead"
@@ -106,8 +110,9 @@ function BossQueuePanel:_draw()
         primaryText, enabled = "Покинуть очередь", true
     elseif state == "Invited" then
         self.status.Text = "Приглашение · " .. seconds .. " с"
-        self.detail.Text = self.compact and "Примите приглашение до конца таймера."
-            or "Встреча со стражем ждёт вашего ответа. Примите приглашение до конца таймера."
+        local target = queue.groupName and (queue.groupName .. " · ") or ""
+        self.detail.Text = self.compact and (target .. "Примите до конца таймера.")
+            or (target .. "Примите приглашение до таймера.")
         primaryText, enabled = "Принять", seconds > 0
     elseif state == "Accepted" then
         self.status.Text = "Подключение · " .. seconds .. " с"

@@ -1,7 +1,7 @@
 return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Director,BossQueue)
     local passed=0
     local function test(name,fn) fn(); passed+=1; print('PASS '..name) end
-    local function fixture(realDirector)
+    local function fixture(realDirector,overrides)
         local clock=1; local serial=0
         local world=FakeWorld.new(); world.names={}
         world.positions={}
@@ -32,8 +32,10 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
                 available=function() return {} end,controlled=function() return nil end,connection=function() end,
                 closeTargetForAttack=function() end}
         end}
-        local c=Controller.new({Core=Core,Combat=Combat,Session=Session,Registry=Registry,Config=Config,BossQueue=BossQueue,Director=realDirector and Director or fakeDirector,
-            clock=function() return clock end,guid=function() serial+=1; return 'game-'..serial end},world)
+        local deps={Core=Core,Combat=Combat,Session=Session,Registry=Registry,Config=Config,BossQueue=BossQueue,Director=realDirector and Director or fakeDirector,
+            clock=function() return clock end,guid=function() serial+=1; return 'game-'..serial end}
+        for k,v in pairs(overrides or {}) do deps[k]=v end
+        local c=Controller.new(deps,world)
         local list={}
         local function player(id,name)
             local p={UserId=id,Name=name or ('User'..id),DisplayName=name or ('Hero'..id),Parent='Players'}
@@ -365,6 +367,16 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
             and bounds.minZ==-49 and bounds.maxZ==49,'Camera bounds must come from the active world')
     end)
     if BossQueue then
+        test('group controllers use one shared guardian queue and retain distinct lifecycle identity',function()
+            local shared=BossQueue.new(Config.BossQueue)
+            local c,_,add,send=fixture(true,{SharedBossQueue=shared,GroupId='alpha',guid=function() return 'alpha-run' end})
+            local other,_,addOther,sendOther=fixture(true,{SharedBossQueue=shared,GroupId='beta',guid=function() return 'beta-run' end})
+            assert(c.bossQueue==shared and other.bossQueue==shared,'Controllers must share FIFO authority')
+            send(add(10),{kind='Start'}); sendOther(addOther(20),{kind='Start'})
+            assert(c.current.state.groupId=='alpha' and other.current.state.groupId=='beta')
+            assert(c.current.state.levelId=='causeway' and c.bossSlot~=other.bossSlot)
+            assert(shared.slots[c.bossSlot].context.groupId=='alpha' and shared.slots[other.bossSlot].context.groupId=='beta')
+        end)
         local function queue(send,p) return send(p,{kind='QueueBoss',bossId='CausewayGuardian'}) end
         local function accept(c,list,send,p)
             local offer=c:snapshot(p,list).bossQueue

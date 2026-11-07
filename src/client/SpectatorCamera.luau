@@ -33,12 +33,15 @@ function SpectatorCamera:setEnabled(enabled)
 end
 
 function SpectatorCamera:sync(snapshot, controlled)
-    if self.runId ~= snapshot.runId or self.levelEpoch ~= snapshot.levelEpoch then
+    if self.runId ~= snapshot.runId or self.levelEpoch ~= snapshot.levelEpoch
+        or self.worldName ~= snapshot.worldName or self.groupId ~= snapshot.groupId then
         self.mode, self.selectedActorId, self.point, self.freePosition = "Follow", nil, nil, nil
+        self.models, self.targets = {}, {}
         self:resetInput()
         self.refreshElapsed = 1
     end
     self.runId, self.levelEpoch = snapshot.runId, snapshot.levelEpoch
+    self.worldName, self.groupId = snapshot.worldName, snapshot.groupId
     self.snapshot, self.controlled, self.bounds = snapshot, controlled, snapshot.cameraBounds
     if controlled and controlled.status == "Alive" and controlled.connected and not controlled.dying then
         self.mode = "Follow"
@@ -47,7 +50,9 @@ function SpectatorCamera:sync(snapshot, controlled)
 end
 
 function SpectatorCamera:refreshTargets()
-    local world = workspace:FindFirstChild("BrickToadsWorld") or workspace:FindFirstChild("CombatStandWorld")
+    local world
+    if self.worldName then world = workspace:FindFirstChild(self.worldName)
+    else world = workspace:FindFirstChild("BrickToadsWorld") or workspace:FindFirstChild("CombatStandWorld") end
     local actors = world and world:FindFirstChild("Actors")
     local models = {}
     for _, model in ipairs(actors and actors:GetChildren() or {}) do
@@ -143,7 +148,13 @@ function SpectatorCamera:step(dt, camera)
         self.point = self.point and self.point:Lerp(target, 1 - math.exp(-dt * 7)) or target
         camera.CFrame = CFrame.lookAt(self.point + Vector3.new(0, 23, 30), self.point)
     elseif not self.point then
-        camera.CFrame = CFrame.lookAt(Vector3.new(-55, 30, 36), Vector3.new(-45, 2, 0))
+        if self.worldName and self.bounds then
+            local bounds = self.bounds
+            local target = Vector3.new((bounds.minX + bounds.maxX) / 2, bounds.minY - 5, (bounds.minZ + bounds.maxZ) / 2)
+            camera.CFrame = CFrame.lookAt(target + Vector3.new(0, 23, 30), target)
+        else
+            camera.CFrame = CFrame.lookAt(Vector3.new(-55, 30, 36), Vector3.new(-45, 2, 0))
+        end
     end
 end
 

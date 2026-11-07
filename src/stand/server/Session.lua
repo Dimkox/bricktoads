@@ -23,9 +23,10 @@ end
 -- The ordinary-enemy controller uses the same untrusted intent schema.
 Session.validIntent=valid
 
-function Session.new(Core, Combat, Config, roster, runId, world, logger)
+function Session.new(Core, Combat, Config, roster, runId, world, logger, context)
+    context=context or {}
     local self=setmetatable({Core=Core,Combat=Combat,config=Config,world=world,logger=logger,
-        state=Core.new(runId,"combat-stand",roster,"stand-1"),now=0,serial=0,
+        state=Core.new(runId,context.groupId or "combat-stand",roster,context.levelId or "stand-1"),now=0,serial=0,
         order={},combat={},lastSeq={},nextSpawn={},lastMove={},buckets={},logs={}},Session)
     for _,member in ipairs(roster) do
         local uid=member.userId

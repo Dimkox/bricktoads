@@ -302,7 +302,13 @@ local function buildGeometry(self)
     end
 end
 
-function World.new(BaseWorld, config)
+function World.new(BaseWorld, config, options)
+    options = options or {}
+    local worldName = options.name or "BrickToadsWorld"
+    local offset = options.offset or {}
+    local translation = Vector3.new(offset.x or 0, offset.y or 0, offset.z or 0)
+    -- A newly created group must never replace an existing group's physical world.
+    assert(not Workspace:FindFirstChild(worldName), "World already exists: " .. worldName)
     -- Remove only the untouched blank-place defaults in this playable runtime.
     for _,object in ipairs(Workspace:GetChildren()) do
         if (object.Name == "Baseplate" and object:IsA("BasePart"))
@@ -310,21 +316,25 @@ function World.new(BaseWorld, config)
             object:Destroy()
         end
     end
-    local previous = Workspace:FindFirstChild("BrickToadsWorld")
-    if previous then previous:Destroy() end
-    local self = BaseWorld.new(config)
+    local worldConfig = table.clone(config)
+    worldConfig.FallY = config.FallY + translation.Y
+    local self = BaseWorld.new(worldConfig)
     self._base = BaseWorld
+    self.offset = translation
     setmetatable(self, {__index = function(_, key) return World[key] or BaseWorld[key] end})
-    self.folder.Name = "BrickToadsWorld"
+    self.folder.Name = worldName
     self.folder:SetAttribute("LevelName", "Затопленный тракт")
     self.folder:SetAttribute("OriginalArt", true)
     self.enemyKinds = {}
     self.origins = {
-        [1] = Vector3.new(-65, 3, -7),
-        [2] = Vector3.new(-65, 3, 0),
-        [3] = Vector3.new(-65, 3, 7),
+        [1] = Vector3.new(-65, 3, -7) + translation,
+        [2] = Vector3.new(-65, 3, 0) + translation,
+        [3] = Vector3.new(-65, 3, 7) + translation,
     }
     buildGeometry(self)
+    for _,object in ipairs(self.geometry:GetDescendants()) do
+        if object:IsA("BasePart") then object.CFrame += translation end
+    end
     Lighting.ClockTime = 16.5
     Lighting.Brightness = 2.2
     Lighting.Ambient = Color3.fromRGB(80, 109, 111)
@@ -348,9 +358,17 @@ function World.new(BaseWorld, config)
 end
 
 function World:spawn(uid, actorId, point, held, template)
-    if not self.origins[uid] and uid > 0 then self.origins[uid] = Vector3.new(-65, 3, (uid - 2) * 7) end
+    if not self.origins[uid] and uid > 0 then self.origins[uid] = Vector3.new(-65, 3, (uid - 2) * 7) + self.offset end
     local ok = self._base.spawn(self, uid, actorId, point, held, template or "Mr. Green")
     if ok then
+        -- BaseWorld places a spawn without a safe point at absolute Y=3.
+        -- Keep that emergency-spawn rule relative to this arena's elevation.
+        if not point and self.offset.Y ~= 0 then
+            local actor = self.actors[uid]
+            local p = Vector3.new(actor.root.Position.X, 3 + self.offset.Y, actor.root.Position.Z)
+            actor.model:PivotTo(CFrame.lookAt(p, p + Vector3.new(1, 0, 0)))
+            self.origins[uid] = p
+        end
         self.actors[uid].model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
         toad(self.actors[uid], template or "Mr. Green")
         local actor=self.actors[uid]
@@ -367,14 +385,16 @@ function World:spawnEnemy(id, kind, positionTable)
     local x, y, z = positionTable.x, positionTable.y, positionTable.z
     if type(x) ~= "number" or type(y) ~= "number" or type(z) ~= "number" then return false end
     local isBoss = string.lower(tostring(kind)) == "boss"
-    self.origins[id] = Vector3.new(x, y, z)
+    local position = Vector3.new(x, y, z) + self.offset
+    self.origins[id] = position
     self.names[id] = isBoss and "Страж переправы" or "Ржавый дозорный"
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
     -- BaseWorld's ordinary spawn is deliberately y=3, so preserve the supplied
-    -- world position explicitly for project/director callers.
-    actor.model:PivotTo(CFrame.lookAt(Vector3.new(x, y, z), Vector3.new(x - 1, y, z)))
+    -- translated position explicitly for local project/director callers.
+    actor.model:PivotTo(CFrame.lookAt(position, position + Vector3.new(-1, 0, 0)))
+    self.origins[id] = position
     actor.model:SetAttribute("EnemyKind", kind)
     actor.model:SetAttribute("Template", nil)
     actor.model:SetAttribute("Slot", nil)
@@ -391,7 +411,7 @@ end
 function World:position(id)
     local a = self.actors[id]
     if not a or not a.root.Parent then return nil end
-    local p = a.root.Position
+    local p = a.root.Position - self.offset
     return {x = p.X, y = p.Y, z = p.Z}
 end
 
@@ -519,13 +539,14 @@ end
 
 function World:atExit(heroId)
     local a = self.actors[heroId]
+    local p = a and a.root.Parent and a.root.Position - self.offset
     return a ~= nil and a.root.Parent ~= nil and a.humanoid.Health > 0
-        and a.root.Position.X >= 108 and math.abs(a.root.Position.Z) <= 10
+        and p.X >= 108 and math.abs(p.Z) <= 10
 end
 
 function World:projectile(id, positionTable, reflected)
     if type(id) ~= "number" or id > -1000 or not positionTable then return false end
-    local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z)
+    local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z) + self.offset
     local a = self.actors[id]
     if not a then
         local model = Instance.new("Model")
@@ -617,9 +638,9 @@ function World:clearActors()
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.origins = {
-        [1] = Vector3.new(-65, 3, -7),
-        [2] = Vector3.new(-65, 3, 0),
-        [3] = Vector3.new(-65, 3, 7),
+        [1] = Vector3.new(-65, 3, -7) + self.offset,
+        [2] = Vector3.new(-65, 3, 0) + self.offset,
+        [3] = Vector3.new(-65, 3, 7) + self.offset,
     }
     self:stage("Approach")
 end

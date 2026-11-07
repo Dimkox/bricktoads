@@ -10,6 +10,7 @@ local intent = remotes:WaitForChild("Intent")
 local stateRemote = remotes:WaitForChild("State")
 local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
+local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
 local spectatorCamera = SpectatorCamera.new()
 
 local C = {
@@ -36,11 +37,20 @@ local actionPending, actionAt = false, 0
 local width, height = 900, 650
 local render, layout
 
+local function sendIntent(packet)
+    local envelope = table.clone(packet)
+    if snapshot then
+        if type(snapshot.groupId) ~= "string" or snapshot.groupId == "" then return end
+        envelope.groupId = snapshot.groupId
+    elseif envelope.kind ~= "Sync" then return end
+    intent:FireServer(envelope)
+end
+
 local function chooseView(view)
     if not snapshot or snapshot.status ~= "Active" or not snapshot.canChooseView or pendingView then return end
     if snapshot.view == view then return end
     pendingView, pendingViewAt = view, os.clock()
-    intent:FireServer({kind = "ChooseView", runId = snapshot.runId, levelEpoch = snapshot.levelEpoch, view = view})
+    sendIntent({kind = "ChooseView", runId = snapshot.runId, levelEpoch = snapshot.levelEpoch, view = view})
 end
 
 local function make(className, name, parent, props)
@@ -135,7 +145,7 @@ for i, choice in ipairs({{role = "Hero", text = "Герой"}, {role = "Enemy", 
         if not snapshot or snapshot.status == "Active" or snapshot.canSelect == false or pendingRole then return end
         if (snapshot.preference or "Hero") == role then return end
         pendingRole, pendingRoleAt = role, os.clock()
-        intent:FireServer({kind = "SelectRole", role = role})
+        sendIntent({kind = "SelectRole", role = role})
     end)
     roleButtons[i] = {button = item, role = role, text = choice.text, outline = stroke(item, C.line, 1)}
 end
@@ -175,7 +185,7 @@ for i, template in ipairs(templates) do
         if not snapshot or not snapshot.canSelect or (snapshot.preference or "Hero") ~= "Hero" or pendingTemplate then return end
         if snapshot.selectedTemplate == template then return end
         pendingTemplate, pendingAt = template, os.clock()
-        intent:FireServer({kind = "SelectHero", template = template})
+        sendIntent({kind = "SelectHero", template = template})
     end)
     card.ClipsDescendants = true
     heroCards[i] = {
@@ -211,7 +221,7 @@ footer.AnchorPoint, footer.Position = Vector2.new(0, 1), UDim2.fromScale(0, 1)
 local startButton = button(footer, "Start", "Подключаемся…", C.line, function()
     if not snapshot or not snapshot.canStart or actionPending then return end
     actionPending, actionAt = true, os.clock()
-    intent:FireServer({kind = "Start"})
+    sendIntent({kind = "Start"})
 end)
 startButton.TextSize = 19
 local returnToWatch = button(footer, "ReturnToObservation", "Вернуться к наблюдению", C.green, function()
@@ -226,7 +236,7 @@ menuNotice.TextXAlignment = Enum.TextXAlignment.Center
 
 local hud = frame(safe, "HUD")
 hud.BackgroundTransparency, hud.Size, hud.Visible = 1, UDim2.fromScale(1, 1), false
-local bossQueue = BossQueuePanel.new(scroll, hud, function(packet) intent:FireServer(packet) end, C)
+local bossQueue = BossQueuePanel.new(scroll, hud, sendIntent, C)
 local roster = frame(hud, "HeroRoster")
 roster.BackgroundTransparency = 1
 local heroRows = {}
@@ -319,6 +329,9 @@ local freeCameraButton = button(spectator, "FreeCamera", "Свободная к�
     render()
     layout()
 end)
+local groupPanel = GroupPanel.new(scroll, spectator, safe, sendIntent, C, function()
+    if render then render(); layout() end
+end)
 local controls = frame(hud, "Controls")
 controls.BackgroundTransparency, controls.Size = 1, UDim2.fromScale(1, 1)
 local function playable()
@@ -335,7 +348,7 @@ local function send(kind, extra)
         attempt = controlled.attempt, levelEpoch = snapshot.levelEpoch,
         connectionEpoch = controlled.connectionEpoch, seq = sequence}
     for key, value in pairs(extra or {}) do packet[key] = value end
-    intent:FireServer(packet)
+    sendIntent(packet)
 end
 local actions = frame(controls, "Actions")
 actions.BackgroundTransparency, actions.AnchorPoint = 1, Vector2.new(1, 1)
@@ -460,7 +473,7 @@ local function renderOffers()
                 for _, current in ipairs(snapshot.enemyOffers or {}) do
                     if current.enemyId == id and current.actorId == actorId then
                         pendingEnemy, pendingEnemyAt = id, os.clock()
-                        intent:FireServer({kind = "ClaimEnemy", runId = snapshot.runId,
+                        sendIntent({kind = "ClaimEnemy", runId = snapshot.runId,
                             levelEpoch = snapshot.levelEpoch, enemyId = id})
                         render()
                         return
@@ -543,6 +556,7 @@ render = function()
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
     bossQueue:update(snapshot, mine)
+    groupPanel:update(snapshot, mine)
     local owners = snapshot and snapshot.lobby or {}
     local heroOnline = 0
     for _, owner in ipairs(owners) do if (owner.preference or "Hero") == "Hero" then heroOnline += 1 end end
@@ -636,7 +650,7 @@ render = function()
     local choice = active and snapshot.view == "Choice"
     local expanded = canChoose and choosingEnemy and not choice and not personalMenu
     local enemyDead = enemy and enemy.status == "Dead"
-    local canObserve = active and snapshot.canChooseView == true and snapshot.view == "Spectating" and not expanded
+    local canObserve = active and snapshot.canChooseView == true and snapshot.view == "Spectating" and not expanded and not groupPanel:isOpen()
     spectatorCamera:setEnabled(canObserve == true)
     if not canObserve then
         cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
@@ -855,7 +869,7 @@ layout = function()
     local compactCameraPanel = not portrait and short and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
     if compactCameraPanel then
         spectatorWidth = math.min(spectatorWidth, width - 2 * (inset + cameraPadSize + 12))
-        spectatorHeight = 122
+        spectatorHeight = groupPanel.hudButton.Visible and 144 or 122
     end
     local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
     if bossQueue.card.Visible then
@@ -919,9 +933,10 @@ layout = function()
         local viewButtonHeight = 44
         if compactCameraPanel then
             position(spectatorText, 14, 7, spectatorWidth - 28, 18)
-            position(nextHeroButton, 14, 29, halfButton, 44)
-            position(freeCameraButton, 14 + halfButton + gapButtons, 29, halfButton, 44)
-            bottomRow, viewButtonHeight = 81, 34
+            local cameraRowY = groupPanel.hudButton.Visible and 51 or 29
+            position(nextHeroButton, 14, cameraRowY, halfButton, 44)
+            position(freeCameraButton, 14 + halfButton + gapButtons, cameraRowY, halfButton, 44)
+            bottomRow, viewButtonHeight = cameraRowY + 52, 34
         end
         position(watchButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
         position(chooseEnemyButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
@@ -932,6 +947,15 @@ layout = function()
     spectatorText.TextWrapped = not compactCameraPanel
     spectatorText.TextTruncate = compactCameraPanel and Enum.TextTruncate.AtEnd or Enum.TextTruncate.None
     nextHeroButton.TextSize, freeCameraButton.TextSize = compact and 13 or 15, compact and 13 or 15
+    if groupPanel.hudButton.Visible then
+        -- Share the spectator heading row without obscuring ordinary offers or camera buttons.
+        spectatorText.Size = UDim2.fromOffset(spectatorWidth - 140, spectatorText.Size.Y.Offset)
+        if expanded then
+            enemyChoiceTitle.Size = UDim2.fromOffset(spectatorWidth - 140, 19)
+            if spectatorHeight < 200 then enemyChoiceNote.Size = UDim2.fromOffset(spectatorWidth - 140, 25) end
+        end
+    end
+    groupPanel:layout(contentWidth, width, height, spectatorWidth)
 end
 
 local function dragTo(input)
@@ -1022,18 +1046,20 @@ stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
+    local previousGroupId = snapshot and snapshot.groupId
     local previousRunId = snapshot and snapshot.runId
     local previousLevelEpoch = snapshot and snapshot.levelEpoch
     snapshot, mine = data, nil
     for _, hero in ipairs(data.heroes or {}) do if hero.slot == data.mine then mine = hero; break end end
     controlled = mine or data.enemyRole
     spectatorCamera:sync(data, controlled)
-    local nextIdentity = controlled and table.concat({tostring(data.runId), tostring(data.levelEpoch),
+    local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
     if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; resetInput()
     elseif wasPlayable and not playable() then resetInput() end
-    if previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
+    if previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
         choosingEnemy = data.preference ~= "Spectator"
+        pendingTemplate, pendingRole = nil, nil
         pendingEnemy = nil
         pendingView = nil
         resetInput()
@@ -1042,7 +1068,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     if pendingRole and (data.preference == pendingRole or data.notice) then pendingRole = nil end
     if pendingEnemy and (data.enemyRole or data.notice) then pendingEnemy = nil end
     if pendingView and (data.view == pendingView or data.notice or data.status ~= "Active") then pendingView = nil end
-    if previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
+    if previousGroupId ~= data.groupId or previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
     actionPending = false
     render()
     layout()
@@ -1062,28 +1088,29 @@ end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
     bossQueue:step()
+    groupPanel:step()
     moveElapsed, syncElapsed = moveElapsed + dt, syncElapsed + dt
     if syncElapsed >= 2 then
         syncElapsed = 0
-        if not snapshot then intent:FireServer({kind = "Sync"}) end
+        if not snapshot then sendIntent({kind = "Sync"}) end
         if pendingTemplate and os.clock() - pendingAt > 4 then
             pendingTemplate = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             renderSelection()
         end
         if pendingRole and os.clock() - pendingRoleAt > 4 then
             pendingRole = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             renderSelection()
         end
         if pendingEnemy and os.clock() - pendingEnemyAt > 4 then
             pendingEnemy = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             render()
         end
         if pendingView and os.clock() - pendingViewAt > 4 then
             pendingView = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             render()
         end
         if actionPending and os.clock() - actionAt > 4 then actionPending = false; render() end
@@ -1107,4 +1134,4 @@ RunService.RenderStepped:Connect(function(dt)
 end)
 render()
 layout()
-intent:FireServer({kind = "Sync"})
+sendIntent({kind = "Sync"})

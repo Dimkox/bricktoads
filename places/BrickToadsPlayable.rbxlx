@@ -88,16 +88,33 @@ Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
 local config=require(gameplay.GameConfig)(require(runtime.Config))
-local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config)
-local controller=require(gameplay.GameController).new({Core=require(script.Parent.RunLifecycle),
+local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
-    Config=config,Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),clock=function() return workspace:GetServerTimeNow() end,
-    guid=function() return HttpService:GenerateGUID(false) end},world)
+    Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
+    clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
+    function(index,groupId)
+        -- Migrate this runtime's older saved preview once; its unscoped floor
+        -- would otherwise overlap the first group's independently owned arena.
+        if index==1 then
+            local legacy=workspace:FindFirstChild('BrickToadsWorld')
+            if legacy and legacy:GetAttribute('OriginalArt')==true
+                and legacy:GetAttribute('LevelName')=='Затопленный тракт' and legacy:GetAttribute('GroupId')==nil then
+                legacy:Destroy()
+            end
+        end
+        local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config,{
+            name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing}})
+        world.folder:SetAttribute('GroupId',groupId)
+        return world
+    end)
 local remotes=Instance.new('Folder'); remotes.Name='BrickToadsGame'; remotes.Parent=ReplicatedStorage
 local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=remotes
 local state=Instance.new('RemoteEvent'); state.Name='State'; state.Parent=remotes
 local fault,lastBroadcast=nil,0
 local function replicationFocus(player)
+    local group=controller:selected(player)
+    if not group then return end
+    local world=group.world
     local slot=controller:controlledSlot(player.UserId)
     local actor=slot and world.actors[slot]
     if not actor or not actor.root.Parent then
@@ -132,7 +149,8 @@ intent.OnServerEvent:Connect(function(player,payload)
     if not ok then fault=tostring(code); warn('[BrickToads] '..fault); return end
     if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
         or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView'
-        or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss') then
+        or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss'
+        or payload.kind=='CreateGroup' or payload.kind=='JoinGroup') then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)
@@ -141,7 +159,11 @@ RunService.Heartbeat:Connect(function(dt)
     if not fault then
         local ok,err=xpcall(function()
             controller:step(at,dt)
-            if controller.current then world:updatePresentation(controller.current,dt,controller.director.enemies) end
+            for _,id in ipairs(controller.order) do
+                local group=controller.groups[id]
+                local run=group.controller
+                if run.current then group.world:updatePresentation(run.current,dt,run.director.enemies) end
+            end
         end,debug.traceback)
         if not ok then fault=tostring(err); warn('[BrickToads] '..fault) end
     end
@@ -679,6 +701,7 @@ return function(base)
     config.Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
+    config.Groups={maxGroups=4,spacing=512}
     return config
 end
 </ProtectedString>
@@ -687,7 +710,7 @@ end
         <Item class="ModuleScript" referent="BT12">
           <Properties>
             <string name="Name">GameController</string>
-            <ProtectedString name="Source">-- One playable group. Player identity comes from the server, never from payload fields.
+            <ProtectedString name="Source">-- One group's runtime. Player identity comes from the server, never from payload fields.
 local Controller={}
 Controller.__index=Controller
 local templates={['Mr. Green']=true,['Mr. Yellow']=true,['Mr. Brown']=true}
@@ -700,7 +723,8 @@ local function exact(payload,allowed)
 end
 function Controller.new(deps,world)
     local self=setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={}},Controller)
-    if deps.BossQueue then
+    if deps.SharedBossQueue then self.bossQueue=deps.SharedBossQueue
+    elseif deps.BossQueue then
         self.bossQueue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
             return self:_bossEligible(userId,context)
         end)
@@ -788,7 +812,7 @@ function Controller:_begin(player,players)
     end
     self.current=self.deps.Session.new(self.deps.Core,self.deps.Combat,self.deps.Config,roster,self.deps.guid(),self.world,function(row)
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
-    end)
+    end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
     self.current:step(self.deps.clock())
     self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config)
     for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end
@@ -1296,7 +1320,13 @@ local function buildGeometry(self)
     end
 end
 
-function World.new(BaseWorld, config)
+function World.new(BaseWorld, config, options)
+    options = options or {}
+    local worldName = options.name or "BrickToadsWorld"
+    local offset = options.offset or {}
+    local translation = Vector3.new(offset.x or 0, offset.y or 0, offset.z or 0)
+    -- A newly created group must never replace an existing group's physical world.
+    assert(not Workspace:FindFirstChild(worldName), "World already exists: " .. worldName)
     -- Remove only the untouched blank-place defaults in this playable runtime.
     for _,object in ipairs(Workspace:GetChildren()) do
         if (object.Name == "Baseplate" and object:IsA("BasePart"))
@@ -1304,21 +1334,25 @@ function World.new(BaseWorld, config)
             object:Destroy()
         end
     end
-    local previous = Workspace:FindFirstChild("BrickToadsWorld")
-    if previous then previous:Destroy() end
-    local self = BaseWorld.new(config)
+    local worldConfig = table.clone(config)
+    worldConfig.FallY = config.FallY + translation.Y
+    local self = BaseWorld.new(worldConfig)
     self._base = BaseWorld
+    self.offset = translation
     setmetatable(self, {__index = function(_, key) return World[key] or BaseWorld[key] end})
-    self.folder.Name = "BrickToadsWorld"
+    self.folder.Name = worldName
     self.folder:SetAttribute("LevelName", "Затопленный тракт")
     self.folder:SetAttribute("OriginalArt", true)
     self.enemyKinds = {}
     self.origins = {
-        [1] = Vector3.new(-65, 3, -7),
-        [2] = Vector3.new(-65, 3, 0),
-        [3] = Vector3.new(-65, 3, 7),
+        [1] = Vector3.new(-65, 3, -7) + translation,
+        [2] = Vector3.new(-65, 3, 0) + translation,
+        [3] = Vector3.new(-65, 3, 7) + translation,
     }
     buildGeometry(self)
+    for _,object in ipairs(self.geometry:GetDescendants()) do
+        if object:IsA("BasePart") then object.CFrame += translation end
+    end
     Lighting.ClockTime = 16.5
     Lighting.Brightness = 2.2
     Lighting.Ambient = Color3.fromRGB(80, 109, 111)
@@ -1342,9 +1376,17 @@ function World.new(BaseWorld, config)
 end
 
 function World:spawn(uid, actorId, point, held, template)
-    if not self.origins[uid] and uid &gt; 0 then self.origins[uid] = Vector3.new(-65, 3, (uid - 2) * 7) end
+    if not self.origins[uid] and uid &gt; 0 then self.origins[uid] = Vector3.new(-65, 3, (uid - 2) * 7) + self.offset end
     local ok = self._base.spawn(self, uid, actorId, point, held, template or "Mr. Green")
     if ok then
+        -- BaseWorld places a spawn without a safe point at absolute Y=3.
+        -- Keep that emergency-spawn rule relative to this arena's elevation.
+        if not point and self.offset.Y ~= 0 then
+            local actor = self.actors[uid]
+            local p = Vector3.new(actor.root.Position.X, 3 + self.offset.Y, actor.root.Position.Z)
+            actor.model:PivotTo(CFrame.lookAt(p, p + Vector3.new(1, 0, 0)))
+            self.origins[uid] = p
+        end
         self.actors[uid].model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
         toad(self.actors[uid], template or "Mr. Green")
         local actor=self.actors[uid]
@@ -1361,14 +1403,16 @@ function World:spawnEnemy(id, kind, positionTable)
     local x, y, z = positionTable.x, positionTable.y, positionTable.z
     if type(x) ~= "number" or type(y) ~= "number" or type(z) ~= "number" then return false end
     local isBoss = string.lower(tostring(kind)) == "boss"
-    self.origins[id] = Vector3.new(x, y, z)
+    local position = Vector3.new(x, y, z) + self.offset
+    self.origins[id] = position
     self.names[id] = isBoss and "Страж переправы" or "Ржавый дозорный"
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
     -- BaseWorld's ordinary spawn is deliberately y=3, so preserve the supplied
-    -- world position explicitly for project/director callers.
-    actor.model:PivotTo(CFrame.lookAt(Vector3.new(x, y, z), Vector3.new(x - 1, y, z)))
+    -- translated position explicitly for local project/director callers.
+    actor.model:PivotTo(CFrame.lookAt(position, position + Vector3.new(-1, 0, 0)))
+    self.origins[id] = position
     actor.model:SetAttribute("EnemyKind", kind)
     actor.model:SetAttribute("Template", nil)
     actor.model:SetAttribute("Slot", nil)
@@ -1385,7 +1429,7 @@ end
 function World:position(id)
     local a = self.actors[id]
     if not a or not a.root.Parent then return nil end
-    local p = a.root.Position
+    local p = a.root.Position - self.offset
     return {x = p.X, y = p.Y, z = p.Z}
 end
 
@@ -1513,13 +1557,14 @@ end
 
 function World:atExit(heroId)
     local a = self.actors[heroId]
+    local p = a and a.root.Parent and a.root.Position - self.offset
     return a ~= nil and a.root.Parent ~= nil and a.humanoid.Health &gt; 0
-        and a.root.Position.X &gt;= 108 and math.abs(a.root.Position.Z) &lt;= 10
+        and p.X &gt;= 108 and math.abs(p.Z) &lt;= 10
 end
 
 function World:projectile(id, positionTable, reflected)
     if type(id) ~= "number" or id &gt; -1000 or not positionTable then return false end
-    local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z)
+    local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z) + self.offset
     local a = self.actors[id]
     if not a then
         local model = Instance.new("Model")
@@ -1611,9 +1656,9 @@ function World:clearActors()
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.origins = {
-        [1] = Vector3.new(-65, 3, -7),
-        [2] = Vector3.new(-65, 3, 0),
-        [3] = Vector3.new(-65, 3, 7),
+        [1] = Vector3.new(-65, 3, -7) + self.offset,
+        [2] = Vector3.new(-65, 3, 0) + self.offset,
+        [3] = Vector3.new(-65, 3, 7) + self.offset,
     }
     self:stage("Approach")
 end
@@ -1982,12 +2027,298 @@ return Director
 </ProtectedString>
           </Properties>
         </Item>
+        <Item class="ModuleScript" referent="BT15">
+          <Properties>
+            <string name="Name">MatchHub</string>
+            <ProtectedString name="Source">-- Current-Player authority and routing for independent local playable groups.
+local MatchHub={}
+MatchHub.__index=MatchHub
+
+local function identifier(value)
+    return type(value)=='string' and #value&gt;0 and #value&lt;=160
+end
+local function exact(payload,allowed)
+    if type(payload)~='table' then return false end
+    for key in pairs(payload) do if not allowed[key] then return false end end
+    return true
+end
+local function active(controller)
+    return controller.current~=nil and not controller:_open()
+end
+
+-- The Hub registry owns connection tombstones. Group registries own only routed
+-- membership, so the same current Player can return after an observer transfer.
+local function groupRegistry(hub,groupId)
+    local registry={current={},arrivals=setmetatable({},{__mode='k'}),serial=0}
+    function registry:join(player)
+        if not hub.connections:isCurrent(player) or hub.routes[player.UserId]~=groupId then return false end
+        local previous=self.current[player.UserId]
+        if previous==player then return false end
+        self.serial+=1; self.arrivals[player]=self.serial; self.current[player.UserId]=player
+        return true,previous
+    end
+    function registry:isCurrent(player)
+        return hub.connections:isCurrent(player) and hub.routes[player.UserId]==groupId and self.current[player.UserId]==player
+    end
+    function registry:remove(player)
+        if self.current[player.UserId]~=player then return false end
+        self.current[player.UserId]=nil
+        return true
+    end
+    function registry:online(players)
+        local online,seen={},{}
+        for _,player in ipairs(players) do
+            if self:isCurrent(player) and not seen[player] then
+                online[#online+1]=player; seen[player]=true
+            end
+        end
+        table.sort(online,function(a,b) return self.arrivals[a]&lt;self.arrivals[b] end)
+        return online
+    end
+    return registry
+end
+
+function MatchHub.new(deps,worldFactory)
+    assert(type(worldFactory)=='function','World factory is required')
+    local configured=deps.Config.Groups and deps.Config.Groups.maxGroups or 4
+    assert(type(configured)=='number' and configured&gt;=1 and configured%1==0,'Invalid group capacity')
+    local self=setmetatable({deps=deps,worldFactory=worldFactory,maxGroups=math.min(4,configured),
+        connections=deps.Registry.new(),groups={},order={},routes={},requests={},
+        buckets=setmetatable({},{__mode='k'}),notices=setmetatable({},{__mode='k'}),
+        envelopes=setmetatable({},{__mode='k'})},MatchHub)
+    self.queue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
+        return self:_queueEligible(userId,context)
+    end)
+    self:_create()
+    return self
+end
+
+function MatchHub:_create()
+    local index=#self.order+1; local id='group-'..index
+    local world=self.worldFactory(index,id)
+    local controllerDeps=table.clone(self.deps)
+    controllerDeps.GroupId=id; controllerDeps.SharedBossQueue=self.queue
+    controllerDeps.Registry={new=function() return groupRegistry(self,id) end}
+    local group={id=id,name='Команда '..index,world=world}
+    group.controller=self.deps.Controller.new(controllerDeps,world)
+    self.groups[id]=group; self.order[#self.order+1]=id
+    return group
+end
+
+-- A queued boss may already own its matching active guardian. That existing
+-- assignment is the only living-role exception when validating its own slot.
+function MatchHub:_livingRole(userId,context)
+    for _,id in ipairs(self.order) do
+        local group=self.groups[id]; local c=group.controller
+        if active(c) then
+            local slot=c.ownerSlots[userId]
+            local hero=slot and c.current.state.heroes[slot]
+            if hero and hero.status~='Eliminated' then return group end
+            local role=c.director:controlled(userId)
+            if role and role.status=='Alive' then
+                local matchingBoss=role.template=='Boss' and context and context.groupId==id
+                    and context.runId==c.current.state.runId and context.levelEpoch==c.current.state.levelEpoch
+                if not matchingBoss then return group end
+            end
+        end
+    end
+end
+
+function MatchHub:_queueEligible(userId,context)
+    local target=context and self.groups[context.groupId]
+    if target and active(target.controller) and target.controller.ownerSlots[userId] then return false end
+    return self:_livingRole(userId,context)==nil
+end
+
+function MatchHub:members(groupId,players)
+    local members={}
+    for _,player in ipairs(self.connections:online(players)) do
+        if self.routes[player.UserId]==groupId then members[#members+1]=player end
+    end
+    return members
+end
+
+function MatchHub:selected(player)
+    if not self.connections:isCurrent(player) then return nil end
+    return self.groups[self.routes[player.UserId]]
+end
+
+function MatchHub:join(player)
+    local joined,previous=self.connections:join(player)
+    if not joined then return false end
+    local id=self.routes[player.UserId] or self.order[1]
+    self.routes[player.UserId]=id
+    local group=self.groups[id]
+    if previous then group.controller:leave(previous) end
+    group.controller:join(player)
+    return true
+end
+
+function MatchHub:leave(player)
+    if not self.connections:remove(player) then return false end
+    local group=self.groups[self.routes[player.UserId]]
+    if group then group.controller:leave(player) end
+    self.buckets[player]=nil; self.notices[player]=nil
+    return true
+end
+
+function MatchHub:_switchReason(userId,targetId,now)
+    if targetId and self.routes[userId]==targetId then return nil end
+    if self:_livingRole(userId,nil) then return 'ROLE_ACTIVE' end
+    local queue=self.queue:view(userId,now)
+    if queue.state=='Accepted' or queue.state=='Ready' or queue.state=='Active' then return 'ROLE_RESERVED' end
+end
+
+function MatchHub:_move(player,target,now)
+    local previous=self.groups[self.routes[player.UserId]]
+    if previous==target then return end
+    if previous then previous.controller:leave(player) end
+    self.routes[player.UserId]=target.id
+    local queue=self.queue:view(player.UserId,now)
+    if queue.state~='None' then
+        target.controller.preferences[player.UserId]='Spectator'
+        target.controller.viewChoices[player.UserId]='Spectating'
+    end
+    target.controller:join(player)
+end
+
+function MatchHub:_rate(player,now)
+    local rate=self.deps.Config.MaxIntentRate
+    local bucket=self.buckets[player] or {tokens=rate,last=now}
+    bucket.tokens=math.min(rate,bucket.tokens+math.max(0,now-bucket.last)*rate)
+    bucket.last=math.max(bucket.last,now); self.buckets[player]=bucket
+    if bucket.tokens&lt;1 then return false end
+    bucket.tokens-=1
+    return true
+end
+
+function MatchHub:_offerGroup(userId,offerId,now)
+    local view=self.queue:view(userId,now)
+    if view.offerId~=offerId then return nil end
+    for _,id in ipairs(self.order) do
+        local group=self.groups[id]
+        if group.controller.bossSlot==view.slotId then return group end
+    end
+end
+
+function MatchHub:handle(player,payload,players)
+    if not player.Parent or not self.connections:isCurrent(player) then return 'STALE_CONNECTION' end
+    local function done(code)
+        self.notices[player]=code~='OK' and code or nil
+        return code
+    end
+    local now=self.deps.clock()
+    if not self:_rate(player,now) then return done('RATE_LIMIT') end
+    if type(payload)~='table' or type(payload.kind)~='string' then return done('INVALID_INTENT') end
+    local selected=self:selected(player)
+    if payload.groupId==nil then
+        if payload.kind~='Sync' or self.envelopes[player] then return done('MISSING_GROUP') end
+    elseif not identifier(payload.groupId) then return done('INVALID_INTENT')
+    elseif payload.groupId~=selected.id then return done('WRONG_GROUP') end
+    self.envelopes[player]=true
+
+    if payload.kind=='CreateGroup' then
+        if not exact(payload,{kind=true,groupId=true,requestId=true}) or not identifier(payload.requestId) then return done('INVALID_INTENT') end
+        local requests=self.requests[player.UserId]
+        if requests and requests[payload.requestId] then return done('OK') end
+        local reason=self:_switchReason(player.UserId,nil,now)
+        if reason then return done(reason) end
+        if #self.order&gt;=self.maxGroups then return done('GROUP_LIMIT') end
+        local group=self:_create()
+        if not requests then requests={}; self.requests[player.UserId]=requests end
+        requests[payload.requestId]=group.id
+        self:_move(player,group,now)
+        return done('OK')
+    elseif payload.kind=='JoinGroup' then
+        if not exact(payload,{kind=true,groupId=true,targetGroupId=true}) or not identifier(payload.targetGroupId) then return done('INVALID_INTENT') end
+        local target=self.groups[payload.targetGroupId]
+        if not target then return done('UNKNOWN_GROUP') end
+        local reason=self:_switchReason(player.UserId,target.id,now)
+        if reason then return done(reason) end
+        self:_move(player,target,now)
+        return done('OK')
+    elseif payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss' then
+        local reply=payload.kind=='ReplyBoss'
+        if not exact(payload,reply and {kind=true,groupId=true,offerId=true,accepted=true}
+            or {kind=true,groupId=true,offerId=true}) or not identifier(payload.offerId)
+            or (reply and type(payload.accepted)~='boolean') then return done('INVALID_INTENT') end
+        local target=self:_offerGroup(player.UserId,payload.offerId,now)
+        if not target then return done('STALE_OFFER') end
+        local result
+        if reply then result=self.queue:reply(player.UserId,payload.offerId,payload.accepted,now)
+        else result=self.queue:connect(player.UserId,payload.offerId,now) end
+        if result=='OK' and (not reply or payload.accepted) then self:_move(player,target,now) end
+        return done(result)
+    end
+
+    local c=selected.controller
+    if payload.kind=='ClaimEnemy' or payload.kind=='QueueBoss' or (payload.kind=='SelectRole' and payload.role=='Hero') then
+        local owned=self:_livingRole(player.UserId,nil)
+        if owned and owned~=selected then return done('ROLE_ACTIVE') end
+    elseif payload.kind=='Start' and c:_open() then
+        for _,candidate in ipairs(c:_heroes(self:members(selected.id,players))) do
+            if self:_livingRole(candidate.UserId,nil) then return done('ROLE_ACTIVE') end
+            local queue=self.queue:view(candidate.UserId,now)
+            if queue.state=='Accepted' or queue.state=='Ready' or queue.state=='Active' then return done('ROLE_RESERVED') end
+        end
+    end
+    local inner={}
+    for key,value in pairs(payload) do if key~='groupId' then inner[key]=value end end
+    return done(c:handle(player,inner,self:members(selected.id,players)))
+end
+
+function MatchHub:snapshot(player,players)
+    if not player.Parent then return nil end
+    local selected=self:selected(player)
+    if not selected then return nil end
+    local data=selected.controller:snapshot(player,self:members(selected.id,players))
+    if not data then return nil end
+    local now=self.deps.clock()
+    data.groupId=selected.id; data.groupName=selected.name
+    data.worldName=selected.world.folder and selected.world.folder.Name or selected.world.name
+    data.groups={}
+    for _,id in ipairs(self.order) do
+        local group=self.groups[id]; local c=group.controller
+        local reason=self:_switchReason(player.UserId,id,now)
+        data.groups[#data.groups+1]={id=id,name=group.name,
+            status=c.director and c.director.result or (c.current and c.current.state.status or 'Lobby'),
+            heroes=c.current and #c.current.order or 0,players=#self:members(id,players),canJoin=reason==nil,reason=reason}
+    end
+    data.canCreateGroup=#self.order&lt;self.maxGroups and self:_switchReason(player.UserId,nil,now)==nil
+    data.notice=self.notices[player]
+    local queue=data.bossQueue
+    if queue then
+        queue.available=queue.available and self:_queueEligible(player.UserId,nil)
+        if queue.offerId then
+            local target=self:_offerGroup(player.UserId,queue.offerId,now)
+            if target then queue.groupId=target.id; queue.groupName=target.name end
+        end
+    end
+    return data
+end
+
+function MatchHub:controlledSlot(userId)
+    local group=self.groups[self.routes[userId]]
+    if not group then return nil end
+    local slot=group.controller:controlledSlot(userId)
+    if slot then return slot,group.world end
+end
+
+function MatchHub:step(now,dt)
+    self.queue:step(now)
+    for _,id in ipairs(self.order) do self.groups[id].controller:step(now,dt) end
+end
+
+return MatchHub
+</ProtectedString>
+          </Properties>
+        </Item>
       </Item>
-      <Item class="Folder" referent="BT15">
+      <Item class="Folder" referent="BT16">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT16">
+        <Item class="ModuleScript" referent="BT17">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
@@ -2037,7 +2368,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT17">
+        <Item class="ModuleScript" referent="BT18">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -2065,9 +2396,10 @@ end
 -- The ordinary-enemy controller uses the same untrusted intent schema.
 Session.validIntent=valid
 
-function Session.new(Core, Combat, Config, roster, runId, world, logger)
+function Session.new(Core, Combat, Config, roster, runId, world, logger, context)
+    context=context or {}
     local self=setmetatable({Core=Core,Combat=Combat,config=Config,world=world,logger=logger,
-        state=Core.new(runId,"combat-stand",roster,"stand-1"),now=0,serial=0,
+        state=Core.new(runId,context.groupId or "combat-stand",roster,context.levelId or "stand-1"),now=0,serial=0,
         order={},combat={},lastSeq={},nextSpawn={},lastMove={},buckets={},logs={}},Session)
     for _,member in ipairs(roster) do
         local uid=member.userId
@@ -2326,7 +2658,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT18">
+        <Item class="ModuleScript" referent="BT19">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -2356,7 +2688,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT19">
+        <Item class="ModuleScript" referent="BT20">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -2416,7 +2748,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT20">
+        <Item class="ModuleScript" referent="BT21">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -2682,15 +3014,15 @@ return World
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT21">
+  <Item class="ReplicatedStorage" referent="BT22">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT22">
+    <Item class="Folder" referent="BT23">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT23">
+      <Item class="ModuleScript" referent="BT24">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -2702,19 +3034,19 @@ return table.freeze({
       </Item>
     </Item>
   </Item>
-  <Item class="StarterPlayer" referent="BT24">
+  <Item class="StarterPlayer" referent="BT25">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT25">
+    <Item class="StarterPlayerScripts" referent="BT26">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT26">
+      <Item class="Folder" referent="BT27">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT27">
+        <Item class="ModuleScript" referent="BT28">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -2794,6 +3126,10 @@ end
 
 function BossQueuePanel:update(data, hero)
     local old = self.queue
+    if data and self.groupId ~= data.groupId then
+        self.pending, self.ackOffer, self.expiredOffer = nil, nil, nil
+    end
+    self.groupId = data and data.groupId
     self.queue = data and data.bossQueue
     local queue, active = self.queue, data and data.status == "Active"
     local livingEnemy = data and data.enemyRole and data.enemyRole.status ~= "Dead"
@@ -2825,8 +3161,9 @@ function BossQueuePanel:_draw()
         primaryText, enabled = "Покинуть очередь", true
     elseif state == "Invited" then
         self.status.Text = "Приглашение · " .. seconds .. " с"
-        self.detail.Text = self.compact and "Примите приглашение до конца таймера."
-            or "Встреча со стражем ждёт вашего ответа. Примите приглашение до конца таймера."
+        local target = queue.groupName and (queue.groupName .. " · ") or ""
+        self.detail.Text = self.compact and (target .. "Примите до конца таймера.")
+            or (target .. "Примите приглашение до таймера.")
         primaryText, enabled = "Принять", seconds &gt; 0
     elseif state == "Accepted" then
         self.status.Text = "Подключение · " .. seconds .. " с"
@@ -2921,7 +3258,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT28">
+        <Item class="LocalScript" referent="BT29">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -2936,6 +3273,7 @@ local intent = remotes:WaitForChild("Intent")
 local stateRemote = remotes:WaitForChild("State")
 local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
+local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
 local spectatorCamera = SpectatorCamera.new()
 
 local C = {
@@ -2962,11 +3300,20 @@ local actionPending, actionAt = false, 0
 local width, height = 900, 650
 local render, layout
 
+local function sendIntent(packet)
+    local envelope = table.clone(packet)
+    if snapshot then
+        if type(snapshot.groupId) ~= "string" or snapshot.groupId == "" then return end
+        envelope.groupId = snapshot.groupId
+    elseif envelope.kind ~= "Sync" then return end
+    intent:FireServer(envelope)
+end
+
 local function chooseView(view)
     if not snapshot or snapshot.status ~= "Active" or not snapshot.canChooseView or pendingView then return end
     if snapshot.view == view then return end
     pendingView, pendingViewAt = view, os.clock()
-    intent:FireServer({kind = "ChooseView", runId = snapshot.runId, levelEpoch = snapshot.levelEpoch, view = view})
+    sendIntent({kind = "ChooseView", runId = snapshot.runId, levelEpoch = snapshot.levelEpoch, view = view})
 end
 
 local function make(className, name, parent, props)
@@ -3061,7 +3408,7 @@ for i, choice in ipairs({{role = "Hero", text = "Герой"}, {role = "Enemy", 
         if not snapshot or snapshot.status == "Active" or snapshot.canSelect == false or pendingRole then return end
         if (snapshot.preference or "Hero") == role then return end
         pendingRole, pendingRoleAt = role, os.clock()
-        intent:FireServer({kind = "SelectRole", role = role})
+        sendIntent({kind = "SelectRole", role = role})
     end)
     roleButtons[i] = {button = item, role = role, text = choice.text, outline = stroke(item, C.line, 1)}
 end
@@ -3101,7 +3448,7 @@ for i, template in ipairs(templates) do
         if not snapshot or not snapshot.canSelect or (snapshot.preference or "Hero") ~= "Hero" or pendingTemplate then return end
         if snapshot.selectedTemplate == template then return end
         pendingTemplate, pendingAt = template, os.clock()
-        intent:FireServer({kind = "SelectHero", template = template})
+        sendIntent({kind = "SelectHero", template = template})
     end)
     card.ClipsDescendants = true
     heroCards[i] = {
@@ -3137,7 +3484,7 @@ footer.AnchorPoint, footer.Position = Vector2.new(0, 1), UDim2.fromScale(0, 1)
 local startButton = button(footer, "Start", "Подключаемся…", C.line, function()
     if not snapshot or not snapshot.canStart or actionPending then return end
     actionPending, actionAt = true, os.clock()
-    intent:FireServer({kind = "Start"})
+    sendIntent({kind = "Start"})
 end)
 startButton.TextSize = 19
 local returnToWatch = button(footer, "ReturnToObservation", "Вернуться к наблюдению", C.green, function()
@@ -3152,7 +3499,7 @@ menuNotice.TextXAlignment = Enum.TextXAlignment.Center
 
 local hud = frame(safe, "HUD")
 hud.BackgroundTransparency, hud.Size, hud.Visible = 1, UDim2.fromScale(1, 1), false
-local bossQueue = BossQueuePanel.new(scroll, hud, function(packet) intent:FireServer(packet) end, C)
+local bossQueue = BossQueuePanel.new(scroll, hud, sendIntent, C)
 local roster = frame(hud, "HeroRoster")
 roster.BackgroundTransparency = 1
 local heroRows = {}
@@ -3245,6 +3592,9 @@ local freeCameraButton = button(spectator, "FreeCamera", "Свободная к�
     render()
     layout()
 end)
+local groupPanel = GroupPanel.new(scroll, spectator, safe, sendIntent, C, function()
+    if render then render(); layout() end
+end)
 local controls = frame(hud, "Controls")
 controls.BackgroundTransparency, controls.Size = 1, UDim2.fromScale(1, 1)
 local function playable()
@@ -3261,7 +3611,7 @@ local function send(kind, extra)
         attempt = controlled.attempt, levelEpoch = snapshot.levelEpoch,
         connectionEpoch = controlled.connectionEpoch, seq = sequence}
     for key, value in pairs(extra or {}) do packet[key] = value end
-    intent:FireServer(packet)
+    sendIntent(packet)
 end
 local actions = frame(controls, "Actions")
 actions.BackgroundTransparency, actions.AnchorPoint = 1, Vector2.new(1, 1)
@@ -3386,7 +3736,7 @@ local function renderOffers()
                 for _, current in ipairs(snapshot.enemyOffers or {}) do
                     if current.enemyId == id and current.actorId == actorId then
                         pendingEnemy, pendingEnemyAt = id, os.clock()
-                        intent:FireServer({kind = "ClaimEnemy", runId = snapshot.runId,
+                        sendIntent({kind = "ClaimEnemy", runId = snapshot.runId,
                             levelEpoch = snapshot.levelEpoch, enemyId = id})
                         render()
                         return
@@ -3469,6 +3819,7 @@ render = function()
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
     bossQueue:update(snapshot, mine)
+    groupPanel:update(snapshot, mine)
     local owners = snapshot and snapshot.lobby or {}
     local heroOnline = 0
     for _, owner in ipairs(owners) do if (owner.preference or "Hero") == "Hero" then heroOnline += 1 end end
@@ -3562,7 +3913,7 @@ render = function()
     local choice = active and snapshot.view == "Choice"
     local expanded = canChoose and choosingEnemy and not choice and not personalMenu
     local enemyDead = enemy and enemy.status == "Dead"
-    local canObserve = active and snapshot.canChooseView == true and snapshot.view == "Spectating" and not expanded
+    local canObserve = active and snapshot.canChooseView == true and snapshot.view == "Spectating" and not expanded and not groupPanel:isOpen()
     spectatorCamera:setEnabled(canObserve == true)
     if not canObserve then
         cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
@@ -3781,7 +4132,7 @@ layout = function()
     local compactCameraPanel = not portrait and short and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
     if compactCameraPanel then
         spectatorWidth = math.min(spectatorWidth, width - 2 * (inset + cameraPadSize + 12))
-        spectatorHeight = 122
+        spectatorHeight = groupPanel.hudButton.Visible and 144 or 122
     end
     local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
     if bossQueue.card.Visible then
@@ -3845,9 +4196,10 @@ layout = function()
         local viewButtonHeight = 44
         if compactCameraPanel then
             position(spectatorText, 14, 7, spectatorWidth - 28, 18)
-            position(nextHeroButton, 14, 29, halfButton, 44)
-            position(freeCameraButton, 14 + halfButton + gapButtons, 29, halfButton, 44)
-            bottomRow, viewButtonHeight = 81, 34
+            local cameraRowY = groupPanel.hudButton.Visible and 51 or 29
+            position(nextHeroButton, 14, cameraRowY, halfButton, 44)
+            position(freeCameraButton, 14 + halfButton + gapButtons, cameraRowY, halfButton, 44)
+            bottomRow, viewButtonHeight = cameraRowY + 52, 34
         end
         position(watchButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
         position(chooseEnemyButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
@@ -3858,6 +4210,15 @@ layout = function()
     spectatorText.TextWrapped = not compactCameraPanel
     spectatorText.TextTruncate = compactCameraPanel and Enum.TextTruncate.AtEnd or Enum.TextTruncate.None
     nextHeroButton.TextSize, freeCameraButton.TextSize = compact and 13 or 15, compact and 13 or 15
+    if groupPanel.hudButton.Visible then
+        -- Share the spectator heading row without obscuring ordinary offers or camera buttons.
+        spectatorText.Size = UDim2.fromOffset(spectatorWidth - 140, spectatorText.Size.Y.Offset)
+        if expanded then
+            enemyChoiceTitle.Size = UDim2.fromOffset(spectatorWidth - 140, 19)
+            if spectatorHeight &lt; 200 then enemyChoiceNote.Size = UDim2.fromOffset(spectatorWidth - 140, 25) end
+        end
+    end
+    groupPanel:layout(contentWidth, width, height, spectatorWidth)
 end
 
 local function dragTo(input)
@@ -3948,18 +4309,20 @@ stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
+    local previousGroupId = snapshot and snapshot.groupId
     local previousRunId = snapshot and snapshot.runId
     local previousLevelEpoch = snapshot and snapshot.levelEpoch
     snapshot, mine = data, nil
     for _, hero in ipairs(data.heroes or {}) do if hero.slot == data.mine then mine = hero; break end end
     controlled = mine or data.enemyRole
     spectatorCamera:sync(data, controlled)
-    local nextIdentity = controlled and table.concat({tostring(data.runId), tostring(data.levelEpoch),
+    local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
     if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; resetInput()
     elseif wasPlayable and not playable() then resetInput() end
-    if previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
+    if previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
         choosingEnemy = data.preference ~= "Spectator"
+        pendingTemplate, pendingRole = nil, nil
         pendingEnemy = nil
         pendingView = nil
         resetInput()
@@ -3968,7 +4331,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     if pendingRole and (data.preference == pendingRole or data.notice) then pendingRole = nil end
     if pendingEnemy and (data.enemyRole or data.notice) then pendingEnemy = nil end
     if pendingView and (data.view == pendingView or data.notice or data.status ~= "Active") then pendingView = nil end
-    if previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
+    if previousGroupId ~= data.groupId or previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
     actionPending = false
     render()
     layout()
@@ -3988,28 +4351,29 @@ end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
     bossQueue:step()
+    groupPanel:step()
     moveElapsed, syncElapsed = moveElapsed + dt, syncElapsed + dt
     if syncElapsed &gt;= 2 then
         syncElapsed = 0
-        if not snapshot then intent:FireServer({kind = "Sync"}) end
+        if not snapshot then sendIntent({kind = "Sync"}) end
         if pendingTemplate and os.clock() - pendingAt &gt; 4 then
             pendingTemplate = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             renderSelection()
         end
         if pendingRole and os.clock() - pendingRoleAt &gt; 4 then
             pendingRole = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             renderSelection()
         end
         if pendingEnemy and os.clock() - pendingEnemyAt &gt; 4 then
             pendingEnemy = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             render()
         end
         if pendingView and os.clock() - pendingViewAt &gt; 4 then
             pendingView = nil
-            intent:FireServer({kind = "Sync"})
+            sendIntent({kind = "Sync"})
             render()
         end
         if actionPending and os.clock() - actionAt &gt; 4 then actionPending = false; render() end
@@ -4033,11 +4397,238 @@ RunService.RenderStepped:Connect(function(dt)
 end)
 render()
 layout()
-intent:FireServer({kind = "Sync"})
+sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT29">
+        <Item class="ModuleScript" referent="BT30">
+          <Properties>
+            <string name="Name">GroupPanel</string>
+            <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
+local HttpService = game:GetService("HttpService")
+local GroupPanel = {}
+GroupPanel.__index = GroupPanel
+
+local statusNames = {Lobby = "Сбор команды", Active = "Идёт игра", Won = "Победа", Lost = "Игра окончена"}
+local reasons = {
+    ROLE_ACTIVE = "Сначала завершите игру за живого персонажа.",
+    ACTIVE_ROLE = "Сначала завершите игру за живого персонажа.",
+    ROLE_RESERVED = "Сначала отмените принятое приглашение стража.",
+    GROUP_FULL = "В команде нет свободных мест.",
+    GROUP_LIMIT = "Достигнут предел команд.",
+    UNKNOWN_GROUP = "Эта команда больше недоступна.",
+    STALE_GROUP = "Выбранная команда изменилась. Обновляем список.",
+    WRONG_GROUP = "Выбранная команда изменилась. Обновляем список.",
+    HERO_LOCKED = "В этой команде нельзя повторно выбрать роль противника.",
+}
+
+local function make(className, name, parent, properties)
+    local item = Instance.new(className)
+    item.Name = name
+    for key, value in pairs(properties or {}) do item[key] = value end
+    item.Parent = parent
+    return item
+end
+
+local function position(item, x, y, width, height)
+    item.Position, item.Size = UDim2.fromOffset(x, y), UDim2.fromOffset(width, height)
+end
+
+function GroupPanel.new(menuParent, spectatorParent, safeParent, sendIntent, colors, onToggle)
+    local self = setmetatable({sendIntent = sendIntent, colors = colors, onToggle = onToggle, rows = {}}, GroupPanel)
+    local function round(item, radius)
+        make("UICorner", "Corner", item, {CornerRadius = UDim.new(0, radius or 12)})
+        return item
+    end
+    local function text(parent, name, size, color, bold)
+        return make("TextLabel", name, parent, {
+            BackgroundTransparency = 1, Text = "", TextColor3 = color, TextSize = size,
+            Font = bold and Enum.Font.GothamBold or Enum.Font.Gotham,
+            TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Center,
+            TextWrapped = true, ZIndex = 73,
+        })
+    end
+    local function button(parent, name, title, callback, zIndex)
+        local item = round(make("TextButton", name, parent, {
+            BackgroundColor3 = colors.card, BorderSizePixel = 0, Text = title,
+            TextColor3 = colors.text, Font = Enum.Font.GothamBold, TextSize = 14,
+            TextWrapped = true, AutoButtonColor = false, ZIndex = zIndex or 73,
+        }))
+        item.Activated:Connect(callback)
+        return item
+    end
+    self.menuCard = round(make("Frame", "Groups", menuParent, {
+        BackgroundColor3 = colors.panel, BorderSizePixel = 0, LayoutOrder = 8, Visible = false,
+    }))
+    self.menuHeading = text(self.menuCard, "GroupHeading", 12, colors.lime, true)
+    self.menuHeading.Text = "ВАША КОМАНДА"
+    self.menuCurrent = text(self.menuCard, "CurrentGroup", 18, colors.text, true)
+    self.menuHelp = text(self.menuCard, "GroupHelp", 13, colors.muted, false)
+    self.menuHelp.Text = "Другая команда продолжает свою игру. В начатой игре вы будете наблюдателем."
+    self.menuButton = button(self.menuCard, "ChooseGroup", "Выбрать команду", function() self:_setOpen(true) end, 1)
+    self.hudButton = button(spectatorParent, "GroupsButton", "Группы", function() self:_setOpen(true) end, 2)
+    self.hudButton.Visible = false
+
+    self.overlay = make("Frame", "GroupSelector", safeParent, {
+        BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Visible = false, Active = true, ZIndex = 70,
+    })
+    self.backdrop = button(self.overlay, "GroupBackdrop", "", function() self:_setOpen(false) end, 70)
+    self.backdrop.Size = UDim2.fromScale(1, 1)
+    self.backdrop.BackgroundColor3, self.backdrop.BackgroundTransparency = colors.ink, 0.08
+    self.backdrop.Modal = true
+    self.shell = round(make("Frame", "GroupSelectorCard", self.overlay, {
+        BackgroundColor3 = colors.panel, BorderSizePixel = 0, Active = true, ZIndex = 71,
+    }), 16)
+    self.title = text(self.shell, "GroupSelectorTitle", 21, colors.text, true)
+    self.title.Text = "ГРУППЫ"
+    self.current = text(self.shell, "GroupSelectorCurrent", 14, colors.lime, true)
+    self.close = button(self.shell, "CloseGroups", "Закрыть", function() self:_setOpen(false) end)
+    self.help = text(self.shell, "GroupSelectorHelp", 13, colors.muted, false)
+    self.help.Text = "В начатую игру можно войти наблюдателем. Состав её героев уже закреплён."
+    self.list = make("ScrollingFrame", "GroupList", self.shell, {
+        BackgroundTransparency = 1, BorderSizePixel = 0, CanvasSize = UDim2.new(),
+        AutomaticCanvasSize = Enum.AutomaticSize.Y, ScrollBarThickness = 4,
+        ScrollBarImageColor3 = colors.muted, ScrollingDirection = Enum.ScrollingDirection.Y, ZIndex = 72,
+    })
+    make("UIListLayout", "GroupListLayout", self.list, {SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 8)})
+    make("UIPadding", "GroupListPadding", self.list, {PaddingRight = UDim.new(0, 8), PaddingBottom = UDim.new(0, 4)})
+    self.empty = text(self.list, "NoOtherGroups", 14, colors.muted, false)
+    self.empty.Text, self.empty.Size = "Других команд пока нет. Создайте свою.", UDim2.new(1, 0, 0, 64)
+    self.create = button(self.shell, "CreateGroup", "Создать команду", function() self:_create() end)
+    self.notice = text(self.shell, "GroupSelectorNotice", 12, colors.yellow, false)
+    return self
+end
+
+function GroupPanel:isOpen()
+    return self.overlay.Visible
+end
+
+function GroupPanel:_setOpen(open)
+    if open and (not self.data or (not self.menuCard.Visible and not self.hudButton.Visible)) then return end
+    self.overlay.Visible = open
+    if self.onToggle then self.onToggle() end
+end
+
+function GroupPanel:_join(targetId)
+    if not self.overlay.Visible or self.pending or not self.data then return end
+    for _, group in ipairs(self.data.groups or {}) do
+        if group.id == targetId and group.id ~= self.data.groupId and group.canJoin == true then
+            self.pending, self.pendingAt = targetId, os.clock()
+            self.sendIntent({kind = "JoinGroup", targetGroupId = targetId})
+            self:_draw()
+            return
+        end
+    end
+end
+
+function GroupPanel:_create()
+    if not self.overlay.Visible or self.pending or not self.data or self.data.canCreateGroup ~= true then return end
+    self.createRequestId = self.createRequestId or HttpService:GenerateGUID(false)
+    self.pending, self.pendingAt = "Create", os.clock()
+    self.sendIntent({kind = "CreateGroup", requestId = self.createRequestId})
+    self:_draw()
+end
+
+function GroupPanel:_draw()
+    local data, seen, count = self.data, {}, 0
+    if not data then return end
+    local currentName = data.groupName or "Текущая команда"
+    self.menuCurrent.Text, self.current.Text = currentName, "Сейчас: " .. currentName
+    self.menuButton.Text = self.pending and "Переходим…" or "Выбрать команду"
+    for _, group in ipairs(data.groups or {}) do
+        if group.id ~= data.groupId then
+            count += 1
+            seen[group.id] = true
+            local row = self.rows[group.id]
+            if not row then
+                local targetId = group.id
+                row = make("TextButton", "JoinGroup_" .. targetId, self.list, {
+                    BackgroundColor3 = self.colors.card, BorderSizePixel = 0,
+                    Text = "", TextColor3 = self.colors.text, Font = Enum.Font.Gotham,
+                    TextSize = 14, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left,
+                    AutoButtonColor = false, Size = UDim2.new(1, 0, 0, 82), ZIndex = 73,
+                })
+                make("UICorner", "Corner", row, {CornerRadius = UDim.new(0, 10)})
+                make("UIPadding", "TextPadding", row, {PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12)})
+                row.Activated:Connect(function() self:_join(targetId) end)
+                self.rows[targetId] = row
+            end
+            local enabled = group.canJoin == true and not self.pending
+            local action = group.status == "Active" and "Наблюдать" or "Войти в команду"
+            if group.canJoin ~= true then action = reasons[group.reason] or "Переход сейчас недоступен." end
+            if self.pending == group.id then action = "Переходим…" end
+            row.Text = (group.name or "Команда") .. " · " .. (statusNames[group.status] or "Ожидание")
+                .. "\nГероев: " .. tostring(group.heroes or 0) .. " · игроков: " .. tostring(group.players or 0) .. "\n" .. action
+            row.LayoutOrder, row.Active, row.Selectable = count, enabled, enabled
+            row.TextColor3 = group.canJoin == true and self.colors.text or self.colors.muted
+        end
+    end
+    for id, row in pairs(self.rows) do if not seen[id] then row:Destroy(); self.rows[id] = nil end end
+    self.empty.Visible = count == 0
+    self.create.Active = data.canCreateGroup == true and not self.pending
+    self.create.Selectable = self.create.Active
+    self.create.BackgroundColor3 = self.create.Active and self.colors.lime or self.colors.card
+    self.create.TextColor3 = self.create.Active and self.colors.ink or self.colors.muted
+    self.create.Text = self.pending == "Create" and "Создаём…" or "Создать команду"
+    self.notice.Text = self.pending and "Ждём подтверждения перехода…"
+        or (reasons[data.notice] or (data.canCreateGroup == false and "Создание команды сейчас недоступно." or ""))
+end
+
+function GroupPanel:update(data, hero)
+    local changed = self.data and data and self.data.groupId ~= data.groupId
+    if changed then
+        self.pending, self.createRequestId = nil, nil
+        self.overlay.Visible = false
+        self.list.CanvasPosition = Vector2.zero
+    elseif self.pending and data and data.notice then
+        self.pending = nil
+    end
+    self.data = data
+    local available = data ~= nil and type(data.groups) == "table"
+    local active = data and data.status == "Active"
+    local personalMenu = active and data.view == "Menu"
+    local livingHero = hero and hero.status ~= "Eliminated"
+    local livingEnemy = data and data.enemyRole and data.enemyRole.status ~= "Dead"
+    self.menuCard.Visible = available and (not active or personalMenu == true)
+    self.hudButton.Visible = available and active == true and not personalMenu and not livingHero and not livingEnemy
+    if not self.menuCard.Visible and not self.hudButton.Visible then self.overlay.Visible = false end
+    self:_draw()
+end
+
+function GroupPanel:step()
+    if self.pending and os.clock() - self.pendingAt &gt; 4 then
+        self.pending = nil
+        self.sendIntent({kind = "Sync"})
+        self:_draw()
+    end
+end
+
+function GroupPanel:layout(menuWidth, width, height, spectatorWidth)
+    self.menuCard.Size = UDim2.new(1, 0, 0, menuWidth &lt; 420 and 168 or 150)
+    position(self.menuHeading, 14, 10, menuWidth - 28, 18)
+    position(self.menuCurrent, 14, 32, menuWidth - 28, 24)
+    position(self.menuHelp, 14, 60, menuWidth - 28, menuWidth &lt; 420 and 49 or 31)
+    position(self.menuButton, 14, menuWidth &lt; 420 and 116 or 98, menuWidth - 28, 42)
+    position(self.hudButton, spectatorWidth - 114, 9, 100, 36)
+    local margin = width &lt; 500 and 12 or 18
+    local shellWidth, shellHeight = math.min(640, width - margin * 2), math.min(590, height - margin * 2)
+    position(self.shell, (width - shellWidth) / 2, (height - shellHeight) / 2, shellWidth, shellHeight)
+    local shallow = shellHeight &lt; 380
+    position(self.title, 14, 10, shellWidth - 126, 28)
+    position(self.close, shellWidth - 104, 10, 90, 42)
+    position(self.current, 14, 42, shellWidth - 126, shallow and 23 or 27)
+    position(self.help, 14, shallow and 68 or 77, shellWidth - 28, shallow and 30 or 42)
+    local listY = shallow and 104 or 128
+    position(self.list, 14, listY, shellWidth - 28, math.max(42, shellHeight - listY - 83))
+    position(self.create, 14, shellHeight - 74, shellWidth - 28, 42)
+    position(self.notice, 14, shellHeight - 29, shellWidth - 28, 23)
+end
+
+return GroupPanel
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT31">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.
@@ -4075,12 +4666,15 @@ function SpectatorCamera:setEnabled(enabled)
 end
 
 function SpectatorCamera:sync(snapshot, controlled)
-    if self.runId ~= snapshot.runId or self.levelEpoch ~= snapshot.levelEpoch then
+    if self.runId ~= snapshot.runId or self.levelEpoch ~= snapshot.levelEpoch
+        or self.worldName ~= snapshot.worldName or self.groupId ~= snapshot.groupId then
         self.mode, self.selectedActorId, self.point, self.freePosition = "Follow", nil, nil, nil
+        self.models, self.targets = {}, {}
         self:resetInput()
         self.refreshElapsed = 1
     end
     self.runId, self.levelEpoch = snapshot.runId, snapshot.levelEpoch
+    self.worldName, self.groupId = snapshot.worldName, snapshot.groupId
     self.snapshot, self.controlled, self.bounds = snapshot, controlled, snapshot.cameraBounds
     if controlled and controlled.status == "Alive" and controlled.connected and not controlled.dying then
         self.mode = "Follow"
@@ -4089,7 +4683,9 @@ function SpectatorCamera:sync(snapshot, controlled)
 end
 
 function SpectatorCamera:refreshTargets()
-    local world = workspace:FindFirstChild("BrickToadsWorld") or workspace:FindFirstChild("CombatStandWorld")
+    local world
+    if self.worldName then world = workspace:FindFirstChild(self.worldName)
+    else world = workspace:FindFirstChild("BrickToadsWorld") or workspace:FindFirstChild("CombatStandWorld") end
     local actors = world and world:FindFirstChild("Actors")
     local models = {}
     for _, model in ipairs(actors and actors:GetChildren() or {}) do
@@ -4185,7 +4781,13 @@ function SpectatorCamera:step(dt, camera)
         self.point = self.point and self.point:Lerp(target, 1 - math.exp(-dt * 7)) or target
         camera.CFrame = CFrame.lookAt(self.point + Vector3.new(0, 23, 30), self.point)
     elseif not self.point then
-        camera.CFrame = CFrame.lookAt(Vector3.new(-55, 30, 36), Vector3.new(-45, 2, 0))
+        if self.worldName and self.bounds then
+            local bounds = self.bounds
+            local target = Vector3.new((bounds.minX + bounds.maxX) / 2, bounds.minY - 5, (bounds.minZ + bounds.maxZ) / 2)
+            camera.CFrame = CFrame.lookAt(target + Vector3.new(0, 23, 30), target)
+        else
+            camera.CFrame = CFrame.lookAt(Vector3.new(-55, 30, 36), Vector3.new(-45, 2, 0))
+        end
     end
 end
 
