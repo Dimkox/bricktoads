@@ -8,6 +8,8 @@ local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("BrickToadsGame")
 local intent = remotes:WaitForChild("Intent")
 local stateRemote = remotes:WaitForChild("State")
+local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
+local spectatorCamera = SpectatorCamera.new()
 
 local C = {
     ink = Color3.fromRGB(12, 20, 32), panel = Color3.fromRGB(22, 35, 49),
@@ -25,10 +27,20 @@ local keys, touchVector, dragging = {}, Vector2.zero, nil
 local pendingTemplate, pendingAt = nil, 0
 local pendingRole, pendingRoleAt = nil, 0
 local pendingEnemy, pendingEnemyAt = nil, 0
-local choosingEnemy, watchingAfterDeath = true, false
+local choosingEnemy = true
+local pendingView, pendingViewAt = nil, 0
+local cameraDragging, cameraStickInput = false, nil
+local cameraHolds = {}
 local actionPending, actionAt = false, 0
 local width, height = 900, 650
 local render, layout
+
+local function chooseView(view)
+    if not snapshot or snapshot.status ~= "Active" or not snapshot.canChooseView or pendingView then return end
+    if snapshot.view == view then return end
+    pendingView, pendingViewAt = view, os.clock()
+    intent:FireServer({kind = "ChooseView", runId = snapshot.runId, levelEpoch = snapshot.levelEpoch, view = view})
+end
 
 local function make(className, name, parent, props)
     local item = Instance.new(className)
@@ -201,6 +213,11 @@ local startButton = button(footer, "Start", "Подключаемся…", C.lin
     intent:FireServer({kind = "Start"})
 end)
 startButton.TextSize = 19
+local returnToWatch = button(footer, "ReturnToObservation", "Вернуться к наблюдению", C.green, function()
+    choosingEnemy = false
+    chooseView("Spectating")
+end)
+returnToWatch.TextColor3, returnToWatch.Visible = C.ink, false
 local waitLabel = label(footer, "HostWait", "Ждём ответ игры…", 14, C.muted)
 waitLabel.TextXAlignment = Enum.TextXAlignment.Center
 local menuNotice = label(footer, "Notice", "", 14, C.yellow)
@@ -276,7 +293,8 @@ make("UIListLayout", "OfferLayout", enemyOffers, {SortOrder = Enum.SortOrder.Lay
 make("UIPadding", "OfferPadding", enemyOffers, {PaddingRight = UDim.new(0, 6), PaddingBottom = UDim.new(0, 3)})
 local offerButtons = {}
 local watchButton = button(spectator, "Watch", "Наблюдать", C.card, function()
-    choosingEnemy, watchingAfterDeath = false, true
+    choosingEnemy = false
+    chooseView("Spectating")
     render()
     layout()
 end)
@@ -285,11 +303,26 @@ local chooseEnemyButton = button(spectator, "ChooseEnemy", "Выбрать пр�
     render()
     layout()
 end)
+local personalMenuButton = button(spectator, "PersonalMenu", "В меню", C.card, function()
+    chooseView("Menu")
+end)
+local nextHeroButton = button(spectator, "NextHero", "Следующий герой", C.card, function()
+    spectatorCamera:refreshTargets()
+    spectatorCamera:nextHero()
+    render()
+    layout()
+end)
+local freeCameraButton = button(spectator, "FreeCamera", "Свободная камера", C.card, function()
+    spectatorCamera:toggleFree(workspace.CurrentCamera)
+    render()
+    layout()
+end)
 local controls = frame(hud, "Controls")
 controls.BackgroundTransparency, controls.Size = 1, UDim2.fromScale(1, 1)
 local function playable()
     return snapshot and snapshot.status == "Active" and controlled and controlled.status == "Alive"
         and controlled.connected == true and not controlled.dying and not snapshot.fault
+        and (snapshot.view == nil or snapshot.view == "Playing") and not spectatorCamera:isFree()
 end
 local function send(kind, extra)
     if not playable() or not snapshot.runId or not controlled.actorId then return end
@@ -326,6 +359,36 @@ keyboardHint.AnchorPoint = Vector2.new(0, 1)
 keyboardHint.BackgroundColor3, keyboardHint.BackgroundTransparency = C.ink, 0.15
 corner(keyboardHint, 10)
 keyboardHint.TextXAlignment = Enum.TextXAlignment.Center
+local cameraControls = frame(hud, "CameraControls")
+cameraControls.BackgroundTransparency, cameraControls.Size, cameraControls.Visible = 1, UDim2.fromScale(1, 1), false
+local cameraPad = frame(cameraControls, "MoveStick", C.ink)
+cameraPad.BackgroundTransparency, cameraPad.Active, cameraPad.AnchorPoint = 0.15, true, Vector2.new(0, 1)
+corner(cameraPad, 100)
+stroke(cameraPad, C.muted, 2)
+local cameraKnob = frame(cameraPad, "Knob", C.lime)
+cameraKnob.AnchorPoint, cameraKnob.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
+cameraKnob.Size = UDim2.fromScale(0.34, 0.34)
+corner(cameraKnob, 100)
+local cameraAxes = frame(cameraControls, "HeightAndYaw")
+cameraAxes.BackgroundTransparency, cameraAxes.AnchorPoint = 1, Vector2.new(1, 1)
+local cameraButtons = {}
+for _, definition in ipairs({{key = "Up", text = "ВЫШЕ"}, {key = "Down", text = "НИЖЕ"},
+    {key = "Left", text = "ЛЕВО"}, {key = "Right", text = "ПРАВО"}}) do
+    local cameraKey = definition.key
+    local item = button(cameraAxes, cameraKey, definition.text, C.card, function() end)
+    item.InputBegan:Connect(function(input)
+        if not spectatorCamera.enabled or not spectatorCamera:isFree() then return end
+        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+            cameraHolds[input] = cameraKey
+            spectatorCamera:setKey(cameraKey, true)
+        end
+    end)
+    cameraButtons[cameraKey] = item
+end
+local cameraHint = label(cameraControls, "KeyboardHint", "WASD · полёт   Q/E · высота   правая кнопка мыши · поворот", 13, C.text)
+cameraHint.AnchorPoint, cameraHint.TextXAlignment = Vector2.new(0.5, 1), Enum.TextXAlignment.Center
+cameraHint.BackgroundColor3, cameraHint.BackgroundTransparency = C.ink, 0.12
+corner(cameraHint, 10)
 local fault = frame(safe, "GameMessage", C.ink)
 fault.AnchorPoint, fault.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
 fault.Size, fault.Visible = UDim2.new(1, -36, 0, 92), false
@@ -338,6 +401,9 @@ faultText.TextXAlignment = Enum.TextXAlignment.Center
 local function resetInput()
     keys, dragging, touchVector = {}, nil, Vector2.zero
     knob.Position = UDim2.fromScale(0.5, 0.5)
+    spectatorCamera:resetInput()
+    cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
+    cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
 end
 local function heroName(hero)
     return hero.displayName or hero.username or ("Игрок " .. tostring(hero.slot or ""))
@@ -408,7 +474,9 @@ local function renderOffers()
 end
 local function renderSelection()
     local preference = snapshot and snapshot.preference or "Hero"
-    selectionHeading.Visible, cardsContainer.Visible = preference == "Hero", preference == "Hero"
+    local personalMenu = snapshot and snapshot.status == "Active" and snapshot.view == "Menu"
+    rolePicker.Visible = not personalMenu
+    selectionHeading.Visible, cardsContainer.Visible = not personalMenu and preference == "Hero", not personalMenu and preference == "Hero"
     roleNote.Text = preference == "Enemy" and "После старта выберите свободного дозорного до его первого боя. Три сердца, одна жизнь."
         or (preference == "Spectator" and "Наблюдайте за героями. Во время игры можно выбрать свободного дозорного."
             or "В команду входят 1–3 героя. Первый герой начинает игру.")
@@ -436,7 +504,8 @@ end
 render = function()
     local active = snapshot and snapshot.status == "Active"
     local completed = snapshot and (snapshot.status == "Won" or snapshot.status == "Lost")
-    overlay.Visible, hud.Visible, controls.Visible = not active, active == true, playable() == true
+    local personalMenu = active and snapshot.view == "Menu"
+    overlay.Visible, hud.Visible, controls.Visible = not active or personalMenu == true, active == true and not personalMenu, playable() == true
     fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false
     resultBanner.Visible = completed == true
     if completed then
@@ -454,9 +523,14 @@ render = function()
                 or "Возвраты героев закончились. Выберите роли и попробуйте пройти тракт ещё раз."
         end
         intro.Text, chooseTitle.Text = "Следующая попытка начинается по кнопке «Новая игра».", "ГЕРОЙ ДЛЯ СЛЕДУЮЩЕЙ ИГРЫ"
+    elseif personalMenu then
+        intro.Text = snapshot.enemyRole and snapshot.enemyRole.status == "Dead"
+            and "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой."
+            or "Вы можете вернуться к наблюдению за этой же игрой."
     else
         intro.Text, chooseTitle.Text = "Соберите команду, пройдите тракт и откройте ворота.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
+    title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
     local owners = snapshot and snapshot.lobby or {}
     local heroOnline = 0
@@ -478,7 +552,11 @@ render = function()
     end
     partyNote.Text = snapshot and (heroOnline == 0 and "Нужен хотя бы один герой, чтобы начать игру."
         or "Состав героев закрепляется при старте. Противник выбирает дозорного во время игры.") or "Подключаемся к игре…"
-    startButton.Visible = not snapshot or snapshot.canStart == true
+    if personalMenu then partyNote.Text = "Команда продолжает прохождение. Возвращение к наблюдению не даёт новую жизнь." end
+    startButton.Visible = not personalMenu and (not snapshot or snapshot.canStart == true)
+    returnToWatch.Visible = personalMenu == true and snapshot.canChooseView == true
+    returnToWatch.Text = pendingView == "Spectating" and "Возвращаемся…" or "Вернуться к наблюдению"
+    returnToWatch.Selectable = pendingView == nil
     startButton.BackgroundColor3, startButton.TextColor3 = snapshot and snapshot.canStart and C.lime or C.line,
         snapshot and snapshot.canStart and C.ink or C.text
     startButton.Text = actionPending and "Начинаем…" or (completed and "Новая игра" or "Начать игру")
@@ -486,6 +564,7 @@ render = function()
     waitLabel.Text = not snapshot and "Ждём ответ игры…" or (snapshot.canStart
         and "Можно играть одному, вдвоём или втроём." or (snapshot.host == nil
             and "Выберите роль героя, чтобы начать игру." or ("Ожидаем: " .. hostName() .. " начнёт игру.")))
+    if personalMenu then waitLabel.Text = "Вы вернётесь в эту же игру." end
     menuNotice.Text = snapshot and (noticeMessages[snapshot.notice] or "") or ""
     for i, row in ipairs(heroRows) do
         local hero = snapshot and snapshot.heroes and snapshot.heroes[i]
@@ -536,19 +615,39 @@ render = function()
         end
         bossLabel.Text = alive > 0 and ("Противников впереди: " .. tostring(alive)) or "Ударьте снаряд стража, чтобы отразить его."
     end
-    spectator.Visible = active == true and not playable()
+    spectator.Visible = active == true and not personalMenu and not playable()
     local canChoose = enemyChoiceAllowed()
-    local expanded = canChoose and choosingEnemy
+    local choice = active and snapshot.view == "Choice"
+    local expanded = canChoose and choosingEnemy and not choice and not personalMenu
     local enemyDead = enemy and enemy.status == "Dead"
+    local canObserve = active and snapshot.canChooseView == true and snapshot.view == "Spectating" and not expanded
+    spectatorCamera:setEnabled(canObserve == true)
+    if not canObserve then
+        cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
+        cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
+    end
+    cameraControls.Visible = canObserve == true and spectatorCamera:isFree()
+    nextHeroButton.Visible, freeCameraButton.Visible = canObserve == true, canObserve == true
+    freeCameraButton.Text = spectatorCamera:isFree() and "Следить за героем" or "Свободная камера"
+    freeCameraButton.BackgroundColor3 = spectatorCamera:isFree() and C.lime or C.card
+    freeCameraButton.TextColor3 = spectatorCamera:isFree() and C.ink or C.text
+    personalMenuButton.Visible = active == true and not personalMenu and snapshot.canChooseView == true
+    personalMenuButton.Text = pendingView == "Menu" and "Открываем…" or "В меню"
+    personalMenuButton.Selectable = pendingView == nil
     enemyChoiceTitle.Visible, enemyChoiceNote.Visible, enemyOffers.Visible = expanded == true, expanded == true, expanded == true
-    watchButton.Visible = expanded == true or (enemyDead == true and not watchingAfterDeath)
-    chooseEnemyButton.Visible = canChoose == true and not choosingEnemy
+    watchButton.Visible = expanded == true or choice == true
+    watchButton.Text = pendingView == "Spectating" and "Открываем…" or "Наблюдать"
+    watchButton.Selectable = pendingView == nil
+    chooseEnemyButton.Visible = canChoose == true and not choosingEnemy and not choice and not personalMenu
     if enemyDead then
-        spectatorText.Text = watchingAfterDeath and "Вы наблюдаете. Новую роль можно выбрать перед следующей игрой."
+        spectatorText.Text = snapshot.view == "Spectating" and "Вы наблюдаете. Новую роль можно выбрать перед следующей игрой."
             or noticeMessages.ENEMY_LIFE_SPENT
+    elseif choice then
+        spectatorText.Text = "Вы выбыли. Группа продолжает игру — наблюдать или перейти в меню?"
     elseif mine then
         spectatorText.Text = mine.status ~= "Eliminated" and mine.connected and "Герой возвращается…"
-            or (noticeMessages[snapshot.enemyUnavailableReason] or noticeMessages.HERO_LOCKED)
+            or (snapshot.view == "Spectating" and "Вы наблюдаете за продолжающейся игрой."
+                or (noticeMessages[snapshot.enemyUnavailableReason] or noticeMessages.HERO_LOCKED))
     elseif enemy then
         spectatorText.Text = "Связь с дозорным восстанавливается…"
     elseif expanded then
@@ -655,16 +754,18 @@ layout = function()
     position(partyNote, 16, 43 + math.max(owners, 1) * rowHeight, contentWidth - 32, noteHeight)
     footer.Size = UDim2.new(1, 0, 0, 108)
     position(startButton, 3, 0, contentWidth, 52)
+    position(returnToWatch, 3, 0, contentWidth, 52)
     position(waitLabel, 3, 56, contentWidth, 31)
     position(menuNotice, 3, 88, contentWidth, 20)
-    if snapshot and snapshot.canStart == false then position(waitLabel, 3, 8, contentWidth, 47) end
+    if snapshot and snapshot.canStart == false and not returnToWatch.Visible then position(waitLabel, 3, 8, contentWidth, 47) end
     if shortLandscape then
         footer.Size = UDim2.new(1, 0, 0, 84)
         position(startButton, 3, 0, contentWidth, 44)
+        position(returnToWatch, 3, 0, contentWidth, 44)
         position(waitLabel, 3, 46, contentWidth, 20)
         position(menuNotice, 3, 68, contentWidth, 16)
         waitLabel.TextSize, menuNotice.TextSize = 12, 12
-        if snapshot and snapshot.canStart == false then position(waitLabel, 3, 8, contentWidth, 38) end
+        if snapshot and snapshot.canStart == false and not returnToWatch.Visible then position(waitLabel, 3, 8, contentWidth, 38) end
     else waitLabel.TextSize, menuNotice.TextSize = 14, 14 end
 
     local inset, short = width < 500 and 12 or 18, height < 480
@@ -726,25 +827,63 @@ layout = function()
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
     pad.Visible, keyboardHint.Visible = isTouch, not isTouch
     keyboardHint.Position, keyboardHint.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(190, 36)
-    local expanded = enemyChoiceAllowed() and choosingEnemy
-    local deadPrompt = enemy and enemy.status == "Dead" and not watchingAfterDeath
+    local expanded = enemyChoiceAllowed() and choosingEnemy and snapshot.view ~= "Choice"
     local spectatorWidth = math.min(500, width - inset * 2)
-    local spectatorHeight = expanded and (short and 192 or 256) or ((chooseEnemyButton.Visible or deadPrompt) and 116 or 74)
-    spectator.Position = UDim2.new(0.5, 0, 1, -bottom)
+    local hasCameraButtons = nextHeroButton.Visible
+    local hasViewButtons = watchButton.Visible or personalMenuButton.Visible or chooseEnemyButton.Visible
+    local spectatorHeight = expanded and (short and 224 or 274) or (hasCameraButtons and 158 or (hasViewButtons and 116 or 74))
+    local cameraPadSize = short and 104 or (width < 360 and 106 or 116)
+    local compactCameraPanel = shortLandscape and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
+    if compactCameraPanel then
+        spectatorWidth = math.min(spectatorWidth, width - 2 * (inset + cameraPadSize + 12))
+        spectatorHeight = 122
+    end
+    local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
+    spectator.Position = UDim2.new(0.5, 0, 1, -bottom - cameraBottom)
     spectator.Size = UDim2.fromOffset(spectatorWidth, spectatorHeight)
+    cameraPad.Position, cameraPad.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(cameraPadSize, cameraPadSize)
+    cameraPad.Visible, cameraAxes.Visible, cameraHint.Visible = isTouch, isTouch, not isTouch
+    cameraAxes.Position, cameraAxes.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(108, 108)
+    position(cameraButtons.Up, 0, 0, 50, 50)
+    position(cameraButtons.Down, 58, 0, 50, 50)
+    position(cameraButtons.Left, 0, 58, 50, 50)
+    position(cameraButtons.Right, 58, 58, 50, 50)
+    cameraButtons.Up.TextSize, cameraButtons.Down.TextSize = 11, 11
+    cameraButtons.Left.TextSize, cameraButtons.Right.TextSize = 11, 11
+    cameraHint.Position = UDim2.new(0.5, 0, 1, -bottom - spectatorHeight - 10)
+    cameraHint.Size = UDim2.fromOffset(math.min(620, width - inset * 2), 40)
+    local innerWidth, gapButtons = spectatorWidth - 28, 8
+    local halfButton = (innerWidth - gapButtons) / 2
+    local bottomRow = spectatorHeight - 54
     if expanded then
         position(enemyChoiceTitle, 14, 9, spectatorWidth - 28, 19)
         position(spectatorText, 14, 31, spectatorWidth - 28, 19)
         position(enemyChoiceNote, 14, 52, spectatorWidth - 28, short and 32 or 38)
-        position(enemyOffers, 14, short and 88 or 95, spectatorWidth - 28, spectatorHeight - (short and 136 or 143))
-        position(watchButton, 14, spectatorHeight - 43, spectatorWidth - 28, 34)
+        position(enemyOffers, 14, short and 88 or 95, spectatorWidth - 28, spectatorHeight - (short and 150 or 157))
+        position(watchButton, 14, bottomRow, personalMenuButton.Visible and halfButton or innerWidth, 44)
+        position(personalMenuButton, 14 + halfButton + gapButtons, bottomRow, halfButton, 44)
         spectatorText.TextSize = short and 12 or 13
     else
-        position(spectatorText, 14, 7, spectatorWidth - 28, spectatorHeight > 74 and 59 or 60)
-        position(watchButton, 14, spectatorHeight - 43, spectatorWidth - 28, 34)
-        position(chooseEnemyButton, 14, spectatorHeight - 43, spectatorWidth - 28, 34)
+        position(spectatorText, 14, 7, spectatorWidth - 28, hasViewButtons and 44 or 60)
+        position(nextHeroButton, 14, 55, halfButton, 44)
+        position(freeCameraButton, 14 + halfButton + gapButtons, 55, halfButton, 44)
+        local paired = personalMenuButton.Visible and (watchButton.Visible or chooseEnemyButton.Visible)
+        local viewButtonHeight = 44
+        if compactCameraPanel then
+            position(spectatorText, 14, 7, spectatorWidth - 28, 18)
+            position(nextHeroButton, 14, 29, halfButton, 44)
+            position(freeCameraButton, 14 + halfButton + gapButtons, 29, halfButton, 44)
+            bottomRow, viewButtonHeight = 81, 34
+        end
+        position(watchButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
+        position(chooseEnemyButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
+        position(personalMenuButton, paired and (14 + halfButton + gapButtons) or 14,
+            bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
         spectatorText.TextSize = short and 12 or 14
     end
+    spectatorText.TextWrapped = not compactCameraPanel
+    spectatorText.TextTruncate = compactCameraPanel and Enum.TextTruncate.AtEnd or Enum.TextTruncate.None
+    nextHeroButton.TextSize, freeCameraButton.TextSize = compact and 13 or 15, compact and 13 or 15
 end
 
 local function dragTo(input)
@@ -763,13 +902,42 @@ pad.InputBegan:Connect(function(input)
         dragTo(input)
     end
 end)
+local function dragCameraTo(input)
+    if not spectatorCamera.enabled or not spectatorCamera:isFree() then return end
+    local center = cameraPad.AbsolutePosition + cameraPad.AbsoluteSize / 2
+    local radius = math.max(1, cameraPad.AbsoluteSize.X * 0.34)
+    local delta = (Vector2.new(input.Position.X, input.Position.Y) - center) / radius
+    if delta.Magnitude > 1 then delta = delta.Unit end
+    if delta.Magnitude < 0.12 then delta = Vector2.zero end
+    spectatorCamera:setTouch(delta.X, delta.Y)
+    cameraKnob.Position = UDim2.new(0.5, delta.X * radius, 0.5, delta.Y * radius)
+end
+cameraPad.InputBegan:Connect(function(input)
+    if cameraStickInput or not spectatorCamera.enabled or not spectatorCamera:isFree() then return end
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        cameraStickInput = input
+        dragCameraTo(input)
+    end
+end)
 UserInputService.InputChanged:Connect(function(input)
     if dragging and (input == dragging or (dragging.UserInputType == Enum.UserInputType.MouseButton1
         and input.UserInputType == Enum.UserInputType.MouseMovement)) then dragTo(input) end
+    if cameraStickInput and (input == cameraStickInput or (cameraStickInput.UserInputType == Enum.UserInputType.MouseButton1
+        and input.UserInputType == Enum.UserInputType.MouseMovement)) then dragCameraTo(input) end
+    if cameraDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        spectatorCamera:rotate(-input.Delta.X * 0.005)
+    end
 end)
 UserInputService.InputBegan:Connect(function(input, processed)
-    if processed or not playable() or UserInputService:GetFocusedTextBox() then return end
+    if processed or UserInputService:GetFocusedTextBox() then return end
     local key = input.KeyCode
+    if spectatorCamera.enabled and spectatorCamera:isFree() then
+        if input.UserInputType == Enum.UserInputType.MouseButton2 then cameraDragging = true end
+        if key == Enum.KeyCode.W or key == Enum.KeyCode.A or key == Enum.KeyCode.S or key == Enum.KeyCode.D
+            or key == Enum.KeyCode.Q or key == Enum.KeyCode.E then spectatorCamera:setKey(key.Name, true) end
+        return
+    end
+    if not playable() then return end
     if key == Enum.KeyCode.W or key == Enum.KeyCode.A or key == Enum.KeyCode.S or key == Enum.KeyCode.D then keys[key] = true
     elseif key == Enum.KeyCode.Space then send("Jump")
     elseif key == Enum.KeyCode.F then send("Attack", {attack = "Punch"})
@@ -777,6 +945,21 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 UserInputService.InputEnded:Connect(function(input)
     keys[input.KeyCode] = nil
+    spectatorCamera:setKey(input.KeyCode.Name, false)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then cameraDragging = false end
+    for held, key in pairs(cameraHolds) do
+        if held == input or (held.UserInputType == Enum.UserInputType.MouseButton1
+            and input.UserInputType == Enum.UserInputType.MouseButton1) then
+            spectatorCamera:setKey(key, false)
+            cameraHolds[held] = nil
+        end
+    end
+    if cameraStickInput and (input == cameraStickInput or (cameraStickInput.UserInputType == Enum.UserInputType.MouseButton1
+        and input.UserInputType == Enum.UserInputType.MouseButton1)) then
+        cameraStickInput = nil
+        spectatorCamera:setTouch(0, 0)
+        cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
+    end
     if input == dragging then
         dragging, touchVector = nil, Vector2.zero
         knob.Position = UDim2.fromScale(0.5, 0.5)
@@ -787,27 +970,6 @@ UserInputService.WindowFocusReleased:Connect(function()
     send("Move", {x = 0, z = 0})
 end)
 
-local cameraActor, cameraPoint = nil, nil
-local function findCameraActor()
-    local world = workspace:FindFirstChild("BrickToadsWorld") or workspace:FindFirstChild("CombatStandWorld")
-    local actors = world and world:FindFirstChild("Actors")
-    if not actors then return nil end
-    local byId = {}
-    for _, model in ipairs(actors:GetChildren()) do
-        if model:IsA("Model") and model:FindFirstChild("HumanoidRootPart") then
-            local id = model:GetAttribute("ActorId")
-            if id then byId[id] = model end
-        end
-    end
-    if controlled and controlled.status == "Alive" and byId[controlled.actorId] then return byId[controlled.actorId] end
-    for _, hero in ipairs(snapshot and snapshot.heroes or {}) do
-        if hero.status == "Alive" and hero.connected and byId[hero.actorId] then return byId[hero.actorId] end
-    end
-    for _, hero in ipairs(snapshot and snapshot.heroes or {}) do
-        if byId[hero.actorId] then return byId[hero.actorId] end
-    end
-    return nil
-end
 stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
     local wasPlayable = playable()
@@ -817,22 +979,23 @@ stateRemote.OnClientEvent:Connect(function(data)
     snapshot, mine = data, nil
     for _, hero in ipairs(data.heroes or {}) do if hero.slot == data.mine then mine = hero; break end end
     controlled = mine or data.enemyRole
+    spectatorCamera:sync(data, controlled)
     local nextIdentity = controlled and table.concat({tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
     if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; resetInput()
     elseif wasPlayable and not playable() then resetInput() end
     if previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
-        choosingEnemy, watchingAfterDeath = data.preference ~= "Spectator", false
+        choosingEnemy = data.preference ~= "Spectator"
         pendingEnemy = nil
-        cameraPoint = nil
+        pendingView = nil
         resetInput()
     end
     if pendingTemplate and (data.selectedTemplate == pendingTemplate or data.notice) then pendingTemplate = nil end
     if pendingRole and (data.preference == pendingRole or data.notice) then pendingRole = nil end
     if pendingEnemy and (data.enemyRole or data.notice) then pendingEnemy = nil end
+    if pendingView and (data.view == pendingView or data.notice or data.status ~= "Active") then pendingView = nil end
     if previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
     actionPending = false
-    cameraActor = findCameraActor()
     render()
     layout()
 end)
@@ -848,9 +1011,9 @@ task.spawn(function()
     end
     pcall(function() StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false) end)
 end)
-local moveElapsed, syncElapsed, actorElapsed = 0, 0, 0
+local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
-    moveElapsed, syncElapsed, actorElapsed = moveElapsed + dt, syncElapsed + dt, actorElapsed + dt
+    moveElapsed, syncElapsed = moveElapsed + dt, syncElapsed + dt
     if syncElapsed >= 2 then
         syncElapsed = 0
         if not snapshot then intent:FireServer({kind = "Sync"}) end
@@ -869,21 +1032,15 @@ RunService.RenderStepped:Connect(function(dt)
             intent:FireServer({kind = "Sync"})
             render()
         end
+        if pendingView and os.clock() - pendingViewAt > 4 then
+            pendingView = nil
+            intent:FireServer({kind = "Sync"})
+            render()
+        end
         if actionPending and os.clock() - actionAt > 4 then actionPending = false; render() end
     end
-    if actorElapsed >= 0.2 then actorElapsed = 0; cameraActor = findCameraActor() end
     local camera = workspace.CurrentCamera
-    if camera then
-        camera.CameraType = Enum.CameraType.Scriptable
-        local root = cameraActor and cameraActor.Parent and cameraActor:FindFirstChild("HumanoidRootPart")
-        if root then
-            local target = root.Position + Vector3.new(0, 2, 0)
-            cameraPoint = cameraPoint and cameraPoint:Lerp(target, 1 - math.exp(-dt * 7)) or target
-            camera.CFrame = CFrame.lookAt(cameraPoint + Vector3.new(0, 23, 30), cameraPoint)
-        elseif not cameraPoint then
-            camera.CFrame = CFrame.lookAt(Vector3.new(-55, 30, 36), Vector3.new(-45, 2, 0))
-        end
-    end
+    spectatorCamera:step(dt, camera)
     if moveElapsed >= 0.1 then
         moveElapsed = 0
         if playable() then

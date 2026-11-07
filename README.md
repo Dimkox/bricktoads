@@ -13,10 +13,14 @@ Open `places/BrickToadsPlayable.rbxlx` in Roblox Studio and press Play. The leve
 - Ordinary sentries have three hearts and one life. Clear both encounters to open the guardian arena.
 - To play an enemy, choose **Противник**, wait for the hero to start, then select an available sentry. You take its existing body and current health. Move/jump normally and use **F** or the attack button for its ordinary strike; the hero's heavy strike is unavailable.
 - A sentry becomes unavailable after its first accepted attack or an accepted hero attack directed at it, including a miss. A dead human enemy cannot take another sentry in this run/level. A separate new game resets that limit.
+- After final elimination, choose **Наблюдать** or **В основное меню**. The personal menu has **Вернуться к наблюдению** while the same group continues; it does not restore a body, health or respawns.
+- Spectators can switch the followed hero or use the free camera inside the level bounds. Free camera: **WASD** to move, **Q/E** for height, right mouse drag for direction. Touch has a camera stick and height/turn buttons.
 - Reflect the guardian's orange projectiles with an attack. Three returned projectiles open the exit.
 - Victory/defeat returns to the selection screen. The host starts the next game manually.
 
 All three templates have the same capabilities. The server fixes the 1–3 hero roster at Start; later arrivals spectate this run. Health, collisions, enemy AI, projectiles and respawns are server-owned.
+
+The spectator/menu flow was checked through Studio MCP with four real clients, including an eliminated hero, a dead human enemy and a continuing teammate. Camera bounds and iPhone 17 Pro landscape emulation were checked; this does not establish physical phone/tablet acceptance. Evidence: [spectator camera report](reports/2026-11-07-spectator-menu-camera/README.md).
 
 This is an original playable prototype. Enemy damage, timing, geometry and the boss adaptation remain provisional. Ordinary human-enemy control is implemented for this group's current level. Boss queues, multiple groups/levels and complete source-mechanics transfer are still outstanding. Additional enemy combat abilities are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
 

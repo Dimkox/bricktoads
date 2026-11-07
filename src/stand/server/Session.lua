@@ -271,7 +271,7 @@ function Session:snapshot()
         local h=self.state.heroes[uid]
         local c=self.combat[uid]
         heroes[#heroes+1]={slot=uid,actorId=h.actorId,attempt=h.attempt,
-            connectionEpoch=h.connectionEpoch,connected=h.connected,status=h.status,
+            connectionEpoch=h.connectionEpoch,connected=h.connected,status=h.status,view=h.view,
             hearts=self.Combat.hearts(c.rawLife),rawLife=c.rawLife,respawns=h.respawns,
             shield=h.shield and h.shield.kind,shieldUntil=h.shield and h.shield.deadline,
             dying=c.deathAt~=nil}

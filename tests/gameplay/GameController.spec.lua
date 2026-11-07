@@ -200,5 +200,169 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
         assert(send(hero,{kind='Start'})=='OK')
         assert(claim(c,send,enemy)=='OK' and #c.current.order==1)
     end)
+    local function choose(c,send,player,view,extra)
+        local p={kind='ChooseView',runId=c.current.state.runId,levelEpoch=c.current.state.levelEpoch,view=view}
+        for k,v in pairs(extra or {}) do p[k]=v end
+        return send(player,p)
+    end
+    local function eliminate(c,tick,slot)
+        for _=1,4 do
+            c.current:_die(slot,'Confirmed test death')
+            if c.current.state.heroes[slot].status~='Eliminated' then tick(.1) end
+        end
+        assert(c.current.state.heroes[slot].status=='Eliminated')
+    end
+    test('eliminated hero can choose menu and watch without changing the continuing duo',function()
+        local c,list,add,send,tick=fixture(true); local a,b=add(10),add(20)
+        assert(send(a,{kind='Start'})=='OK')
+        eliminate(c,tick,1)
+        c.current.combat[2].rawLife=31
+        local state=c.current.state; local run=state.runId; local teammate=state.heroes[2]
+        local body=c.world.actors[2]; local spawns=c.world.spawns; local kills=c.world.kills
+        local initial=c:snapshot(a,list)
+        assert(initial.view=='Choice' and initial.canChooseView,'Eliminated hero must receive a personal choice')
+        assert(choose(c,send,a,'Menu')=='OK')
+        assert(c.current.state.heroes[1].view=='Menu' and c:snapshot(a,list).view=='Menu')
+        local revision=c.current.state.revision; local logs=#c.current.logs
+        assert(choose(c,send,a,'Menu')=='OK' and c.current.state.revision==revision and #c.current.logs==logs,
+            'Repeating the same view must not emit a duplicate Core event')
+        assert(choose(c,send,a,'Spectating')=='OK')
+        local watching=c:snapshot(a,list)
+        assert(watching.view=='Spectating' and watching.heroes[1].view=='Spectating')
+        assert(c.current.state.runId==run and c.current.state.status=='Active' and not c.current.state.partyDissolved)
+        assert(c.current.state.heroes[1].respawns==0 and c.current.state.heroes[1].health==0 and c.current.combat[1].rawLife==0)
+        assert(c.current.state.heroes[2].actorId==teammate.actorId and c.current.state.heroes[2].respawns==teammate.respawns
+            and c.current.combat[2].rawLife==31 and c.world.actors[2]==body)
+        assert(c.world.spawns==spawns and c.world.kills==kills and #c.current.order==2)
+        assert(c:snapshot(b,list).view=='Playing' and not c:snapshot(b,list).canChooseView)
+        assert(send(a,{kind='Start'})=='RUN_ACTIVE' and not watching.canStart and not watching.canSelect)
+    end)
+    test('observer menu is personal and survives Player replacement without spawning',function()
+        local c,list,add,send,_,hero=enemyFixture(); local viewer=add(30)
+        local body=c.world.actors[1]; local spawns=c.world.spawns
+        local initial=c:snapshot(viewer,list)
+        assert(initial.view=='Spectating' and initial.canChooseView and not initial.canStart and not initial.canSelect)
+        assert(choose(c,send,viewer,'Menu')=='OK','Observer must be able to choose a personal menu')
+        assert(c:snapshot(viewer,list).view=='Menu' and c:snapshot(hero,list).view=='Playing')
+        local replacement=add(30,'Returned observer')
+        assert(c:snapshot(replacement,list).view=='Menu')
+        assert(choose(c,send,viewer,'Spectating')=='STALE_CONNECTION' and c:snapshot(viewer,list)==nil)
+        assert(choose(c,send,replacement,'Spectating')=='OK' and c:snapshot(replacement,list).view=='Spectating')
+        assert(c.current.state.status=='Active' and not c.current.state.partyDissolved and #c.current.order==1)
+        assert(c.world.actors[1]==body and c.world.spawns==spawns and c.current.state.heroes[1].respawns==3)
+        assert(choose(c,send,replacement,'Menu')=='OK')
+        assert(claim(c,send,replacement,-1)=='OK' and c:snapshot(replacement,list).view=='Playing'
+            and not c:snapshot(replacement,list).canChooseView)
+        c.director:_kill(-1)
+        assert(c:snapshot(replacement,list).view=='Choice','A newly spent enemy role must offer a fresh view choice')
+    end)
+    test('dead enemy menu and watch preserve its spent life through replacement and later waves',function()
+        local c,list,add,send,tick,_,enemy=enemyFixture()
+        assert(claim(c,send,enemy)=='OK'); c.director:_kill(-1)
+        assert(c:snapshot(enemy,list).view=='Choice' and c:snapshot(enemy,list).canChooseView)
+        local spawns=c.world.spawns
+        assert(choose(c,send,enemy,'Menu')=='OK' and choose(c,send,enemy,'Spectating')=='OK')
+        assert(c:snapshot(enemy,list).view=='Spectating' and claim(c,send,enemy,-2)=='ENEMY_LIFE_SPENT')
+        assert(c.world.spawns==spawns)
+        c:leave(enemy); local returned=add(20,'Returned enemy')
+        assert(c:snapshot(returned,list).view=='Spectating')
+        assert(choose(c,send,returned,'Menu')=='OK')
+        c.director:_kill(-2); tick(.1)
+        assert(c.director.stage=='Courtyard' and c:snapshot(returned,list).view=='Menu')
+        assert(claim(c,send,returned,-3)=='ENEMY_LIFE_SPENT')
+        assert(c.current.state.status=='Active' and #c.current.order==1 and c.director:controlled(20).status=='Dead')
+    end)
+    test('living roles cannot suspend their actors with a personal view choice',function()
+        local c,list,_,send,_,hero,enemy=enemyFixture()
+        assert(claim(c,send,enemy)=='OK')
+        local spawns=c.world.spawns; local heroBody=c.world.actors[1]; local enemyBody=c.world.actors[-1]
+        assert(choose(c,send,hero,'Menu')=='NOT_ELIMINATED')
+        assert(choose(c,send,enemy,'Menu')=='ROLE_ACTIVE','A living enemy must keep playing its owned body')
+        assert(choose(c,send,enemy,'Spectating')=='ROLE_ACTIVE')
+        assert(c:snapshot(hero,list).view=='Playing' and c:snapshot(enemy,list).view=='Playing')
+        assert(not c:snapshot(hero,list).canChooseView and not c:snapshot(enemy,list).canChooseView)
+        assert(c.world.spawns==spawns and c.world.actors[1]==heroBody and c.world.actors[-1]==enemyBody)
+    end)
+    test('awaiting initial spawn and awaiting respawn heroes stay Playing and cannot choose menu',function()
+        local c,list,add,send,tick=fixture(true); local hero=add(10)
+        c.world.safe=false; assert(send(hero,{kind='Start'})=='OK')
+        assert(c.current.state.heroes[1].status=='AwaitingInitial')
+        assert(choose(c,send,hero,'Menu')=='NOT_ELIMINATED')
+        assert(c:snapshot(hero,list).view=='Playing' and not c:snapshot(hero,list).canChooseView)
+        c.world.safe=true; tick(1)
+        c.current:_die(1,'Test death with reserves')
+        assert(c.current.state.heroes[1].status=='AwaitingRespawn')
+        assert(choose(c,send,hero,'Spectating')=='NOT_ELIMINATED')
+        assert(c:snapshot(hero,list).view=='Playing' and not c:snapshot(hero,list).canChooseView)
+    end)
+    test('new game resets personal choices while the closed group always shows the result menu',function()
+        local c,list,add,send=fixture(true); local hero,enemy,viewer=add(10),add(20),add(30)
+        assert(send(enemy,{kind='SelectRole',role='Enemy'})=='OK')
+        assert(send(viewer,{kind='SelectRole',role='Spectator'})=='OK')
+        assert(send(hero,{kind='Start'})=='OK'); local run=c.current.state.runId
+        assert(choose(c,send,viewer,'Menu')=='OK' and claim(c,send,enemy)=='OK')
+        c.director:_kill(-1); assert(choose(c,send,enemy,'Menu')=='OK')
+        c.director.result='Won'
+        for _,p in ipairs(list) do
+            assert(c:snapshot(p,list).view=='Menu' and not c:snapshot(p,list).canChooseView)
+            assert(choose(c,send,p,'Spectating')=='RUN_CLOSED')
+        end
+        assert(send(hero,{kind='Start'})=='OK' and c.current.state.runId~=run)
+        assert(c:snapshot(viewer,list).view=='Spectating','A separate game must reset the observer menu choice')
+        assert(c:snapshot(enemy,list).view=='Spectating' and c:snapshot(enemy,list).enemyRole==nil)
+        assert(choose(c,send,viewer,'Menu',{runId=run})=='WRONG_RUN')
+        assert(claim(c,send,enemy)=='OK' and c:snapshot(enemy,list).view=='Playing')
+    end)
+    test('view choice binds current run level and sender while rejecting extra or missing fields',function()
+        local c,list,add,send,tick=fixture(true); local a,b,viewer=add(10),add(20),add(30)
+        assert(send(viewer,{kind='SelectRole',role='Spectator'})=='OK')
+        assert(send(a,{kind='Start'})=='OK'); eliminate(c,tick,1)
+        assert(choose(c,send,a,'Menu')=='OK' and choose(c,send,viewer,'Menu')=='OK')
+        local before=c.current.state; local revision=before.revision
+        local cases={
+            {change={runId='old'},want='WRONG_RUN'},
+            {change={levelEpoch=2},want='STALE_LEVEL'},
+            {change={userId=b.UserId},want='INVALID_INTENT'},
+            {change={connectionEpoch=1},want='INVALID_INTENT'},
+            {change={actorId='spoof'},want='INVALID_INTENT'},
+            {change={view='Playing'},want='INVALID_INTENT'},
+            {change={view={}},want='INVALID_INTENT'},
+            {change={runId={}},want='INVALID_INTENT'},
+            {change={runId=''},want='INVALID_INTENT'},
+            {change={levelEpoch=0},want='INVALID_INTENT'},
+            {change={levelEpoch=1.5},want='INVALID_INTENT'},
+            {change={levelEpoch=0/0},want='INVALID_INTENT'},
+            {change={levelEpoch=math.huge},want='INVALID_INTENT'},
+        }
+        for _,p in ipairs({a,viewer}) do
+            for _,case in ipairs(cases) do assert(choose(c,send,p,'Spectating',case.change)==case.want) end
+            assert(send(p,{kind='ChooseView',runId=before.runId,view='Menu'})=='INVALID_INTENT')
+            assert(send(p,{kind='ChooseView',levelEpoch=1,view='Menu'})=='INVALID_INTENT')
+            assert(send(p,{kind='ChooseView',runId=before.runId,levelEpoch=1})=='INVALID_INTENT')
+        end
+        assert(c.current.state==before and c.current.state.revision==revision)
+        assert(c:snapshot(a,list).view=='Menu' and c:snapshot(viewer,list).view=='Menu')
+        assert(c.current:_clock(c.deps.clock())=='OK')
+        local teammate=c.current.state.heroes[2]
+        assert(c.current:_event('AdvanceLevel',2,{actorId=teammate.actorId,attempt=teammate.attempt,levelEpoch=1,
+            levelId='second',destinationSafe=true,prerequisitesMet=true})=='OK')
+        assert(c:snapshot(a,list).view=='Menu' and c:snapshot(viewer,list).view=='Menu')
+        assert(choose(c,send,a,'Spectating',{levelEpoch=1})=='STALE_LEVEL')
+        assert(choose(c,send,viewer,'Spectating',{levelEpoch=1})=='STALE_LEVEL')
+        local old=a; a=add(10,'Returned eliminated hero')
+        assert(c:snapshot(a,list).view=='Menu')
+        assert(choose(c,send,old,'Spectating')=='STALE_CONNECTION' and c:snapshot(old,list)==nil)
+        a.Parent=nil; assert(choose(c,send,a,'Spectating')=='STALE_CONNECTION')
+        a.Parent='Players'; assert(choose(c,send,a,'Spectating')=='OK')
+        assert(c.current.state.heroes[1].view=='Spectating')
+    end)
+    test('snapshot publishes world camera bounds and tolerates worlds without them',function()
+        local c,list,add,send=fixture(true); local hero=add(10)
+        assert(send(hero,{kind='Start'})=='OK' and c:snapshot(hero,list).cameraBounds==nil)
+        function c.world:cameraBounds() return {minX=-90,maxX=130,minY=7,maxY=52,minZ=-49,maxZ=49} end
+        local bounds=c:snapshot(hero,list).cameraBounds
+        assert(bounds and bounds.minX==-90 and bounds.maxX==130 and bounds.minY==7 and bounds.maxY==52
+            and bounds.minZ==-49 and bounds.maxZ==49,'Camera bounds must come from the active world')
+    end)
     print('GameController: '..passed..' PASS')
 end

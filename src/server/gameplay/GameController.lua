@@ -10,7 +10,7 @@ local function exact(payload,allowed)
     return true
 end
 function Controller.new(deps,world)
-    return setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},owners={},ownerSlots={},buckets={},notices={}},Controller)
+    return setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={}},Controller)
 end
 function Controller:_heroes(players)
     local heroes={}
@@ -60,7 +60,7 @@ function Controller:_begin(player,players)
     if #online==0 then return 'NO_HERO' end
     if online[1]~=player then return 'HOST_ONLY' end
     if not self:_open() then return 'RUN_ACTIVE' end
-    self.world:clearActors(); self.ownerSlots={}; self.owners={}
+    self.world:clearActors(); self.ownerSlots={}; self.owners={}; self.viewChoices={}
     local roster={}
     for index=1,math.min(3,#online) do
         local owner=online[index]
@@ -111,6 +111,27 @@ function Controller:handle(player,payload,players)
         if not exact(payload,{kind=true,role=true}) or not roles[payload.role] then return 'INVALID_INTENT' end
         if not self:_open() then code='RUN_ACTIVE'
         else self.preferences[player.UserId]=payload.role; code='OK' end
+    elseif payload.kind=='ChooseView' then
+        if not exact(payload,{kind=true,runId=true,levelEpoch=true,view=true})
+            or type(payload.runId)~='string' or #payload.runId==0 or #payload.runId>160
+            or type(payload.levelEpoch)~='number' or payload.levelEpoch<1 or payload.levelEpoch>1000000000 or payload.levelEpoch%1~=0
+            or (payload.view~='Menu' and payload.view~='Spectating') then return 'INVALID_INTENT' end
+        if self:_open() then code='RUN_CLOSED'
+        elseif payload.runId~=self.current.state.runId then code='WRONG_RUN'
+        elseif payload.levelEpoch~=self.current.state.levelEpoch then code='STALE_LEVEL'
+        else
+            local slot=self.ownerSlots[player.UserId]
+            local hero=slot and self.current.state.heroes[slot]
+            local enemy=self.director:controlled(player.UserId)
+            if hero and hero.status~='Eliminated' then code='NOT_ELIMINATED'
+            elseif hero then
+                code=self.current:_clock(at)
+                if code=='OK' and hero.view~=payload.view then
+                    code=self.current:_event('ChooseView',slot,{view=payload.view,connectionEpoch=hero.connectionEpoch})
+                end
+            elseif enemy and enemy.status=='Alive' then code='ROLE_ACTIVE'
+            else self.viewChoices[player.UserId]=payload.view; code='OK' end
+        end
     elseif payload.kind=='ClaimEnemy' then
         if not exact(payload,{kind=true,runId=true,levelEpoch=true,enemyId=true})
             or type(payload.enemyId)~='number' or payload.enemyId%1~=0 or payload.enemyId>=0 or payload.enemyId<=-1000 then return 'INVALID_INTENT' end
@@ -122,6 +143,7 @@ function Controller:handle(player,payload,players)
             self:_enemyName(player)
             self.director.now=at
             code=self.director:claim(player.UserId,payload.enemyId)
+            if code=='OK' then self.viewChoices[player.UserId]=nil end
         end
     elseif self.current then
         local slot=self.ownerSlots[player.UserId]
@@ -175,6 +197,17 @@ function Controller:snapshot(player,players)
     data.selectedTemplate=self.choices[player.UserId] or 'Mr. Green'
     data.preference=self.preferences[player.UserId] or 'Hero'
     data.enemyRole=self.director and self.director:controlled(player.UserId)
+    data.cameraBounds=self.world.cameraBounds and self.world:cameraBounds() or nil
+    if self:_open() then data.view='Menu'; data.canChooseView=false
+    elseif data.mine then
+        local hero=self.current.state.heroes[data.mine]
+        data.view=hero.status=='Eliminated' and hero.view or 'Playing'
+        data.canChooseView=hero.status=='Eliminated'
+    elseif data.enemyRole and data.enemyRole.status=='Alive' then data.view='Playing'; data.canChooseView=false
+    else
+        data.view=self.viewChoices[player.UserId] or (data.enemyRole and 'Choice' or 'Spectating')
+        data.canChooseView=true
+    end
     data.enemyOffers={}
     if not self.current or self:_open() then data.enemyUnavailableReason='RUN_CLOSED'
     elseif data.mine then data.enemyUnavailableReason='HERO_LOCKED'

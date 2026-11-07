@@ -324,6 +324,17 @@ return function(Core, Combat, Session, Config, World)
             eq(s.combat[1].attack,nil); eq(s.state.heroes[1].respawns,2)
         end
     end)
+    test("snapshot exposes eliminated view without changing lives or the continuing teammate",function()
+        local s,w=setup(2)
+        for i=1,4 do w.hazards[1]='Fall'; s:step(i*.3); s:step(i*.3+.1) end
+        eq(s.state.status,'Active'); eq(s.state.heroes[1].status,'Eliminated')
+        eq(s:snapshot().heroes[1].view,'Choice')
+        local spawns=w.spawns; local teammate=s.state.heroes[2].actorId
+        s:_clock(1.5)
+        eq(s:_event('ChooseView',1,{view='Menu',connectionEpoch=s.state.heroes[1].connectionEpoch}),'OK')
+        eq(s:snapshot().heroes[1].view,'Menu'); eq(s.state.heroes[1].respawns,0)
+        eq(w.spawns,spawns); eq(s.state.heroes[2].actorId,teammate)
+    end)
     print("Session tests: "..passed.." PASS, "..failed.." FAIL")
     assert(failed==0, "Session contracts failed")
     return passed

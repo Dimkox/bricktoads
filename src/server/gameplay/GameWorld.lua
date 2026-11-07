@@ -395,6 +395,19 @@ function World:position(id)
     return {x = p.X, y = p.Y, z = p.Z}
 end
 
+function World:cameraBounds()
+    local minX,maxX,minZ,maxZ,top=math.huge,-math.huge,math.huge,-math.huge,-math.huge
+    for _,floor in ipairs(self.floors) do
+        minX=math.min(minX,floor.Position.X-floor.Size.X/2)
+        maxX=math.max(maxX,floor.Position.X+floor.Size.X/2)
+        minZ=math.min(minZ,floor.Position.Z-floor.Size.Z/2)
+        maxZ=math.max(maxZ,floor.Position.Z+floor.Size.Z/2)
+        top=math.max(top,floor.Position.Y+floor.Size.Y/2)
+    end
+    assert(minX<maxX and minZ<maxZ,'The current level has no camera bounds')
+    return {minX=minX-12,maxX=maxX+12,minY=top+7,maxY=top+52,minZ=minZ-28,maxZ=maxZ+28}
+end
+
 function World:enemyIdentity(id,actorId,ownerName)
     local actor=self.actors[id]
     if not actor or self.enemyKinds[id]~='Drone' then return end

@@ -50,7 +50,7 @@ intent.OnServerEvent:Connect(function(player,payload)
     local ok,code=xpcall(function() return controller:handle(player,payload,Players:GetPlayers()) end,debug.traceback)
     if not ok then fault=tostring(code); warn('[BrickToads] '..fault); return end
     if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
-        or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy') then
+        or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView') then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)
