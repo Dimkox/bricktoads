@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the blank development place from src/ using only the Python standard library."""
+"""Build the playable main project from src/ using the Python standard library."""
 from __future__ import annotations
 
 import argparse
@@ -81,7 +81,15 @@ def build(root_path: Path) -> bytes:
     prop(lighting, "float", "ClockTime", 14)
     prop(lighting, "float", "Brightness", 2)
     server = item(root, "ServerScriptService", "ServerScriptService")
-    sources(item(server, "Folder", "BrickToads"), root_path / "src/server", server_only=True)
+    project = item(server, "Folder", "BrickToads")
+    sources(project, root_path / "src/server", server_only=True)
+    # Share implementations with the independent stand; exclude its entrypoint,
+    # diagnostics and all acceptance helpers from the actual game.
+    runtime = item(project, "Folder", "CombatRuntime")
+    for name in ("Combat", "Session", "Config", "ConnectionRegistry", "RobloxWorld"):
+        child = item(runtime, "ModuleScript", name)
+        prop(child, "ProtectedString", "Source",
+             (root_path / "src/stand/server" / (name + ".lua")).read_text(encoding="utf-8"))
     replicated = item(root, "ReplicatedStorage", "ReplicatedStorage")
     sources(item(replicated, "Folder", "BrickToads"), root_path / "src/shared")
     starter = item(root, "StarterPlayer", "StarterPlayer")
@@ -93,7 +101,7 @@ def build(root_path: Path) -> bytes:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=ROOT / "places/BrickToads.rbxlx")
+    parser.add_argument("--output", type=Path, default=ROOT / "places/BrickToadsPlayable.rbxlx")
     parser.add_argument("--check", action="store_true", help="Fail if the saved place differs from current sources")
     args = parser.parse_args()
     content = build(ROOT)

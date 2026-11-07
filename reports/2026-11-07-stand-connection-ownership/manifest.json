@@ -1,0 +1,126 @@
+{
+  "baseCommit": "6649ba1ff3fb99ba0840581b07010bffb4ba7eda",
+  "studioVersion": "0.746.0.7461269",
+  "actualSameUserTransport": "NOT RUN",
+  "studioRegression": {
+    "passed": 486,
+    "scenarios": 48,
+    "failed": 0
+  },
+  "generatedPlace": {
+    "bytes": 64493,
+    "sha256": "dba4e206b42ce97a1c78cb68b744acbedfa45d6b28963d2554ef62beac71e72b"
+  },
+  "payloads": {
+    "departed-object-fail.txt": {
+      "bytes": 1069,
+      "sha256": "7dcfb8a342ab0ab61d2128ebd174d42ffa8cc411cb121d4ac075141b046606d0"
+    },
+    "gateway-baseline-fail.txt": {
+      "bytes": 1191,
+      "sha256": "4964d238472b098e34637c21b3c4f3d87bbe13c2f75faf624f8370b9fcda427e"
+    },
+    "gateway-contracts-pass.txt": {
+      "bytes": 1031,
+      "sha256": "385cfb2112ad86addc2c0b5cd00ea59703fc7976348942e68cbb64caec25648a"
+    },
+    "registry-contracts-pass.txt": {
+      "bytes": 1329,
+      "sha256": "7da94a848e23be9cfb6e4887a1a2559ed60d36ac41e90706949b88ab1930709d"
+    },
+    "studio-regression-pass.json": {
+      "bytes": 301085,
+      "sha256": "be4c7c5a30093b00c54ec53db4ffefcd5898edd9af42d5d9290aee97b0e6eab5"
+    },
+    "transport-preflight.json": {
+      "bytes": 1143,
+      "sha256": "2dd4a3441ee9a52422a0cea3763a8637f524d85fcb587ba4fe51a6a8d8ed0c5d"
+    }
+  },
+  "finalSourcesUtf8Lf": {
+    ".github/workflows/combat-stand.yml": {
+      "utf8LfBytes": 2486,
+      "sha256": "ca9cb9d4e6425d07def2cf4dcfa7e5c09f15d9885013dbddd4ccb783d0319149"
+    },
+    "src/server/RunLifecycle.lua": {
+      "utf8LfBytes": 13755,
+      "sha256": "cda5e4089bb04e76b2b075d21d119368db670d17bbfccdf5cb638b5f8375b968"
+    },
+    "src/stand/client/Stand.client.lua": {
+      "utf8LfBytes": 9120,
+      "sha256": "3a59bf7358a22bdd02362a63755b54c6a91e6cd1b06152cf027921167f91ad66"
+    },
+    "src/stand/server/Combat.lua": {
+      "utf8LfBytes": 1509,
+      "sha256": "5aa750a866478645f85017d8243ffe22b103af193469561b323ab8402b09fd87"
+    },
+    "src/stand/server/Config.lua": {
+      "utf8LfBytes": 747,
+      "sha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624"
+    },
+    "src/stand/server/ConnectionRegistry.lua": {
+      "utf8LfBytes": 1717,
+      "sha256": "7f6cd4b6216cc993a359a55d318c46a819c90ecf0f893f4d34843cb168956c92"
+    },
+    "src/stand/server/RobloxWorld.lua": {
+      "utf8LfBytes": 13419,
+      "sha256": "3023ade94d227f2ce76f8f9a6c3dbabdfcbfba390c8ab840c3b62d9da3e860f0"
+    },
+    "src/stand/server/Session.lua": {
+      "utf8LfBytes": 12556,
+      "sha256": "1a32f69c5df41dd1197ec84cbf63a3a8e73ff67d4555ce1f590e838374342276"
+    },
+    "src/stand/server/Stand.server.lua": {
+      "utf8LfBytes": 8269,
+      "sha256": "f69563f3f08c86f8e01aceb93e05197283df2ec80020f2753909fdf401fa8719"
+    },
+    "tests/run_connections.luau": {
+      "utf8LfBytes": 499,
+      "sha256": "bdc6537d4668581e2c2a0ddf2fc1fb13d32f3d9e8ab7865e4ad9749a6beed4d1"
+    },
+    "tests/stand/Combat.spec.lua": {
+      "utf8LfBytes": 2126,
+      "sha256": "b070bddea4025fc3f6cf7137a489d7bf7b725fa604b8cd124e46f14f1a49bcc4"
+    },
+    "tests/stand/CombatStandSecurityScenarios.lua": {
+      "utf8LfBytes": 16165,
+      "sha256": "da0716b4bace38a61292903b696bfc81f32db20716a477f78d77514c8a48e862"
+    },
+    "tests/stand/CombatStandStudioAcceptance.server.lua": {
+      "utf8LfBytes": 60964,
+      "sha256": "bd3a63b237c3539d34d9d03a65dae4ec363fcc6f73c210344ec80aa4a6fba4fd"
+    },
+    "tests/stand/CombatStandStudioClient.client.lua": {
+      "utf8LfBytes": 7826,
+      "sha256": "4d2a8b249ad70bd32e82e346ba2e5d13db2df87a09c20d16442e77832e3a1afb"
+    },
+    "tests/stand/ConnectionRegistry.spec.lua": {
+      "utf8LfBytes": 10489,
+      "sha256": "101edf2eeee57161a598ed63a3cb07396227e1c64752871a67262501860cdcfc"
+    },
+    "tests/stand/FakeWorld.lua": {
+      "utf8LfBytes": 1706,
+      "sha256": "45ea299c6131a6c7e620093c3b0cfc6beb502926a9202cb19db4cb4f0f98d212"
+    },
+    "tests/stand/Session.spec.lua": {
+      "utf8LfBytes": 17309,
+      "sha256": "cd2ed354791059ede7afc632756df2f5d65f0a4a9605d35059712a8a900ea23e"
+    },
+    "tests/stand/StandGateway.spec.lua": {
+      "utf8LfBytes": 7182,
+      "sha256": "f8427678edef23f39e7035078a4f257c5ca3c505918c1e964494ff35ae04c39f"
+    },
+    "tests/stand/StandGatewayFixture.lua": {
+      "utf8LfBytes": 4214,
+      "sha256": "37ec84299a62f95990f645e827bf282be5639f729f9d6aba5c73ec0d2a386c94"
+    },
+    "tools/studio_launch_combat_acceptance.luau": {
+      "utf8LfBytes": 4044,
+      "sha256": "fac450d63fd815d31ccd204e367df87d3912aea940bb5d9b83b9b0f579019999"
+    },
+    "tools/test_stand_gateway.py": {
+      "utf8LfBytes": 1656,
+      "sha256": "242fe1fed6db39be05b0b5263ecad6cea362e39afd203008b487e29f52e786bd"
+    }
+  }
+}

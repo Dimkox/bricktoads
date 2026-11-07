@@ -1,0 +1,4473 @@
+{
+  "date": "2026-11-07",
+  "studioVersion": "0.746.0.7461269",
+  "placeId": 117412694427208,
+  "scope": "Prepared three-client/two-group engine checks. QA fixed BindableFunction actions clear NPCs, skip to zones3/6, reposition actual bodies, and apply the existing Session Dash hit; health/reserve values are never directly edited. Production client key/touch inputs catch food. The simultaneous race uses two scheduled valid production Attack packets from actual clients with explicit high sequences, then the test ends. This is not a natural complete level clear or a physical device test.",
+  "checkpoints": {
+    "fliesBaseline": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052786.441552,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 0,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": []
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052786.441552,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 0,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": []
+      }
+    },
+    "fliesDamaged": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052787.610858,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 3.297872340425532,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 31,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 0,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052787.610858,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 0,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": []
+      }
+    },
+    "fliesFirstCatch": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052788.227447,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052788.227447,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 0,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": []
+      }
+    },
+    "fliesAfterFullHealth": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052832.625191,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 2,
+            "total": 6,
+            "active": 0
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052832.625191,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 0,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": []
+      }
+    },
+    "fliesMiss": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052882.323925,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 2,
+            "total": 6,
+            "active": 0
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052882.323925,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 3.297872340425532,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 31,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 0,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 3,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052880.772374,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  507
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 4,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052881.840136,
+            "data": {
+              "action": "Punch",
+              "seq": 947
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          }
+        ]
+      }
+    },
+    "fliesSeparateGroupCatch": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052883.323978,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 2,
+            "total": 6,
+            "active": 0
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052883.323978,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 3,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052880.772374,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  507
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 4,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052881.840136,
+            "data": {
+              "action": "Punch",
+              "seq": 947
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.805526,
+            "data": {
+              "action": "Punch",
+              "seq": 955
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.972085,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          }
+        ]
+      }
+    },
+    "fliesBridgeBefore": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052883.455578,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 6,
+          "healingFlies": {
+            "consumed": 2,
+            "total": 6,
+            "active": 4
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "active": true,
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052883.455578,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 3,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052880.772374,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  507
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 4,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052881.840136,
+            "data": {
+              "action": "Punch",
+              "seq": 947
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.805526,
+            "data": {
+              "action": "Punch",
+              "seq": 955
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.972085,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          }
+        ]
+      }
+    },
+    "fliesSequentialInputs": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052884.192255,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.574468085106383,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 43,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 6,
+          "healingFlies": {
+            "consumed": 3,
+            "total": 6,
+            "active": 3
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "active": true,
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 10,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.53865,
+            "data": {
+              "action": "Punch",
+              "seq": 967
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 11,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.705042,
+            "data": {
+              "before": 39,
+              "flyId": "bridge-fly-1",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 12,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052883.737512,
+            "data": {
+              "action": "Punch",
+              "seq": 966
+            },
+            "kind": "AttackAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 13,
+            "rawLife": 43,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.839494,
+            "data": {
+              "action": "Punch",
+              "attacker": 2,
+              "profile": 18,
+              "observed": {
+                "velocity": [
+                  4.6035208356443036e-7,
+                  7.482372265722216e-15,
+                  -1.2816661509873484e-8
+                ],
+                "held": false,
+                "position": [
+                  544,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 43,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052884.192255,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 3,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052880.772374,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  507
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 4,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052881.840136,
+            "data": {
+              "action": "Punch",
+              "seq": 947
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.805526,
+            "data": {
+              "action": "Punch",
+              "seq": 955
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.972085,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          }
+        ]
+      }
+    },
+    "fliesCap": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052959.470376,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 5,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 47,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 6,
+          "healingFlies": {
+            "consumed": 4,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "active": true,
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 10,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.53865,
+            "data": {
+              "action": "Punch",
+              "seq": 967
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 11,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.705042,
+            "data": {
+              "before": 39,
+              "flyId": "bridge-fly-1",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 12,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052883.737512,
+            "data": {
+              "action": "Punch",
+              "seq": 966
+            },
+            "kind": "AttackAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 13,
+            "rawLife": 43,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.839494,
+            "data": {
+              "action": "Punch",
+              "attacker": 2,
+              "profile": 18,
+              "observed": {
+                "velocity": [
+                  4.6035208356443036e-7,
+                  7.482372265722216e-15,
+                  -1.2816661509873484e-8
+                ],
+                "held": false,
+                "position": [
+                  544,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 43,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 15,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.00238,
+            "data": {
+              "action": "Punch",
+              "seq": 1533
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 16,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.169312,
+            "data": {
+              "before": 47,
+              "flyId": "bridge-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052959.470376,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 3,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052880.772374,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  507
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 4,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052881.840136,
+            "data": {
+              "action": "Punch",
+              "seq": 947
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.805526,
+            "data": {
+              "action": "Punch",
+              "seq": 955
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.972085,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          }
+        ]
+      }
+    },
+    "fliesRaceBefore": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052960.553132,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 3.297872340425532,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 31,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 3.297872340425532,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 31,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 6,
+          "healingFlies": {
+            "consumed": 4,
+            "total": 6,
+            "active": 2
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "active": true,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "active": true,
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 10,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.53865,
+            "data": {
+              "action": "Punch",
+              "seq": 967
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 11,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.705042,
+            "data": {
+              "before": 39,
+              "flyId": "bridge-fly-1",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 12,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052883.737512,
+            "data": {
+              "action": "Punch",
+              "seq": 966
+            },
+            "kind": "AttackAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 13,
+            "rawLife": 43,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.839494,
+            "data": {
+              "action": "Punch",
+              "attacker": 2,
+              "profile": 18,
+              "observed": {
+                "velocity": [
+                  4.6035208356443036e-7,
+                  7.482372265722216e-15,
+                  -1.2816661509873484e-8
+                ],
+                "held": false,
+                "position": [
+                  544,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 43,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 15,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.00238,
+            "data": {
+              "action": "Punch",
+              "seq": 1533
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 16,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.169312,
+            "data": {
+              "before": 47,
+              "flyId": "bridge-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 17,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.552855,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  5.518093644241162e-7,
+                  -2.766967631038196e-14,
+                  -5.616339038283513e-8
+                ],
+                "held": false,
+                "position": [
+                  550,
+                  3,
+                  5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 18,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052959.552855,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  150,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052960.553132,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 3,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052880.772374,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  507
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 4,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052881.840136,
+            "data": {
+              "action": "Punch",
+              "seq": 947
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.805526,
+            "data": {
+              "action": "Punch",
+              "seq": 955
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.972085,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          }
+        ]
+      }
+    },
+    "fliesRace": {
+      "group-1": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052988.350997,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            },
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 2,
+              "attempt": 1,
+              "hearts": 3.297872340425532,
+              "connectionEpoch": 1,
+              "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 31,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 6,
+          "healingFlies": {
+            "consumed": 5,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "consumed": true,
+            "active": false,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "active": true,
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052786.526033,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.741912,
+            "data": {
+              "action": "Punch",
+              "seq": 248
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 7,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052787.915765,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 8,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.206649,
+            "data": {
+              "action": "Punch",
+              "seq": 579
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 9,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052832.373853,
+            "data": {
+              "before": 47,
+              "flyId": "courtyard-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 10,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.53865,
+            "data": {
+              "action": "Punch",
+              "seq": 967
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 11,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.705042,
+            "data": {
+              "before": 39,
+              "flyId": "bridge-fly-1",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 12,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052883.737512,
+            "data": {
+              "action": "Punch",
+              "seq": 966
+            },
+            "kind": "AttackAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 13,
+            "rawLife": 43,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052883.839494,
+            "data": {
+              "action": "Punch",
+              "attacker": 2,
+              "profile": 18,
+              "observed": {
+                "velocity": [
+                  4.6035208356443036e-7,
+                  7.482372265722216e-15,
+                  -1.2816661509873484e-8
+                ],
+                "held": false,
+                "position": [
+                  544,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 43,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 15,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.00238,
+            "data": {
+              "action": "Punch",
+              "seq": 1533
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 16,
+            "rawLife": 47,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.169312,
+            "data": {
+              "before": 47,
+              "flyId": "bridge-fly-2",
+              "after": 47
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 17,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052959.552855,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  5.518093644241162e-7,
+                  -2.766967631038196e-14,
+                  -5.616339038283513e-8
+                ],
+                "held": false,
+                "position": [
+                  550,
+                  3,
+                  5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 18,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052959.552855,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  150,
+                  3,
+                  -5
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 19,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052987.951444,
+            "data": {
+              "action": "Punch",
+              "seq": 1000001
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          },
+          {
+            "revision": 20,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 2,
+            "respawns": 3,
+            "now": 1794052987.968208,
+            "data": {
+              "action": "Punch",
+              "seq": 1000001
+            },
+            "kind": "InteractionAccepted",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5"
+          },
+          {
+            "revision": 21,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052988.117711,
+            "data": {
+              "before": 31,
+              "flyId": "bridge-fly-3",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2"
+          }
+        ]
+      },
+      "group-2": {
+        "state": {
+          "levelEpoch": 1,
+          "now": 1794052988.368034,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+          "heroes": [
+            {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "hearts": 4.148936170212766,
+              "connectionEpoch": 1,
+              "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2",
+              "status": "Alive",
+              "respawns": 3,
+              "rawLife": 39,
+              "dying": false
+            }
+          ]
+        },
+        "offset": [
+          0,
+          0,
+          512
+        ],
+        "level": {
+          "stage": "Route",
+          "zoneIndex": 3,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "rows": [
+          {
+            "y": 4.5,
+            "x": 178,
+            "zone": 3,
+            "id": "courtyard-fly-1",
+            "consumed": true,
+            "active": false,
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 184,
+            "zone": 3,
+            "id": "courtyard-fly-2",
+            "active": true,
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 548,
+            "zone": 6,
+            "id": "bridge-fly-1",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 554,
+            "zone": 6,
+            "id": "bridge-fly-2",
+            "z": 5
+          },
+          {
+            "y": 4.5,
+            "x": 568,
+            "zone": 6,
+            "id": "bridge-fly-3",
+            "z": -5
+          },
+          {
+            "y": 4.5,
+            "x": 574,
+            "zone": 6,
+            "id": "bridge-fly-4",
+            "z": 5
+          }
+        ],
+        "events": [
+          {
+            "revision": 3,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052880.772374,
+            "data": {
+              "action": "Dash",
+              "attacker": -1,
+              "profile": 22,
+              "observed": {
+                "velocity": [
+                  0,
+                  0,
+                  0
+                ],
+                "held": false,
+                "position": [
+                  174,
+                  3,
+                  507
+                ]
+              },
+              "blocked": false,
+              "before": 47,
+              "impulse": true,
+              "after": 31,
+              "dying": false
+            },
+            "kind": "Hit",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 4,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052881.840136,
+            "data": {
+              "action": "Punch",
+              "seq": 947
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.805526,
+            "data": {
+              "action": "Punch",
+              "seq": 955
+            },
+            "kind": "InteractionAccepted",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          },
+          {
+            "revision": 6,
+            "rawLife": 39,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "now": 1794052882.972085,
+            "data": {
+              "before": 31,
+              "flyId": "courtyard-fly-1",
+              "after": 39
+            },
+            "kind": "FlyCaught",
+            "runId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae",
+            "actorId": "cdb864e3-9428-4822-bc2c-3d5c58a092ae:actor:2"
+          }
+        ]
+      }
+    }
+  },
+  "phone": {
+    "before": {
+      "visible": true,
+      "path": "Players.Player2.PlayerGui.BrickToadsGameUI.SafeArea.HUD.Controls.Actions.Punch",
+      "viewport": [
+        750,
+        381
+      ],
+      "text": "ЛОВИТЬ МУХУ",
+      "state": {
+        "view": "Playing",
+        "canChooseView": false,
+        "mine": 2,
+        "heroes": [
+          {
+            "view": "Playing",
+            "connected": true,
+            "template": "Mr. Green",
+            "slot": 1,
+            "attempt": 1,
+            "userId": -1,
+            "displayName": "Player1",
+            "username": "Player1",
+            "connectionEpoch": 1,
+            "hearts": 4.148936170212766,
+            "rawLife": 39,
+            "status": "Alive",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+            "respawns": 3,
+            "dying": false
+          },
+          {
+            "view": "Playing",
+            "connected": true,
+            "template": "Mr. Green",
+            "slot": 2,
+            "attempt": 1,
+            "userId": -2,
+            "displayName": "Player2",
+            "username": "Player2",
+            "connectionEpoch": 1,
+            "hearts": 5,
+            "rawLife": 47,
+            "status": "Alive",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+            "respawns": 3,
+            "dying": false
+          }
+        ],
+        "levelEpoch": 1,
+        "preference": "Hero",
+        "groups": [
+          {
+            "players": 2,
+            "name": "Команда 1",
+            "status": "Active",
+            "canJoin": true,
+            "id": "group-1",
+            "heroes": 2
+          },
+          {
+            "players": 1,
+            "name": "Команда 2",
+            "heroes": 1,
+            "status": "Active",
+            "canJoin": false,
+            "id": "group-2",
+            "reason": "ROLE_ACTIVE"
+          }
+        ],
+        "enemyOffers": [],
+        "status": "Active",
+        "level": {
+          "objective": "Освободите двор перед обрывом",
+          "zoneName": "Каменный двор",
+          "enemies": [
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -1,
+              "kind": "Pig",
+              "zoneIndex": 1,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -2,
+              "kind": "Pig",
+              "zoneIndex": 1,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -3,
+              "kind": "Walker",
+              "zoneIndex": 1,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -7,
+              "kind": "Pig",
+              "zoneIndex": 3,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -8,
+              "kind": "Pig",
+              "zoneIndex": 3,
+              "dead": true
+            }
+          ],
+          "bossHits": 0,
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          },
+          "zoneIndex": 3,
+          "bossMechanic": "PickupThrow",
+          "zoneCount": 6,
+          "stage": "Route",
+          "bossMax": 3
+        },
+        "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+        "enemyUnavailableReason": "HERO_LOCKED",
+        "interaction": {
+          "carrying": false,
+          "kind": "HealingFly",
+          "available": true,
+          "label": "ЛОВИТЬ МУХУ"
+        },
+        "cameraBounds": {
+          "maxY": 56,
+          "minZ": -90,
+          "minY": 7,
+          "minX": -90,
+          "maxZ": 90,
+          "maxX": 700
+        },
+        "canSelect": false,
+        "groupId": "group-1",
+        "bossQueue": {
+          "state": "None",
+          "available": false
+        },
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "groupName": "Команда 1",
+        "host": -1,
+        "online": 2,
+        "selectedTemplate": "Mr. Green",
+        "now": 1794052831.306569,
+        "canStart": false,
+        "canCreateGroup": false,
+        "worldName": "BrickToadsWorld_group-1",
+        "lobby": [
+          {
+            "username": "Player1",
+            "template": "Mr. Green",
+            "preference": "Hero",
+            "userId": -1,
+            "displayName": "Player1"
+          },
+          {
+            "username": "Player2",
+            "template": "Mr. Green",
+            "preference": "Hero",
+            "userId": -2,
+            "displayName": "Player2"
+          }
+        ],
+        "heroOnline": 2
+      },
+      "button": [
+        570,
+        206,
+        77,
+        56
+      ]
+    },
+    "after": {
+      "state": {
+        "view": "Playing",
+        "canChooseView": false,
+        "mine": 2,
+        "heroes": [
+          {
+            "view": "Playing",
+            "connected": true,
+            "template": "Mr. Green",
+            "slot": 1,
+            "attempt": 1,
+            "userId": -1,
+            "displayName": "Player1",
+            "username": "Player1",
+            "connectionEpoch": 1,
+            "hearts": 4.148936170212766,
+            "rawLife": 39,
+            "status": "Alive",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:2",
+            "respawns": 3,
+            "dying": false
+          },
+          {
+            "view": "Playing",
+            "connected": true,
+            "template": "Mr. Green",
+            "slot": 2,
+            "attempt": 1,
+            "userId": -2,
+            "displayName": "Player2",
+            "username": "Player2",
+            "connectionEpoch": 1,
+            "hearts": 5,
+            "rawLife": 47,
+            "status": "Alive",
+            "actorId": "82b3528c-ac0a-4b76-a72a-285856d91129:actor:5",
+            "respawns": 3,
+            "dying": false
+          }
+        ],
+        "levelEpoch": 1,
+        "preference": "Hero",
+        "groups": [
+          {
+            "players": 2,
+            "name": "Команда 1",
+            "status": "Active",
+            "canJoin": true,
+            "id": "group-1",
+            "heroes": 2
+          },
+          {
+            "players": 1,
+            "name": "Команда 2",
+            "heroes": 1,
+            "status": "Active",
+            "canJoin": false,
+            "id": "group-2",
+            "reason": "ROLE_ACTIVE"
+          }
+        ],
+        "enemyOffers": [],
+        "status": "Active",
+        "level": {
+          "objective": "Освободите двор перед обрывом",
+          "zoneName": "Каменный двор",
+          "enemies": [
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -1,
+              "kind": "Pig",
+              "zoneIndex": 1,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -2,
+              "kind": "Pig",
+              "zoneIndex": 1,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -3,
+              "kind": "Walker",
+              "zoneIndex": 1,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -7,
+              "kind": "Pig",
+              "zoneIndex": 3,
+              "dead": true
+            },
+            {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -8,
+              "kind": "Pig",
+              "zoneIndex": 3,
+              "dead": true
+            }
+          ],
+          "bossHits": 0,
+          "healingFlies": {
+            "consumed": 2,
+            "total": 6,
+            "active": 0
+          },
+          "zoneIndex": 3,
+          "bossMechanic": "PickupThrow",
+          "zoneCount": 6,
+          "stage": "Route",
+          "bossMax": 3
+        },
+        "runId": "82b3528c-ac0a-4b76-a72a-285856d91129",
+        "enemyUnavailableReason": "HERO_LOCKED",
+        "interaction": {
+          "carrying": false,
+          "kind": "HealingFly",
+          "available": false,
+          "label": "ЛОВИТЬ МУХУ"
+        },
+        "cameraBounds": {
+          "maxY": 56,
+          "minZ": -90,
+          "minY": 7,
+          "minX": -90,
+          "maxZ": 90,
+          "maxX": 700
+        },
+        "canSelect": false,
+        "groupId": "group-1",
+        "bossQueue": {
+          "state": "None",
+          "available": false
+        },
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "groupName": "Команда 1",
+        "host": -1,
+        "online": 2,
+        "selectedTemplate": "Mr. Green",
+        "now": 1794052832.507417,
+        "canStart": false,
+        "canCreateGroup": false,
+        "worldName": "BrickToadsWorld_group-1",
+        "lobby": [
+          {
+            "username": "Player1",
+            "template": "Mr. Green",
+            "preference": "Hero",
+            "userId": -1,
+            "displayName": "Player1"
+          },
+          {
+            "username": "Player2",
+            "template": "Mr. Green",
+            "preference": "Hero",
+            "userId": -2,
+            "displayName": "Player2"
+          }
+        ],
+        "heroOnline": 2
+      },
+      "hits": 1
+    },
+    "hitMapping": "Explicit MCP coordinates add emulator offsets(+62,+20); actual Punch.Activated count1 and real state transition confirm the hit."
+  },
+  "racePassed": true,
+  "preparationHook": "\n-- Test-session-only diagnostic. Not present in repository or generated place.\nlocal qa=Instance.new('BindableFunction');qa.Name='BrickToadsFliesQA';qa.Parent=game.ServerStorage\nqa.OnInvoke=function(action,groupId,slot)\n local result={}\n if action=='freeze' then\n  for _,id in controller.order do\n   local c=controller.groups[id].controller\n   for eid,a in c.world.actors do if eid<0 then a.humanoid.Health=0 end end\n  end\n elseif action=='prepare' then\n  local c=assert(controller.groups[groupId]).controller\n  for eid in c.director.enemies do c.director:_kill(eid) end\n  c.director:_enterZone(3)\n  for eid in c.director.enemies do c.director:_kill(eid) end\n  for uid,a in c.world.actors do\n   if uid>0 then a.model:PivotTo(CFrame.lookAt(Vector3.new(174,3,-5)+c.world.offset,Vector3.new(178,3,-5)+c.world.offset));a.root.AssemblyLinearVelocity=Vector3.zero end\n  end\n elseif action=='snapshot' then\n  for _,id in controller.order do\n   local g=controller.groups[id];local c=g.controller\n   if c.current then result[id]={state=c.current:snapshot(),level=c.director:snapshot(),rows=c.director.flies.rows,logs=c.current.logs,offset={g.world.offset.X,g.world.offset.Y,g.world.offset.Z}} end\n  end\n elseif action=='place' then\n  local c=controller.groups[groupId].controller;local a=c.world.actors[slot]\n  a.model:PivotTo(CFrame.lookAt(Vector3.new(174,3,-5)+c.world.offset,Vector3.new(178,3,-5)+c.world.offset));a.root.AssemblyLinearVelocity=Vector3.zero\n elseif action=='secondFly' then\n  local c=controller.groups[groupId].controller;local a=c.world.actors[slot]\n  a.model:PivotTo(CFrame.lookAt(Vector3.new(180,3,5)+c.world.offset,Vector3.new(184,3,5)+c.world.offset));a.root.AssemblyLinearVelocity=Vector3.zero\n elseif action=='retreat' then\n  local c=controller.groups[groupId].controller;local a=c.world.actors[slot]\n  a.model:PivotTo(CFrame.new(Vector3.new(150,3,-5)+c.world.offset));a.root.AssemblyLinearVelocity=Vector3.zero\n elseif action=='damage' then\n  local c=controller.groups[groupId].controller;c.current:_hit(-1,slot,'Dash')\n elseif action=='bridge' then\n  local c=controller.groups[groupId].controller\n  c.director:_enterZone(6)\n end\n return game.HttpService:JSONEncode(result)\nend\n"
+}

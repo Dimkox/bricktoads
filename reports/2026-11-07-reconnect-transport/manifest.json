@@ -1,0 +1,80 @@
+{
+  "baseCommit": "ce518f5902e4a09e92ab053b32709cf76277ab1c",
+  "studioVersion": "0.746.0.7461269",
+  "status": "PARTIAL: same-server reconnect not confirmed",
+  "universeId": 10775039796,
+  "placeId": 117412694427208,
+  "visibility": "PRIVATE",
+  "payloads": {
+    "arena-before-departure.json": {
+      "bytes": 481,
+      "sha256": "a6aaf5880b681f6f1e9a7a253b43aecd8439af7b1167f65670ff1ac389a7f4b5"
+    },
+    "cleanup-observed.json": {
+      "bytes": 1176,
+      "sha256": "0adf214636a4c3351b9e57eb5112cf0b516469af64aa91e6d4a714ee87198d29"
+    },
+    "multiplayer-context-fail.json": {
+      "bytes": 1006,
+      "sha256": "2781a0239d1b5eb34c7a223d73a7e1d50f69e8fb3c8d637f68507e3191d62315"
+    },
+    "ordinary-play-return-precondition.json": {
+      "bytes": 677,
+      "sha256": "c567b5b37bbdc2a2974871587fe6416d619aa7f65efc61273ac87e2d91209f63"
+    },
+    "play-mode-add-player-fail.json": {
+      "bytes": 303,
+      "sha256": "73011f2e9eb693e54955a5cee593b3a05a5eaf832097619cb88416c9ba3f8471"
+    },
+    "private-experience.json": {
+      "bytes": 465,
+      "sha256": "2a09dedf253d10a56d88228a89042b2d685ea88eb768a011079737b90b19eb8a"
+    },
+    "run-mode-two-client-transport-fail.json": {
+      "bytes": 721,
+      "sha256": "ab7dff362d7b74d44a02da2881e2709b54b79e1ebfd044732301ddddc7f8222b"
+    }
+  },
+  "finalSourcesUtf8Lf": {
+    "src/stand/server/Combat.lua": {
+      "utf8LfBytes": 1509,
+      "sha256": "5aa750a866478645f85017d8243ffe22b103af193469561b323ab8402b09fd87"
+    },
+    "src/stand/server/Config.lua": {
+      "utf8LfBytes": 747,
+      "sha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624"
+    },
+    "src/stand/server/ConnectionRegistry.lua": {
+      "utf8LfBytes": 1717,
+      "sha256": "7f6cd4b6216cc993a359a55d318c46a819c90ecf0f893f4d34843cb168956c92"
+    },
+    "src/stand/server/RobloxWorld.lua": {
+      "utf8LfBytes": 13419,
+      "sha256": "3023ade94d227f2ce76f8f9a6c3dbabdfcbfba390c8ab840c3b62d9da3e860f0"
+    },
+    "src/stand/server/Session.lua": {
+      "utf8LfBytes": 12556,
+      "sha256": "1a32f69c5df41dd1197ec84cbf63a3a8e73ff67d4555ce1f590e838374342276"
+    },
+    "src/stand/server/Stand.server.lua": {
+      "utf8LfBytes": 8269,
+      "sha256": "f69563f3f08c86f8e01aceb93e05197283df2ec80020f2753909fdf401fa8719"
+    },
+    "src/server/RunLifecycle.lua": {
+      "utf8LfBytes": 13755,
+      "sha256": "cda5e4089bb04e76b2b075d21d119368db670d17bbfccdf5cb638b5f8375b968"
+    },
+    "tests/stand/StudioReconnectTransportProbe.server.lua": {
+      "utf8LfBytes": 5604,
+      "sha256": "566ac9709103ee1d6944eaefae28fa899ab4f5addf05cb4272dddbf2c8921222"
+    },
+    "tests/stand/observe_actual_reconnect.luau": {
+      "utf8LfBytes": 6271,
+      "sha256": "f611df96956c605bd21848c5ba203eb8dcb43f8903630a2ce2056c5462038932"
+    },
+    ".github/workflows/combat-stand.yml": {
+      "utf8LfBytes": 2510,
+      "sha256": "63a48ef5e9a468f00f73713032e1cf474e55c9a0f9c7acc92c2275255cc03433"
+    }
+  }
+}

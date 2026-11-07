@@ -1,0 +1,58 @@
+name: Combat stand checks
+on:
+  push:
+    branches: ['bt-18-combat-stand']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stand:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install pinned Luau CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/bricktoads-luau build
+          curl --fail --location --retry 2 --output /tmp/luau.zip https://github.com/luau-lang/luau/releases/download/0.745/luau-ubuntu.zip
+          echo '186e5ddaa2b048ebc7390c11ed1b00c04e7d3beaffed429250329e3575d2ece2  /tmp/luau.zip' | sha256sum --check
+          unzip -q /tmp/luau.zip -d /tmp/bricktoads-luau
+          chmod +x /tmp/bricktoads-luau/luau /tmp/bricktoads-luau/luau-compile
+      - name: Compile every stand script without executing engine APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          find src/stand tests/stand \( -name '*.lua' -o -name '*.luau' \) -print0 | while IFS= read -r -d '' file; do
+            /tmp/bricktoads-luau/luau-compile "$file" > /dev/null
+          done
+          /tmp/bricktoads-luau/luau-compile tools/studio_launch_combat_acceptance.luau > /dev/null
+      - name: Native Luau behavioral contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/bricktoads-luau/luau tests/run_stand.luau | tee build/stand-contracts.log
+          /tmp/bricktoads-luau/luau tests/run_connections.luau | tee build/connection-contracts.log
+          python3 tools/test_stand_gateway.py --luau /tmp/bricktoads-luau/luau | tee build/gateway-contracts.log
+      - name: Structural stand build tests
+        run: python3 tools/test_combat_stand.py
+      - name: Serialize and verify standalone place
+        run: |
+          python3 tools/build_combat_stand.py
+          python3 tools/build_combat_stand.py --check
+          sha256sum build/CombatStand.rbxlx > build/CombatStand.sha256
+      - name: Preserve stand and test output (not engine acceptance)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: CombatStand-${{ github.sha }}
+          path: |
+            build/CombatStand.rbxlx
+            build/CombatStand.sha256
+            build/stand-contracts.log
+            build/connection-contracts.log
+            build/gateway-contracts.log
+          if-no-files-found: error

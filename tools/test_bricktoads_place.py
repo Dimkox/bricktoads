@@ -53,6 +53,22 @@ class BrickToadsPlaceTests(unittest.TestCase):
         self.assertGreaterEqual(spawn_bottom, floor_top)
         self.assertGreater(float(floor.findtext("Properties/Vector3/X")), float(spawn.findtext("Properties/Vector3/X")))
 
+    def test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint(self):
+        root = ET.fromstring(self.builder.build(ROOT))
+        server = named(named(root, "ServerScriptService"), "BrickToads")
+        runtime = named(server, "CombatRuntime")
+        expected = {"Combat", "Session", "Config", "ConnectionRegistry", "RobloxWorld"}
+        self.assertEqual({i.findtext("Properties/string[@name='Name']") for i in runtime.findall("Item")}, expected)
+        for name in expected:
+            source = (ROOT / "src/stand/server" / (name + ".lua")).read_text(encoding="utf-8")
+            module = named(runtime, name)
+            self.assertEqual(module.attrib["class"], "ModuleScript")
+            self.assertEqual(module.findtext("Properties/ProtectedString[@name='Source']"), source)
+        all_names = {i.findtext("Properties/string[@name='Name']") for i in root.iter("Item")}
+        self.assertNotIn("Stand", all_names)
+        self.assertNotIn("Diagnostics", all_names)
+        self.assertNotIn("StudioReconnectTransportProbe", all_names)
+
     def test_rebuild_is_deterministic(self):
         self.assertEqual(self.builder.build(ROOT), self.builder.build(ROOT))
 

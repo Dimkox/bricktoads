@@ -1,0 +1,21 @@
+{
+  "scope": "Immediately-after-Stop observations reported by the root agent; no later read-only response from closed child sessions is assumed",
+  "source": "Direct Roblox Studio MCP responses observed by the root agent before this archive was written",
+  "childSessionStops": [
+    {"role": "server", "sessionIdPrefix": "b1db", "runningImmediatelyAfterStop": false},
+    {"role": "client", "sessionIdPrefix": "7779", "runningImmediatelyAfterStop": false},
+    {"role": "client", "sessionIdPrefix": "f321", "runningImmediatelyAfterStop": false}
+  ],
+  "childTestEnd": {"endTestOK": true, "runningImmediatelyAfterEndTest": false},
+  "mainEditorPreviouslyVerified": {
+    "serverScriptServiceChildCount": 0,
+    "testServiceNumberOfPlayers": 0,
+    "executeWithStudioRun": false,
+    "networkDelayJitterLossSettings": {"count": 6, "allZero": true}
+  },
+  "limits": [
+    "Session identifiers are recorded only as the prefixes available in the observed handoff.",
+    "No timestamp is invented for the individual responses.",
+    "Follow-up read-only queries to closed child sessions were still pending; their results are not claimed as a fresh final-state verification."
+  ]
+}

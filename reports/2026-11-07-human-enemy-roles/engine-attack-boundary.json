@@ -1,0 +1,169 @@
+{
+  "scope": "Fresh two-client test of final guard code",
+  "preparation": "Both NPC roots were temporarily anchored; NPC1 was placed seven studs ahead, then moved beyond reach after the hero submitted a contextual Dash. This intentionally makes the accepted attack miss.",
+  "afterMiss": {
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "d5fe0e1d-6bb3-48b6-ab20-acf0d7b14d62:actor:2",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [
+      {
+        "enemyId": -2,
+        "maxHearts": 3,
+        "actorId": "d5fe0e1d-6bb3-48b6-ab20-acf0d7b14d62:enemy:1:-2",
+        "hearts": 3,
+        "name": "Ржавый дозорный"
+      }
+    ],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "d5fe0e1d-6bb3-48b6-ab20-acf0d7b14d62",
+    "canSelect": false,
+    "notice": "ENEMY_ENGAGED",
+    "heroOnline": 1,
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Enemy",
+        "displayName": "Player2"
+      }
+    ],
+    "online": 2,
+    "now": 1794020167.869657,
+    "canStart": false,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "selectedTemplate": "Mr. Green",
+    "preference": "Enemy",
+    "host": -1
+  },
+  "otherEnemyClaim": {
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "d5fe0e1d-6bb3-48b6-ab20-acf0d7b14d62:actor:2",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "d5fe0e1d-6bb3-48b6-ab20-acf0d7b14d62",
+    "enemyRole": {
+      "connected": true,
+      "enemyId": -2,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 3,
+      "maxHearts": 3,
+      "status": "Alive",
+      "template": "Sentry",
+      "actorId": "d5fe0e1d-6bb3-48b6-ab20-acf0d7b14d62:enemy:1:-2",
+      "name": "Ржавый дозорный"
+    },
+    "canSelect": false,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Enemy",
+        "displayName": "Player2"
+      }
+    ],
+    "heroOnline": 1,
+    "online": 2,
+    "now": 1794020168.205363,
+    "canStart": false,
+    "selectedTemplate": "Mr. Green",
+    "enemyUnavailableReason": "ENEMY_ALREADY_OWNED",
+    "preference": "Enemy",
+    "host": -1
+  },
+  "restored": "Both roots unanchored and server network ownership restored before continuation."
+}

@@ -1,0 +1,87 @@
+{
+  "correction": "The first continuation was launched after the group had already lost during setup. It proves no completed playthrough; the later fresh final-code continuation is separate.",
+  "result": {
+    "seconds": 0.11334390006959438,
+    "status": "Lost",
+    "phases": [
+      {
+        "stage": "Lost",
+        "seconds": 0.11334270006045699
+      }
+    ],
+    "final": {
+      "mine": 1,
+      "levelEpoch": 1,
+      "heroes": [
+        {
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 4,
+          "userId": -1,
+          "displayName": "Player1",
+          "username": "Player1",
+          "connectionEpoch": 1,
+          "hearts": 0,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "respawns": 0,
+          "dying": false
+        }
+      ],
+      "enemyOffers": [],
+      "status": "Lost",
+      "level": {
+        "bossHits": 0,
+        "bossMax": 3,
+        "objective": "Команда выбыла",
+        "result": "Lost",
+        "stage": "Lost",
+        "enemies": [
+          {
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "id": -1,
+            "dead": true
+          },
+          {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "dead": false
+          }
+        ]
+      },
+      "runId": "01ed813e-ea1f-4101-83d5-12185a6b3100",
+      "canSelect": true,
+      "notice": "REACTION",
+      "heroOnline": 1,
+      "host": -1,
+      "preference": "Hero",
+      "online": 2,
+      "now": 1794019895.639658,
+      "canStart": true,
+      "enemyUnavailableReason": "RUN_CLOSED",
+      "selectedTemplate": "Mr. Green",
+      "lobby": [
+        {
+          "username": "Player1",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -1,
+          "displayName": "Player1"
+        },
+        {
+          "username": "Player2",
+          "template": "Mr. Green",
+          "preference": "Enemy",
+          "userId": -2,
+          "displayName": "Player2"
+        }
+      ],
+      "calibration": "PLAYABLE_PROTOTYPE"
+    }
+  }
+}
