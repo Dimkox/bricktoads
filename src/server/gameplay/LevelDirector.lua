@@ -18,24 +18,48 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config)
+function Director.new(session,world,Combat,config,GuardianPattern)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
-        stage='Approach',now=session.now or 0,bossHits=0,serial=0,
+        stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height}},Director)
-    self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}})
+    if self.route then self:_enterZone(1)
+    else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
 end
 function Director:_wave(stage,roster)
     self.stage=stage; self.world:stage(stage)
     for _,r in ipairs(roster) do
-        assert(self.world:spawnEnemy(r.id,'Drone',{x=r.x,y=3,z=r.z}),'Enemy spawn failed')
+        assert(self.world:spawnEnemy(r.id,r.kind or 'Drone',{x=r.x,y=r.y or 3,z=r.z}),'Enemy spawn failed')
         local actorId=self.session.state.runId..':enemy:'..self.session.state.levelEpoch..':'..r.id
         self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false,
-            actorId=actorId,name='Ржавый дозорный'}
+            actorId=actorId,zoneIndex=self.zoneIndex,kind=r.kind,
+            name=({Pig='Болотный налётчик',Walker='Длинноногий дозорный',Dragon='Крылатый разведчик'})[r.kind] or 'Ржавый дозорный'}
         self.world:enemyIdentity(r.id,actorId)
         self.world:enemyHealth(r.id,self.config.Enemy.hearts,self.config.Enemy.hearts)
     end
+end
+function Director:_enterZone(index)
+    self.zoneIndex=index
+    self.world:progress(index,false)
+    self:_wave('Route',self.route.zones[index].enemies)
+end
+function Director:_zoneReached()
+    local volume=self.route.zones[self.zoneIndex].exit
+    for _,id in ipairs(self.session.order) do
+        local hero=self.session.state.heroes[id]
+        if hero.status=='Alive' and not self.session.combat[id].deathAt and self.world:reached(id,volume) then return true end
+    end
+    return false
+end
+function Director:interaction(slot)
+    return self.guardian and self.stage=='Boss' and self.guardian:interaction(slot) or {available=false}
+end
+function Director:interact(slot,now,attack)
+    if not self.guardian or self.stage~='Boss' then return 'NO_INTERACTION' end
+    if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
+    self.now=now
+    return self.guardian:interact(slot,now)
 end
 function Director:claim(userId,enemyId)
     local owned=self.byUserId[userId]
@@ -125,6 +149,7 @@ function Director:command(userId,payload,now,validator)
             end
         else
             if now<self.nextShot then return 'COOLDOWN' end
+            if self.guardian then return self.guardian:fire(e.aim) end
             self:_shoot(nil,e.aim); self.nextShot=now+self.config.Boss.interval
         end
         return 'OK'
@@ -158,9 +183,11 @@ function Director:_boss()
         self.stage='BossReady'; self.world:stage('BossReady'); return
     end
     self.stage='Boss'; self.world:stage('Boss')
-    assert(self.world:spawnEnemy(-99,'Boss',{x=82,y=3,z=0}),'Boss spawn failed')
+    local position=self.route and self.route.boss.position or {x=82,y=3,z=0}
+    assert(self.world:spawnEnemy(-99,'Boss',position),'Boss spawn failed')
     local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
-    local e={boss=true,actorId=actorId,health=self.config.Boss.hits,name='Страж переправы',aim={x=-1,z=0}}
+    local e={boss=true,actorId=actorId,health=self.config.Boss.hits,rawLife=self.route and self.config.Boss.rawLife,
+        zoneIndex=self.zoneIndex,name='Страж переправы',aim={x=-1,z=0}}
     self.enemies[-99]=e
     if controller.state=='Human' then
         e.ownerUserId=controller.userId
@@ -171,6 +198,10 @@ function Director:_boss()
     self.world:enemyIdentity(-99,actorId,e.ownerUserId and self.ownerNames[e.ownerUserId])
     self.world:enemyHealth(-99,self.config.Boss.hits,self.config.Boss.hits)
     self.nextShot=self.now+1.8
+    if self.route then
+        assert(self.GuardianPattern,'Modern guardian pattern is required')
+        self.guardian=self.GuardianPattern.new(self)
+    end
 end
 function Director:isTarget(id)
     return self.enemies[id]~=nil or self.projectiles[id]~=nil or id==-99
@@ -179,6 +210,7 @@ function Director:_kill(id)
     local e=self.enemies[id]
     if not e or e.dead then return end
     e.dead=true; e.windup=nil; e.health=0
+    if e.boss and self.route then e.rawLife=0 end
     self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
     self.world:kill(id)
     if e.boss then
@@ -187,6 +219,7 @@ function Director:_kill(id)
 end
 function Director:hit(attacker,target,action)
     if self.result then return false end
+    if self.guardian and (self.projectiles[target] or target==-99) then return self.guardian:hit(attacker,target,action) end
     local ball=self.projectiles[target]
     if ball then
         if ball.reflected then return false end
@@ -262,7 +295,13 @@ function Director:_enemies()
         end
     end
     if living==0 then
-        if self.stage=='Approach' then self:_wave('Courtyard',{{id=-3,x=22,z=-7},{id=-4,x=30,z=6}})
+        if self.route then
+            self.world:progress(self.zoneIndex,true)
+            if self:_zoneReached() then
+                if self.zoneIndex<#self.route.zones then self:_enterZone(self.zoneIndex+1)
+                else self.zoneIndex=#self.route.zones+1;self.world:progress(self.zoneIndex,false);self:_boss() end
+            end
+        elseif self.stage=='Approach' then self:_wave('Courtyard',{{id=-3,x=22,z=-7},{id=-4,x=30,z=6}})
         elseif self.stage=='Courtyard' then self:_boss() end
     end
 end
@@ -281,6 +320,7 @@ function Director:_shoot(target,aim)
     self.world:projectile(id,start,false)
 end
 function Director:_projectiles(dt)
+    if self.guardian then self.guardian:step(self.now,dt);return end
     local boss=self.enemies[-99]
     if self.stage=='Boss' and boss and not boss.ownerUserId and self.now>=self.nextShot then
         local target,range=self:_nearest(self.world:position(-99))
@@ -329,7 +369,7 @@ function Director:step(now,dt)
     if self.session.state.status=='Lost' then
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
     end
-    if self.stage=='Approach' or self.stage=='Courtyard' then self:_enemies() end
+    if self.stage=='Approach' or self.stage=='Courtyard' or self.stage=='Route' then self:_enemies() end
     if self.stage=='BossReady' then self:_boss() end
     if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
@@ -345,10 +385,15 @@ function Director:snapshot()
     local enemies={}
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-            dead=e.dead==true,attacking=e.windup~=nil}
+            dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind}
     end
     table.sort(enemies,function(a,b) return a.id>b.id end)
-    return {stage=self.stage,objective=objectives[self.stage],enemies=enemies,bossHits=self.bossHits,
-        bossMax=self.config.Boss.hits,result=self.result}
+    local zone=self.route and self.route.zones[self.zoneIndex]
+    local objective=objectives[self.stage]
+    if self.route and self.stage=='Route' then objective=zone.objective
+    elseif self.route and self.stage=='Boss' then objective='Уклоняйтесь. Возьмите тяжёлый шар и бросьте в стража.' end
+    return {stage=self.stage,objective=objective,enemies=enemies,bossHits=self.bossHits,
+        bossMax=self.config.Boss.hits,result=self.result,zoneIndex=self.zoneIndex,zoneCount=self.route and #self.route.zones,
+        zoneName=zone and zone.name,bossMechanic=self.route and 'PickupThrow',bossRawLife=self.enemies[-99] and self.enemies[-99].rawLife}
 end
 return Director

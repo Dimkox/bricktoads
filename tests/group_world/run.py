@@ -15,6 +15,8 @@ arguments = parser.parse_args()
 SCRIPTS = (
     ("WorldSource", "src/server/gameplay/GameWorld.lua"),
     ("CameraSource", "src/client/SpectatorCamera.luau"),
+    ("LevelSource", "src/server/gameplay/LevelDefinition.lua"),
+    ("BaseWorldSource", "src/stand/server/RobloxWorld.lua"),
 )
 prefix = "\n".join(
     f"local {name} = [====[{(ROOT / path).read_text(encoding='utf-8')}]====]"

@@ -100,10 +100,13 @@ function World:findSafe(uid)
         if floor.CanCollide and same then
             local minX,maxX=floor.Position.X-floor.Size.X/2+2.2,floor.Position.X+floor.Size.X/2-2.2
             local minZ,maxZ=floor.Position.Z-floor.Size.Z/2+1.2,floor.Position.Z+floor.Size.Z/2-1.2
-            local y=floor.Position.Y+floor.Size.Y/2+3
-            local function add(x,z) points[#points+1]={position=Vector3.new(x,y,z),surface=floor} end
-            add(math.clamp(origin.X,minX,maxX),math.clamp(origin.Z,minZ,maxZ))
-            for x=minX,maxX,4.5 do for z=minZ,maxZ,3 do add(x,z) end end
+            -- An upright body cannot fit on a support smaller than its safe footprint.
+            if minX<=maxX and minZ<=maxZ then
+                local y=floor.Position.Y+floor.Size.Y/2+3
+                local function add(x,z) points[#points+1]={position=Vector3.new(x,y,z),surface=floor} end
+                add(math.clamp(origin.X,minX,maxX),math.clamp(origin.Z,minZ,maxZ))
+                for x=minX,maxX,4.5 do for z=minZ,maxZ,3 do add(x,z) end end
+            end
         end
     end
     table.sort(points,function(a,b)

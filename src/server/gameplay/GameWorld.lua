@@ -134,7 +134,7 @@ local function toad(actor, template)
     model:SetAttribute("Appearance", "OriginalToad")
 end
 
-local function drone(actor)
+local function drone(actor, kind)
     hideRig(actor)
     local m = actor.model
     cosmetic(m, m.Torso, "RustHull", Vector3.new(2.35, 1.85, 1.55), CFrame.new(), COLORS.rust)
@@ -152,6 +152,27 @@ local function drone(actor)
     cosmetic(m, m.Head, "SingleOptic", Vector3.new(0.68, 0.5, 0.25), CFrame.new(0, 0.02, -0.77), COLORS.amber, Enum.PartType.Ball, Enum.Material.Neon)
     cosmetic(m, m.Head, "Antenna", Vector3.new(0.12, 0.95, 0.12), CFrame.new(0.6, 0.7, 0.22) * CFrame.Angles(0, 0, -0.25), COLORS.pale)
     cosmetic(m, m.Head, "AntennaTip", Vector3.new(0.23, 0.23, 0.23), CFrame.new(0.72, 1.13, 0.22), COLORS.amber, Enum.PartType.Ball, Enum.Material.Neon)
+    -- Species silhouettes are original art; their shared combat remains prototype tuning.
+    if kind == "Pig" then
+        cosmetic(m, m.Head, "PigSnout", Vector3.new(1.5, 0.85, 1.1), CFrame.new(0, -0.05, -1), COLORS.rust, Enum.PartType.Ball)
+        for _,side in ipairs({-1, 1}) do
+            cosmetic(m, m.Head, "PigTusk", Vector3.new(0.22, 0.8, 0.25), CFrame.new(side * 0.66, -0.12, -1.35) * CFrame.Angles(0, 0, -side * 0.3), COLORS.pale)
+            cosmetic(m, m.Head, "PigEar", Vector3.new(0.75, 0.8, 0.4), CFrame.new(side * 0.8, 0.85, 0), COLORS.rust)
+        end
+        cosmetic(m, m.Torso, "PigArmour", Vector3.new(2.85, 1.5, 1.7), CFrame.new(0, 0.1, 0.1), COLORS.rust, Enum.PartType.Ball)
+    elseif kind == "Walker" then
+        for _,side in ipairs({-1, 1}) do
+            cosmetic(m, m.Torso, "WalkerShoulder", Vector3.new(1.25, 1.5, 1.7), CFrame.new(side * 1.65, 0.45, 0), COLORS.dark)
+            cosmetic(m, m[side == -1 and "Left Leg" or "Right Leg"], "WalkerPiston", Vector3.new(0.9, 2.05, 0.9), CFrame.new(0, 0.1, 0.1), COLORS.amber)
+        end
+        cosmetic(m, m.Head, "WalkerCrest", Vector3.new(0.5, 1.5, 1.2), CFrame.new(0, 0.9, 0), COLORS.pale)
+    elseif kind == "Dragon" then
+        for _,side in ipairs({-1, 1}) do
+            cosmetic(m, m.Torso, "DragonWing", Vector3.new(3.2, 0.28, 2.1), CFrame.new(side * 2.3, 0.45, 0.45) * CFrame.Angles(0, 0, side * 0.3), COLORS.moss)
+            cosmetic(m, m.Head, "DragonHorn", Vector3.new(0.3, 1.4, 0.4), CFrame.new(side * 0.6, 0.9, 0.3) * CFrame.Angles(0.2, 0, -side * 0.2), COLORS.amber)
+        end
+        cosmetic(m, m.Torso, "DragonTail", Vector3.new(0.7, 0.65, 3.2), CFrame.new(0, -0.7, 2), COLORS.moss, Enum.PartType.Ball)
+    end
 end
 
 local function boss(actor)
@@ -302,6 +323,117 @@ local function buildGeometry(self)
     end
 end
 
+local function gateState(gate, open)
+    gate.beam.CanCollide = not open
+    gate.beam.Transparency = open and 1 or 0.63
+    gate.marker.Color = open and COLORS.mint or COLORS.amber
+    gate.marker.Transparency = open and 0.75 or 0
+    gate.light.Color, gate.light.Brightness = gate.marker.Color, open and 0.4 or 1.6
+    gate.label.TextTransparency = open and 0.65 or 0
+end
+
+local function buildRoute(self, level)
+    self.geometry:ClearAllChildren()
+    self.allFloors, self.floors, self.gates = {}, {}, {}
+    local g = self.geometry
+    local function platform(data, zoneIndex, surfaceId)
+        local p = part(g, "DistrictSupport", Vector3.new(data.w, data.h, data.d), CFrame.new(data.x, data.y, data.z),
+            zoneIndex == 4 and COLORS.dark or COLORS.stone, Enum.Material.Slate, true)
+        p:SetAttribute("SurfaceId", surfaceId)
+        p:SetAttribute("ZoneIndex", zoneIndex)
+        self.allFloors[#self.allFloors + 1] = p
+        local top = data.y + data.h / 2
+        -- Every paving stone belongs to one support; no decorative strip spans a gap.
+        for x = data.x - data.w / 2 + 3.5, data.x + data.w / 2 - 3.5, 7 do
+            for z = data.z - data.d / 2 + 3.5, data.z + data.d / 2 - 3.5, 7 do
+                local tile = part(g, "RoutePaving", Vector3.new(6.5, 0.08, 6.5), CFrame.new(x, top + 0.04, z),
+                    zoneIndex == 4 and COLORS.pale or Color3.fromRGB(91, 111, 103), Enum.Material.Slate)
+                tile.Transparency = 0.28
+            end
+        end
+        for _,side in ipairs({-1, 1}) do
+            part(g, "PlatformEdge", Vector3.new(data.w, 0.18, 0.32), CFrame.new(data.x, top + 0.12, data.z + side * (data.d / 2 - 0.25)), COLORS.pale)
+        end
+        return top
+    end
+    local function gate(x, z, top, width, title)
+        local beam = part(g, "DistrictGate", Vector3.new(0.7, 12, width + 8), CFrame.new(x, top + 6, z), COLORS.amber, Enum.Material.ForceField, true)
+        local marker = ball(g, "DistrictBeacon", Vector3.new(1.7, 1.7, 1.7), CFrame.new(x, top + 14, z), COLORS.amber, Enum.Material.Neon)
+        local result = {beam = beam, marker = marker, light = pointLight(marker, COLORS.amber, 20, 1.6),
+            label = label(beam, title, 330, Vector3.new(0, 7.5, 0))}
+        gateState(result, false)
+        return result
+    end
+    for index, zone in ipairs(level.zones) do
+        for _,data in ipairs(zone.platforms) do platform(data, index, zone.id) end
+        local first, last = zone.platforms[1], zone.platforms[#zone.platforms]
+        local x, y, z = first.x - first.w / 2 + 8, first.y + first.h / 2, first.z
+        local sign = part(g, "DistrictSign", Vector3.new(0.8, 6, 0.8), CFrame.new(x, y + 3, z - first.d / 2 - 2), COLORS.dark, Enum.Material.Wood)
+        label(sign, tostring(index) .. "  ·  " .. string.upper(zone.name), 350, Vector3.new(0, 5, 0)).TextSize = 21
+        -- Large silhouettes identify districts from the moving camera without blocking jumps.
+        for _,side in ipairs({-1, 1}) do
+            local depth = z + side * (first.d / 2 + 4)
+            if index == 1 or index == 2 then
+                part(g, "AqueductTower", Vector3.new(5, 19 + index * 2, 5), CFrame.new(x + 13, y + 8, depth), COLORS.dark, Enum.Material.Rock)
+                part(g, "TowerCrown", Vector3.new(8, 2, 8), CFrame.new(x + 13, y + 19, depth), COLORS.pale, Enum.Material.Slate)
+            elseif index == 3 then
+                local bowl = ball(g, "CourtyardBrazier", Vector3.new(4, 3, 4), CFrame.new(x + 24, y + 4, depth), COLORS.rust)
+                ball(g, "BrazierGlow", Vector3.new(2, 3, 2), CFrame.new(x + 24, y + 6, depth), COLORS.amber, Enum.Material.Neon)
+                pointLight(bowl, COLORS.amber, 22, 2)
+            elseif index == 4 then
+                part(g, "CliffNeedle", Vector3.new(6, 26, 7), CFrame.new(x + 11, y - 8, depth), COLORS.dark, Enum.Material.Rock)
+                ball(g, "CliffMoss", Vector3.new(8, 3, 9), CFrame.new(x + 11, y + 5, depth), COLORS.moss, Enum.Material.Grass)
+            elseif index == 5 then
+                part(g, "ForgeChimney", Vector3.new(5, 24, 5), CFrame.new(x + 21, y + 10, depth), COLORS.rust, Enum.Material.Metal)
+                local glow = part(g, "ForgeWindow", Vector3.new(3, 4, 0.3), CFrame.new(x + 21, y + 6, depth - side * 2.7), COLORS.amber, Enum.Material.Neon)
+                pointLight(glow, COLORS.amber, 18, 1.8)
+            else
+                part(g, "BridgePylon", Vector3.new(3.5, 23, 4), CFrame.new(x + 15, y + 8, depth), COLORS.pale, Enum.Material.Slate)
+                part(g, "BridgeBrace", Vector3.new(9, 2, 3), CFrame.new(x + 15, y + 19, depth), COLORS.dark)
+            end
+        end
+        for _,gap in ipairs(zone.gaps or {}) do
+            -- Marks stay entirely on the takeoff/landing edges, outside the empty air.
+            local left, right = gap.minX, gap.maxX
+            local before, after
+            for _,data in ipairs(zone.platforms) do
+                if math.abs(data.x + data.w / 2 - left) < .01 then before = data end
+                if math.abs(data.x - data.w / 2 - right) < .01 then after = data end
+            end
+            for _,edge in ipairs({{x = left - .35, data = before}, {x = right + .35, data = after}}) do
+                local data = edge.data
+                if data then
+                    local top = data.y + data.h / 2
+                    part(g, "JumpEdge", Vector3.new(.45, .13, data.d - 1), CFrame.new(edge.x, top + .12, data.z), COLORS.amber, Enum.Material.Neon)
+                    local marker = part(g, "JumpMarker", Vector3.new(1, .1, 1), CFrame.new(edge.x - 1, top + .15, data.z), COLORS.mint, Enum.Material.Neon)
+                    label(marker, "ПРЫЖОК  →", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
+                end
+            end
+        end
+        self.gates[index] = gate(zone.gateX, last.z, last.y + last.h / 2, last.d, tostring(index) .. "  ·  " .. zone.name)
+    end
+    local boss = level.boss
+    platform(boss.platform, #level.zones + 1, "GuardianCourt")
+    local bossTop = boss.platform.y + boss.platform.h / 2
+    self.exitGate = gate(boss.gateX, boss.platform.z, bossTop, boss.platform.d, "СТРАЖ ПЕРЕПРАВЫ")
+    self.exitPad = part(g, "ExitPad", Vector3.new(boss.pad.w, .13, boss.pad.d), CFrame.new(boss.pad.x, boss.pad.y, boss.pad.z), COLORS.mint, Enum.Material.Neon)
+    self.exitPad.Transparency = .78
+    for _,side in ipairs({-1, 1}) do
+        local z = boss.platform.z + side * (boss.platform.d / 2 + 3)
+        part(g, "GuardianObelisk", Vector3.new(5, 27, 5), CFrame.new(boss.position.x + 5, bossTop + 11, z), COLORS.dark, Enum.Material.Rock)
+        local light = ball(g, "GuardianSigil", Vector3.new(3, 3, 3), CFrame.new(boss.position.x + 5, bossTop + 23, z), COLORS.mint, Enum.Material.Neon)
+        pointLight(light, COLORS.mint, 24, 2)
+    end
+    local bounds = level.bounds
+    local marsh = part(g, "RouteMarsh", Vector3.new(bounds.maxX - bounds.minX + 100, .4, bounds.maxZ - bounds.minZ + 60),
+        CFrame.new((bounds.minX + bounds.maxX) / 2, -9, (bounds.minZ + bounds.maxZ) / 2), Color3.fromRGB(34, 101, 96), Enum.Material.Glass)
+    marsh.Transparency, marsh.Reflectance = .34, .25
+    local depth = part(g, "MarshDepth", Vector3.new(bounds.maxX - bounds.minX + 100, 9, bounds.maxZ - bounds.minZ + 60),
+        CFrame.new((bounds.minX + bounds.maxX) / 2, -15, (bounds.minZ + bounds.maxZ) / 2), COLORS.dark)
+    depth.Transparency = .22
+    self:progress(1, false)
+end
+
 function World.new(BaseWorld, config, options)
     options = options or {}
     local worldName = options.name or "BrickToadsWorld"
@@ -331,7 +463,7 @@ function World.new(BaseWorld, config, options)
         [2] = Vector3.new(-65, 3, 0) + translation,
         [3] = Vector3.new(-65, 3, 7) + translation,
     }
-    buildGeometry(self)
+    if config.Level then buildRoute(self, config.Level) else buildGeometry(self) end
     for _,object in ipairs(self.geometry:GetDescendants()) do
         if object:IsA("BasePart") then object.CFrame += translation end
     end
@@ -387,7 +519,8 @@ function World:spawnEnemy(id, kind, positionTable)
     local isBoss = string.lower(tostring(kind)) == "boss"
     local position = Vector3.new(x, y, z) + self.offset
     self.origins[id] = position
-    self.names[id] = isBoss and "Страж переправы" or "Ржавый дозорный"
+    local speciesNames = {Pig = "Панцирный хряк", Walker = "Шагающий страж", Dragon = "Крылатый дозорный"}
+    self.names[id] = isBoss and "Страж переправы" or speciesNames[kind] or "Ржавый дозорный"
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
@@ -401,7 +534,7 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
     actor.humanoid.WalkSpeed = isBoss and 0 or 8
     self.enemyKinds[id] = isBoss and "Boss" or "Drone"
-    if isBoss then boss(actor) else drone(actor) end
+    if isBoss then boss(actor) else drone(actor, kind) end
     actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0, isBoss and 7.6 or 4.5, 0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
@@ -416,15 +549,21 @@ function World:position(id)
 end
 
 function World:cameraBounds()
-    local minX,maxX,minZ,maxZ,top=math.huge,-math.huge,math.huge,-math.huge,-math.huge
-    for _,floor in ipairs(self.floors) do
+    local minX,maxX,minZ,maxZ,top,bottom=math.huge,-math.huge,math.huge,-math.huge,-math.huge,math.huge
+    for _,floor in ipairs(self.allFloors or self.floors) do
         minX=math.min(minX,floor.Position.X-floor.Size.X/2)
         maxX=math.max(maxX,floor.Position.X+floor.Size.X/2)
         minZ=math.min(minZ,floor.Position.Z-floor.Size.Z/2)
         maxZ=math.max(maxZ,floor.Position.Z+floor.Size.Z/2)
         top=math.max(top,floor.Position.Y+floor.Size.Y/2)
+        bottom=math.min(bottom,floor.Position.Y+floor.Size.Y/2)
     end
     assert(minX<maxX and minZ<maxZ,'The current level has no camera bounds')
+    if self.config.Level then
+        local bounds=self.config.Level.bounds
+        return {minX=bounds.minX+self.offset.X,maxX=bounds.maxX+self.offset.X,minY=bottom+7,maxY=top+52,
+            minZ=bounds.minZ+self.offset.Z,maxZ=bounds.maxZ+self.offset.Z}
+    end
     return {minX=minX-12,maxX=maxX+12,minY=top+7,maxY=top+52,minZ=minZ-28,maxZ=maxZ+28}
 end
 
@@ -449,6 +588,61 @@ function World:move(id,x,z)
         actor.humanoid.WalkSpeed=self.config.Enemy.speed
     end
     self._base.move(self,id,x,z)
+end
+
+-- Modern route jump grace uses only this body's server-observed support. A
+-- delayed packet may arrive just beyond an edge while its client still sees floor.
+local function sampleJumpSupport(world,actor,now)
+    local root,humanoid=actor.root,actor.humanoid
+    local state=actor.routeJumpSupport
+    if not state then state={consumed=false}; actor.routeJumpSupport=state end
+    local velocity=root.AssemblyLinearVelocity
+    local grounded=false
+    if humanoid.FloorMaterial~=Enum.Material.Air and velocity.Y<=1 then
+        local hit=Workspace:Raycast(root.Position,Vector3.new(0,-3.4,0),world.ray)
+        grounded=hit~=nil and hit.Normal.Y>=.95 and not hit.Instance:GetAttribute('Hazard')
+            and hit.Instance:GetAttribute('SurfaceId')~=nil
+    end
+    if state.consumed then
+        -- FloorMaterial can retain its old value until the next physics step.
+        -- A jump is rearmed only after observed upward flight and a real landing.
+        if humanoid.FloorMaterial==Enum.Material.Air and
+            (velocity.Y>1 or root.Position.Y>(state.launchY or root.Position.Y)+.1) then state.airborne=true end
+        if grounded and state.airborne then state.consumed=false; state.airborne=false end
+    end
+    if grounded and not state.consumed then state.groundedAt=now; state.groundedY=root.Position.Y end
+    return state,grounded
+end
+
+function World:hazard(id)
+    local reason=self._base.hazard(self,id)
+    if not self.config.Level then return reason end
+    local actor=self.actors[id]
+    if actor then
+        if reason or actor.root.Anchored or actor.humanoid.PlatformStand then actor.routeJumpSupport=nil
+        else sampleJumpSupport(self,actor,Workspace:GetServerTimeNow()) end
+    end
+    return reason
+end
+
+function World:jump(id)
+    if not self.config.Level then return self._base.jump(self,id) end
+    local actor=self.actors[id]
+    if not actor or not actor.root.Parent or actor.humanoid.Health<=0 or actor.root.Anchored
+        or actor.humanoid.PlatformStand then return end
+    if self:hazard(id) then return end
+    local now=Workspace:GetServerTimeNow()
+    local state,grounded=sampleJumpSupport(self,actor,now)
+    if state.consumed then return end
+    local grace=state.groundedAt and now-state.groundedAt>=0 and now-state.groundedAt<=.20
+        and state.groundedY-actor.root.Position.Y<=3.5
+    if not grounded and not grace then return end
+    local power=actor.humanoid.JumpPower or self.config.JumpPower
+    if type(power)~='number' or power<=0 or power~=power or power==math.huge then return end
+    state.consumed=true; state.airborne=false; state.launchY=actor.root.Position.Y
+    local velocity=actor.root.AssemblyLinearVelocity
+    actor.root.AssemblyLinearVelocity=Vector3.new(velocity.X,power,velocity.Z)
+    actor.humanoid.Jump=true
 end
 
 function World:setReaction(id,active)
@@ -512,9 +706,55 @@ function World:enemyHealth(id, raw, maximum)
     end
 end
 
+function World:progress(zoneIndex, complete)
+    local level = self.config.Level
+    if not level then return end
+    zoneIndex = math.clamp(zoneIndex, 1, #level.zones + 1)
+    self.zoneIndex = zoneIndex
+    self.floors = {}
+    for _,floor in ipairs(self.allFloors) do
+        if floor:GetAttribute("ZoneIndex") <= zoneIndex then self.floors[#self.floors + 1] = floor end
+    end
+    local completed = zoneIndex - (complete and 0 or 1)
+    for index,gate in ipairs(self.gates) do gateState(gate, index <= completed) end
+    self.folder:SetAttribute("ZoneIndex", zoneIndex)
+    self.folder:SetAttribute("ZoneName", level.zones[zoneIndex] and level.zones[zoneIndex].name or "Страж переправы")
+end
+
+function World:noSafe(enabled)
+    if not self.config.Level then return self._base.noSafe(self, enabled) end
+    self.blocked = enabled
+    for _,floor in ipairs(self.allFloors) do floor.CanCollide = not enabled end
+end
+
+function World:reached(heroId, box)
+    local actor = self.actors[heroId]
+    if not actor or not actor.root.Parent or actor.humanoid.Health <= 0 then return false end
+    local p = actor.root.Position - self.offset
+    return p.X >= box.minX and p.X <= box.maxX and p.Y >= box.minY and p.Y <= box.maxY
+        and p.Z >= box.minZ and p.Z <= box.maxZ
+end
+
+function World:groundPosition(position)
+    local origin = Vector3.new(position.x, position.y, position.z) + self.offset + Vector3.new(0, 16, 0)
+    local hit = Workspace:Raycast(origin, Vector3.new(0, -96, 0), self.ray)
+    if not hit or hit.Normal.Y < .95 or hit.Instance:GetAttribute("Hazard")
+        or not hit.Instance:GetAttribute("SurfaceId") then return nil end
+    local p = hit.Position + Vector3.new(0, 1.2, 0) - self.offset
+    return {x = p.X, y = p.Y, z = p.Z}
+end
+
 function World:stage(name)
     self.stageName = name
     self.folder:SetAttribute("Stage", name)
+    if self.config.Level then
+        local open = name == "Exit" or name == "Won"
+        gateState(self.exitGate, open)
+        self.exitGate.label.Text = name == "Won" and "ТРАКТ ПРОЙДЕН!" or (open and "ВЫХОД  →  ВСТАНЬТЕ НА ПЕЧАТЬ" or "СТРАЖ ПЕРЕПРАВЫ")
+        self.exitGate.label.TextColor3 = open and COLORS.mint or COLORS.amber
+        self.exitPad.Transparency = open and .12 or .78
+        return
+    end
     local progress = ({Approach = 0, Courtyard = 1, BossReady = 1, Boss = 2, Exit = 3, Won = 3, Lost = -1})[name] or 0
     for index, gate in ipairs(self.gates) do
         local open = progress >= index
@@ -538,13 +778,14 @@ function World:stage(name)
 end
 
 function World:atExit(heroId)
+    if self.config.Level then return self:reached(heroId, self.config.Level.boss.exit) end
     local a = self.actors[heroId]
     local p = a and a.root.Parent and a.root.Position - self.offset
     return a ~= nil and a.root.Parent ~= nil and a.humanoid.Health > 0
         and p.X >= 108 and math.abs(p.Z) <= 10
 end
 
-function World:projectile(id, positionTable, reflected)
+function World:projectile(id, positionTable, reflected, mode)
     if type(id) ~= "number" or id > -1000 or not positionTable then return false end
     local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z) + self.offset
     local a = self.actors[id]
@@ -570,13 +811,28 @@ function World:projectile(id, positionTable, reflected)
         a.light = pointLight(root, COLORS.amber, 10, 1.2)
         self.actors[id] = a
     end
-    local color = reflected and COLORS.mint or COLORS.amber
+    local color, size = reflected and COLORS.mint or COLORS.amber, 1.55
+    if mode == "Bullet" then color, size = Color3.fromRGB(255, 91, 66), 1.25
+    elseif mode == "Heavy" then color, size = Color3.fromRGB(255, 151, 55), 2.6
+    elseif mode == "Ground" or mode == "Carried" then color, size = Color3.fromRGB(255, 220, 71), 2.4
+    elseif mode == "Thrown" then color, size = COLORS.mint, 2.4 end
     a.root.CFrame = CFrame.new(p)
     a.halo.CFrame = CFrame.new(p)
+    a.root.Size = Vector3.new(size, size, size)
+    local haloSize = mode and size * 1.35 or 2.1
+    a.halo.Size = Vector3.new(haloSize, haloSize, haloSize)
     a.root.Color = color
     a.halo.Color = color
     a.light.Color = color
     a.model:SetAttribute("Reflected", reflected == true)
+    a.model:SetAttribute("ProjectileMode", mode)
+    a.model:SetAttribute("Pickup", mode == "Ground")
+    a.model:SetAttribute("Carried", mode == "Carried")
+    if mode == "Ground" and not a.pickupLabel then
+        a.pickupLabel = label(a.root, "ШАР  ·  ВЗЯТЬ", 190, Vector3.new(0, 2.7, 0))
+        a.pickupLabel.TextColor3 = Color3.fromRGB(255, 220, 71)
+    end
+    if a.pickupLabel then a.pickupLabel.Parent.Enabled = mode == "Ground" end
     return true
 end
 
@@ -642,6 +898,7 @@ function World:clearActors()
         [2] = Vector3.new(-65, 3, 0) + self.offset,
         [3] = Vector3.new(-65, 3, 7) + self.offset,
     }
+    if self.config.Level then self:progress(1, false) end
     self:stage("Approach")
 end
 

@@ -125,7 +125,7 @@ local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Соберите команду, пройдите тракт и откройте ворота.", 16, C.muted)
+local intro = label(header, "Intro", "Шесть районов, разрывы и страж переправы. Пройдите тракт вместе.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -343,6 +343,7 @@ local function send(kind, extra)
     if not playable() or not snapshot.runId or not controlled.actorId then return end
     if snapshot.enemyRole and kind == "Attack" and extra and extra.attack ~= "Punch" then return end
     if snapshot.enemyRole and snapshot.enemyRole.template == "Boss" and kind == "Jump" then return end
+    if snapshot.interaction and snapshot.interaction.carrying and kind == "Attack" and extra and extra.attack == "Dash" then return end
     sequence += 1
     local packet = {kind = kind, runId = snapshot.runId, actorId = controlled.actorId,
         attempt = controlled.attempt, levelEpoch = snapshot.levelEpoch,
@@ -523,10 +524,23 @@ local function renderSelection()
         card.button.Selectable = snapshot ~= nil and snapshot.canSelect == true
     end
 end
+local function remainingEnemies(level)
+    local count = 0
+    for _, actor in ipairs(level.enemies or {}) do
+        local current = actor.zoneIndex == nil or level.zoneIndex == nil or actor.zoneIndex == level.zoneIndex
+        local ordinary = actor.boss ~= true and actor.template ~= "Boss" and actor.id ~= -99 and actor.enemyId ~= -99
+        if current and ordinary and actor.dead ~= true and actor.alive ~= false
+            and actor.status ~= "Dead" and actor.status ~= "Eliminated"
+            and (actor.hearts == nil or (tonumber(actor.hearts) or 0) > 0) then count += 1 end
+    end
+    return count
+end
 render = function()
     local active = snapshot and snapshot.status == "Active"
     local completed = snapshot and (snapshot.status == "Won" or snapshot.status == "Lost")
     local personalMenu = active and snapshot.view == "Menu"
+    local level = snapshot and snapshot.level or {}
+    local modern = level.bossMechanic == "PickupThrow"
     overlay.Visible, hud.Visible, controls.Visible = not active or personalMenu == true, active == true and not personalMenu, playable() == true
     fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false
     resultBanner.Visible = completed == true
@@ -538,11 +552,15 @@ render = function()
             or (won and "ТРАКТ ПРОЙДЕН!" or "КОМАНДА ВЫБЫЛА")
         resultTitle.TextColor3, resultAccent.BackgroundColor3 = success and C.lime or C.red, success and C.lime or C.red
         if enemyPerspective then
-            resultDetail.Text = won and "Герои победили стража и открыли ворота. Выберите роль для следующей игры."
-                or "Герои потратили все возвраты. Тракт остался под охраной."
+            resultDetail.Text = modern and (won and "Герои прошли шесть районов, победили стража и открыли выход."
+                or "Герои остановлены на тракте. Следующая попытка начнётся с первого района.")
+                or (won and "Герои победили стража и открыли ворота. Выберите роль для следующей игры."
+                    or "Герои потратили все возвраты. Тракт остался под охраной.")
         else
-            resultDetail.Text = won and "Страж побеждён. Ворота открыты — команда добралась до выхода."
-                or "Возвраты героев закончились. Выберите роли и попробуйте пройти тракт ещё раз."
+            resultDetail.Text = modern and (won and "Шесть районов пройдены. Страж повержен тяжёлыми шарами — выход открыт."
+                or "Команда не дошла до выхода. Районы и страж ждут новой попытки.")
+                or (won and "Страж побеждён. Ворота открыты — команда добралась до выхода."
+                    or "Возвраты героев закончились. Выберите роли и попробуйте пройти тракт ещё раз.")
         end
         intro.Text, chooseTitle.Text = "Следующая попытка начинается по кнопке «Новая игра».", "ГЕРОЙ ДЛЯ СЛЕДУЮЩЕЙ ИГРЫ"
     elseif personalMenu then
@@ -551,7 +569,7 @@ render = function()
                 or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
-        intro.Text, chooseTitle.Text = "Соберите команду, пройдите тракт и откройте ворота.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Шесть районов, разрывы и страж переправы. Пройдите тракт вместе.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
@@ -622,13 +640,22 @@ render = function()
             heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
         end
     end
-    dash.Visible = enemy == nil
+    local interaction = snapshot and snapshot.interaction
+    local carrying = interaction and interaction.carrying == true
+    local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
+    dash.Visible = enemy == nil and not carrying
     jump.Visible = not controlledBoss
-    keyboardHint.Text = controlledBoss and "W A S D  ·  прицел" or "W A S D  ·  движение"
-    local level = snapshot and snapshot.level or {}
+    keyboardHint.Text = controlledBoss and "W A S D · прицел · F · огонь"
+        or (interactionLabel and ("F · " .. interactionLabel) or "W A S D · движение · F · удар")
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
     stageLabel.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ"
+    if modern and level.stage == "Route" then
+        stageLabel.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6) .. " · " .. (level.zoneName or "Затопленный тракт")
+    elseif modern and level.stage == "Exit" then stageLabel.Text = "ВЫХОД ОТКРЫТ" end
     objectiveLabel.Text = enemy and "Остановите героев" or (level.objective or "Пройдите тракт и доберитесь до ворот.")
+    if modern and isBoss and not enemy then
+        objectiveLabel.Text = "Уклоняйтесь. Возьмите тяжёлый шар и бросьте в стража."
+    end
     local hits = tonumber(level.bossHits) or 0
     if enemy then
         local aliveHeroes = 0
@@ -636,13 +663,14 @@ render = function()
             if hero.status == "Alive" and not hero.dying and (tonumber(hero.hearts) or 0) > 0 then aliveHeroes += 1 end
         end
         bossLabel.Text = "Героев в бою: " .. tostring(aliveHeroes)
+    elseif modern and (isBoss or level.stage == "Exit" or hits > 0) then
+        bossLabel.Text = "Попаданий шаром: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
+    elseif modern then
+        bossLabel.Text = "Противников в районе: " .. tostring(remainingEnemies(level))
     elseif isBoss or hits > 0 then
         bossLabel.Text = "Отражено снарядов: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
     else
-        local alive = 0
-        for _, enemy in ipairs(level.enemies or {}) do
-            if enemy.alive ~= false and enemy.status ~= "Eliminated" and (enemy.hearts == nil or enemy.hearts > 0) then alive += 1 end
-        end
+        local alive = remainingEnemies(level)
         bossLabel.Text = alive > 0 and ("Противников впереди: " .. tostring(alive)) or "Ударьте снаряд стража, чтобы отразить его."
     end
     spectator.Visible = active == true and not personalMenu and not playable()
@@ -804,6 +832,8 @@ layout = function()
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
     local enemy = snapshot and snapshot.enemyRole
     local controlledBoss = enemy and enemy.template == "Boss"
+    local interaction = snapshot and snapshot.interaction
+    local carrying = interaction and interaction.carrying == true
     local enemyStatusHeight = short and 57 or 72
     local rosterHeight = enemy and (enemyStatusHeight + gap) or count * (rowHeightHUD + gap)
     if not enemy and enemyChoiceAllowed() and choosingEnemy and height < 620 then
@@ -848,12 +878,16 @@ layout = function()
     local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
     actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
     local half = (controlWidth - 8) / 2
-    position(punch, 0, 0, enemy and controlWidth or half, topHeight)
+    position(punch, 0, 0, (enemy or carrying) and controlWidth or half, topHeight)
     position(dash, half + 8, 0, half, topHeight)
     position(jump, 0, topHeight + 8, controlWidth, short and 41 or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
     local isTouch = UserInputService.TouchEnabled
-    punch.Text = controlledBoss and (isTouch and "СНАРЯД" or "СНАРЯД\nF") or (isTouch and "УДАР" or "УДАР\nF")
+    local primaryLabel = controlledBoss and "ОГОНЬ" or "УДАР"
+    if not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
+        primaryLabel = interaction.label
+    end
+    punch.Text = isTouch and primaryLabel or (primaryLabel .. "\nF")
     dash.Text = isTouch and "ТАРАН" or "ТАРАН\nR"
     jump.Text = isTouch and "ПРЫЖОК" or "ПРЫЖОК · SPACE"
     local padSize = short and 104 or (width < 360 and 106 or 122)

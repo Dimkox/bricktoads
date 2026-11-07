@@ -150,6 +150,16 @@ function Session:intent(uid, p, now)
         self.world:jump(uid)
     else
         if now<c.nextAttack or c.attack then return "COOLDOWN" end
+        if self.contextualAttack then
+            local interaction=self.contextualAttack(uid,now,p.attack)
+            if interaction~='NO_INTERACTION' then
+                if interaction=='OK' then
+                    c.nextAttack=now+self.config.Attacks[p.attack].cooldown
+                    self:_record('InteractionAccepted',uid,{action=p.attack,seq=p.seq})
+                end
+                return interaction
+            end
+        end
         code=self:_event("BeginAttack",uid,{connectionEpoch=h.connectionEpoch})
         if code~="OK" then return code end
         self.world:hold(uid,false)

@@ -1,5 +1,9 @@
 -- These doubles exercise real coordinate consumers; engine physics is tested in Studio.
-local Vec={}; Vec.__index=Vec
+local Vec={}
+Vec.__index=function(self,key)
+    if key=='Magnitude' then return math.sqrt(self.X*self.X+self.Y*self.Y+self.Z*self.Z) end
+    return Vec[key]
+end
 function Vec.__add(a,b) return setmetatable({X=a.X+b.X,Y=a.Y+b.Y,Z=a.Z+b.Z},Vec) end
 function Vec.__sub(a,b) return setmetatable({X=a.X-b.X,Y=a.Y-b.Y,Z=a.Z-b.Z},Vec) end
 local function vector(x,y,z) return setmetatable({X=x or 0,Y=y or 0,Z=z or 0},Vec) end
@@ -45,6 +49,22 @@ function Node:Destroy() self.destroyed=true; self.Parent=nil end
 function Node:ClearAllChildren() for _,child in ipairs(self:GetChildren()) do child:Destroy() end end
 function Node:PivotTo(cf) self.HumanoidRootPart.CFrame=cf end
 local workspace=node('Workspace','Workspace')
+local serverTime=0
+function workspace:GetServerTimeNow() return serverTime end
+function workspace:Raycast(origin,direction,params)
+    local highest,partHit
+    for _,p in ipairs(params.geometry:GetDescendants()) do
+        if p:IsA('BasePart') and p.CanCollide then
+            local top=p.Position.Y+p.Size.Y/2
+            if origin.X>=p.Position.X-p.Size.X/2 and origin.X<=p.Position.X+p.Size.X/2
+                and origin.Z>=p.Position.Z-p.Size.Z/2 and origin.Z<=p.Position.Z+p.Size.Z/2
+                and top<=origin.Y and top>=origin.Y+direction.Y and (not highest or top>highest) then
+                highest,partHit=top,p
+            end
+        end
+    end
+    if partHit then return {Instance=partHit,Position=vector(origin.X,highest,origin.Z),Normal=vector(0,1,0)} end
+end
 local lighting=node('Lighting','Lighting')
 local enum=setmetatable({},{__index=function(self,key)
     local group=setmetatable({},{__index=function(_,value) return value end}); rawset(self,key,group); return group
@@ -61,8 +81,9 @@ local World,Camera=source(WorldSource),source(CameraSource)
 local Base={}
 function Base.new(config)
     local folder=node('Folder','CombatStandWorld',workspace)
-    return {config=config,folder=folder,geometry=node('Folder','Geometry',folder),actorFolder=node('Folder','Actors',folder),
-        actors={},names={},origins={}}
+    local geometry=node('Folder','Geometry',folder)
+    return {config=config,folder=folder,geometry=geometry,actorFolder=node('Folder','Actors',folder),
+        actors={},names={},origins={},deathReason={},lastSupport={},ray={geometry=geometry}}
 end
 function Base.clearActors(self)
     for _,a in pairs(self.actors) do a.model:Destroy() end
@@ -74,7 +95,9 @@ local function actor(self,id,position)
     for _,name in ipairs({'Torso','Head','Left Arm','Right Arm','Left Leg','Right Leg'}) do
         local limb=node('Part',name,model); limb.CFrame=frame(position)
     end
-    local a={model=model,root=root,humanoid={Health=100},cue=0}
+    root.Anchored=false; root.AssemblyLinearVelocity=vector()
+    local a={model=model,root=root,humanoid={Health=100,PlatformStand=false,FloorMaterial=enum.Material.Slate,
+        Jump=false,JumpPower=42,UseJumpPower=true},cue=0}
     self.actors[id]=a; return a
 end
 function Base.spawn(self,id,actorId,point)
@@ -137,3 +160,138 @@ eq(view.CFrame.Position,121,35,542,'A group without loaded actors must keep its 
 camera:sync({heroes={{actorId='same-id',status='Alive'}}})
 camera:refreshTargets(); assert(camera.models['same-id']==defaultActor.model,'Old snapshots retain default-world compatibility')
 print('PASS camera selects one world, clears cross-group state and never falls back from an explicit missing world')
+
+local route=World.new(Base,{FallY=-20,Level=source(LevelSource)},
+    {name='RouteWorld',offset={x=100,y=10,z=1024}})
+assert(route.allFloors and #route.allFloors==12,'Modern route must build all district and guardian supports')
+assert(#route.floors==1,'Initial respawns must not use unopened district platforms')
+assert(route:groundPosition({x=50,y=3,z=0})==nil,'Aqueduct gap must have no collision bridge below it')
+assert(route:groundPosition({x=532,y=3,z=0})==nil,'Longbridge gap must remain a real fall')
+for _,x in ipairs({272,303,334}) do
+    assert(route:groundPosition({x=x,y=9,z=0})==nil,'Cliff jumps must have no hidden supporting floor')
+end
+local landing=route:groundPosition({x=287,y=5,z=6})
+assert(landing and landing.x==287 and math.abs(landing.y-3.2)<.00001 and landing.z==6,
+    'Ground pickup placement must return the local top of its own elevated support')
+assert(route.gates[1].beam.CanCollide and route.exitGate.beam.CanCollide,'Future gates start closed')
+route:progress(2,false)
+assert(#route.floors==3 and not route.gates[1].beam.CanCollide and route.gates[2].beam.CanCollide,
+    'Zone entry opens only completed district gates and respawn supports')
+local fullBounds=route:cameraBounds()
+assert(fullBounds.maxX>790 and fullBounds.minZ<1024 and fullBounds.maxZ>1024,'Camera bounds include the complete offset route')
+route:progress(6,true)
+assert(#route.floors==11 and not route.gates[6].beam.CanCollide and route.exitGate.beam.CanCollide,
+    'A complete district cannot expose future respawn supports before its exit is reached')
+route:progress(7,false); assert(#route.floors==12,'Entering the guardian court unlocks its respawn support')
+route:stage('Boss'); assert(route.exitGate.beam.CanCollide,'Guardian gate remains closed throughout battle')
+route:stage('Exit'); assert(not route.exitGate.beam.CanCollide,'Defeating the guardian opens its final gate')
+local finisher=actor(route,1,vector(780,13,1024))
+assert(route:atExit(1),'Final exit must come from the level definition and group-local coordinates')
+assert(not route:reached(1,{minX=0,maxX=4,minY=1,maxY=9,minZ=-10,maxZ=10}))
+route:clearActors(); assert(#route.floors==1 and route.gates[1].beam.CanCollide,'New runs reset unlocked supports and all district gates')
+route:noSafe(true); route:noSafe(false)
+assert(route:groundPosition({x=50,y=3,z=0})==nil,'Resetting safe supports must not turn cosmetic marsh into a collision bridge')
+print('PASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped')
+
+for _,item in ipairs({{kind='Pig',part='PigSnout'},{kind='Walker',part='WalkerShoulder'},{kind='Dragon',part='DragonWing'}}) do
+    assert(route:spawnEnemy(-10,item.kind,{x=-35,y=3,z=0}))
+    assert(route.actors[-10].model:FindFirstChild(item.part),'Species must have distinct visible original silhouettes')
+    assert(route.actors[-10].model:GetAttribute('EnemyKind')==item.kind)
+end
+route:projectile(-2001,{x=-30,y=1.2,z=0},false,'Ground')
+local pickup=route.actors[-2001]
+assert(pickup.model:GetAttribute('ProjectileMode')=='Ground' and pickup.model:GetAttribute('Pickup')==true)
+eq(pickup.root.Position,70,11.2,1024,'Modern pickups obey the same group offset as other actors')
+local gold=pickup.root.Color
+route:projectile(-2001,{x=-30,y=3,z=0},false,'Bullet')
+assert(pickup.model:GetAttribute('Pickup')==false and pickup.root.Color~=gold,'Live bullets cannot look like ground pickups')
+print('PASS ordinary species and guardian projectile modes have distinct original readable presentation')
+
+local actualBase=source(BaseWorldSource)
+local scopedSearch={floors=route.floors,actors={},origins={[1]=vector(720,13,1024)},deathReason={[1]='Fall'},lastSupport={},
+    isSafe=function() return true end}
+local scopedPoint=actualBase.findSafe(scopedSearch,1)
+assert(scopedPoint and scopedPoint.surface:GetAttribute('ZoneIndex')==1,
+    'Even a fall near the guardian cannot respawn into a still-locked district')
+local tiny=node('Part','NarrowSupport',route.geometry); tiny.Size=vector(3,2,2); tiny.CFrame=frame(50,0,0); tiny.CanCollide=true
+local wide=node('Part','SafeSupport',route.geometry); wide.Size=vector(20,2,20); wide.CFrame=frame(0,-1,0); wide.CanCollide=true
+local search={floors={tiny,wide},actors={},origins={[1]=vector(0,3,0)},deathReason={},lastSupport={},
+    isSafe=function() return true end}
+local point=actualBase.findSafe(search,1)
+assert(point and point.surface==wide,'Too-small support must be skipped instead of crashing respawn search')
+print('PASS narrow support cannot crash safe respawn search')
+
+-- These contracts run the actual adapter/hazard code; only engine integration is doubled.
+Base.jump=actualBase.jump; Base.hazard=actualBase.hazard
+local function standing(world,id)
+    local previous=world.actors[id]
+    if previous then previous.model:Destroy() end
+    local a=actor(world,id,vector(47,3,0)+world.offset)
+    a.model:SetAttribute('ActorId','jump-body-'..id)
+    return a
+end
+local function walkOff(world,a,at,y)
+    serverTime=at
+    a.humanoid.FloorMaterial=enum.Material.Air
+    a.root.CFrame=frame(vector(50.57,y or 1.31,0)+world.offset)
+    a.root.AssemblyLinearVelocity=vector(16,-20,3)
+    assert(world:hazard(1)==nil)
+end
+
+local delayed=standing(route,1)
+serverTime=0; assert(route:hazard(1)==nil)
+walkOff(route,delayed,.16)
+route:jump(1)
+eq(delayed.root.AssemblyLinearVelocity,16,42,3,
+    'A server-confirmed walk-off within 0.20s must accept the delayed jump and preserve horizontal momentum')
+assert(delayed.humanoid.Jump,'Accepted modern jump must also request its humanoid jump state')
+print('PASS modern delayed jump uses bounded server ground history and preserves horizontal momentum')
+
+delayed.humanoid.FloorMaterial=enum.Material.Slate
+delayed.root.AssemblyLinearVelocity=vector(16,0,3); delayed.humanoid.Jump=false
+serverTime=.17; route:hazard(1); route:jump(1)
+eq(delayed.root.AssemblyLinearVelocity,16,0,3,'The stale grounded physics frame before takeoff cannot rearm a consumed jump')
+assert(not delayed.humanoid.Jump)
+delayed.humanoid.FloorMaterial=enum.Material.Air
+delayed.root.CFrame=frame(vector(52,4,0)+route.offset)
+delayed.root.AssemblyLinearVelocity=vector(16,30,3); serverTime=.18; route:hazard(1)
+delayed.root.AssemblyLinearVelocity=vector(16,-2,3); delayed.humanoid.Jump=false
+serverTime=.19; route:hazard(1); route:jump(1)
+eq(delayed.root.AssemblyLinearVelocity,16,-2,3,'An airborne player cannot repeat the coyote jump')
+assert(not delayed.humanoid.Jump)
+delayed.humanoid.FloorMaterial=enum.Material.Slate
+delayed.root.CFrame=frame(vector(56,3,0)+route.offset)
+delayed.root.AssemblyLinearVelocity=vector(16,0,3); serverTime=.6; route:hazard(1); route:jump(1)
+eq(delayed.root.AssemblyLinearVelocity,16,42,3,'A real landing must restore one jump')
+print('PASS jump consumption survives stale floor reports and midair input, then resets after actual landing')
+
+for _,case in ipairs({{at=.2,y=-.5,accept=true},{at=.2001,y=1.31,accept=false},{at=.16,y=-.501,accept=false}}) do
+    local a=standing(route,1); serverTime=0; route:hazard(1)
+    walkOff(route,a,case.at,case.y); route:jump(1)
+    assert(a.humanoid.Jump==case.accept,'Walk-off grace must enforce both its exact time boundary and maximum 3.5-stud drop')
+    eq(a.root.AssemblyLinearVelocity,16,case.accept and 42 or -20,3)
+end
+for _,blocked in ipairs({'Anchored','Reaction','Dead'}) do
+    local a=standing(route,1); serverTime=0; route:hazard(1); walkOff(route,a,.1)
+    if blocked=='Anchored' then a.root.Anchored=true
+    elseif blocked=='Reaction' then a.humanoid.PlatformStand=true
+    else a.humanoid.Health=0 end
+    route:jump(1)
+    eq(a.root.AssemblyLinearVelocity,16,-20,3,'Dead, held, and reacting actors cannot use jump grace')
+    assert(not a.humanoid.Jump)
+end
+print('PASS jump grace rejects expired, deep, dead, held and reacting requests')
+
+local old=standing(route,1); serverTime=0; route:hazard(1)
+local replacement=standing(route,1); walkOff(route,replacement,.1); route:jump(1)
+assert(not replacement.humanoid.Jump,'A replacement body must never inherit the previous actor jump history')
+eq(replacement.root.AssemblyLinearVelocity,16,-20,3)
+local scoped=World.new(Base,{FallY=-20,Level=source(LevelSource)},
+    {name='OtherJumpRoute',offset={x=100,y=10,z=1536}})
+local isolated=standing(scoped,1); walkOff(scoped,isolated,.1); scoped:jump(1)
+assert(not isolated.humanoid.Jump,'A different group cannot borrow grounded history for the same slot ID')
+local legacy=standing(default,1); serverTime=0; default:hazard(1)
+walkOff(default,legacy,.1); default:jump(1)
+assert(not legacy.humanoid.Jump,'Legacy worlds must retain the original grounded-only BaseWorld jump')
+eq(legacy.root.AssemblyLinearVelocity,16,-20,3)
+print('PASS jump history belongs to one actual actor in one modern world and preserves legacy behavior')

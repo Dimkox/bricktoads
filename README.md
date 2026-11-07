@@ -1,6 +1,6 @@
 # Brick Toads
 
-Playable Roblox prototype: choose Mr. Green, Mr. Yellow or Mr. Brown, clear the original 3D causeway, defeat its guardian by reflecting three projectiles, and reach the exit.
+Playable Roblox prototype: choose Mr. Green, Mr. Yellow or Mr. Brown, cross six original 3D districts with real gaps and raised ledges, defeat the guardian by picking up and throwing heavy balls, and reach the exit.
 
 ## Play
 
@@ -9,30 +9,39 @@ Open `places/BrickToadsPlayable.rbxlx` in Roblox Studio and press Play. The leve
 Use **Группы** / **Выбрать команду** to create an independent team or join another. Up to four local teams can play in separate arenas on one server. Joining an active team observes its existing run; it never adds a hero. A living or awaiting-respawn character keeps its role. After elimination you may create a new team or manually choose an eligible ordinary enemy in another group. Your old group's elimination/spent-life history stays intact when you return.
 
 - **WASD** — move and face a direction.
-- **F** — punch; **R** — heavy strike; **Space** — jump.
+- **F** — punch, pick up a nearby ground ball, or throw the ball you are carrying. The primary button shows **ВЗЯТЬ ШАР** / **БРОСИТЬ ШАР** when that interaction is available. **R** — heavy strike; **Space** — jump. The heavy strike is unavailable while carrying a ball.
 - Touch devices have a movement stick and attack/jump buttons.
 - Heroes have five hearts and three successful respawns. A living hero with zero respawns can keep playing.
-- Ordinary sentries have three hearts and one life. Clear both encounters to open the guardian arena.
+- The six districts contain a static roster of 13 ordinary actors: nine pigs, two walkers and two dragons. They have distinct original silhouettes and currently share the provisional three-heart, one-life combat profile. This source-classified roster is not a verified natural-play population or a claim of complete species mechanics.
+- Advance by defeating the current district's enemies and physically reaching its far side. Empty traversal sections still require crossing their gaps and reaching the next gate. Respawns use unlocked route supports.
 - To play an enemy, choose **Противник**, wait for the hero to start, then select an available sentry. You take its existing body and current health. Move/jump normally and use **F** or the attack button for its ordinary strike; the hero's heavy strike is unavailable.
 - A sentry becomes unavailable after its first accepted attack or an accepted hero attack directed at it, including a miss. A dead human enemy cannot take another sentry in this run/level. A separate new game resets that limit.
 - To play the guardian, open **ОЧЕРЕДЬ БОССА** in the menu or observer HUD and press **Ждать стража**. This removes you from the next hero roster. Invitations follow FIFO; answer within10 seconds. After acceptance the current client acknowledges readiness automatically, with a separate15-second connection deadline.
 - Declining or missing an invitation moves you to the queue tail for a future assignment. Cancel explicitly to leave. A successful ordinary-enemy claim cancels waiting; an accepted guardian reserve must be cancelled before claiming a sentry.
-- The reserved guardian appears after the ordinary encounters. Without an accepted ready player it uses NPC control after pending invitations finish. A human guardian uses **WASD**/the touch stick to aim and **F**/**СНАРЯД** to fire the same projectile, with the same cooldown and three-reflection defeat condition. It has no hero heavy strike or jump. Disconnect preserves its body and health while accepted projectiles and physics continue.
+- The reserved guardian appears after all six districts. Without an accepted ready player it uses NPC control after pending invitations finish. A human guardian uses **WASD**/the touch stick to aim and **F**/**ОГОНЬ** to fire its ordinary shots. It has no hero heavy strike or jump. The server's finite pattern continues to provide heavy-ball opportunities while its human owner is idle or offline; disconnect preserves its body and health while accepted projectiles and timers continue.
 - After final elimination, choose **Наблюдать** or **В основное меню**. The personal menu has **Вернуться к наблюдению** while the same group continues; it does not restore a body, health or respawns.
 - Spectators can switch the followed hero or use the free camera inside the level bounds. Free camera: **WASD** to move, **Q/E** for height, right mouse drag for direction. Touch has a camera stick and height/turn buttons.
-- Reflect the guardian's orange projectiles with an attack. Three returned projectiles open the exit.
+- Dodge the guardian's flying shots; they cannot be punched back. Its special heavy shot becomes a ground ball. Approach it, press **F** to pick it up, then **F** again to throw it at the guardian. Three thrown-ball impacts defeat the guardian and open the exit.
 - Victory/defeat returns to the selection screen. The host starts the next game manually.
 - Each group's victory/defeat and restart are independent. Guardian waiting is shared across groups; an invitation names its target team, and accepting transfers only the invited observer to that team.
 
 All three templates have the same capabilities. The server fixes the 1–3 hero roster at Start; later arrivals spectate this run. Health, collisions, enemy AI, projectiles and respawns are server-owned.
 
-The spectator/menu flow was checked through Studio MCP with four real clients, including an eliminated hero, a dead human enemy and a continuing teammate. Camera bounds and iPhone 17 Pro landscape emulation were checked; this does not establish physical phone/tablet acceptance. Evidence: [spectator camera report](reports/2026-11-07-spectator-menu-camera/README.md).
-
 This is an original playable prototype. Enemy damage, timing, geometry and the boss adaptation remain provisional. Ordinary human-enemy control, the guardian queue and up to four independent local groups are implemented for the current level. Multiple levels, cross-server boss routing and complete source-mechanics transfer remain outstanding. This does not implement cross-server discovery. Additional enemy combat abilities are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
 
-Guardian acceptance used three real Studio clients for FIFO/decline/accept, then two clients for mobile invitation, human projectile control, three real reflected hits and the unlocked exit. Ordinary NPCs were held/killed and the hero relocated to isolate that encounter; this was not an unprepared full-level run. See [boss role evidence](reports/2026-11-07-boss-role-queue/README.md).
+## Current route acceptance
 
-Independent-group acceptance used four Studio clients and three actual runs. It verified elimination/new game, isolated loss, another group's existing enemy, shared guardian assignment and a reflected projectile in the translated arena. The group selector was checked in phone emulation. See [group evidence](reports/2026-11-07-independent-groups/README.md).
+The six-district route, all five physical gap landings, the three pickup/throw guardian hits and the earned exit were checked on the final sources in Studio. Ordinary NPCs were cleared by a separate QA listener to isolate traversal; hero movement, health and respawns were not edited. See [the current route report](reports/2026-11-07-first-level-route/README.md) for the exact evidence and remaining limits.
+
+## Historical acceptance evidence
+
+The archived reports below cover the earlier short prototype. They do not validate the current six-district route, its jumps, or the pickup/throw guardian battle. Native contracts and isolated encounter checks also do not establish an unprepared complete playthrough or physical phone/tablet acceptance.
+
+The earlier spectator/menu flow was checked through Studio MCP with four real clients, including an eliminated hero, a dead human enemy and a continuing teammate. Camera bounds and iPhone 17 Pro landscape emulation were checked. See the historical [spectator camera report](reports/2026-11-07-spectator-menu-camera/README.md).
+
+Earlier guardian acceptance used three real Studio clients for FIFO/decline/accept, then two clients for mobile invitation, human projectile control, three reflected hits in the legacy battle and the unlocked exit. Ordinary NPCs were held/killed and the hero relocated to isolate that encounter; this was not an unprepared full-level run. See the historical [boss role evidence](reports/2026-11-07-boss-role-queue/README.md).
+
+Earlier independent-group acceptance used four Studio clients and three actual runs. It verified elimination/new game, isolated loss, another group's existing enemy, shared guardian assignment and a reflected projectile in the legacy translated arena. The group selector was checked in phone emulation. See the historical [group evidence](reports/2026-11-07-independent-groups/README.md).
 
 ## Source structure
 
@@ -61,6 +70,8 @@ python tools/build_bricktoads_place.py
 python tools/build_bricktoads_place.py --check
 python tools/test_bricktoads_place.py
 luau tests/run_gameplay.luau
+luau tests/run_level_route.luau
+luau tests/run_guardian.luau
 luau tests/run.luau
 luau tests/run_stand.luau
 luau tests/run_connections.luau

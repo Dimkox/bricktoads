@@ -1,0 +1,757 @@
+{
+  "fixture": "None. New Play with no NPC clearing listener, no hero edits/teleports; production input-only QA driver.",
+  "result": {
+    "jumps": [
+      {
+        "launchY": 3.0000457763671875,
+        "landingY": 3,
+        "samples": [
+          {
+            "humanoidState": "Freefall",
+            "t": 0.08262809994630516,
+            "attempt": 1,
+            "anchored": false,
+            "y": 3.0000457763671875,
+            "x": 47.12077713012695,
+            "platformStand": false,
+            "z": -3.987077236175537,
+            "vz": 0.6409379839897156,
+            "grounded": true,
+            "vx": 15.984367370605469,
+            "vy": 0
+          },
+          {
+            "notice": "STALE_SEQUENCE",
+            "humanoidState": "Freefall",
+            "t": 0.1510918999556452,
+            "attempt": 1,
+            "anchored": false,
+            "y": 2.9810259342193604,
+            "x": 48.17115020751953,
+            "platformStand": false,
+            "z": -3.9448227882385254,
+            "vz": 0.645476222038269,
+            "grounded": true,
+            "vx": 15.982098579406738,
+            "vy": 12.217028617858887
+          },
+          {
+            "notice": "STALE_SEQUENCE",
+            "humanoidState": "Freefall",
+            "t": 0.23323070001788437,
+            "attempt": 1,
+            "anchored": false,
+            "y": 5.245284557342529,
+            "x": 49.50278854370117,
+            "platformStand": false,
+            "z": -3.906386375427246,
+            "vz": 0.35111820697784424,
+            "grounded": false,
+            "vx": 15.984001159667969,
+            "vy": 34.2828369140625
+          },
+          {
+            "humanoidState": "Landed",
+            "t": 0.31990569992922246,
+            "attempt": 1,
+            "anchored": false,
+            "y": 7.422787189483643,
+            "x": 50.88528060913086,
+            "platformStand": false,
+            "z": -3.909248113632202,
+            "vz": -0.056148722767829895,
+            "grounded": false,
+            "vx": 15.99804401397705,
+            "vy": 16.313148498535156
+          },
+          {
+            "notice": "STALE_SEQUENCE",
+            "humanoidState": "Running",
+            "t": 0.3997100000269711,
+            "attempt": 1,
+            "anchored": false,
+            "y": 8.138976097106934,
+            "x": 52.18190002441406,
+            "platformStand": false,
+            "z": -3.9139389991760254,
+            "vz": -0.1487082839012146,
+            "grounded": false,
+            "vx": 16.00007438659668,
+            "vy": -0.04111170768737793
+          },
+          {
+            "notice": "STALE_SEQUENCE",
+            "humanoidState": "Running",
+            "t": 0.48217400000430644,
+            "attempt": 1,
+            "anchored": false,
+            "y": 7.895492076873779,
+            "x": 53.494415283203125,
+            "platformStand": false,
+            "z": -3.926473617553711,
+            "vz": -0.24433767795562744,
+            "grounded": true,
+            "vx": 15.926643371582031,
+            "vy": 2.073803186416626
+          }
+        ],
+        "fromMaxX": 48,
+        "at": 64127.677690600045,
+        "landingX": 53,
+        "result": "LANDED",
+        "from": "DistrictSupport",
+        "start": {
+          "floor": "Slate",
+          "anchored": false,
+          "state": "Running",
+          "y": 3.0000457763671875,
+          "x": 45.7857780456543,
+          "platformStand": false,
+          "z": -4.040887832641602,
+          "vz": 0.6409379839897156,
+          "snapshotAge": 0.06598305702209473,
+          "vx": 15.984367370605469,
+          "vy": 0
+        },
+        "toMinX": 53,
+        "maxRise": 5.138930320739746,
+        "sentSeq": 1000236
+      }
+    ],
+    "latest": {
+      "view": "Menu",
+      "canChooseView": false,
+      "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+      "mine": 1,
+      "lobby": [
+        {
+          "username": "Archaicus14",
+          "template": "Mr. Green",
+          "userId": 11946162891,
+          "preference": "Hero",
+          "displayName": "Archaicus14"
+        }
+      ],
+      "levelEpoch": 1,
+      "selectedTemplate": "Mr. Green",
+      "groups": [
+        {
+          "players": 1,
+          "name": "Команда 1",
+          "status": "Lost",
+          "heroes": 1,
+          "id": "group-1",
+          "canJoin": true
+        }
+      ],
+      "enemyOffers": [],
+      "status": "Lost",
+      "level": {
+        "objective": "Команда выбыла",
+        "zoneName": "Разбитый акведук",
+        "enemies": [
+          {
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": true
+          },
+          {
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": true
+          },
+          {
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": true
+          },
+          {
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": true
+          },
+          {
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": true
+          },
+          {
+            "attacking": false,
+            "hearts": 1,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          }
+        ],
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 2,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "result": "Lost",
+        "stage": "Lost"
+      },
+      "runId": "0d2184ec-f424-4c5b-b785-b1c4a228201b",
+      "groupId": "group-1",
+      "notice": "RUN_CLOSED",
+      "heroOnline": 1,
+      "canSelect": true,
+      "worldName": "BrickToadsWorld_group-1",
+      "bossQueue": {
+        "state": "None",
+        "available": true
+      },
+      "canCreateGroup": true,
+      "groupName": "Команда 1",
+      "heroes": [
+        {
+          "view": "Menu",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 4,
+          "userId": 11946162891,
+          "displayName": "Archaicus14",
+          "username": "Archaicus14",
+          "connectionEpoch": 1,
+          "hearts": 0,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "respawns": 0,
+          "dying": false
+        }
+      ],
+      "cameraBounds": {
+        "maxY": 56,
+        "minZ": -90,
+        "minY": 7,
+        "minX": -90,
+        "maxX": 700,
+        "maxZ": 90
+      },
+      "online": 1,
+      "now": 1794028394.056141,
+      "canStart": true,
+      "interaction": {
+        "available": false
+      },
+      "host": 11946162891,
+      "preference": "Hero",
+      "enemyUnavailableReason": "RUN_CLOSED"
+    },
+    "status": "OBSERVED Lost",
+    "elapsed": 62.00876140000764,
+    "checkpoints": [
+      {
+        "at": 0.00006350001785904169,
+        "message": "Started input-only driver; no world/state mutations"
+      },
+      {
+        "at": 0.041884999955073,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 0.07504929997958243,
+        "message": "Body group-1:0d2184ec-f424-4c5b-b785-b1c4a228201b:actor:2:1:1"
+      },
+      {
+        "at": 0.6086964999558404,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 0.8415707999374717,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 0.941858800011687,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 1.0415500999661162,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 1.141926100011915,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 1.5085676000453532,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 1.6079273000359535,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 2.2741609000368044,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 2.408718599937856,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 2.525558999972418,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 2.7239543000468984,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 2.85879319999367,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 2.957497700001113,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 3.058443299960345,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 3.2914057000307366,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 3.4087492999387905,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 3.9416606000158936,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 4.17492390004918,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 4.275733800022863,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 4.391347700031474,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 4.491907399962656,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 4.624765099957585,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 4.841092800023034,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 4.941611099988222,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 5.174635999952443,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 5.290758899995126,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 5.390865299967118,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 5.492102999938652,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 5.824475200031884,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 5.92466100002639,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 6.357381899957545,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 6.458128200029023,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 6.690246299956925,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 6.807279999949969,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 6.907996600028127,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 7.007559499936178,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 7.223936200025491,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 7.423896300024353,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 7.5419262000359595,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 7.6244283999549225,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 8.074041499989107,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 8.641367899952456,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 8.740954600041732,
+        "message": "group-1:1:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 9.291058899951167,
+        "message": "group-1:1:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 10.174090299988165,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 10.957722999970429,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 11.391640200046822,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 11.491054099984467,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 11.690619600005448,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 13.708026899956167,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 13.808028799947351,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 14.040134100010619,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 14.140004999935627,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 14.241124299936928,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 14.340590200037695,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 14.557310899952427,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 14.790898900013417,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 14.890518700005487,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 15.108068799949251,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 15.191517799976282,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 15.391339199966751,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 15.524720099987462,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 15.740786600043066,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 15.841467799968086,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 15.940981699968688,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 16.04081060003955,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 16.27385839994531,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 16.374075099942274,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 16.48999679996632,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 16.606997999944724,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 16.84120280004572,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 16.957060700049624,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 17.07365499995649,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 17.19073989999015,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 17.307349300011992,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 17.40679299994372,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 17.523920099949464,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 17.624638400040567,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 17.741249799961224,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 17.775065599940717,
+        "message": "Jump SENT at X=45.79 to 57.00"
+      },
+      {
+        "at": 17.923912200029008,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 18.057053999975324,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 18.156755900010467,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 18.257716899970546,
+        "message": "Jump LANDED maxRise=5.14 x/y=53.49/7.90"
+      },
+      {
+        "at": 18.390970999957062,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 18.474705799948424,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 18.723392899963073,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 18.823916399967857,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 19.041076499968767,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 19.807645699940622,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 19.906888599973172,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 20.673894500010647,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 20.891488099936396,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 20.973296700045466,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 21.106873800046742,
+        "message": "group-1:2:Route:1:Alive:0:nil"
+      },
+      {
+        "at": 21.206735200015828,
+        "message": "group-1:2:Route:1:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 21.423584999982268,
+        "message": "group-1:2:Route:2:Alive:0:STALE_ACTOR"
+      },
+      {
+        "at": 21.440579100046307,
+        "message": "Body group-1:0d2184ec-f424-4c5b-b785-b1c4a228201b:actor:18:2:1"
+      },
+      {
+        "at": 21.52385660004802,
+        "message": "group-1:2:Route:2:Alive:0:nil"
+      },
+      {
+        "at": 21.640635299962014,
+        "message": "group-1:2:Route:2:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 21.956795600010082,
+        "message": "group-1:2:Route:2:Alive:0:nil"
+      },
+      {
+        "at": 22.50710079993587,
+        "message": "group-1:2:Route:3:Alive:0:NOT_ALIVE"
+      },
+      {
+        "at": 22.55823139997665,
+        "message": "Body group-1:0d2184ec-f424-4c5b-b785-b1c4a228201b:actor:22:3:1"
+      },
+      {
+        "at": 22.624098800006323,
+        "message": "group-1:2:Route:3:Alive:0:nil"
+      },
+      {
+        "at": 22.740667999954894,
+        "message": "group-1:2:Route:3:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 22.84009790001437,
+        "message": "group-1:2:Route:3:Alive:0:nil"
+      },
+      {
+        "at": 23.289799200021662,
+        "message": "group-1:2:Route:3:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 23.389783199992962,
+        "message": "group-1:2:Route:3:Alive:0:nil"
+      },
+      {
+        "at": 23.490502499975264,
+        "message": "group-1:2:Route:4:Alive:0:STALE_ACTOR"
+      },
+      {
+        "at": 23.558240800048225,
+        "message": "Body group-1:0d2184ec-f424-4c5b-b785-b1c4a228201b:actor:27:4:1"
+      },
+      {
+        "at": 23.62450210005045,
+        "message": "group-1:2:Route:4:Alive:0:nil"
+      },
+      {
+        "at": 23.723890600027516,
+        "message": "group-1:2:Route:4:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 23.84052279999014,
+        "message": "group-1:2:Route:4:Alive:0:nil"
+      },
+      {
+        "at": 23.956766100018285,
+        "message": "group-1:2:Route:4:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 24.173822200042196,
+        "message": "group-1:2:Route:4:Alive:0:nil"
+      },
+      {
+        "at": 24.290522299939767,
+        "message": "group-1:2:Route:4:Alive:0:STALE_SEQUENCE"
+      },
+      {
+        "at": 24.390261000022292,
+        "message": "group-1:2:Route:4:Alive:0:nil"
+      },
+      {
+        "at": 24.506870400044136,
+        "message": "group-1:2:Lost:4:Eliminated:0:RUN_CLOSED"
+      },
+      {
+        "at": 24.507069600047544,
+        "message": "OBSERVED Lost"
+      }
+    ]
+  }
+}

@@ -87,10 +87,11 @@ local HttpService=game:GetService('HttpService')
 Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
-local config=require(gameplay.GameConfig)(require(runtime.Config))
+local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
 local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
+    GuardianPattern=require(gameplay.GuardianPattern),
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor
@@ -695,13 +696,23 @@ return BossQueue
             <string name="Name">GameConfig</string>
             <ProtectedString name="Source">-- Original playable prototype calibration. Resource limits are canonical.
 -- Enemy damage and spatial/timing values still need the full source transfer.
-return function(base)
+return function(base,level)
     local config=table.clone(base)
     config.Calibration='PLAYABLE_PROTOTYPE'
     config.Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}
+    config.Level=level
+    if level then
+        config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
+        config.Boss.interval=1.6
+        config.Boss.ballInterval=8
+        config.Boss.ballLife=20
+        config.Boss.pickupRange=5.5
+        config.Boss.rawLife=47
+        config.Boss.throwDamage=16
+    end
     return config
 end
 </ProtectedString>
@@ -814,7 +825,10 @@ function Controller:_begin(player,players)
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
     end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern)
+    self.current.contextualAttack=function(slot,now,action)
+        return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
+    end
     for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end
     if self.bossQueue then
         self.bossSlot=self.current.state.runId..':guardian:'..self.current.state.levelEpoch
@@ -1003,6 +1017,7 @@ function Controller:snapshot(player,players)
         if #data.enemyOffers==0 then data.enemyUnavailableReason='NO_ENEMY_AVAILABLE' end
     end
     data.notice=self.notices[player]
+    data.interaction=data.mine and self.director and self.director.interaction and self.director:interaction(data.mine) or {available=false}
     if self.bossQueue then
         data.bossQueue=self.bossQueue:view(player.UserId,self.deps.clock())
         data.bossQueue.available=self:_bossSelection(player)=='OK'
@@ -1152,7 +1167,7 @@ local function toad(actor, template)
     model:SetAttribute("Appearance", "OriginalToad")
 end
 
-local function drone(actor)
+local function drone(actor, kind)
     hideRig(actor)
     local m = actor.model
     cosmetic(m, m.Torso, "RustHull", Vector3.new(2.35, 1.85, 1.55), CFrame.new(), COLORS.rust)
@@ -1170,6 +1185,27 @@ local function drone(actor)
     cosmetic(m, m.Head, "SingleOptic", Vector3.new(0.68, 0.5, 0.25), CFrame.new(0, 0.02, -0.77), COLORS.amber, Enum.PartType.Ball, Enum.Material.Neon)
     cosmetic(m, m.Head, "Antenna", Vector3.new(0.12, 0.95, 0.12), CFrame.new(0.6, 0.7, 0.22) * CFrame.Angles(0, 0, -0.25), COLORS.pale)
     cosmetic(m, m.Head, "AntennaTip", Vector3.new(0.23, 0.23, 0.23), CFrame.new(0.72, 1.13, 0.22), COLORS.amber, Enum.PartType.Ball, Enum.Material.Neon)
+    -- Species silhouettes are original art; their shared combat remains prototype tuning.
+    if kind == "Pig" then
+        cosmetic(m, m.Head, "PigSnout", Vector3.new(1.5, 0.85, 1.1), CFrame.new(0, -0.05, -1), COLORS.rust, Enum.PartType.Ball)
+        for _,side in ipairs({-1, 1}) do
+            cosmetic(m, m.Head, "PigTusk", Vector3.new(0.22, 0.8, 0.25), CFrame.new(side * 0.66, -0.12, -1.35) * CFrame.Angles(0, 0, -side * 0.3), COLORS.pale)
+            cosmetic(m, m.Head, "PigEar", Vector3.new(0.75, 0.8, 0.4), CFrame.new(side * 0.8, 0.85, 0), COLORS.rust)
+        end
+        cosmetic(m, m.Torso, "PigArmour", Vector3.new(2.85, 1.5, 1.7), CFrame.new(0, 0.1, 0.1), COLORS.rust, Enum.PartType.Ball)
+    elseif kind == "Walker" then
+        for _,side in ipairs({-1, 1}) do
+            cosmetic(m, m.Torso, "WalkerShoulder", Vector3.new(1.25, 1.5, 1.7), CFrame.new(side * 1.65, 0.45, 0), COLORS.dark)
+            cosmetic(m, m[side == -1 and "Left Leg" or "Right Leg"], "WalkerPiston", Vector3.new(0.9, 2.05, 0.9), CFrame.new(0, 0.1, 0.1), COLORS.amber)
+        end
+        cosmetic(m, m.Head, "WalkerCrest", Vector3.new(0.5, 1.5, 1.2), CFrame.new(0, 0.9, 0), COLORS.pale)
+    elseif kind == "Dragon" then
+        for _,side in ipairs({-1, 1}) do
+            cosmetic(m, m.Torso, "DragonWing", Vector3.new(3.2, 0.28, 2.1), CFrame.new(side * 2.3, 0.45, 0.45) * CFrame.Angles(0, 0, side * 0.3), COLORS.moss)
+            cosmetic(m, m.Head, "DragonHorn", Vector3.new(0.3, 1.4, 0.4), CFrame.new(side * 0.6, 0.9, 0.3) * CFrame.Angles(0.2, 0, -side * 0.2), COLORS.amber)
+        end
+        cosmetic(m, m.Torso, "DragonTail", Vector3.new(0.7, 0.65, 3.2), CFrame.new(0, -0.7, 2), COLORS.moss, Enum.PartType.Ball)
+    end
 end
 
 local function boss(actor)
@@ -1320,6 +1356,117 @@ local function buildGeometry(self)
     end
 end
 
+local function gateState(gate, open)
+    gate.beam.CanCollide = not open
+    gate.beam.Transparency = open and 1 or 0.63
+    gate.marker.Color = open and COLORS.mint or COLORS.amber
+    gate.marker.Transparency = open and 0.75 or 0
+    gate.light.Color, gate.light.Brightness = gate.marker.Color, open and 0.4 or 1.6
+    gate.label.TextTransparency = open and 0.65 or 0
+end
+
+local function buildRoute(self, level)
+    self.geometry:ClearAllChildren()
+    self.allFloors, self.floors, self.gates = {}, {}, {}
+    local g = self.geometry
+    local function platform(data, zoneIndex, surfaceId)
+        local p = part(g, "DistrictSupport", Vector3.new(data.w, data.h, data.d), CFrame.new(data.x, data.y, data.z),
+            zoneIndex == 4 and COLORS.dark or COLORS.stone, Enum.Material.Slate, true)
+        p:SetAttribute("SurfaceId", surfaceId)
+        p:SetAttribute("ZoneIndex", zoneIndex)
+        self.allFloors[#self.allFloors + 1] = p
+        local top = data.y + data.h / 2
+        -- Every paving stone belongs to one support; no decorative strip spans a gap.
+        for x = data.x - data.w / 2 + 3.5, data.x + data.w / 2 - 3.5, 7 do
+            for z = data.z - data.d / 2 + 3.5, data.z + data.d / 2 - 3.5, 7 do
+                local tile = part(g, "RoutePaving", Vector3.new(6.5, 0.08, 6.5), CFrame.new(x, top + 0.04, z),
+                    zoneIndex == 4 and COLORS.pale or Color3.fromRGB(91, 111, 103), Enum.Material.Slate)
+                tile.Transparency = 0.28
+            end
+        end
+        for _,side in ipairs({-1, 1}) do
+            part(g, "PlatformEdge", Vector3.new(data.w, 0.18, 0.32), CFrame.new(data.x, top + 0.12, data.z + side * (data.d / 2 - 0.25)), COLORS.pale)
+        end
+        return top
+    end
+    local function gate(x, z, top, width, title)
+        local beam = part(g, "DistrictGate", Vector3.new(0.7, 12, width + 8), CFrame.new(x, top + 6, z), COLORS.amber, Enum.Material.ForceField, true)
+        local marker = ball(g, "DistrictBeacon", Vector3.new(1.7, 1.7, 1.7), CFrame.new(x, top + 14, z), COLORS.amber, Enum.Material.Neon)
+        local result = {beam = beam, marker = marker, light = pointLight(marker, COLORS.amber, 20, 1.6),
+            label = label(beam, title, 330, Vector3.new(0, 7.5, 0))}
+        gateState(result, false)
+        return result
+    end
+    for index, zone in ipairs(level.zones) do
+        for _,data in ipairs(zone.platforms) do platform(data, index, zone.id) end
+        local first, last = zone.platforms[1], zone.platforms[#zone.platforms]
+        local x, y, z = first.x - first.w / 2 + 8, first.y + first.h / 2, first.z
+        local sign = part(g, "DistrictSign", Vector3.new(0.8, 6, 0.8), CFrame.new(x, y + 3, z - first.d / 2 - 2), COLORS.dark, Enum.Material.Wood)
+        label(sign, tostring(index) .. "  ·  " .. string.upper(zone.name), 350, Vector3.new(0, 5, 0)).TextSize = 21
+        -- Large silhouettes identify districts from the moving camera without blocking jumps.
+        for _,side in ipairs({-1, 1}) do
+            local depth = z + side * (first.d / 2 + 4)
+            if index == 1 or index == 2 then
+                part(g, "AqueductTower", Vector3.new(5, 19 + index * 2, 5), CFrame.new(x + 13, y + 8, depth), COLORS.dark, Enum.Material.Rock)
+                part(g, "TowerCrown", Vector3.new(8, 2, 8), CFrame.new(x + 13, y + 19, depth), COLORS.pale, Enum.Material.Slate)
+            elseif index == 3 then
+                local bowl = ball(g, "CourtyardBrazier", Vector3.new(4, 3, 4), CFrame.new(x + 24, y + 4, depth), COLORS.rust)
+                ball(g, "BrazierGlow", Vector3.new(2, 3, 2), CFrame.new(x + 24, y + 6, depth), COLORS.amber, Enum.Material.Neon)
+                pointLight(bowl, COLORS.amber, 22, 2)
+            elseif index == 4 then
+                part(g, "CliffNeedle", Vector3.new(6, 26, 7), CFrame.new(x + 11, y - 8, depth), COLORS.dark, Enum.Material.Rock)
+                ball(g, "CliffMoss", Vector3.new(8, 3, 9), CFrame.new(x + 11, y + 5, depth), COLORS.moss, Enum.Material.Grass)
+            elseif index == 5 then
+                part(g, "ForgeChimney", Vector3.new(5, 24, 5), CFrame.new(x + 21, y + 10, depth), COLORS.rust, Enum.Material.Metal)
+                local glow = part(g, "ForgeWindow", Vector3.new(3, 4, 0.3), CFrame.new(x + 21, y + 6, depth - side * 2.7), COLORS.amber, Enum.Material.Neon)
+                pointLight(glow, COLORS.amber, 18, 1.8)
+            else
+                part(g, "BridgePylon", Vector3.new(3.5, 23, 4), CFrame.new(x + 15, y + 8, depth), COLORS.pale, Enum.Material.Slate)
+                part(g, "BridgeBrace", Vector3.new(9, 2, 3), CFrame.new(x + 15, y + 19, depth), COLORS.dark)
+            end
+        end
+        for _,gap in ipairs(zone.gaps or {}) do
+            -- Marks stay entirely on the takeoff/landing edges, outside the empty air.
+            local left, right = gap.minX, gap.maxX
+            local before, after
+            for _,data in ipairs(zone.platforms) do
+                if math.abs(data.x + data.w / 2 - left) &lt; .01 then before = data end
+                if math.abs(data.x - data.w / 2 - right) &lt; .01 then after = data end
+            end
+            for _,edge in ipairs({{x = left - .35, data = before}, {x = right + .35, data = after}}) do
+                local data = edge.data
+                if data then
+                    local top = data.y + data.h / 2
+                    part(g, "JumpEdge", Vector3.new(.45, .13, data.d - 1), CFrame.new(edge.x, top + .12, data.z), COLORS.amber, Enum.Material.Neon)
+                    local marker = part(g, "JumpMarker", Vector3.new(1, .1, 1), CFrame.new(edge.x - 1, top + .15, data.z), COLORS.mint, Enum.Material.Neon)
+                    label(marker, "ПРЫЖОК  →", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
+                end
+            end
+        end
+        self.gates[index] = gate(zone.gateX, last.z, last.y + last.h / 2, last.d, tostring(index) .. "  ·  " .. zone.name)
+    end
+    local boss = level.boss
+    platform(boss.platform, #level.zones + 1, "GuardianCourt")
+    local bossTop = boss.platform.y + boss.platform.h / 2
+    self.exitGate = gate(boss.gateX, boss.platform.z, bossTop, boss.platform.d, "СТРАЖ ПЕРЕПРАВЫ")
+    self.exitPad = part(g, "ExitPad", Vector3.new(boss.pad.w, .13, boss.pad.d), CFrame.new(boss.pad.x, boss.pad.y, boss.pad.z), COLORS.mint, Enum.Material.Neon)
+    self.exitPad.Transparency = .78
+    for _,side in ipairs({-1, 1}) do
+        local z = boss.platform.z + side * (boss.platform.d / 2 + 3)
+        part(g, "GuardianObelisk", Vector3.new(5, 27, 5), CFrame.new(boss.position.x + 5, bossTop + 11, z), COLORS.dark, Enum.Material.Rock)
+        local light = ball(g, "GuardianSigil", Vector3.new(3, 3, 3), CFrame.new(boss.position.x + 5, bossTop + 23, z), COLORS.mint, Enum.Material.Neon)
+        pointLight(light, COLORS.mint, 24, 2)
+    end
+    local bounds = level.bounds
+    local marsh = part(g, "RouteMarsh", Vector3.new(bounds.maxX - bounds.minX + 100, .4, bounds.maxZ - bounds.minZ + 60),
+        CFrame.new((bounds.minX + bounds.maxX) / 2, -9, (bounds.minZ + bounds.maxZ) / 2), Color3.fromRGB(34, 101, 96), Enum.Material.Glass)
+    marsh.Transparency, marsh.Reflectance = .34, .25
+    local depth = part(g, "MarshDepth", Vector3.new(bounds.maxX - bounds.minX + 100, 9, bounds.maxZ - bounds.minZ + 60),
+        CFrame.new((bounds.minX + bounds.maxX) / 2, -15, (bounds.minZ + bounds.maxZ) / 2), COLORS.dark)
+    depth.Transparency = .22
+    self:progress(1, false)
+end
+
 function World.new(BaseWorld, config, options)
     options = options or {}
     local worldName = options.name or "BrickToadsWorld"
@@ -1349,7 +1496,7 @@ function World.new(BaseWorld, config, options)
         [2] = Vector3.new(-65, 3, 0) + translation,
         [3] = Vector3.new(-65, 3, 7) + translation,
     }
-    buildGeometry(self)
+    if config.Level then buildRoute(self, config.Level) else buildGeometry(self) end
     for _,object in ipairs(self.geometry:GetDescendants()) do
         if object:IsA("BasePart") then object.CFrame += translation end
     end
@@ -1405,7 +1552,8 @@ function World:spawnEnemy(id, kind, positionTable)
     local isBoss = string.lower(tostring(kind)) == "boss"
     local position = Vector3.new(x, y, z) + self.offset
     self.origins[id] = position
-    self.names[id] = isBoss and "Страж переправы" or "Ржавый дозорный"
+    local speciesNames = {Pig = "Панцирный хряк", Walker = "Шагающий страж", Dragon = "Крылатый дозорный"}
+    self.names[id] = isBoss and "Страж переправы" or speciesNames[kind] or "Ржавый дозорный"
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
@@ -1419,7 +1567,7 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
     actor.humanoid.WalkSpeed = isBoss and 0 or 8
     self.enemyKinds[id] = isBoss and "Boss" or "Drone"
-    if isBoss then boss(actor) else drone(actor) end
+    if isBoss then boss(actor) else drone(actor, kind) end
     actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0, isBoss and 7.6 or 4.5, 0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
@@ -1434,15 +1582,21 @@ function World:position(id)
 end
 
 function World:cameraBounds()
-    local minX,maxX,minZ,maxZ,top=math.huge,-math.huge,math.huge,-math.huge,-math.huge
-    for _,floor in ipairs(self.floors) do
+    local minX,maxX,minZ,maxZ,top,bottom=math.huge,-math.huge,math.huge,-math.huge,-math.huge,math.huge
+    for _,floor in ipairs(self.allFloors or self.floors) do
         minX=math.min(minX,floor.Position.X-floor.Size.X/2)
         maxX=math.max(maxX,floor.Position.X+floor.Size.X/2)
         minZ=math.min(minZ,floor.Position.Z-floor.Size.Z/2)
         maxZ=math.max(maxZ,floor.Position.Z+floor.Size.Z/2)
         top=math.max(top,floor.Position.Y+floor.Size.Y/2)
+        bottom=math.min(bottom,floor.Position.Y+floor.Size.Y/2)
     end
     assert(minX&lt;maxX and minZ&lt;maxZ,'The current level has no camera bounds')
+    if self.config.Level then
+        local bounds=self.config.Level.bounds
+        return {minX=bounds.minX+self.offset.X,maxX=bounds.maxX+self.offset.X,minY=bottom+7,maxY=top+52,
+            minZ=bounds.minZ+self.offset.Z,maxZ=bounds.maxZ+self.offset.Z}
+    end
     return {minX=minX-12,maxX=maxX+12,minY=top+7,maxY=top+52,minZ=minZ-28,maxZ=maxZ+28}
 end
 
@@ -1467,6 +1621,61 @@ function World:move(id,x,z)
         actor.humanoid.WalkSpeed=self.config.Enemy.speed
     end
     self._base.move(self,id,x,z)
+end
+
+-- Modern route jump grace uses only this body's server-observed support. A
+-- delayed packet may arrive just beyond an edge while its client still sees floor.
+local function sampleJumpSupport(world,actor,now)
+    local root,humanoid=actor.root,actor.humanoid
+    local state=actor.routeJumpSupport
+    if not state then state={consumed=false}; actor.routeJumpSupport=state end
+    local velocity=root.AssemblyLinearVelocity
+    local grounded=false
+    if humanoid.FloorMaterial~=Enum.Material.Air and velocity.Y&lt;=1 then
+        local hit=Workspace:Raycast(root.Position,Vector3.new(0,-3.4,0),world.ray)
+        grounded=hit~=nil and hit.Normal.Y&gt;=.95 and not hit.Instance:GetAttribute('Hazard')
+            and hit.Instance:GetAttribute('SurfaceId')~=nil
+    end
+    if state.consumed then
+        -- FloorMaterial can retain its old value until the next physics step.
+        -- A jump is rearmed only after observed upward flight and a real landing.
+        if humanoid.FloorMaterial==Enum.Material.Air and
+            (velocity.Y&gt;1 or root.Position.Y&gt;(state.launchY or root.Position.Y)+.1) then state.airborne=true end
+        if grounded and state.airborne then state.consumed=false; state.airborne=false end
+    end
+    if grounded and not state.consumed then state.groundedAt=now; state.groundedY=root.Position.Y end
+    return state,grounded
+end
+
+function World:hazard(id)
+    local reason=self._base.hazard(self,id)
+    if not self.config.Level then return reason end
+    local actor=self.actors[id]
+    if actor then
+        if reason or actor.root.Anchored or actor.humanoid.PlatformStand then actor.routeJumpSupport=nil
+        else sampleJumpSupport(self,actor,Workspace:GetServerTimeNow()) end
+    end
+    return reason
+end
+
+function World:jump(id)
+    if not self.config.Level then return self._base.jump(self,id) end
+    local actor=self.actors[id]
+    if not actor or not actor.root.Parent or actor.humanoid.Health&lt;=0 or actor.root.Anchored
+        or actor.humanoid.PlatformStand then return end
+    if self:hazard(id) then return end
+    local now=Workspace:GetServerTimeNow()
+    local state,grounded=sampleJumpSupport(self,actor,now)
+    if state.consumed then return end
+    local grace=state.groundedAt and now-state.groundedAt&gt;=0 and now-state.groundedAt&lt;=.20
+        and state.groundedY-actor.root.Position.Y&lt;=3.5
+    if not grounded and not grace then return end
+    local power=actor.humanoid.JumpPower or self.config.JumpPower
+    if type(power)~='number' or power&lt;=0 or power~=power or power==math.huge then return end
+    state.consumed=true; state.airborne=false; state.launchY=actor.root.Position.Y
+    local velocity=actor.root.AssemblyLinearVelocity
+    actor.root.AssemblyLinearVelocity=Vector3.new(velocity.X,power,velocity.Z)
+    actor.humanoid.Jump=true
 end
 
 function World:setReaction(id,active)
@@ -1530,9 +1739,55 @@ function World:enemyHealth(id, raw, maximum)
     end
 end
 
+function World:progress(zoneIndex, complete)
+    local level = self.config.Level
+    if not level then return end
+    zoneIndex = math.clamp(zoneIndex, 1, #level.zones + 1)
+    self.zoneIndex = zoneIndex
+    self.floors = {}
+    for _,floor in ipairs(self.allFloors) do
+        if floor:GetAttribute("ZoneIndex") &lt;= zoneIndex then self.floors[#self.floors + 1] = floor end
+    end
+    local completed = zoneIndex - (complete and 0 or 1)
+    for index,gate in ipairs(self.gates) do gateState(gate, index &lt;= completed) end
+    self.folder:SetAttribute("ZoneIndex", zoneIndex)
+    self.folder:SetAttribute("ZoneName", level.zones[zoneIndex] and level.zones[zoneIndex].name or "Страж переправы")
+end
+
+function World:noSafe(enabled)
+    if not self.config.Level then return self._base.noSafe(self, enabled) end
+    self.blocked = enabled
+    for _,floor in ipairs(self.allFloors) do floor.CanCollide = not enabled end
+end
+
+function World:reached(heroId, box)
+    local actor = self.actors[heroId]
+    if not actor or not actor.root.Parent or actor.humanoid.Health &lt;= 0 then return false end
+    local p = actor.root.Position - self.offset
+    return p.X &gt;= box.minX and p.X &lt;= box.maxX and p.Y &gt;= box.minY and p.Y &lt;= box.maxY
+        and p.Z &gt;= box.minZ and p.Z &lt;= box.maxZ
+end
+
+function World:groundPosition(position)
+    local origin = Vector3.new(position.x, position.y, position.z) + self.offset + Vector3.new(0, 16, 0)
+    local hit = Workspace:Raycast(origin, Vector3.new(0, -96, 0), self.ray)
+    if not hit or hit.Normal.Y &lt; .95 or hit.Instance:GetAttribute("Hazard")
+        or not hit.Instance:GetAttribute("SurfaceId") then return nil end
+    local p = hit.Position + Vector3.new(0, 1.2, 0) - self.offset
+    return {x = p.X, y = p.Y, z = p.Z}
+end
+
 function World:stage(name)
     self.stageName = name
     self.folder:SetAttribute("Stage", name)
+    if self.config.Level then
+        local open = name == "Exit" or name == "Won"
+        gateState(self.exitGate, open)
+        self.exitGate.label.Text = name == "Won" and "ТРАКТ ПРОЙДЕН!" or (open and "ВЫХОД  →  ВСТАНЬТЕ НА ПЕЧАТЬ" or "СТРАЖ ПЕРЕПРАВЫ")
+        self.exitGate.label.TextColor3 = open and COLORS.mint or COLORS.amber
+        self.exitPad.Transparency = open and .12 or .78
+        return
+    end
     local progress = ({Approach = 0, Courtyard = 1, BossReady = 1, Boss = 2, Exit = 3, Won = 3, Lost = -1})[name] or 0
     for index, gate in ipairs(self.gates) do
         local open = progress &gt;= index
@@ -1556,13 +1811,14 @@ function World:stage(name)
 end
 
 function World:atExit(heroId)
+    if self.config.Level then return self:reached(heroId, self.config.Level.boss.exit) end
     local a = self.actors[heroId]
     local p = a and a.root.Parent and a.root.Position - self.offset
     return a ~= nil and a.root.Parent ~= nil and a.humanoid.Health &gt; 0
         and p.X &gt;= 108 and math.abs(p.Z) &lt;= 10
 end
 
-function World:projectile(id, positionTable, reflected)
+function World:projectile(id, positionTable, reflected, mode)
     if type(id) ~= "number" or id &gt; -1000 or not positionTable then return false end
     local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z) + self.offset
     local a = self.actors[id]
@@ -1588,13 +1844,28 @@ function World:projectile(id, positionTable, reflected)
         a.light = pointLight(root, COLORS.amber, 10, 1.2)
         self.actors[id] = a
     end
-    local color = reflected and COLORS.mint or COLORS.amber
+    local color, size = reflected and COLORS.mint or COLORS.amber, 1.55
+    if mode == "Bullet" then color, size = Color3.fromRGB(255, 91, 66), 1.25
+    elseif mode == "Heavy" then color, size = Color3.fromRGB(255, 151, 55), 2.6
+    elseif mode == "Ground" or mode == "Carried" then color, size = Color3.fromRGB(255, 220, 71), 2.4
+    elseif mode == "Thrown" then color, size = COLORS.mint, 2.4 end
     a.root.CFrame = CFrame.new(p)
     a.halo.CFrame = CFrame.new(p)
+    a.root.Size = Vector3.new(size, size, size)
+    local haloSize = mode and size * 1.35 or 2.1
+    a.halo.Size = Vector3.new(haloSize, haloSize, haloSize)
     a.root.Color = color
     a.halo.Color = color
     a.light.Color = color
     a.model:SetAttribute("Reflected", reflected == true)
+    a.model:SetAttribute("ProjectileMode", mode)
+    a.model:SetAttribute("Pickup", mode == "Ground")
+    a.model:SetAttribute("Carried", mode == "Carried")
+    if mode == "Ground" and not a.pickupLabel then
+        a.pickupLabel = label(a.root, "ШАР  ·  ВЗЯТЬ", 190, Vector3.new(0, 2.7, 0))
+        a.pickupLabel.TextColor3 = Color3.fromRGB(255, 220, 71)
+    end
+    if a.pickupLabel then a.pickupLabel.Parent.Enabled = mode == "Ground" end
     return true
 end
 
@@ -1660,6 +1931,7 @@ function World:clearActors()
         [2] = Vector3.new(-65, 3, 0) + self.offset,
         [3] = Vector3.new(-65, 3, 7) + self.offset,
     }
+    if self.config.Level then self:progress(1, false) end
     self:stage("Approach")
 end
 
@@ -1668,6 +1940,322 @@ return World
           </Properties>
         </Item>
         <Item class="ModuleScript" referent="BT14">
+          <Properties>
+            <string name="Name">GuardianPattern</string>
+            <ProtectedString name="Source">-- Original 3D tuning around the source's ground-ball pickup/throw guardian chain.
+-- Authority and ordinary attack validation belong to Session/Director, never the client.
+local GuardianPattern={}
+GuardianPattern.__index=GuardianPattern
+
+local function finite(n) return type(n)=='number' and n==n and n&gt;-math.huge and n&lt;math.huge end
+local function point(p) return type(p)=='table' and finite(p.x) and finite(p.y) and finite(p.z) end
+local function copy(p) return {x=p.x,y=p.y,z=p.z} end
+local function distance(a,b)
+    if not point(a) or not point(b) then return math.huge end
+    return math.sqrt((a.x-b.x)^2+(a.y-b.y)^2+(a.z-b.z)^2)
+end
+local function towards(a,b,amount)
+    local d=distance(a,b)
+    if d==0 then return copy(b) end
+    local t=math.min(1,amount/d)
+    return {x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t}
+end
+local function segmentDistance(a,b,p)
+    if not point(p) then return math.huge end
+    local x,y,z=b.x-a.x,b.y-a.y,b.z-a.z
+    local length=x*x+y*y+z*z
+    local t=length&gt;0 and math.clamp(((p.x-a.x)*x+(p.y-a.y)*y+(p.z-a.z)*z)/length,0,1) or 0
+    return distance({x=a.x+t*x,y=a.y+t*y,z=a.z+t*z},p)
+end
+local function ids(projectiles)
+    local result={}
+    for id in pairs(projectiles) do result[#result+1]=id end
+    table.sort(result,function(a,b) return a&gt;b end)
+    return result
+end
+
+function GuardianPattern.new(director)
+    local now=director.now or 0; local cfg=director.config.Boss
+    local self=setmetatable({director=director,world=director.world,session=director.session,config=cfg,
+        now=now,carriers={},nextShot=director.nextShot or now+(cfg.initial or 1.8),
+        nextBall=now+(cfg.ballInterval or 8)},GuardianPattern)
+    director.nextShot=self.nextShot
+    local boss=director.enemies[-99]
+    if boss and boss.rawLife==nil then boss.rawLife=math.max(0,47-16*(director.bossHits or 0)) end
+    return self
+end
+
+function GuardianPattern:_active()
+    local d=self.director; local boss=d.enemies[-99]
+    return d.stage=='Boss' and not d.result and self.session.state.status=='Active' and boss and not boss.dead
+end
+
+function GuardianPattern:_hero(slot,held)
+    local h=self.session.state.heroes[slot]; local combat=self.session.combat[slot]
+    if not h or h.status~='Alive' or h.connected~=true or not combat or combat.deathAt then return nil end
+    if held and (held.actorId~=h.actorId or held.attempt~=h.attempt or held.connectionEpoch~=h.connectionEpoch) then return nil end
+    if not point(self.world:position(slot)) then return nil end
+    return h
+end
+
+function GuardianPattern:_render(id,p)
+    self.world:projectile(id,p.position,false,p.mode)
+end
+
+function GuardianPattern:_remove(id)
+    local p=self.director.projectiles[id]
+    if not p then return end
+    if p.holder and self.carriers[p.holder]==id then self.carriers[p.holder]=nil end
+    self.director.projectiles[id]=nil
+    self.world:removeProjectile(id)
+end
+
+function GuardianPattern:_clear()
+    for _,id in ipairs(ids(self.director.projectiles)) do self:_remove(id) end
+    table.clear(self.carriers)
+end
+
+function GuardianPattern:_drop(id,p)
+    if p.holder and self.carriers[p.holder]==id then self.carriers[p.holder]=nil end
+    p.holder=nil; p.actorId=nil; p.attempt=nil; p.connectionEpoch=nil
+    local ground=self.world:groundPosition(p.position)
+    if not point(ground) or self.now&gt;=p.expiresAt then self:_remove(id); return end
+    p.mode='Ground'; p.position=copy(ground); p.direction=nil
+    self:_render(id,p)
+end
+
+function GuardianPattern:_carried(slot)
+    local id=self.carriers[slot]; local p=id and self.director.projectiles[id]
+    if not p or p.mode~='Carried' or p.holder~=slot then self.carriers[slot]=nil; return nil end
+    if self.now&gt;=p.expiresAt or not self:_hero(slot,p) then self:_drop(id,p); return nil end
+    return id,p
+end
+
+function GuardianPattern:_ground(slot)
+    local position=self.world:position(slot); local selected,best=nil,math.huge
+    for _,id in ipairs(ids(self.director.projectiles)) do
+        local p=self.director.projectiles[id]
+        if p.mode=='Ground' and self.now&lt;p.expiresAt and math.abs(position.y-p.position.y)&lt;=3.5 then
+            local range=distance(position,p.position)
+            if range&lt;=(self.config.pickupRange or 5.5) and range&lt;best then selected,best=id,range end
+        end
+    end
+    return selected,selected and self.director.projectiles[selected]
+end
+
+function GuardianPattern:_spawn(mode,aim,target)
+    local origin=self.world:position(-99)
+    if not point(origin) then return false end
+    local destination
+    if target then
+        local h=self.session.state.heroes[target]
+        local combat=self.session.combat[target]
+        local position=self.world:position(target)
+        if not h or h.status~='Alive' or not combat or combat.deathAt or not point(position) then return false end
+        destination=copy(position)
+    elseif aim then
+        local length=math.sqrt(aim.x^2+aim.z^2)
+        destination={x=origin.x+aim.x/length*self.config.aggroRange,y=origin.y,
+            z=origin.z+aim.z/length*self.config.aggroRange}
+    end
+    if not destination then return false end
+    if mode=='Heavy' then
+        destination=self.world:groundPosition(destination)
+        if not point(destination) then return false end
+        destination=copy(destination)
+    end
+    local d=self.director; local id
+    repeat
+        d.serial=math.max(0,d.serial or 0)+1; id=-1000-d.serial
+    until not d.projectiles[id]
+    local p={mode=mode,position=towards(origin,destination,5),direction=destination,target=target,
+        created=self.now,expiresAt=self.now+(self.config.ballLife or 20)}
+    d.projectiles[id]=p
+    if target and not d.enemies[-99].ownerUserId and self.world.face then self.world:face(-99,target) end
+    self.world:cue(-99,true); self:_render(id,p)
+    return true
+end
+
+function GuardianPattern:fire(aim,target)
+    if not self:_active() then return 'NOT_ALIVE' end
+    local boss=self.director.enemies[-99]
+    if boss.ownerUserId and boss.connected==false then return 'OFFLINE' end
+    self.now=math.max(self.now,self.director.now or self.now)
+    if self.now&lt;self.nextShot then return 'COOLDOWN' end
+    if aim and (type(aim)~='table' or not finite(aim.x) or not finite(aim.z) or aim.x^2+aim.z^2&lt;=0) then return 'INVALID_AIM' end
+    if not self:_spawn('Bullet',aim,target) then return 'NO_TARGET' end
+    self.nextShot=self.now+self.config.interval; self.director.nextShot=self.nextShot
+    return 'OK'
+end
+
+function GuardianPattern:hit(attacker,target,action)
+    if self.director.projectiles[target] then return false end
+    if target==-99 and self:_active() then self.world:cue(-99,true); return true end
+    return false
+end
+
+function GuardianPattern:interaction(slot)
+    if not self:_active() then return {available=false,carrying=false} end
+    self.now=math.max(self.now,self.director.now or self.now)
+    local carried=self:_carried(slot)
+    if not self:_hero(slot) then return {available=false,carrying=false} end
+    if carried then return {available=true,label='БРОСИТЬ ШАР',carrying=true} end
+    if self:_ground(slot) then return {available=true,label='ВЗЯТЬ ШАР',carrying=false} end
+    return {available=false,carrying=false}
+end
+
+function GuardianPattern:interact(slot,now)
+    if not finite(now) or now&lt;0 then return 'INVALID_TIME' end
+    if not self:_active() then return 'NO_INTERACTION' end
+    self.now=math.max(self.now,now,self.director.now or now)
+    local id,p=self:_carried(slot)
+    local h=self:_hero(slot)
+    if not h then return 'NO_INTERACTION' end
+    if p then
+        -- BeginAttack is the authoritative shield transition. Failure keeps the
+        -- ball carried; neither its flight nor the hold release has happened yet.
+        local result=self.session:_event('BeginAttack',slot,{connectionEpoch=h.connectionEpoch})
+        if result~='OK' then return result end
+        self.world:hold(slot,false)
+        self.carriers[slot]=nil
+        p.mode='Thrown'; p.holder=nil; p.actorId=nil; p.attempt=nil; p.connectionEpoch=nil
+        p.target=-99; p.direction=nil; p.created=self.now; p.expiresAt=self.now+(self.config.ballLife or 20)
+        self:_render(id,p)
+        return 'OK'
+    end
+    id,p=self:_ground(slot)
+    if not p then return 'NO_INTERACTION' end
+    p.mode='Carried'; p.holder=slot; p.actorId=h.actorId; p.attempt=h.attempt; p.connectionEpoch=h.connectionEpoch
+    self.carriers[slot]=id
+    local position=self.world:position(slot)
+    p.position={x=position.x,y=position.y+2,z=position.z}
+    self:_render(id,p)
+    return 'OK'
+end
+
+function GuardianPattern:_impact(id)
+    if not self:_active() then return end
+    local d=self.director; local boss=d.enemies[-99]
+    d.bossHits=(d.bossHits or 0)+1
+    boss.rawLife=math.max(0,boss.rawLife-16)
+    boss.health=math.max(0,(self.config.hits or 3)-d.bossHits)
+    self.world:enemyHealth(-99,boss.health,self.config.hits or 3); self.world:cue(-99,false)
+    self:_remove(id)
+    if boss.rawLife==0 then d:_kill(-99); self:_clear() end
+end
+
+function GuardianPattern:step(now,dt)
+    if not finite(now) or now&lt;0 or (dt~=nil and (not finite(dt) or dt&lt;0)) then return 'INVALID_TIME' end
+    if now&lt;self.now then return 'TIME_REVERSED' end
+    self.now=now; dt=dt or 0
+    if not self:_active() then self:_clear(); return 'OK' end
+    local d=self.director; local boss=d.enemies[-99]
+    for slot in pairs(self.carriers) do self:_carried(slot) end
+    -- The finite special-shot deadline belongs to the server, including while a
+    -- human owner is idle/offline. It does not supply ordinary human commands.
+    if now&gt;=self.nextBall then
+        local target=d:_nearest(self.world:position(-99))
+        if target then self:_spawn('Heavy',nil,target) end
+        self.nextBall=now+(self.config.ballInterval or 8)
+    end
+    if not boss.ownerUserId and now&gt;=self.nextShot then
+        local target,range=d:_nearest(self.world:position(-99))
+        if target and range&lt;=self.config.aggroRange then self:fire(nil,target) end
+    end
+    for _,id in ipairs(ids(d.projectiles)) do
+        if not self:_active() then self:_clear(); break end
+        local p=d.projectiles[id]
+        if p then
+            if now&gt;=p.expiresAt then self:_remove(id)
+            elseif p.mode=='Carried' then
+                local position=self.world:position(p.holder)
+                p.position={x=position.x,y=position.y+2,z=position.z}; self:_render(id,p)
+            elseif p.mode~='Ground' then
+                local destination=p.mode=='Thrown' and self.world:position(-99) or p.direction
+                if not point(destination) then self:_remove(id)
+                else
+                    local before=p.position
+                    local speed=p.mode=='Thrown' and self.config.returnSpeed or self.config.projectileSpeed
+                    p.position=towards(before,destination,speed*dt)
+                    self:_render(id,p)
+                    if p.mode=='Thrown' and segmentDistance(before,p.position,destination)&lt;2.5 then
+                        self:_impact(id)
+                    elseif p.mode=='Heavy' then
+                        if distance(p.position,destination)&lt;.1 then
+                            p.mode='Ground'; p.position=copy(destination); p.direction=nil; self:_render(id,p)
+                        end
+                    elseif p.mode=='Bullet' then
+                        local hit=false
+                        for _,slot in ipairs(self.session.order) do
+                            local h=self.session.state.heroes[slot]; local combat=self.session.combat[slot]
+                            if h.status=='Alive' and not combat.deathAt and segmentDistance(before,p.position,self.world:position(slot))&lt;2.3 then
+                                self.session:_hit(-99,slot,'Dash'); hit=true; break
+                            end
+                        end
+                        if hit or distance(p.position,destination)&lt;.1 then self:_remove(id) end
+                    end
+                end
+            end
+        end
+    end
+    return 'OK'
+end
+
+return GuardianPattern
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT15">
+          <Properties>
+            <string name="Name">LevelDefinition</string>
+            <ProtectedString name="Source">-- Original Brick Toads geography; static actor order is derived from upstream level1_cfg.
+-- Primary: feos-tas/DisAssemble, Battletoads/data/levels_cfgs1.asm.
+-- Thirteen ordinary actor records: nine pigs, two walkers, two dragons.
+-- This does not assert a verified natural-play total or completed NES AI/animation parity.
+local function floor(x,y,z,w,d) return {x=x,y=y,z=z,w=w,h=2,d=d} end
+local function enemy(id,kind,x,y,z) return {id=id,kind=kind,x=x,y=y,z=z} end
+local function exit(x,z,y) return {minX=x-6,maxX=x+2,minY=(y or 3)-2,maxY=(y or 3)+6,minZ=z-13,maxZ=z+13} end
+return {
+    id='causeway-1',name='Затопленный тракт',
+    source='https://github.com/feos-tas/DisAssemble/blob/master/Battletoads/data/levels_cfgs1.asm',
+    calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER',
+    zones={
+        {id='Floodgate',name='Затопленные ворота',gateX=4,exit=exit(2,0),
+            objective='Расчистите ворота и доберитесь до акведука',
+            platforms={floor(-39,-1,0,86,52)},
+            enemies={enemy(-1,'Pig',-35,3,-8),enemy(-2,'Pig',-25,3,8),enemy(-3,'Walker',-8,3,0)}},
+        {id='Aqueduct',name='Разбитый акведук',gateX=124,exit=exit(122,0),
+            objective='Перепрыгните разрыв и разбейте дальний дозор',
+            platforms={floor(26,-1,0,44,38),floor(88.5,-1,0,71,38)},
+            gaps={{minX=48,maxX=53,minZ=-19,maxZ=19}},
+            enemies={enemy(-4,'Pig',20,3,-7),enemy(-5,'Pig',38,3,7),enemy(-6,'Walker',94,3,0)}},
+        {id='Courtyard',name='Каменный двор',gateX=236,exit=exit(234,0),
+            objective='Освободите двор перед обрывом',
+            platforms={floor(180,-1,0,112,56)},
+            enemies={enemy(-7,'Pig',155,3,-10),enemy(-8,'Pig',201,3,11)}},
+        {id='Cliffs',name='Обрыв и уступы',gateX=360,exit=exit(358,-6,5),
+            objective='Поднимитесь по уступам и пройдите крылатый дозор',
+            platforms={floor(253,-1,0,34,18),floor(287.5,1,6,27,18),floor(318.5,3,0,27,18),floor(348,1,-6,24,22)},
+            gaps={{minX=270,maxX=274},{minX=301,maxX=305},{minX=332,maxX=336}},
+            enemies={enemy(-9,'Dragon',287,5,6),enemy(-10,'Dragon',320,7,0)}},
+        {id='Watchforge',name='Кузница дозора',gateX=486,exit=exit(484,0),
+            objective='Сломите последний наземный дозор',
+            platforms={floor(423,-1,0,126,52)},
+            enemies={enemy(-11,'Pig',386,3,-10),enemy(-12,'Pig',414,3,10),enemy(-13,'Pig',454,3,0)}},
+        {id='Longbridge',name='Длинный мост',gateX=590,exit=exit(588,0),
+            objective='Перепрыгните разлом и доберитесь до стража',
+            platforms={floor(508,-1,0,44,26),floor(562.5,-1,0,55,26)},
+            gaps={{minX=530,maxX=535,minZ=-13,maxZ=13}},enemies={}},
+    },
+    boss={position={x=628,y=3,z=0},platform=floor(641,-1,0,102,70),gateX=668,
+        exit={minX=670,maxX=690,minY=1,maxY=10,minZ=-12,maxZ=12},pad={x=680,y=.09,z=0,w=16,d=24}},
+    -- Measured Roblox-scale tuning, not claims about NES timing or distances.
+    bounds={minX=-90,maxX=700,minZ=-90,maxZ=90},
+}
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT16">
           <Properties>
             <string name="Name">LevelDirector</string>
             <ProtectedString name="Source">-- Original prototype encounters. All decisions run on the server.
@@ -1690,24 +2278,48 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config)
+function Director.new(session,world,Combat,config,GuardianPattern)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
-        stage='Approach',now=session.now or 0,bossHits=0,serial=0,
+        stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height}},Director)
-    self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}})
+    if self.route then self:_enterZone(1)
+    else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
 end
 function Director:_wave(stage,roster)
     self.stage=stage; self.world:stage(stage)
     for _,r in ipairs(roster) do
-        assert(self.world:spawnEnemy(r.id,'Drone',{x=r.x,y=3,z=r.z}),'Enemy spawn failed')
+        assert(self.world:spawnEnemy(r.id,r.kind or 'Drone',{x=r.x,y=r.y or 3,z=r.z}),'Enemy spawn failed')
         local actorId=self.session.state.runId..':enemy:'..self.session.state.levelEpoch..':'..r.id
         self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false,
-            actorId=actorId,name='Ржавый дозорный'}
+            actorId=actorId,zoneIndex=self.zoneIndex,kind=r.kind,
+            name=({Pig='Болотный налётчик',Walker='Длинноногий дозорный',Dragon='Крылатый разведчик'})[r.kind] or 'Ржавый дозорный'}
         self.world:enemyIdentity(r.id,actorId)
         self.world:enemyHealth(r.id,self.config.Enemy.hearts,self.config.Enemy.hearts)
     end
+end
+function Director:_enterZone(index)
+    self.zoneIndex=index
+    self.world:progress(index,false)
+    self:_wave('Route',self.route.zones[index].enemies)
+end
+function Director:_zoneReached()
+    local volume=self.route.zones[self.zoneIndex].exit
+    for _,id in ipairs(self.session.order) do
+        local hero=self.session.state.heroes[id]
+        if hero.status=='Alive' and not self.session.combat[id].deathAt and self.world:reached(id,volume) then return true end
+    end
+    return false
+end
+function Director:interaction(slot)
+    return self.guardian and self.stage=='Boss' and self.guardian:interaction(slot) or {available=false}
+end
+function Director:interact(slot,now,attack)
+    if not self.guardian or self.stage~='Boss' then return 'NO_INTERACTION' end
+    if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
+    self.now=now
+    return self.guardian:interact(slot,now)
 end
 function Director:claim(userId,enemyId)
     local owned=self.byUserId[userId]
@@ -1797,6 +2409,7 @@ function Director:command(userId,payload,now,validator)
             end
         else
             if now&lt;self.nextShot then return 'COOLDOWN' end
+            if self.guardian then return self.guardian:fire(e.aim) end
             self:_shoot(nil,e.aim); self.nextShot=now+self.config.Boss.interval
         end
         return 'OK'
@@ -1830,9 +2443,11 @@ function Director:_boss()
         self.stage='BossReady'; self.world:stage('BossReady'); return
     end
     self.stage='Boss'; self.world:stage('Boss')
-    assert(self.world:spawnEnemy(-99,'Boss',{x=82,y=3,z=0}),'Boss spawn failed')
+    local position=self.route and self.route.boss.position or {x=82,y=3,z=0}
+    assert(self.world:spawnEnemy(-99,'Boss',position),'Boss spawn failed')
     local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
-    local e={boss=true,actorId=actorId,health=self.config.Boss.hits,name='Страж переправы',aim={x=-1,z=0}}
+    local e={boss=true,actorId=actorId,health=self.config.Boss.hits,rawLife=self.route and self.config.Boss.rawLife,
+        zoneIndex=self.zoneIndex,name='Страж переправы',aim={x=-1,z=0}}
     self.enemies[-99]=e
     if controller.state=='Human' then
         e.ownerUserId=controller.userId
@@ -1843,6 +2458,10 @@ function Director:_boss()
     self.world:enemyIdentity(-99,actorId,e.ownerUserId and self.ownerNames[e.ownerUserId])
     self.world:enemyHealth(-99,self.config.Boss.hits,self.config.Boss.hits)
     self.nextShot=self.now+1.8
+    if self.route then
+        assert(self.GuardianPattern,'Modern guardian pattern is required')
+        self.guardian=self.GuardianPattern.new(self)
+    end
 end
 function Director:isTarget(id)
     return self.enemies[id]~=nil or self.projectiles[id]~=nil or id==-99
@@ -1851,6 +2470,7 @@ function Director:_kill(id)
     local e=self.enemies[id]
     if not e or e.dead then return end
     e.dead=true; e.windup=nil; e.health=0
+    if e.boss and self.route then e.rawLife=0 end
     self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
     self.world:kill(id)
     if e.boss then
@@ -1859,6 +2479,7 @@ function Director:_kill(id)
 end
 function Director:hit(attacker,target,action)
     if self.result then return false end
+    if self.guardian and (self.projectiles[target] or target==-99) then return self.guardian:hit(attacker,target,action) end
     local ball=self.projectiles[target]
     if ball then
         if ball.reflected then return false end
@@ -1934,7 +2555,13 @@ function Director:_enemies()
         end
     end
     if living==0 then
-        if self.stage=='Approach' then self:_wave('Courtyard',{{id=-3,x=22,z=-7},{id=-4,x=30,z=6}})
+        if self.route then
+            self.world:progress(self.zoneIndex,true)
+            if self:_zoneReached() then
+                if self.zoneIndex&lt;#self.route.zones then self:_enterZone(self.zoneIndex+1)
+                else self.zoneIndex=#self.route.zones+1;self.world:progress(self.zoneIndex,false);self:_boss() end
+            end
+        elseif self.stage=='Approach' then self:_wave('Courtyard',{{id=-3,x=22,z=-7},{id=-4,x=30,z=6}})
         elseif self.stage=='Courtyard' then self:_boss() end
     end
 end
@@ -1953,6 +2580,7 @@ function Director:_shoot(target,aim)
     self.world:projectile(id,start,false)
 end
 function Director:_projectiles(dt)
+    if self.guardian then self.guardian:step(self.now,dt);return end
     local boss=self.enemies[-99]
     if self.stage=='Boss' and boss and not boss.ownerUserId and self.now&gt;=self.nextShot then
         local target,range=self:_nearest(self.world:position(-99))
@@ -2001,7 +2629,7 @@ function Director:step(now,dt)
     if self.session.state.status=='Lost' then
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
     end
-    if self.stage=='Approach' or self.stage=='Courtyard' then self:_enemies() end
+    if self.stage=='Approach' or self.stage=='Courtyard' or self.stage=='Route' then self:_enemies() end
     if self.stage=='BossReady' then self:_boss() end
     if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
@@ -2017,17 +2645,22 @@ function Director:snapshot()
     local enemies={}
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-            dead=e.dead==true,attacking=e.windup~=nil}
+            dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind}
     end
     table.sort(enemies,function(a,b) return a.id&gt;b.id end)
-    return {stage=self.stage,objective=objectives[self.stage],enemies=enemies,bossHits=self.bossHits,
-        bossMax=self.config.Boss.hits,result=self.result}
+    local zone=self.route and self.route.zones[self.zoneIndex]
+    local objective=objectives[self.stage]
+    if self.route and self.stage=='Route' then objective=zone.objective
+    elseif self.route and self.stage=='Boss' then objective='Уклоняйтесь. Возьмите тяжёлый шар и бросьте в стража.' end
+    return {stage=self.stage,objective=objective,enemies=enemies,bossHits=self.bossHits,
+        bossMax=self.config.Boss.hits,result=self.result,zoneIndex=self.zoneIndex,zoneCount=self.route and #self.route.zones,
+        zoneName=zone and zone.name,bossMechanic=self.route and 'PickupThrow',bossRawLife=self.enemies[-99] and self.enemies[-99].rawLife}
 end
 return Director
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT15">
+        <Item class="ModuleScript" referent="BT17">
           <Properties>
             <string name="Name">MatchHub</string>
             <ProtectedString name="Source">-- Current-Player authority and routing for independent local playable groups.
@@ -2314,11 +2947,11 @@ return MatchHub
           </Properties>
         </Item>
       </Item>
-      <Item class="Folder" referent="BT16">
+      <Item class="Folder" referent="BT18">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT17">
+        <Item class="ModuleScript" referent="BT19">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
@@ -2368,7 +3001,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT18">
+        <Item class="ModuleScript" referent="BT20">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -2523,6 +3156,16 @@ function Session:intent(uid, p, now)
         self.world:jump(uid)
     else
         if now&lt;c.nextAttack or c.attack then return "COOLDOWN" end
+        if self.contextualAttack then
+            local interaction=self.contextualAttack(uid,now,p.attack)
+            if interaction~='NO_INTERACTION' then
+                if interaction=='OK' then
+                    c.nextAttack=now+self.config.Attacks[p.attack].cooldown
+                    self:_record('InteractionAccepted',uid,{action=p.attack,seq=p.seq})
+                end
+                return interaction
+            end
+        end
         code=self:_event("BeginAttack",uid,{connectionEpoch=h.connectionEpoch})
         if code~="OK" then return code end
         self.world:hold(uid,false)
@@ -2658,7 +3301,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT19">
+        <Item class="ModuleScript" referent="BT21">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -2688,7 +3331,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT20">
+        <Item class="ModuleScript" referent="BT22">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -2748,7 +3391,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT21">
+        <Item class="ModuleScript" referent="BT23">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -2853,10 +3496,13 @@ function World:findSafe(uid)
         if floor.CanCollide and same then
             local minX,maxX=floor.Position.X-floor.Size.X/2+2.2,floor.Position.X+floor.Size.X/2-2.2
             local minZ,maxZ=floor.Position.Z-floor.Size.Z/2+1.2,floor.Position.Z+floor.Size.Z/2-1.2
-            local y=floor.Position.Y+floor.Size.Y/2+3
-            local function add(x,z) points[#points+1]={position=Vector3.new(x,y,z),surface=floor} end
-            add(math.clamp(origin.X,minX,maxX),math.clamp(origin.Z,minZ,maxZ))
-            for x=minX,maxX,4.5 do for z=minZ,maxZ,3 do add(x,z) end end
+            -- An upright body cannot fit on a support smaller than its safe footprint.
+            if minX&lt;=maxX and minZ&lt;=maxZ then
+                local y=floor.Position.Y+floor.Size.Y/2+3
+                local function add(x,z) points[#points+1]={position=Vector3.new(x,y,z),surface=floor} end
+                add(math.clamp(origin.X,minX,maxX),math.clamp(origin.Z,minZ,maxZ))
+                for x=minX,maxX,4.5 do for z=minZ,maxZ,3 do add(x,z) end end
+            end
         end
     end
     table.sort(points,function(a,b)
@@ -3014,15 +3660,15 @@ return World
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT22">
+  <Item class="ReplicatedStorage" referent="BT24">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT23">
+    <Item class="Folder" referent="BT25">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT24">
+      <Item class="ModuleScript" referent="BT26">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -3034,19 +3680,19 @@ return table.freeze({
       </Item>
     </Item>
   </Item>
-  <Item class="StarterPlayer" referent="BT25">
+  <Item class="StarterPlayer" referent="BT27">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT26">
+    <Item class="StarterPlayerScripts" referent="BT28">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT27">
+      <Item class="Folder" referent="BT29">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT28">
+        <Item class="ModuleScript" referent="BT30">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -3258,7 +3904,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT29">
+        <Item class="LocalScript" referent="BT31">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -3388,7 +4034,7 @@ local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Соберите команду, пройдите тракт и откройте ворота.", 16, C.muted)
+local intro = label(header, "Intro", "Шесть районов, разрывы и страж переправы. Пройдите тракт вместе.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -3606,6 +4252,7 @@ local function send(kind, extra)
     if not playable() or not snapshot.runId or not controlled.actorId then return end
     if snapshot.enemyRole and kind == "Attack" and extra and extra.attack ~= "Punch" then return end
     if snapshot.enemyRole and snapshot.enemyRole.template == "Boss" and kind == "Jump" then return end
+    if snapshot.interaction and snapshot.interaction.carrying and kind == "Attack" and extra and extra.attack == "Dash" then return end
     sequence += 1
     local packet = {kind = kind, runId = snapshot.runId, actorId = controlled.actorId,
         attempt = controlled.attempt, levelEpoch = snapshot.levelEpoch,
@@ -3786,10 +4433,23 @@ local function renderSelection()
         card.button.Selectable = snapshot ~= nil and snapshot.canSelect == true
     end
 end
+local function remainingEnemies(level)
+    local count = 0
+    for _, actor in ipairs(level.enemies or {}) do
+        local current = actor.zoneIndex == nil or level.zoneIndex == nil or actor.zoneIndex == level.zoneIndex
+        local ordinary = actor.boss ~= true and actor.template ~= "Boss" and actor.id ~= -99 and actor.enemyId ~= -99
+        if current and ordinary and actor.dead ~= true and actor.alive ~= false
+            and actor.status ~= "Dead" and actor.status ~= "Eliminated"
+            and (actor.hearts == nil or (tonumber(actor.hearts) or 0) &gt; 0) then count += 1 end
+    end
+    return count
+end
 render = function()
     local active = snapshot and snapshot.status == "Active"
     local completed = snapshot and (snapshot.status == "Won" or snapshot.status == "Lost")
     local personalMenu = active and snapshot.view == "Menu"
+    local level = snapshot and snapshot.level or {}
+    local modern = level.bossMechanic == "PickupThrow"
     overlay.Visible, hud.Visible, controls.Visible = not active or personalMenu == true, active == true and not personalMenu, playable() == true
     fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false
     resultBanner.Visible = completed == true
@@ -3801,11 +4461,15 @@ render = function()
             or (won and "ТРАКТ ПРОЙДЕН!" or "КОМАНДА ВЫБЫЛА")
         resultTitle.TextColor3, resultAccent.BackgroundColor3 = success and C.lime or C.red, success and C.lime or C.red
         if enemyPerspective then
-            resultDetail.Text = won and "Герои победили стража и открыли ворота. Выберите роль для следующей игры."
-                or "Герои потратили все возвраты. Тракт остался под охраной."
+            resultDetail.Text = modern and (won and "Герои прошли шесть районов, победили стража и открыли выход."
+                or "Герои остановлены на тракте. Следующая попытка начнётся с первого района.")
+                or (won and "Герои победили стража и открыли ворота. Выберите роль для следующей игры."
+                    or "Герои потратили все возвраты. Тракт остался под охраной.")
         else
-            resultDetail.Text = won and "Страж побеждён. Ворота открыты — команда добралась до выхода."
-                or "Возвраты героев закончились. Выберите роли и попробуйте пройти тракт ещё раз."
+            resultDetail.Text = modern and (won and "Шесть районов пройдены. Страж повержен тяжёлыми шарами — выход открыт."
+                or "Команда не дошла до выхода. Районы и страж ждут новой попытки.")
+                or (won and "Страж побеждён. Ворота открыты — команда добралась до выхода."
+                    or "Возвраты героев закончились. Выберите роли и попробуйте пройти тракт ещё раз.")
         end
         intro.Text, chooseTitle.Text = "Следующая попытка начинается по кнопке «Новая игра».", "ГЕРОЙ ДЛЯ СЛЕДУЮЩЕЙ ИГРЫ"
     elseif personalMenu then
@@ -3814,7 +4478,7 @@ render = function()
                 or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
-        intro.Text, chooseTitle.Text = "Соберите команду, пройдите тракт и откройте ворота.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Шесть районов, разрывы и страж переправы. Пройдите тракт вместе.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
@@ -3885,13 +4549,22 @@ render = function()
             heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
         end
     end
-    dash.Visible = enemy == nil
+    local interaction = snapshot and snapshot.interaction
+    local carrying = interaction and interaction.carrying == true
+    local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
+    dash.Visible = enemy == nil and not carrying
     jump.Visible = not controlledBoss
-    keyboardHint.Text = controlledBoss and "W A S D  ·  прицел" or "W A S D  ·  движение"
-    local level = snapshot and snapshot.level or {}
+    keyboardHint.Text = controlledBoss and "W A S D · прицел · F · огонь"
+        or (interactionLabel and ("F · " .. interactionLabel) or "W A S D · движение · F · удар")
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
     stageLabel.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ"
+    if modern and level.stage == "Route" then
+        stageLabel.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6) .. " · " .. (level.zoneName or "Затопленный тракт")
+    elseif modern and level.stage == "Exit" then stageLabel.Text = "ВЫХОД ОТКРЫТ" end
     objectiveLabel.Text = enemy and "Остановите героев" or (level.objective or "Пройдите тракт и доберитесь до ворот.")
+    if modern and isBoss and not enemy then
+        objectiveLabel.Text = "Уклоняйтесь. Возьмите тяжёлый шар и бросьте в стража."
+    end
     local hits = tonumber(level.bossHits) or 0
     if enemy then
         local aliveHeroes = 0
@@ -3899,13 +4572,14 @@ render = function()
             if hero.status == "Alive" and not hero.dying and (tonumber(hero.hearts) or 0) &gt; 0 then aliveHeroes += 1 end
         end
         bossLabel.Text = "Героев в бою: " .. tostring(aliveHeroes)
+    elseif modern and (isBoss or level.stage == "Exit" or hits &gt; 0) then
+        bossLabel.Text = "Попаданий шаром: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
+    elseif modern then
+        bossLabel.Text = "Противников в районе: " .. tostring(remainingEnemies(level))
     elseif isBoss or hits &gt; 0 then
         bossLabel.Text = "Отражено снарядов: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
     else
-        local alive = 0
-        for _, enemy in ipairs(level.enemies or {}) do
-            if enemy.alive ~= false and enemy.status ~= "Eliminated" and (enemy.hearts == nil or enemy.hearts &gt; 0) then alive += 1 end
-        end
+        local alive = remainingEnemies(level)
         bossLabel.Text = alive &gt; 0 and ("Противников впереди: " .. tostring(alive)) or "Ударьте снаряд стража, чтобы отразить его."
     end
     spectator.Visible = active == true and not personalMenu and not playable()
@@ -4067,6 +4741,8 @@ layout = function()
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
     local enemy = snapshot and snapshot.enemyRole
     local controlledBoss = enemy and enemy.template == "Boss"
+    local interaction = snapshot and snapshot.interaction
+    local carrying = interaction and interaction.carrying == true
     local enemyStatusHeight = short and 57 or 72
     local rosterHeight = enemy and (enemyStatusHeight + gap) or count * (rowHeightHUD + gap)
     if not enemy and enemyChoiceAllowed() and choosingEnemy and height &lt; 620 then
@@ -4111,12 +4787,16 @@ layout = function()
     local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
     actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
     local half = (controlWidth - 8) / 2
-    position(punch, 0, 0, enemy and controlWidth or half, topHeight)
+    position(punch, 0, 0, (enemy or carrying) and controlWidth or half, topHeight)
     position(dash, half + 8, 0, half, topHeight)
     position(jump, 0, topHeight + 8, controlWidth, short and 41 or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
     local isTouch = UserInputService.TouchEnabled
-    punch.Text = controlledBoss and (isTouch and "СНАРЯД" or "СНАРЯД\nF") or (isTouch and "УДАР" or "УДАР\nF")
+    local primaryLabel = controlledBoss and "ОГОНЬ" or "УДАР"
+    if not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
+        primaryLabel = interaction.label
+    end
+    punch.Text = isTouch and primaryLabel or (primaryLabel .. "\nF")
     dash.Text = isTouch and "ТАРАН" or "ТАРАН\nR"
     jump.Text = isTouch and "ПРЫЖОК" or "ПРЫЖОК · SPACE"
     local padSize = short and 104 or (width &lt; 360 and 106 or 122)
@@ -4401,7 +5081,7 @@ sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT30">
+        <Item class="ModuleScript" referent="BT32">
           <Properties>
             <string name="Name">GroupPanel</string>
             <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
@@ -4628,7 +5308,7 @@ return GroupPanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT31">
+        <Item class="ModuleScript" referent="BT33">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.

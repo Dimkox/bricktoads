@@ -342,6 +342,16 @@ return function(Core, Combat, Session, Config, World)
         eq(s.state.groupId,'group-two'); eq(s.state.levelId,'causeway'); eq(s.state.runId,'game-context')
         local original=setup(1); eq(original.state.groupId,'combat-stand'); eq(original.state.levelId,'stand-1')
     end)
+    test("contextual object action runs only after actor authority and cooldown checks",function()
+        local s,w=setup(1);local calls=0
+        s.contextualAttack=function(uid,now,action) calls+=1;eq(uid,1);eq(action,'Punch');return 'OK' end
+        local bad=packet(s,1,'Attack',{attack='Punch'});bad.actorId='wrong'
+        eq(s:intent(1,bad,.1),'STALE_ACTOR');eq(calls,0)
+        eq(s:intent(1,packet(s,1,'Attack',{attack='Punch'}),.1),'OK');eq(calls,1);eq(s.combat[1].attack,nil)
+        eq(s:intent(1,packet(s,1,'Attack',{attack='Punch'}),.2),'COOLDOWN');eq(calls,1)
+        s.contextualAttack=function() return 'NO_INTERACTION' end
+        eq(s:intent(1,packet(s,1,'Attack',{attack='Punch'}),1),'OK');assert(s.combat[1].attack)
+    end)
     print("Session tests: "..passed.." PASS, "..failed.." FAIL")
     assert(failed==0, "Session contracts failed")
     return passed
