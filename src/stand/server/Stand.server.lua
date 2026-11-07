@@ -25,13 +25,15 @@ local function logger(row)
     print("[BT-STAND] "..HttpService:JSONEncode(row))
     if row.kind=="Hit" then world:cue(row.userId,row.data.blocked) end
 end
-local function broadcast()
+local function broadcast(requester)
     local list=online()
     local snapshot=current and current:snapshot() or {status="Lobby",heroes={},now=now()}
     snapshot.calibration=Config.Calibration; snapshot.online=#list
     snapshot.host=list[1] and list[1].UserId
     snapshot.fault=fault
-    for _,player in ipairs(list) do
+    -- Sync and rejected Start are replies to one caller. Keep periodic updates
+    -- and a successful new run global without allowing request-driven fanout.
+    for _,player in ipairs(requester and {requester} or list) do
         snapshot.mine=ownerSlots[player.UserId]
         snapshot.canStart=list[1]==player and (not current or current.state.status=="Lost")
         snapshot.notice=notices[player]
@@ -87,14 +89,18 @@ intent.OnServerEvent:Connect(function(player,payload)
     if type(payload)~="table" or type(payload.kind)~="string" then return end
     if payload.kind=="Sync" or payload.kind=="Start" then
         local count=0; for _ in pairs(payload) do count=count+1; if count>1 then return end end
-        if payload.kind=="Start" then notices[player]=begin(player) end
-        broadcast(); return
+        if payload.kind=="Start" then
+            local code=begin(player)
+            if code=="OK" then notices[player]=nil; broadcast(); return end
+            notices[player]=code
+        end
+        broadcast(player); return
     end
     if fault or not current then return end
     local slot=ownerSlots[player.UserId]
     if not slot then return end
     local code=current:intent(slot,payload,at)
-    notices[player]=code=="OK" and nil or code
+    if code=="OK" then notices[player]=nil else notices[player]=code end
 end)
 RunService.Heartbeat:Connect(function()
     local at=now()

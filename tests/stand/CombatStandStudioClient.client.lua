@@ -36,6 +36,7 @@ local command = required(bridge, "Command")
 local reply = required(bridge, "Reply")
 local snapshot, mine, identity = nil, nil, nil
 local sequence = 0
+local stateReceived = 0
 
 local function status()
     local count = 0
@@ -56,6 +57,7 @@ local function status()
         presentationDisabled = count > 0 and allDisabled,
         sequence = sequence,
         identity = identity,
+        stateReceived = stateReceived,
     }
 end
 
@@ -65,6 +67,7 @@ end
 
 stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
+    stateReceived = stateReceived + 1
     snapshot, mine = data, nil
     for _, hero in ipairs(data.heroes or {}) do
         if hero.slot == data.mine then mine = hero; break end
@@ -120,6 +123,25 @@ command.OnClientEvent:Connect(function(message)
             packet = actorIntent("Move", {x = message.x, z = message.z})
         elseif message.kind == "Jump" then
             packet = actorIntent("Jump")
+        elseif message.kind == "Raw" or message.kind == "Burst" then
+            -- Test-only wire generator. Special values are constructed on the actual
+            -- client so JSON/Command serialization cannot silently normalize them.
+            local payload = message.payload
+            if message.mode == "nil" then payload = nil
+            elseif message.mode == "instance" then payload = workspace
+            elseif message.mode == "nan" then payload[message.field] = 0/0
+            elseif message.mode == "infinity" then payload[message.field] = math.huge
+            end
+            local count = message.kind == "Burst" and message.count or 1
+            assert(type(count) == "number" and count >= 1 and count <= 120 and count % 1 == 0)
+            local firstSeq = type(payload) == "table" and payload.seq
+            for index = 1, count do
+                if message.increment and firstSeq then payload.seq = firstSeq + index - 1 end
+                intent:FireServer(payload)
+            end
+            packet = {testMode = message.mode or "literal", count = count}
+        elseif message.kind == "Inspect" then
+            packet = {testMode = "inspect-only"}
         elseif message.kind == "Leave" then
             if not StudioTestService:CanLeaveTest() then error("This test client cannot LeaveTest") end
             reply:FireServer({type = "Reply", id = message.id, ok = true, state = status(), leaving = true})

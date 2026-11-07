@@ -1002,6 +1002,18 @@ local ok, failure = xpcall(function()
         unique[h.actorId] = true
     end
     results.initialRoster = roster
+    if args.securityOnly == true then
+        results.mode = "Real Studio clients: malformed, forged, replayed, stale and flooded Intent"
+        results.skipped = {"Physical mobile/touch", "Same-user reconnect", "NPC/boss/level routing",
+            "Pending attack after actual disconnect (separate unmet fixture)", "Full combat/geometry matrix"}
+        require(script.Parent.CombatStandSecurityScenarios)({
+            check = check, waitFor = waitFor, dump = dump, hero = hero, physical = physical,
+            send = send, idle = idle, syncActor = syncActor, results = results,
+            diagnostics = diagnostics, drivers = drivers, slots = slotPlayers,
+            roster = rosterPlayers, host = host, phase = args.securityPhase,
+        })
+        return
+    end
     if args.edgeDisconnectOnly == true then
         results.mode = "Real Studio multiplayer Edge, actual departure, offline-body damage and AddPlayers identity capability"
         results.skipped[#results.skipped + 1] = "Ordered-pair core matrix (edgeDisconnectOnly launch mode)"

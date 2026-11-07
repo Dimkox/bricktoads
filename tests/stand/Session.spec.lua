@@ -225,6 +225,105 @@ return function(Core, Combat, Session, Config, World)
             eq(s:intent(1,packet(s,1,"Jump",{seq=v}),0),"INVALID_INTENT")
         end
     end)
+    test("malformed identity types and non-finite counters cannot mutate the session",function()
+        local s,w=setup()
+        local revision,logs=s.state.revision,#s.logs
+        for _,key in ipairs({"attempt","levelEpoch","connectionEpoch","seq"}) do
+            for _,value in ipairs({0,-1,1.5,math.huge,-math.huge,0/0,1000000001,false,{}}) do
+                local p=packet(s,1,"Jump"); p[key]=value
+                eq(s:intent(1,p,100),"INVALID_INTENT")
+            end
+        end
+        for _,key in ipairs({"runId","actorId"}) do
+            for _,value in ipairs({false,1,{},string.rep("x",161)}) do
+                local p=packet(s,1,"Jump"); p[key]=value
+                eq(s:intent(1,p,100),"INVALID_INTENT")
+            end
+        end
+        eq(s.state.revision,revision); eq(#s.logs,logs); eq(s.now,0)
+        eq(s.lastSeq[1],0); eq(s.buckets[1],nil); eq(w.lastJump,nil)
+        eq(s:intent(1,packet(s,1,"Jump"),0),"OK")
+    end)
+    test("non-table packets and unknown schema are harmless rejections",function()
+        local s,w=setup()
+        eq(s:intent(1,nil,0),"INVALID_INTENT")
+        for _,value in ipairs({false,1,"Attack",{},{kind=false},{kind={}},
+            {kind=0/0},{kind=string.rep("x",161)}}) do
+            eq(s:intent(1,value,0),"INVALID_INTENT")
+        end
+        for _,extra in ipairs({{[1]="extra"},{[false]="extra"},
+            {target={actorId="other"}},{health=5},{safe=true},{now=999}}) do
+            eq(s:intent(1,packet(s,1,"Jump",extra),0),"INVALID_INTENT")
+        end
+        eq(s.lastSeq[1],0); eq(w.lastJump,nil)
+        eq(s:intent(1,packet(s,1,"Jump"),0),"OK")
+    end)
+    test("non-finite and oversized movement never reaches the world",function()
+        local s,w=setup(); local moves=w.moves
+        for _,key in ipairs({"x","z"}) do
+            for _,value in ipairs({math.huge,-math.huge,0/0,1.01,-1.01,false,{}}) do
+                local p=packet(s,1,"Move",{x=0,z=0}); p[key]=value
+                eq(s:intent(1,p,0),"INVALID_INTENT")
+            end
+        end
+        eq(s:intent(1,packet(s,1,"Move",{x=0.8,z=0.8}),0),"INVALID_INTENT")
+        eq(w.moves,moves); eq(s.lastSeq[1],0)
+        eq(s:intent(1,packet(s,1,"Move",{x=0.6,z=0.8}),0),"OK")
+        eq(w.moves,moves+1); eq(w.lastMove[2],0.6); eq(w.lastMove[3],0.8)
+    end)
+    test("forged context and foreign actor cannot poison the owners sequence",function()
+        local s,w=setup(); local revision=s.state.revision
+        local cases={
+            {runId="foreign",expected="WRONG_RUN"},
+            {actorId=s.state.heroes[2].actorId,expected="STALE_ACTOR"},
+            {attempt=2,expected="STALE_ACTOR"},
+            {levelEpoch=2,expected="STALE_ACTOR"},
+            {connectionEpoch=2,expected="STALE_CONNECTION"},
+        }
+        for _,case in ipairs(cases) do
+            local p=packet(s,1,"Attack",{attack="Punch",seq=1000000000})
+            for key,value in pairs(case) do if key~="expected" then p[key]=value end end
+            eq(s:intent(1,p,100),case.expected)
+        end
+        eq(s.lastSeq[1],0); eq(s.buckets[1],nil); eq(s.now,0)
+        eq(s.state.revision,revision); eq(w.impulses,0); eq(s.combat[2].rawLife,47)
+        eq(s:intent(1,packet(s,1,"Jump"),0),"OK")
+    end)
+    test("an overtaken attack cannot cancel protection or replay after a newer move",function()
+        local s,w=setup(); death(s,w,1,0.1); s:step(0.2)
+        local old=packet(s,1,"Attack",{attack="Punch",seq=1})
+        eq(s:intent(1,packet(s,1,"Move",{x=0,z=0,seq=2}),0.3),"OK")
+        local shield=s.state.heroes[1].shield
+        eq(s:intent(1,old,0.31),"STALE_SEQUENCE")
+        eq(s.state.heroes[1].shield,shield); eq(s.combat[1].attack,nil)
+        eq(s.lastSeq[1],2); eq(w.impulses,0)
+        eq(s:intent(1,packet(s,1,"Attack",{attack="Punch"}),0.32),"OK")
+        eq(s.state.heroes[1].shield,nil)
+    end)
+    test("a new sequence during cooldown cannot replace an accepted attack",function()
+        local s,w=setup(); w.targetsFor[1]={2}
+        eq(s:intent(1,packet(s,1,"Attack",{attack="Dash"}),0),"OK")
+        local pending=s.combat[1].attack
+        eq(s:intent(1,packet(s,1,"Attack",{attack="Punch"}),0.01),"COOLDOWN")
+        eq(s.combat[1].attack,pending)
+        s:step(Config.Attacks.Dash.windup); s:step(0.2)
+        eq(w.impulses,1); eq(s.combat[2].rawLife,31)
+        local accepted=0
+        for _,row in ipairs(s.logs) do if row.kind=="AttackAccepted" then accepted=accepted+1 end end
+        eq(accepted,1)
+    end)
+    test("rate-limited attacks cannot cancel normal or emergency protection",function()
+        for _,emergency in ipairs({false,true}) do
+            local s,w=setup(); death(s,w,1,0.1); w.safe=not emergency; s:step(0.2)
+            local shield=s.state.heroes[1].shield
+            for _=1,Config.MaxIntentRate do
+                eq(s:intent(1,packet(s,1,"Move",{x=0,z=0}),0.3),"OK")
+            end
+            eq(s:intent(1,packet(s,1,"Attack",{attack="Punch"}),0.3),"RATE_LIMIT")
+            eq(s.state.heroes[1].shield,shield); eq(w.actors[1].held,emergency)
+            eq(s.combat[1].attack,nil); eq(s.state.heroes[1].respawns,2)
+        end
+    end)
     print("Session tests: "..passed.." PASS, "..failed.." FAIL")
     assert(failed==0, "Session contracts failed")
     return passed

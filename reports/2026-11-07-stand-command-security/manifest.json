@@ -1,0 +1,70 @@
+{
+  "baseCommit": "9029e4ec90ff010ca9f314b494869d2fb2c53b15",
+  "studioVersion": "0.746.0.7461269",
+  "players": 2,
+  "newSpectatorAdded": true,
+  "generatedPlace": {
+    "path": "build/CombatStand.rbxlx",
+    "bytes": 62499,
+    "sha256": "f0e1cabb7325220a8de39b9127e6a7dca717a1ee2c059d337b1048e5cce55063"
+  },
+  "baselineStandSourceSha256": "6a1103d7e4019f62bc6c49e70e5c0e27b2721bae829b33eceaf0e48cf1c434ba",
+  "finalSourcesUtf8Lf": {
+    "src/stand/server/Stand.server.lua": {
+      "utf8LfBytes": 8217,
+      "sha256": "06edc25b2ad5c44f9125def0fc42a0ba58a2e58bede097776419ba99d979ca2e"
+    },
+    "tests/stand/CombatStandStudioAcceptance.server.lua": {
+      "utf8LfBytes": 60964,
+      "sha256": "bd3a63b237c3539d34d9d03a65dae4ec363fcc6f73c210344ec80aa4a6fba4fd"
+    },
+    "tests/stand/CombatStandStudioClient.client.lua": {
+      "utf8LfBytes": 7826,
+      "sha256": "4d2a8b249ad70bd32e82e346ba2e5d13db2df87a09c20d16442e77832e3a1afb"
+    },
+    "tests/stand/CombatStandSecurityScenarios.lua": {
+      "utf8LfBytes": 16165,
+      "sha256": "da0716b4bace38a61292903b696bfc81f32db20716a477f78d77514c8a48e862"
+    },
+    "tools/studio_launch_combat_acceptance.luau": {
+      "utf8LfBytes": 4044,
+      "sha256": "fac450d63fd815d31ccd204e367df87d3912aea940bb5d9b83b9b0f579019999"
+    },
+    "tests/stand/Session.spec.lua": {
+      "utf8LfBytes": 17309,
+      "sha256": "cd2ed354791059ede7afc632756df2f5d65f0a4a9605d35059712a8a900ea23e"
+    }
+  },
+  "evidence": {
+    "baseline-fanout-fail.json": {
+      "bytes": 24093,
+      "sha256": "c83e76d6acf78a6586a2fc956d8c08a3913d5528bfed5810f13c3d8d3d2cd725",
+      "status": "FAIL",
+      "summary": {
+        "passed": 29,
+        "scenarios": 1,
+        "failed": 1
+      }
+    },
+    "notice-clear-fail.json": {
+      "bytes": 250280,
+      "sha256": "637be248ed7ff68d11893bb694b7f9a0c0fcd625f35bf7a292bed6c24cbeb193",
+      "status": "FAIL",
+      "summary": {
+        "passed": 343,
+        "scenarios": 42,
+        "failed": 1
+      }
+    },
+    "security-final-pass.json": {
+      "bytes": 301132,
+      "sha256": "2087543372ffedd3c81482c20634858f5048b5a912417303605b4f16b25ee8a4",
+      "status": "PASS",
+      "summary": {
+        "passed": 486,
+        "scenarios": 48,
+        "failed": 0
+      }
+    }
+  }
+}

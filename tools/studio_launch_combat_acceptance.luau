@@ -32,6 +32,8 @@ return function(options)
                 emergency = options.emergency == true,
                 protectionOnly = options.protectionOnly == true,
                 edgeDisconnectOnly = options.edgeDisconnectOnly == true,
+                securityOnly = options.securityOnly == true,
+                securityPhase = options.securityPhase or "full",
             })
             local encoded = game:GetService("HttpService"):JSONEncode({
                 ok = true, result = result, networkProfile = options.networkProfile or "recorded settings",
