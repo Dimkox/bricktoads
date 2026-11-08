@@ -92,6 +92,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
+    EnemyCarry=require(gameplay.EnemyCarry),
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor
@@ -693,6 +694,230 @@ return BossQueue
         </Item>
         <Item class="ModuleScript" referent="BT11">
           <Properties>
+            <string name="Name">EnemyCarry</string>
+            <ProtectedString name="Source">-- Existing-body Pig pickup/throw. Reach, timing and ordinary damage are Roblox calibration.
+-- Source throw profile17/raw4 is provenance; this module never creates projectile collateral damage.
+local EnemyCarry={}
+EnemyCarry.__index=EnemyCarry
+local function finite(n) return type(n)=='number' and n==n and n&gt;-math.huge and n&lt;math.huge end
+
+function EnemyCarry.new(director)
+    return setmetatable({director=director,session=director.session,world=director.world,
+        config=director.config.EnemyCarry,now=director.now or director.session.now,
+        pending={},pendingBySlot={},states={},holders={}},EnemyCarry)
+end
+
+function EnemyCarry:_hero(slot,offline)
+    if self.closed or self.director.result or self.session.state.status~='Active' then return nil end
+    local h,c=self.session.state.heroes[slot],self.session.combat[slot]
+    if not h or h.status~='Alive' or (not offline and not h.connected) or not h.actorId
+        or not c or c.deathAt or c.reactionEnd or c.attack or self.world:hazard(slot) then return nil end
+    return h,c
+end
+
+function EnemyCarry:_sameHero(row,offline)
+    local h,c=self:_hero(row.slot,offline)
+    return h and h.actorId==row.heroActorId and h.attempt==row.attempt
+        and self.session.state.levelEpoch==row.levelEpoch and c==row.combat
+        and (c.reactionEpoch or 0)==row.heroReactionEpoch
+end
+
+function EnemyCarry:_sameEnemy(row)
+    local e=self.director.enemies[row.id]
+    return e and e==row.enemy and not e.dead and e.actorId==row.enemyActorId
+end
+
+function EnemyCarry:_eligible(id,e,slot)
+    return e.kind=='Pig' and not e.boss and not e.dead and not self.states[id]
+        and not (e.reactionUntil and self.now&lt;e.reactionUntil) and not self.world:hazard(id)
+        and self.world:canGrabEnemy(slot,id,self.config.range,self.config.height,self.config.facingDot)
+end
+
+function EnemyCarry:_nearest(slot)
+    local origin=self.world:position(slot)
+    if not origin then return nil end
+    local selected,best=nil,math.huge
+    for id,e in pairs(self.director.enemies) do
+        if self:_eligible(id,e,slot) then
+            local p=self.world:position(id)
+            if p then
+                local range=(p.x-origin.x)^2+(p.y-origin.y)^2+(p.z-origin.z)^2
+                if range&lt;best or (range==best and (not selected or id&lt;selected)) then selected,best=id,range end
+            end
+        end
+    end
+    return selected
+end
+
+function EnemyCarry:_log(kind,row,data)
+    data=data or {}
+    data.enemyId=row.id;data.enemyActorId=row.enemyActorId;data.heroActorId=row.heroActorId
+    self.session:_record(kind,row.slot,data)
+end
+
+function EnemyCarry:_remove(row,reason)
+    if self.states[row.id]~=row then return end
+    self.states[row.id]=nil
+    if self.holders[row.slot]==row.id then self.holders[row.slot]=nil end
+    self.world:releaseEnemy(row.id)
+    local e=self.director.enemies[row.id]
+    if row.mode=='Thrown' and e==row.enemy and e.reactionUntil==row.untilTime then
+        e.reactionUntil=nil
+        self.world:setReaction(row.id,false)
+    end
+    if row.mode=='Carried' then self:_log('EnemyDropped',row,{reason=reason}) end
+end
+
+function EnemyCarry:stateFor(id)
+    local row=self.states[id]
+    return row and row.mode or nil
+end
+
+function EnemyCarry:blocksEnemy(id)
+    return self.states[id]~=nil
+end
+
+function EnemyCarry:interaction(slot)
+    self.now=math.max(self.now,self.session.now,self.director.now or 0)
+    local id=self.holders[slot];local row=id and self.states[id]
+    if row and row.mode=='Carried' then
+        return {available=self:_sameHero(row,false)==true and self:_sameEnemy(row)==true and not self.world:hazard(row.id),
+            carrying=true,kind='EnemyCarry',label='БРОСИТЬ ВРАГА'}
+    end
+    if not self:_hero(slot) or self.pendingBySlot[slot] then return {available=false,carrying=false} end
+    return {available=self:_nearest(slot)~=nil,carrying=false,kind='EnemyCarry',label='СХВАТИТЬ'}
+end
+
+function EnemyCarry:_throw(row,now)
+    if not self:_sameHero(row,false) or not self:_sameEnemy(row) then
+        self:_remove(row,'HolderChanged');return 'NO_INTERACTION'
+    end
+    if self.world:hazard(row.id) then
+        self.director:_kill(row.id);self:forgetEnemy(row.id);return 'NOT_ALIVE'
+    end
+    local h=self.session.state.heroes[row.slot]
+    local code=self.session:_event('BeginAttack',row.slot,{connectionEpoch=h.connectionEpoch})
+    if code~='OK' then return code end
+    self.world:hold(row.slot,false)
+    if not self.world:releaseEnemy(row.id,row.slot,self.config) then return 'CARRY_RELEASE_FAILED' end
+    row.mode='Thrown';row.untilTime=now+self.config.reaction
+    self.holders[row.slot]=nil
+    local e=row.enemy
+    e.windup=nil;e.lastMove=nil;e.reactionUntil=row.untilTime
+    self.world:setReaction(row.id,true)
+    local before=e.health
+    -- The existing death callback may forget this very state. Do not recreate it afterward.
+    self.director:applyThrowDamage(row.id,row.slot)
+    row.enemyReactionEpoch=e.reactionEpoch or 0
+    self:_log('EnemyThrown',row,{before=before,after=e.health,damage=self.config.throwDamage,
+        sourceProfile=self.config.sourceProfile,sourceRawDamage=self.config.sourceRawDamage})
+    return 'OK'
+end
+
+function EnemyCarry:interact(slot,now,action)
+    if not finite(now) or now&lt;self.now then return 'INVALID_TIME' end
+    self.now=now
+    if self.closed or self.director.result or self.session.state.status~='Active' then return 'NO_INTERACTION' end
+    local id=self.holders[slot];local held=id and self.states[id]
+    if held and held.mode=='Carried' then
+        if action~='Punch' then return 'HANDS_FULL' end
+        return self:_throw(held,now)
+    end
+    if action~='Punch' then return 'NO_INTERACTION' end
+    local h,c=self:_hero(slot)
+    if not h then return 'NO_INTERACTION' end
+    if self.pendingBySlot[slot] then return 'COOLDOWN' end
+    id=self:_nearest(slot)
+    if not id then return 'NO_INTERACTION' end
+    local code=self.session:_event('BeginAttack',slot,{connectionEpoch=h.connectionEpoch})
+    if code~='OK' then return code end
+    self.world:hold(slot,false)
+    local e=self.director.enemies[id]
+    local row={id=id,slot=slot,enemy=e,enemyActorId=e.actorId,enemyReactionEpoch=e.reactionEpoch or 0,
+        heroActorId=h.actorId,attempt=h.attempt,levelEpoch=self.session.state.levelEpoch,
+        combat=c,heroReactionEpoch=c.reactionEpoch or 0,at=now+self.config.windup}
+    row.expiresAt=row.at+self.config.window
+    self.pending[#self.pending+1]=row;self.pendingBySlot[slot]=row
+    e.engaged=true
+    self:_log('EnemyGrabAccepted',row)
+    return 'OK'
+end
+
+function EnemyCarry:_capture(row)
+    if row.cancelled or self.now&gt;row.expiresAt or self.holders[row.slot]
+        or not self:_sameHero(row,true) or not self:_sameEnemy(row)
+        or (row.enemy.reactionEpoch or 0)~=row.enemyReactionEpoch
+        or not self:_eligible(row.id,row.enemy,row.slot) then return end
+    -- Director resolves expired reactions later in this tick. Normalize that
+    -- old physics before World saves it, so a future drop cannot restore it.
+    if row.enemy.reactionUntil and self.now&gt;=row.enemy.reactionUntil then
+        row.enemy.reactionUntil=nil
+        self.world:setReaction(row.id,false)
+    end
+    if not self.world:carryEnemy(row.id,row.slot) then return end
+    row.mode='Carried';self.states[row.id]=row;self.holders[row.slot]=row.id
+    row.enemy.windup=nil;row.enemy.lastMove=nil;row.enemy.reactionUntil=nil
+    self.world:move(row.id,0,0)
+    self:_log('EnemyGrabbed',row,{health=row.enemy.health,ownerUserId=row.enemy.ownerUserId})
+end
+
+function EnemyCarry:step(now)
+    if not finite(now) or now&lt;self.now then return 'INVALID_TIME' end
+    self.now=now
+    if self.closed then return 'RUN_CLOSED' end
+    if self.director.result or self.session.state.status~='Active' then self:close();return 'RUN_CLOSED' end
+    local active={}
+    for id in pairs(self.states) do active[#active+1]=id end
+    table.sort(active)
+    for _,id in ipairs(active) do
+        local row=self.states[id]
+        if row then
+            if not self:_sameEnemy(row) then self:_remove(row,'EnemyChanged')
+            elseif self.world:hazard(id) then self.director:_kill(id);self:forgetEnemy(id)
+            elseif row.mode=='Carried' then
+                if not self:_sameHero(row,true) or (row.enemy.reactionEpoch or 0)~=row.enemyReactionEpoch then
+                    self:_remove(row,'Interrupted')
+                elseif not self.world:carryEnemy(id,row.slot) then self:_remove(row,'PhysicalLinkLost') end
+            elseif (row.enemy.reactionEpoch or 0)~=row.enemyReactionEpoch then self:_remove(row,'EnemyInterrupted')
+            elseif now&gt;=row.untilTime then self:_remove(row,'FlightComplete') end
+        end
+    end
+    local future={}
+    for _,row in ipairs(self.pending) do
+        if row.cancelled or now&gt;=row.at then
+            if self.pendingBySlot[row.slot]==row then self.pendingBySlot[row.slot]=nil end
+            if not row.cancelled then self:_capture(row) end
+        else future[#future+1]=row end
+    end
+    self.pending=future
+    return 'OK'
+end
+
+function EnemyCarry:forgetEnemy(id)
+    local row=self.states[id]
+    if row then self:_remove(row,'EnemyReleased') end
+    for _,pending in ipairs(self.pending) do
+        if pending.id==id then
+            pending.cancelled=true
+            if self.pendingBySlot[pending.slot]==pending then self.pendingBySlot[pending.slot]=nil end
+        end
+    end
+end
+
+function EnemyCarry:close()
+    if self.closed then return end
+    self.closed=true
+    local active={};for id in pairs(self.states) do active[#active+1]=id end
+    for _,id in ipairs(active) do self:_remove(self.states[id],'RunClosed') end
+    self.pending={};self.pendingBySlot={};self.holders={}
+end
+
+return EnemyCarry
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT12">
+          <Properties>
             <string name="Name">GameConfig</string>
             <ProtectedString name="Source">-- Original playable prototype calibration. Resource limits are canonical.
 -- Enemy damage and spatial/timing values still need the full source transfer.
@@ -706,6 +931,9 @@ return function(base,level)
     config.Level=level
     -- Studs, seconds and radians/second; not claimed original NES timing.
     config.HealingFlies={range=6,height=3,facingDot=.25,windup=.16,bobHeight=.25,bobSpeed=2}
+    -- Original close Pig grab/throw; existing3HP damage is still prototype tuning.
+    config.EnemyCarry={range=3.3,height=2.5,facingDot=.5,windup=.12,window=.2,reaction=.85,
+        horizontal=26,vertical=16,throwDamage=config.Enemy.punchDamage,sourceProfile=17,sourceRawDamage=4}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
         config.Boss.interval=1.6
@@ -720,7 +948,7 @@ end
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT12">
+        <Item class="ModuleScript" referent="BT13">
           <Properties>
             <string name="Name">GameController</string>
             <ProtectedString name="Source">-- One group's runtime. Player identity comes from the server, never from payload fields.
@@ -827,7 +1055,7 @@ function Controller:_begin(player,players)
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
     end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end
@@ -1033,7 +1261,7 @@ return Controller
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT13">
+        <Item class="ModuleScript" referent="BT14">
           <Properties>
             <string name="Name">GameWorld</string>
             <ProtectedString name="Source">-- Original first-level presentation. Combat and hero physics stay in BaseWorld.
@@ -1503,6 +1731,7 @@ function World.new(BaseWorld, config, options)
     self.healingEffectFolder.Name = "HealingEffects"
     self.healingEffectFolder.Parent = self.folder
     self.healingFlyVisuals, self.healingEffects = {}, {}
+    self.enemyCarries = {}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + translation,
         [2] = Vector3.new(-65, 3, 0) + translation,
@@ -1628,6 +1857,7 @@ function World:enemyIdentity(id,actorId,ownerName)
 end
 
 function World:move(id,x,z)
+    if self.enemyCarries[id] then return end
     local actor=self.actors[id]
     if actor and self.enemyKinds[id]=='Drone' and not actor.humanoid.PlatformStand then
         actor.humanoid.WalkSpeed=self.config.Enemy.speed
@@ -1691,6 +1921,15 @@ function World:jump(id)
 end
 
 function World:setReaction(id,active)
+    local carried = self.enemyCarries[id]
+    if carried then
+        -- Reaction deadlines may expire while the body is held or in flight.
+        -- Remember the requested eventual state without unfreezing it early.
+        carried.platformStand = active
+        carried.autoRotate = not active
+        carried.walkSpeed = active and 0 or (self.enemyKinds[id]=='Drone' and self.config.Enemy.speed or self.config.WalkSpeed)
+        return
+    end
     self._base.setReaction(self,id,active)
     local actor=self.actors[id]
     if actor and self.enemyKinds[id]=='Drone' then actor.humanoid.WalkSpeed=active and 0 or self.config.Enemy.speed end
@@ -1713,6 +1952,7 @@ function World:aim(id,x,z)
 end
 
 function World:enemyMove(id, targetId, speed)
+    if self.enemyCarries[id] then return end
     local a, b = self.actors[id], self.actors[targetId]
     if not a or not b or not a.root.Parent or not b.root.Parent or a.root.Anchored or a.humanoid.Health &lt;= 0 then return end
     local delta = b.root.Position - a.root.Position
@@ -1889,6 +2129,120 @@ function World:removeProjectile(id)
     end
 end
 
+local function livingBody(world, id)
+    local actor = world.actors[id]
+    return actor and actor.root.Parent and actor.model.Parent == world.actorFolder
+        and actor.humanoid.Health &gt; 0 and actor or nil
+end
+
+local function flatFacing(root)
+    local look = root.CFrame.LookVector
+    local length = math.sqrt(look.X*look.X + look.Z*look.Z)
+    if length &lt; .000001 then return nil end
+    return look.X/length, look.Z/length
+end
+
+function World:canGrabEnemy(heroId, enemyId, range, height, facingDot)
+    local hero, enemy = livingBody(self, heroId), livingBody(self, enemyId)
+    if not hero or not enemy or heroId == enemyId or self.enemyKinds[enemyId] ~= 'Drone'
+        or self.enemyCarries[enemyId] or hero.model:GetAttribute('CarryingEnemy') ~= nil
+        or hero.root.Anchored or hero.humanoid.PlatformStand or enemy.root.Anchored
+        or hero.humanoid.FloorMaterial == Enum.Material.Air
+        or math.abs(hero.root.AssemblyLinearVelocity.Y) &gt; 1 then return false end
+    local support = Workspace:Raycast(hero.root.Position, Vector3.new(0,-3.4,0), self.ray)
+    if not support or support.Normal.Y &lt; .95 or support.Instance:GetAttribute('Hazard')
+        or support.Instance:GetAttribute('SurfaceId') == nil then return false end
+    local delta = enemy.root.Position - hero.root.Position
+    if delta.Magnitude &gt; range or math.abs(delta.Y) &gt; height then return false end
+    local x,z = flatFacing(hero.root)
+    if not x then return false end
+    local horizontal = math.sqrt(delta.X*delta.X + delta.Z*delta.Z)
+    if horizontal &gt; .000001 and (x*delta.X + z*delta.Z)/horizontal &lt; facingDot then return false end
+    return Workspace:Raycast(hero.root.Position, delta, self.ray) == nil
+end
+
+function World:carryEnemy(enemyId, heroId)
+    local enemy, hero = livingBody(self, enemyId), livingBody(self, heroId)
+    if not enemy or not hero or hero.root.Anchored or hero.humanoid.PlatformStand then return false end
+    local carried = self.enemyCarries[enemyId]
+    if carried and (carried.mode ~= 'Carried' or carried.actor ~= enemy or carried.holder ~= hero) then return false end
+    local x,z = flatFacing(hero.root)
+    if not x then return false end
+    if not carried then
+        if enemy.root.Anchored or self.enemyKinds[enemyId] ~= 'Drone'
+            or hero.model:GetAttribute('CarryingEnemy') ~= nil then return false end
+        carried = {actor = enemy, holder = hero, holderId = heroId, mode = 'Carried', collisions = {},
+            platformStand = enemy.humanoid.PlatformStand, autoRotate = enemy.humanoid.AutoRotate,
+            walkSpeed = enemy.humanoid.WalkSpeed, anchored = enemy.root.Anchored,
+            evaluateStateMachine = enemy.humanoid.EvaluateStateMachine}
+        -- PlatformStand alone still lets Humanoid rewrite torso collision.
+        -- Stop evaluation before disabling the parts so the carried body stays inert.
+        enemy.humanoid.EvaluateStateMachine = false
+        for _,p in ipairs(enemy.model:GetDescendants()) do
+            if p:IsA('BasePart') then carried.collisions[p] = p.CanCollide; p.CanCollide = false end
+        end
+        self.enemyCarries[enemyId] = carried
+        enemy.humanoid:Move(Vector3.new(),false)
+    end
+    enemy.humanoid.EvaluateStateMachine = false
+    enemy.root.Anchored = true
+    enemy.humanoid.PlatformStand, enemy.humanoid.AutoRotate, enemy.humanoid.WalkSpeed = true, false, 0
+    enemy.root.AssemblyLinearVelocity, enemy.root.AssemblyAngularVelocity = Vector3.new(), Vector3.new()
+    local origin = hero.root.Position
+    local held = Vector3.new(origin.X+x*1.75, origin.Y+3.4, origin.Z+z*1.75)
+    enemy.model:PivotTo(CFrame.lookAt(held, Vector3.new(held.X+x,held.Y,held.Z+z)) * CFrame.Angles(0,0,math.pi/2))
+    enemy.model:SetAttribute('CarryMode','Carried')
+    enemy.model:SetAttribute('HeldBy',heroId)
+    hero.model:SetAttribute('CarryingEnemy',enemyId)
+    return true
+end
+
+function World:releaseEnemy(enemyId, throwerId, tuning)
+    local carried = self.enemyCarries[enemyId]
+    if not carried then return false end
+    local x,z
+    if throwerId ~= nil then
+        local thrower = livingBody(self,throwerId)
+        tuning = tuning or self.config.EnemyCarry
+        if carried.mode ~= 'Carried' or thrower ~= carried.holder or not thrower
+            or throwerId ~= carried.holderId or thrower.root.Anchored or thrower.humanoid.PlatformStand
+            or type(tuning) ~= 'table' or type(tuning.horizontal) ~= 'number' or type(tuning.vertical) ~= 'number'
+            or tuning.horizontal ~= tuning.horizontal or tuning.vertical ~= tuning.vertical
+            or math.abs(tuning.horizontal) == math.huge or math.abs(tuning.vertical) == math.huge
+            or tuning.horizontal &lt; 0 then return false end
+        x,z = flatFacing(thrower.root)
+        if not x then return false end
+    end
+    local enemy = carried.actor
+    if enemy.root.Parent then enemy.humanoid.EvaluateStateMachine = carried.evaluateStateMachine end
+    if carried.holder.model:GetAttribute('CarryingEnemy') == enemyId then
+        carried.holder.model:SetAttribute('CarryingEnemy',nil)
+    end
+    enemy.model:SetAttribute('HeldBy',nil)
+    if carried.mode == 'Carried' then
+        for p,collidable in pairs(carried.collisions) do if p.Parent then p.CanCollide = collidable end end
+        if enemy.root.Parent then
+            enemy.root.Anchored = carried.anchored
+            local allowed = enemy.root:CanSetNetworkOwnership()
+            if allowed then enemy.root:SetNetworkOwner(nil) end
+        end
+    end
+    if throwerId ~= nil then
+        carried.mode = 'Thrown'
+        enemy.model:SetAttribute('CarryMode','Thrown')
+        enemy.root.AssemblyLinearVelocity = Vector3.new(x*tuning.horizontal,tuning.vertical,z*tuning.horizontal)
+        enemy.root.AssemblyAngularVelocity = Vector3.new()
+        return true
+    end
+    enemy.model:SetAttribute('CarryMode',nil)
+    if enemy.root.Parent then
+        enemy.humanoid.PlatformStand, enemy.humanoid.AutoRotate, enemy.humanoid.WalkSpeed =
+            carried.platformStand, carried.autoRotate, carried.walkSpeed
+    end
+    self.enemyCarries[enemyId] = nil
+    return true
+end
+
 -- Collectibles are presentation only: they never enter the combat actor table.
 function World:healingFly(id, position)
     local fly = self.healingFlyVisuals[id]
@@ -2016,12 +2370,18 @@ function World:updatePresentation(session, dt, enemies)
             end
             local attacking = actor.attackPoseUntil and self.presentationTime &lt; actor.attackPoseUntil
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
+            local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
+            local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil
                 local angle = stride * (left and 1 or -1) * (shoulder and -1 or 1)
                 local roll = 0
-                if shoulder and reacting then
+                if shoulder and carryingEnemy then
+                    angle, roll = 2.65, left and -.2 or .2
+                elseif beingCarried then
+                    angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
+                elseif shoulder and reacting then
                     angle, roll = 0.65, left and -0.25 or 0.25
                 elseif shoulder and attacking then
                     angle = actor.attackPoseAction == "Dash" and 1.5 or (left and 0.45 or 1.95)
@@ -2033,6 +2393,7 @@ function World:updatePresentation(session, dt, enemies)
 end
 
 function World:clearActors()
+    for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.healingFlyFolder:ClearAllChildren()
@@ -2051,7 +2412,7 @@ return World
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT14">
+        <Item class="ModuleScript" referent="BT15">
           <Properties>
             <string name="Name">GuardianPattern</string>
             <ProtectedString name="Source">-- Original 3D tuning around the source's ground-ball pickup/throw guardian chain.
@@ -2317,7 +2678,7 @@ return GuardianPattern
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT15">
+        <Item class="ModuleScript" referent="BT16">
           <Properties>
             <string name="Name">HealingFlies</string>
             <ProtectedString name="Source">-- Source-backed food arithmetic; flight, reach and timing are Roblox calibration.
@@ -2453,7 +2814,7 @@ return HealingFlies
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT16">
+        <Item class="ModuleScript" referent="BT17">
           <Properties>
             <string name="Name">LevelDefinition</string>
             <ProtectedString name="Source">-- Original Brick Toads geography; static actor order is derived from upstream level1_cfg.
@@ -2506,7 +2867,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT17">
+        <Item class="ModuleScript" referent="BT18">
           <Properties>
             <string name="Name">LevelDirector</string>
             <ProtectedString name="Source">-- Original prototype encounters. All decisions run on the server.
@@ -2529,13 +2890,14 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height}},Director)
     if self.route then
         self.flies=HealingFlies and HealingFlies.new(session,world,config)
+        self.carry=EnemyCarry and EnemyCarry.new(self)
         self:_enterZone(1)
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
@@ -2567,21 +2929,30 @@ function Director:_zoneReached()
     return false
 end
 function Director:interaction(slot)
+    local carry=self.carry and self.carry:interaction(slot)
+    if carry and carry.carrying then return carry end
     if self.guardian and self.stage=='Boss' then
         local interaction=self.guardian:interaction(slot)
         if interaction.available then return interaction end
     end
-    return self.flies and self.flies:interaction(slot) or {available=false}
+    local fly=self.flies and self.flies:interaction(slot)
+    if fly and fly.available then return fly end
+    return carry or {available=false}
 end
 function Director:interact(slot,now,attack)
     self.now=now
+    if self.carry and self.carry:interaction(slot).carrying then return self.carry:interact(slot,now,attack) end
     if self.guardian and self.stage=='Boss' then
         if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
         local result=self.guardian:interact(slot,now)
         if result~='NO_INTERACTION' then return result end
     end
     if attack~='Punch' then return 'NO_INTERACTION' end
-    return self.flies and self.flies:interact(slot,now) or 'NO_INTERACTION'
+    if self.flies then
+        local result=self.flies:interact(slot,now)
+        if result~='NO_INTERACTION' then return result end
+    end
+    return self.carry and self.carry:interact(slot,now,attack) or 'NO_INTERACTION'
 end
 function Director:claim(userId,enemyId)
     local owned=self.byUserId[userId]
@@ -2619,7 +2990,7 @@ function Director:controlled(userId)
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-        template=e.boss and 'Boss' or 'Sentry',name=e.name}
+        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id)}
 end
 function Director:available(userId)
     local offers={}
@@ -2661,6 +3032,9 @@ function Director:command(userId,payload,now,validator)
     if not finite(now) or now&lt;0 then return 'INVALID_TIME' end
     if now&lt;self.now then return 'TIME_REVERSED' end
     self.now=now; e.lastSeq=payload.seq
+    if self.carry and self.carry:blocksEnemy(id) then
+        return self.carry:stateFor(id)=='Carried' and 'HELD' or 'THROWN'
+    end
     if e.boss then
         if self.stage~='Boss' then return 'RUN_CLOSED' end
         if payload.kind=='Move' then
@@ -2731,6 +3105,7 @@ end
 function Director:_kill(id)
     local e=self.enemies[id]
     if not e or e.dead then return end
+    if self.carry then self.carry:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.health=0
     if e.boss and self.route then e.rawLife=0 end
     self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
@@ -2762,6 +3137,8 @@ function Director:hit(attacker,target,action)
     end
     local e=self.enemies[target]
     if not e or e.dead or (e.reactionUntil and self.now&lt;e.reactionUntil) then return false end
+    if self.carry then self.carry:forgetEnemy(target) end
+    e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil
     e.health=math.max(0,e.health-(action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
     self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
@@ -2773,6 +3150,18 @@ function Director:hit(attacker,target,action)
         local profile=action=='Dash' and 22 or 18
         if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
     end
+    return true
+end
+function Director:applyThrowDamage(id,heroSlot)
+    local e=self.enemies[id]
+    if self.result or self.session.state.status~='Active' or not e or e.dead or e.kind~='Pig' then return false end
+    local before=e.health
+    e.health=math.max(0,e.health-self.config.EnemyCarry.throwDamage)
+    e.reactionEpoch=(e.reactionEpoch or 0)+1
+    self.world:enemyHealth(id,e.health,self.config.Enemy.hearts);self.world:cue(id,false)
+    self.session:_record('EnemyThrowDamage',heroSlot,{enemyId=id,before=before,after=e.health,
+        sourceProfile=self.config.EnemyCarry.sourceProfile,sourceRawDamage=self.config.EnemyCarry.sourceRawDamage})
+    if e.health==0 then self:_kill(id) end
     return true
 end
 function Director:_nearest(position)
@@ -2793,10 +3182,11 @@ function Director:_enemies()
             if self.world:hazard(id) then self:_kill(id)
             else
                 living+=1
-                if e.reactionUntil and self.now&gt;=e.reactionUntil then
+                local carried=self.carry and self.carry:blocksEnemy(id)
+                if not carried and e.reactionUntil and self.now&gt;=e.reactionUntil then
                     e.reactionUntil=nil; self.world:setReaction(id,false)
                 end
-                if not e.reactionUntil then
+                if not carried and not e.reactionUntil then
                     if e.windup then
                         self.world:move(id,0,0)
                         if self.now&gt;=e.windup.at then self:_resolveStrike(id,e) end
@@ -2886,8 +3276,13 @@ function Director:_projectiles(dt)
     end
 end
 function Director:step(now,dt)
-    if self.result then if self.flies then self.flies:close() end;return end
+    if self.result then
+        if self.flies then self.flies:close() end
+        if self.carry then self.carry:close() end
+        return
+    end
     self.now=now
+    if self.carry then self.carry:step(now) end
     if self.flies then self.flies:step(now) end
     if self.session.state.status=='Lost' then
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
@@ -2901,6 +3296,7 @@ function Director:step(now,dt)
             if self.session.state.heroes[id].status=='Alive' and not self.session.combat[id].deathAt and self.world:atExit(id) then
                 self.result='Won'; self.stage='Won'; self.world:stage('Won')
                 if self.flies then self.flies:close() end
+                if self.carry then self.carry:close() end
                 break
             end
         end
@@ -2910,7 +3306,8 @@ function Director:snapshot()
     local enemies={}
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-            dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind}
+            dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind,
+            carryState=self.carry and self.carry:stateFor(id)}
     end
     table.sort(enemies,function(a,b) return a.id&gt;b.id end)
     local zone=self.route and self.route.zones[self.zoneIndex]
@@ -2926,7 +3323,7 @@ return Director
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT18">
+        <Item class="ModuleScript" referent="BT19">
           <Properties>
             <string name="Name">MatchHub</string>
             <ProtectedString name="Source">-- Current-Player authority and routing for independent local playable groups.
@@ -3213,11 +3610,11 @@ return MatchHub
           </Properties>
         </Item>
       </Item>
-      <Item class="Folder" referent="BT19">
+      <Item class="Folder" referent="BT20">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT20">
+        <Item class="ModuleScript" referent="BT21">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
@@ -3267,7 +3664,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT21">
+        <Item class="ModuleScript" referent="BT22">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -3570,7 +3967,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT22">
+        <Item class="ModuleScript" referent="BT23">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -3600,7 +3997,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT23">
+        <Item class="ModuleScript" referent="BT24">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -3660,7 +4057,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT24">
+        <Item class="ModuleScript" referent="BT25">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -3929,15 +4326,15 @@ return World
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT25">
+  <Item class="ReplicatedStorage" referent="BT26">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT26">
+    <Item class="Folder" referent="BT27">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT27">
+      <Item class="ModuleScript" referent="BT28">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -3949,19 +4346,19 @@ return table.freeze({
       </Item>
     </Item>
   </Item>
-  <Item class="StarterPlayer" referent="BT28">
+  <Item class="StarterPlayer" referent="BT29">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT29">
+    <Item class="StarterPlayerScripts" referent="BT30">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT30">
+      <Item class="Folder" referent="BT31">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT31">
+        <Item class="ModuleScript" referent="BT32">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -4173,7 +4570,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT32">
+        <Item class="LocalScript" referent="BT33">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -4303,7 +4700,7 @@ local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Шесть районов и страж. Ловите мух языком, чтобы восстановить здоровье.", 16, C.muted)
+local intro = label(header, "Intro", "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -4631,6 +5028,9 @@ local noticeMessages = {
     ROLE_ACTIVE = "Вы уже управляете живым противником.",
     ROLE_RESERVED = "Приглашение стража уже принято. Сначала отмените его в очереди.",
     STALE_OFFER = "Это приглашение больше недоступно. Очередь обновляется.",
+    HELD = "Вас держит герой. Управление вернётся после освобождения.",
+    THROWN = "Вас бросили. Дождитесь окончания реакции.",
+    HANDS_FULL = "Руки заняты. Сначала бросьте то, что держите.",
 }
 local function enemyChoiceAllowed()
     local reason = snapshot and snapshot.enemyUnavailableReason
@@ -4747,7 +5147,7 @@ render = function()
                 or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
-        intro.Text, chooseTitle.Text = "Шесть районов и страж. Ловите мух языком, чтобы восстановить здоровье.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
@@ -4814,6 +5214,9 @@ render = function()
             or (enemy.connected and (tostring(enemy.hearts or 0) .. " / " .. tostring(enemy.maxHearts or 3) .. " ♥") or "Страж · нет связи"))
             or (enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи"))
         enemyLife.TextColor3 = enemy.status == "Dead" and C.red or C.muted
+        if enemy.status == "Alive" and enemy.carryState then
+            enemyLife.Text = enemy.carryState == "Carried" and "Вас держат · ждите освобождения" or "Бросок · возвращаем управление"
+        end
         for n, heart in ipairs(enemyHearts) do
             heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
         end
@@ -5350,7 +5753,7 @@ sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT33">
+        <Item class="ModuleScript" referent="BT34">
           <Properties>
             <string name="Name">GroupPanel</string>
             <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
@@ -5577,7 +5980,7 @@ return GroupPanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT34">
+        <Item class="ModuleScript" referent="BT35">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.

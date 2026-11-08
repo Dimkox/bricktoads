@@ -10,6 +10,9 @@ return function(base,level)
     config.Level=level
     -- Studs, seconds and radians/second; not claimed original NES timing.
     config.HealingFlies={range=6,height=3,facingDot=.25,windup=.16,bobHeight=.25,bobSpeed=2}
+    -- Original close Pig grab/throw; existing3HP damage is still prototype tuning.
+    config.EnemyCarry={range=3.3,height=2.5,facingDot=.5,windup=.12,window=.2,reaction=.85,
+        horizontal=26,vertical=16,throwDamage=config.Enemy.punchDamage,sourceProfile=17,sourceRawDamage=4}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
         config.Boss.interval=1.6

@@ -102,7 +102,7 @@ function Controller:_begin(player,players)
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
     end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end

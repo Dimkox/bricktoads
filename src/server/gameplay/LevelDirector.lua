@@ -18,13 +18,14 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height}},Director)
     if self.route then
         self.flies=HealingFlies and HealingFlies.new(session,world,config)
+        self.carry=EnemyCarry and EnemyCarry.new(self)
         self:_enterZone(1)
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
@@ -56,21 +57,30 @@ function Director:_zoneReached()
     return false
 end
 function Director:interaction(slot)
+    local carry=self.carry and self.carry:interaction(slot)
+    if carry and carry.carrying then return carry end
     if self.guardian and self.stage=='Boss' then
         local interaction=self.guardian:interaction(slot)
         if interaction.available then return interaction end
     end
-    return self.flies and self.flies:interaction(slot) or {available=false}
+    local fly=self.flies and self.flies:interaction(slot)
+    if fly and fly.available then return fly end
+    return carry or {available=false}
 end
 function Director:interact(slot,now,attack)
     self.now=now
+    if self.carry and self.carry:interaction(slot).carrying then return self.carry:interact(slot,now,attack) end
     if self.guardian and self.stage=='Boss' then
         if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
         local result=self.guardian:interact(slot,now)
         if result~='NO_INTERACTION' then return result end
     end
     if attack~='Punch' then return 'NO_INTERACTION' end
-    return self.flies and self.flies:interact(slot,now) or 'NO_INTERACTION'
+    if self.flies then
+        local result=self.flies:interact(slot,now)
+        if result~='NO_INTERACTION' then return result end
+    end
+    return self.carry and self.carry:interact(slot,now,attack) or 'NO_INTERACTION'
 end
 function Director:claim(userId,enemyId)
     local owned=self.byUserId[userId]
@@ -108,7 +118,7 @@ function Director:controlled(userId)
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-        template=e.boss and 'Boss' or 'Sentry',name=e.name}
+        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id)}
 end
 function Director:available(userId)
     local offers={}
@@ -150,6 +160,9 @@ function Director:command(userId,payload,now,validator)
     if not finite(now) or now<0 then return 'INVALID_TIME' end
     if now<self.now then return 'TIME_REVERSED' end
     self.now=now; e.lastSeq=payload.seq
+    if self.carry and self.carry:blocksEnemy(id) then
+        return self.carry:stateFor(id)=='Carried' and 'HELD' or 'THROWN'
+    end
     if e.boss then
         if self.stage~='Boss' then return 'RUN_CLOSED' end
         if payload.kind=='Move' then
@@ -220,6 +233,7 @@ end
 function Director:_kill(id)
     local e=self.enemies[id]
     if not e or e.dead then return end
+    if self.carry then self.carry:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.health=0
     if e.boss and self.route then e.rawLife=0 end
     self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
@@ -251,6 +265,8 @@ function Director:hit(attacker,target,action)
     end
     local e=self.enemies[target]
     if not e or e.dead or (e.reactionUntil and self.now<e.reactionUntil) then return false end
+    if self.carry then self.carry:forgetEnemy(target) end
+    e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil
     e.health=math.max(0,e.health-(action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
     self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
@@ -262,6 +278,18 @@ function Director:hit(attacker,target,action)
         local profile=action=='Dash' and 22 or 18
         if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
     end
+    return true
+end
+function Director:applyThrowDamage(id,heroSlot)
+    local e=self.enemies[id]
+    if self.result or self.session.state.status~='Active' or not e or e.dead or e.kind~='Pig' then return false end
+    local before=e.health
+    e.health=math.max(0,e.health-self.config.EnemyCarry.throwDamage)
+    e.reactionEpoch=(e.reactionEpoch or 0)+1
+    self.world:enemyHealth(id,e.health,self.config.Enemy.hearts);self.world:cue(id,false)
+    self.session:_record('EnemyThrowDamage',heroSlot,{enemyId=id,before=before,after=e.health,
+        sourceProfile=self.config.EnemyCarry.sourceProfile,sourceRawDamage=self.config.EnemyCarry.sourceRawDamage})
+    if e.health==0 then self:_kill(id) end
     return true
 end
 function Director:_nearest(position)
@@ -282,10 +310,11 @@ function Director:_enemies()
             if self.world:hazard(id) then self:_kill(id)
             else
                 living+=1
-                if e.reactionUntil and self.now>=e.reactionUntil then
+                local carried=self.carry and self.carry:blocksEnemy(id)
+                if not carried and e.reactionUntil and self.now>=e.reactionUntil then
                     e.reactionUntil=nil; self.world:setReaction(id,false)
                 end
-                if not e.reactionUntil then
+                if not carried and not e.reactionUntil then
                     if e.windup then
                         self.world:move(id,0,0)
                         if self.now>=e.windup.at then self:_resolveStrike(id,e) end
@@ -375,8 +404,13 @@ function Director:_projectiles(dt)
     end
 end
 function Director:step(now,dt)
-    if self.result then if self.flies then self.flies:close() end;return end
+    if self.result then
+        if self.flies then self.flies:close() end
+        if self.carry then self.carry:close() end
+        return
+    end
     self.now=now
+    if self.carry then self.carry:step(now) end
     if self.flies then self.flies:step(now) end
     if self.session.state.status=='Lost' then
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
@@ -390,6 +424,7 @@ function Director:step(now,dt)
             if self.session.state.heroes[id].status=='Alive' and not self.session.combat[id].deathAt and self.world:atExit(id) then
                 self.result='Won'; self.stage='Won'; self.world:stage('Won')
                 if self.flies then self.flies:close() end
+                if self.carry then self.carry:close() end
                 break
             end
         end
@@ -399,7 +434,8 @@ function Director:snapshot()
     local enemies={}
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-            dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind}
+            dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind,
+            carryState=self.carry and self.carry:stateFor(id)}
     end
     table.sort(enemies,function(a,b) return a.id>b.id end)
     local zone=self.route and self.route.zones[self.zoneIndex]

@@ -125,7 +125,7 @@ local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Шесть районов и страж. Ловите мух языком, чтобы восстановить здоровье.", 16, C.muted)
+local intro = label(header, "Intro", "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -453,6 +453,9 @@ local noticeMessages = {
     ROLE_ACTIVE = "Вы уже управляете живым противником.",
     ROLE_RESERVED = "Приглашение стража уже принято. Сначала отмените его в очереди.",
     STALE_OFFER = "Это приглашение больше недоступно. Очередь обновляется.",
+    HELD = "Вас держит герой. Управление вернётся после освобождения.",
+    THROWN = "Вас бросили. Дождитесь окончания реакции.",
+    HANDS_FULL = "Руки заняты. Сначала бросьте то, что держите.",
 }
 local function enemyChoiceAllowed()
     local reason = snapshot and snapshot.enemyUnavailableReason
@@ -569,7 +572,7 @@ render = function()
                 or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
-        intro.Text, chooseTitle.Text = "Шесть районов и страж. Ловите мух языком, чтобы восстановить здоровье.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
@@ -636,6 +639,9 @@ render = function()
             or (enemy.connected and (tostring(enemy.hearts or 0) .. " / " .. tostring(enemy.maxHearts or 3) .. " ♥") or "Страж · нет связи"))
             or (enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи"))
         enemyLife.TextColor3 = enemy.status == "Dead" and C.red or C.muted
+        if enemy.status == "Alive" and enemy.carryState then
+            enemyLife.Text = enemy.carryState == "Carried" and "Вас держат · ждите освобождения" or "Бросок · возвращаем управление"
+        end
         for n, heart in ipairs(enemyHearts) do
             heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
         end

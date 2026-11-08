@@ -465,6 +465,7 @@ function World.new(BaseWorld, config, options)
     self.healingEffectFolder.Name = "HealingEffects"
     self.healingEffectFolder.Parent = self.folder
     self.healingFlyVisuals, self.healingEffects = {}, {}
+    self.enemyCarries = {}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + translation,
         [2] = Vector3.new(-65, 3, 0) + translation,
@@ -590,6 +591,7 @@ function World:enemyIdentity(id,actorId,ownerName)
 end
 
 function World:move(id,x,z)
+    if self.enemyCarries[id] then return end
     local actor=self.actors[id]
     if actor and self.enemyKinds[id]=='Drone' and not actor.humanoid.PlatformStand then
         actor.humanoid.WalkSpeed=self.config.Enemy.speed
@@ -653,6 +655,15 @@ function World:jump(id)
 end
 
 function World:setReaction(id,active)
+    local carried = self.enemyCarries[id]
+    if carried then
+        -- Reaction deadlines may expire while the body is held or in flight.
+        -- Remember the requested eventual state without unfreezing it early.
+        carried.platformStand = active
+        carried.autoRotate = not active
+        carried.walkSpeed = active and 0 or (self.enemyKinds[id]=='Drone' and self.config.Enemy.speed or self.config.WalkSpeed)
+        return
+    end
     self._base.setReaction(self,id,active)
     local actor=self.actors[id]
     if actor and self.enemyKinds[id]=='Drone' then actor.humanoid.WalkSpeed=active and 0 or self.config.Enemy.speed end
@@ -675,6 +686,7 @@ function World:aim(id,x,z)
 end
 
 function World:enemyMove(id, targetId, speed)
+    if self.enemyCarries[id] then return end
     local a, b = self.actors[id], self.actors[targetId]
     if not a or not b or not a.root.Parent or not b.root.Parent or a.root.Anchored or a.humanoid.Health <= 0 then return end
     local delta = b.root.Position - a.root.Position
@@ -851,6 +863,120 @@ function World:removeProjectile(id)
     end
 end
 
+local function livingBody(world, id)
+    local actor = world.actors[id]
+    return actor and actor.root.Parent and actor.model.Parent == world.actorFolder
+        and actor.humanoid.Health > 0 and actor or nil
+end
+
+local function flatFacing(root)
+    local look = root.CFrame.LookVector
+    local length = math.sqrt(look.X*look.X + look.Z*look.Z)
+    if length < .000001 then return nil end
+    return look.X/length, look.Z/length
+end
+
+function World:canGrabEnemy(heroId, enemyId, range, height, facingDot)
+    local hero, enemy = livingBody(self, heroId), livingBody(self, enemyId)
+    if not hero or not enemy or heroId == enemyId or self.enemyKinds[enemyId] ~= 'Drone'
+        or self.enemyCarries[enemyId] or hero.model:GetAttribute('CarryingEnemy') ~= nil
+        or hero.root.Anchored or hero.humanoid.PlatformStand or enemy.root.Anchored
+        or hero.humanoid.FloorMaterial == Enum.Material.Air
+        or math.abs(hero.root.AssemblyLinearVelocity.Y) > 1 then return false end
+    local support = Workspace:Raycast(hero.root.Position, Vector3.new(0,-3.4,0), self.ray)
+    if not support or support.Normal.Y < .95 or support.Instance:GetAttribute('Hazard')
+        or support.Instance:GetAttribute('SurfaceId') == nil then return false end
+    local delta = enemy.root.Position - hero.root.Position
+    if delta.Magnitude > range or math.abs(delta.Y) > height then return false end
+    local x,z = flatFacing(hero.root)
+    if not x then return false end
+    local horizontal = math.sqrt(delta.X*delta.X + delta.Z*delta.Z)
+    if horizontal > .000001 and (x*delta.X + z*delta.Z)/horizontal < facingDot then return false end
+    return Workspace:Raycast(hero.root.Position, delta, self.ray) == nil
+end
+
+function World:carryEnemy(enemyId, heroId)
+    local enemy, hero = livingBody(self, enemyId), livingBody(self, heroId)
+    if not enemy or not hero or hero.root.Anchored or hero.humanoid.PlatformStand then return false end
+    local carried = self.enemyCarries[enemyId]
+    if carried and (carried.mode ~= 'Carried' or carried.actor ~= enemy or carried.holder ~= hero) then return false end
+    local x,z = flatFacing(hero.root)
+    if not x then return false end
+    if not carried then
+        if enemy.root.Anchored or self.enemyKinds[enemyId] ~= 'Drone'
+            or hero.model:GetAttribute('CarryingEnemy') ~= nil then return false end
+        carried = {actor = enemy, holder = hero, holderId = heroId, mode = 'Carried', collisions = {},
+            platformStand = enemy.humanoid.PlatformStand, autoRotate = enemy.humanoid.AutoRotate,
+            walkSpeed = enemy.humanoid.WalkSpeed, anchored = enemy.root.Anchored,
+            evaluateStateMachine = enemy.humanoid.EvaluateStateMachine}
+        -- PlatformStand alone still lets Humanoid rewrite torso collision.
+        -- Stop evaluation before disabling the parts so the carried body stays inert.
+        enemy.humanoid.EvaluateStateMachine = false
+        for _,p in ipairs(enemy.model:GetDescendants()) do
+            if p:IsA('BasePart') then carried.collisions[p] = p.CanCollide; p.CanCollide = false end
+        end
+        self.enemyCarries[enemyId] = carried
+        enemy.humanoid:Move(Vector3.new(),false)
+    end
+    enemy.humanoid.EvaluateStateMachine = false
+    enemy.root.Anchored = true
+    enemy.humanoid.PlatformStand, enemy.humanoid.AutoRotate, enemy.humanoid.WalkSpeed = true, false, 0
+    enemy.root.AssemblyLinearVelocity, enemy.root.AssemblyAngularVelocity = Vector3.new(), Vector3.new()
+    local origin = hero.root.Position
+    local held = Vector3.new(origin.X+x*1.75, origin.Y+3.4, origin.Z+z*1.75)
+    enemy.model:PivotTo(CFrame.lookAt(held, Vector3.new(held.X+x,held.Y,held.Z+z)) * CFrame.Angles(0,0,math.pi/2))
+    enemy.model:SetAttribute('CarryMode','Carried')
+    enemy.model:SetAttribute('HeldBy',heroId)
+    hero.model:SetAttribute('CarryingEnemy',enemyId)
+    return true
+end
+
+function World:releaseEnemy(enemyId, throwerId, tuning)
+    local carried = self.enemyCarries[enemyId]
+    if not carried then return false end
+    local x,z
+    if throwerId ~= nil then
+        local thrower = livingBody(self,throwerId)
+        tuning = tuning or self.config.EnemyCarry
+        if carried.mode ~= 'Carried' or thrower ~= carried.holder or not thrower
+            or throwerId ~= carried.holderId or thrower.root.Anchored or thrower.humanoid.PlatformStand
+            or type(tuning) ~= 'table' or type(tuning.horizontal) ~= 'number' or type(tuning.vertical) ~= 'number'
+            or tuning.horizontal ~= tuning.horizontal or tuning.vertical ~= tuning.vertical
+            or math.abs(tuning.horizontal) == math.huge or math.abs(tuning.vertical) == math.huge
+            or tuning.horizontal < 0 then return false end
+        x,z = flatFacing(thrower.root)
+        if not x then return false end
+    end
+    local enemy = carried.actor
+    if enemy.root.Parent then enemy.humanoid.EvaluateStateMachine = carried.evaluateStateMachine end
+    if carried.holder.model:GetAttribute('CarryingEnemy') == enemyId then
+        carried.holder.model:SetAttribute('CarryingEnemy',nil)
+    end
+    enemy.model:SetAttribute('HeldBy',nil)
+    if carried.mode == 'Carried' then
+        for p,collidable in pairs(carried.collisions) do if p.Parent then p.CanCollide = collidable end end
+        if enemy.root.Parent then
+            enemy.root.Anchored = carried.anchored
+            local allowed = enemy.root:CanSetNetworkOwnership()
+            if allowed then enemy.root:SetNetworkOwner(nil) end
+        end
+    end
+    if throwerId ~= nil then
+        carried.mode = 'Thrown'
+        enemy.model:SetAttribute('CarryMode','Thrown')
+        enemy.root.AssemblyLinearVelocity = Vector3.new(x*tuning.horizontal,tuning.vertical,z*tuning.horizontal)
+        enemy.root.AssemblyAngularVelocity = Vector3.new()
+        return true
+    end
+    enemy.model:SetAttribute('CarryMode',nil)
+    if enemy.root.Parent then
+        enemy.humanoid.PlatformStand, enemy.humanoid.AutoRotate, enemy.humanoid.WalkSpeed =
+            carried.platformStand, carried.autoRotate, carried.walkSpeed
+    end
+    self.enemyCarries[enemyId] = nil
+    return true
+end
+
 -- Collectibles are presentation only: they never enter the combat actor table.
 function World:healingFly(id, position)
     local fly = self.healingFlyVisuals[id]
@@ -978,12 +1104,18 @@ function World:updatePresentation(session, dt, enemies)
             end
             local attacking = actor.attackPoseUntil and self.presentationTime < actor.attackPoseUntil
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
+            local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
+            local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil
                 local angle = stride * (left and 1 or -1) * (shoulder and -1 or 1)
                 local roll = 0
-                if shoulder and reacting then
+                if shoulder and carryingEnemy then
+                    angle, roll = 2.65, left and -.2 or .2
+                elseif beingCarried then
+                    angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
+                elseif shoulder and reacting then
                     angle, roll = 0.65, left and -0.25 or 0.25
                 elseif shoulder and attacking then
                     angle = actor.attackPoseAction == "Dash" and 1.5 or (left and 0.45 or 1.95)
@@ -995,6 +1127,7 @@ function World:updatePresentation(session, dt, enemies)
 end
 
 function World:clearActors()
+    for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.healingFlyFolder:ClearAllChildren()

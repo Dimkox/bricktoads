@@ -48,6 +48,8 @@ function Node:GetAttribute(name) return self.attributes[name] end
 function Node:Destroy() self.destroyed=true; self.Parent=nil end
 function Node:ClearAllChildren() for _,child in ipairs(self:GetChildren()) do child:Destroy() end end
 function Node:PivotTo(cf) self.HumanoidRootPart.CFrame=cf end
+function Node:CanSetNetworkOwnership() return not self.Anchored end
+function Node:SetNetworkOwner(owner) self.networkOwner=owner;self.networkOwnerSet=true end
 local workspace=node('Workspace','Workspace')
 local serverTime=0
 function workspace:GetServerTimeNow() return serverTime end
@@ -97,7 +99,8 @@ local function actor(self,id,position)
     end
     root.Anchored=false; root.AssemblyLinearVelocity=vector()
     local a={model=model,root=root,humanoid={Health=100,PlatformStand=false,FloorMaterial=enum.Material.Slate,
-        Jump=false,JumpPower=42,UseJumpPower=true},cue=0}
+        Jump=false,JumpPower=42,UseJumpPower=true,AutoRotate=true,WalkSpeed=12,EvaluateStateMachine=true},cue=0}
+    function a.humanoid:Move(direction) self.lastMove=direction end
     self.actors[id]=a; return a
 end
 function Base.spawn(self,id,actorId,point)
@@ -342,3 +345,126 @@ walkOff(default,legacy,.1); default:jump(1)
 assert(not legacy.humanoid.Jump,'Legacy worlds must retain the original grounded-only BaseWorld jump')
 eq(legacy.root.AssemblyLinearVelocity,16,-20,3)
 print('PASS jump history belongs to one actual actor in one modern world and preserves legacy behavior')
+
+Base.move=actualBase.move; Base.setReaction=actualBase.setReaction
+local carrying=World.new(Base,{FallY=-20,Level=source(LevelSource),Enemy={speed=9},WalkSpeed=12},
+    {name='EnemyCarryWorld',offset={x=100,y=10,z=2048}})
+local holder=actor(carrying,1,vector(100,13,2048))
+holder.root.CFrame.LookVector=vector(1,0,0)
+local pig=actor(carrying,-1,vector(103,13,2048))
+pig.model:SetAttribute('ActorId','original-pig'); pig.model:SetAttribute('HealthRaw',2)
+carrying.enemyKinds[-1]='Drone'
+assert(type(carrying.canGrabEnemy)=='function','Enemy grabbing needs actual-body grounding, range, facing and geometry checks')
+assert(carrying:canGrabEnemy(1,-1,4,2,.25),'A grounded hero can grab the nearby same-world pig ahead')
+pig.root.CFrame=frame(97,13,2048)
+assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'A pig behind the actual hero direction cannot be grabbed')
+pig.root.CFrame=frame(104.01,13,2048)
+assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'Grab range must not extend beyond its configured boundary')
+pig.root.CFrame=frame(103,15.01,2048)
+assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'A grab cannot exceed its configured vertical separation')
+pig.root.CFrame=frame(103,13,2048)
+holder.humanoid.FloorMaterial=enum.Material.Air
+assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'Airborne heroes cannot initiate a ground grab')
+holder.humanoid.FloorMaterial=enum.Material.Slate
+holder.root.AssemblyLinearVelocity=vector(0,2,0)
+assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'A stale grounded report during upward flight cannot enable grabbing')
+holder.root.AssemblyLinearVelocity=vector()
+holder.root.CFrame=frame(150,13,2048); holder.root.CFrame.LookVector=vector(1,0,0)
+pig.root.CFrame=frame(153,13,2048)
+assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'FloorMaterial alone cannot turn a true route gap into ground support')
+holder.root.CFrame=frame(100,13,2048); holder.root.CFrame.LookVector=vector(1,0,0)
+pig.root.CFrame=frame(103,13,2048)
+for _,state in ipairs({'Anchored','Reaction','Dead'}) do
+    holder.root.Anchored=state=='Anchored'; holder.humanoid.PlatformStand=state=='Reaction'
+    holder.humanoid.Health=state=='Dead' and 0 or 100
+    assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'A held, reacting or dead hero cannot grab')
+end
+holder.root.Anchored=false;holder.humanoid.PlatformStand=false;holder.humanoid.Health=100
+local oldRaycast=workspace.Raycast
+function workspace:Raycast(origin,direction,params)
+    if math.abs(direction.X)>0 then return {Instance=carrying.gates[1].beam,Normal=vector(-1,0,0)} end
+    return oldRaycast(self,origin,direction,params)
+end
+assert(not carrying:canGrabEnemy(1,-1,4,2,.25),'Collidable group geometry between the bodies blocks a grab')
+workspace.Raycast=oldRaycast
+assert(carrying:canGrabEnemy(1,-1,4,2,.25),'Removing only the geometry obstruction restores the eligible close grab')
+print('PASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry')
+
+for _,p in ipairs(pig.model:GetDescendants()) do
+    if p:IsA('BasePart') then p.CanCollide=p.Name=='Torso' or p.Name=='Head' end
+end
+local originalModel,originalHP=pig.model,pig.humanoid.Health
+assert(carrying:carryEnemy(-1,1),'Grabbing must attach the same living model without spawning')
+assert(pig.model==originalModel and pig.humanoid.Health==originalHP and pig.model:GetAttribute('HealthRaw')==2)
+assert(pig.model:GetAttribute('ActorId')=='original-pig' and pig.model:GetAttribute('CarryMode')=='Carried'
+    and pig.model:GetAttribute('HeldBy')==1 and holder.model:GetAttribute('CarryingEnemy')==-1)
+assert(pig.root.Anchored and pig.humanoid.PlatformStand)
+assert(pig.humanoid.EvaluateStateMachine==false,
+    'Carried bodies must disable automatic humanoid collision updates before physics can re-enable torso collision')
+for _,p in ipairs(pig.model:GetDescendants()) do if p:IsA('BasePart') then assert(not p.CanCollide) end end
+eq(pig.root.Position,101.75,16.4,2048,'Carry pose must use the actual translated holder once')
+holder.root.CFrame=frame(105,13,2048);holder.root.CFrame.LookVector=vector(0,0,1)
+assert(carrying:carryEnemy(-1,1))
+eq(pig.root.Position,105,16.4,2049.75,'Repeated carry updates must follow the same holder current position and facing')
+local previousMove=pig.humanoid.lastMove
+carrying:setReaction(-1,false);carrying:move(-1,1,0)
+assert(pig.root.Anchored and pig.humanoid.PlatformStand and pig.humanoid.lastMove==previousMove,
+    'Reaction expiry and movement must not unfreeze or move a carried body')
+assert(not carrying:releaseEnemy(-1,2,{horizontal=26,vertical=16}),'A missing thrower cannot release a held body')
+assert(not carrying:releaseEnemy(-1,1,{horizontal=0/0,vertical=16}),'Invalid throw tuning cannot mutate the hold')
+assert(pig.root.Anchored and not pig.model.Torso.CanCollide and pig.model:GetAttribute('CarryMode')=='Carried'
+    and holder.model:GetAttribute('CarryingEnemy')==-1,'Rejected throws must preserve held physics and attributes')
+assert(carrying:releaseEnemy(-1,1,{horizontal=26,vertical=16}),'Throwing releases the same body with current validated holder direction')
+assert(not pig.root.Anchored and pig.humanoid.PlatformStand and pig.model:GetAttribute('CarryMode')=='Thrown')
+assert(pig.humanoid.EvaluateStateMachine==true,'Throw release must restore the original humanoid evaluation setting')
+assert(pig.root.networkOwnerSet and pig.root.networkOwner==nil,'Unanchored throws must remain server owned')
+assert(pig.model:GetAttribute('HeldBy')==nil and holder.model:GetAttribute('CarryingEnemy')==nil)
+eq(pig.root.AssemblyLinearVelocity,0,16,26,'Throw direction must be captured from the current holder immediately')
+assert(pig.model.Torso.CanCollide and pig.model.Head.CanCollide and not pig.root.CanCollide
+    and not pig.model['Left Arm'].CanCollide,'Each target part must restore its own original collision value')
+holder.root.CFrame=frame(500,40,2000);holder.root.CFrame.LookVector=vector(-1,0,0)
+eq(pig.root.AssemblyLinearVelocity,0,16,26,'Later holder movement cannot retarget the accepted throw')
+carrying:setReaction(-1,false)
+assert(pig.humanoid.PlatformStand,'Thrown bodies remain physical until the domain ends their reaction')
+assert(carrying:releaseEnemy(-1),'Ending throw restores autonomous body physics without another launch')
+assert(pig.model:GetAttribute('CarryMode')==nil and not pig.humanoid.PlatformStand and pig.humanoid.AutoRotate)
+eq(pig.root.AssemblyLinearVelocity,0,16,26,'Ending throw must preserve its actual current physical motion')
+assert(pig.model==originalModel and pig.humanoid.Health==originalHP)
+print('PASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing')
+
+holder.root.CFrame=frame(100,13,2048);holder.root.CFrame.LookVector=vector(1,0,0)
+pig.root.CFrame=frame(103,13,2048)
+assert(carrying:carryEnemy(-1,1))
+local oldHeldPosition=pig.root.Position
+local oldHolder=holder
+holder=actor(carrying,1,vector(300,13,2048));holder.root.CFrame.LookVector=vector(-1,0,0)
+assert(not carrying:carryEnemy(-1,1),'Replacement hero models cannot inherit an old carry')
+assert(not carrying:releaseEnemy(-1,1,{horizontal=26,vertical=16}),'A replacement hero cannot throw the predecessor held body')
+assert(pig.root.Anchored and pig.model:GetAttribute('CarryMode')=='Carried','Rejected replacement throws leave the old carry unchanged')
+assert(carrying:releaseEnemy(-1),'Dropping after replacement must use the already held body pose')
+eq(pig.root.Position,oldHeldPosition.X,oldHeldPosition.Y,oldHeldPosition.Z,'Drop cannot teleport to a replacement hero')
+assert(oldHolder.model:GetAttribute('CarryingEnemy')==nil and holder.model:GetAttribute('CarryingEnemy')==nil,
+    'Release must clear the original holder reference without attaching the replacement')
+assert(pig.humanoid.EvaluateStateMachine==true,'A normal drop restores the original enabled evaluation')
+pig.root.CFrame=frame(303,13,2048)
+pig.humanoid.EvaluateStateMachine=false
+assert(carrying:carryEnemy(-1,1))
+assert(carrying:releaseEnemy(-1) and pig.humanoid.EvaluateStateMachine==false,
+    'A body whose evaluation was originally disabled must retain that setting after drop')
+assert(carrying:carryEnemy(-1,1))
+assert(carrying:releaseEnemy(-1,1,{horizontal=26,vertical=16}) and pig.humanoid.EvaluateStateMachine==false,
+    'A throw must also preserve an originally disabled evaluation setting')
+assert(carrying:releaseEnemy(-1) and pig.humanoid.EvaluateStateMachine==false)
+pig.humanoid.EvaluateStateMachine=true
+assert(carrying:carryEnemy(-1,1))
+pig.humanoid.Health=0
+assert(carrying:releaseEnemy(-1) and pig.humanoid.EvaluateStateMachine==true,
+    'A dead carried body must regain its original evaluation when the domain forgets it')
+pig.humanoid.Health=100
+assert(carrying:carryEnemy(-1,1))
+carrying:clearActors()
+assert(next(carrying.enemyCarries)==nil and holder.model:GetAttribute('CarryingEnemy')==nil,
+    'New-run cleanup clears original carry attributes and bookkeeping before destroying actors')
+assert(pig.humanoid.EvaluateStateMachine==true,'Cleanup must restore carried evaluation before destroying its body')
+assert(default.folder.Parent==workspace and route.folder.Parent==workspace,'Carry cleanup preserves other group worlds')
+print('PASS carry drops and new-run cleanup retain old body references without crossing group or actor generations')
