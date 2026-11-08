@@ -1,0 +1,236 @@
+{
+  "panel": {
+    "y": 189,
+    "x": 134,
+    "visible": true,
+    "w": 482,
+    "h": 122
+  },
+  "objective": {
+    "y": 18,
+    "x": 328,
+    "visible": true,
+    "w": 404,
+    "h": 92
+  },
+  "next": {
+    "y": 218,
+    "x": 148,
+    "visible": true,
+    "w": 223,
+    "h": 44
+  },
+  "free": {
+    "y": 218,
+    "x": 379,
+    "visible": true,
+    "w": 223,
+    "h": 44
+  },
+  "right": {
+    "y": 261,
+    "x": 682,
+    "visible": true,
+    "w": 50,
+    "h": 50
+  },
+  "mode": "Free",
+  "up": {
+    "y": 203,
+    "x": 624,
+    "visible": true,
+    "w": 50,
+    "h": 50
+  },
+  "state": {
+    "view": "Spectating",
+    "canChooseView": true,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "actorId": "ae6970f0-ad92-4235-a298-ca5c799d6e6a:actor:2",
+        "respawns": 3,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 2,
+        "attempt": 1,
+        "userId": -2,
+        "displayName": "Player2",
+        "username": "Player2",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "actorId": "ae6970f0-ad92-4235-a298-ca5c799d6e6a:actor:5",
+        "respawns": 3,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 3,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "actorId": "ae6970f0-ad92-4235-a298-ca5c799d6e6a:actor:8",
+        "respawns": 3,
+        "dying": false
+      }
+    ],
+    "enemyOffers": [
+      {
+        "enemyId": -1,
+        "maxHearts": 3,
+        "name": "Ржавый дозорный",
+        "hearts": 3,
+        "actorId": "ae6970f0-ad92-4235-a298-ca5c799d6e6a:enemy:1:-1"
+      },
+      {
+        "enemyId": -2,
+        "maxHearts": 3,
+        "name": "Ржавый дозорный",
+        "hearts": 3,
+        "actorId": "ae6970f0-ad92-4235-a298-ca5c799d6e6a:enemy:1:-2"
+      }
+    ],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "ae6970f0-ad92-4235-a298-ca5c799d6e6a",
+    "canSelect": false,
+    "heroOnline": 3,
+    "host": -1,
+    "preference": "Spectator",
+    "online": 4,
+    "now": 1794022409.450429,
+    "canStart": false,
+    "cameraBounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxZ": 49,
+      "maxX": 136
+    },
+    "selectedTemplate": "Mr. Green",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "preference": "Hero",
+        "userId": -1,
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "preference": "Hero",
+        "userId": -2,
+        "displayName": "Player2"
+      },
+      {
+        "username": "Player3",
+        "template": "Mr. Green",
+        "preference": "Hero",
+        "userId": -3,
+        "displayName": "Player3"
+      },
+      {
+        "username": "Player4",
+        "template": "Mr. Green",
+        "preference": "Spectator",
+        "userId": -4,
+        "displayName": "Player4"
+      }
+    ],
+    "calibration": "PLAYABLE_PROTOTYPE"
+  },
+  "roster": {
+    "y": 18,
+    "x": 18,
+    "visible": true,
+    "w": 292,
+    "h": 150
+  },
+  "safe": {
+    "y": 0,
+    "x": 0,
+    "visible": true,
+    "w": 750,
+    "h": 323
+  },
+  "menu": {
+    "y": 270,
+    "x": 379,
+    "visible": true,
+    "w": 223,
+    "h": 34
+  },
+  "viewport": [
+    750,
+    381
+  ],
+  "axes": {
+    "y": 203,
+    "x": 624,
+    "visible": true,
+    "w": 108,
+    "h": 108
+  },
+  "chooseEnemy": {
+    "y": 270,
+    "x": 148,
+    "visible": true,
+    "w": 223,
+    "h": 34
+  },
+  "stick": {
+    "y": 207,
+    "x": 18,
+    "visible": true,
+    "w": 104,
+    "h": 104
+  }
+}

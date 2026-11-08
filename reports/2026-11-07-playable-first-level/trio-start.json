@@ -1,0 +1,399 @@
+{
+  "status": "PASS_START_AND_REPLICATION",
+  "fullTrioLevel": "NOT_RUN",
+  "clients": [
+    {
+      "client": -3,
+      "bodies": [
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:2",
+          "slot": 1,
+          "root": true,
+          "name": "Player1 @Player1",
+          "template": "Mr. Yellow"
+        },
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:22",
+          "slot": 3,
+          "root": true,
+          "name": "Player3 @Player3",
+          "template": "Mr. Yellow"
+        },
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:33",
+          "slot": 2,
+          "root": true,
+          "name": "Player2 @Player2",
+          "template": "Mr. Yellow"
+        }
+      ],
+      "snapshot": {
+        "canSelect": false,
+        "host": -1,
+        "lobby": [
+          {
+            "username": "Player1",
+            "template": "Mr. Yellow",
+            "userId": -1,
+            "displayName": "Player1"
+          },
+          {
+            "username": "Player2",
+            "template": "Mr. Yellow",
+            "userId": -2,
+            "displayName": "Player2"
+          },
+          {
+            "username": "Player3",
+            "template": "Mr. Yellow",
+            "userId": -3,
+            "displayName": "Player3"
+          }
+        ],
+        "calibration": "PLAYABLE_PROTOTYPE",
+        "mine": 3,
+        "heroes": [
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 1,
+            "attempt": 1,
+            "userId": -1,
+            "displayName": "Player1",
+            "username": "Player1",
+            "connectionEpoch": 1,
+            "hearts": 3.297872340425532,
+            "rawLife": 31,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:2",
+            "respawns": 3,
+            "dying": false
+          },
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 2,
+            "attempt": 3,
+            "userId": -2,
+            "displayName": "Player2",
+            "username": "Player2",
+            "connectionEpoch": 1,
+            "hearts": 3.297872340425532,
+            "rawLife": 31,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:33",
+            "respawns": 1,
+            "dying": false
+          },
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 3,
+            "attempt": 3,
+            "userId": -3,
+            "displayName": "Player3",
+            "username": "Player3",
+            "connectionEpoch": 1,
+            "hearts": 5,
+            "rawLife": 47,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:22",
+            "respawns": 1,
+            "dying": false
+          }
+        ],
+        "levelEpoch": 1,
+        "online": 3,
+        "now": 1794017248.432673,
+        "canStart": false,
+        "status": "Active",
+        "level": {
+          "bossHits": 0,
+          "bossMax": 3,
+          "objective": "Разбейте дозор у старых ворот",
+          "stage": "Approach",
+          "enemies": [
+            {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -1,
+              "dead": false
+            },
+            {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -2,
+              "dead": false
+            }
+          ]
+        },
+        "runId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5",
+        "selectedTemplate": "Mr. Yellow"
+      }
+    },
+    {
+      "client": -1,
+      "bodies": [
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:2",
+          "slot": 1,
+          "root": true,
+          "name": "Player1 @Player1",
+          "template": "Mr. Yellow"
+        },
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:22",
+          "slot": 3,
+          "root": true,
+          "name": "Player3 @Player3",
+          "template": "Mr. Yellow"
+        },
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:33",
+          "slot": 2,
+          "root": true,
+          "name": "Player2 @Player2",
+          "template": "Mr. Yellow"
+        }
+      ],
+      "snapshot": {
+        "canSelect": false,
+        "host": -1,
+        "lobby": [
+          {
+            "username": "Player1",
+            "template": "Mr. Yellow",
+            "userId": -1,
+            "displayName": "Player1"
+          },
+          {
+            "username": "Player2",
+            "template": "Mr. Yellow",
+            "userId": -2,
+            "displayName": "Player2"
+          },
+          {
+            "username": "Player3",
+            "template": "Mr. Yellow",
+            "userId": -3,
+            "displayName": "Player3"
+          }
+        ],
+        "calibration": "PLAYABLE_PROTOTYPE",
+        "mine": 1,
+        "heroes": [
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 1,
+            "attempt": 1,
+            "userId": -1,
+            "displayName": "Player1",
+            "username": "Player1",
+            "connectionEpoch": 1,
+            "hearts": 3.297872340425532,
+            "rawLife": 31,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:2",
+            "respawns": 3,
+            "dying": false
+          },
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 2,
+            "attempt": 3,
+            "userId": -2,
+            "displayName": "Player2",
+            "username": "Player2",
+            "connectionEpoch": 1,
+            "hearts": 3.297872340425532,
+            "rawLife": 31,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:33",
+            "respawns": 1,
+            "dying": false
+          },
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 3,
+            "attempt": 3,
+            "userId": -3,
+            "displayName": "Player3",
+            "username": "Player3",
+            "connectionEpoch": 1,
+            "hearts": 5,
+            "rawLife": 47,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:22",
+            "respawns": 1,
+            "dying": false
+          }
+        ],
+        "levelEpoch": 1,
+        "online": 3,
+        "now": 1794017248.548209,
+        "canStart": false,
+        "status": "Active",
+        "level": {
+          "bossHits": 0,
+          "bossMax": 3,
+          "objective": "Разбейте дозор у старых ворот",
+          "stage": "Approach",
+          "enemies": [
+            {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -1,
+              "dead": false
+            },
+            {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -2,
+              "dead": false
+            }
+          ]
+        },
+        "runId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5",
+        "selectedTemplate": "Mr. Yellow"
+      }
+    },
+    {
+      "client": -2,
+      "bodies": [
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:2",
+          "slot": 1,
+          "root": true,
+          "name": "Player1 @Player1",
+          "template": "Mr. Yellow"
+        },
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:22",
+          "slot": 3,
+          "root": true,
+          "name": "Player3 @Player3",
+          "template": "Mr. Yellow"
+        },
+        {
+          "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:33",
+          "slot": 2,
+          "root": true,
+          "name": "Player2 @Player2",
+          "template": "Mr. Yellow"
+        }
+      ],
+      "snapshot": {
+        "canSelect": false,
+        "host": -1,
+        "lobby": [
+          {
+            "username": "Player1",
+            "template": "Mr. Yellow",
+            "userId": -1,
+            "displayName": "Player1"
+          },
+          {
+            "username": "Player2",
+            "template": "Mr. Yellow",
+            "userId": -2,
+            "displayName": "Player2"
+          },
+          {
+            "username": "Player3",
+            "template": "Mr. Yellow",
+            "userId": -3,
+            "displayName": "Player3"
+          }
+        ],
+        "calibration": "PLAYABLE_PROTOTYPE",
+        "mine": 2,
+        "heroes": [
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 1,
+            "attempt": 1,
+            "userId": -1,
+            "displayName": "Player1",
+            "username": "Player1",
+            "connectionEpoch": 1,
+            "hearts": 3.297872340425532,
+            "rawLife": 31,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:2",
+            "respawns": 3,
+            "dying": false
+          },
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 2,
+            "attempt": 3,
+            "userId": -2,
+            "displayName": "Player2",
+            "username": "Player2",
+            "connectionEpoch": 1,
+            "hearts": 3.297872340425532,
+            "rawLife": 31,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:33",
+            "respawns": 1,
+            "dying": false
+          },
+          {
+            "connected": true,
+            "template": "Mr. Yellow",
+            "slot": 3,
+            "attempt": 3,
+            "userId": -3,
+            "displayName": "Player3",
+            "username": "Player3",
+            "connectionEpoch": 1,
+            "hearts": 5,
+            "rawLife": 47,
+            "status": "Alive",
+            "actorId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5:actor:22",
+            "respawns": 1,
+            "dying": false
+          }
+        ],
+        "levelEpoch": 1,
+        "online": 3,
+        "now": 1794017248.548209,
+        "canStart": false,
+        "status": "Active",
+        "level": {
+          "bossHits": 0,
+          "bossMax": 3,
+          "objective": "Разбейте дозор у старых ворот",
+          "stage": "Approach",
+          "enemies": [
+            {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -1,
+              "dead": false
+            },
+            {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -2,
+              "dead": false
+            }
+          ]
+        },
+        "runId": "c389be60-eb1a-4f88-862c-3bbc3dc352c5",
+        "selectedTemplate": "Mr. Yellow"
+      }
+    }
+  ]
+}

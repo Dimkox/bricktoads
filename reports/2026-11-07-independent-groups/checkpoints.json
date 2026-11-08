@@ -1,0 +1,352 @@
+{
+  "fifo": {
+    "selectedGroup": "group-2",
+    "heroes": 1,
+    "offer": {
+      "groupId": "group-2",
+      "offerId": "boss-offer:2",
+      "groupName": "Команда 2",
+      "bossId": "CausewayGuardian",
+      "available": true,
+      "deadline": 1794024846.001674,
+      "state": "Invited",
+      "slotId": "96709902-9d01-4258-8982-b35e63f628e2:guardian:1",
+      "position": 1
+    },
+    "queue": {
+      "state": "Ready",
+      "slotId": "96709902-9d01-4258-8982-b35e63f628e2:guardian:1",
+      "available": true,
+      "bossId": "CausewayGuardian",
+      "offerId": "boss-offer:2",
+      "groupName": "Команда 2",
+      "groupId": "group-2"
+    },
+    "world": "BrickToadsWorld_group-2"
+  },
+  "falls": {
+    "appearances": [
+      "3a5b66bb-78cb-4558-93e5-eb3f44ba20b2:actor:2",
+      "3a5b66bb-78cb-4558-93e5-eb3f44ba20b2:actor:9",
+      "3a5b66bb-78cb-4558-93e5-eb3f44ba20b2:actor:13",
+      "3a5b66bb-78cb-4558-93e5-eb3f44ba20b2:actor:17"
+    ],
+    "preparation": "Four real fall deaths; no HP/reserve edits"
+  },
+  "eliminated": {
+    "heroes": [
+      {
+        "view": "Choice",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 4,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 0,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "respawns": 0,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 2,
+        "attempt": 1,
+        "userId": -2,
+        "displayName": "Player2",
+        "username": "Player2",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "3a5b66bb-78cb-4558-93e5-eb3f44ba20b2:actor:5",
+        "dying": false
+      }
+    ],
+    "group": "group-1",
+    "run": "3a5b66bb-78cb-4558-93e5-eb3f44ba20b2",
+    "groups": [
+      {
+        "players": 2,
+        "name": "Команда 1",
+        "status": "Active",
+        "heroes": 2,
+        "id": "group-1",
+        "canJoin": true
+      },
+      {
+        "players": 2,
+        "name": "Команда 2",
+        "status": "Active",
+        "heroes": 1,
+        "id": "group-2",
+        "canJoin": true
+      }
+    ]
+  },
+  "created": {
+    "groups": [
+      {
+        "players": 1,
+        "name": "Команда 1",
+        "status": "Active",
+        "heroes": 2,
+        "id": "group-1",
+        "canJoin": true
+      },
+      {
+        "players": 2,
+        "name": "Команда 2",
+        "status": "Active",
+        "heroes": 1,
+        "id": "group-2",
+        "canJoin": true
+      },
+      {
+        "players": 1,
+        "name": "Команда 3",
+        "status": "Lobby",
+        "heroes": 0,
+        "id": "group-3",
+        "canJoin": true
+      }
+    ],
+    "canStart": true,
+    "group": "group-3",
+    "status": "Lobby",
+    "world": "BrickToadsWorld_group-3"
+  },
+  "newRun": {
+    "group": "group-3",
+    "groups": [
+      {
+        "players": 1,
+        "name": "Команда 1",
+        "heroes": 2,
+        "status": "Active",
+        "id": "group-1",
+        "canJoin": false,
+        "reason": "ROLE_ACTIVE"
+      },
+      {
+        "players": 2,
+        "name": "Команда 2",
+        "heroes": 1,
+        "status": "Active",
+        "id": "group-2",
+        "canJoin": false,
+        "reason": "ROLE_ACTIVE"
+      },
+      {
+        "players": 1,
+        "name": "Команда 3",
+        "status": "Active",
+        "heroes": 1,
+        "id": "group-3",
+        "canJoin": true
+      }
+    ],
+    "run": "b94fd326-c35e-40e0-88cd-e29d08535ede",
+    "hero": {
+      "view": "Playing",
+      "connected": true,
+      "template": "Mr. Green",
+      "slot": 1,
+      "attempt": 1,
+      "userId": -1,
+      "displayName": "Player1",
+      "username": "Player1",
+      "connectionEpoch": 1,
+      "hearts": 5,
+      "rawLife": 47,
+      "status": "Alive",
+      "respawns": 3,
+      "actorId": "b94fd326-c35e-40e0-88cd-e29d08535ede:actor:2",
+      "dying": false
+    }
+  },
+  "isolatedLoss": {
+    "group": "group-3",
+    "hero": {
+      "view": "Menu",
+      "connected": true,
+      "template": "Mr. Green",
+      "slot": 1,
+      "attempt": 4,
+      "userId": -1,
+      "displayName": "Player1",
+      "username": "Player1",
+      "connectionEpoch": 1,
+      "hearts": 0,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "respawns": 0,
+      "dying": false
+    },
+    "groups": [
+      {
+        "players": 1,
+        "name": "Команда 1",
+        "status": "Active",
+        "heroes": 2,
+        "id": "group-1",
+        "canJoin": true
+      },
+      {
+        "players": 2,
+        "name": "Команда 2",
+        "status": "Active",
+        "heroes": 1,
+        "id": "group-2",
+        "canJoin": true
+      },
+      {
+        "players": 1,
+        "name": "Команда 3",
+        "status": "Lost",
+        "heroes": 1,
+        "id": "group-3",
+        "canJoin": true
+      }
+    ],
+    "status": "Lost"
+  },
+  "joinedOther": {
+    "camera": "-65.00099182128906, 28.000045776367188, 534.9998779296875",
+    "heroes": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "96709902-9d01-4258-8982-b35e63f628e2:actor:2",
+        "dying": false
+      }
+    ],
+    "offers": [
+      {
+        "enemyId": -1,
+        "maxHearts": 3,
+        "actorId": "96709902-9d01-4258-8982-b35e63f628e2:enemy:1:-1",
+        "hearts": 3,
+        "name": "Ржавый дозорный"
+      },
+      {
+        "enemyId": -2,
+        "maxHearts": 3,
+        "actorId": "96709902-9d01-4258-8982-b35e63f628e2:enemy:1:-2",
+        "hearts": 3,
+        "name": "Ржавый дозорный"
+      }
+    ],
+    "group": "group-2",
+    "status": "Active",
+    "world": "BrickToadsWorld_group-2"
+  },
+  "existingEnemy": {
+    "hero": {
+      "view": "Playing",
+      "connected": true,
+      "template": "Mr. Green",
+      "slot": 1,
+      "attempt": 1,
+      "userId": -3,
+      "displayName": "Player3",
+      "username": "Player3",
+      "connectionEpoch": 1,
+      "hearts": 5,
+      "rawLife": 47,
+      "status": "Alive",
+      "respawns": 3,
+      "actorId": "96709902-9d01-4258-8982-b35e63f628e2:actor:2",
+      "dying": false
+    },
+    "role": {
+      "connected": true,
+      "enemyId": -1,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 3,
+      "maxHearts": 3,
+      "status": "Alive",
+      "template": "Sentry",
+      "actorId": "96709902-9d01-4258-8982-b35e63f628e2:enemy:1:-1",
+      "name": "Ржавый дозорный"
+    },
+    "group": "group-2",
+    "camera": "-34.51118469238281, 28.000011444091797, 535.7435913085938",
+    "world": "BrickToadsWorld_group-2"
+  },
+  "scopedDamage": {
+    "group": "group-2",
+    "run": "96709902-9d01-4258-8982-b35e63f628e2",
+    "hero": {
+      "view": "Playing",
+      "connected": true,
+      "template": "Mr. Green",
+      "slot": 1,
+      "attempt": 1,
+      "userId": -3,
+      "displayName": "Player3",
+      "username": "Player3",
+      "connectionEpoch": 1,
+      "hearts": 3.297872340425532,
+      "rawLife": 31,
+      "status": "Alive",
+      "respawns": 3,
+      "actorId": "96709902-9d01-4258-8982-b35e63f628e2:actor:2",
+      "dying": false
+    }
+  },
+  "shiftedBoss": {
+    "role": {
+      "connected": true,
+      "enemyId": -99,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 2,
+      "maxHearts": 3,
+      "status": "Alive",
+      "template": "Boss",
+      "actorId": "96709902-9d01-4258-8982-b35e63f628e2:boss:1",
+      "name": "Страж переправы"
+    },
+    "heroes": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 3.297872340425532,
+        "rawLife": 31,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "96709902-9d01-4258-8982-b35e63f628e2:actor:2",
+        "dying": false
+      }
+    ],
+    "group": "group-2",
+    "hits": 1,
+    "world": "BrickToadsWorld_group-2"
+  }
+}

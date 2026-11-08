@@ -1,0 +1,8 @@
+local Registry = require("../src/stand/server/ConnectionRegistry")
+local Core = require("../src/server/RunLifecycle")
+local Combat = require("../src/stand/server/Combat")
+local Session = require("../src/stand/server/Session")
+local Config = require("../src/stand/server/Config")
+local World = require("./stand/FakeWorld")
+require("./stand/ConnectionRegistry.spec")(Registry, Core, Combat, Session, Config, World)
+print("PASS native Luau connection contracts; actual same-account transport NOT RUN")

@@ -1,0 +1,36 @@
+{
+  "verifiedOn": "2026-11-07",
+  "workspace": "C:/Users/User/Documents/bricktoads",
+  "runtime": {"luau": "0.745", "python": "3.13.9"},
+  "checks": [
+    {"command": "& '.tools/luau-0.745/luau.exe' tests/run_gameplay.luau", "exitCode": 0, "passed": 53, "counts": {"LevelDirector": 25, "GameController": 27, "SpectatorTargets": 1}},
+    {"command": "& '.tools/luau-0.745/luau.exe' tests/run.luau", "exitCode": 0, "passed": 46, "failed": 0},
+    {"command": "& '.tools/luau-0.745/luau.exe' tests/run_stand.luau", "exitCode": 0, "counts": {"CombatAssertions": 318, "SessionPassed": 38, "SessionFailed": 0}},
+    {"command": "& '.tools/luau-0.745/luau.exe' tests/run_connections.luau", "exitCode": 0, "passed": 18, "failed": 0},
+    {"command": "& '.tools/python-3.13.9/python.exe' tools/test_stand_gateway.py --luau '.tools/luau-0.745/luau.exe'", "exitCode": 0, "passed": 14, "failed": 0},
+    {"command": "& '.tools/python-3.13.9/python.exe' -m unittest discover -s tools -p 'test_*.py'", "exitCode": 0, "passed": 17},
+    {"command": "$scripts=@(rg --files src tests -g '*.lua' -g '*.luau'); foreach ($file in $scripts) { & '.tools/luau-0.745/luau-compile.exe' $file > $null; if ($LASTEXITCODE -ne 0) { throw \"Compilation failed: $file\" } }; & '.tools/luau-0.745/luau-compile.exe' tools/studio_launch_combat_acceptance.luau > $null; if ($LASTEXITCODE -ne 0) { throw 'Compilation failed: acceptance launcher' }; Write-Output \"Compiled $($scripts.Count) src/tests scripts and 1 CI acceptance launcher\"", "exitCode": 0, "compiledSourceAndTestFiles": 35, "compiledAcceptanceLaunchers": 1},
+    {"command": "& '.tools/python-3.13.9/python.exe' tools/build_bricktoads_place.py", "exitCode": 0},
+    {"command": "& '.tools/python-3.13.9/python.exe' tools/build_bricktoads_place.py --check", "exitCode": 0},
+    {"command": "& '.tools/python-3.13.9/python.exe' tools/build_combat_stand.py", "exitCode": 0},
+    {"command": "& '.tools/python-3.13.9/python.exe' tools/build_combat_stand.py --check", "exitCode": 0},
+    {"command": "& '.tools/python-3.13.9/python.exe' tools/build_test_place.py", "exitCode": 0}
+  ],
+  "playable": {
+    "path": "places/BrickToadsPlayable.rbxlx",
+    "bytes": 182273,
+    "sha256": "2b98d0e594aba7426eb3097d71289f2fb821055fa6c37fc18bacb23e14f11af3",
+    "matchesCurrentSources": true
+  },
+  "preservedStarter": {
+    "path": "places/BrickToads.rbxlx",
+    "bytesBefore": 91334,
+    "bytesAfter": 91334,
+    "sha256Before": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353",
+    "sha256After": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353",
+    "modifiedUtcBefore": "2026-11-07T00:32:29.6179821Z",
+    "modifiedUtcAfter": "2026-11-07T00:32:29.6179821Z",
+    "unchanged": true
+  },
+  "scope": "Fresh native CLI, compilation and build checks. Engine physics and real same-account reconnect are not established by these checks."
+}

@@ -1,0 +1,9 @@
+{
+  "status": "START_NOT_OBSERVED",
+  "clients": 3,
+  "method": "MCP user_mouse_input on the Start button in client -3, which was incorrectly assumed to be host",
+  "observed": "All three client snapshots remained in Lobby with zero actors after the tool acknowledged input.",
+  "endTestLabel": "TRIO_START_CONFIRMED",
+  "actualHost": -1,
+  "correction": "The EndTest label was issued prematurely and is not evidence of a trio start. Saved snapshots identify -1 as host and show canStart=false on clicked client -3. The separate direct-client Intent retest in trio-start.json confirms the real trio start."
+}

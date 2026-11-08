@@ -1,0 +1,257 @@
+Native verification 2026-11-07; engine physics separately verified in Studio.
+tests/run.luau
+PASS 1/2/3 heroes share templates, not resources
+PASS invalid roster rejected
+PASS late hero is never added
+PASS initial failure does not spend a respawn
+PASS unsafe initial spawn is not an invented free emergency life
+PASS failed respawn consumes nothing
+PASS three successful respawns then actual death at zero
+PASS normal shield is exactly two seconds
+PASS accepted attack cancels protection even without a hit
+PASS zero normalized health alone is not a death event
+PASS emergency appearance costs one and expires at ten seconds
+PASS emergency cycles consume appearances without deaths
+PASS safe relocation does not heal or spend again
+PASS emergency attack cancels hold and the later retry
+PASS failed emergency replacement leaves existing living attempt
+PASS offline emergency expiry never spawns or kills
+PASS offline dead hero waits for owner without spending
+PASS rejoin living actor preserves health, resources and deadline
+PASS offline actor still accepts damage and death
+PASS offline owner cannot start attacks
+PASS stale connection cannot command after rejoin
+PASS disconnect invalidates an uncommitted spawn
+PASS duplicate commit replays the established acknowledgement
+PASS same event id with different payload rejected
+PASS concurrent requests cannot reserve twice
+PASS old actor death cannot kill its replacement
+PASS actor ids cannot be reused within a run
+PASS aborted token cannot confirm a later reservation
+PASS level transition heals once without resetting resources
+PASS one living hero completes an eligible exit
+PASS exit prerequisites cannot be skipped
+PASS eliminated member stays eliminated on next level
+PASS pending offline respawn prevents false defeat
+PASS old level reservations are invalidated; owner uses current level
+PASS old level death is rejected even for the same actor
+PASS transition preserves ordinary deadline and clears emergency hold
+PASS spectator menu choice does not dissolve remaining party
+PASS new game gives a new independent roster and resources
+PASS wrong run events cannot affect another game
+PASS input snapshots remain immutable
+PASS malformed times, revisions and numeric health are rejected
+PASS server clock cannot move backwards
+PASS safe relocation wins a serialized race without double spending
+PASS death cancels a prepared emergency replacement
+PASS attack cancels a prepared emergency replacement
+PASS 120 deterministic life-cycle sequences preserve invariants
+RESULT: 46 passed; 0 failed
+tests/run_stand.luau
+PASS Combat: 318 assertions
+PASS one two three heroes have independent actors and reserves
+PASS all six ordered trio attack pairs use the same profile
+PASS duplicate and reordered attack cannot replay damage or impulse
+PASS payload cannot supply target health position time or NaN
+PASS stale actor packet does not poison new sequence
+PASS failed physical spawn spends no resource
+PASS safe point race aborts without spending
+PASS unsafe initial spawn is not a free emergency attempt
+PASS normal shield blocks health but not unproven impulse immunity
+PASS missed own attack cancels normal shield before impact
+PASS normal movement retains shield and expires without input
+PASS emergency cycles consume exactly three respawns then release live body
+PASS safe relocation beats simultaneous timeout without new life or healing
+PASS emergency attack releases hold even when it misses
+PASS emergency protection prevents health and impulse
+PASS offline body remains target while new commands are rejected
+PASS already accepted attack resolves after disconnect
+PASS old connection cannot control returned actor
+PASS offline emergency timeout cannot consume another reserve
+PASS lethal dash begins dying state before one confirmed death
+PASS exact arithmetic zero alone is not lethal
+PASS server stall does not deliver an expired hit window
+PASS backward time and wrong run do not mutate state
+PASS one hit chooses one target and does not hit self
+PASS physical response keeps the selected hero profile
+PASS rate limit is bounded and recovers with server time
+PASS failed emergency replacement preserves the current living actor
+PASS safe relocation preserves an intermediate combat state
+PASS acceptance order not slot number decides simultaneous attacks
+PASS missing identity and non-scalar input is rejected
+PASS malformed identity types and non-finite counters cannot mutate the session
+PASS non-table packets and unknown schema are harmless rejections
+PASS non-finite and oversized movement never reaches the world
+PASS forged context and foreign actor cannot poison the owners sequence
+PASS an overtaken attack cannot cancel protection or replay after a newer move
+PASS a new sequence during cooldown cannot replace an accepted attack
+PASS rate-limited attacks cannot cancel normal or emergency protection
+PASS snapshot exposes eliminated view without changing lives or the continuing teammate
+PASS game sessions accept explicit group and level identities without changing stand defaults
+PASS contextual object action runs only after actor authority and cooldown checks
+Session tests: 40 PASS, 0 FAIL
+PASS native Luau stand contracts; engine physics NOT RUN
+tests/run_connections.luau
+PASS unknown objects have no connection authority
+PASS first join is current and duplicate join is a no-op
+PASS a fresh object replaces the same account's current object
+PASS superseded object's removal cannot disconnect the replacement
+PASS current removal changes authority exactly once
+PASS departing replacement never falls back to old object
+PASS known superseded or removed objects never revive through add replay
+PASS a genuinely new object can return after all old objects leave
+PASS different accounts including Studio negative IDs are independent
+PASS authority uses exact object identity even for equal fake objects
+PASS online filters stale/unknown duplicates and sorts without changing input
+PASS online only returns current objects present in the supplied population
+PASS late new account is online without replacing an existing account
+PASS separate registries do not share object lifecycle
+PASS binding returns a damaged live hero without healing or a new appearance
+PASS binding replacement does not cancel an already accepted attack
+PASS binding preserves current life, actor, reserve and both shield deadlines
+PASS binding reconnects an offline dead hero with exactly one successful respawn
+ConnectionRegistry tests: 18 PASS, 0 FAIL
+PASS native Luau connection contracts; actual same-account transport NOT RUN
+tests/run_gameplay.luau
+PASS ordinary enemies are weaker and die once without respawning
+PASS encounters unlock in order and never from walking directly to exit
+PASS boss body is protected and only reflected projectiles count
+PASS three reflected balls open exit; one living hero completes exactly once
+PASS NPC attack has a windup and resolves against the actual hero once
+PASS a late reflection has time to return instead of inheriting outbound expiry
+PASS offline living bodies remain targets without an NPC replacing ownership
+PASS lost run closes encounter and cannot be won at exit
+PASS lethal delayed death cannot turn into victory at the exit
+PASS guardian waits for a hero to enter its arena before firing
+PASS claim transfers the existing wounded body once without resetting its combat state
+PASS offers contain only existing living unengaged unowned ordinary enemies
+PASS actual human enemy death spends the one life through disconnect and later waves
+PASS hero attack boundary closes the first living directed target even if the effect misses
+PASS reacting heroes do not hide a claimable enemy from the accepted attack boundary
+PASS reacting enemies do not hide the next eligible enemy from the accepted attack boundary
+PASS already reflected projectiles do not hide an eligible enemy at the accepted attack boundary
+PASS owned enemy commands bind schema identity epoch sequence and ordinary moves
+PASS disconnect retains body and accepted strike while new connection rejects old packets
+PASS human and NPC ordinary strikes share windup front hitbox and cooldown
+PASS ordinary human strike hits another enemy through shared enemy health without striking through it
+PASS reaction death and closed runs reject enemy commands
+PASS an engine-dead or missing body cannot be offered or claimed between server steps
+PASS boss gate waits before spawning and assigns one existing-profile human guardian
+PASS human guardian aims and fires only validated input with NPC projectile calibration
+PASS physical guardian death ends its role and does not permit late commands or respawn
+PASS guardian input cannot fire through an already missing physical body
+PASS guardian death cancels later outbound impacts in the same server tick
+PASS human and NPC strikes use actual Session hero damage and profile
+PASS actual respawn shield blocks human enemy damage through the Session hit path
+LevelDirector: 30 PASS
+PASS selection is owned by the real sender and duplicate trio templates are allowed
+PASS malformed and owner-spoofed choices cannot change selection
+PASS only host starts; solo begins immediately with full initial resources
+PASS active choices cannot heal, add a hero, or change the frozen template
+PASS a fourth owner receives spectator state and cannot gain a hero
+PASS obsolete Player object cannot select or receive private state
+PASS returning current owner retains same actor life reserve and template
+PASS result needs manual new game and creates fresh run only once per accepted start
+PASS Enemy and Spectator preferences leave hero places to selected heroes
+PASS no hero means no game start or consumed appearances
+PASS claim takes the same damaged body without healing a hero slot or spawning
+PASS hero including eliminated hero cannot reenter this run as an enemy
+PASS claims reject wrong run level spoofed owner and malformed enemy id
+PASS a second applicant cannot take or duplicate an occupied body
+PASS accepted directed hero attack locks the enemy before a delayed miss
+PASS attack lock uses acceptance time when the first target reaction just expired
+PASS one enemy life survives disconnect and cannot be reset by selecting a different sentry
+PASS current replacement retains enemy body health and rejects stale sender and epoch
+PASS separate new game clears enemy spent life but active role preference cannot reset a run
+PASS eliminated hero can choose menu and watch without changing the continuing duo
+PASS observer menu is personal and survives Player replacement without spawning
+PASS dead enemy menu and watch preserve its spent life through replacement and later waves
+PASS living roles cannot suspend their actors with a personal view choice
+PASS awaiting initial spawn and awaiting respawn heroes stay Playing and cannot choose menu
+PASS new game resets personal choices while the closed group always shows the result menu
+PASS view choice binds current run level and sender while rejecting extra or missing fields
+PASS snapshot publishes world camera bounds and tolerates worlds without them
+PASS group controllers use one shared guardian queue and retain distinct lifecycle identity
+PASS boss selection waits FIFO and removes the applicant from the next hero roster
+PASS boss wait rejects active or eliminated same-run heroes and living ordinary enemies
+PASS successful ordinary claim cancels waiting while failed claims preserve it
+PASS accepted boss reserve excludes ordinary claim and cannot silently enter the hero roster
+PASS boss gateway validates sender and exact invitation payloads
+PASS boss invitation expires into NPC once and a late reply never replaces it
+PASS dead guardian releases its assignment without restoring its body or queue
+PASS ready owner disconnects before guardian spawn without creating a false online controller
+GameController: 36 PASS
+PASS spectator targets retain zero-health and offline living heroes; skip eliminated dying absent actors
+tests/run_groups.luau
+PASS independent real controllers keep group B alive when group A loses
+PASS creation is bounded and duplicate request IDs do not create another group
+PASS only initial Sync can omit the strict current group envelope
+PASS observer A to B to A permits return while replacement rejects the obsolete Player
+PASS living and respawning heroes cannot create or join a second group
+PASS eliminated hero can take group B enemy but retains group A hero and spent B history
+PASS shared guardian FIFO targets each group and accepting moves only the invited observer
+PASS waiting survives observer switches and a created lobby stays spectator until Hero selection
+PASS same-run eliminated hero is excluded only from that groups guardian slot
+PASS failed ordinary claims preserve global waiting and success cancels its invitation
+PASS one global token bucket prevents group hopping from resetting intent limits
+MatchHub: 11 passed
+tests/run_level_route.luau
+PASS route contains the classified13 actors in unique source order across6 districts
+PASS initial district alone spawns and distant exit cannot skip living encounters
+PASS clearing enemies still requires physically reaching that districts far side
+PASS eliminated or dying bodies cannot advance a district
+PASS every district requires its own exit and raised enemies preserve configured height
+PASS modern flying shots cannot be reflected and final exit needs guardian defeat
+PASS lost run closes the route before later districts spawn
+LevelRoute: 7 passed
+tests/run_guardian.luau
+PASS finite Heavy phase gives idle disconnected human a ground ball without replacing ownership
+PASS ordinary shots damage through Session and flying bullets never reflect
+PASS human fire respects cooldown and NPC only fires within aggro range
+PASS pickup is exclusive and preserves shield health reserves and combat resources
+PASS pickup requires server distance height and a living connected non-dying hero
+PASS throw accepts BeginAttack and removes emergency hold before the projectile effect
+PASS failed BeginAttack leaves the ball held and never releases shield hold
+PASS thrown ball clears nearby heroes during normal flight before reaching the guardian
+PASS carried ball follows its owner and lifecycle changes drop it without duplicating
+PASS unsupported dropped balls clear and expired balls cannot be picked up
+PASS three thrown impacts follow raw 47 31 15 0 and defeat the guardian once
+PASS same-tick guardian death clears later impacts and hazards immediately
+PASS direct attacks cannot bypass the thrown-ball rule and IDs remain unique
+GuardianPattern: 13 passed
+PASS actual Session pickup retains normal shield/resources and throw clears it before flight
+PASS stale actor cannot pick up and actual death never transfers held ball to a new appearance
+PASS actual Session throw survives small flight steps without hurting or stunning its owner
+GuardianSession: 3 passed
+PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls
+PASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped
+PASS camera selects one world, clears cross-group state and never falls back from an explicit missing world
+PASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped
+PASS ordinary species and guardian projectile modes have distinct original readable presentation
+PASS narrow support cannot crash safe respawn search
+PASS modern delayed jump uses bounded server ground history and preserves horizontal momentum
+PASS jump consumption survives stale floor reports and midair input, then resets after actual landing
+PASS jump grace rejects expired, deep, dead, held and reacting requests
+PASS jump history belongs to one actual actor in one modern world and preserves legacy behavior
+Compiled 10 KLOC into 644 KB bytecode (read 0.01s, parse 0.01s, compile 0.03s)
+PASS duplicate selection preserves FIFO priority and invitation deadline
+PASS select fills a previously registered slot
+PASS decline rotates once and exhausted slot starts NPC
+PASS invitation accepts strictly before ten seconds and reserves a separate connection deadline
+PASS invitation at exact expiry cannot accept and rotates to the next candidate
+PASS connection strictly before its deadline becomes ready and starts one human
+PASS accepted reserve expires at connection deadline without rejoining the queue
+PASS switching an invited boss invalidates the old token and fills both waiting slots
+PASS cancel invalidates an invitation without changing another candidates offer
+PASS accepted and ready reserves can cancel but cannot switch bosses
+PASS simultaneous slots offer distinct users in registration order
+PASS signed Studio user identities preserve FIFO and exclusive ownership
+PASS eligibility excludes active ordinary roles globally and same group heroes per slot
+PASS eligibility change clears an unresolved reserve before next invitation
+PASS NPC selection cannot be replaced by later queue entries
+PASS close clears the assignment without requeue and keeps later users waiting
+PASS close at assignment expiry removes its owner without consuming the next candidate
+PASS stale server timestamps cannot reopen an expired invitation
+PASS private views cannot mutate queue order or the active assignment
+PASS invalid operations return errors without consuming another players invitation
+BossQueue: 20 passed

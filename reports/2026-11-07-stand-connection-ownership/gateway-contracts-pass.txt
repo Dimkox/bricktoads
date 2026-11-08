@@ -1,0 +1,15 @@
+PASS duplicate PlayerAdded cannot reset connection epoch or sequence
+PASS superseded Player cannot use the replacements current actor and epoch
+PASS superseded Player receives no role State or Sync reply
+PASS current replacement removal never revives old host
+PASS roster contains one owner per UserId during overlap
+PASS late removal and repeated current removal cannot disconnect twice
+PASS delayed join callback for an already removed unknown object is ignored
+PASS departed current object cannot command before its removal callback
+PASS replacement uses current Life without new actor healing or reserve
+PASS both protection deadlines and hold survive replacement without renewal
+PASS already accepted attack survives owner replacement and resolves once
+PASS offline death waits and returns with exactly one successful respawn
+PASS new owner receives new epoch and rejects the prior epoch
+PASS late different user is a spectator without a replacement role
+Gateway contracts: 14 PASS, 0 FAIL; fake transport, NOT real reconnect

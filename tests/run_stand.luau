@@ -1,0 +1,8 @@
+local Combat=require("../src/stand/server/Combat")
+local Core=require("../src/server/RunLifecycle")
+local Config=require("../src/stand/server/Config")
+local Session=require("../src/stand/server/Session")
+local World=require("./stand/FakeWorld")
+require("./stand/Combat.spec")(Combat)
+require("./stand/Session.spec")(Core,Combat,Session,Config,World)
+print("PASS native Luau stand contracts; engine physics NOT RUN")

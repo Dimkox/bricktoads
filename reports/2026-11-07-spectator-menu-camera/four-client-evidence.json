@@ -1,0 +1,1672 @@
+{
+  "spectatorPreparation": {
+    "falls": [
+      "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:2",
+      "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:12",
+      "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:16",
+      "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:20"
+    ],
+    "preparation": "NPC roots frozen only to isolate view flow; hero1 eliminated by four real falls, no HP or reserve edits"
+  },
+  "spectatorBaseline": {
+    "view": "Choice",
+    "canChooseView": true,
+    "mine": 1,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "view": "Choice",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 4,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 0,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "respawns": 0,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 2,
+        "attempt": 1,
+        "userId": -2,
+        "displayName": "Player2",
+        "username": "Player2",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 3,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+    "canSelect": false,
+    "notice": "NOT_ALIVE",
+    "heroOnline": 3,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Hero",
+        "displayName": "Player2"
+      },
+      {
+        "username": "Player3",
+        "template": "Mr. Green",
+        "userId": -3,
+        "preference": "Hero",
+        "displayName": "Player3"
+      },
+      {
+        "username": "Player4",
+        "template": "Mr. Green",
+        "userId": -4,
+        "preference": "Spectator",
+        "displayName": "Player4"
+      }
+    ],
+    "selectedTemplate": "Mr. Green",
+    "online": 4,
+    "now": 1794021587.404208,
+    "canStart": false,
+    "enemyUnavailableReason": "HERO_LOCKED",
+    "cameraBounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxX": 136,
+      "maxZ": 49
+    },
+    "preference": "Hero",
+    "host": -1
+  },
+  "spectatorFollowEvidence": [
+    {
+      "mode": "Follow",
+      "candidates": [
+        {
+          "cameraDistance": 7.0001068115234375,
+          "position": [
+            -64.99903869628906,
+            3.0000457763671875,
+            0
+          ],
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+          "slot": 2
+        },
+        {
+          "cameraDistance": 0,
+          "position": [
+            -64.99903869628906,
+            3.0000457763671875,
+            7.0001068115234375
+          ],
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+          "slot": 3
+        }
+      ],
+      "position": [
+        -64.99903869628906,
+        28.000045776367188,
+        37.00010681152344
+      ]
+    },
+    {
+      "mode": "Follow",
+      "candidates": [
+        {
+          "cameraDistance": 0,
+          "position": [
+            -64.99903869628906,
+            3.0000457763671875,
+            0
+          ],
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+          "slot": 2
+        },
+        {
+          "cameraDistance": 7.0001068115234375,
+          "position": [
+            -64.99903869628906,
+            3.0000457763671875,
+            7.0001068115234375
+          ],
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+          "slot": 3
+        }
+      ],
+      "position": [
+        -64.99903869628906,
+        28.000045776367188,
+        30
+      ]
+    }
+  ],
+  "spectatorPersonalMenu": {
+    "state": {
+      "view": "Menu",
+      "canChooseView": true,
+      "mine": 1,
+      "levelEpoch": 1,
+      "heroes": [
+        {
+          "view": "Menu",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 4,
+          "userId": -1,
+          "displayName": "Player1",
+          "username": "Player1",
+          "connectionEpoch": 1,
+          "hearts": 0,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "respawns": 0,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 2,
+          "attempt": 1,
+          "userId": -2,
+          "displayName": "Player2",
+          "username": "Player2",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+          "respawns": 3,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 3,
+          "attempt": 1,
+          "userId": -3,
+          "displayName": "Player3",
+          "username": "Player3",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+          "respawns": 3,
+          "dying": false
+        }
+      ],
+      "enemyOffers": [],
+      "status": "Active",
+      "level": {
+        "bossHits": 0,
+        "bossMax": 3,
+        "objective": "Разбейте дозор у старых ворот",
+        "stage": "Approach",
+        "enemies": [
+          {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "dead": false
+          },
+          {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "dead": false
+          }
+        ]
+      },
+      "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+      "canSelect": false,
+      "heroOnline": 3,
+      "host": -1,
+      "preference": "Hero",
+      "cameraBounds": {
+        "maxY": 52,
+        "minZ": -49,
+        "minY": 7,
+        "minX": -94,
+        "maxZ": 49,
+        "maxX": 136
+      },
+      "selectedTemplate": "Mr. Green",
+      "now": 1794021656.267306,
+      "canStart": false,
+      "enemyUnavailableReason": "HERO_LOCKED",
+      "online": 4,
+      "lobby": [
+        {
+          "username": "Player1",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -1,
+          "displayName": "Player1"
+        },
+        {
+          "username": "Player2",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -2,
+          "displayName": "Player2"
+        },
+        {
+          "username": "Player3",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -3,
+          "displayName": "Player3"
+        },
+        {
+          "username": "Player4",
+          "template": "Mr. Green",
+          "preference": "Spectator",
+          "userId": -4,
+          "displayName": "Player4"
+        }
+      ],
+      "calibration": "PLAYABLE_PROTOTYPE"
+    },
+    "startButton": false,
+    "menu": true,
+    "returnButton": true
+  },
+  "spectatorGameContinuesInMenu": {
+    "state": {
+      "view": "Menu",
+      "canChooseView": true,
+      "mine": 1,
+      "levelEpoch": 1,
+      "heroes": [
+        {
+          "view": "Menu",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 4,
+          "userId": -1,
+          "displayName": "Player1",
+          "username": "Player1",
+          "connectionEpoch": 1,
+          "hearts": 0,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "respawns": 0,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 2,
+          "attempt": 1,
+          "userId": -2,
+          "displayName": "Player2",
+          "username": "Player2",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+          "respawns": 3,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 3,
+          "attempt": 1,
+          "userId": -3,
+          "displayName": "Player3",
+          "username": "Player3",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+          "respawns": 3,
+          "dying": false
+        }
+      ],
+      "enemyOffers": [],
+      "status": "Active",
+      "level": {
+        "bossHits": 0,
+        "bossMax": 3,
+        "objective": "Разбейте дозор у старых ворот",
+        "stage": "Approach",
+        "enemies": [
+          {
+            "attacking": true,
+            "hearts": 1,
+            "maxHearts": 3,
+            "id": -1,
+            "dead": false
+          },
+          {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "dead": false
+          }
+        ]
+      },
+      "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+      "canSelect": false,
+      "heroOnline": 3,
+      "host": -1,
+      "preference": "Hero",
+      "cameraBounds": {
+        "maxY": 52,
+        "minZ": -49,
+        "minY": 7,
+        "minX": -94,
+        "maxZ": 49,
+        "maxX": 136
+      },
+      "selectedTemplate": "Mr. Green",
+      "now": 1794021659.868354,
+      "canStart": false,
+      "enemyUnavailableReason": "HERO_LOCKED",
+      "online": 4,
+      "lobby": [
+        {
+          "username": "Player1",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -1,
+          "displayName": "Player1"
+        },
+        {
+          "username": "Player2",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -2,
+          "displayName": "Player2"
+        },
+        {
+          "username": "Player3",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -3,
+          "displayName": "Player3"
+        },
+        {
+          "username": "Player4",
+          "template": "Mr. Green",
+          "preference": "Spectator",
+          "userId": -4,
+          "displayName": "Player4"
+        }
+      ],
+      "calibration": "PLAYABLE_PROTOTYPE"
+    },
+    "cameraMode": "Follow"
+  },
+  "spectatorReturned": {
+    "view": "Spectating",
+    "canChooseView": true,
+    "mine": 1,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "view": "Spectating",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 4,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 0,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "respawns": 0,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 2,
+        "attempt": 1,
+        "userId": -2,
+        "displayName": "Player2",
+        "username": "Player2",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 3,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 1,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 3,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": false
+        }
+      ]
+    },
+    "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+    "canSelect": false,
+    "heroOnline": 3,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Hero",
+        "displayName": "Player2"
+      },
+      {
+        "username": "Player3",
+        "template": "Mr. Green",
+        "userId": -3,
+        "preference": "Hero",
+        "displayName": "Player3"
+      },
+      {
+        "username": "Player4",
+        "template": "Mr. Green",
+        "userId": -4,
+        "preference": "Spectator",
+        "displayName": "Player4"
+      }
+    ],
+    "selectedTemplate": "Mr. Green",
+    "online": 4,
+    "now": 1794021660.901607,
+    "canStart": false,
+    "enemyUnavailableReason": "HERO_LOCKED",
+    "cameraBounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxX": 136,
+      "maxZ": 49
+    },
+    "preference": "Hero",
+    "host": -1
+  },
+  "spectatorBoundsMax": {
+    "state": {
+      "view": "Spectating",
+      "canChooseView": true,
+      "mine": 1,
+      "levelEpoch": 1,
+      "heroes": [
+        {
+          "view": "Spectating",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 4,
+          "userId": -1,
+          "displayName": "Player1",
+          "username": "Player1",
+          "connectionEpoch": 1,
+          "hearts": 0,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "respawns": 0,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 2,
+          "attempt": 1,
+          "userId": -2,
+          "displayName": "Player2",
+          "username": "Player2",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+          "respawns": 3,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 3,
+          "attempt": 1,
+          "userId": -3,
+          "displayName": "Player3",
+          "username": "Player3",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+          "respawns": 3,
+          "dying": false
+        }
+      ],
+      "enemyOffers": [],
+      "status": "Active",
+      "level": {
+        "bossHits": 0,
+        "bossMax": 3,
+        "objective": "Разбейте дозор у старых ворот",
+        "stage": "Approach",
+        "enemies": [
+          {
+            "attacking": false,
+            "hearts": 1,
+            "maxHearts": 3,
+            "id": -1,
+            "dead": false
+          },
+          {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "dead": false
+          }
+        ]
+      },
+      "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+      "canSelect": false,
+      "heroOnline": 3,
+      "host": -1,
+      "preference": "Hero",
+      "cameraBounds": {
+        "maxY": 52,
+        "minZ": -49,
+        "minY": 7,
+        "minX": -94,
+        "maxZ": 49,
+        "maxX": 136
+      },
+      "selectedTemplate": "Mr. Green",
+      "now": 1794021728.797631,
+      "canStart": false,
+      "enemyUnavailableReason": "HERO_LOCKED",
+      "online": 4,
+      "lobby": [
+        {
+          "username": "Player1",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -1,
+          "displayName": "Player1"
+        },
+        {
+          "username": "Player2",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -2,
+          "displayName": "Player2"
+        },
+        {
+          "username": "Player3",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -3,
+          "displayName": "Player3"
+        },
+        {
+          "username": "Player4",
+          "template": "Mr. Green",
+          "preference": "Spectator",
+          "userId": -4,
+          "displayName": "Player4"
+        }
+      ],
+      "calibration": "PLAYABLE_PROTOTYPE"
+    },
+    "bounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxZ": 49,
+      "maxX": 136
+    },
+    "mode": "Free",
+    "position": [
+      136,
+      52,
+      49
+    ]
+  },
+  "spectatorBoundsMin": {
+    "state": {
+      "view": "Spectating",
+      "canChooseView": true,
+      "mine": 1,
+      "levelEpoch": 1,
+      "heroes": [
+        {
+          "view": "Spectating",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 4,
+          "userId": -1,
+          "displayName": "Player1",
+          "username": "Player1",
+          "connectionEpoch": 1,
+          "hearts": 0,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "respawns": 0,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 2,
+          "attempt": 1,
+          "userId": -2,
+          "displayName": "Player2",
+          "username": "Player2",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+          "respawns": 3,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 3,
+          "attempt": 1,
+          "userId": -3,
+          "displayName": "Player3",
+          "username": "Player3",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+          "respawns": 3,
+          "dying": false
+        }
+      ],
+      "enemyOffers": [],
+      "status": "Active",
+      "level": {
+        "bossHits": 0,
+        "bossMax": 3,
+        "objective": "Разбейте дозор у старых ворот",
+        "stage": "Approach",
+        "enemies": [
+          {
+            "attacking": false,
+            "hearts": 1,
+            "maxHearts": 3,
+            "id": -1,
+            "dead": false
+          },
+          {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "dead": false
+          }
+        ]
+      },
+      "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+      "canSelect": false,
+      "heroOnline": 3,
+      "host": -1,
+      "preference": "Hero",
+      "cameraBounds": {
+        "maxY": 52,
+        "minZ": -49,
+        "minY": 7,
+        "minX": -94,
+        "maxZ": 49,
+        "maxX": 136
+      },
+      "selectedTemplate": "Mr. Green",
+      "now": 1794021742.980292,
+      "canStart": false,
+      "enemyUnavailableReason": "HERO_LOCKED",
+      "online": 4,
+      "lobby": [
+        {
+          "username": "Player1",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -1,
+          "displayName": "Player1"
+        },
+        {
+          "username": "Player2",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -2,
+          "displayName": "Player2"
+        },
+        {
+          "username": "Player3",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -3,
+          "displayName": "Player3"
+        },
+        {
+          "username": "Player4",
+          "template": "Mr. Green",
+          "preference": "Spectator",
+          "userId": -4,
+          "displayName": "Player4"
+        }
+      ],
+      "calibration": "PLAYABLE_PROTOTYPE"
+    },
+    "bounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxZ": 49,
+      "maxX": 136
+    },
+    "mode": "Free",
+    "position": [
+      -94,
+      7,
+      -49
+    ]
+  },
+  "spectatorChooserReturn": {
+    "state": {
+      "view": "Spectating",
+      "canChooseView": true,
+      "levelEpoch": 1,
+      "heroes": [
+        {
+          "view": "Spectating",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 4,
+          "userId": -1,
+          "displayName": "Player1",
+          "username": "Player1",
+          "connectionEpoch": 1,
+          "hearts": 0,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "respawns": 0,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 2,
+          "attempt": 1,
+          "userId": -2,
+          "displayName": "Player2",
+          "username": "Player2",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+          "respawns": 3,
+          "dying": false
+        },
+        {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 3,
+          "attempt": 1,
+          "userId": -3,
+          "displayName": "Player3",
+          "username": "Player3",
+          "connectionEpoch": 1,
+          "hearts": 5,
+          "rawLife": 47,
+          "status": "Alive",
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+          "respawns": 3,
+          "dying": false
+        }
+      ],
+      "enemyOffers": [
+        {
+          "enemyId": -2,
+          "maxHearts": 3,
+          "name": "Ржавый дозорный",
+          "hearts": 3,
+          "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:enemy:1:-2"
+        }
+      ],
+      "status": "Active",
+      "level": {
+        "bossHits": 0,
+        "bossMax": 3,
+        "objective": "Разбейте дозор у старых ворот",
+        "stage": "Approach",
+        "enemies": [
+          {
+            "attacking": false,
+            "hearts": 1,
+            "maxHearts": 3,
+            "id": -1,
+            "dead": false
+          },
+          {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "dead": false
+          }
+        ]
+      },
+      "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+      "canSelect": false,
+      "heroOnline": 3,
+      "host": -1,
+      "preference": "Spectator",
+      "online": 4,
+      "now": 1794021825.462154,
+      "canStart": false,
+      "cameraBounds": {
+        "maxY": 52,
+        "minZ": -49,
+        "minY": 7,
+        "minX": -94,
+        "maxZ": 49,
+        "maxX": 136
+      },
+      "selectedTemplate": "Mr. Green",
+      "lobby": [
+        {
+          "username": "Player1",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -1,
+          "displayName": "Player1"
+        },
+        {
+          "username": "Player2",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -2,
+          "displayName": "Player2"
+        },
+        {
+          "username": "Player3",
+          "template": "Mr. Green",
+          "preference": "Hero",
+          "userId": -3,
+          "displayName": "Player3"
+        },
+        {
+          "username": "Player4",
+          "template": "Mr. Green",
+          "preference": "Spectator",
+          "userId": -4,
+          "displayName": "Player4"
+        }
+      ],
+      "calibration": "PLAYABLE_PROTOTYPE"
+    },
+    "mode": "Follow",
+    "free": true,
+    "offers": false
+  },
+  "spectatorPhoneCorrected": {
+    "before": {
+      "pad": [
+        18,
+        207,
+        104,
+        104
+      ],
+      "p": [
+        -64.99903869628906,
+        48.392337799072266,
+        37.00010681152344
+      ],
+      "events": "[{\"button\":\"Up\",\"x\":649,\"y\":208}]",
+      "look": [
+        -0.7908286452293396,
+        -0.6084315180778503,
+        -0.06634064018726349
+      ]
+    },
+    "afterYaw": {
+      "p": [
+        -64.99903869628906,
+        48.392337799072266,
+        37.00010681152344
+      ],
+      "events": "[{\"button\":\"Up\",\"x\":649,\"y\":208},{\"button\":\"Right\",\"x\":707,\"y\":286}]",
+      "look": [
+        -0.2456909865140915,
+        -0.6084315180778503,
+        -0.7546170949935913
+      ]
+    },
+    "afterMove": {
+      "state": {
+        "view": "Spectating",
+        "canChooseView": true,
+        "mine": 1,
+        "levelEpoch": 1,
+        "heroes": [
+          {
+            "view": "Spectating",
+            "connected": true,
+            "template": "Mr. Green",
+            "slot": 1,
+            "attempt": 4,
+            "userId": -1,
+            "displayName": "Player1",
+            "username": "Player1",
+            "connectionEpoch": 1,
+            "hearts": 0,
+            "status": "Eliminated",
+            "rawLife": 0,
+            "respawns": 0,
+            "dying": false
+          },
+          {
+            "view": "Playing",
+            "connected": true,
+            "template": "Mr. Green",
+            "slot": 2,
+            "attempt": 1,
+            "userId": -2,
+            "displayName": "Player2",
+            "username": "Player2",
+            "connectionEpoch": 1,
+            "hearts": 5,
+            "rawLife": 47,
+            "status": "Alive",
+            "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+            "respawns": 3,
+            "dying": false
+          },
+          {
+            "view": "Playing",
+            "connected": true,
+            "template": "Mr. Green",
+            "slot": 3,
+            "attempt": 1,
+            "userId": -3,
+            "displayName": "Player3",
+            "username": "Player3",
+            "connectionEpoch": 1,
+            "hearts": 5,
+            "rawLife": 47,
+            "status": "Alive",
+            "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+            "respawns": 3,
+            "dying": false
+          }
+        ],
+        "enemyOffers": [],
+        "status": "Active",
+        "level": {
+          "bossHits": 0,
+          "bossMax": 3,
+          "objective": "Разбейте дозор у старых ворот",
+          "stage": "Approach",
+          "enemies": [
+            {
+              "attacking": false,
+              "hearts": 1,
+              "maxHearts": 3,
+              "id": -1,
+              "dead": false
+            },
+            {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -2,
+              "dead": false
+            }
+          ]
+        },
+        "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+        "canSelect": false,
+        "heroOnline": 3,
+        "host": -1,
+        "preference": "Hero",
+        "cameraBounds": {
+          "maxY": 52,
+          "minZ": -49,
+          "minY": 7,
+          "minX": -94,
+          "maxZ": 49,
+          "maxX": 136
+        },
+        "selectedTemplate": "Mr. Green",
+        "now": 1794022015.722185,
+        "canStart": false,
+        "enemyUnavailableReason": "HERO_LOCKED",
+        "online": 4,
+        "lobby": [
+          {
+            "username": "Player1",
+            "template": "Mr. Green",
+            "preference": "Hero",
+            "userId": -1,
+            "displayName": "Player1"
+          },
+          {
+            "username": "Player2",
+            "template": "Mr. Green",
+            "preference": "Hero",
+            "userId": -2,
+            "displayName": "Player2"
+          },
+          {
+            "username": "Player3",
+            "template": "Mr. Green",
+            "preference": "Hero",
+            "userId": -3,
+            "displayName": "Player3"
+          },
+          {
+            "username": "Player4",
+            "template": "Mr. Green",
+            "preference": "Spectator",
+            "userId": -4,
+            "displayName": "Player4"
+          }
+        ],
+        "calibration": "PLAYABLE_PROTOTYPE"
+      },
+      "p": [
+        -45.94727325439453,
+        48.392337799072266,
+        30.797163009643555
+      ],
+      "mode": "Free"
+    },
+    "upBefore": {
+      "visible": true,
+      "p": [
+        -64.99903869628906,
+        28.000045776367188,
+        37.00010681152344
+      ],
+      "up": [
+        50,
+        50
+      ],
+      "mode": "Free",
+      "touch": true
+    },
+    "upAfter": {
+      "mode": "Free",
+      "look": [
+        -0.7908286452293396,
+        -0.6084315180778503,
+        -0.06634064018726349
+      ],
+      "p": [
+        -64.99903869628906,
+        28.000045776367188,
+        37.00010681152344
+      ]
+    },
+    "hitMapping": "Automatic instance targeting misses the emulator safe area. Explicit coordinates were verified with actual button InputBegan events; Up event raised camera Y from28 to48.39; Right and stick then verified."
+  },
+  "spectatorDeadEnemyChoice": {
+    "view": "Choice",
+    "canChooseView": true,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "view": "Spectating",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 4,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 0,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "respawns": 0,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 2,
+        "attempt": 1,
+        "userId": -2,
+        "displayName": "Player2",
+        "username": "Player2",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 3,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 1,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 0,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": true
+        }
+      ]
+    },
+    "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+    "enemyRole": {
+      "connected": true,
+      "enemyId": -2,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 0,
+      "maxHearts": 3,
+      "status": "Dead",
+      "template": "Sentry",
+      "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:enemy:1:-2",
+      "name": "Ржавый дозорный"
+    },
+    "canSelect": false,
+    "notice": "NOT_ALIVE",
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Hero",
+        "displayName": "Player2"
+      },
+      {
+        "username": "Player3",
+        "template": "Mr. Green",
+        "userId": -3,
+        "preference": "Hero",
+        "displayName": "Player3"
+      },
+      {
+        "username": "Player4",
+        "template": "Mr. Green",
+        "userId": -4,
+        "preference": "Spectator",
+        "displayName": "Player4"
+      }
+    ],
+    "heroOnline": 3,
+    "selectedTemplate": "Mr. Green",
+    "online": 4,
+    "now": 1794022147.868746,
+    "canStart": false,
+    "enemyUnavailableReason": "ENEMY_LIFE_SPENT",
+    "cameraBounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxX": 136,
+      "maxZ": 49
+    },
+    "preference": "Spectator",
+    "host": -1
+  },
+  "spectatorDeadEnemyMenu": {
+    "view": "Menu",
+    "canChooseView": true,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "view": "Spectating",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 4,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 0,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "respawns": 0,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 2,
+        "attempt": 1,
+        "userId": -2,
+        "displayName": "Player2",
+        "username": "Player2",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 3,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 1,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 0,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": true
+        }
+      ]
+    },
+    "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+    "enemyRole": {
+      "connected": true,
+      "enemyId": -2,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 0,
+      "maxHearts": 3,
+      "status": "Dead",
+      "template": "Sentry",
+      "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:enemy:1:-2",
+      "name": "Ржавый дозорный"
+    },
+    "canSelect": false,
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Hero",
+        "displayName": "Player2"
+      },
+      {
+        "username": "Player3",
+        "template": "Mr. Green",
+        "userId": -3,
+        "preference": "Hero",
+        "displayName": "Player3"
+      },
+      {
+        "username": "Player4",
+        "template": "Mr. Green",
+        "userId": -4,
+        "preference": "Spectator",
+        "displayName": "Player4"
+      }
+    ],
+    "heroOnline": 3,
+    "selectedTemplate": "Mr. Green",
+    "online": 4,
+    "now": 1794022148.851514,
+    "canStart": false,
+    "enemyUnavailableReason": "ENEMY_LIFE_SPENT",
+    "cameraBounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxX": 136,
+      "maxZ": 49
+    },
+    "preference": "Spectator",
+    "host": -1
+  },
+  "spectatorDeadEnemyReturned": {
+    "view": "Spectating",
+    "canChooseView": true,
+    "levelEpoch": 1,
+    "heroes": [
+      {
+        "view": "Spectating",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 1,
+        "attempt": 4,
+        "userId": -1,
+        "displayName": "Player1",
+        "username": "Player1",
+        "connectionEpoch": 1,
+        "hearts": 0,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "respawns": 0,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 2,
+        "attempt": 1,
+        "userId": -2,
+        "displayName": "Player2",
+        "username": "Player2",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:5",
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "slot": 3,
+        "attempt": 1,
+        "userId": -3,
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 1,
+        "hearts": 5,
+        "rawLife": 47,
+        "status": "Alive",
+        "respawns": 3,
+        "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:actor:8",
+        "dying": false
+      }
+    ],
+    "enemyOffers": [],
+    "status": "Active",
+    "level": {
+      "bossHits": 0,
+      "bossMax": 3,
+      "objective": "Разбейте дозор у старых ворот",
+      "stage": "Approach",
+      "enemies": [
+        {
+          "attacking": false,
+          "hearts": 1,
+          "maxHearts": 3,
+          "id": -1,
+          "dead": false
+        },
+        {
+          "attacking": false,
+          "hearts": 0,
+          "maxHearts": 3,
+          "id": -2,
+          "dead": true
+        }
+      ]
+    },
+    "runId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d",
+    "enemyRole": {
+      "connected": true,
+      "enemyId": -2,
+      "attempt": 1,
+      "connectionEpoch": 1,
+      "hearts": 0,
+      "maxHearts": 3,
+      "status": "Dead",
+      "template": "Sentry",
+      "actorId": "ce43a715-39b2-46c0-9644-d4c1ccf45a9d:enemy:1:-2",
+      "name": "Ржавый дозорный"
+    },
+    "canSelect": false,
+    "notice": "ENEMY_LIFE_SPENT",
+    "calibration": "PLAYABLE_PROTOTYPE",
+    "lobby": [
+      {
+        "username": "Player1",
+        "template": "Mr. Green",
+        "userId": -1,
+        "preference": "Hero",
+        "displayName": "Player1"
+      },
+      {
+        "username": "Player2",
+        "template": "Mr. Green",
+        "userId": -2,
+        "preference": "Hero",
+        "displayName": "Player2"
+      },
+      {
+        "username": "Player3",
+        "template": "Mr. Green",
+        "userId": -3,
+        "preference": "Hero",
+        "displayName": "Player3"
+      },
+      {
+        "username": "Player4",
+        "template": "Mr. Green",
+        "userId": -4,
+        "preference": "Spectator",
+        "displayName": "Player4"
+      }
+    ],
+    "heroOnline": 3,
+    "selectedTemplate": "Mr. Green",
+    "online": 4,
+    "now": 1794022150.048886,
+    "canStart": false,
+    "enemyUnavailableReason": "ENEMY_LIFE_SPENT",
+    "cameraBounds": {
+      "maxY": 52,
+      "minZ": -49,
+      "minY": 7,
+      "minX": -94,
+      "maxX": 136,
+      "maxZ": 49
+    },
+    "preference": "Spectator",
+    "host": -1
+  },
+  "note": "Studio MCP four-client prepared-scene verification. Temporary enemy-root anchors isolate spectator checks. Hero1 elimination used four real falls plus normal lifecycle respawns; HP/reserves were not directly edited. Phone hit mapping required explicit MCP coordinates; see spectatorPhoneCorrected. Full engine walkthrough is not claimed by these view checks."
+}
