@@ -41,6 +41,24 @@ Node.__newindex=function(self,key,value)
         if old then for i,child in ipairs(old.children) do if child==self then table.remove(old.children,i); break end end end
         rawset(self,'_parent',value)
         if value then value.children[#value.children+1]=self end
+        -- Opt-in reproduction of the live assembly ownership reset: the basic
+        -- rig was pinned before a later physical art part joined its assembly.
+        local physicalAddition=self.ClassName=='Part'
+        if self.ClassName=='Model' then
+            for _,p in ipairs(self:GetDescendants()) do if p:IsA('BasePart') then physicalAddition=true;break end end
+        end
+        if value and physicalAddition then
+            local ancestor,root=value,nil
+            while ancestor do
+                if ancestor.ClassName=='Model' then root=ancestor:FindFirstChild('HumanoidRootPart') end
+                if root then break end
+                ancestor=ancestor.Parent
+            end
+            if root and root.simulateAssemblyOwnershipReset then
+                root.networkOwnershipAuto=true;root.networkOwner=root.nearbyAutomaticOwner
+                root.assemblyOwnershipResets=(root.assemblyOwnershipResets or 0)+1
+            end
+        end
     else rawset(self,key,value) end
 end
 local function node(class,name,parent)
@@ -64,8 +82,13 @@ function Node:GetAttribute(name) return self.attributes[name] end
 function Node:Destroy() self.destroyed=true; self.Parent=nil end
 function Node:ClearAllChildren() for _,child in ipairs(self:GetChildren()) do child:Destroy() end end
 function Node:PivotTo(cf) self.HumanoidRootPart.CFrame=cf end
-function Node:CanSetNetworkOwnership() return not self.Anchored end
-function Node:SetNetworkOwner(owner) self.networkOwner=owner;self.networkOwnerSet=true end
+function Node:CanSetNetworkOwnership() return not self.Anchored and not self.networkOwnershipDenied,'Ownership unavailable in fixture' end
+function Node:SetNetworkOwner(owner)
+    self.networkOwner=owner;self.networkOwnerSet=true;self.networkOwnershipAuto=false
+    self.networkOwnershipPins=(self.networkOwnershipPins or 0)+1
+end
+function Node:GetNetworkOwner() return self.networkOwner end
+function Node:GetNetworkOwnershipAuto() return self.networkOwnershipAuto~=false end
 local workspace=node('Workspace','Workspace')
 local serverTime=0
 function workspace:GetServerTimeNow() return serverTime end
@@ -283,6 +306,88 @@ local gold=pickup.root.Color
 route:projectile(-2001,{x=-30,y=3,z=0},false,'Bullet')
 assert(pickup.model:GetAttribute('Pickup')==false and pickup.root.Color~=gold,'Live bullets cannot look like ground pickups')
 print('PASS ordinary species and guardian projectile modes have distinct original readable presentation')
+
+local ownershipBase=table.clone(Base)
+function ownershipBase.spawn(world,id,actorId,point)
+    local ok=Base.spawn(world,id,actorId,point)
+    local root=world.actors[id].root
+    root.simulateAssemblyOwnershipReset=true;root.nearbyAutomaticOwner='nearby-player-2'
+    root:SetNetworkOwner(nil) -- Real BaseWorld already pins this basic rig.
+    return ok
+end
+local ownershipWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50,Enemy={speed=9}},
+    {name='CompletedEnemyOwnership',offset={x=100,y=10,z=9216}})
+for i,kind in ipairs({'Pig','Walker','Dragon','Boss'}) do
+    local id=-20-i
+    assert(ownershipWorld:spawnEnemy(id,kind,{x=-30+i*5,y=3,z=0}))
+    local root=ownershipWorld.actors[id].root
+    assert(root.assemblyOwnershipResets>0,'The complete species must actually invalidate the basic-rig ownership pin in this fixture')
+    assert(root:GetNetworkOwner()==nil and not root:GetNetworkOwnershipAuto(),
+        'Completed '..kind..' assembly must be pinned to the server after all physical art is attached')
+end
+local claimed=ownershipWorld.actors[-21]
+local claimedModel,claimedRoot,claimedHP=claimed.model,claimed.root,claimed.humanoid.Health
+claimedRoot.networkOwnershipAuto=true;claimedRoot.networkOwner='nearby-player-2'
+ownershipWorld:enemyIdentity(-21,'ownership-run:enemy:1:-21','Player2')
+assert(claimedRoot:GetNetworkOwner()==nil and not claimedRoot:GetNetworkOwnershipAuto(),
+    'Claim identity must retain server physics rather than transfer the assembly to the logical role owner')
+assert(ownershipWorld.actors[-21].model==claimedModel and ownershipWorld.actors[-21].root==claimedRoot
+    and claimed.humanoid.Health==claimedHP and claimedModel:GetAttribute('ControlledByPlayer')==true
+    and claimedModel:GetAttribute('ActorId')=='ownership-run:enemy:1:-21','Ownership correction cannot replace or heal the claimed body')
+local ownershipHero=actor(ownershipWorld,1,claimedRoot.Position-vector(3,0,0))
+ownershipHero.root.CFrame.LookVector=vector(1,0,0)
+assert(ownershipWorld:carryEnemy(-21,1))
+claimedRoot.networkOwnershipAuto=true;claimedRoot.networkOwner='nearby-player-2'
+assert(ownershipWorld:releaseEnemy(-21))
+assert(claimedRoot:GetNetworkOwner()==nil and not claimedRoot:GetNetworkOwnershipAuto()
+    and claimed.model==claimedModel and claimed.humanoid.Health==claimedHP,'Unanchoring the carried same body must restore server authority')
+local ownedDragon=ownershipWorld.actors[-23];ownedDragon.root.AssemblyMass=12
+ownedDragon.root.networkOwnershipAuto=true;ownedDragon.root.networkOwner='nearby-player-2'
+workspace.Gravity=196.2
+assert(ownershipWorld:dragonMotion(-23,1,0,4.5,10))
+assert(ownedDragon.root:GetNetworkOwner()==nil and not ownedDragon.root:GetNetworkOwnershipAuto(),
+    'Dragon flight retains server authority on its existing completed body')
+ownershipWorld:stopDragon(-23)
+claimedRoot.networkOwnershipDenied=true
+local canClaim,claimError=pcall(function() ownershipWorld:enemyIdentity(-21,'unchanged','Player2') end)
+assert(not canClaim and string.find(tostring(claimError),'Ownership unavailable',1,true),
+    'A failed server-ownership assignment must fail explicitly instead of silently accepting a client-owned body')
+claimedRoot.networkOwnershipDenied=nil
+ownershipWorld:clearActors()
+print('PASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership')
+
+local clubOwnershipWorld=World.new(Base,{FallY=-20,WalkSpeed=16},{name='ClubOwnership'})
+local clubOwner=actor(clubOwnershipWorld,1,vector(0,3,0))
+clubOwner.model:SetAttribute('ActorId','club-owner-body')
+clubOwner.root.simulateAssemblyOwnershipReset=true;clubOwner.root.nearbyAutomaticOwner='nearby-player-1'
+clubOwner.root:SetNetworkOwner(nil)
+local ownerRoot,ownerModel,ownerHP=clubOwner.root,clubOwner.model,clubOwner.humanoid.Health
+assert(clubOwnershipWorld:equipClub('ownership-club',1))
+assert(ownerRoot.assemblyOwnershipResets>0,'Attaching the actual nested club model must invalidate the old pin in this fixture')
+assert(ownerRoot:GetNetworkOwner()==nil and not ownerRoot:GetNetworkOwnershipAuto(),
+    'Equipped nested weapon must pin the same hero assembly after its parts join')
+assert(clubOwner.model==ownerModel and clubOwner.root==ownerRoot and clubOwner.humanoid.Health==ownerHP
+    and ownerModel:GetAttribute('ActorId')=='club-owner-body','Equipping cannot replace or heal the hero')
+ownerRoot.networkOwnershipAuto=true;ownerRoot.networkOwner='nearby-player-1'
+assert(clubOwnershipWorld:unequipClub('ownership-club'))
+assert(ownerRoot:GetNetworkOwner()==nil and not ownerRoot:GetNetworkOwnershipAuto(),
+    'Removing a weapon must restore explicit server authority after its assembly change')
+assert(clubOwnershipWorld:equipClub('old-owner-club',1))
+local replacementOwner=actor(clubOwnershipWorld,1,vector(20,3,0))
+replacementOwner.root:SetNetworkOwner('replacement-owner')
+local replacementPins=replacementOwner.root.networkOwnershipPins
+ownerRoot.networkOwnershipAuto=true;ownerRoot.networkOwner='nearby-player-1'
+assert(clubOwnershipWorld:unequipClub('old-owner-club'))
+assert(ownerRoot:GetNetworkOwner()==nil and not ownerRoot:GetNetworkOwnershipAuto()
+    and replacementOwner.root:GetNetworkOwner()=='replacement-owner'
+    and replacementOwner.root.networkOwnershipPins==replacementPins,'Unequip must pin its saved old owner and never the replacement')
+replacementOwner.root.Anchored=true
+assert(clubOwnershipWorld:equipClub('anchored-club',1) and clubOwnershipWorld:unequipClub('anchored-club'))
+assert(replacementOwner.root.Anchored and replacementOwner.root.networkOwnershipPins==replacementPins,
+    'Anchored equipment owners must skip ownership assignment and preserve their physical flags')
+assert(clubOwner.humanoid.Health==ownerHP)
+ownerModel:Destroy();clubOwnershipWorld:clearActors()
+print('PASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements')
 
 local actualBase=source(BaseWorldSource)
 local scopedSearch={floors=route.floors,actors={},origins={[1]=vector(720,13,1024)},deathReason={[1]='Fall'},lastSupport={},

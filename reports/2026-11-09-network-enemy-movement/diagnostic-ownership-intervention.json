@@ -1,0 +1,30 @@
+{
+  "scope": "Single-variable diagnostic intervention, not final acceptance. Only the existing root's SetNetworkOwner(nil) was changed; no HP/life/position/kill helpers.",
+  "sourceSha256": "ca590a35b8ea4f9b6f2280490886117a4779cb338345ca6fe44d91692f94e96a",
+  "reproduction": {
+    "runId": "5ae94f68-0053-4634-8967-091af796efb1",
+    "hero": "Player1",
+    "enemyOwner": "Player2",
+    "enemyId": -1,
+    "ordinaryNativeInput": "A held",
+    "before": {
+      "sampleCount": 19,
+      "allMovementMode": "Idle",
+      "maxAbsoluteVx": 0,
+      "x": -34.99955749511719,
+      "cap": 9,
+      "networkOwner": "Player2",
+      "automaticOwnership": true
+    },
+    "sourceTrace": "BaseWorld.spawn pins the simple rig. GameWorld.spawnEnemy subsequently rebuilds/articulates enemy art without reapplying server ownership. Hero Session hold(false) pins after customization; enemy claim only changes identity/nameplate."
+  },
+  "intervention": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"before\":{\"owner\":\"Player2\",\"auto\":true,\"position\":\"-34.99956130981445, 3.0000457763671875, -8.0001220703125\"},\"after\":{\"auto\":false,\"owner\":\"nil\"}}"
+      }
+    ],
+    "isError": false
+  }
+}

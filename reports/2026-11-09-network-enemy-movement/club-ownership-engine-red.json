@@ -1,0 +1,25 @@
+{
+  "scope": "Isolated temporary physical World fixture in a real two-client Studio server while the main game remains Lobby. Actual GameWorld.spawn/hold/equipClub/unequipClub APIs; fixture offset y256; no role/resource/HP edits. Fixture actors and folder were fully removed. Not natural route acceptance.",
+  "sourceSha256": "38954c4fb38058503e1dc606244edbafa2ce16d2859e61eb82d77625d843842b",
+  "observed": {
+    "before": {
+      "automatic": false,
+      "owner": "nil",
+      "health": 100,
+      "actorId": "club-diagnostic"
+    },
+    "equipped": {
+      "automatic": true,
+      "owner": "Player1",
+      "health": 100,
+      "actorId": "club-diagnostic"
+    },
+    "removed": {
+      "automatic": true,
+      "owner": "Player1",
+      "health": 100,
+      "actorId": "club-diagnostic"
+    },
+    "ok": true
+  }
+}

@@ -4,6 +4,15 @@ local World = {}
 local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
 
+local function ownCompletedRig(actor)
+    local root=actor.root
+    if root.Parent and not root.Anchored then
+        local allowed,reason=root:CanSetNetworkOwnership()
+        assert(allowed,reason or 'Cannot assign server ownership')
+        root:SetNetworkOwner(nil)
+    end
+end
+
 local COLORS = {
     stone = Color3.fromRGB(71, 92, 89),
     dark = Color3.fromRGB(35, 54, 57),
@@ -558,6 +567,8 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0, isBoss and 7.6 or 4.5, 0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
+    -- The species art changes the assembly after BaseWorld pinned its basic rig.
+    ownCompletedRig(actor)
     return true
 end
 
@@ -590,6 +601,8 @@ end
 function World:enemyIdentity(id,actorId,ownerName)
     local actor=self.actors[id]
     if not actor or (self.enemyKinds[id]~='Drone' and self.enemyKinds[id]~='Boss') then return end
+    -- A logical player role still uses server-driven Humanoid movement.
+    ownCompletedRig(actor)
     actor.model:SetAttribute('ActorId',actorId)
     actor.model:SetAttribute('ControlledByPlayer',ownerName~=nil)
     if ownerName then
@@ -1209,6 +1222,7 @@ function World:equipClub(id, heroId)
     art.owner,art.heroId=hero,heroId
     self.equippedClubs[id]=art
     hero.model:SetAttribute('EquippedClub',id)
+    ownCompletedRig(hero)
     return true
 end
 
@@ -1226,6 +1240,7 @@ function World:unequipClub(id)
     end
     equipped.model:Destroy()
     self.equippedClubs[id]=nil
+    ownCompletedRig(owner)
     return true
 end
 
