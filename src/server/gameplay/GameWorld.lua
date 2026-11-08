@@ -1213,6 +1213,30 @@ local walkerPoses = {
     },
 }
 
+local dragonPoses = {
+    DragonHeadbutt = {
+        Windup = {left=-.4,right=-.4,leftRoll=-.3,rightRoll=.3,hip=-.15,neck=-.55},
+        Recovery = {left=.8,right=.8,leftRoll=-.5,rightRoll=.5,hip=.2,neck=.45},
+    },
+}
+
+local heroPoses = {
+    HeroJab={Windup={left=.3,right=-.3,leftRoll=.1,rightRoll=-.2,hip=0},
+        Recovery={left=.4,right=1.9,leftRoll=.1,rightRoll=-.1,hip=0}},
+    HeroUppercut={Windup={left=.7,right=-.7,leftRoll=.2,rightRoll=-.4,hip=.15},
+        Recovery={left=.6,right=2.7,leftRoll=.1,rightRoll=-.2,hip=-.2}},
+    HeroElbow={Windup={left=2.3,right=2.3,leftRoll=-.4,rightRoll=.4,hip=-.15},
+        Recovery={left=1.2,right=1.2,leftRoll=-.2,rightRoll=.2,hip=.25}},
+    HeroPowerPunch={Windup={left=.8,right=-1,leftRoll=.2,rightRoll=-.6,hip=.25},
+        Recovery={left=.5,right=2.3,leftRoll=.1,rightRoll=-.1,hip=-.3}},
+    HeroKick={Windup={left=.8,right=.8,leftRoll=-.2,rightRoll=.2,leftHip=.1,rightHip=-.6},
+        Recovery={left=.5,right=.5,leftRoll=-.1,rightRoll=.1,leftHip=0,rightHip=1.2}},
+    HeroBoot={Windup={left=1.1,right=1.1,leftRoll=-.4,rightRoll=.4,leftHip=.3,rightHip=-1},
+        Recovery={left=.4,right=.4,leftRoll=-.2,rightRoll=.2,leftHip=-.2,rightHip=1.6}},
+    Dash={Windup={left=-.5,right=-.5,leftRoll=-.4,rightRoll=.4,hip=.2},
+        Recovery={left=1.6,right=1.6,leftRoll=-.2,rightRoll=.2,hip=.25}},
+}
+
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
@@ -1239,7 +1263,8 @@ function World:updatePresentation(session, dt, enemies)
                 actor.poseMotors = {}
                 for _,joint in ipairs(actor.model:GetDescendants()) do
                     if joint:IsA("Motor6D") and (joint.Name == "Left Shoulder" or joint.Name == "Right Shoulder"
-                        or joint.Name == "Left Hip" or joint.Name == "Right Hip") then
+                        or joint.Name == "Left Hip" or joint.Name == "Right Hip"
+                        or (joint.Name=='Neck' and enemies and enemies[id] and enemies[id].kind=='Dragon')) then
                         actor.poseMotors[joint.Name] = {joint = joint, base = joint.C0}
                     end
                 end
@@ -1253,16 +1278,20 @@ function World:updatePresentation(session, dt, enemies)
             if club and club.owner~=actor then club=nil end
             local pig = enemy and enemy.kind == 'Pig'
             local poses = pig and pigPoses or (enemy and enemy.kind=='Walker' and walkerPoses)
+                or (enemy and enemy.kind=='Dragon' and dragonPoses)
+                or (combat and session.sourceCombat and heroPoses)
+            local actionState=enemy or combat
+            local windup=enemy and enemy.windup or (combat and combat.attack)
             local primaryAction,primaryPhase
             if poses then
                 actor.attackPoseUntil,actor.attackPoseAction = nil,nil
-                local dead = actor.humanoid.Health<=0 or enemy.dead or (combat and combat.deathAt~=nil)
+                local dead = actor.humanoid.Health<=0 or (enemy and enemy.dead) or (combat and combat.deathAt~=nil)
                 if not dead and not reacting and not carryingEnemy and not beingCarried then
-                    if enemy.windup and poses[enemy.windup.action] then
-                        primaryAction,primaryPhase = enemy.windup.action,'Windup'
-                    elseif poses[enemy.lastStrikeAction] and type(enemy.strikeRecoveryUntil)=='number'
-                        and session and type(session.now)=='number' and session.now<enemy.strikeRecoveryUntil then
-                        primaryAction,primaryPhase = enemy.lastStrikeAction,'Recovery'
+                    if windup and poses[windup.action] then
+                        primaryAction,primaryPhase = windup.action,'Windup'
+                    elseif poses[actionState.lastStrikeAction] and type(actionState.strikeRecoveryUntil)=='number'
+                        and session and type(session.now)=='number' and session.now<actionState.strikeRecoveryUntil then
+                        primaryAction,primaryPhase = actionState.lastStrikeAction,'Recovery'
                     elseif pig and enemy.rushing then primaryAction,primaryPhase = 'PigRush','Running' end
                 end
             else
@@ -1291,7 +1320,9 @@ function World:updatePresentation(session, dt, enemies)
                 local left = string.find(name, "Left", 1, true) ~= nil
                 local angle = stride * (left and 1 or -1) * (shoulder and -1 or 1)
                 local roll = 0
-                if shoulder and carryingEnemy then
+                if name=='Neck' then
+                    angle=primaryPose and primaryPose.neck or 0
+                elseif shoulder and carryingEnemy then
                     angle, roll = 2.65, left and -.2 or .2
                 elseif beingCarried then
                     angle, roll = shoulder and 1.3 or .45, left and -.3 or .3

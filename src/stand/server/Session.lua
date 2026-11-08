@@ -43,14 +43,20 @@ function Session:_clock(now)
     return "OK"
 end
 
-function Session:_record(kind, uid, data)
+function Session:_record(kind, uid, data, at)
     local h=self.state.heroes[uid]
-    local row={kind=kind,userId=uid,now=self.now,runId=self.state.runId,revision=self.state.revision,
+    local row={kind=kind,userId=uid,now=at or self.now,runId=self.state.runId,groupId=self.state.groupId,
+        levelEpoch=self.state.levelEpoch,revision=self.state.revision,
         actorId=h and h.actorId,attempt=h and h.attempt,respawns=h and h.respawns,
-        rawLife=self.combat[uid] and self.combat[uid].rawLife,data=data}
+        rawLife=self.combat[uid] and self.combat[uid].rawLife,status=h and h.status,view=h and h.view,
+        connected=h and h.connected,shieldKind=h and h.shield and h.shield.kind,
+        shieldUntil=h and h.shield and h.shield.deadline,data=data}
     self.logs[#self.logs+1]=row
     if #self.logs>self.config.MaxLogEntries then table.remove(self.logs,1) end
-    if self.logger then self.logger(row) end
+    if self.logger then
+        local ok=pcall(self.logger,row)
+        if not ok then self.loggerFailures=(self.loggerFailures or 0)+1 end
+    end
 end
 
 function Session:_event(kind, uid, fields)
@@ -107,7 +113,20 @@ function Session:_die(uid, reason)
     self.combat[uid]={rawLife=0,nextAttack=self.now}
     self.lastMove[uid]=nil
     self.world:kill(uid)
-    self:_record("ConfirmedDeath",uid,{reason=reason})
+    self:_record("ConfirmedDeath",uid,{reason=reason,actorId=h.actorId,observed=self.world:observe(uid)})
+end
+
+function Session:_finishReaction(uid)
+    local c=self.combat[uid]
+    if not c or not c.reactionEnd or c.deathAt or self.now<c.reactionEnd then return false end
+    if c.recover then
+        c.rawLife=self.Combat.recover(c.rawLife)
+        assert(self:_event('SetHealth',uid,{health=self.Combat.hearts(c.rawLife)})=='OK')
+    elseif self.sourceCombat and c.heavyReaction==true then
+        c.hitProtectedUntil=c.reactionEnd+(c.reactionProtectionSeconds or self.sourceCombat.heavyProtection)
+    end
+    c.reactionEnd=nil;c.recover=nil;c.heavyReaction=nil;c.reactionProtectionSeconds=nil;self.world:setReaction(uid,false)
+    return true
 end
 
 function Session:connection(uid, connected, now)
@@ -142,6 +161,7 @@ function Session:intent(uid, p, now)
     if b.tokens<1 then return "RATE_LIMIT" end
     b.tokens=b.tokens-1
     local c=self.combat[uid]
+    if self.sourceCombat then self:_finishReaction(uid) end
     if c.reactionEnd or c.deathAt then return "REACTION" end
     if p.kind=="Move" then
         self.lastMove[uid]=now
@@ -163,23 +183,28 @@ function Session:intent(uid, p, now)
         code=self:_event("BeginAttack",uid,{connectionEpoch=h.connectionEpoch})
         if code~="OK" then return code end
         self.world:hold(uid,false)
-        local cfg=self.config.Attacks[p.attack]
+        local action=self.attackSelector and self.attackSelector(uid,p.attack) or p.attack
+        local cfg=self.config.Attacks[action]
+        assert(cfg,'Unknown trusted action')
         c.nextAttack=now+cfg.cooldown
-        c.attack={action=p.attack,actorId=h.actorId,at=now+cfg.windup,
+        c.attack={action=action,inputAction=p.attack,tuning=self.Combat.captureAttack(self.config,action,cfg),actorId=h.actorId,at=now+cfg.windup,
             untilTime=now+cfg.windup+cfg.window,order=self.serial}
-        self:_record("AttackAccepted",uid,{action=p.attack,seq=p.seq})
+        self:_record("AttackAccepted",uid,{action=action,inputAction=p.attack,seq=p.seq})
     end
     return "OK"
 end
 
-function Session:_hit(attacker, target, action)
+function Session:_hit(attacker, target, action, tuning)
     local h=self.state.heroes[target]
     local c=self.combat[target]
-    if not h or target==attacker or h.status~="Alive" or c.reactionEnd or c.deathAt then return false end
+    if not h or target==attacker or h.status~="Alive" or c.deathAt then return false end
+    if self.sourceCombat then self:_finishReaction(target) end
+    if c.reactionEnd and not self.sourceCombat then return false end
+    if self.sourceCombat and c.hitProtectedUntil and self.now<c.hitProtectedUntil then return false end
     local shield=h.shield and self.now<h.shield.deadline and h.shield.kind or nil
     local before=c.rawLife
     local result=self.Combat.hit(before,action,shield)
-    local cfg=self.config.Attacks[action]
+    local cfg=tuning or self.config.Attacks[action]
     if not result.blocked then
         local code=self:_event("SetHealth",target,{health=self.Combat.hearts(result.rawLife)})
         if code~="OK" then return false end
@@ -192,11 +217,15 @@ function Session:_hit(attacker, target, action)
         if result.heavyReaction then c.heavyReactionEpoch=(c.heavyReactionEpoch or 0)+1 end
         c.attack=nil
         c.recover=result.recover
+        c.heavyReaction=result.heavyReaction
+        local policy=cfg.sourceCombat or self.sourceCombat
+        c.reactionProtectionSeconds=policy and policy.heavyProtection or nil
         c.reactionEnd=self.now+cfg.reaction
-        c.deathAt=result.dying and self.now+self.config.DeathDelay or nil
+        c.deathAt=result.dying and self.now+(cfg.deathDelay or self.config.DeathDelay) or nil
         self.world:move(target,0,0)
         self.world:setReaction(target,true)
-        self.world:impulse(target,attacker,self.config.Impulses[result.profile],result.profile)
+        local impulse=cfg.responses and cfg.responses[result.profile] or self.config.Impulses[result.profile]
+        self.world:impulse(target,attacker,impulse,result.profile)
     end
     self:_record("Hit",target,{attacker=attacker,action=action,profile=result.profile,
         before=before,after=c.rawLife,blocked=result.blocked,impulse=result.impulse,
@@ -236,12 +265,7 @@ function Session:step(now)
             if c.deathAt and now>=c.deathAt then
                 self:_die(uid,"CombatUnderflow")
             elseif c.reactionEnd and not c.deathAt and now>=c.reactionEnd then
-                if c.recover then
-                    c.rawLife=self.Combat.recover(c.rawLife)
-                    assert(self:_event("SetHealth",uid,{health=self.Combat.hearts(c.rawLife)})=="OK")
-                end
-                c.reactionEnd=nil; c.recover=nil
-                self.world:setReaction(uid,false)
+                self:_finishReaction(uid)
             end
         end
     end
@@ -260,9 +284,13 @@ function Session:step(now)
         if self.combat[uid].attack==a then
             self.combat[uid].attack=nil
             if h.status=="Alive" and h.actorId==a.actorId and now<=a.untilTime then
-                for _,target in ipairs(self.world:targets(uid,self.config.Attacks[a.action])) do
-                    if self:_hit(uid,target,a.action) then break end
+                self.combat[uid].lastStrikeAction=a.action
+                self.combat[uid].strikeRecoveryUntil=now+((a.tuning and a.tuning.recoveryPose) or .17)
+                local landed=false
+                for _,target in ipairs(self.world:targets(uid,a.tuning or self.config.Attacks[a.action])) do
+                    if self:_hit(uid,target,a.action,a.tuning) then landed=true;break end
                 end
+                if not landed then self:_record('AttackMiss',uid,{action=a.action}) end
             else self:_record("AttackExpired",uid,{action=a.action}) end
         end
     end

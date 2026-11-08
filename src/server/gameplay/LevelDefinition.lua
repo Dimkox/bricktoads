@@ -3,7 +3,8 @@
 -- Thirteen ordinary actor records: nine pigs, two walkers, two dragons.
 -- This does not assert a verified natural-play total or completed NES AI/animation parity.
 local function floor(x,y,z,w,d) return {x=x,y=y,z=z,w=w,h=2,d=d} end
-local function enemy(id,kind,x,y,z) return {id=id,kind=kind,x=x,y=y,z=z} end
+local sourceLife={15,15,31,31,31,31,31,31,31,47,31,31,15}
+local function enemy(id,kind,x,y,z) return {id=id,kind=kind,x=x,y=y,z=z,rawLife=sourceLife[-id]} end
 local function exit(x,z,y) return {minX=x-6,maxX=x+2,minY=(y or 3)-2,maxY=(y or 3)+6,minZ=z-13,maxZ=z+13} end
 return {
     id='causeway-1',name='Затопленный тракт',

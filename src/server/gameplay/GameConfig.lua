@@ -24,6 +24,9 @@ return function(base,level)
     config.Attacks.WalkerHeavy={windup=.65,cooldown=1.6,reaction=.75,reach=7.5,width=3.25,height=4,recoveryPose=.35}
     config.Walker={range=6.5,minRange=2.5,retreatSpeed=7,
         npcDamage={WalkerLight=1,WalkerHeavy=2},npcProfile={WalkerLight=0,WalkerHeavy=2}}
+    -- Ordinary Dragon animation32 has base4/hero22, never the hero Dash finisher.
+    config.Attacks.DragonHeadbutt={windup=.35,cooldown=1.25,reaction=.75,reach=6,width=3,height=4,recoveryPose=.25}
+    config.Dragon={npcDamage={DragonHeadbutt=2},npcProfile={DragonHeadbutt=4}}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}
@@ -35,6 +38,19 @@ return function(base,level)
         horizontal=26,vertical=16,throwDamage=config.Enemy.punchDamage,sourceProfile=17,sourceRawDamage=4}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
+        config.SourceCombat={heavyProtection=28/60,npcLightReaction=1.05,npcHeavyReaction=.85}
+        for _,action in ipairs({'HeroJab','HeroKick','HeroUppercut','HeroPowerPunch','HeroBoot','HeroElbow'}) do
+            config.Attacks[action]=table.clone(config.Attacks.Punch)
+            config.Attacks[action].reaction=action=='HeroJab' and 28/60 or .75
+            config.Attacks[action].recoveryPose=.2
+        end
+        config.Impulses[19]={horizontal=24,vertical=20}
+        config.Impulses[24]={horizontal=34,vertical=30}
+        config.Impulses[28]={horizontal=9,vertical=-12}
+        config.Impulses[1]=table.clone(config.Impulses[19])
+        config.Impulses[3]=table.clone(config.Impulses[21])
+        config.Impulses[6]=table.clone(config.Impulses[24])
+        config.Impulses[10]=table.clone(config.Impulses[28])
         config.Boss.interval=1.6
         config.Boss.ballInterval=8
         config.Boss.ballLife=20

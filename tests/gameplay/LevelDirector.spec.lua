@@ -45,7 +45,7 @@ return function(Director,Session,Core,Combat,baseConfig,FakeWorld)
         local session={state={runId='run-enemies',levelEpoch=1,status='Active',heroes={[1]={status='Alive',connected=true}}},order={1},combat={[1]={}},now=0}
         function session:_hit(a,t,action) world.hits+=1; world.lastHit={a,t,action}; return true end
         local cfg={MoveTimeout=.35,Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'},Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=200},Attacks={Dash={reach=8,width=3,height=4}}}
-        return Director.new(session,world,{},cfg),world,session
+        return Director.new(session,world,Combat,cfg),world,session
     end
     local function clearWave(d)
         local ids={}; for id,e in pairs(d.enemies) do if not e.dead then ids[#ids+1]=id end end

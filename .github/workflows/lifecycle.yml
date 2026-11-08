@@ -23,8 +23,13 @@ jobs:
           echo '186e5ddaa2b048ebc7390c11ed1b00c04e7d3beaffed429250329e3575d2ece2  /tmp/luau.zip' | sha256sum --check
           unzip -q /tmp/luau.zip -d /tmp/bricktoads-luau
           chmod +x /tmp/bricktoads-luau/luau /tmp/bricktoads-luau/luau-compile
-      - name: Compile isolated Studio acceptance runner
-        run: /tmp/bricktoads-luau/luau-compile tests/gameplay/WalkerHeavyStudioAcceptance.server.luau > /dev/null
+      - name: Compile source and tests without executing engine APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          find src tests \( -name '*.lua' -o -name '*.luau' \) -print0 | while IFS= read -r -d '' file; do
+            /tmp/bricktoads-luau/luau-compile "$file" > /dev/null
+          done
       - name: Native Luau contract tests
         run: /tmp/bricktoads-luau/luau tests/run.luau
       - name: Playable game contracts
@@ -39,6 +44,10 @@ jobs:
           /tmp/bricktoads-luau/luau tests/run_walker_clubs.luau
           /tmp/bricktoads-luau/luau tests/run_pig_strikes.luau
           /tmp/bricktoads-luau/luau tests/run_walker_strikes.luau
+          /tmp/bricktoads-luau/luau tests/run_dragon_strikes.luau
+          /tmp/bricktoads-luau/luau tests/run_source_combat.luau
+          /tmp/bricktoads-luau/luau tests/run_journal.luau
+          /tmp/bricktoads-luau/luau tests/run_feedback.luau
           python3 tests/group_world/run.py --luau /tmp/bricktoads-luau/luau
       - name: Structural build tests
         run: python3 tools/test_build.py
@@ -57,4 +66,10 @@ jobs:
         with:
           name: WalkerHeavyAcceptance-${{ github.sha }}
           path: build/WalkerHeavyAcceptance.rbxlx
+          if-no-files-found: error
+      - name: Preserve playable for later Studio acceptance
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: BrickToadsPlayable-${{ github.sha }}
+          path: places/BrickToadsPlayable.rbxlx
           if-no-files-found: error

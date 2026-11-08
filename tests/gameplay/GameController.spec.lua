@@ -1,4 +1,4 @@
-return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Director,BossQueue)
+return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Director,BossQueue,Journal)
     local passed=0
     local function test(name,fn) fn(); passed+=1; print('PASS '..name) end
     local function fixture(realDirector,overrides)
@@ -469,5 +469,35 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
             assert(c.world.actors[-99]==body and send(enemy,{kind='Sync'})=='STALE_CONNECTION')
         end)
     end
+    test('one private journal follows actual lifecycle hit result and restart without leaking diagnostic rows',function()
+        local c,list,add,send,tick=fixture(false,{RunJournal=Journal,BuildId='source-sha'})
+        local a,b=add(10),add(20);assert(send(a,{kind='Start'})=='OK')
+        assert(c.journal and c.journal:snapshot().build=='source-sha')
+        local started=c.journal:snapshot().events[1]
+        assert(started.kind=='RunStarted' and started.data.owners[1]==10 and started.data.owners[2]==20)
+        assert(c.current:_hit(2,1,'Punch'))
+        local data=c:snapshot(a,list)
+        assert(data.feedback and data.feedback.latestSeq>0 and data.journal==nil and data.logs==nil)
+        local hit=false
+        for _,event in ipairs(data.feedback.events) do
+            if event.kind=='Hit' then hit=true;assert(event.data==nil and event.slot==1) end
+        end
+        assert(hit)
+        tick(.6)
+        local h=c.current.state.heroes[1]
+        assert(send(a,{kind='Attack',attack='Punch',runId=c.current.state.runId,actorId=h.actorId,
+            attempt=h.attempt,levelEpoch=1,connectionEpoch=h.connectionEpoch,seq=1})=='OK')
+        tick(.2)
+        local misses=0
+        for _,event in ipairs(c.journal:snapshot().events) do if event.kind=='AttackMiss' then misses+=1 end end
+        assert(misses==1)
+        c.director.result='Won';tick(.1);tick(.1)
+        local results=0
+        for _,event in ipairs(c.journal:snapshot().events) do if event.kind=='RunResult' then results+=1 end end
+        assert(results==1)
+        local previous=c.journal:snapshot().runId
+        assert(send(a,{kind='Start'})=='OK')
+        assert(c.journal:snapshot().runId~=previous and c.previousJournal:snapshot().runId==previous)
+    end)
     print('GameController: '..passed..' PASS')
 end

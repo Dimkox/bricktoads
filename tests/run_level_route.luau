@@ -5,4 +5,4 @@ assert(Config.Attacks.Club and not Base.Attacks.Club and not Base.Impulses[2] an
     'Adding a trusted Club profile must not mutate shared stand defaults')
 require('./gameplay/LevelRoute.spec')(require('../src/server/gameplay/LevelDirector'),Definition,Config,
     require('../src/server/gameplay/HealingFlies'),require('../src/server/gameplay/EnemyCarry'),
-    require('../src/server/gameplay/WalkerClubs'))
+    require('../src/server/gameplay/WalkerClubs'),require('../src/stand/server/Combat'))

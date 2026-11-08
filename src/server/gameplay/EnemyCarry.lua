@@ -65,8 +65,8 @@ function EnemyCarry:_remove(row,reason)
     self.world:releaseEnemy(row.id)
     local e=self.director.enemies[row.id]
     if row.mode=='Thrown' and e==row.enemy and e.reactionUntil==row.untilTime then
-        e.reactionUntil=nil
-        self.world:setReaction(row.id,false)
+        if e.rawLife~=nil and reason=='FlightComplete' then self.director:_finishReaction(row.id,e)
+        else e.reactionUntil=nil;e.heavyReaction=nil;self.world:setReaction(row.id,false) end
     end
     if row.mode=='Carried' then self:_log('EnemyDropped',row,{reason=reason}) end
 end
@@ -154,8 +154,8 @@ function EnemyCarry:_capture(row)
     -- Director resolves expired reactions later in this tick. Normalize that
     -- old physics before World saves it, so a future drop cannot restore it.
     if row.enemy.reactionUntil and self.now>=row.enemy.reactionUntil then
-        row.enemy.reactionUntil=nil
-        self.world:setReaction(row.id,false)
+        if row.enemy.rawLife~=nil then self.director:_finishReaction(row.id,row.enemy)
+        else row.enemy.reactionUntil=nil;self.world:setReaction(row.id,false) end
     end
     if not self.world:carryEnemy(row.id,row.slot) then return end
     row.mode='Carried';self.states[row.id]=row;self.holders[row.slot]=row.id

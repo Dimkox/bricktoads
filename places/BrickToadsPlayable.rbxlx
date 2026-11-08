@@ -88,12 +88,16 @@ Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
+local buildInfo=script.Parent:FindFirstChild('BuildInfo')
+local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
 local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
+    SourceCombat=require(gameplay.SourceCombat),
+    RunJournal=require(gameplay.RunJournal),BuildId=buildId,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor
@@ -110,6 +114,20 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
         world.folder:SetAttribute('GroupId',groupId)
         return world
     end)
+if RunService:IsStudio() then
+    -- Read-only server-side export. No remote, gameplay mutation or test control.
+    local diagnostics=Instance.new('BindableFunction')
+    diagnostics.Name='BrickToadsDiagnostics';diagnostics.Parent=game:GetService('ServerStorage')
+    diagnostics.OnInvoke=function(groupId)
+        if type(groupId)~='string' then return nil end
+        local group=controller.groups[groupId]
+        if not group then return nil end
+        local run=group.controller
+        return {sourceSha256=buildId,placeId=game.PlaceId,placeVersion=game.PlaceVersion,
+            loggerFailures=run.current and (run.current.loggerFailures or 0) or 0,
+            current=run.journal and run.journal:snapshot(),previous=run.previousJournal and run.previousJournal:snapshot()}
+    end
+end
 local remotes=Instance.new('Folder'); remotes.Name='BrickToadsGame'; remotes.Parent=ReplicatedStorage
 local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=remotes
 local state=Instance.new('RemoteEvent'); state.Name='State'; state.Parent=remotes
@@ -763,8 +781,8 @@ function EnemyCarry:_remove(row,reason)
     self.world:releaseEnemy(row.id)
     local e=self.director.enemies[row.id]
     if row.mode=='Thrown' and e==row.enemy and e.reactionUntil==row.untilTime then
-        e.reactionUntil=nil
-        self.world:setReaction(row.id,false)
+        if e.rawLife~=nil and reason=='FlightComplete' then self.director:_finishReaction(row.id,e)
+        else e.reactionUntil=nil;e.heavyReaction=nil;self.world:setReaction(row.id,false) end
     end
     if row.mode=='Carried' then self:_log('EnemyDropped',row,{reason=reason}) end
 end
@@ -852,8 +870,8 @@ function EnemyCarry:_capture(row)
     -- Director resolves expired reactions later in this tick. Normalize that
     -- old physics before World saves it, so a future drop cannot restore it.
     if row.enemy.reactionUntil and self.now&gt;=row.enemy.reactionUntil then
-        row.enemy.reactionUntil=nil
-        self.world:setReaction(row.id,false)
+        if row.enemy.rawLife~=nil then self.director:_finishReaction(row.id,row.enemy)
+        else row.enemy.reactionUntil=nil;self.world:setReaction(row.id,false) end
     end
     if not self.world:carryEnemy(row.id,row.slot) then return end
     row.mode='Carried';self.states[row.id]=row;self.holders[row.slot]=row.id
@@ -946,6 +964,9 @@ return function(base,level)
     config.Attacks.WalkerHeavy={windup=.65,cooldown=1.6,reaction=.75,reach=7.5,width=3.25,height=4,recoveryPose=.35}
     config.Walker={range=6.5,minRange=2.5,retreatSpeed=7,
         npcDamage={WalkerLight=1,WalkerHeavy=2},npcProfile={WalkerLight=0,WalkerHeavy=2}}
+    -- Ordinary Dragon animation32 has base4/hero22, never the hero Dash finisher.
+    config.Attacks.DragonHeadbutt={windup=.35,cooldown=1.25,reaction=.75,reach=6,width=3,height=4,recoveryPose=.25}
+    config.Dragon={npcDamage={DragonHeadbutt=2},npcProfile={DragonHeadbutt=4}}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}
@@ -957,6 +978,19 @@ return function(base,level)
         horizontal=26,vertical=16,throwDamage=config.Enemy.punchDamage,sourceProfile=17,sourceRawDamage=4}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
+        config.SourceCombat={heavyProtection=28/60,npcLightReaction=1.05,npcHeavyReaction=.85}
+        for _,action in ipairs({'HeroJab','HeroKick','HeroUppercut','HeroPowerPunch','HeroBoot','HeroElbow'}) do
+            config.Attacks[action]=table.clone(config.Attacks.Punch)
+            config.Attacks[action].reaction=action=='HeroJab' and 28/60 or .75
+            config.Attacks[action].recoveryPose=.2
+        end
+        config.Impulses[19]={horizontal=24,vertical=20}
+        config.Impulses[24]={horizontal=34,vertical=30}
+        config.Impulses[28]={horizontal=9,vertical=-12}
+        config.Impulses[1]=table.clone(config.Impulses[19])
+        config.Impulses[3]=table.clone(config.Impulses[21])
+        config.Impulses[6]=table.clone(config.Impulses[24])
+        config.Impulses[10]=table.clone(config.Impulses[28])
         config.Boss.interval=1.6
         config.Boss.ballInterval=8
         config.Boss.ballLife=20
@@ -1072,14 +1106,23 @@ function Controller:_begin(player,players)
         self.world.names[index]=owner.DisplayName..' @'..owner.Name
         roster[index]={userId=index,template=template}
     end
-    self.current=self.deps.Session.new(self.deps.Core,self.deps.Combat,self.deps.Config,roster,self.deps.guid(),self.world,function(row)
+    local runId=self.deps.guid()
+    self.previousJournal=self.journal
+    self.journal=self.deps.RunJournal and self.deps.RunJournal.new({runId=runId,groupId=self.deps.GroupId or 'combat-stand',
+        build=self.deps.BuildId or 'unknown',rules='D01-D10-source-combat-v1'}) or nil
+    self.current=self.deps.Session.new(self.deps.Core,self.deps.Combat,self.deps.Config,roster,runId,self.world,function(row)
+        if self.journal then self.journal:record(row) end
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
     end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
+    local actorOwners={}
+    for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
+    self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners})
     self.current:step(self.deps.clock())
     self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end
+    if self.deps.SourceCombat then self.deps.SourceCombat.bind(self.current,self.director,self.deps.Config) end
     for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end
     if self.bossQueue then
         self.bossSlot=self.current.state.runId..':guardian:'..self.current.state.levelEpoch
@@ -1089,9 +1132,9 @@ function Controller:_begin(player,players)
     end
     local originalHit=self.current._hit
     local director=self.director
-    self.current._hit=function(session,attacker,target,action)
-        if type(target)=='number' and target&lt;0 then return director:hit(attacker,target,action) end
-        return originalHit(session,attacker,target,action)
+    self.current._hit=function(session,attacker,target,action,tuning)
+        if type(target)=='number' and target&lt;0 then return director:hit(attacker,target,action,tuning) end
+        return originalHit(session,attacker,target,action,tuning)
     end
     self.finished=false
     return 'OK'
@@ -1199,9 +1242,9 @@ function Controller:handle(player,payload,players)
             local accepted=self.current.combat[slot].attack
             local actor=self.current.state.heroes[slot].actorId
             if code=='OK' and payload.kind=='Attack' and accepted
-                and accepted.actorId==actor and accepted.action==payload.attack then
+                and accepted.actorId==actor and (accepted.inputAction or accepted.action)==payload.attack then
                 self.director.now=at
-                self.director:closeTargetForAttack(self.world:targets(slot,self.deps.Config.Attacks[payload.attack]))
+                self.director:closeTargetForAttack(self.world:targets(slot,accepted.tuning or self.deps.Config.Attacks[accepted.action]))
             end
         elseif self.director:controlled(player.UserId) then
             code=self.director:command(player.UserId,payload,at,self.deps.Session.validIntent)
@@ -1220,6 +1263,7 @@ function Controller:step(now,dt)
     end
     if self.director.result then
         self.finished=true
+        self.current:_record('RunResult',nil,{result=self.director.result})
         for _,id in ipairs(self.current.order) do
             self.world:move(id,0,0)
             if self.world.hold then self.world:hold(id,true) end
@@ -1273,6 +1317,7 @@ function Controller:snapshot(player,players)
     data.notice=self.notices[player]
     data.interaction=data.mine and self.director and self.director.interaction and self.director:interaction(data.mine) or {available=false}
     data.weapon=data.mine and self.director and self.director.clubs and self.director.clubs:hasClub(data.mine) and 'WalkerClub' or nil
+    data.feedback=self.journal and self.journal:feedback() or nil
     if self.bossQueue then
         data.bossQueue=self.bossQueue:view(player.UserId,self.deps.clock())
         data.bossQueue.available=self:_bossSelection(player)=='OK'
@@ -2501,6 +2546,30 @@ local walkerPoses = {
     },
 }
 
+local dragonPoses = {
+    DragonHeadbutt = {
+        Windup = {left=-.4,right=-.4,leftRoll=-.3,rightRoll=.3,hip=-.15,neck=-.55},
+        Recovery = {left=.8,right=.8,leftRoll=-.5,rightRoll=.5,hip=.2,neck=.45},
+    },
+}
+
+local heroPoses = {
+    HeroJab={Windup={left=.3,right=-.3,leftRoll=.1,rightRoll=-.2,hip=0},
+        Recovery={left=.4,right=1.9,leftRoll=.1,rightRoll=-.1,hip=0}},
+    HeroUppercut={Windup={left=.7,right=-.7,leftRoll=.2,rightRoll=-.4,hip=.15},
+        Recovery={left=.6,right=2.7,leftRoll=.1,rightRoll=-.2,hip=-.2}},
+    HeroElbow={Windup={left=2.3,right=2.3,leftRoll=-.4,rightRoll=.4,hip=-.15},
+        Recovery={left=1.2,right=1.2,leftRoll=-.2,rightRoll=.2,hip=.25}},
+    HeroPowerPunch={Windup={left=.8,right=-1,leftRoll=.2,rightRoll=-.6,hip=.25},
+        Recovery={left=.5,right=2.3,leftRoll=.1,rightRoll=-.1,hip=-.3}},
+    HeroKick={Windup={left=.8,right=.8,leftRoll=-.2,rightRoll=.2,leftHip=.1,rightHip=-.6},
+        Recovery={left=.5,right=.5,leftRoll=-.1,rightRoll=.1,leftHip=0,rightHip=1.2}},
+    HeroBoot={Windup={left=1.1,right=1.1,leftRoll=-.4,rightRoll=.4,leftHip=.3,rightHip=-1},
+        Recovery={left=.4,right=.4,leftRoll=-.2,rightRoll=.2,leftHip=-.2,rightHip=1.6}},
+    Dash={Windup={left=-.5,right=-.5,leftRoll=-.4,rightRoll=.4,hip=.2},
+        Recovery={left=1.6,right=1.6,leftRoll=-.2,rightRoll=.2,hip=.25}},
+}
+
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
@@ -2527,7 +2596,8 @@ function World:updatePresentation(session, dt, enemies)
                 actor.poseMotors = {}
                 for _,joint in ipairs(actor.model:GetDescendants()) do
                     if joint:IsA("Motor6D") and (joint.Name == "Left Shoulder" or joint.Name == "Right Shoulder"
-                        or joint.Name == "Left Hip" or joint.Name == "Right Hip") then
+                        or joint.Name == "Left Hip" or joint.Name == "Right Hip"
+                        or (joint.Name=='Neck' and enemies and enemies[id] and enemies[id].kind=='Dragon')) then
                         actor.poseMotors[joint.Name] = {joint = joint, base = joint.C0}
                     end
                 end
@@ -2541,16 +2611,20 @@ function World:updatePresentation(session, dt, enemies)
             if club and club.owner~=actor then club=nil end
             local pig = enemy and enemy.kind == 'Pig'
             local poses = pig and pigPoses or (enemy and enemy.kind=='Walker' and walkerPoses)
+                or (enemy and enemy.kind=='Dragon' and dragonPoses)
+                or (combat and session.sourceCombat and heroPoses)
+            local actionState=enemy or combat
+            local windup=enemy and enemy.windup or (combat and combat.attack)
             local primaryAction,primaryPhase
             if poses then
                 actor.attackPoseUntil,actor.attackPoseAction = nil,nil
-                local dead = actor.humanoid.Health&lt;=0 or enemy.dead or (combat and combat.deathAt~=nil)
+                local dead = actor.humanoid.Health&lt;=0 or (enemy and enemy.dead) or (combat and combat.deathAt~=nil)
                 if not dead and not reacting and not carryingEnemy and not beingCarried then
-                    if enemy.windup and poses[enemy.windup.action] then
-                        primaryAction,primaryPhase = enemy.windup.action,'Windup'
-                    elseif poses[enemy.lastStrikeAction] and type(enemy.strikeRecoveryUntil)=='number'
-                        and session and type(session.now)=='number' and session.now&lt;enemy.strikeRecoveryUntil then
-                        primaryAction,primaryPhase = enemy.lastStrikeAction,'Recovery'
+                    if windup and poses[windup.action] then
+                        primaryAction,primaryPhase = windup.action,'Windup'
+                    elseif poses[actionState.lastStrikeAction] and type(actionState.strikeRecoveryUntil)=='number'
+                        and session and type(session.now)=='number' and session.now&lt;actionState.strikeRecoveryUntil then
+                        primaryAction,primaryPhase = actionState.lastStrikeAction,'Recovery'
                     elseif pig and enemy.rushing then primaryAction,primaryPhase = 'PigRush','Running' end
                 end
             else
@@ -2579,7 +2653,9 @@ function World:updatePresentation(session, dt, enemies)
                 local left = string.find(name, "Left", 1, true) ~= nil
                 local angle = stride * (left and 1 or -1) * (shoulder and -1 or 1)
                 local roll = 0
-                if shoulder and carryingEnemy then
+                if name=='Neck' then
+                    angle=primaryPose and primaryPose.neck or 0
+                elseif shoulder and carryingEnemy then
                     angle, roll = 2.65, left and -.2 or .2
                 elseif beingCarried then
                     angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
@@ -2688,6 +2764,9 @@ end
 function GuardianPattern:_render(id,p)
     self.world:projectile(id,p.position,false,p.mode)
 end
+function GuardianPattern:_log(kind,slot,data)
+    if self.session._record then self.session:_record(kind,slot,data,self.now) end
+end
 
 function GuardianPattern:_remove(id)
     local p=self.director.projectiles[id]
@@ -2760,6 +2839,7 @@ function GuardianPattern:_spawn(mode,aim,target)
     d.projectiles[id]=p
     if target and not d.enemies[-99].ownerUserId and self.world.face then self.world:face(-99,target) end
     self.world:cue(-99,true); self:_render(id,p)
+    self:_log(mode=='Heavy' and 'BossWarning' or 'BossShot',-99,{projectileId=id,mode=mode,target=target})
     return true
 end
 
@@ -2777,7 +2857,11 @@ end
 
 function GuardianPattern:hit(attacker,target,action)
     if self.director.projectiles[target] then return false end
-    if target==-99 and self:_active() then self.world:cue(-99,true); return true end
+    if target==-99 and self:_active() then
+        self.world:cue(-99,true)
+        self:_log('BossShielded',-99,{attacker=attacker,action=action})
+        return true
+    end
     return false
 end
 
@@ -2808,6 +2892,7 @@ function GuardianPattern:interact(slot,now)
         p.mode='Thrown'; p.holder=nil; p.actorId=nil; p.attempt=nil; p.connectionEpoch=nil
         p.target=-99; p.direction=nil; p.created=self.now; p.expiresAt=self.now+(self.config.ballLife or 20)
         self:_render(id,p)
+        self:_log('GuardianBallThrown',slot,{projectileId=id,target=-99})
         return 'OK'
     end
     id,p=self:_ground(slot)
@@ -2817,16 +2902,19 @@ function GuardianPattern:interact(slot,now)
     local position=self.world:position(slot)
     p.position={x=position.x,y=position.y+2,z=position.z}
     self:_render(id,p)
+    self:_log('GuardianBallPickedUp',slot,{projectileId=id})
     return 'OK'
 end
 
 function GuardianPattern:_impact(id)
     if not self:_active() then return end
     local d=self.director; local boss=d.enemies[-99]
+    local before=boss.rawLife
     d.bossHits=(d.bossHits or 0)+1
     boss.rawLife=math.max(0,boss.rawLife-16)
     boss.health=math.max(0,(self.config.hits or 3)-d.bossHits)
     self.world:enemyHealth(-99,boss.health,self.config.hits or 3); self.world:cue(-99,false)
+    self:_log('BossHit',-99,{actorId=boss.actorId,projectileId=id,before=before,after=boss.rawLife,hits=d.bossHits})
     self:_remove(id)
     if boss.rawLife==0 then d:_kill(-99); self:_clear() end
 end
@@ -3036,7 +3124,8 @@ return HealingFlies
 -- Thirteen ordinary actor records: nine pigs, two walkers, two dragons.
 -- This does not assert a verified natural-play total or completed NES AI/animation parity.
 local function floor(x,y,z,w,d) return {x=x,y=y,z=z,w=w,h=2,d=d} end
-local function enemy(id,kind,x,y,z) return {id=id,kind=kind,x=x,y=y,z=z} end
+local sourceLife={15,15,31,31,31,31,31,31,31,47,31,31,15}
+local function enemy(id,kind,x,y,z) return {id=id,kind=kind,x=x,y=y,z=z,rawLife=sourceLife[-id]} end
 local function exit(x,z,y) return {minX=x-6,maxX=x+2,minY=(y or 3)-2,maxY=(y or 3)+6,minZ=z-13,maxZ=z+13} end
 return {
     id='causeway-1',name='Затопленный тракт',
@@ -3106,7 +3195,7 @@ local objectives={Approach='Разбейте дозор у старых воро
 
 function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs)
     local profile=config.Attacks[config.Enemy.attack]
-    local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
+    local self=setmetatable({session=session,world=world,config=config,Combat=Combat,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height,
             windup=config.Enemy.windup,cooldown=config.Enemy.cooldown,recoveryPose=.17},random=math.random},Director)
@@ -3118,6 +3207,25 @@ function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,E
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
 end
+function Director:_health(id,e)
+    if e.rawLife~=nil and not e.boss then
+        e.health=self.config.Enemy.hearts*e.rawLife/e.maxRawLife
+        self.world:enemyHealth(id,e.rawLife,e.maxRawLife)
+    else self.world:enemyHealth(id,e.health,e.boss and self.config.Boss.hits or self.config.Enemy.hearts) end
+end
+function Director:_log(kind,id,data)
+    if self.session._record then self.session:_record(kind,id,data,self.now) end
+end
+function Director:_finishReaction(id,e)
+    if e~=self.enemies[id] or e.dead or not e.reactionUntil or self.now&lt;e.reactionUntil then return false end
+    if e.rawLife~=nil then
+        local before=e.rawLife
+        e.rawLife=self.Combat.recover(e.rawLife);self:_health(id,e)
+        self:_log('EnemyRecovery',id,{actorId=e.actorId,before=before,after=e.rawLife})
+    end
+    e.reactionUntil=nil;e.heavyReaction=nil;self.world:setReaction(id,false)
+    return true
+end
 function Director:_wave(stage,roster)
     self.stage=stage; self.world:stage(stage)
     for _,r in ipairs(roster) do
@@ -3126,8 +3234,14 @@ function Director:_wave(stage,roster)
         self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false,
             actorId=actorId,zoneIndex=self.zoneIndex,kind=r.kind,
             name=({Pig='Болотный налётчик',Walker='Длинноногий дозорный',Dragon='Крылатый разведчик'})[r.kind] or 'Ржавый дозорный'}
+        local e=self.enemies[r.id]
+        if self.config.SourceCombat and r.rawLife~=nil then
+            assert(type(r.rawLife)=='number' and r.rawLife&gt;=0 and r.rawLife&lt;=47 and r.rawLife%1==0,'Invalid source Life')
+            e.rawLife=r.rawLife;e.maxRawLife=math.floor(r.rawLife/16)*16+15
+        end
         self.world:enemyIdentity(r.id,actorId)
-        self.world:enemyHealth(r.id,self.config.Enemy.hearts,self.config.Enemy.hearts)
+        self:_health(r.id,e)
+        self:_log('EnemySpawned',r.id,{actorId=actorId,kind=e.kind,rawLife=e.rawLife,health=e.health})
     end
 end
 function Director:_enterZone(index)
@@ -3196,6 +3310,7 @@ function Director:claim(userId,enemyId)
     self.byUserId[userId]=enemyId
     self.world:move(enemyId,0,0)
     self.world:enemyIdentity(enemyId,e.actorId,self.ownerNames[userId])
+    self:_log('EnemyClaimed',enemyId,{actorId=e.actorId,ownerUserId=userId,rawLife=e.rawLife,health=e.health})
     return 'OK'
 end
 function Director:connection(userId,connected)
@@ -3205,6 +3320,7 @@ function Director:connection(userId,connected)
     if e.connected==connected then return 'NO_CHANGE' end
     e.connected=connected; e.connectionEpoch+=1; e.lastSeq=0; e.lastMove=nil
     self.world:move(id,0,0)
+    self:_log('EnemyConnection',id,{actorId=e.actorId,ownerUserId=userId,connected=connected,connectionEpoch=e.connectionEpoch})
     return 'OK'
 end
 function Director:controlled(userId)
@@ -3297,29 +3413,36 @@ function Director:_beginStrike(id,e,target)
     local action=self.config.Enemy.attack
     local tuning=self.strikeProfile
     local sourceFamily=self.route and ((e.kind=='Pig' and self.config.Pig) or (e.kind=='Walker' and self.config.Walker))
-    if sourceFamily then
+    if self.route and e.kind=='Dragon' and self.config.Dragon then
+        action='DragonHeadbutt';tuning=self.config.Attacks[action]
+    elseif sourceFamily then
         local light=e.kind=='Pig' and 'PigJab' or 'WalkerLight'
         local heavy=e.kind=='Pig' and 'PigHeavy' or 'WalkerHeavy'
         target=target or self:_strikeTarget(id,self.config.Attacks[light])
         local combat=target and self.session.combat[target]
+        local ordinary=target and self.enemies[target]
+        if not combat and ordinary and ordinary.rawLife~=nil then combat=ordinary end
         -- Prototype enemy3HP is not raw source Life; an unknown target uses jab.
         action=e.kind=='Pig' and e.rushing and 'PigRush' or (combat and combat.rawLife%16&lt;4 and heavy or light)
         tuning=self.config.Attacks[action]
     end
     e.engaged=true; e.rushing=nil; e.strikeRecoveryUntil=nil
-    e.windup={at=self.now+tuning.windup,action=action,tuning=table.clone(tuning)}
+    e.windup={at=self.now+tuning.windup,action=action,tuning=self.Combat.captureAttack(self.config,action,tuning)}
     self.world:move(id,0,0); self.world:cue(id,true)
+    self:_log('EnemyAttackAccepted',id,{actorId=e.actorId,action=action,ownerUserId=e.ownerUserId,effectAt=e.windup.at})
 end
 function Director:_resolveStrike(id,e)
     local pending=e.windup
     e.windup=nil; e.nextAttack=self.now+pending.tuning.cooldown
     e.lastStrikeAction=pending.action; e.strikeRecoveryUntil=self.now+pending.tuning.recoveryPose
+    local landed=false
     for _,target in ipairs(self.world:targets(id,pending.tuning)) do
         local hit=false
-        if self.enemies[target] then hit=self:hit(id,target,pending.action)
-        elseif self.session.state.heroes[target] then hit=self.session:_hit(id,target,pending.action) end
-        if hit then break end
+        if self.enemies[target] then hit=self:hit(id,target,pending.action,pending.tuning)
+        elseif self.session.state.heroes[target] then hit=self.session:_hit(id,target,pending.action,pending.tuning) end
+        if hit then landed=true;break end
     end
+    if not landed then self:_log('EnemyAttackMiss',id,{actorId=e.actorId,action=pending.action}) end
 end
 function Director:_boss()
     local controller=self.bossGate and self.bossGate(self.now) or {state='NPC'}
@@ -3342,6 +3465,7 @@ function Director:_boss()
     end
     self.world:enemyIdentity(-99,actorId,e.ownerUserId and self.ownerNames[e.ownerUserId])
     self.world:enemyHealth(-99,self.config.Boss.hits,self.config.Boss.hits)
+    self:_log('BossAssigned',-99,{actorId=actorId,ownerUserId=e.ownerUserId,rawLife=e.rawLife,health=e.health})
     self.nextShot=self.now+1.8
     if self.route then
         assert(self.GuardianPattern,'Modern guardian pattern is required')
@@ -3357,14 +3481,15 @@ function Director:_kill(id,cause)
     if self.carry then self.carry:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
-    if e.boss and self.route then e.rawLife=0 end
-    self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
+    if e.rawLife~=nil then e.rawLife=0 end
+    self:_health(id,e)
     self.world:kill(id)
+    self:_log('EnemyDeath',id,{actorId=e.actorId,cause=cause or 'Unknown',ownerUserId=e.ownerUserId,position=self.world:position(id)})
     if e.boss then
         self.stage='Exit'; self.world:stage('Exit')
     end
 end
-function Director:hit(attacker,target,action)
+function Director:hit(attacker,target,action,tuning)
     if self.result then return false end
     if self.guardian and (self.projectiles[target] or target==-99) then return self.guardian:hit(attacker,target,action) end
     local ball=self.projectiles[target]
@@ -3379,32 +3504,46 @@ function Director:hit(attacker,target,action)
     if target==-99 then
         if self.stage~='Boss' then return false end
         self.world:cue(-99,true)
-        if self.config.Impulses then
-            local profile=action=='Dash' and 22 or 18
-            self.world:impulse(-99,attacker,self.config.Impulses[profile],profile)
-        end
+        local profile=action=='Dash' and 22 or 18
+        local responses=tuning and tuning.responses or self.config.Impulses
+        local impulse=responses and responses[profile]
+        if impulse then self.world:impulse(-99,attacker,impulse,profile) end
         return true
     end
     local e=self.enemies[target]
-    if not e or e.dead or (e.reactionUntil and self.now&lt;e.reactionUntil) then return false end
+    if e and e.rawLife~=nil and self.carry and self.carry:blocksEnemy(target) then return false end
+    if e and e.rawLife~=nil then self:_finishReaction(target,e) end
+    if not e or e.dead or (e.rawLife==nil and e.reactionUntil and self.now&lt;e.reactionUntil) then return false end
     if self.carry then self.carry:forgetEnemy(target) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil
     local family=(self.config.Pig and self.config.Pig.npcDamage[action] and self.config.Pig)
         or (self.config.Walker and self.config.Walker.npcDamage[action] and self.config.Walker)
+        or (self.config.Dragon and self.config.Dragon.npcDamage[action] and self.config.Dragon)
     local damage=(family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
         or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
-    e.health=math.max(0,e.health-damage)
-    self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
+    local before=e.rawLife or e.health
+    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,action)
+    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-damage) end
+    self:_health(target,e)
     self.world:cue(target,false)
-    if e.health==0 then self:_kill(target,'Combat')
+    self:_log('EnemyHit',target,{actorId=e.actorId,attacker=attacker,target=target,action=action,
+        before=before,after=e.rawLife or e.health,sourceRaw=source~=false and source~=nil,
+        profile=source and source.profile or nil,dying=source and source.dying,position=self.world:position(target)})
+    if (source and source.dying) or (not source and e.health==0) then self:_kill(target,'Combat')
     else
-        local reaction=family and self.config.Attacks[action].reaction
+        local policy=tuning and tuning.sourceCombat or self.config.SourceCombat
+        local reaction=source and (source.heavyReaction and policy.npcHeavyReaction
+            or policy.npcLightReaction) or ((tuning and tuning.reaction) or (family and self.config.Attacks[action].reaction)
             or (action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction)
+        )
+        e.heavyReaction=source and source.heavyReaction or nil
         e.reactionUntil=self.now+reaction
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18))
-        if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
+        local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
+        local responses=tuning and tuning.responses or self.config.Impulses
+        local impulse=responses and responses[profile]
+        if impulse then self.world:impulse(target,attacker,impulse,profile) end
     end
     return true
 end
@@ -3412,12 +3551,13 @@ function Director:applyThrowDamage(id,heroSlot)
     local e=self.enemies[id]
     if self.result or self.session.state.status~='Active' or not e or e.dead or e.kind~='Pig' then return false end
     local before=e.health
-    e.health=math.max(0,e.health-self.config.EnemyCarry.throwDamage)
+    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,'EnemyThrow')
+    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-self.config.EnemyCarry.throwDamage) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
-    self.world:enemyHealth(id,e.health,self.config.Enemy.hearts);self.world:cue(id,false)
+    self:_health(id,e);self.world:cue(id,false)
     self.session:_record('EnemyThrowDamage',heroSlot,{enemyId=id,before=before,after=e.health,
         sourceProfile=self.config.EnemyCarry.sourceProfile,sourceRawDamage=self.config.EnemyCarry.sourceRawDamage})
-    if e.health==0 then self:_kill(id) end
+    if (source and source.dying) or (not source and e.health==0) then self:_kill(id,'Combat') end
     return true
 end
 function Director:_nearest(position,standingEligibility)
@@ -3425,7 +3565,7 @@ function Director:_nearest(position,standingEligibility)
     for _,id in ipairs(self.session.order) do
         local h=self.session.state.heroes[id]
         local c=self.session.combat[id]
-        if h.status=='Alive' and not c.deathAt
+        if h.status=='Alive' and not c.deathAt and not (c.hitProtectedUntil and self.now&lt;c.hitProtectedUntil)
             and (not standingEligibility or not c.reactionEnd or c.recover==true) then
             local d=distance(position,self.world:position(id))
             if d&lt;best then selected,best=id,d end
@@ -3444,7 +3584,7 @@ function Director:_enemies()
                 local carried=self.carry and self.carry:blocksEnemy(id)
                 if carried then e.rushing=nil; e.strikeRecoveryUntil=nil end
                 if not carried and e.reactionUntil and self.now&gt;=e.reactionUntil then
-                    e.reactionUntil=nil; self.world:setReaction(id,false)
+                    self:_finishReaction(id,e)
                 end
                 if not carried and not e.reactionUntil then
                     if e.windup then
@@ -3457,6 +3597,7 @@ function Director:_enemies()
                     else
                         local walker=self.route and e.kind=='Walker' and self.config.Walker
                         local standing=walker or (self.route and e.kind=='Pig' and self.config.Pig)
+                            or (self.route and e.kind=='Dragon' and self.config.Dragon)
                         local target,range=self:_nearest(self.world:position(id),standing~=nil and standing~=false)
                         local attackRange=walker and walker.range or self.config.Enemy.range
                         -- Validate the approach before either melee or movement:
@@ -3672,7 +3813,7 @@ function MatchHub.new(deps,worldFactory)
     local self=setmetatable({deps=deps,worldFactory=worldFactory,maxGroups=math.min(4,configured),
         connections=deps.Registry.new(),groups={},order={},routes={},requests={},
         buckets=setmetatable({},{__mode='k'}),notices=setmetatable({},{__mode='k'}),
-        envelopes=setmetatable({},{__mode='k'})},MatchHub)
+        envelopes=setmetatable({},{__mode='k'}),snapshotSeq=setmetatable({},{__mode='k'})},MatchHub)
     self.queue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
         return self:_queueEligible(userId,context)
     end)
@@ -3881,6 +4022,8 @@ function MatchHub:snapshot(player,players)
             if target then queue.groupId=target.id; queue.groupName=target.name end
         end
     end
+    self.snapshotSeq[player]=(self.snapshotSeq[player] or 0)+1
+    data.snapshotSeq=self.snapshotSeq[player];data.serverNow=now
     return data
 end
 
@@ -3901,6 +4044,158 @@ return MatchHub
           </Properties>
         </Item>
         <Item class="ModuleScript" referent="BT20">
+          <Properties>
+            <string name="Name">RunJournal</string>
+            <ProtectedString name="Source">-- Bounded private evidence and an allowlisted view of the same server records.
+local Journal={}
+Journal.__index=Journal
+local public={Hit=true,EnemyHit=true,AttackMiss=true,EnemyAttackMiss=true,CommitSpawn=true,
+    RelocateToSafety=true,EnemyDeath=true,EnemyClaimed=true,FlyCaught=true,ClubEquipped=true,
+    ClubDropped=true,ClubSwingHit=true,EnemyGrabbed=true,EnemyThrown=true,EnemyDropped=true,
+    RunResult=true,GuardianBallPickedUp=true,GuardianBallThrown=true,BossHit=true,BossShielded=true,BossWarning=true}
+local function finite(v) return type(v)=='number' and v==v and v&gt;-math.huge and v&lt;math.huge end
+local function text(v)
+    if type(v)~='string' then return nil end
+    local length=math.min(#v,160)
+    while length&lt;#v and length&gt;0 do
+        local byte=string.byte(v,length+1)
+        if byte&lt;128 or byte&gt;=192 then break end
+        length-=1
+    end
+    local result=string.sub(v,1,length)
+    return utf8.len(result) and result or '[invalid-utf8]'
+end
+local function copy(v)
+    if type(v)~='table' then return v end
+    local result={};for k,value in pairs(v) do result[k]=copy(value) end;return result
+end
+local function sanitize(v,depth,budget,seen)
+    local kind=type(v)
+    if kind=='string' then return text(v) end
+    if kind=='number' then return finite(v) and v or nil end
+    if kind=='boolean' then return v end
+    if kind~='table' or depth&gt;=3 or seen[v] then return nil end
+    seen[v]=true
+    local result,count={},0
+    for key,value in pairs(v) do
+        if count&gt;=16 or budget.count&gt;=64 then break end
+        count+=1;budget.count+=1
+        if (type(key)=='string' and #key&lt;=48 and utf8.len(key)) or (finite(key) and key&gt;=1 and key&lt;=16 and key%1==0) then
+            result[key]=sanitize(value,depth+1,budget,seen)
+        end
+    end
+    seen[v]=nil
+    return result
+end
+
+function Journal.new(context,capacity)
+    capacity=capacity or 256
+    assert(finite(capacity) and capacity&gt;=1 and capacity&lt;=256 and capacity%1==0,'Invalid journal capacity')
+    assert(type(context)=='table' and text(context.runId) and text(context.groupId),'Journal identity required')
+    return setmetatable({context={runId=text(context.runId),groupId=text(context.groupId),
+        build=text(context.build) or 'unknown',rules=text(context.rules) or 'unknown'},
+        capacity=capacity,rows={},keys={},seen={},next=1,count=0,seq=0,dropped=0,invalid=0,duplicates=0,
+        publicRows={},lastNow=0},Journal)
+end
+
+function Journal:record(row)
+    if type(row)~='table' or type(row.kind)~='string' or #row.kind&gt;48 or not row.kind:match('^[A-Za-z][A-Za-z0-9_]*$')
+        or (row.data~=nil and type(row.data)~='table')
+        or not finite(row.now) or row.now&lt;0 or (row.runId~=nil and row.runId~=self.context.runId)
+        or (row.groupId~=nil and row.groupId~=self.context.groupId) then
+        self.invalid+=1;return false,'INVALID_RECORD'
+    end
+    local data=sanitize(row.data or {},0,{count=0},{}) or {}
+    local key=type(data.eventId)=='string' and row.kind..':'..data.eventId or nil
+    if key and self.seen[key] then self.duplicates+=1;return false,'DUPLICATE' end
+    self.seq+=1
+    local event={seq=self.seq,kind=row.kind,now=row.now,late=row.now&lt;self.lastNow,data=data}
+    for _,name in ipairs({'levelEpoch','userId','attempt','respawns','rawLife','revision','shieldUntil'}) do
+        if finite(row[name]) then event[name]=row[name] end
+    end
+    event.actorId=text(row.actorId) or text(data.actorId)
+    event.shieldKind=text(row.shieldKind);event.status=text(row.status);event.view=text(row.view)
+    if type(row.connected)=='boolean' then event.connected=row.connected end
+    self.lastNow=math.max(self.lastNow,row.now)
+    if self.count==self.capacity then
+        self.dropped+=1
+        local oldKey=self.keys[self.next];if oldKey then self.seen[oldKey]=nil end
+    else self.count+=1 end
+    self.rows[self.next]=event;self.keys[self.next]=key
+    if key then self.seen[key]=true end
+    self.next=self.next%self.capacity+1
+    if public[event.kind] and (data.code==nil or data.code=='OK') then
+        local item={seq=event.seq,now=event.now,kind=event.kind,slot=event.userId,
+            actorId=event.actorId or text(data.actorId),levelEpoch=event.levelEpoch,attempt=event.attempt,
+            action=text(data.action),result=text(data.result),target=finite(data.target) and data.target or nil,
+            attacker=finite(data.attacker) and data.attacker or nil,blocked=data.blocked==true}
+        self.publicRows[#self.publicRows+1]=item
+        if #self.publicRows&gt;12 then table.remove(self.publicRows,1) end
+    end
+    return true
+end
+
+function Journal:snapshot()
+    local result=copy(self.context)
+    result.schema=1;result.latestSeq=self.seq;result.dropped=self.dropped;result.invalid=self.invalid
+    result.duplicates=self.duplicates;result.events={}
+    local first=self.count&lt;self.capacity and 1 or self.next
+    for i=1,self.count do result.events[i]=copy(self.rows[(first+i-2)%self.capacity+1]) end
+    return result
+end
+
+function Journal:feedback()
+    return {latestSeq=self.seq,events=copy(self.publicRows)}
+end
+
+return Journal
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT21">
+          <Properties>
+            <string name="Name">SourceCombat</string>
+            <ProtectedString name="Source">-- Source-state action choice. Public controls never carry target, Life or profile.
+local SourceCombat={}
+
+function SourceCombat.bind(session,director,config)
+    if not config.SourceCombat then return false end
+    session.sourceCombat=config.SourceCombat
+    session.attackSelector=function(slot,input)
+        director.now=session.now
+        for _,target in ipairs(session.world:targets(slot,config.Attacks[input])) do
+            local enemy=director.enemies[target]
+            local hero=session.state.heroes[target]
+            local combat=session.combat[target]
+            local raw,heavy,kind
+            if enemy and not enemy.boss and not enemy.dead and enemy.rawLife~=nil
+                and not (director.carry and director.carry:blocksEnemy(target)) then
+                director:_finishReaction(target,enemy)
+                raw=enemy.rawLife;heavy=enemy.reactionUntil~=nil and enemy.heavyReaction==true;kind=enemy.kind
+            elseif hero and hero.status=='Alive' and combat and not combat.deathAt
+                and not (combat.hitProtectedUntil and session.now&lt;combat.hitProtectedUntil) then
+                session:_finishReaction(target)
+                if combat.hitProtectedUntil and session.now&lt;combat.hitProtectedUntil then continue end
+                raw=combat.rawLife;heavy=combat.reactionEnd~=nil and combat.heavyReaction==true
+            end
+            if raw~=nil then
+                if input=='Dash' then return heavy and 'HeroBoot' or 'Dash' end
+                if heavy then return raw&lt;8 and 'HeroBoot' or 'HeroKick' end
+                if raw&lt;4 then return 'HeroPowerPunch' end
+                if raw%16&lt;4 then return kind=='Dragon' and 'HeroElbow' or 'HeroUppercut' end
+                return 'HeroJab'
+            end
+        end
+        return input=='Dash' and 'Dash' or 'HeroJab'
+    end
+    return true
+end
+
+return SourceCombat
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT22">
           <Properties>
             <string name="Name">WalkerClubs</string>
             <ProtectedString name="Source">-- One source-backed Walker leg-club per combat death. Geometry/timing/NPC HP are Roblox calibration.
@@ -4114,18 +4409,22 @@ return WalkerClubs
           </Properties>
         </Item>
       </Item>
-      <Item class="Folder" referent="BT21">
+      <Item class="Folder" referent="BT23">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT22">
+        <Item class="ModuleScript" referent="BT24">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
 local Combat = {}
 -- Trusted server actions; public input validation remains in Session.
 -- Pig animation40 does not satisfy the hero Dash animation16 finisher condition.
-local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22,WalkerLight=18,WalkerHeavy=20}
+local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22,WalkerLight=18,WalkerHeavy=20,DragonHeadbutt=22,
+    HeroJab=18,HeroKick=19,HeroUppercut=20,HeroPowerPunch=21,HeroBoot=24,HeroElbow=28}
+local ordinaryProfiles={Punch=0,HeroJab=0,HeroKick=1,HeroUppercut=2,HeroPowerPunch=3,HeroBoot=6,HeroElbow=10,
+    Club=2,PigJab=0,PigHeavy=2,PigRush=4,WalkerLight=0,WalkerHeavy=2,DragonHeadbutt=4,EnemyThrow=17}
+local ordinaryDamage={[0]=2,[1]=8,[2]=16,[3]=255,[4]=16,[6]=255,[10]=8,[17]=4}
 local function life(value)
     assert(type(value) == "number" and value == value and value &gt;= 0
         and value &lt;= 47 and value % 1 == 0, "raw Life must be an integer in 0..47")
@@ -4133,7 +4432,7 @@ end
 
 function Combat.damage(old, damage)
     life(old)
-    assert(damage == 4 or damage == 16 or damage == 255, "unsupported hero damage profile")
+    assert(damage == 2 or damage == 4 or damage == 8 or damage == 16 or damage == 255, "unsupported damage profile")
     if old &lt; damage then return 0, true end
     local result = old - damage
     if math.floor(result / 16) ~= math.floor(old / 16) then
@@ -4147,7 +4446,7 @@ function Combat.hit(old, action, shield)
     assert(fixedProfiles[action] ~= nil or action == "Dash", "unsupported action")
     assert(shield == nil or shield == "Normal" or shield == "Emergency", "unsupported shield")
     local profile = fixedProfiles[action] or (old &lt; 16 and 21 or 22)
-    local damage = profile == 18 and 4 or (profile == 21 and 255 or 16)
+    local damage = profile==18 and 4 or ((profile==19 or profile==28) and 8 or ((profile==21 or profile==24) and 255 or 16))
     local raw, dying = Combat.damage(old, damage)
     if shield then raw, dying = old, false end
     return {
@@ -4156,6 +4455,31 @@ function Combat.hit(old, action, shield)
         recover=profile == 18 and not dying and shield == nil,
         heavyReaction=profile ~= 18,
     }
+end
+
+function Combat.hitEnemy(old,action)
+    life(old)
+    local profile=ordinaryProfiles[action]
+    if action=='Dash' then profile=old&lt;16 and 3 or 4 end
+    assert(profile~=nil,'unsupported ordinary-target action')
+    local damage=ordinaryDamage[profile]
+    local raw,dying=Combat.damage(old,damage)
+    return {rawLife=raw,dying=dying,profile=profile,rawDamage=damage,
+        heavyReaction=profile~=0,recover=not dying}
+end
+
+function Combat.captureAttack(config,action,tuning)
+    local result=table.clone(tuning or config.Attacks[action])
+    local original=config.Attacks[action]
+    if result.reaction==nil and original then result.reaction=original.reaction end
+    result.deathDelay=config.DeathDelay
+    result.sourceCombat=config.SourceCombat and table.clone(config.SourceCombat) or nil
+    result.responses={}
+    for profile,impulse in pairs(config.Impulses or {}) do
+        local response=table.clone(impulse)
+        response.profile=profile;result.responses[profile]=response
+    end
+    return result
 end
 
 function Combat.recover(raw)
@@ -4172,7 +4496,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT23">
+        <Item class="ModuleScript" referent="BT25">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -4220,14 +4544,20 @@ function Session:_clock(now)
     return "OK"
 end
 
-function Session:_record(kind, uid, data)
+function Session:_record(kind, uid, data, at)
     local h=self.state.heroes[uid]
-    local row={kind=kind,userId=uid,now=self.now,runId=self.state.runId,revision=self.state.revision,
+    local row={kind=kind,userId=uid,now=at or self.now,runId=self.state.runId,groupId=self.state.groupId,
+        levelEpoch=self.state.levelEpoch,revision=self.state.revision,
         actorId=h and h.actorId,attempt=h and h.attempt,respawns=h and h.respawns,
-        rawLife=self.combat[uid] and self.combat[uid].rawLife,data=data}
+        rawLife=self.combat[uid] and self.combat[uid].rawLife,status=h and h.status,view=h and h.view,
+        connected=h and h.connected,shieldKind=h and h.shield and h.shield.kind,
+        shieldUntil=h and h.shield and h.shield.deadline,data=data}
     self.logs[#self.logs+1]=row
     if #self.logs&gt;self.config.MaxLogEntries then table.remove(self.logs,1) end
-    if self.logger then self.logger(row) end
+    if self.logger then
+        local ok=pcall(self.logger,row)
+        if not ok then self.loggerFailures=(self.loggerFailures or 0)+1 end
+    end
 end
 
 function Session:_event(kind, uid, fields)
@@ -4284,7 +4614,20 @@ function Session:_die(uid, reason)
     self.combat[uid]={rawLife=0,nextAttack=self.now}
     self.lastMove[uid]=nil
     self.world:kill(uid)
-    self:_record("ConfirmedDeath",uid,{reason=reason})
+    self:_record("ConfirmedDeath",uid,{reason=reason,actorId=h.actorId,observed=self.world:observe(uid)})
+end
+
+function Session:_finishReaction(uid)
+    local c=self.combat[uid]
+    if not c or not c.reactionEnd or c.deathAt or self.now&lt;c.reactionEnd then return false end
+    if c.recover then
+        c.rawLife=self.Combat.recover(c.rawLife)
+        assert(self:_event('SetHealth',uid,{health=self.Combat.hearts(c.rawLife)})=='OK')
+    elseif self.sourceCombat and c.heavyReaction==true then
+        c.hitProtectedUntil=c.reactionEnd+(c.reactionProtectionSeconds or self.sourceCombat.heavyProtection)
+    end
+    c.reactionEnd=nil;c.recover=nil;c.heavyReaction=nil;c.reactionProtectionSeconds=nil;self.world:setReaction(uid,false)
+    return true
 end
 
 function Session:connection(uid, connected, now)
@@ -4319,6 +4662,7 @@ function Session:intent(uid, p, now)
     if b.tokens&lt;1 then return "RATE_LIMIT" end
     b.tokens=b.tokens-1
     local c=self.combat[uid]
+    if self.sourceCombat then self:_finishReaction(uid) end
     if c.reactionEnd or c.deathAt then return "REACTION" end
     if p.kind=="Move" then
         self.lastMove[uid]=now
@@ -4340,23 +4684,28 @@ function Session:intent(uid, p, now)
         code=self:_event("BeginAttack",uid,{connectionEpoch=h.connectionEpoch})
         if code~="OK" then return code end
         self.world:hold(uid,false)
-        local cfg=self.config.Attacks[p.attack]
+        local action=self.attackSelector and self.attackSelector(uid,p.attack) or p.attack
+        local cfg=self.config.Attacks[action]
+        assert(cfg,'Unknown trusted action')
         c.nextAttack=now+cfg.cooldown
-        c.attack={action=p.attack,actorId=h.actorId,at=now+cfg.windup,
+        c.attack={action=action,inputAction=p.attack,tuning=self.Combat.captureAttack(self.config,action,cfg),actorId=h.actorId,at=now+cfg.windup,
             untilTime=now+cfg.windup+cfg.window,order=self.serial}
-        self:_record("AttackAccepted",uid,{action=p.attack,seq=p.seq})
+        self:_record("AttackAccepted",uid,{action=action,inputAction=p.attack,seq=p.seq})
     end
     return "OK"
 end
 
-function Session:_hit(attacker, target, action)
+function Session:_hit(attacker, target, action, tuning)
     local h=self.state.heroes[target]
     local c=self.combat[target]
-    if not h or target==attacker or h.status~="Alive" or c.reactionEnd or c.deathAt then return false end
+    if not h or target==attacker or h.status~="Alive" or c.deathAt then return false end
+    if self.sourceCombat then self:_finishReaction(target) end
+    if c.reactionEnd and not self.sourceCombat then return false end
+    if self.sourceCombat and c.hitProtectedUntil and self.now&lt;c.hitProtectedUntil then return false end
     local shield=h.shield and self.now&lt;h.shield.deadline and h.shield.kind or nil
     local before=c.rawLife
     local result=self.Combat.hit(before,action,shield)
-    local cfg=self.config.Attacks[action]
+    local cfg=tuning or self.config.Attacks[action]
     if not result.blocked then
         local code=self:_event("SetHealth",target,{health=self.Combat.hearts(result.rawLife)})
         if code~="OK" then return false end
@@ -4369,11 +4718,15 @@ function Session:_hit(attacker, target, action)
         if result.heavyReaction then c.heavyReactionEpoch=(c.heavyReactionEpoch or 0)+1 end
         c.attack=nil
         c.recover=result.recover
+        c.heavyReaction=result.heavyReaction
+        local policy=cfg.sourceCombat or self.sourceCombat
+        c.reactionProtectionSeconds=policy and policy.heavyProtection or nil
         c.reactionEnd=self.now+cfg.reaction
-        c.deathAt=result.dying and self.now+self.config.DeathDelay or nil
+        c.deathAt=result.dying and self.now+(cfg.deathDelay or self.config.DeathDelay) or nil
         self.world:move(target,0,0)
         self.world:setReaction(target,true)
-        self.world:impulse(target,attacker,self.config.Impulses[result.profile],result.profile)
+        local impulse=cfg.responses and cfg.responses[result.profile] or self.config.Impulses[result.profile]
+        self.world:impulse(target,attacker,impulse,result.profile)
     end
     self:_record("Hit",target,{attacker=attacker,action=action,profile=result.profile,
         before=before,after=c.rawLife,blocked=result.blocked,impulse=result.impulse,
@@ -4413,12 +4766,7 @@ function Session:step(now)
             if c.deathAt and now&gt;=c.deathAt then
                 self:_die(uid,"CombatUnderflow")
             elseif c.reactionEnd and not c.deathAt and now&gt;=c.reactionEnd then
-                if c.recover then
-                    c.rawLife=self.Combat.recover(c.rawLife)
-                    assert(self:_event("SetHealth",uid,{health=self.Combat.hearts(c.rawLife)})=="OK")
-                end
-                c.reactionEnd=nil; c.recover=nil
-                self.world:setReaction(uid,false)
+                self:_finishReaction(uid)
             end
         end
     end
@@ -4437,9 +4785,13 @@ function Session:step(now)
         if self.combat[uid].attack==a then
             self.combat[uid].attack=nil
             if h.status=="Alive" and h.actorId==a.actorId and now&lt;=a.untilTime then
-                for _,target in ipairs(self.world:targets(uid,self.config.Attacks[a.action])) do
-                    if self:_hit(uid,target,a.action) then break end
+                self.combat[uid].lastStrikeAction=a.action
+                self.combat[uid].strikeRecoveryUntil=now+((a.tuning and a.tuning.recoveryPose) or .17)
+                local landed=false
+                for _,target in ipairs(self.world:targets(uid,a.tuning or self.config.Attacks[a.action])) do
+                    if self:_hit(uid,target,a.action,a.tuning) then landed=true;break end
                 end
+                if not landed then self:_record('AttackMiss',uid,{action=a.action}) end
             else self:_record("AttackExpired",uid,{action=a.action}) end
         end
     end
@@ -4476,7 +4828,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT24">
+        <Item class="ModuleScript" referent="BT26">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -4506,7 +4858,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT25">
+        <Item class="ModuleScript" referent="BT27">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -4566,7 +4918,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT26">
+        <Item class="ModuleScript" referent="BT28">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -4762,7 +5114,7 @@ function World:targets(uid, cfg)
     return result
 end
 function World:impulse(uid, attacker, cfg, profile)
-    assert(self.config.Impulses[profile]==cfg,"Unbound response profile")
+    assert((self.config.Impulses and self.config.Impulses[profile]==cfg) or (cfg and cfg.profile==profile),"Unbound response profile")
     local a,b=self.actors[uid],self.actors[attacker]
     if not a or not b or a.root.Anchored then return end
     local facing=b.root.CFrame.LookVector
@@ -4833,17 +5185,24 @@ return World
           </Properties>
         </Item>
       </Item>
+      <Item class="ModuleScript" referent="BT40">
+        <Properties>
+          <string name="Name">BuildInfo</string>
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='d47b4c1f530b636bbd220e6a93252d116056ab41a1e5dd3d13a6e6ca35258e9b'})
+</ProtectedString>
+        </Properties>
+      </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT27">
+  <Item class="ReplicatedStorage" referent="BT29">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT28">
+    <Item class="Folder" referent="BT30">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT29">
+      <Item class="ModuleScript" referent="BT31">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -4855,19 +5214,19 @@ return table.freeze({
       </Item>
     </Item>
   </Item>
-  <Item class="StarterPlayer" referent="BT30">
+  <Item class="StarterPlayer" referent="BT32">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT31">
+    <Item class="StarterPlayerScripts" referent="BT33">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT32">
+      <Item class="Folder" referent="BT34">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT33">
+        <Item class="ModuleScript" referent="BT35">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -5079,7 +5438,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT34">
+        <Item class="LocalScript" referent="BT36">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -5095,7 +5454,10 @@ local stateRemote = remotes:WaitForChild("State")
 local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
 local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
+local CombatFeedback = require(script.Parent:WaitForChild("CombatFeedback"))
 local spectatorCamera = SpectatorCamera.new()
+local combatFeedback = CombatFeedback.new()
+local feedbackUntil = 0
 
 local C = {
     ink = Color3.fromRGB(12, 20, 32), panel = Color3.fromRGB(22, 35, 49),
@@ -5373,6 +5735,7 @@ corner(objective, 14)
 local stageLabel = label(objective, "Stage", "ЗАТОПЛЕННЫЙ ТРАКТ", 12, C.lime, true)
 local objectiveLabel = label(objective, "Task", "Доберитесь до ворот", 17, C.text, true)
 local bossLabel = label(objective, "BossHits", "", 13, C.yellow)
+local feedbackLabel = label(objective, "ConfirmedFeedback", "", 12, C.muted, true)
 local spectator = frame(hud, "Spectator", C.ink)
 spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5, 1)
 corner(spectator, 14)
@@ -5612,15 +5975,7 @@ local function renderSelection()
     end
 end
 local function remainingEnemies(level)
-    local count = 0
-    for _, actor in ipairs(level.enemies or {}) do
-        local current = actor.zoneIndex == nil or level.zoneIndex == nil or actor.zoneIndex == level.zoneIndex
-        local ordinary = actor.boss ~= true and actor.template ~= "Boss" and actor.id ~= -99 and actor.enemyId ~= -99
-        if current and ordinary and actor.dead ~= true and actor.alive ~= false
-            and actor.status ~= "Dead" and actor.status ~= "Eliminated"
-            and (actor.hearts == nil or (tonumber(actor.hearts) or 0) &gt; 0) then count += 1 end
-    end
-    return count
+    return CombatFeedback.remainingEnemies(level)
 end
 render = function()
     local active = snapshot and snapshot.status == "Active"
@@ -5749,10 +6104,7 @@ render = function()
     end
     local hits = tonumber(level.bossHits) or 0
     if enemy then
-        local aliveHeroes = 0
-        for _, hero in ipairs(snapshot.heroes or {}) do
-            if hero.status == "Alive" and not hero.dying and (tonumber(hero.hearts) or 0) &gt; 0 then aliveHeroes += 1 end
-        end
+        local aliveHeroes = CombatFeedback.aliveHeroes(snapshot.heroes)
         bossLabel.Text = "Героев в бою: " .. tostring(aliveHeroes)
     elseif modern and (isBoss or level.stage == "Exit" or hits &gt; 0) then
         bossLabel.Text = "Попаданий шаром: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
@@ -5955,16 +6307,18 @@ layout = function()
     end
     objective.Visible = true
     if portrait then
-        position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 100)
+        position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 120)
     else
         local objectiveWidth = math.min(420, width - rosterWidth - inset * 3)
-        position(objective, width - inset - objectiveWidth, inset, objectiveWidth, short and 92 or 106)
+        position(objective, width - inset - objectiveWidth, inset, objectiveWidth, short and 112 or 126)
     end
     stageLabel.Position, stageLabel.Size = UDim2.fromOffset(13, 9), UDim2.new(1, -26, 0, 17)
     objectiveLabel.Position, objectiveLabel.Size = UDim2.fromOffset(13, 29), UDim2.new(1, -26, 0, short and 33 or 40)
     objectiveLabel.TextSize = short and 14 or 16
-    bossLabel.Position, bossLabel.Size = UDim2.new(0, 13, 1, -29), UDim2.new(1, -26, 0, 24)
+    bossLabel.Position, bossLabel.Size = UDim2.new(0, 13, 1, -49), UDim2.new(1, -26, 0, 24)
     bossLabel.TextSize = short and 11 or 12
+    feedbackLabel.Position, feedbackLabel.Size = UDim2.new(0, 13, 1, -26), UDim2.new(1, -26, 0, 20)
+    feedbackLabel.TextSize = short and 11 or 12
     local bottom, controlWidth = short and 12 or 20, width &lt; 360 and 146 or 162
     local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
     actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
@@ -6005,7 +6359,7 @@ layout = function()
             if portrait and queueY + 108 &gt; spectatorTop then
                 -- The observer queue replaces the tall roster when a phone needs that space.
                 roster.Visible = false
-                position(objective, inset, inset, width - inset * 2, short and 92 or 100)
+                position(objective, inset, inset, width - inset * 2, short and 112 or 120)
                 queueY = inset + objective.Size.Y.Offset + 8
             end
             if queueY + 108 &gt; spectatorTop then
@@ -6169,6 +6523,8 @@ end)
 
 stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
+    local confirmed, accepted = combatFeedback:sync(data)
+    if accepted == false then return end
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
     local previousGroupId = snapshot and snapshot.groupId
@@ -6180,7 +6536,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     spectatorCamera:sync(data, controlled)
     local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
-    if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; resetInput()
+    if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; feedbackUntil = 0; resetInput()
     elseif wasPlayable and not playable() then resetInput() end
     if previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
         choosingEnemy = data.preference ~= "Spectator"
@@ -6195,6 +6551,15 @@ stateRemote.OnClientEvent:Connect(function(data)
     if pendingView and (data.view == pendingView or data.notice or data.status ~= "Active") then pendingView = nil end
     if previousGroupId ~= data.groupId or previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
     actionPending = false
+    if os.clock() &gt;= feedbackUntil then
+        feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(data), C.muted
+    end
+    if #confirmed &gt; 0 then
+        local latest = confirmed[#confirmed]
+        feedbackLabel.Text = latest.text
+        feedbackLabel.TextColor3 = ({damage=C.red,shield=C.yellow,success=C.lime})[latest.style] or C.text
+        feedbackUntil = os.clock() + 1.4
+    end
     render()
     layout()
 end)
@@ -6212,6 +6577,10 @@ task.spawn(function()
 end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
+    if feedbackUntil &gt; 0 and os.clock() &gt;= feedbackUntil then
+        feedbackUntil = 0
+        feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(snapshot), C.muted
+    end
     bossQueue:step()
     groupPanel:step()
     moveElapsed, syncElapsed = moveElapsed + dt, syncElapsed + dt
@@ -6263,7 +6632,116 @@ sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT35">
+        <Item class="ModuleScript" referent="BT37">
+          <Properties>
+            <string name="Name">CombatFeedback</string>
+            <ProtectedString name="Source">-- Confirmed presentation only. This module never sends input or changes actors.
+local Feedback={}
+Feedback.__index=Feedback
+local messages={AttackMiss='ПРОМАХ',EnemyAttackMiss='ПРОМАХ',EnemyDeath='ПРОТИВНИК ПОВЕРЖЕН',
+    EnemyClaimed='РОЛЬ ПОЛУЧЕНА',FlyCaught='ЗДОРОВЬЕ ВОССТАНОВЛЕНО',ClubEquipped='ДУБИНА В РУКАХ',
+    ClubDropped='ДУБИНА ВЫПАЛА',ClubSwingHit='УДАР ДУБИНОЙ',EnemyGrabbed='ПРОТИВНИК СХВАЧЕН',
+    EnemyThrown='ПРОТИВНИК БРОШЕН',EnemyDropped='ПРОТИВНИК ОСВОБОЖДЁН',RelocateToSafety='БЕЗОПАСНАЯ ОПОРА',
+    GuardianBallPickedUp='ШАР В РУКАХ',GuardianBallThrown='ШАР БРОШЕН',BossHit='ПОПАДАНИЕ В СТРАЖА',
+    BossShielded='СТРАЖ ЗАЩИЩЁН',BossWarning='ТЯЖЁЛЫЙ ШАР — УКЛОНЯЙТЕСЬ'}
+local global={RunResult=true,EnemyDeath=true,BossHit=true,BossShielded=true,BossWarning=true}
+local function finite(v) return type(v)=='number' and v==v and v&gt;-math.huge and v&lt;math.huge end
+local function integer(v) return finite(v) and v&gt;=0 and v&lt;=1e12 and v%1==0 end
+local function identity(v) return type(v)=='string' and #v&gt;0 and #v&lt;=160 end
+local function owner(data)
+    if finite(data.mine) and type(data.heroes)=='table' then
+        for i=1,math.min(#data.heroes,3) do
+            local hero=data.heroes[i]
+            if type(hero)=='table' and hero.slot==data.mine then return hero.slot,hero.actorId end
+        end
+    end
+    local enemy=data.enemyRole
+    if type(enemy)=='table' and finite(enemy.enemyId) then return enemy.enemyId,enemy.actorId end
+end
+
+function Feedback.new() return setmetatable({cursor=0},Feedback) end
+
+function Feedback:sync(data)
+    if type(data)~='table' or not integer(data.snapshotSeq) or data.snapshotSeq&lt;1
+        or (self.snapshotSeq and data.snapshotSeq&lt;=self.snapshotSeq) then return {},false end
+    self.snapshotSeq=data.snapshotSeq
+    if not identity(data.runId) then self.scope=nil;self.cursor=0;return {},true end
+    local group=data.groupId or 'combat-stand'
+    if not identity(group) then return {},false end
+    local feed=data.feedback
+    if type(feed)~='table' or not integer(feed.latestSeq) or type(feed.events)~='table'
+        or #feed.events&gt;12 or not finite(data.now) then return {},true end
+    local scope=tostring(#group)..':'..group..':'..data.runId
+    if self.scope~=scope then self.scope=scope;self.cursor=feed.latestSeq;return {},true end
+    if feed.latestSeq&lt;=self.cursor then return {},true end
+    local serverNow=finite(data.serverNow) and data.serverNow or data.now
+    local ownSlot,ownActor=owner(data)
+    local pending={}
+    for _,event in ipairs(feed.events) do
+        if type(event)=='table' and integer(event.seq) and event.seq&gt;self.cursor and event.seq&lt;=feed.latestSeq
+            and finite(event.now) and event.now&lt;=serverNow+.5 and serverNow-event.now&lt;=3
+            and event.levelEpoch==data.levelEpoch then pending[#pending+1]=event end
+    end
+    table.sort(pending,function(a,b) return a.seq&lt;b.seq end)
+    local result,seen={},{}
+    for _,event in ipairs(pending) do
+        local relevant=ownSlot==nil or global[event.kind] or event.slot==ownSlot or event.attacker==ownSlot
+        if event.slot==ownSlot and event.actorId and ownActor and event.actorId~=ownActor then relevant=false end
+        if not seen[event.seq] and relevant then
+            seen[event.seq]=true
+            local message,style=messages[event.kind],'neutral'
+            if event.kind=='Hit' or event.kind=='EnemyHit' then
+                if event.blocked then message,style='ЗАЩИТА','shield'
+                elseif event.slot==ownSlot then message,style='ПОЛУЧЕН УРОН','damage'
+                else message,style='ПОПАДАНИЕ','success' end
+            elseif event.kind=='CommitSpawn' and finite(event.attempt) and event.attempt&gt;1 then
+                message,style='ВОЗВРАЩЕНИЕ','success'
+            elseif event.kind=='RunResult' then
+                if event.result=='Won' then message,style='ПОБЕДА','success'
+                elseif event.result=='Lost' then message,style='ПОРАЖЕНИЕ','damage' end
+            elseif event.kind=='BossWarning' then style='shield' end
+            if message then result[#result+1]={seq=event.seq,kind=event.kind,text=message,style=style} end
+        end
+    end
+    self.cursor=feed.latestSeq
+    return result,true
+end
+
+function Feedback.hint(data)
+    data=type(data)=='table' and data or {}
+    if type(data.enemyRole)=='table' and data.enemyRole.template=='Boss' then return 'ОГОНЬ: стреляйте в героев' end
+    if type(data.interaction)=='table' and data.interaction.available and type(data.interaction.label)=='string' then
+        return data.interaction.label..' — кнопка действия'
+    end
+    if data.mine then return 'УДАР: атака или действие рядом' end
+    if data.enemyRole then return 'УДАР: остановите героев' end
+    return 'Выберите роль или наблюдайте'
+end
+
+function Feedback.aliveHeroes(heroes)
+    local count=0
+    for _,hero in ipairs(heroes or {}) do
+        if hero.status=='Alive' and not hero.dying then count+=1 end
+    end
+    return count
+end
+
+function Feedback.remainingEnemies(level)
+    local count=0
+    for _,actor in ipairs(level.enemies or {}) do
+        local current=actor.zoneIndex==nil or level.zoneIndex==nil or actor.zoneIndex==level.zoneIndex
+        local ordinary=actor.boss~=true and actor.template~='Boss' and actor.id~=-99 and actor.enemyId~=-99
+        if current and ordinary and actor.dead~=true and actor.alive~=false
+            and actor.status~='Dead' and actor.status~='Eliminated' then count+=1 end
+    end
+    return count
+end
+
+return Feedback
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT38">
           <Properties>
             <string name="Name">GroupPanel</string>
             <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
@@ -6490,7 +6968,7 @@ return GroupPanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT36">
+        <Item class="ModuleScript" referent="BT39">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.

@@ -98,14 +98,23 @@ function Controller:_begin(player,players)
         self.world.names[index]=owner.DisplayName..' @'..owner.Name
         roster[index]={userId=index,template=template}
     end
-    self.current=self.deps.Session.new(self.deps.Core,self.deps.Combat,self.deps.Config,roster,self.deps.guid(),self.world,function(row)
+    local runId=self.deps.guid()
+    self.previousJournal=self.journal
+    self.journal=self.deps.RunJournal and self.deps.RunJournal.new({runId=runId,groupId=self.deps.GroupId or 'combat-stand',
+        build=self.deps.BuildId or 'unknown',rules='D01-D10-source-combat-v1'}) or nil
+    self.current=self.deps.Session.new(self.deps.Core,self.deps.Combat,self.deps.Config,roster,runId,self.world,function(row)
+        if self.journal then self.journal:record(row) end
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
     end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
+    local actorOwners={}
+    for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
+    self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners})
     self.current:step(self.deps.clock())
     self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end
+    if self.deps.SourceCombat then self.deps.SourceCombat.bind(self.current,self.director,self.deps.Config) end
     for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end
     if self.bossQueue then
         self.bossSlot=self.current.state.runId..':guardian:'..self.current.state.levelEpoch
@@ -115,9 +124,9 @@ function Controller:_begin(player,players)
     end
     local originalHit=self.current._hit
     local director=self.director
-    self.current._hit=function(session,attacker,target,action)
-        if type(target)=='number' and target<0 then return director:hit(attacker,target,action) end
-        return originalHit(session,attacker,target,action)
+    self.current._hit=function(session,attacker,target,action,tuning)
+        if type(target)=='number' and target<0 then return director:hit(attacker,target,action,tuning) end
+        return originalHit(session,attacker,target,action,tuning)
     end
     self.finished=false
     return 'OK'
@@ -225,9 +234,9 @@ function Controller:handle(player,payload,players)
             local accepted=self.current.combat[slot].attack
             local actor=self.current.state.heroes[slot].actorId
             if code=='OK' and payload.kind=='Attack' and accepted
-                and accepted.actorId==actor and accepted.action==payload.attack then
+                and accepted.actorId==actor and (accepted.inputAction or accepted.action)==payload.attack then
                 self.director.now=at
-                self.director:closeTargetForAttack(self.world:targets(slot,self.deps.Config.Attacks[payload.attack]))
+                self.director:closeTargetForAttack(self.world:targets(slot,accepted.tuning or self.deps.Config.Attacks[accepted.action]))
             end
         elseif self.director:controlled(player.UserId) then
             code=self.director:command(player.UserId,payload,at,self.deps.Session.validIntent)
@@ -246,6 +255,7 @@ function Controller:step(now,dt)
     end
     if self.director.result then
         self.finished=true
+        self.current:_record('RunResult',nil,{result=self.director.result})
         for _,id in ipairs(self.current.order) do
             self.world:move(id,0,0)
             if self.world.hold then self.world:hold(id,true) end
@@ -299,6 +309,7 @@ function Controller:snapshot(player,players)
     data.notice=self.notices[player]
     data.interaction=data.mine and self.director and self.director.interaction and self.director:interaction(data.mine) or {available=false}
     data.weapon=data.mine and self.director and self.director.clubs and self.director.clubs:hasClub(data.mine) and 'WalkerClub' or nil
+    data.feedback=self.journal and self.journal:feedback() or nil
     if self.bossQueue then
         data.bossQueue=self.bossQueue:view(player.UserId,self.deps.clock())
         data.bossQueue.available=self:_bossSelection(player)=='OK'

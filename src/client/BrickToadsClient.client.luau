@@ -11,7 +11,10 @@ local stateRemote = remotes:WaitForChild("State")
 local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
 local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
+local CombatFeedback = require(script.Parent:WaitForChild("CombatFeedback"))
 local spectatorCamera = SpectatorCamera.new()
+local combatFeedback = CombatFeedback.new()
+local feedbackUntil = 0
 
 local C = {
     ink = Color3.fromRGB(12, 20, 32), panel = Color3.fromRGB(22, 35, 49),
@@ -289,6 +292,7 @@ corner(objective, 14)
 local stageLabel = label(objective, "Stage", "ЗАТОПЛЕННЫЙ ТРАКТ", 12, C.lime, true)
 local objectiveLabel = label(objective, "Task", "Доберитесь до ворот", 17, C.text, true)
 local bossLabel = label(objective, "BossHits", "", 13, C.yellow)
+local feedbackLabel = label(objective, "ConfirmedFeedback", "", 12, C.muted, true)
 local spectator = frame(hud, "Spectator", C.ink)
 spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5, 1)
 corner(spectator, 14)
@@ -528,15 +532,7 @@ local function renderSelection()
     end
 end
 local function remainingEnemies(level)
-    local count = 0
-    for _, actor in ipairs(level.enemies or {}) do
-        local current = actor.zoneIndex == nil or level.zoneIndex == nil or actor.zoneIndex == level.zoneIndex
-        local ordinary = actor.boss ~= true and actor.template ~= "Boss" and actor.id ~= -99 and actor.enemyId ~= -99
-        if current and ordinary and actor.dead ~= true and actor.alive ~= false
-            and actor.status ~= "Dead" and actor.status ~= "Eliminated"
-            and (actor.hearts == nil or (tonumber(actor.hearts) or 0) > 0) then count += 1 end
-    end
-    return count
+    return CombatFeedback.remainingEnemies(level)
 end
 render = function()
     local active = snapshot and snapshot.status == "Active"
@@ -665,10 +661,7 @@ render = function()
     end
     local hits = tonumber(level.bossHits) or 0
     if enemy then
-        local aliveHeroes = 0
-        for _, hero in ipairs(snapshot.heroes or {}) do
-            if hero.status == "Alive" and not hero.dying and (tonumber(hero.hearts) or 0) > 0 then aliveHeroes += 1 end
-        end
+        local aliveHeroes = CombatFeedback.aliveHeroes(snapshot.heroes)
         bossLabel.Text = "Героев в бою: " .. tostring(aliveHeroes)
     elseif modern and (isBoss or level.stage == "Exit" or hits > 0) then
         bossLabel.Text = "Попаданий шаром: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
@@ -871,16 +864,18 @@ layout = function()
     end
     objective.Visible = true
     if portrait then
-        position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 100)
+        position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 120)
     else
         local objectiveWidth = math.min(420, width - rosterWidth - inset * 3)
-        position(objective, width - inset - objectiveWidth, inset, objectiveWidth, short and 92 or 106)
+        position(objective, width - inset - objectiveWidth, inset, objectiveWidth, short and 112 or 126)
     end
     stageLabel.Position, stageLabel.Size = UDim2.fromOffset(13, 9), UDim2.new(1, -26, 0, 17)
     objectiveLabel.Position, objectiveLabel.Size = UDim2.fromOffset(13, 29), UDim2.new(1, -26, 0, short and 33 or 40)
     objectiveLabel.TextSize = short and 14 or 16
-    bossLabel.Position, bossLabel.Size = UDim2.new(0, 13, 1, -29), UDim2.new(1, -26, 0, 24)
+    bossLabel.Position, bossLabel.Size = UDim2.new(0, 13, 1, -49), UDim2.new(1, -26, 0, 24)
     bossLabel.TextSize = short and 11 or 12
+    feedbackLabel.Position, feedbackLabel.Size = UDim2.new(0, 13, 1, -26), UDim2.new(1, -26, 0, 20)
+    feedbackLabel.TextSize = short and 11 or 12
     local bottom, controlWidth = short and 12 or 20, width < 360 and 146 or 162
     local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
     actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
@@ -921,7 +916,7 @@ layout = function()
             if portrait and queueY + 108 > spectatorTop then
                 -- The observer queue replaces the tall roster when a phone needs that space.
                 roster.Visible = false
-                position(objective, inset, inset, width - inset * 2, short and 92 or 100)
+                position(objective, inset, inset, width - inset * 2, short and 112 or 120)
                 queueY = inset + objective.Size.Y.Offset + 8
             end
             if queueY + 108 > spectatorTop then
@@ -1085,6 +1080,8 @@ end)
 
 stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
+    local confirmed, accepted = combatFeedback:sync(data)
+    if accepted == false then return end
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
     local previousGroupId = snapshot and snapshot.groupId
@@ -1096,7 +1093,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     spectatorCamera:sync(data, controlled)
     local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
-    if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; resetInput()
+    if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; feedbackUntil = 0; resetInput()
     elseif wasPlayable and not playable() then resetInput() end
     if previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
         choosingEnemy = data.preference ~= "Spectator"
@@ -1111,6 +1108,15 @@ stateRemote.OnClientEvent:Connect(function(data)
     if pendingView and (data.view == pendingView or data.notice or data.status ~= "Active") then pendingView = nil end
     if previousGroupId ~= data.groupId or previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
     actionPending = false
+    if os.clock() >= feedbackUntil then
+        feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(data), C.muted
+    end
+    if #confirmed > 0 then
+        local latest = confirmed[#confirmed]
+        feedbackLabel.Text = latest.text
+        feedbackLabel.TextColor3 = ({damage=C.red,shield=C.yellow,success=C.lime})[latest.style] or C.text
+        feedbackUntil = os.clock() + 1.4
+    end
     render()
     layout()
 end)
@@ -1128,6 +1134,10 @@ task.spawn(function()
 end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
+    if feedbackUntil > 0 and os.clock() >= feedbackUntil then
+        feedbackUntil = 0
+        feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(snapshot), C.muted
+    end
     bossQueue:step()
     groupPanel:step()
     moveElapsed, syncElapsed = moveElapsed + dt, syncElapsed + dt

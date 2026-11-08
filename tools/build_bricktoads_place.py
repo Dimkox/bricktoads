@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -95,6 +96,21 @@ def build(root_path: Path) -> bytes:
     starter = item(root, "StarterPlayer", "StarterPlayer")
     scripts = item(starter, "StarterPlayerScripts", "StarterPlayerScripts")
     sources(item(scripts, "Folder", "BrickToads"), root_path / "src/client")
+    # Fingerprint the embedded script paths and text, excluding this derived receipt.
+    source_pack = []
+    def collect(parent, prefix):
+        for child in parent.findall("Item"):
+            name = child.findtext("Properties/string[@name='Name']")
+            path = prefix + "/" + name
+            source = child.findtext("Properties/ProtectedString[@name='Source']")
+            if source is not None:
+                source_pack.append({"path": path, "class": child.attrib["class"], "source": source})
+            collect(child, path)
+    collect(root, "")
+    fingerprint = hashlib.sha256(json.dumps(source_pack, sort_keys=True, separators=(",", ":"),
+                                             ensure_ascii=False).encode("utf-8")).hexdigest()
+    receipt = item(project, "ModuleScript", "BuildInfo")
+    prop(receipt, "ProtectedString", "Source", f"return table.freeze({{format=1,sourceSha256='{fingerprint}'}})\n")
     ET.indent(root, space="  ")
     return ET.tostring(root, encoding="utf-8", xml_declaration=True)
 

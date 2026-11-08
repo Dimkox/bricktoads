@@ -678,6 +678,52 @@ pigWorld:updatePresentation(poseSession,.1,{[-1]=pigState,[-2]=walkerState})
 assert(posingPig.model:GetAttribute('PrimaryAttack')=='PigJab','Walker presentation must not replace Pig primary states')
 print('PASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption')
 
+local dragonPose=actor(pigWorld,-3,vector(110,13,3072));pigWorld.enemyKinds[-3]='Drone'
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip','Neck'}) do
+    local motor=node('Motor6D',name,dragonPose.model.Torso);motor.C0=frame()
+end
+local dragonState={kind='Dragon',windup={at=4,action='DragonHeadbutt'}}
+poseSession.now=3
+local function poseDragon() pigWorld:updatePresentation(poseSession,.1,{[-3]=dragonState}) end
+poseDragon()
+assert(dragonPose.model:GetAttribute('PrimaryAttack')=='DragonHeadbutt'
+    and dragonPose.model:GetAttribute('AttackPhase')=='Windup','Dragon must present its own accepted headbutt')
+local dragonNeck=dragonPose.poseMotors.Neck
+assert(dragonNeck and dragonNeck.joint.C0.rotationX~=0,'Headbutt needs a real original neck pose')
+local preparedNeck=dragonNeck.joint.C0.rotationX
+dragonState.windup=nil;dragonState.lastStrikeAction='DragonHeadbutt';dragonState.strikeRecoveryUntil=3.25
+poseDragon();assert(dragonNeck.joint.C0.rotationX~=preparedNeck and dragonPose.model:GetAttribute('AttackPhase')=='Recovery')
+poseSession.now=3.25;poseDragon()
+assert(dragonNeck.joint.C0.rotationX==0 and dragonPose.model:GetAttribute('PrimaryAttack')==nil,
+    'Headbutt neck/phase must reset after the finite recovery')
+dragonState.windup={at=5,action='DragonHeadbutt'};dragonState.reactionUntil=5;poseDragon()
+assert(dragonNeck.joint.C0.rotationX==0 and dragonPose.model:GetAttribute('PrimaryAttack')==nil)
+dragonState.reactionUntil=nil;dragonPose.humanoid.Health=0;poseDragon()
+assert(dragonPose.model:GetAttribute('AttackPhase')==nil,'Death must cancel Dragon presentation')
+dragonPose.humanoid.Health=100
+print('PASS Dragon headbutt has real finite neck poses and clears on reaction/death')
+
+local sourceHero=actor(pigWorld,1,vector(100,13,3072))
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip'}) do
+    local motor=node('Motor6D',name,sourceHero.model.Torso);motor.C0=frame()
+end
+local sourceSession={now=4,sourceCombat={},combat={[1]={rawLife=47,attack={at=4.2,action='HeroUppercut'}}}}
+pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('PrimaryAttack')=='HeroUppercut','Modern hero must show the server-selected action')
+local upperArm=sourceHero.poseMotors['Right Shoulder'].joint.C0.rotationX
+sourceSession.combat[1].attack.action='HeroBoot';pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.poseMotors['Right Shoulder'].joint.C0.rotationX~=upperArm
+    and sourceHero.poseMotors['Right Hip'].joint.C0.rotationX~=0,'Boot must have a distinct arm and leg pose')
+sourceSession.combat[1].attack=nil;sourceSession.combat[1].lastStrikeAction='HeroBoot';sourceSession.combat[1].strikeRecoveryUntil=4.3
+pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('AttackPhase')=='Recovery')
+sourceSession.now=4.3;pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('PrimaryAttack')==nil and sourceHero.poseMotors['Right Hip'].joint.C0.rotationX==0)
+sourceSession.combat[1].attack={action='HeroKick'};sourceSession.combat[1].reactionEnd=5
+pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('PrimaryAttack')==nil,'Incoming damage suppresses the hero attack pose')
+print('PASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat')
+
 local retreatWorld=World.new(Base,{FallY=-20,Level=source(LevelSource),Enemy={speed=9},WalkSpeed=12},
     {name='WalkerRetreatWorld',offset={x=100,y=10,z=3584}})
 local retreatWalker=actor(retreatWorld,-1,vector(100,13,3584))
@@ -722,3 +768,16 @@ retreatWorld.enemyCarries[-1]=nil
 workspace.Raycast=oldRaycast
 assert(default.folder.Parent==workspace and pigWorld.folder.Parent==workspace,'Retreat affects no other group world')
 print('PASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses')
+
+local responseWorld=World.new(Base,{FallY=-20},{name='AcceptedResponseWorld'})
+local responseTarget=actor(responseWorld,1,vector(0,3,0))
+local responseAttacker=actor(responseWorld,2,vector(2,3,0))
+responseAttacker.root.CFrame.LookVector=vector(1,0,0)
+responseTarget.root.AssemblyMass=2
+local applied=0
+function responseTarget.root:ApplyImpulse(value) self.lastApplied=value;applied+=1 end
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18)
+eq(responseTarget.root.lastApplied,18,0,0,'A captured response survives removal of the live impulse table')
+local bound=pcall(actualBase.impulse,responseWorld,1,2,{profile=18,horizontal=9,vertical=0},22)
+assert(not bound and applied==1,'A snapshot cannot be rebound to a different profile')
+print('PASS accepted response snapshots stay bound to their own profile without a live config table')

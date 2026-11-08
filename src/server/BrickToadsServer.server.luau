@@ -7,12 +7,16 @@ Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
+local buildInfo=script.Parent:FindFirstChild('BuildInfo')
+local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
 local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
+    SourceCombat=require(gameplay.SourceCombat),
+    RunJournal=require(gameplay.RunJournal),BuildId=buildId,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor
@@ -29,6 +33,20 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
         world.folder:SetAttribute('GroupId',groupId)
         return world
     end)
+if RunService:IsStudio() then
+    -- Read-only server-side export. No remote, gameplay mutation or test control.
+    local diagnostics=Instance.new('BindableFunction')
+    diagnostics.Name='BrickToadsDiagnostics';diagnostics.Parent=game:GetService('ServerStorage')
+    diagnostics.OnInvoke=function(groupId)
+        if type(groupId)~='string' then return nil end
+        local group=controller.groups[groupId]
+        if not group then return nil end
+        local run=group.controller
+        return {sourceSha256=buildId,placeId=game.PlaceId,placeVersion=game.PlaceVersion,
+            loggerFailures=run.current and (run.current.loggerFailures or 0) or 0,
+            current=run.journal and run.journal:snapshot(),previous=run.previousJournal and run.previousJournal:snapshot()}
+    end
+end
 local remotes=Instance.new('Folder'); remotes.Name='BrickToadsGame'; remotes.Parent=ReplicatedStorage
 local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=remotes
 local state=Instance.new('RemoteEvent'); state.Name='State'; state.Parent=remotes

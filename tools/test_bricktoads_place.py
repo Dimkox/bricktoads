@@ -1,5 +1,6 @@
 """Test the development place build boundary; Studio import is checked separately."""
 import importlib.util
+import re
 from pathlib import Path
 import shutil
 import tempfile
@@ -71,6 +72,19 @@ class BrickToadsPlaceTests(unittest.TestCase):
 
     def test_rebuild_is_deterministic(self):
         self.assertEqual(self.builder.build(ROOT), self.builder.build(ROOT))
+
+    def test_private_source_receipt_changes_when_an_embedded_source_changes(self):
+        def stamp(content):
+            server = named(named(ET.fromstring(content), "ServerScriptService"), "BrickToads")
+            receipt = named(server, "BuildInfo").findtext("Properties/ProtectedString[@name='Source']")
+            return re.search(r"sourceSha256='([0-9a-f]{64})'", receipt).group(1)
+        original = stamp(self.builder.build(ROOT))
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            shutil.copytree(ROOT / "src", source / "src")
+            file = source / "src/server/gameplay/GameConfig.lua"
+            file.write_text(file.read_text() + "\n-- Controlled embedded source identity probe.\n")
+            self.assertNotEqual(original, stamp(self.builder.build(source)))
 
     def test_missing_sources_fail_without_emitting_an_empty_place(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -191,7 +191,7 @@ function World:targets(uid, cfg)
     return result
 end
 function World:impulse(uid, attacker, cfg, profile)
-    assert(self.config.Impulses[profile]==cfg,"Unbound response profile")
+    assert((self.config.Impulses and self.config.Impulses[profile]==cfg) or (cfg and cfg.profile==profile),"Unbound response profile")
     local a,b=self.actors[uid],self.actors[attacker]
     if not a or not b or a.root.Anchored then return end
     local facing=b.root.CFrame.LookVector

@@ -72,6 +72,10 @@ return function(Pattern,Session,Core,Combat,Config,FakeWorld)
         end
         assert(d.bossHits==1 and d.enemies[-99].rawLife==31 and not d.projectiles[-1001])
         assert(s.combat[1].rawLife==47 and s.state.heroes[1].respawns==3)
+        local counts={GuardianBallPickedUp=0,GuardianBallThrown=0,BossHit=0}
+        for _,row in ipairs(s.logs) do if counts[row.kind]~=nil then counts[row.kind]+=1 end end
+        assert(counts.GuardianBallPickedUp==1 and counts.GuardianBallThrown==1 and counts.BossHit==1,
+            'The real pickup throw impact chain needs one confirmed feedback event per effect')
     end)
     print('GuardianSession: '..passed..' passed')
 end

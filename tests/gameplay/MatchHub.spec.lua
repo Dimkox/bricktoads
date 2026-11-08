@@ -225,5 +225,15 @@ return function(MatchHub,Controller,Core,Combat,Session,Registry,Config,FakeWorl
         tick(1); eq(send(p,{kind='CreateGroup',requestId='two'}),'OK'); eq(#h.order,3)
     end)
 
+    test('snapshot sequence is monotonic across groups and independent for each current Player',function()
+        local h,list,add,send=fixture();local a,b=add(10),add(20)
+        local first=h:snapshot(a,list);local second=h:snapshot(a,list)
+        assert(first.snapshotSeq==1 and second.snapshotSeq==2 and second.serverNow==1)
+        assert(h:snapshot(b,list).snapshotSeq==1)
+        create(h,send,a,'snapshot-group')
+        assert(h:snapshot(a,list).snapshotSeq>second.snapshotSeq)
+        local fresh=add(10)
+        assert(h:snapshot(a,list)==nil and h:snapshot(fresh,list).snapshotSeq==1)
+    end)
     print('MatchHub: '..passed..' passed')
 end

@@ -20,7 +20,7 @@ local objectives={Approach='Разбейте дозор у старых воро
 
 function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs)
     local profile=config.Attacks[config.Enemy.attack]
-    local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
+    local self=setmetatable({session=session,world=world,config=config,Combat=Combat,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height,
             windup=config.Enemy.windup,cooldown=config.Enemy.cooldown,recoveryPose=.17},random=math.random},Director)
@@ -32,6 +32,25 @@ function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,E
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
 end
+function Director:_health(id,e)
+    if e.rawLife~=nil and not e.boss then
+        e.health=self.config.Enemy.hearts*e.rawLife/e.maxRawLife
+        self.world:enemyHealth(id,e.rawLife,e.maxRawLife)
+    else self.world:enemyHealth(id,e.health,e.boss and self.config.Boss.hits or self.config.Enemy.hearts) end
+end
+function Director:_log(kind,id,data)
+    if self.session._record then self.session:_record(kind,id,data,self.now) end
+end
+function Director:_finishReaction(id,e)
+    if e~=self.enemies[id] or e.dead or not e.reactionUntil or self.now<e.reactionUntil then return false end
+    if e.rawLife~=nil then
+        local before=e.rawLife
+        e.rawLife=self.Combat.recover(e.rawLife);self:_health(id,e)
+        self:_log('EnemyRecovery',id,{actorId=e.actorId,before=before,after=e.rawLife})
+    end
+    e.reactionUntil=nil;e.heavyReaction=nil;self.world:setReaction(id,false)
+    return true
+end
 function Director:_wave(stage,roster)
     self.stage=stage; self.world:stage(stage)
     for _,r in ipairs(roster) do
@@ -40,8 +59,14 @@ function Director:_wave(stage,roster)
         self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false,
             actorId=actorId,zoneIndex=self.zoneIndex,kind=r.kind,
             name=({Pig='Болотный налётчик',Walker='Длинноногий дозорный',Dragon='Крылатый разведчик'})[r.kind] or 'Ржавый дозорный'}
+        local e=self.enemies[r.id]
+        if self.config.SourceCombat and r.rawLife~=nil then
+            assert(type(r.rawLife)=='number' and r.rawLife>=0 and r.rawLife<=47 and r.rawLife%1==0,'Invalid source Life')
+            e.rawLife=r.rawLife;e.maxRawLife=math.floor(r.rawLife/16)*16+15
+        end
         self.world:enemyIdentity(r.id,actorId)
-        self.world:enemyHealth(r.id,self.config.Enemy.hearts,self.config.Enemy.hearts)
+        self:_health(r.id,e)
+        self:_log('EnemySpawned',r.id,{actorId=actorId,kind=e.kind,rawLife=e.rawLife,health=e.health})
     end
 end
 function Director:_enterZone(index)
@@ -110,6 +135,7 @@ function Director:claim(userId,enemyId)
     self.byUserId[userId]=enemyId
     self.world:move(enemyId,0,0)
     self.world:enemyIdentity(enemyId,e.actorId,self.ownerNames[userId])
+    self:_log('EnemyClaimed',enemyId,{actorId=e.actorId,ownerUserId=userId,rawLife=e.rawLife,health=e.health})
     return 'OK'
 end
 function Director:connection(userId,connected)
@@ -119,6 +145,7 @@ function Director:connection(userId,connected)
     if e.connected==connected then return 'NO_CHANGE' end
     e.connected=connected; e.connectionEpoch+=1; e.lastSeq=0; e.lastMove=nil
     self.world:move(id,0,0)
+    self:_log('EnemyConnection',id,{actorId=e.actorId,ownerUserId=userId,connected=connected,connectionEpoch=e.connectionEpoch})
     return 'OK'
 end
 function Director:controlled(userId)
@@ -211,29 +238,36 @@ function Director:_beginStrike(id,e,target)
     local action=self.config.Enemy.attack
     local tuning=self.strikeProfile
     local sourceFamily=self.route and ((e.kind=='Pig' and self.config.Pig) or (e.kind=='Walker' and self.config.Walker))
-    if sourceFamily then
+    if self.route and e.kind=='Dragon' and self.config.Dragon then
+        action='DragonHeadbutt';tuning=self.config.Attacks[action]
+    elseif sourceFamily then
         local light=e.kind=='Pig' and 'PigJab' or 'WalkerLight'
         local heavy=e.kind=='Pig' and 'PigHeavy' or 'WalkerHeavy'
         target=target or self:_strikeTarget(id,self.config.Attacks[light])
         local combat=target and self.session.combat[target]
+        local ordinary=target and self.enemies[target]
+        if not combat and ordinary and ordinary.rawLife~=nil then combat=ordinary end
         -- Prototype enemy3HP is not raw source Life; an unknown target uses jab.
         action=e.kind=='Pig' and e.rushing and 'PigRush' or (combat and combat.rawLife%16<4 and heavy or light)
         tuning=self.config.Attacks[action]
     end
     e.engaged=true; e.rushing=nil; e.strikeRecoveryUntil=nil
-    e.windup={at=self.now+tuning.windup,action=action,tuning=table.clone(tuning)}
+    e.windup={at=self.now+tuning.windup,action=action,tuning=self.Combat.captureAttack(self.config,action,tuning)}
     self.world:move(id,0,0); self.world:cue(id,true)
+    self:_log('EnemyAttackAccepted',id,{actorId=e.actorId,action=action,ownerUserId=e.ownerUserId,effectAt=e.windup.at})
 end
 function Director:_resolveStrike(id,e)
     local pending=e.windup
     e.windup=nil; e.nextAttack=self.now+pending.tuning.cooldown
     e.lastStrikeAction=pending.action; e.strikeRecoveryUntil=self.now+pending.tuning.recoveryPose
+    local landed=false
     for _,target in ipairs(self.world:targets(id,pending.tuning)) do
         local hit=false
-        if self.enemies[target] then hit=self:hit(id,target,pending.action)
-        elseif self.session.state.heroes[target] then hit=self.session:_hit(id,target,pending.action) end
-        if hit then break end
+        if self.enemies[target] then hit=self:hit(id,target,pending.action,pending.tuning)
+        elseif self.session.state.heroes[target] then hit=self.session:_hit(id,target,pending.action,pending.tuning) end
+        if hit then landed=true;break end
     end
+    if not landed then self:_log('EnemyAttackMiss',id,{actorId=e.actorId,action=pending.action}) end
 end
 function Director:_boss()
     local controller=self.bossGate and self.bossGate(self.now) or {state='NPC'}
@@ -256,6 +290,7 @@ function Director:_boss()
     end
     self.world:enemyIdentity(-99,actorId,e.ownerUserId and self.ownerNames[e.ownerUserId])
     self.world:enemyHealth(-99,self.config.Boss.hits,self.config.Boss.hits)
+    self:_log('BossAssigned',-99,{actorId=actorId,ownerUserId=e.ownerUserId,rawLife=e.rawLife,health=e.health})
     self.nextShot=self.now+1.8
     if self.route then
         assert(self.GuardianPattern,'Modern guardian pattern is required')
@@ -271,14 +306,15 @@ function Director:_kill(id,cause)
     if self.carry then self.carry:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
-    if e.boss and self.route then e.rawLife=0 end
-    self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
+    if e.rawLife~=nil then e.rawLife=0 end
+    self:_health(id,e)
     self.world:kill(id)
+    self:_log('EnemyDeath',id,{actorId=e.actorId,cause=cause or 'Unknown',ownerUserId=e.ownerUserId,position=self.world:position(id)})
     if e.boss then
         self.stage='Exit'; self.world:stage('Exit')
     end
 end
-function Director:hit(attacker,target,action)
+function Director:hit(attacker,target,action,tuning)
     if self.result then return false end
     if self.guardian and (self.projectiles[target] or target==-99) then return self.guardian:hit(attacker,target,action) end
     local ball=self.projectiles[target]
@@ -293,32 +329,46 @@ function Director:hit(attacker,target,action)
     if target==-99 then
         if self.stage~='Boss' then return false end
         self.world:cue(-99,true)
-        if self.config.Impulses then
-            local profile=action=='Dash' and 22 or 18
-            self.world:impulse(-99,attacker,self.config.Impulses[profile],profile)
-        end
+        local profile=action=='Dash' and 22 or 18
+        local responses=tuning and tuning.responses or self.config.Impulses
+        local impulse=responses and responses[profile]
+        if impulse then self.world:impulse(-99,attacker,impulse,profile) end
         return true
     end
     local e=self.enemies[target]
-    if not e or e.dead or (e.reactionUntil and self.now<e.reactionUntil) then return false end
+    if e and e.rawLife~=nil and self.carry and self.carry:blocksEnemy(target) then return false end
+    if e and e.rawLife~=nil then self:_finishReaction(target,e) end
+    if not e or e.dead or (e.rawLife==nil and e.reactionUntil and self.now<e.reactionUntil) then return false end
     if self.carry then self.carry:forgetEnemy(target) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil
     local family=(self.config.Pig and self.config.Pig.npcDamage[action] and self.config.Pig)
         or (self.config.Walker and self.config.Walker.npcDamage[action] and self.config.Walker)
+        or (self.config.Dragon and self.config.Dragon.npcDamage[action] and self.config.Dragon)
     local damage=(family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
         or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
-    e.health=math.max(0,e.health-damage)
-    self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
+    local before=e.rawLife or e.health
+    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,action)
+    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-damage) end
+    self:_health(target,e)
     self.world:cue(target,false)
-    if e.health==0 then self:_kill(target,'Combat')
+    self:_log('EnemyHit',target,{actorId=e.actorId,attacker=attacker,target=target,action=action,
+        before=before,after=e.rawLife or e.health,sourceRaw=source~=false and source~=nil,
+        profile=source and source.profile or nil,dying=source and source.dying,position=self.world:position(target)})
+    if (source and source.dying) or (not source and e.health==0) then self:_kill(target,'Combat')
     else
-        local reaction=family and self.config.Attacks[action].reaction
+        local policy=tuning and tuning.sourceCombat or self.config.SourceCombat
+        local reaction=source and (source.heavyReaction and policy.npcHeavyReaction
+            or policy.npcLightReaction) or ((tuning and tuning.reaction) or (family and self.config.Attacks[action].reaction)
             or (action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction)
+        )
+        e.heavyReaction=source and source.heavyReaction or nil
         e.reactionUntil=self.now+reaction
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18))
-        if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
+        local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
+        local responses=tuning and tuning.responses or self.config.Impulses
+        local impulse=responses and responses[profile]
+        if impulse then self.world:impulse(target,attacker,impulse,profile) end
     end
     return true
 end
@@ -326,12 +376,13 @@ function Director:applyThrowDamage(id,heroSlot)
     local e=self.enemies[id]
     if self.result or self.session.state.status~='Active' or not e or e.dead or e.kind~='Pig' then return false end
     local before=e.health
-    e.health=math.max(0,e.health-self.config.EnemyCarry.throwDamage)
+    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,'EnemyThrow')
+    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-self.config.EnemyCarry.throwDamage) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
-    self.world:enemyHealth(id,e.health,self.config.Enemy.hearts);self.world:cue(id,false)
+    self:_health(id,e);self.world:cue(id,false)
     self.session:_record('EnemyThrowDamage',heroSlot,{enemyId=id,before=before,after=e.health,
         sourceProfile=self.config.EnemyCarry.sourceProfile,sourceRawDamage=self.config.EnemyCarry.sourceRawDamage})
-    if e.health==0 then self:_kill(id) end
+    if (source and source.dying) or (not source and e.health==0) then self:_kill(id,'Combat') end
     return true
 end
 function Director:_nearest(position,standingEligibility)
@@ -339,7 +390,7 @@ function Director:_nearest(position,standingEligibility)
     for _,id in ipairs(self.session.order) do
         local h=self.session.state.heroes[id]
         local c=self.session.combat[id]
-        if h.status=='Alive' and not c.deathAt
+        if h.status=='Alive' and not c.deathAt and not (c.hitProtectedUntil and self.now<c.hitProtectedUntil)
             and (not standingEligibility or not c.reactionEnd or c.recover==true) then
             local d=distance(position,self.world:position(id))
             if d<best then selected,best=id,d end
@@ -358,7 +409,7 @@ function Director:_enemies()
                 local carried=self.carry and self.carry:blocksEnemy(id)
                 if carried then e.rushing=nil; e.strikeRecoveryUntil=nil end
                 if not carried and e.reactionUntil and self.now>=e.reactionUntil then
-                    e.reactionUntil=nil; self.world:setReaction(id,false)
+                    self:_finishReaction(id,e)
                 end
                 if not carried and not e.reactionUntil then
                     if e.windup then
@@ -371,6 +422,7 @@ function Director:_enemies()
                     else
                         local walker=self.route and e.kind=='Walker' and self.config.Walker
                         local standing=walker or (self.route and e.kind=='Pig' and self.config.Pig)
+                            or (self.route and e.kind=='Dragon' and self.config.Dragon)
                         local target,range=self:_nearest(self.world:position(id),standing~=nil and standing~=false)
                         local attackRange=walker and walker.range or self.config.Enemy.range
                         -- Validate the approach before either melee or movement:

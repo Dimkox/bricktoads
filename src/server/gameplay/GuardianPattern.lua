@@ -57,6 +57,9 @@ end
 function GuardianPattern:_render(id,p)
     self.world:projectile(id,p.position,false,p.mode)
 end
+function GuardianPattern:_log(kind,slot,data)
+    if self.session._record then self.session:_record(kind,slot,data,self.now) end
+end
 
 function GuardianPattern:_remove(id)
     local p=self.director.projectiles[id]
@@ -129,6 +132,7 @@ function GuardianPattern:_spawn(mode,aim,target)
     d.projectiles[id]=p
     if target and not d.enemies[-99].ownerUserId and self.world.face then self.world:face(-99,target) end
     self.world:cue(-99,true); self:_render(id,p)
+    self:_log(mode=='Heavy' and 'BossWarning' or 'BossShot',-99,{projectileId=id,mode=mode,target=target})
     return true
 end
 
@@ -146,7 +150,11 @@ end
 
 function GuardianPattern:hit(attacker,target,action)
     if self.director.projectiles[target] then return false end
-    if target==-99 and self:_active() then self.world:cue(-99,true); return true end
+    if target==-99 and self:_active() then
+        self.world:cue(-99,true)
+        self:_log('BossShielded',-99,{attacker=attacker,action=action})
+        return true
+    end
     return false
 end
 
@@ -177,6 +185,7 @@ function GuardianPattern:interact(slot,now)
         p.mode='Thrown'; p.holder=nil; p.actorId=nil; p.attempt=nil; p.connectionEpoch=nil
         p.target=-99; p.direction=nil; p.created=self.now; p.expiresAt=self.now+(self.config.ballLife or 20)
         self:_render(id,p)
+        self:_log('GuardianBallThrown',slot,{projectileId=id,target=-99})
         return 'OK'
     end
     id,p=self:_ground(slot)
@@ -186,16 +195,19 @@ function GuardianPattern:interact(slot,now)
     local position=self.world:position(slot)
     p.position={x=position.x,y=position.y+2,z=position.z}
     self:_render(id,p)
+    self:_log('GuardianBallPickedUp',slot,{projectileId=id})
     return 'OK'
 end
 
 function GuardianPattern:_impact(id)
     if not self:_active() then return end
     local d=self.director; local boss=d.enemies[-99]
+    local before=boss.rawLife
     d.bossHits=(d.bossHits or 0)+1
     boss.rawLife=math.max(0,boss.rawLife-16)
     boss.health=math.max(0,(self.config.hits or 3)-d.bossHits)
     self.world:enemyHealth(-99,boss.health,self.config.hits or 3); self.world:cue(-99,false)
+    self:_log('BossHit',-99,{actorId=boss.actorId,projectileId=id,before=before,after=boss.rawLife,hits=d.bossHits})
     self:_remove(id)
     if boss.rawLife==0 then d:_kill(-99); self:_clear() end
 end

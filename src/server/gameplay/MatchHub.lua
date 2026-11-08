@@ -53,7 +53,7 @@ function MatchHub.new(deps,worldFactory)
     local self=setmetatable({deps=deps,worldFactory=worldFactory,maxGroups=math.min(4,configured),
         connections=deps.Registry.new(),groups={},order={},routes={},requests={},
         buckets=setmetatable({},{__mode='k'}),notices=setmetatable({},{__mode='k'}),
-        envelopes=setmetatable({},{__mode='k'})},MatchHub)
+        envelopes=setmetatable({},{__mode='k'}),snapshotSeq=setmetatable({},{__mode='k'})},MatchHub)
     self.queue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
         return self:_queueEligible(userId,context)
     end)
@@ -262,6 +262,8 @@ function MatchHub:snapshot(player,players)
             if target then queue.groupId=target.id; queue.groupName=target.name end
         end
     end
+    self.snapshotSeq[player]=(self.snapshotSeq[player] or 0)+1
+    data.snapshotSeq=self.snapshotSeq[player];data.serverNow=now
     return data
 end
 
