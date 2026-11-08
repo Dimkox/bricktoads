@@ -2,6 +2,13 @@
 -- Enemy damage and spatial/timing values still need the full source transfer.
 return function(base,level)
     local config=table.clone(base)
+    config.Attacks=table.clone(base.Attacks)
+    config.Impulses=table.clone(base.Impulses)
+    -- Internal Club is never a permitted client attack name. Distances/times are calibrated.
+    config.Attacks.Club={windup=.16,window=.16,cooldown=.7,reaction=.75,reach=9,width=3.5,height=4}
+    config.Impulses[2]={horizontal=26,vertical=22}
+    config.Impulses[20]={horizontal=26,vertical=22}
+    config.WalkerClub={pickupRange=4.5,pickupHeight=3,npcDamage=2}
     config.Calibration='PLAYABLE_PROTOTYPE'
     config.Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}

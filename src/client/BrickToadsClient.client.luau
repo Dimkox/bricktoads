@@ -125,7 +125,7 @@ local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", 16, C.muted)
+local intro = label(header, "Intro", "Оружие дозорных, захваты и страж. Пройдите тракт вместе.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -572,7 +572,7 @@ render = function()
                 or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
-        intro.Text, chooseTitle.Text = "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Оружие дозорных, захваты и страж. Пройдите тракт вместе.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
@@ -625,6 +625,7 @@ render = function()
             elseif hero.status == "Eliminated" then detail = "Выбыл"
             elseif hero.status ~= "Alive" or hero.dying then detail = "Возвращается…"
             elseif hero.shield then detail ..= " · защита" end
+            if hero.slot==snapshot.mine and snapshot.weapon then detail ..= " · дубина" end
             row.status.Text = detail
             local hp = tonumber(hero.hearts) or 0
             for n, heart in ipairs(row.fills) do heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1) end

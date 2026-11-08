@@ -19,6 +19,14 @@ return function(Combat)
     eq(pcall(Combat.hit, 0/0, "Punch"), false)
     eq(pcall(Combat.hit, 48, "Punch"), false)
     eq(pcall(Combat.hit, 47, "Forged"), false)
+    -- Club is a trusted server action with its own hero-target profile, not Dash.
+    v=Combat.hit(47,'Club',nil)
+    eq(v.rawLife,31);eq(v.profile,20);eq(v.rawDamage,16);eq(v.recover,false);eq(v.heavyReaction,true)
+    v=Combat.hit(15,'Club',nil)
+    eq(v.rawLife,0);eq(v.profile,20);eq(v.rawDamage,16);eq(v.dying,true)
+    v=Combat.hit(16,'Club',nil);eq(v.rawLife,15);eq(v.dying,false)
+    v=Combat.hit(47,'Club','Normal');eq(v.rawLife,47);eq(v.impulse,true);eq(v.blocked,true)
+    v=Combat.hit(47,'Club','Emergency');eq(v.rawLife,47);eq(v.impulse,false)
     -- Independent rows from the previously verified common-routine table, not a hitbox proof.
     local expected4 = {0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,15,15,15,15,16,17,18,19,20,21,22,23,24,25,26,27,31,31,31,31,32,33,34,35,36,37,38,39,40,41,42,43}
     local expected16 = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31}

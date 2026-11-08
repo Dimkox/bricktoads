@@ -1,4 +1,4 @@
-return function(Director,Definition,Config,Flies,Carry)
+return function(Director,Definition,Config,Flies,Carry,Clubs)
     local passed=0
     local function test(name,fn) fn(); passed+=1; print('PASS '..name) end
     local function fixture()
@@ -23,6 +23,13 @@ return function(Director,Definition,Config,Flies,Carry)
         function w:carryEnemy(target,uid) self.held=self.held or {};self.held[target]=uid;return true end
         function w:releaseEnemy(target) self.held=self.held or {};self.held[target]=nil;return true end
         function w:hold() end
+        function w:clubItem(id,p) self.clubs=self.clubs or {};self.clubs[id]=p and table.clone(p) or nil end
+        function w:canPickupClub() return true end
+        function w:equipClub(id,uid) self.equipped={id=id,uid=uid};return true end
+        function w:unequipClub() self.equipped=nil end
+        function w:clubSwing() end
+        function w:aim() end
+        function w:groundPosition(p) return p and {x=p.x,y=1.2,z=p.z} end
         function w:setReaction() end
         function w:impulse() self.impulses+=1 end
         function w:kill(id) self.actors[id].dead=true end
@@ -41,7 +48,7 @@ return function(Director,Definition,Config,Flies,Carry)
             return {step=function() end,hit=function(_,_,target) return target==-99 end,
                 interaction=function() return {available=false} end,interact=function() return 'NO_INTERACTION' end}
         end}
-        return Director.new(s,w,{},Config,pattern,Flies,Carry),w,s
+        return Director.new(s,w,{},Config,pattern,Flies,Carry,Clubs),w,s
     end
     local function clear(d)
         local ids={};for id,e in pairs(d.enemies) do if not e.dead and not e.boss then ids[#ids+1]=id end end
@@ -129,6 +136,18 @@ return function(Director,Definition,Config,Flies,Carry)
         d:step(1.7,.1);packet.seq=3
         assert(d:command(41,packet,1.8,function()return true end)=='OK' and d.enemies[-1].health==2)
         assert(d:controlled(41).carryState==nil)
+    end)
+    test('combat Walker death creates one club and actual boss introduction frees weapon hands',function()
+        local d,w=fixture()
+        assert(d.clubs,'Production director must compose WalkerClubs')
+        assert(d:hit(1,-3,'Dash'));d.now=.4;assert(d:hit(1,-3,'Punch'))
+        local count=0;for _ in pairs(w.clubs)do count+=1 end;assert(count==1)
+        d:_kill(-3,'Combat');local again=0;for _ in pairs(w.clubs)do again+=1 end;assert(again==1)
+        w.positions[1]={x=-8,y=3,z=0}
+        assert(d:interaction(1).label=='ВЗЯТЬ ДУБИНУ')
+        assert(d:interact(1,.5,'Punch')=='OK' and d.clubs:hasClub(1))
+        assert(d:interaction(1).label=='УДАР ДУБИНОЙ')
+        d:_boss();assert(not d.clubs:hasClub(1) and w.equipped==nil)
     end)
     print('LevelRoute: '..passed..' passed')
 end

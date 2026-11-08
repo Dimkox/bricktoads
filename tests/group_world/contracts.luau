@@ -468,3 +468,99 @@ assert(next(carrying.enemyCarries)==nil and holder.model:GetAttribute('CarryingE
 assert(pig.humanoid.EvaluateStateMachine==true,'Cleanup must restore carried evaluation before destroying its body')
 assert(default.folder.Parent==workspace and route.folder.Parent==workspace,'Carry cleanup preserves other group worlds')
 print('PASS carry drops and new-run cleanup retain old body references without crossing group or actor generations')
+
+local weapons=World.new(Base,{FallY=-20,Level=source(LevelSource),Enemy={speed=9},WalkSpeed=12},
+    {name='ClubWorld',offset={x=100,y=10,z=2560}})
+assert(type(weapons.clubItem)=='function','Walker clubs need a separate group-local ground-item presentation')
+weapons:clubItem('walker-leg',{x=3,y=.3,z=0})
+default:clubItem('walker-leg',{x=3,y=.3,z=0})
+local groundClub=weapons.clubItemFolder:FindFirstChild('ClubItem_walker-leg')
+local otherClub=default.clubItemFolder:FindFirstChild('ClubItem_walker-leg')
+assert(groundClub and otherClub and groundClub~=otherClub)
+eq(groundClub.PrimaryPart.Position,103,10.3,2560,'A ground club must use its own world offset exactly once')
+assert(groundClub:GetAttribute('ClubId')=='walker-leg' and groundClub:GetAttribute('ItemKind')=='WalkerClub')
+for _,p in ipairs(groundClub:GetDescendants()) do
+    assert(not p:IsA('Humanoid'),'An item model must not create an enemy Humanoid')
+    if p:IsA('BasePart') then assert(not p.CanCollide and not p.CanQuery and not p.CanTouch) end
+end
+assert(weapons.actors['walker-leg']==nil,'Ground weapons remain outside combat targets')
+weapons:clubItem('walker-leg',{x=4,y=.3,z=1})
+assert(weapons.clubItemFolder:FindFirstChild('ClubItem_walker-leg')==groundClub,'Updating one ground weapon cannot duplicate its model')
+eq(groundClub.PrimaryPart.Position,104,10.3,2561)
+print('PASS ground clubs are independent noncolliding original item models with one group translation')
+
+local wielder=actor(weapons,1,vector(100,13,2560));wielder.root.CFrame.LookVector=vector(1,0,0)
+assert(weapons:canPickupClub(1,{x=-2,y=.3,z=0},4.5,3),'Ground club pickup must not require pre-facing the object')
+assert(not weapons:canPickupClub(1,{x=-4,y=.3,z=0},4.5,3),'Pickup checks full spatial distance to the item')
+assert(not weapons:canPickupClub(1,{x=0,y=-.01,z=0},4.5,3),'Pickup has an independent vertical limit')
+wielder.humanoid.FloorMaterial=enum.Material.Air
+assert(not weapons:canPickupClub(1,{x=2,y=.3,z=0},4.5,3),'Airborne heroes cannot take a grounded club')
+wielder.humanoid.FloorMaterial=enum.Material.Slate
+for _,state in ipairs({'Anchored','Reaction','Dead'}) do
+    wielder.root.Anchored=state=='Anchored';wielder.humanoid.PlatformStand=state=='Reaction'
+    wielder.humanoid.Health=state=='Dead' and 0 or 100
+    assert(not weapons:canPickupClub(1,{x=2,y=.3,z=0},4.5,3),'Held, reacting and dead bodies cannot pick up a club')
+end
+wielder.root.Anchored=false;wielder.humanoid.PlatformStand=false;wielder.humanoid.Health=100
+wielder.root.CFrame=frame(150,13,2560)
+assert(not weapons:canPickupClub(1,{x=52,y=.3,z=0},4.5,3),'FloorMaterial without an actual support ray cannot permit pickup over a gap')
+wielder.root.CFrame=frame(100,13,2560)
+oldRaycast=workspace.Raycast
+function workspace:Raycast(origin,direction,params)
+    if math.abs(direction.X)>0 then return {Instance=weapons.gates[1].beam,Normal=vector(-1,0,0)} end
+    return oldRaycast(self,origin,direction,params)
+end
+assert(not weapons:canPickupClub(1,{x=2,y=.3,z=0},4.5,3),'Collidable own-world geometry blocks a club pickup')
+workspace.Raycast=oldRaycast
+assert(weapons:canPickupClub(1,{x=2,y=.3,z=0},4.5,3))
+print('PASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing')
+
+assert(weapons:equipClub('walker-leg',1),'Equipping must weld original art to the current hero body')
+local equipment=wielder.model:FindFirstChild('EquippedClub_walker-leg')
+assert(equipment and groundClub.Parent~=nil,'Equip is independent of removal of its matching ground model')
+assert(wielder.model:GetAttribute('EquippedClub')=='walker-leg' and equipment:GetAttribute('ClubId')=='walker-leg')
+local weldCount=0
+for _,p in ipairs(equipment:GetDescendants()) do
+    assert(not p:IsA('Humanoid'))
+    if p:IsA('BasePart') then assert(p.Massless and not p.Anchored and not p.CanCollide and not p.CanQuery and not p.CanTouch) end
+    if p:IsA('WeldConstraint') then assert(p.Part0==wielder.model['Right Arm']);weldCount+=1 end
+end
+assert(weldCount>0,'All equipped geometry must move with the same actor right arm')
+assert(weapons:equipClub('walker-leg',1) and wielder.model:FindFirstChild('EquippedClub_walker-leg')==equipment,
+    'Repeating equip on the same current actor must not duplicate art')
+assert(not weapons:equipClub('other-leg',1),'One hero cannot visually equip two different clubs')
+weapons:clubItem('walker-leg',nil)
+assert(groundClub.destroyed and equipment.Parent==wielder.model,'Ground-item removal cannot destroy equipped art')
+local healthBefore=wielder.humanoid.Health
+assert(weapons:clubSwing('walker-leg',1) and equipment:GetAttribute('Swinging')==true)
+assert(not weapons:clubSwing('walker-leg',2),'Only the actual equipped body can display its swing')
+assert(wielder.humanoid.Health==healthBefore and weapons.actors['walker-leg']==nil,'Visual swing cannot create damage or an actor')
+weapons:updatePresentation(nil,.1);weapons:updatePresentation(nil,.1);weapons:updatePresentation(nil,.1);weapons:updatePresentation(nil,.1)
+assert(equipment:GetAttribute('Swinging')~=true and wielder.model:GetAttribute('ClubSwing')==nil,'Swing pose flags expire without changing equipment')
+local originalWielder=wielder
+wielder=actor(weapons,1,vector(300,13,2560))
+assert(not weapons:equipClub('walker-leg',1) and not weapons:clubSwing('walker-leg',1),
+    'A replacement body cannot inherit the old actor equipment or swing')
+originalWielder.poseMotors={['Right Shoulder']={joint={C0='weapon-pose'},base='rest-pose'}}
+assert(weapons:unequipClub('walker-leg') and equipment.destroyed)
+assert(originalWielder.model:GetAttribute('EquippedClub')==nil and originalWielder.model:GetAttribute('ClubSwing')==nil)
+assert(originalWielder.poseMotors['Right Shoulder'].joint.C0=='rest-pose','Unequip restores the old owner weapon arm pose')
+assert(wielder.model:GetAttribute('EquippedClub')==nil,'Unequip must clean the saved old-owner reference, never the replacement')
+weapons:clubItem('walker-leg',{x=200,y=.3,z=0})
+assert(weapons:equipClub('walker-leg',1),'An explicitly dropped club ID can be picked up again by a current body')
+local newEquipment=wielder.model:FindFirstChild('EquippedClub_walker-leg')
+assert(newEquipment and newEquipment~=equipment)
+wielder.model:SetAttribute('CarryingEnemy',-5)
+wielder.poseMotors={['Right Shoulder']={joint={C0='pig-carry-pose'},base='rest-pose'}}
+assert(weapons:unequipClub('walker-leg'))
+assert(wielder.poseMotors['Right Shoulder'].joint.C0=='pig-carry-pose','Weapon release must not overwrite the higher-priority Pig carry pose')
+wielder.model:SetAttribute('CarryingEnemy',nil)
+assert(weapons:equipClub('walker-leg',1))
+newEquipment=wielder.model:FindFirstChild('EquippedClub_walker-leg')
+weapons:clearActors()
+assert(newEquipment.destroyed and wielder.model:GetAttribute('EquippedClub')==nil
+    and next(weapons.equippedClubs)==nil and #weapons.clubItemFolder:GetChildren()==0,
+    'A new run clears this world ground items, equipment, pose flags and saved owners')
+assert(otherClub.Parent~=nil,'Weapon reset must preserve another group copy of the same logical item')
+default:clubItem('walker-leg',nil)
+print('PASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset')

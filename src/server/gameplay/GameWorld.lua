@@ -466,6 +466,10 @@ function World.new(BaseWorld, config, options)
     self.healingEffectFolder.Parent = self.folder
     self.healingFlyVisuals, self.healingEffects = {}, {}
     self.enemyCarries = {}
+    self.clubItemFolder = Instance.new('Folder')
+    self.clubItemFolder.Name = 'ClubItems'
+    self.clubItemFolder.Parent = self.folder
+    self.clubItems, self.equippedClubs = {}, {}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + translation,
         [2] = Vector3.new(-65, 3, 0) + translation,
@@ -977,6 +981,112 @@ function World:releaseEnemy(enemyId, throwerId, tuning)
     return true
 end
 
+-- New mechanical leg-club art. Ground items and equipment have separate lifetimes.
+local function clubArt(parent, name, frame, arm)
+    local model = Instance.new('Model')
+    model.Name = name
+    model:SetAttribute('ItemKind','WalkerClub')
+    local art = {model=model,parts={}}
+    local function piece(name, size, offset, color, material)
+        local p = part(model,name,size,frame*offset,color,material or Enum.Material.Metal,false)
+        p.CanQuery = false
+        if arm then
+            p.Anchored, p.Massless = false, true
+            local weld = Instance.new('WeldConstraint')
+            weld.Part0, weld.Part1, weld.Parent = arm, p, p
+        end
+        art.parts[#art.parts+1] = {part=p,offset=offset}
+        return p
+    end
+    art.root = piece('Grip',Vector3.new(.48,.7,.55),CFrame.new(),COLORS.dark)
+    piece('PistonShaft',Vector3.new(.4,2.3,.48),CFrame.new(0,-1.3,0),COLORS.pale)
+    piece('UpperCollar',Vector3.new(.62,.3,.65),CFrame.new(0,-.5,0),COLORS.rust)
+    piece('LowerCollar',Vector3.new(.62,.35,.65),CFrame.new(0,-2.25,0),COLORS.rust)
+    piece('MechanicalFoot',Vector3.new(.95,.6,1.7),CFrame.new(0,-2.68,-.42),COLORS.dark)
+    piece('ImpactPlate',Vector3.new(1.06,.19,1.85),CFrame.new(0,-3.04,-.42),COLORS.pale)
+    piece('PowerStrip',Vector3.new(.12,1.5,.07),CFrame.new(0,-1.25,-.28),COLORS.mint,Enum.Material.Neon)
+    model.PrimaryPart = art.root
+    model.Parent = parent
+    return art
+end
+
+function World:clubItem(id, position)
+    local item = self.clubItems[id]
+    if not position then
+        if item then item.model:Destroy();self.clubItems[id]=nil end
+        return
+    end
+    local physical = Vector3.new(position.x,position.y,position.z)+self.offset
+    local frame = CFrame.new(physical)*CFrame.Angles(0,0,math.pi/2)
+    if not item then
+        item = clubArt(self.clubItemFolder,'ClubItem_'..tostring(id),frame)
+        item.model:SetAttribute('ClubId',id)
+        local text=label(item.root,'ДУБИНА  ·  ВЗЯТЬ',190,Vector3.new(0,1.4,0))
+        text.TextColor3,text.TextSize,text.Parent.MaxDistance=COLORS.mint,14,45
+        pointLight(item.root,COLORS.mint,7,.4)
+        self.clubItems[id]=item
+    end
+    for _,piece in ipairs(item.parts) do piece.part.CFrame=frame*piece.offset end
+end
+
+function World:canPickupClub(heroId, position, range, height)
+    local hero = livingBody(self,heroId)
+    if not hero or heroId<=0 or hero.root.Anchored or hero.humanoid.PlatformStand
+        or hero.model:GetAttribute('CarryingEnemy')~=nil
+        or hero.humanoid.FloorMaterial==Enum.Material.Air
+        or math.abs(hero.root.AssemblyLinearVelocity.Y)>1 then return false end
+    local support=Workspace:Raycast(hero.root.Position,Vector3.new(0,-3.4,0),self.ray)
+    if not support or support.Normal.Y<.95 or support.Instance:GetAttribute('Hazard')
+        or support.Instance:GetAttribute('SurfaceId')==nil then return false end
+    local destination=Vector3.new(position.x,position.y,position.z)+self.offset
+    local delta=destination-hero.root.Position
+    return delta.Magnitude<=range and math.abs(delta.Y)<=height
+        and Workspace:Raycast(hero.root.Position,delta,self.ray)==nil
+end
+
+function World:equipClub(id, heroId)
+    local hero=livingBody(self,heroId)
+    local arm=hero and hero.model:FindFirstChild('Right Arm')
+    if not hero or heroId<=0 or not arm then return false end
+    local equipped=self.equippedClubs[id]
+    if equipped then return equipped.owner==hero and equipped.heroId==heroId and equipped.model.Parent==hero.model end
+    if hero.model:GetAttribute('EquippedClub')~=nil then return false end
+    local art=clubArt(hero.model,'EquippedClub_'..tostring(id),arm.CFrame*CFrame.new(0,-1.05,0),arm)
+    art.model:SetAttribute('ClubId',id)
+    art.owner,art.heroId=hero,heroId
+    self.equippedClubs[id]=art
+    hero.model:SetAttribute('EquippedClub',id)
+    return true
+end
+
+function World:unequipClub(id)
+    local equipped=self.equippedClubs[id]
+    if not equipped then return false end
+    local owner=equipped.owner
+    if owner.model:GetAttribute('EquippedClub')==id then
+        owner.model:SetAttribute('EquippedClub',nil)
+        owner.model:SetAttribute('ClubSwing',nil)
+        if owner.poseMotors and not owner.model:GetAttribute('CarryingEnemy') then
+            local right=owner.poseMotors['Right Shoulder']
+            if right then right.joint.C0=right.base end
+        end
+    end
+    equipped.model:Destroy()
+    self.equippedClubs[id]=nil
+    return true
+end
+
+function World:clubSwing(id, heroId)
+    local equipped=self.equippedClubs[id]
+    local hero=livingBody(self,heroId)
+    if not equipped or equipped.owner~=hero or equipped.heroId~=heroId
+        or hero.model:GetAttribute('EquippedClub')~=id then return false end
+    equipped.swingUntil=(self.presentationTime or 0)+.28
+    equipped.model:SetAttribute('Swinging',true)
+    hero.model:SetAttribute('ClubSwing',true)
+    return true
+end
+
 -- Collectibles are presentation only: they never enter the combat actor table.
 function World:healingFly(id, position)
     local fly = self.healingFlyVisuals[id]
@@ -1068,6 +1178,13 @@ end
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
+    for id,equipped in pairs(self.equippedClubs) do
+        if equipped.swingUntil and self.presentationTime>=equipped.swingUntil then
+            equipped.swingUntil=nil
+            equipped.model:SetAttribute('Swinging',false)
+            if equipped.owner.model:GetAttribute('EquippedClub')==id then equipped.owner.model:SetAttribute('ClubSwing',nil) end
+        end
+    end
     for model,expiresAt in pairs(self.healingEffects) do
         if self.presentationTime >= expiresAt then model:Destroy(); self.healingEffects[model] = nil end
     end
@@ -1106,6 +1223,8 @@ function World:updatePresentation(session, dt, enemies)
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
             local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
             local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
+            local club=self.equippedClubs[actor.model:GetAttribute('EquippedClub')]
+            if club and club.owner~=actor then club=nil end
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil
@@ -1117,6 +1236,8 @@ function World:updatePresentation(session, dt, enemies)
                     angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
                 elseif shoulder and reacting then
                     angle, roll = 0.65, left and -0.25 or 0.25
+                elseif shoulder and club and not left then
+                    angle,roll=club.swingUntil and 1.95 or .65,club.swingUntil and -.55 or .25
                 elseif shoulder and attacking then
                     angle = actor.attackPoseAction == "Dash" and 1.5 or (left and 0.45 or 1.95)
                 end
@@ -1127,12 +1248,15 @@ function World:updatePresentation(session, dt, enemies)
 end
 
 function World:clearActors()
+    for id in pairs(self.equippedClubs) do self:unequipClub(id) end
     for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.healingFlyFolder:ClearAllChildren()
     self.healingEffectFolder:ClearAllChildren()
     self.healingFlyVisuals, self.healingEffects = {}, {}
+    self.clubItemFolder:ClearAllChildren()
+    self.clubItems,self.equippedClubs={},{}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + self.offset,
         [2] = Vector3.new(-65, 3, 0) + self.offset,

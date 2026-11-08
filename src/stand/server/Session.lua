@@ -154,7 +154,7 @@ function Session:intent(uid, p, now)
             local interaction=self.contextualAttack(uid,now,p.attack)
             if interaction~='NO_INTERACTION' then
                 if interaction=='OK' then
-                    c.nextAttack=now+self.config.Attacks[p.attack].cooldown
+                    c.nextAttack=math.max(c.nextAttack,now+self.config.Attacks[p.attack].cooldown)
                     self:_record('InteractionAccepted',uid,{action=p.attack,seq=p.seq})
                 end
                 return interaction
@@ -189,6 +189,7 @@ function Session:_hit(attacker, target, action)
         -- Pending contextual actions must still see an interrupt after recovery
         -- has cleared reactionEnd during a later (possibly long) server step.
         c.reactionEpoch=(c.reactionEpoch or 0)+1
+        if result.heavyReaction then c.heavyReactionEpoch=(c.heavyReactionEpoch or 0)+1 end
         c.attack=nil
         c.recover=result.recover
         c.reactionEnd=self.now+cfg.reaction

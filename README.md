@@ -11,6 +11,7 @@ Use **Группы** / **Выбрать команду** to create an independen
 - **WASD** — move and face a direction.
 - **F** — punch, pick up a nearby ground ball, or throw the ball you are carrying. The primary button shows **ВЗЯТЬ ШАР** / **БРОСИТЬ ШАР** when that interaction is available. **R** — heavy strike; **Space** — jump. The heavy strike is unavailable while carrying a ball.
 - Touch devices have a movement stick and attack/jump buttons.
+- A combat-defeated Walker drops one leg-club. Use **F** / **ВЗЯТЬ ДУБИНУ** nearby to equip it, then **F** / **УДАР ДУБИНОЙ** to swing with greater reach. It has no invented wear limit. Light hits retain it; heavy reactions/death drop it for another pickup. The guardian introduction frees weapon hands, and taking a ground ball also releases an equipped club. Club hits can hurt teammates.
 - Face a nearby Pig while standing on the ground and press **F** / **СХВАТИТЬ** to lift it. Walk or jump with that same body, then press **F** / **БРОСИТЬ ВРАГА** to throw. You cannot use the heavy strike while your hands are occupied. A hit or death of the carrier releases the enemy. Human enemies keep their body, health and owner; their commands resume after release/reaction. Walkers, dragons and heroes are outside this grab slice.
 - In the stone courtyard, then on the long bridge, six healing flies appear in a two-then-four sequence. Face a nearby fly and use **F** / **ЛОВИТЬ МУХУ** to catch it with your tongue. A successful catch consumes it once and adds8 raw Life, capped at47 (about0.85 displayed heart); it does not restore respawns. A full-health catch still consumes the fly.
 - Heroes have five hearts and three successful respawns. A living hero with zero respawns can keep playing.
@@ -32,6 +33,8 @@ All three templates have the same capabilities. The server fixes the 1–3 hero 
 This is an original playable prototype. Enemy damage, timing and geometry remain provisional. The guardian pickup/throw chain and fly healing arithmetic are source-backed; their Roblox distances, timing and presentation are explicit calibration. Ordinary human-enemy control, the guardian queue and up to four independent local groups are implemented for the current level. Multiple levels, cross-server boss routing and complete source-mechanics transfer remain outstanding. This does not implement cross-server discovery. Additional enemy combat abilities are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
 
 ## Current route acceptance
+
+Walker-club pickup/combat, friendly fire, heavy-hit drop, transfer to another hero and guardian hand priority were checked through Studio MCP, including phone pickup/swing emulation. See [the weapon report](reports/2026-11-08-walker-club/README.md) for the prepared scenarios and source/device limits.
 
 Pig grab/carry/throw was checked through Studio MCP with two real clients, including a human enemy, carrier interruption, a phone throw, control recovery and a real fall. See [the grab/throw report](reports/2026-11-08-enemy-grab-throw/README.md) for preparation and source/damage limits.
 
@@ -80,6 +83,7 @@ luau tests/run_level_route.luau
 luau tests/run_guardian.luau
 luau tests/run_healing_flies.luau
 luau tests/run_enemy_carry.luau
+luau tests/run_walker_clubs.luau
 luau tests/run.luau
 luau tests/run_stand.luau
 luau tests/run_connections.luau

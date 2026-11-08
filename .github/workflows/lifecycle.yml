@@ -34,6 +34,7 @@ jobs:
           /tmp/bricktoads-luau/luau tests/run_guardian.luau
           /tmp/bricktoads-luau/luau tests/run_healing_flies.luau
           /tmp/bricktoads-luau/luau tests/run_enemy_carry.luau
+          /tmp/bricktoads-luau/luau tests/run_walker_clubs.luau
           python3 tests/group_world/run.py --luau /tmp/bricktoads-luau/luau
       - name: Structural build tests
         run: python3 tools/test_build.py

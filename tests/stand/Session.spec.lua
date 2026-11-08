@@ -352,6 +352,24 @@ return function(Core, Combat, Session, Config, World)
         s.contextualAttack=function() return 'NO_INTERACTION' end
         eq(s:intent(1,packet(s,1,'Attack',{attack='Punch'}),1),'OK');assert(s.combat[1].attack)
     end)
+    test('trusted contextual action may extend cooldown while client Club remains invalid',function()
+        local s,w=setup(1);local calls=0
+        s.contextualAttack=function(uid,now)
+            calls+=1;s.combat[uid].nextAttack=now+2;return 'OK'
+        end
+        eq(s:intent(1,packet(s,1,'Attack',{attack='Club'}),.1),'INVALID_INTENT');eq(calls,0)
+        eq(s:intent(1,packet(s,1,'Attack',{attack='Punch'}),.1),'OK')
+        eq(s.combat[1].nextAttack,2.1)
+        eq(s:intent(1,packet(s,1,'Attack',{attack='Punch'}),1),'COOLDOWN');eq(calls,1)
+        eq(s:intent(1,packet(s,1,'Attack',{attack='Punch'}),2.1),'OK');eq(calls,2)
+    end)
+    test('heavy reaction history survives recovery while a light hit has no heavy epoch',function()
+        local light=setup(2);assert(light:_hit(1,2,'Punch'))
+        eq(light.combat[2].heavyReactionEpoch,nil);eq(light.combat[2].reactionEpoch,1)
+        local heavy=setup(2);assert(heavy:_hit(1,2,'Dash'))
+        eq(heavy.combat[2].heavyReactionEpoch,1);heavy:step(2)
+        eq(heavy.combat[2].reactionEnd,nil);eq(heavy.combat[2].heavyReactionEpoch,1)
+    end)
     print("Session tests: "..passed.." PASS, "..failed.." FAIL")
     assert(failed==0, "Session contracts failed")
     return passed

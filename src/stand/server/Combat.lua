@@ -18,9 +18,9 @@ end
 
 function Combat.hit(old, action, shield)
     life(old)
-    assert(action == "Punch" or action == "Dash", "unsupported action")
+    assert(action == "Punch" or action == "Dash" or action == "Club", "unsupported action")
     assert(shield == nil or shield == "Normal" or shield == "Emergency", "unsupported shield")
-    local profile = action == "Punch" and 18 or (old < 16 and 21 or 22)
+    local profile = action == "Club" and 20 or (action == "Punch" and 18 or (old < 16 and 21 or 22))
     local damage = profile == 18 and 4 or (profile == 21 and 255 or 16)
     local raw, dying = Combat.damage(old, damage)
     if shield then raw, dying = old, false end
@@ -28,6 +28,7 @@ function Combat.hit(old, action, shield)
         rawLife=raw, dying=dying, profile=profile, rawDamage=damage,
         impulse=shield ~= "Emergency", blocked=shield ~= nil,
         recover=action == "Punch" and not dying and shield == nil,
+        heavyReaction=action ~= "Punch",
     }
 end
 

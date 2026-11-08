@@ -93,6 +93,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
     EnemyCarry=require(gameplay.EnemyCarry),
+    WalkerClubs=require(gameplay.WalkerClubs),
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor
@@ -923,6 +924,13 @@ return EnemyCarry
 -- Enemy damage and spatial/timing values still need the full source transfer.
 return function(base,level)
     local config=table.clone(base)
+    config.Attacks=table.clone(base.Attacks)
+    config.Impulses=table.clone(base.Impulses)
+    -- Internal Club is never a permitted client attack name. Distances/times are calibrated.
+    config.Attacks.Club={windup=.16,window=.16,cooldown=.7,reaction=.75,reach=9,width=3.5,height=4}
+    config.Impulses[2]={horizontal=26,vertical=22}
+    config.Impulses[20]={horizontal=26,vertical=22}
+    config.WalkerClub={pickupRange=4.5,pickupHeight=3,npcDamage=2}
     config.Calibration='PLAYABLE_PROTOTYPE'
     config.Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
@@ -1055,7 +1063,7 @@ function Controller:_begin(player,players)
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
     end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end
@@ -1251,6 +1259,7 @@ function Controller:snapshot(player,players)
     end
     data.notice=self.notices[player]
     data.interaction=data.mine and self.director and self.director.interaction and self.director:interaction(data.mine) or {available=false}
+    data.weapon=data.mine and self.director and self.director.clubs and self.director.clubs:hasClub(data.mine) and 'WalkerClub' or nil
     if self.bossQueue then
         data.bossQueue=self.bossQueue:view(player.UserId,self.deps.clock())
         data.bossQueue.available=self:_bossSelection(player)=='OK'
@@ -1732,6 +1741,10 @@ function World.new(BaseWorld, config, options)
     self.healingEffectFolder.Parent = self.folder
     self.healingFlyVisuals, self.healingEffects = {}, {}
     self.enemyCarries = {}
+    self.clubItemFolder = Instance.new('Folder')
+    self.clubItemFolder.Name = 'ClubItems'
+    self.clubItemFolder.Parent = self.folder
+    self.clubItems, self.equippedClubs = {}, {}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + translation,
         [2] = Vector3.new(-65, 3, 0) + translation,
@@ -2243,6 +2256,112 @@ function World:releaseEnemy(enemyId, throwerId, tuning)
     return true
 end
 
+-- New mechanical leg-club art. Ground items and equipment have separate lifetimes.
+local function clubArt(parent, name, frame, arm)
+    local model = Instance.new('Model')
+    model.Name = name
+    model:SetAttribute('ItemKind','WalkerClub')
+    local art = {model=model,parts={}}
+    local function piece(name, size, offset, color, material)
+        local p = part(model,name,size,frame*offset,color,material or Enum.Material.Metal,false)
+        p.CanQuery = false
+        if arm then
+            p.Anchored, p.Massless = false, true
+            local weld = Instance.new('WeldConstraint')
+            weld.Part0, weld.Part1, weld.Parent = arm, p, p
+        end
+        art.parts[#art.parts+1] = {part=p,offset=offset}
+        return p
+    end
+    art.root = piece('Grip',Vector3.new(.48,.7,.55),CFrame.new(),COLORS.dark)
+    piece('PistonShaft',Vector3.new(.4,2.3,.48),CFrame.new(0,-1.3,0),COLORS.pale)
+    piece('UpperCollar',Vector3.new(.62,.3,.65),CFrame.new(0,-.5,0),COLORS.rust)
+    piece('LowerCollar',Vector3.new(.62,.35,.65),CFrame.new(0,-2.25,0),COLORS.rust)
+    piece('MechanicalFoot',Vector3.new(.95,.6,1.7),CFrame.new(0,-2.68,-.42),COLORS.dark)
+    piece('ImpactPlate',Vector3.new(1.06,.19,1.85),CFrame.new(0,-3.04,-.42),COLORS.pale)
+    piece('PowerStrip',Vector3.new(.12,1.5,.07),CFrame.new(0,-1.25,-.28),COLORS.mint,Enum.Material.Neon)
+    model.PrimaryPart = art.root
+    model.Parent = parent
+    return art
+end
+
+function World:clubItem(id, position)
+    local item = self.clubItems[id]
+    if not position then
+        if item then item.model:Destroy();self.clubItems[id]=nil end
+        return
+    end
+    local physical = Vector3.new(position.x,position.y,position.z)+self.offset
+    local frame = CFrame.new(physical)*CFrame.Angles(0,0,math.pi/2)
+    if not item then
+        item = clubArt(self.clubItemFolder,'ClubItem_'..tostring(id),frame)
+        item.model:SetAttribute('ClubId',id)
+        local text=label(item.root,'ДУБИНА  ·  ВЗЯТЬ',190,Vector3.new(0,1.4,0))
+        text.TextColor3,text.TextSize,text.Parent.MaxDistance=COLORS.mint,14,45
+        pointLight(item.root,COLORS.mint,7,.4)
+        self.clubItems[id]=item
+    end
+    for _,piece in ipairs(item.parts) do piece.part.CFrame=frame*piece.offset end
+end
+
+function World:canPickupClub(heroId, position, range, height)
+    local hero = livingBody(self,heroId)
+    if not hero or heroId&lt;=0 or hero.root.Anchored or hero.humanoid.PlatformStand
+        or hero.model:GetAttribute('CarryingEnemy')~=nil
+        or hero.humanoid.FloorMaterial==Enum.Material.Air
+        or math.abs(hero.root.AssemblyLinearVelocity.Y)&gt;1 then return false end
+    local support=Workspace:Raycast(hero.root.Position,Vector3.new(0,-3.4,0),self.ray)
+    if not support or support.Normal.Y&lt;.95 or support.Instance:GetAttribute('Hazard')
+        or support.Instance:GetAttribute('SurfaceId')==nil then return false end
+    local destination=Vector3.new(position.x,position.y,position.z)+self.offset
+    local delta=destination-hero.root.Position
+    return delta.Magnitude&lt;=range and math.abs(delta.Y)&lt;=height
+        and Workspace:Raycast(hero.root.Position,delta,self.ray)==nil
+end
+
+function World:equipClub(id, heroId)
+    local hero=livingBody(self,heroId)
+    local arm=hero and hero.model:FindFirstChild('Right Arm')
+    if not hero or heroId&lt;=0 or not arm then return false end
+    local equipped=self.equippedClubs[id]
+    if equipped then return equipped.owner==hero and equipped.heroId==heroId and equipped.model.Parent==hero.model end
+    if hero.model:GetAttribute('EquippedClub')~=nil then return false end
+    local art=clubArt(hero.model,'EquippedClub_'..tostring(id),arm.CFrame*CFrame.new(0,-1.05,0),arm)
+    art.model:SetAttribute('ClubId',id)
+    art.owner,art.heroId=hero,heroId
+    self.equippedClubs[id]=art
+    hero.model:SetAttribute('EquippedClub',id)
+    return true
+end
+
+function World:unequipClub(id)
+    local equipped=self.equippedClubs[id]
+    if not equipped then return false end
+    local owner=equipped.owner
+    if owner.model:GetAttribute('EquippedClub')==id then
+        owner.model:SetAttribute('EquippedClub',nil)
+        owner.model:SetAttribute('ClubSwing',nil)
+        if owner.poseMotors and not owner.model:GetAttribute('CarryingEnemy') then
+            local right=owner.poseMotors['Right Shoulder']
+            if right then right.joint.C0=right.base end
+        end
+    end
+    equipped.model:Destroy()
+    self.equippedClubs[id]=nil
+    return true
+end
+
+function World:clubSwing(id, heroId)
+    local equipped=self.equippedClubs[id]
+    local hero=livingBody(self,heroId)
+    if not equipped or equipped.owner~=hero or equipped.heroId~=heroId
+        or hero.model:GetAttribute('EquippedClub')~=id then return false end
+    equipped.swingUntil=(self.presentationTime or 0)+.28
+    equipped.model:SetAttribute('Swinging',true)
+    hero.model:SetAttribute('ClubSwing',true)
+    return true
+end
+
 -- Collectibles are presentation only: they never enter the combat actor table.
 function World:healingFly(id, position)
     local fly = self.healingFlyVisuals[id]
@@ -2334,6 +2453,13 @@ end
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
+    for id,equipped in pairs(self.equippedClubs) do
+        if equipped.swingUntil and self.presentationTime&gt;=equipped.swingUntil then
+            equipped.swingUntil=nil
+            equipped.model:SetAttribute('Swinging',false)
+            if equipped.owner.model:GetAttribute('EquippedClub')==id then equipped.owner.model:SetAttribute('ClubSwing',nil) end
+        end
+    end
     for model,expiresAt in pairs(self.healingEffects) do
         if self.presentationTime &gt;= expiresAt then model:Destroy(); self.healingEffects[model] = nil end
     end
@@ -2372,6 +2498,8 @@ function World:updatePresentation(session, dt, enemies)
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
             local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
             local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
+            local club=self.equippedClubs[actor.model:GetAttribute('EquippedClub')]
+            if club and club.owner~=actor then club=nil end
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil
@@ -2383,6 +2511,8 @@ function World:updatePresentation(session, dt, enemies)
                     angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
                 elseif shoulder and reacting then
                     angle, roll = 0.65, left and -0.25 or 0.25
+                elseif shoulder and club and not left then
+                    angle,roll=club.swingUntil and 1.95 or .65,club.swingUntil and -.55 or .25
                 elseif shoulder and attacking then
                     angle = actor.attackPoseAction == "Dash" and 1.5 or (left and 0.45 or 1.95)
                 end
@@ -2393,12 +2523,15 @@ function World:updatePresentation(session, dt, enemies)
 end
 
 function World:clearActors()
+    for id in pairs(self.equippedClubs) do self:unequipClub(id) end
     for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.healingFlyFolder:ClearAllChildren()
     self.healingEffectFolder:ClearAllChildren()
     self.healingFlyVisuals, self.healingEffects = {}, {}
+    self.clubItemFolder:ClearAllChildren()
+    self.clubItems,self.equippedClubs={},{}
     self.origins = {
         [1] = Vector3.new(-65, 3, -7) + self.offset,
         [2] = Vector3.new(-65, 3, 0) + self.offset,
@@ -2890,7 +3023,7 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
@@ -2898,6 +3031,7 @@ function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,E
     if self.route then
         self.flies=HealingFlies and HealingFlies.new(session,world,config)
         self.carry=EnemyCarry and EnemyCarry.new(self)
+        self.clubs=WalkerClubs and WalkerClubs.new(self)
         self:_enterZone(1)
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
@@ -2937,6 +3071,8 @@ function Director:interaction(slot)
     end
     local fly=self.flies and self.flies:interaction(slot)
     if fly and fly.available then return fly end
+    local club=self.clubs and self.clubs:interaction(slot)
+    if club and club.available then return club end
     return carry or {available=false}
 end
 function Director:interact(slot,now,attack)
@@ -2945,11 +3081,16 @@ function Director:interact(slot,now,attack)
     if self.guardian and self.stage=='Boss' then
         if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
         local result=self.guardian:interact(slot,now)
+        if result=='OK' and self.clubs then self.clubs:drop(slot,'GuardianBall') end
         if result~='NO_INTERACTION' then return result end
     end
     if attack~='Punch' then return 'NO_INTERACTION' end
     if self.flies then
         local result=self.flies:interact(slot,now)
+        if result~='NO_INTERACTION' then return result end
+    end
+    if self.clubs then
+        local result=self.clubs:interact(slot,now,attack)
         if result~='NO_INTERACTION' then return result end
     end
     return self.carry and self.carry:interact(slot,now,attack) or 'NO_INTERACTION'
@@ -3079,6 +3220,7 @@ function Director:_boss()
         self.stage='BossReady'; self.world:stage('BossReady'); return
     end
     self.stage='Boss'; self.world:stage('Boss')
+    if self.clubs then self.clubs:bossIntro() end
     local position=self.route and self.route.boss.position or {x=82,y=3,z=0}
     assert(self.world:spawnEnemy(-99,'Boss',position),'Boss spawn failed')
     local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
@@ -3102,11 +3244,12 @@ end
 function Director:isTarget(id)
     return self.enemies[id]~=nil or self.projectiles[id]~=nil or id==-99
 end
-function Director:_kill(id)
+function Director:_kill(id,cause)
     local e=self.enemies[id]
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.health=0
+    if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
     if e.boss and self.route then e.rawLife=0 end
     self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
     self.world:kill(id)
@@ -3140,14 +3283,17 @@ function Director:hit(attacker,target,action)
     if self.carry then self.carry:forgetEnemy(target) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil
-    e.health=math.max(0,e.health-(action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
+    local damage=action=='Club' and self.config.WalkerClub.npcDamage
+        or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage)
+    e.health=math.max(0,e.health-damage)
     self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
     self.world:cue(target,false)
-    if e.health==0 then self:_kill(target)
+    if e.health==0 then self:_kill(target,'Combat')
     else
-        e.reactionUntil=self.now+self.config.Enemy.reaction
+        local reaction=action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction
+        e.reactionUntil=self.now+reaction
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=action=='Dash' and 22 or 18
+        local profile=action=='Club' and 2 or (action=='Dash' and 22 or 18)
         if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
     end
     return true
@@ -3179,7 +3325,8 @@ function Director:_enemies()
     local living=0
     for id,e in pairs(self.enemies) do
         if not e.dead then
-            if self.world:hazard(id) then self:_kill(id)
+            local hazard=self.world:hazard(id)
+            if hazard then self:_kill(id,hazard)
             else
                 living+=1
                 local carried=self.carry and self.carry:blocksEnemy(id)
@@ -3279,10 +3426,12 @@ function Director:step(now,dt)
     if self.result then
         if self.flies then self.flies:close() end
         if self.carry then self.carry:close() end
+        if self.clubs then self.clubs:close() end
         return
     end
     self.now=now
     if self.carry then self.carry:step(now) end
+    if self.clubs then self.clubs:step(now) end
     if self.flies then self.flies:step(now) end
     if self.session.state.status=='Lost' then
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
@@ -3297,6 +3446,7 @@ function Director:step(now,dt)
                 self.result='Won'; self.stage='Won'; self.world:stage('Won')
                 if self.flies then self.flies:close() end
                 if self.carry then self.carry:close() end
+                if self.clubs then self.clubs:close() end
                 break
             end
         end
@@ -3609,12 +3759,225 @@ return MatchHub
 </ProtectedString>
           </Properties>
         </Item>
+        <Item class="ModuleScript" referent="BT20">
+          <Properties>
+            <string name="Name">WalkerClubs</string>
+            <ProtectedString name="Source">-- One source-backed Walker leg-club per combat death. Geometry/timing/NPC HP are Roblox calibration.
+-- Only validated primary intents reach this module; no packet chooses an item, target or damage.
+local WalkerClubs={}
+WalkerClubs.__index=WalkerClubs
+local function finite(n) return type(n)=='number' and n==n and n&gt;-math.huge and n&lt;math.huge end
+local function point(p) return type(p)=='table' and finite(p.x) and finite(p.y) and finite(p.z) end
+local function copy(p) return {x=p.x,y=p.y,z=p.z} end
+
+function WalkerClubs.new(director)
+    return setmetatable({director=director,session=director.session,world=director.world,
+        config=director.config.WalkerClub,attack=director.config.Attacks.Club,
+        now=director.now or director.session.now,items={},sources={},equipment={},pending={},pendingBySlot={}},WalkerClubs)
+end
+
+function WalkerClubs:_active()
+    return not self.closed and not self.director.result and self.session.state.status=='Active'
+end
+
+function WalkerClubs:_hero(slot,offline)
+    if not self:_active() then return nil end
+    local h,c=self.session.state.heroes[slot],self.session.combat[slot]
+    if not h or h.status~='Alive' or (not offline and not h.connected) or not h.actorId
+        or not c or c.deathAt or c.reactionEnd or c.attack or self.world:hazard(slot) then return nil end
+    return h,c
+end
+
+function WalkerClubs:_log(kind,slot,data)
+    self.session:_record(kind,slot,data)
+end
+
+function WalkerClubs:walkerDefeated(id,position,cause)
+    local e=self.director.enemies[id]
+    if not self:_active() or cause~='Combat' or not e or e.kind~='Walker'
+        or type(e.actorId)~='string' or self.sources[e.actorId] then return nil end
+    local itemId='walker-club:'..e.actorId
+    local item={id=itemId,sourceActorId=e.actorId,state='Lost'}
+    self.sources[e.actorId]=itemId;self.items[itemId]=item
+    local ground=point(position) and self.world:groundPosition(position)
+    if not point(ground) then return nil end
+    item.state='Ground';item.position=copy(ground)
+    self.world:clubItem(itemId,item.position)
+    self:_log('WalkerClubCreated',nil,{itemId=itemId,enemyId=id,enemyActorId=e.actorId,position=copy(ground)})
+    return itemId
+end
+
+function WalkerClubs:_sameOwner(slot,row)
+    local h,c=self.session.state.heroes[slot],self.session.combat[slot]
+    return h and h.actorId==row.actorId and h.attempt==row.attempt
+        and self.session.state.levelEpoch==row.levelEpoch and c==row.combat
+end
+
+function WalkerClubs:_sync(slot)
+    local row=self.equipment[slot]
+    if not row then return nil end
+    -- Read the current position only after identity matches: a replacement actor
+    -- must never supply a fresh safe drop position for the previous weapon.
+    if self:_sameOwner(slot,row) then
+        local position=self.world:position(slot)
+        if point(position) then row.lastPosition=copy(position) end
+        local h,c=self.session.state.heroes[slot],self.session.combat[slot]
+        if h.status=='Alive' and not c.deathAt and not self.world:hazard(slot)
+            and (c.heavyReactionEpoch or 0)==row.heavyReactionEpoch then return row end
+    end
+    self:drop(slot,'OwnerChangedOrHeavyReaction')
+    return nil
+end
+
+function WalkerClubs:hasClub(slot)
+    return not self.closed and self:_sync(slot)~=nil
+end
+
+function WalkerClubs:_nearest(slot)
+    local position=self.world:position(slot)
+    if not point(position) then return nil end
+    local selected,best=nil,math.huge
+    for id,item in pairs(self.items) do
+        if item.state=='Ground' and point(item.position)
+            and self.world:canPickupClub(slot,item.position,self.config.pickupRange,self.config.pickupHeight) then
+            local p=item.position
+            local range=(p.x-position.x)^2+(p.y-position.y)^2+(p.z-position.z)^2
+            if range&lt;best or (range==best and (not selected or id&lt;selected.id)) then selected,best=item,range end
+        end
+    end
+    return selected
+end
+
+function WalkerClubs:interaction(slot)
+    self.now=math.max(self.now,self.session.now,self.director.now or 0)
+    if not self:_active() then return {available=false,carrying=false,equipped=false} end
+    local row=self:_sync(slot)
+    if row then
+        return {available=self:_hero(slot)~=nil,kind='WalkerClub',label='УДАР ДУБИНОЙ',carrying=false,equipped=true}
+    end
+    return {available=self:_hero(slot)~=nil and self:_nearest(slot)~=nil,
+        kind='WalkerClub',label='ВЗЯТЬ ДУБИНУ',carrying=false,equipped=false}
+end
+
+function WalkerClubs:_swing(slot,row,now,h,c)
+    if self.pendingBySlot[slot] then return 'COOLDOWN' end
+    local code=self.session:_event('BeginAttack',slot,{connectionEpoch=h.connectionEpoch})
+    if code~='OK' then return code end
+    self.world:hold(slot,false)
+    local pending={slot=slot,item=row.item,equipment=row,actorId=h.actorId,attempt=h.attempt,
+        levelEpoch=self.session.state.levelEpoch,combat=c,reactionEpoch=c.reactionEpoch or 0,
+        at=now+self.attack.windup}
+    pending.expiresAt=pending.at+self.attack.window
+    self.pending[#self.pending+1]=pending;self.pendingBySlot[slot]=pending
+    c.nextAttack=math.max(c.nextAttack or 0,now+self.attack.cooldown)
+    self.director.now=now
+    self.director:closeTargetForAttack(self.world:targets(slot,self.attack))
+    self.world:clubSwing(row.item.id,slot)
+    self:_log('ClubSwingAccepted',slot,{itemId=row.item.id,sourceEnemyProfile=2,sourceHeroProfile=20})
+    return 'OK'
+end
+
+function WalkerClubs:interact(slot,now,action)
+    if not finite(now) or now&lt;self.now then return 'INVALID_TIME' end
+    self.now=now
+    if not self:_active() or action~='Punch' then return 'NO_INTERACTION' end
+    local row=self:_sync(slot)
+    local h,c=self:_hero(slot)
+    if not h then return 'NO_INTERACTION' end
+    if row then return self:_swing(slot,row,now,h,c) end
+    local item=self:_nearest(slot)
+    if not item then return 'NO_INTERACTION' end
+    local origin=self.world:position(slot)
+    if not self.world:equipClub(item.id,slot) then return 'CLUB_EQUIP_FAILED' end
+    local x,z=item.position.x-origin.x,item.position.z-origin.z
+    if x*x+z*z&gt;0 then self.world:aim(slot,x,z) end
+    item.state='Equipped';item.slot=slot
+    self.equipment[slot]={item=item,actorId=h.actorId,attempt=h.attempt,levelEpoch=self.session.state.levelEpoch,
+        combat=c,heavyReactionEpoch=c.heavyReactionEpoch or 0,lastPosition=copy(self.world:position(slot))}
+    self.world:clubItem(item.id,nil)
+    self:_log('ClubEquipped',slot,{itemId=item.id})
+    return 'OK'
+end
+
+function WalkerClubs:drop(slot,reason)
+    local row=self.equipment[slot]
+    if not row then return false end
+    if self:_sameOwner(slot,row) then
+        local position=self.world:position(slot)
+        if point(position) then row.lastPosition=copy(position) end
+    end
+    self.equipment[slot]=nil
+    local pending=self.pendingBySlot[slot]
+    if pending then pending.cancelled=true;self.pendingBySlot[slot]=nil end
+    local item=row.item
+    self.world:unequipClub(item.id)
+    item.slot=nil;item.state='Lost';item.position=nil
+    local ground=point(row.lastPosition) and self.world:groundPosition(row.lastPosition)
+    if point(ground) then item.state='Ground';item.position=copy(ground);self.world:clubItem(item.id,item.position)
+    else self.world:clubItem(item.id,nil) end
+    self:_log('ClubDropped',slot,{itemId=item.id,reason=reason,supported=item.state=='Ground',position=item.position})
+    return true
+end
+
+function WalkerClubs:bossIntro()
+    if self.bossIntroduced or self.closed then return end
+    self.bossIntroduced=true
+    local owners={};for slot in pairs(self.equipment) do owners[#owners+1]=slot end
+    table.sort(owners)
+    for _,slot in ipairs(owners) do self:drop(slot,'BossIntro') end
+end
+
+function WalkerClubs:_resolve(pending)
+    local slot=pending.slot
+    local h,c=self:_hero(slot,true)
+    if pending.cancelled or self.now&gt;pending.expiresAt or not h or h.actorId~=pending.actorId
+        or h.attempt~=pending.attempt or self.session.state.levelEpoch~=pending.levelEpoch
+        or c~=pending.combat or (c.reactionEpoch or 0)~=pending.reactionEpoch
+        or self.equipment[slot]~=pending.equipment or pending.equipment.item~=pending.item then return end
+    for _,target in ipairs(self.world:targets(slot,self.attack)) do
+        if self.session:_hit(slot,target,'Club') then
+            self:_log('ClubSwingHit',slot,{itemId=pending.item.id,target=target});break
+        end
+    end
+end
+
+function WalkerClubs:step(now)
+    if not finite(now) or now&lt;self.now then return 'INVALID_TIME' end
+    self.now=now
+    if self.closed then return 'RUN_CLOSED' end
+    if not self:_active() then self:close();return 'RUN_CLOSED' end
+    local owners={};for slot in pairs(self.equipment) do owners[#owners+1]=slot end
+    table.sort(owners)
+    for _,slot in ipairs(owners) do self:_sync(slot) end
+    local future={}
+    for _,pending in ipairs(self.pending) do
+        if pending.cancelled or now&gt;=pending.at then
+            if self.pendingBySlot[pending.slot]==pending then self.pendingBySlot[pending.slot]=nil end
+            if not pending.cancelled then self:_resolve(pending) end
+        else future[#future+1]=pending end
+    end
+    self.pending=future
+    return 'OK'
+end
+
+function WalkerClubs:close()
+    if self.closed then return end
+    self.closed=true;self.pending={};self.pendingBySlot={};self.equipment={}
+    for id,item in pairs(self.items) do
+        self.world:unequipClub(id);self.world:clubItem(id,nil);item.state='Lost';item.slot=nil;item.position=nil
+    end
+end
+
+return WalkerClubs
+</ProtectedString>
+          </Properties>
+        </Item>
       </Item>
-      <Item class="Folder" referent="BT20">
+      <Item class="Folder" referent="BT21">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT21">
+        <Item class="ModuleScript" referent="BT22">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
@@ -3637,9 +4000,9 @@ end
 
 function Combat.hit(old, action, shield)
     life(old)
-    assert(action == "Punch" or action == "Dash", "unsupported action")
+    assert(action == "Punch" or action == "Dash" or action == "Club", "unsupported action")
     assert(shield == nil or shield == "Normal" or shield == "Emergency", "unsupported shield")
-    local profile = action == "Punch" and 18 or (old &lt; 16 and 21 or 22)
+    local profile = action == "Club" and 20 or (action == "Punch" and 18 or (old &lt; 16 and 21 or 22))
     local damage = profile == 18 and 4 or (profile == 21 and 255 or 16)
     local raw, dying = Combat.damage(old, damage)
     if shield then raw, dying = old, false end
@@ -3647,6 +4010,7 @@ function Combat.hit(old, action, shield)
         rawLife=raw, dying=dying, profile=profile, rawDamage=damage,
         impulse=shield ~= "Emergency", blocked=shield ~= nil,
         recover=action == "Punch" and not dying and shield == nil,
+        heavyReaction=action ~= "Punch",
     }
 end
 
@@ -3664,7 +4028,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT22">
+        <Item class="ModuleScript" referent="BT23">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -3823,7 +4187,7 @@ function Session:intent(uid, p, now)
             local interaction=self.contextualAttack(uid,now,p.attack)
             if interaction~='NO_INTERACTION' then
                 if interaction=='OK' then
-                    c.nextAttack=now+self.config.Attacks[p.attack].cooldown
+                    c.nextAttack=math.max(c.nextAttack,now+self.config.Attacks[p.attack].cooldown)
                     self:_record('InteractionAccepted',uid,{action=p.attack,seq=p.seq})
                 end
                 return interaction
@@ -3858,6 +4222,7 @@ function Session:_hit(attacker, target, action)
         -- Pending contextual actions must still see an interrupt after recovery
         -- has cleared reactionEnd during a later (possibly long) server step.
         c.reactionEpoch=(c.reactionEpoch or 0)+1
+        if result.heavyReaction then c.heavyReactionEpoch=(c.heavyReactionEpoch or 0)+1 end
         c.attack=nil
         c.recover=result.recover
         c.reactionEnd=self.now+cfg.reaction
@@ -3967,7 +4332,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT23">
+        <Item class="ModuleScript" referent="BT24">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -3997,7 +4362,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT24">
+        <Item class="ModuleScript" referent="BT25">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -4057,7 +4422,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT25">
+        <Item class="ModuleScript" referent="BT26">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -4326,15 +4691,15 @@ return World
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT26">
+  <Item class="ReplicatedStorage" referent="BT27">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT27">
+    <Item class="Folder" referent="BT28">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT28">
+      <Item class="ModuleScript" referent="BT29">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -4346,19 +4711,19 @@ return table.freeze({
       </Item>
     </Item>
   </Item>
-  <Item class="StarterPlayer" referent="BT29">
+  <Item class="StarterPlayer" referent="BT30">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT30">
+    <Item class="StarterPlayerScripts" referent="BT31">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT31">
+      <Item class="Folder" referent="BT32">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT32">
+        <Item class="ModuleScript" referent="BT33">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -4570,7 +4935,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT33">
+        <Item class="LocalScript" referent="BT34">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -4700,7 +5065,7 @@ local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", 16, C.muted)
+local intro = label(header, "Intro", "Оружие дозорных, захваты и страж. Пройдите тракт вместе.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -5147,7 +5512,7 @@ render = function()
                 or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
             or "Вы можете вернуться к наблюдению за этой же игрой."
     else
-        intro.Text, chooseTitle.Text = "Хватайте налётчиков вплотную и бросайте. Ловите мух для лечения.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Оружие дозорных, захваты и страж. Пройдите тракт вместе.", "ВЫБЕРИТЕ ГЕРОЯ"
     end
     title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
     renderSelection()
@@ -5200,6 +5565,7 @@ render = function()
             elseif hero.status == "Eliminated" then detail = "Выбыл"
             elseif hero.status ~= "Alive" or hero.dying then detail = "Возвращается…"
             elseif hero.shield then detail ..= " · защита" end
+            if hero.slot==snapshot.mine and snapshot.weapon then detail ..= " · дубина" end
             row.status.Text = detail
             local hp = tonumber(hero.hearts) or 0
             for n, heart in ipairs(row.fills) do heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1) end
@@ -5753,7 +6119,7 @@ sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT34">
+        <Item class="ModuleScript" referent="BT35">
           <Properties>
             <string name="Name">GroupPanel</string>
             <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
@@ -5980,7 +6346,7 @@ return GroupPanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT35">
+        <Item class="ModuleScript" referent="BT36">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.

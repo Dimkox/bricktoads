@@ -18,7 +18,7 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
@@ -26,6 +26,7 @@ function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,E
     if self.route then
         self.flies=HealingFlies and HealingFlies.new(session,world,config)
         self.carry=EnemyCarry and EnemyCarry.new(self)
+        self.clubs=WalkerClubs and WalkerClubs.new(self)
         self:_enterZone(1)
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
@@ -65,6 +66,8 @@ function Director:interaction(slot)
     end
     local fly=self.flies and self.flies:interaction(slot)
     if fly and fly.available then return fly end
+    local club=self.clubs and self.clubs:interaction(slot)
+    if club and club.available then return club end
     return carry or {available=false}
 end
 function Director:interact(slot,now,attack)
@@ -73,11 +76,16 @@ function Director:interact(slot,now,attack)
     if self.guardian and self.stage=='Boss' then
         if attack~='Punch' then return self.guardian:interaction(slot).carrying and 'HANDS_FULL' or 'NO_INTERACTION' end
         local result=self.guardian:interact(slot,now)
+        if result=='OK' and self.clubs then self.clubs:drop(slot,'GuardianBall') end
         if result~='NO_INTERACTION' then return result end
     end
     if attack~='Punch' then return 'NO_INTERACTION' end
     if self.flies then
         local result=self.flies:interact(slot,now)
+        if result~='NO_INTERACTION' then return result end
+    end
+    if self.clubs then
+        local result=self.clubs:interact(slot,now,attack)
         if result~='NO_INTERACTION' then return result end
     end
     return self.carry and self.carry:interact(slot,now,attack) or 'NO_INTERACTION'
@@ -207,6 +215,7 @@ function Director:_boss()
         self.stage='BossReady'; self.world:stage('BossReady'); return
     end
     self.stage='Boss'; self.world:stage('Boss')
+    if self.clubs then self.clubs:bossIntro() end
     local position=self.route and self.route.boss.position or {x=82,y=3,z=0}
     assert(self.world:spawnEnemy(-99,'Boss',position),'Boss spawn failed')
     local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
@@ -230,11 +239,12 @@ end
 function Director:isTarget(id)
     return self.enemies[id]~=nil or self.projectiles[id]~=nil or id==-99
 end
-function Director:_kill(id)
+function Director:_kill(id,cause)
     local e=self.enemies[id]
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.health=0
+    if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
     if e.boss and self.route then e.rawLife=0 end
     self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
     self.world:kill(id)
@@ -268,14 +278,17 @@ function Director:hit(attacker,target,action)
     if self.carry then self.carry:forgetEnemy(target) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil
-    e.health=math.max(0,e.health-(action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
+    local damage=action=='Club' and self.config.WalkerClub.npcDamage
+        or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage)
+    e.health=math.max(0,e.health-damage)
     self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
     self.world:cue(target,false)
-    if e.health==0 then self:_kill(target)
+    if e.health==0 then self:_kill(target,'Combat')
     else
-        e.reactionUntil=self.now+self.config.Enemy.reaction
+        local reaction=action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction
+        e.reactionUntil=self.now+reaction
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=action=='Dash' and 22 or 18
+        local profile=action=='Club' and 2 or (action=='Dash' and 22 or 18)
         if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
     end
     return true
@@ -307,7 +320,8 @@ function Director:_enemies()
     local living=0
     for id,e in pairs(self.enemies) do
         if not e.dead then
-            if self.world:hazard(id) then self:_kill(id)
+            local hazard=self.world:hazard(id)
+            if hazard then self:_kill(id,hazard)
             else
                 living+=1
                 local carried=self.carry and self.carry:blocksEnemy(id)
@@ -407,10 +421,12 @@ function Director:step(now,dt)
     if self.result then
         if self.flies then self.flies:close() end
         if self.carry then self.carry:close() end
+        if self.clubs then self.clubs:close() end
         return
     end
     self.now=now
     if self.carry then self.carry:step(now) end
+    if self.clubs then self.clubs:step(now) end
     if self.flies then self.flies:step(now) end
     if self.session.state.status=='Lost' then
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
@@ -425,6 +441,7 @@ function Director:step(now,dt)
                 self.result='Won'; self.stage='Won'; self.world:stage('Won')
                 if self.flies then self.flies:close() end
                 if self.carry then self.carry:close() end
+                if self.clubs then self.clubs:close() end
                 break
             end
         end
