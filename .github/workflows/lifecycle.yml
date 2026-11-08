@@ -22,7 +22,9 @@ jobs:
           curl --fail --location --retry 2 --output /tmp/luau.zip https://github.com/luau-lang/luau/releases/download/0.745/luau-ubuntu.zip
           echo '186e5ddaa2b048ebc7390c11ed1b00c04e7d3beaffed429250329e3575d2ece2  /tmp/luau.zip' | sha256sum --check
           unzip -q /tmp/luau.zip -d /tmp/bricktoads-luau
-          chmod +x /tmp/bricktoads-luau/luau
+          chmod +x /tmp/bricktoads-luau/luau /tmp/bricktoads-luau/luau-compile
+      - name: Compile isolated Studio acceptance runner
+        run: /tmp/bricktoads-luau/luau-compile tests/gameplay/WalkerHeavyStudioAcceptance.server.luau > /dev/null
       - name: Native Luau contract tests
         run: /tmp/bricktoads-luau/luau tests/run.luau
       - name: Playable game contracts
@@ -42,7 +44,17 @@ jobs:
         run: python3 tools/test_build.py
       - name: Development place build tests
         run: python3 tools/test_bricktoads_place.py
+      - name: Isolated Walker acceptance package tests
+        run: python3 tools/test_walker_acceptance.py --luau /tmp/bricktoads-luau/luau
       - name: Verify development place matches sources
         run: python3 tools/build_bricktoads_place.py --check
       - name: Serialize Studio contract-test place
         run: python3 tools/build_test_place.py
+      - name: Build isolated Walker engine fixture (not engine acceptance)
+        run: python3 tools/build_walker_acceptance.py
+      - name: Preserve unrun Studio fixture
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: WalkerHeavyAcceptance-${{ github.sha }}
+          path: build/WalkerHeavyAcceptance.rbxlx
+          if-no-files-found: error

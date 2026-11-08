@@ -34,3 +34,12 @@ PR [#3](https://github.com/Dimkox/bricktoads/pull/3) is the continuation branch.
 [Structured follow-up evidence](../../../reports/2026-11-08-walker-strikes/handoff-validation.json) separates this run from the earlier Studio scenarios. BT-62 comment10375 already links the Walker animation/source evidence; BT-37 and BT-26 track source/acceptance limits. The completed checkbox records publication/handoff, not completion of those broader Jira tasks. No new gameplay implementation is required by the review.
 
 This continuation does not rerun Studio, the separate NPC-heavy case, full unprepared combat, physical devices or real reconnect. Those remain open exactly as disclosed in the report.
+
+## Next acceptance preparation — isolated NPC heavy
+
+Continue the outstanding engine check with test-only tooling. Build a separate place from the existing production sources; disable their entrypoints only in that package and add a Studio/server-only fixture. The fixture seeds raw Life35 explicitly, then lets the ordinary NPC AI choose and resolve the heavy attack using actual world hit geometry. It must record profile20,35→31, real unanchored upward response, finite pose/reaction recovery, unchanged actor/attempt/respawns and the same living NPC. Its anchored attacker and health seed are disclosed; it cannot establish natural progression, gait, input or multiplayer behaviour.
+
+- [x] Packaging regression first fails with missing builder; implement isolated package with exact source hashes and no engine success receipt.
+- [x] Add finite Studio scenario and compile it; keep the normal playable source/build unchanged.
+- [x] Run the project checks and independent review; prepare the updated PR, CI artifact publication and Jira evidence. Review found no remaining P1/P2; engine-only judgements stay pending.
+- [ ] Execute the package in Roblox Studio and retain the actual result JSON. Access is unavailable in the current environment; compilation/packaging do not complete this checkbox.
