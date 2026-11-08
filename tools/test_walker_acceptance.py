@@ -39,13 +39,13 @@ class WalkerAcceptanceBuildTests(unittest.TestCase):
             self.assertEqual(disabled, "false" if name == "WalkerHeavyAcceptance" else "true")
         entrypoint = named(project, "BrickToadsServer")
         self.assertEqual(entrypoint.findtext("Properties/ProtectedString[@name='Source']"),
-                         (ROOT / "src/server/BrickToadsServer.server.luau").read_text())
+                         (ROOT / "src/server/BrickToadsServer.server.luau").read_text(encoding="utf-8"))
         gameplay = named(project, "gameplay")
         self.assertEqual(named(gameplay, "LevelDirector").findtext("Properties/ProtectedString[@name='Source']"),
-                         (ROOT / "src/server/gameplay/LevelDirector.lua").read_text())
+                         (ROOT / "src/server/gameplay/LevelDirector.lua").read_text(encoding="utf-8"))
         acceptance = named(server, "WalkerAcceptance")
         self.assertEqual(named(acceptance, "WalkerHeavyAcceptance").findtext("Properties/ProtectedString[@name='Source']"),
-                         (ROOT / "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau").read_text())
+                         (ROOT / "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau").read_text(encoding="utf-8"))
 
     def test_manifest_identifies_exact_source_bytes_without_fabricated_results(self):
         package = ET.fromstring(self.builder.build(ROOT))
@@ -69,7 +69,7 @@ class WalkerAcceptanceBuildTests(unittest.TestCase):
             shutil.copytree(ROOT / "src", copy / "src")
             shutil.copytree(ROOT / "tests/gameplay", copy / "tests/gameplay")
             path = copy / "src/server/gameplay/LevelDirector.lua"
-            path.write_text(path.read_text() + "\n-- Controlled source mutation for build identity.\n")
+            path.write_text(path.read_text(encoding="utf-8") + "\n-- Controlled source mutation for build identity.\n", encoding="utf-8")
             self.assertNotEqual(content, self.builder.build(copy))
             (copy / "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau").unlink()
             with self.assertRaises(FileNotFoundError):
@@ -83,7 +83,7 @@ class WalkerAcceptanceBuildTests(unittest.TestCase):
     def test_runner_returns_before_side_effects_outside_studio_server(self):
         if not LUAU:
             self.skipTest("pass --luau to execute the runner's environment guard")
-        source = (ROOT / "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau").read_text()
+        source = (ROOT / "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau").read_text(encoding="utf-8")
         for studio, server in ((False, False), (False, True), (True, False)):
             with self.subTest(studio=studio, server=server), tempfile.TemporaryDirectory() as directory:
                 script = Path(directory) / "guard.luau"
@@ -91,7 +91,7 @@ class WalkerAcceptanceBuildTests(unittest.TestCase):
                                   "calls+=1; assert(name=='RunService','acceptance escaped its guard')\n"
                                   "return {IsStudio=function() return " + str(studio).lower() + " end,\n"
                                   "IsServer=function() return " + str(server).lower() + " end}\nend\n"
-                                  "local function run()\n" + source + "\nend\nrun()\nassert(calls==1)\n")
+                                  "local function run()\n" + source + "\nend\nrun()\nassert(calls==1)\n", encoding="utf-8")
                 result = subprocess.run([LUAU, str(script)], capture_output=True, text=True, timeout=10)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 

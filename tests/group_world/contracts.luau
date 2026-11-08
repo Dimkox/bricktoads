@@ -123,7 +123,8 @@ local function actor(self,id,position)
     root.Anchored=false; root.AssemblyLinearVelocity=vector()
     local a={model=model,root=root,humanoid={Health=100,PlatformStand=false,FloorMaterial=enum.Material.Slate,
         Jump=false,JumpPower=42,UseJumpPower=true,AutoRotate=true,WalkSpeed=12,EvaluateStateMachine=true},cue=0}
-    function a.humanoid:Move(direction) self.lastMove=direction end
+    a.humanoid.MoveDirection=vector()
+    function a.humanoid:Move(direction) self.lastMove=direction;self.MoveDirection=direction end
     self.actors[id]=a; return a
 end
 function Base.spawn(self,id,actorId,point)
@@ -777,6 +778,47 @@ workspace.Raycast=oldRaycast
 assert(default.folder.Parent==workspace and pigWorld.folder.Parent==workspace,'Retreat affects no other group world')
 print('PASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses')
 
+local movementLinks=World.new(Base,{FallY=-20,Enemy={speed=9},WalkSpeed=12},{name='DragonMovementReset',offset={x=102,y=10,z=5120}})
+local movementDragon=actor(movementLinks,-1,vector(102,13,5120))
+local movementHero=actor(movementLinks,1,vector(106,13,5120))
+for _,mode in ipairs({'Mounted','Captured'}) do
+    movementHero.humanoid:Move(vector(1,0,0),false)
+    assert(movementLinks:dragonLink(-1,1,mode))
+    eq(movementHero.humanoid.MoveDirection,0,0,0,'Dragon link must clear the previous hero movement command')
+    movementLinks:move(1,1,0)
+    movementLinks:move(1,0,0) -- Session timeout/disconnect stop while the link owns physics.
+    eq(movementHero.humanoid.MoveDirection,0,0,0,'Linked movement suppression cannot preserve a previous walking command')
+    -- Exercise release clearing independently, including a residual actuator command.
+    movementHero.humanoid:Move(vector(1,0,0),false)
+    local oldMove=movementHero.humanoid.Move
+    local resetState
+    function movementHero.humanoid:Move(direction,relative)
+        if direction.Magnitude==0 then
+            resetState={evaluate=self.EvaluateStateMachine,standing=self.PlatformStand,anchored=movementHero.root.Anchored}
+        end
+        oldMove(self,direction,relative)
+    end
+    assert(movementLinks:dragonUnlink(1))
+    movementHero.humanoid.Move=oldMove
+    eq(movementHero.humanoid.MoveDirection,0,0,0,'Mounted and captured release cannot resume stale voluntary movement')
+    assert(resetState and resetState.evaluate==false and resetState.standing and resetState.anchored,
+        'The old move command must be cleared before restoring normal body locomotion')
+    assert(movementHero.humanoid.EvaluateStateMachine and not movementHero.humanoid.PlatformStand
+        and movementHero.humanoid.WalkSpeed==12 and not movementHero.root.Anchored and movementHero.humanoid.Health==100,
+        'Clearing old movement must preserve saved physics and health')
+end
+movementHero.humanoid:Move(vector(1,0,0),false)
+assert(movementLinks:dragonLink(-1,1,'Captured'))
+movementHero.humanoid:Move(vector(1,0,0),false)
+local oldLinkedHero=movementHero
+local newMovementHero=actor(movementLinks,1,vector(120,13,5120))
+newMovementHero.humanoid:Move(vector(-1,0,0),false)
+movementLinks:clearActors()
+eq(oldLinkedHero.humanoid.MoveDirection,0,0,0,'Cleanup must stop the saved old linked body, not look up its replacement slot')
+eq(newMovementHero.humanoid.MoveDirection,-1,0,0,'Old-link cleanup cannot rewrite a new actor movement command')
+assert(oldLinkedHero.humanoid.Health==100 and next(movementLinks.dragonLinks)==nil)
+print('PASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup')
+
 local responseWorld=World.new(Base,{FallY=-20},{name='AcceptedResponseWorld'})
 local responseTarget=actor(responseWorld,1,vector(0,3,0))
 local responseAttacker=actor(responseWorld,2,vector(2,3,0))
@@ -789,6 +831,30 @@ eq(responseTarget.root.lastApplied,18,0,0,'A captured response survives removal 
 local bound=pcall(actualBase.impulse,responseWorld,1,2,{profile=18,horizontal=9,vertical=0},22)
 assert(not bound and applied==1,'A snapshot cannot be rebound to a different profile')
 print('PASS accepted response snapshots stay bound to their own profile without a live config table')
+
+responseAttacker.root.CFrame.LookVector=vector(-1,0,0)
+local currentFacingFrame=responseAttacker.root.CFrame
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=1,z=0})
+eq(responseTarget.root.lastApplied,18,0,0,'A captured shot direction must override an attacker who later turns around')
+assert(responseAttacker.root.CFrame==currentFacingFrame,'A shot response cannot rotate the current attacker to fake its accepted direction')
+responseWorld.actors[2]=nil
+local appliedBefore=applied
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=3,y=0,z=0})
+assert(applied==appliedBefore+1,'Accepted direction must still apply an impulse after its attacker actor disappears')
+eq(responseTarget.root.lastApplied,18,0,0,'Explicit horizontal direction is normalized independently of current actors')
+local replacementAttacker=actor(responseWorld,2,vector(4,3,0));replacementAttacker.root.CFrame.LookVector=vector(-1,0,0)
+local replacementFrame=replacementAttacker.root.CFrame
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=1,y=0,z=0})
+eq(responseTarget.root.lastApplied,18,0,0,'A new attacker appearance cannot redirect an earlier shot')
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18)
+eq(responseTarget.root.lastApplied,-18,0,0,'Without a captured direction legacy attacks retain current-facing impulses')
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=0/0,z=1})
+eq(responseTarget.root.lastApplied,-18,0,0,'Malformed direction falls back to the existing actor facing')
+assert(replacementAttacker.root.CFrame==replacementFrame)
+responseWorld.actors[2]=nil;appliedBefore=applied
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=0,z=0})
+assert(applied==appliedBefore,'An absent attacker and invalid direction cannot invent an impulse')
+print('PASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors')
 
 -- Physical API contracts execute the real adapter; they do not integrate Roblox physics.
 assert(type(World.dragonMotion)=='function','Dragon flight needs a real world adapter')

@@ -127,6 +127,7 @@ function Flight:_fire(row,h,c)
     if code~='OK' then return code end
     self.world:hold(row.slot,false)
     local tuning=self.director.Combat.captureAttack(self.director.config,'DragonFire')
+    tuning.impulseDirection=table.clone(direction)
     c.nextAttack=self.now+tuning.cooldown
     if obstructed then self:_log('DragonFireBlocked',row);return 'OK' end
     self.serial+=1;local id=-5000-self.serial

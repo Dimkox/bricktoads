@@ -97,6 +97,9 @@ return function(World)
             for _,p in ipairs(hero.model:GetDescendants()) do if p:IsA('BasePart') then row.collisions[p]=p.CanCollide;p.CanCollide=false end end
             self.dragonLinks[slot]=row
         end
+        -- A previous walking intent must not survive the period of linked physics.
+        -- Physical flags are restored on release; voluntary movement is never replayed.
+        hero.humanoid:Move(Vector3.new(),false)
         hero.humanoid.EvaluateStateMachine=false;hero.humanoid.PlatformStand=true
         hero.humanoid.AutoRotate=false;hero.humanoid.WalkSpeed=0;hero.root.Anchored=true
         hero.root.AssemblyLinearVelocity=Vector3.new();hero.root.AssemblyAngularVelocity=Vector3.new()
@@ -113,6 +116,7 @@ return function(World)
         self.dragonLinks[slot]=nil
         local a=row.hero;a.model:SetAttribute('DragonLink',nil);a.model:SetAttribute('DragonId',nil)
         if a.root.Parent then
+            a.humanoid:Move(Vector3.new(),false)
             a.root.Anchored=row.anchored;a.humanoid.EvaluateStateMachine=row.evaluate
             a.humanoid.PlatformStand=row.platformStand;a.humanoid.AutoRotate=row.autoRotate;a.humanoid.WalkSpeed=row.walkSpeed
             for p,value in pairs(row.collisions) do if p.Parent then p.CanCollide=a.humanoid.Health>0 and value or false end end

@@ -230,7 +230,7 @@ function Session:_hit(attacker, target, action, tuning)
         self.world:move(target,0,0)
         self.world:setReaction(target,true)
         local impulse=cfg.responses and cfg.responses[result.profile] or self.config.Impulses[result.profile]
-        self.world:impulse(target,attacker,impulse,result.profile)
+        self.world:impulse(target,attacker,impulse,result.profile,cfg.impulseDirection)
     end
     self:_record("Hit",target,{attacker=attacker,action=action,profile=result.profile,
         before=before,after=c.rawLife,blocked=result.blocked,impulse=result.impulse,

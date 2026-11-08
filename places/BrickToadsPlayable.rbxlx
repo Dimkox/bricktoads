@@ -845,6 +845,7 @@ function Flight:_fire(row,h,c)
     if code~='OK' then return code end
     self.world:hold(row.slot,false)
     local tuning=self.director.Combat.captureAttack(self.director.config,'DragonFire')
+    tuning.impulseDirection=table.clone(direction)
     c.nextAttack=self.now+tuning.cooldown
     if obstructed then self:_log('DragonFireBlocked',row);return 'OK' end
     self.serial+=1;local id=-5000-self.serial
@@ -1105,6 +1106,9 @@ return function(World)
             for _,p in ipairs(hero.model:GetDescendants()) do if p:IsA('BasePart') then row.collisions[p]=p.CanCollide;p.CanCollide=false end end
             self.dragonLinks[slot]=row
         end
+        -- A previous walking intent must not survive the period of linked physics.
+        -- Physical flags are restored on release; voluntary movement is never replayed.
+        hero.humanoid:Move(Vector3.new(),false)
         hero.humanoid.EvaluateStateMachine=false;hero.humanoid.PlatformStand=true
         hero.humanoid.AutoRotate=false;hero.humanoid.WalkSpeed=0;hero.root.Anchored=true
         hero.root.AssemblyLinearVelocity=Vector3.new();hero.root.AssemblyAngularVelocity=Vector3.new()
@@ -1121,6 +1125,7 @@ return function(World)
         self.dragonLinks[slot]=nil
         local a=row.hero;a.model:SetAttribute('DragonLink',nil);a.model:SetAttribute('DragonId',nil)
         if a.root.Parent then
+            a.humanoid:Move(Vector3.new(),false)
             a.root.Anchored=row.anchored;a.humanoid.EvaluateStateMachine=row.evaluate
             a.humanoid.PlatformStand=row.platformStand;a.humanoid.AutoRotate=row.autoRotate;a.humanoid.WalkSpeed=row.walkSpeed
             for p,value in pairs(row.collisions) do if p.Parent then p.CanCollide=a.humanoid.Health&gt;0 and value or false end end
@@ -1492,6 +1497,9 @@ return function(base,level)
         horizontal=26,vertical=16,throwDamage=config.Enemy.punchDamage,sourceProfile=17,sourceRawDamage=4}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
+        -- Main-route jump budget covers its5-stud gaps and2-stud rises with
+        -- takeoff/landing room at16studs/s. The independent stand keeps42.
+        config.JumpPower=50
         config.SourceCombat={heavyProtection=28/60,npcLightReaction=1.05,npcHeavyReaction=.85}
         for _,action in ipairs({'HeroJab','HeroKick','HeroUppercut','HeroPowerPunch','HeroBoot','HeroElbow'}) do
             config.Attacks[action]=table.clone(config.Attacks.Punch)
@@ -4051,7 +4059,7 @@ function Director:hit(attacker,target,action,tuning)
         local profile=action=='Dash' and 22 or 18
         local responses=tuning and tuning.responses or self.config.Impulses
         local impulse=responses and responses[profile]
-        if impulse then self.world:impulse(-99,attacker,impulse,profile) end
+        if impulse then self.world:impulse(-99,attacker,impulse,profile,tuning and tuning.impulseDirection) end
         return true
     end
     local e=self.enemies[target]
@@ -4088,7 +4096,7 @@ function Director:hit(attacker,target,action,tuning)
         local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
         local responses=tuning and tuning.responses or self.config.Impulses
         local impulse=responses and responses[profile]
-        if impulse then self.world:impulse(target,attacker,impulse,profile) end
+        if impulse then self.world:impulse(target,attacker,impulse,profile,tuning and tuning.impulseDirection) end
     end
     return true
 end
@@ -5292,7 +5300,7 @@ function Session:_hit(attacker, target, action, tuning)
         self.world:move(target,0,0)
         self.world:setReaction(target,true)
         local impulse=cfg.responses and cfg.responses[result.profile] or self.config.Impulses[result.profile]
-        self.world:impulse(target,attacker,impulse,result.profile)
+        self.world:impulse(target,attacker,impulse,result.profile,cfg.impulseDirection)
     end
     self:_record("Hit",target,{attacker=attacker,action=action,profile=result.profile,
         before=before,after=c.rawLife,blocked=result.blocked,impulse=result.impulse,
@@ -5679,13 +5687,26 @@ function World:targets(uid, cfg)
     local result={}; for _,candidate in ipairs(candidates) do result[#result+1]=candidate.id end
     return result
 end
-function World:impulse(uid, attacker, cfg, profile)
+function World:impulse(uid, attacker, cfg, profile, impulseDirection)
     assert((self.config.Impulses and self.config.Impulses[profile]==cfg) or (cfg and cfg.profile==profile),"Unbound response profile")
-    local a,b=self.actors[uid],self.actors[attacker]
-    if not a or not b or a.root.Anchored then return end
-    local facing=b.root.CFrame.LookVector
-    local horizontal=Vector3.new(facing.X,0,facing.Z)
-    if horizontal.Magnitude&lt;0.001 then horizontal=Vector3.new(1,0,0) else horizontal=horizontal.Unit end
+    local a=self.actors[uid]
+    if not a or a.root.Anchored then return end
+    local horizontal
+    if type(impulseDirection)=='table' then
+        local x,z=impulseDirection.x,impulseDirection.z
+        if type(x)=='number' and x==x and math.abs(x)&lt;math.huge
+            and type(z)=='number' and z==z and math.abs(z)&lt;math.huge then
+            local scale=math.max(math.abs(x),math.abs(z))
+            if scale&gt;0 then horizontal=Vector3.new(x/scale,0,z/scale).Unit end
+        end
+    end
+    if not horizontal then
+        local b=self.actors[attacker]
+        if not b then return end
+        local facing=b.root.CFrame.LookVector
+        horizontal=Vector3.new(facing.X,0,facing.Z)
+        if horizontal.Magnitude&lt;0.001 then horizontal=Vector3.new(1,0,0) else horizontal=horizontal.Unit end
+    end
     a.root:ApplyImpulse((horizontal*cfg.horizontal+Vector3.new(0,cfg.vertical,0))*a.root.AssemblyMass)
 end
 function World:hazard(uid)
@@ -5754,7 +5775,7 @@ return World
       <Item class="ModuleScript" referent="BT42">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='00b19a40bd98ebe1839f40f6a88cca202ac2f60fef2cf3aada00213edef254aa'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='111e5acea788db6c93dc5dc011c291ea974604ca4fe60c08b69f3bf733ea5eac'})
 </ProtectedString>
         </Properties>
       </Item>

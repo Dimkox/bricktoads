@@ -43,6 +43,9 @@ return function(base,level)
         horizontal=26,vertical=16,throwDamage=config.Enemy.punchDamage,sourceProfile=17,sourceRawDamage=4}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
+        -- Main-route jump budget covers its5-stud gaps and2-stud rises with
+        -- takeoff/landing room at16studs/s. The independent stand keeps42.
+        config.JumpPower=50
         config.SourceCombat={heavyProtection=28/60,npcLightReaction=1.05,npcHeavyReaction=.85}
         for _,action in ipairs({'HeroJab','HeroKick','HeroUppercut','HeroPowerPunch','HeroBoot','HeroElbow'}) do
             config.Attacks[action]=table.clone(config.Attacks.Punch)

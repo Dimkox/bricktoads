@@ -100,6 +100,42 @@ return function(Flight,Director,Session,Core,Combat,Config,FakeWorld,SourceComba
         assert(intent(2.2,'Attack')=='OK');w.fireVictims={};w.wallHit=true;tick(2.3,.1)
         assert(next(w.shots)==nil,'Wall impact must consume the fireball')
     end)
+    test('hero fire impulse uses a cloned accepted direction after the rider turns and tuning changes',function()
+        local d,s,w,tick,intent,mount=fixture();mount()
+        local direction={x=1,y=0,z=0}
+        function w:dragonMuzzle(id) return table.clone(self.positions[id]),direction,false end
+        assert(intent(1.6,'Attack')=='OK')
+        local _,shot=next(d.dragons.shots);local response=shot.tuning.responses[22]
+        assert(shot.tuning.impulseDirection and shot.tuning.impulseDirection~=direction
+            and shot.tuning.impulseDirection~=shot.direction,'Accepted impulse direction must have its own immutable copy')
+        direction.x=-1;w.actors[1].facing={x=-1,z=0}
+        d.config.Impulses=table.clone(d.config.Impulses);d.config.Impulses[22]={horizontal=999,vertical=999}
+        w.fireVictims={2};tick(1.7,.1)
+        assert(s.combat[2].rawLife==31 and w.lastProfile==22 and w.lastCalibration==response and response.horizontal==32)
+        assert(w.lastImpulseDirection and w.lastImpulseDirection.x==1 and w.lastImpulseDirection.z==0,
+            'Actual Session damage must forward the shot direction rather than the later rider facing')
+        assert(w.lastImpulse[2]==1 and w.actors[1].facing.x==-1,'Attribution stays with the original slot without rotating its body')
+    end)
+    test('NPC fire impulse survives an actual new rider appearance with captured response and direction',function()
+        local d,s,w,tick,intent,mount=fixture();mount();assert(intent(1.6,'Attack')=='OK')
+        local actor=s.state.heroes[1].actorId;local _,shot=next(d.dragons.shots);local response=shot.tuning.responses[4]
+        s:_die(1,'Fixture');w.fireVictims={-2};tick(1.7,.1)
+        assert(s.state.heroes[1].attempt==2 and s.state.heroes[1].actorId~=actor)
+        assert(d.enemies[-2].rawLife==15 and w.lastProfile==4 and w.lastCalibration==response)
+        assert(w.lastImpulseDirection and w.lastImpulseDirection.x==1 and w.lastImpulseDirection.z==0,
+            'Director NPC damage must forward the original shot direction after rider respawn')
+        assert(w.lastImpulse[2]==1,'A replacement body does not change original attribution')
+    end)
+    test('accepted hero and NPC fire impacts retain direction after the attacker body is removed',function()
+        for _,target in ipairs({2,-2}) do
+            local d,s,w,tick,intent,mount=fixture();mount();assert(intent(1.6,'Attack')=='OK')
+            s:_die(1,'Fixture');w.actors[1]=nil;w.positions[1]=nil;w.fireVictims={target}
+            assert(s:_clock(1.7)=='OK');d.now=1.7;d.dragons:step(1.7,.1)
+            assert((target==2 and s.combat[2].rawLife==31) or (target==-2 and d.enemies[-2].rawLife==15))
+            assert(w.lastImpulseDirection and w.lastImpulseDirection.x==1 and w.lastImpulse[2]==1,
+                'Accepted shot response cannot depend on an extant attacker body')
+        end
+    end)
     test('incoming hero hit releases the mount before applying the physical response',function()
         local d,s,w,tick,intent,mount=fixture();mount()
         local impulse=w.impulse

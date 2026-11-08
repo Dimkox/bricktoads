@@ -19,9 +19,10 @@ function World:move(uid, x, z) self.moves=self.moves+1; self.lastMove={uid,x,z} 
 function World:jump(uid) self.lastJump=uid end
 function World:setReaction(uid, active) if self.actors[uid] then self.actors[uid].reaction=active end end
 function World:targets(uid) return self.targetsFor[uid] or {} end
-function World:impulse(uid, attacker, cfg, profile)
+function World:impulse(uid, attacker, cfg, profile, impulseDirection)
     self.impulses=self.impulses+1; self.lastImpulse={uid,attacker}
     self.lastProfile=profile; self.lastCalibration=cfg
+    self.lastImpulseDirection=type(impulseDirection)=='table' and table.clone(impulseDirection) or nil
 end
 function World:hazard(uid) return self.hazards[uid] end
 function World:kill(uid) self.kills=self.kills+1; self.actors[uid].alive=false end

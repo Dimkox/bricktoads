@@ -1,0 +1,1203 @@
+{
+  "scenario": "isolated_same_body_dragon_transport",
+  "elapsed": 3.299992799758911,
+  "placeId": 117412694427208,
+  "mountAvailabilityBefore": {
+    "kind": "Dragon",
+    "label": "ОСЕДЛАТЬ",
+    "available": true
+  },
+  "mountReturnCode": "OK",
+  "intents": [
+    {
+      "x": 1,
+      "now": 1.2829649448394775,
+      "z": 0,
+      "kind": "Move",
+      "code": "OK"
+    },
+    {
+      "now": 1.2991628646850586,
+      "kind": "Attack",
+      "code": "OK"
+    },
+    {
+      "x": 1,
+      "now": 1.2991628646850586,
+      "z": 0,
+      "kind": "Move",
+      "code": "OK"
+    },
+    {
+      "x": 0,
+      "now": 1.483198881149292,
+      "z": 0,
+      "kind": "Move",
+      "code": "OK"
+    },
+    {
+      "now": 1.8494489192962646,
+      "kind": "Attack",
+      "code": "OK"
+    },
+    {
+      "x": -1,
+      "now": 1.8494489192962646,
+      "z": 0,
+      "kind": "Move",
+      "code": "OK"
+    },
+    {
+      "x": 0,
+      "now": 1.9161288738250732,
+      "z": 0,
+      "kind": "Move",
+      "code": "OK"
+    },
+    {
+      "now": 2.21567702293396,
+      "kind": "Jump",
+      "code": "OK"
+    },
+    {
+      "x": 0,
+      "now": 2.21567702293396,
+      "z": 1,
+      "kind": "Move",
+      "code": "OK"
+    },
+    {
+      "x": 0,
+      "now": 2.4322338104248047,
+      "z": 0,
+      "kind": "Move",
+      "code": "OK"
+    }
+  ],
+  "fixtureSourceSha256": "08fd4a79abfeda110e35fffe489bc6f1dbad29b85aeb6fa14e056b1c64a076b7",
+  "status": "fail",
+  "studioVersion": "0.746.0.7461269",
+  "checks": [
+    {
+      "name": "production source receipt matches",
+      "passed": true
+    },
+    {
+      "name": "prepared actors retain their actual source profiles",
+      "passed": true
+    },
+    {
+      "name": "no shared blank-place migration: Baseplate",
+      "passed": true
+    },
+    {
+      "name": "no shared blank-place migration: SpawnLocation",
+      "passed": true
+    },
+    {
+      "name": "isolated hero spawn commits",
+      "passed": true
+    },
+    {
+      "name": "fixture claims preserve two separate actors",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 2.684846878051758,
+          "x": 0,
+          "z": 0
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": false,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 3,
+          "x": -45,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Approach",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 47,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": true,
+        "now": 0.21655797958374023,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPosition": {
+          "y": 4.052525520324707,
+          "x": -40,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "real unanchored Dragon rises under an actual lift force",
+      "passed": true
+    },
+    {
+      "name": "prepared surviving heavy hit disables this same flying body",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.05984589457511902,
+          "x": -1.5091688965185313e-7,
+          "z": 1.3747705196465176e-8
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": false,
+        "respawns": 3,
+        "dragonGrounded": true,
+        "heroPosition": {
+          "y": 3,
+          "x": -45,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Disabled",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "Running",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": false,
+        "now": 1.2829649448394775,
+        "dragonESM": true,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": -9.56254595507744e-8,
+          "z": 8.701344533790234e-9
+        },
+        "dragonPosition": {
+          "y": 2.9984805583953857,
+          "x": -30.09792709350586,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "heavy interruption removes lift before mounting",
+      "passed": true
+    },
+    {
+      "name": "public walk primes a real movement command",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.03258731961250305,
+          "x": -5.77468881601817e-7,
+          "z": 5.255991908370561e-8
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": false,
+        "respawns": 3,
+        "dragonGrounded": true,
+        "heroPosition": {
+          "y": 3,
+          "x": -32.9492301940918,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 1,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Disabled",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "Running",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 14.055822372436523,
+          "z": 0
+        },
+        "dragonPlatformStand": false,
+        "now": 1.2991628646850586,
+        "dragonESM": true,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": -6.040983180355397e-8,
+          "z": 5.496110677682964e-9
+        },
+        "dragonPosition": {
+          "y": 2.9991726875305176,
+          "x": -30.09792709350586,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "movement is present before mount",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.03258731961250305,
+          "x": -5.77468881601817e-7,
+          "z": 5.255991908370561e-8
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": false,
+        "respawns": 3,
+        "dragonGrounded": true,
+        "heroPosition": {
+          "y": 3,
+          "x": -32.9492301940918,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 1,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Disabled",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "Running",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 14.055822372436523,
+          "z": 0
+        },
+        "dragonPlatformStand": false,
+        "now": 1.2991628646850586,
+        "dragonESM": true,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": -6.040983180355397e-8,
+          "z": 5.496110677682964e-9
+        },
+        "dragonPosition": {
+          "y": 2.9991726875305176,
+          "x": -30.09792709350586,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "actual mount availability remains valid after priming movement",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.03258731961250305,
+          "x": -5.77468881601817e-7,
+          "z": 5.255991908370561e-8
+        },
+        "heroAnchored": true,
+        "heroLink": "Mounted",
+        "heroState": "FallingDown",
+        "heroPlatformStand": true,
+        "respawns": 3,
+        "dragonGrounded": true,
+        "heroPosition": {
+          "y": 6.199172496795654,
+          "x": -30.09792709350586,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": false,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Mounted",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "Running",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": false,
+        "now": 1.2991628646850586,
+        "dragonESM": true,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": -6.040983180355397e-8,
+          "z": 5.496110677682964e-9
+        },
+        "dragonPosition": {
+          "y": 2.9991726875305176,
+          "x": -30.09792709350586,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "public primary mounts the existing disabled Dragon",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.03258731961250305,
+          "x": -5.77468881601817e-7,
+          "z": 5.255991908370561e-8
+        },
+        "heroAnchored": true,
+        "heroLink": "Mounted",
+        "heroState": "FallingDown",
+        "heroPlatformStand": true,
+        "respawns": 3,
+        "dragonGrounded": true,
+        "heroPosition": {
+          "y": 6.199172496795654,
+          "x": -30.09792709350586,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": false,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Mounted",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "Running",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": false,
+        "now": 1.2991628646850586,
+        "dragonESM": true,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": -6.040983180355397e-8,
+          "z": 5.496110677682964e-9
+        },
+        "dragonPosition": {
+          "y": 2.9991726875305176,
+          "x": -30.09792709350586,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "physical link discards pre-mount walking",
+      "passed": true
+    },
+    {
+      "name": "public mounted steering accepts",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 3.0518531799316406,
+          "x": 10,
+          "z": 0
+        },
+        "heroAnchored": true,
+        "heroLink": "Mounted",
+        "heroState": "FallingDown",
+        "heroPlatformStand": true,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 7.191357612609863,
+          "x": -28.389616012573242,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": false,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Mounted",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": true,
+        "now": 1.483198881149292,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPosition": {
+          "y": 3.9913578033447266,
+          "x": -28.389616012573242,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "same unanchored body moves under rider control",
+      "passed": true
+    },
+    {
+      "name": "public mounted stop accepts",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 1.8021011352539062,
+          "x": 0,
+          "z": 0
+        },
+        "heroAnchored": true,
+        "heroLink": "Mounted",
+        "heroState": "FallingDown",
+        "heroPlatformStand": true,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 7.399649620056152,
+          "x": -28.222951889038086,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": false,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Mounted",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": true,
+        "now": 1.5664129257202148,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPosition": {
+          "y": 4.199649810791016,
+          "x": -28.222951889038086,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "mounted stop halts horizontal flight",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.2922077178955078,
+          "x": 0,
+          "z": 0
+        },
+        "heroAnchored": true,
+        "heroLink": "Mounted",
+        "heroState": "FallingDown",
+        "heroPlatformStand": true,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 7.651298522949219,
+          "x": -28.222951889038086,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": false,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Mounted",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": true,
+        "now": 1.8494489192962646,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPosition": {
+          "y": 4.451298713684082,
+          "x": -28.222951889038086,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "public mounted fire creates a real projectile",
+      "passed": true
+    },
+    {
+      "name": "turn after accepted fire uses public steering",
+      "passed": true
+    },
+    {
+      "observed": {
+        "pigVelocity": {
+          "y": 14.729999542236328,
+          "x": 32,
+          "z": 0.0000038146965835039737
+        },
+        "riderFacing": {
+          "y": 0,
+          "x": -1,
+          "z": 0
+        },
+        "hitCount": 1,
+        "hit": {
+          "userId": -11,
+          "levelEpoch": 1,
+          "runId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75",
+          "revision": 4,
+          "groupId": "combat-stand",
+          "data": {
+            "action": "DragonFire",
+            "attacker": 1,
+            "before": 31,
+            "after": 15,
+            "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-11",
+            "position": {
+              "y": 3,
+              "x": -12,
+              "z": 0
+            },
+            "target": -11,
+            "profile": 4,
+            "sourceRaw": true,
+            "dying": false
+          },
+          "now": 2.1983540058135986,
+          "kind": "EnemyHit"
+        }
+      },
+      "name": "real fire keeps source damage and forward response after rider turns",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.027199745178222656,
+          "x": 0,
+          "z": 0
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": false,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 7.6954665184021,
+          "x": -28.931278228759766,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Turn",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 18,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": true,
+        "now": 2.21567702293396,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPosition": {
+          "y": 4.495466709136963,
+          "x": -28.931278228759766,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "public jump dismounts",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Palm",
+      "passed": true
+    },
+    {
+      "name": "collision restored: EyeShine",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Finger",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Torso",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Palm",
+      "passed": true
+    },
+    {
+      "name": "collision restored: ToadHead",
+      "passed": true
+    },
+    {
+      "name": "collision restored: HumanoidRootPart",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Finger",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Foot",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Iris",
+      "passed": true
+    },
+    {
+      "name": "collision restored: ToadSpot",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Brow",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Toe",
+      "passed": true
+    },
+    {
+      "name": "collision restored: ToadSpot",
+      "passed": true
+    },
+    {
+      "name": "collision restored: ToadSpot",
+      "passed": true
+    },
+    {
+      "name": "collision restored: EyeRidge",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Right Arm",
+      "passed": true
+    },
+    {
+      "name": "collision restored: EyeRidge",
+      "passed": true
+    },
+    {
+      "name": "collision restored: ToadSpot",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Toe",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Haunch",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Finger",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Belly",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Toe",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Head",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Nostril",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Toe",
+      "passed": true
+    },
+    {
+      "name": "collision restored: UpperArm",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Finger",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Iris",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Toe",
+      "passed": true
+    },
+    {
+      "name": "collision restored: LowerMuzzle",
+      "passed": true
+    },
+    {
+      "name": "collision restored: EyeShine",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Finger",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Foot",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Toe",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Haunch",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Right Leg",
+      "passed": true
+    },
+    {
+      "name": "collision restored: ToadBody",
+      "passed": true
+    },
+    {
+      "name": "collision restored: EyeWhite",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Mouth",
+      "passed": true
+    },
+    {
+      "name": "collision restored: EyeWhite",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Brow",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Nostril",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Finger",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Left Leg",
+      "passed": true
+    },
+    {
+      "name": "collision restored: UpperArm",
+      "passed": true
+    },
+    {
+      "name": "collision restored: Left Arm",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.027199745178222656,
+          "x": 0,
+          "z": 0
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": false,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 7.6954665184021,
+          "x": -28.931278228759766,
+          "z": 0
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Turn",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 18,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": true,
+        "now": 2.21567702293396,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPosition": {
+          "y": 4.495466709136963,
+          "x": -28.931278228759766,
+          "z": 0
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "dismount cannot replay the old walk",
+      "passed": true
+    },
+    {
+      "name": "fresh walking remains accepted after dismount",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.00032901763916015625,
+          "x": 0,
+          "z": 0
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": false,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 2.971209764480591,
+          "x": -28.937278747558594,
+          "z": 3.4375
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Turn",
+        "rawLife": 47,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 1.1307858228683472,
+          "x": 3.023095302978618e-7,
+          "z": -6.82527854678483e-7
+        },
+        "dragonPlatformStand": true,
+        "now": 2.6485788822174072,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 0.9998030662536621,
+          "x": 0.0007163724512793124,
+          "z": -0.019833054393529892
+        },
+        "dragonPosition": {
+          "y": 4.499945163726807,
+          "x": -28.932178497314453,
+          "z": -0.01904296875
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "mount and fire neither heal nor spend appearances",
+      "passed": true
+    },
+    {
+      "observed": {
+        "dragonVelocity": {
+          "y": 0.00032901763916015625,
+          "x": 0,
+          "z": 0
+        },
+        "heroAnchored": false,
+        "heroState": "Running",
+        "heroPlatformStand": true,
+        "respawns": 3,
+        "dragonGrounded": false,
+        "heroPosition": {
+          "y": 3,
+          "x": -25.932178497314453,
+          "z": -0.01904296875
+        },
+        "heroMove": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "heroESM": true,
+        "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+        "dragonMode": "Turn",
+        "rawLife": 31,
+        "attempt": 1,
+        "dragonFloor": 3,
+        "dragonState": "FallingDown",
+        "dragonRawLife": 31,
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPlatformStand": true,
+        "now": 2.6485788822174072,
+        "dragonESM": false,
+        "dragonAnchored": false,
+        "dragonUp": {
+          "y": 1,
+          "x": 0,
+          "z": 0
+        },
+        "dragonPosition": {
+          "y": 4.499945163726807,
+          "x": -28.932178497314453,
+          "z": -0.01904296875
+        },
+        "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+      },
+      "name": "prepared hero heavy reaction is real",
+      "passed": true
+    },
+    {
+      "name": "capture accepts through its real interface",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "111e5acea788db6c93dc5dc011c291ea974604ca4fe60c08b69f3bf733ea5eac",
+  "placeVersion": 0,
+  "error": "ServerScriptService.IsolatedDragonTransportAcceptance:65: Delayed capture did not link the real hero\nServerScriptService.IsolatedDragonTransportAcceptance:65 function waitFor\nServerScriptService.IsolatedDragonTransportAcceptance:216\nServerScriptService.IsolatedDragonTransportAcceptance:101\n",
+  "limits": [
+    "Prepared engine fixture, not natural progression",
+    "No real player/network/device acceptance",
+    "Receipt assumes production ModuleScript sources match their embedded BuildInfo"
+  ],
+  "fireVelocityAtHit": {
+    "y": 0,
+    "x": 0,
+    "z": 0
+  },
+  "lastFrame": {
+    "dragonVelocity": {
+      "y": 0.0000457763671875,
+      "x": 0,
+      "z": 0
+    },
+    "heroAnchored": false,
+    "heroState": "PlatformStanding",
+    "heroPlatformStand": true,
+    "respawns": 3,
+    "dragonGrounded": false,
+    "heroPosition": {
+      "y": 0.9988827705383301,
+      "x": -13.52601146697998,
+      "z": -0.01904296875
+    },
+    "heroMove": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "heroESM": true,
+    "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+    "dragonMode": "Turn",
+    "rawLife": 31,
+    "attempt": 1,
+    "dragonFloor": 3,
+    "dragonState": "FallingDown",
+    "dragonRawLife": 31,
+    "heroVelocity": {
+      "y": -0.00035667335032485425,
+      "x": 0.0001203427164000459,
+      "z": 0.000047750570956850424
+    },
+    "dragonPlatformStand": true,
+    "now": 3.2997260093688965,
+    "dragonESM": false,
+    "dragonAnchored": false,
+    "dragonUp": {
+      "y": 1,
+      "x": 0,
+      "z": 0
+    },
+    "dragonPosition": {
+      "y": 4.499992370605469,
+      "x": -28.932178497314453,
+      "z": -0.01904296875
+    },
+    "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+  },
+  "preparation": {
+    "offsetZ": 8192,
+    "pigInitialRawLife": 31,
+    "isolatedWorld": true,
+    "dragonInitialRawLife": 47,
+    "publicMountMoveFireJump": true,
+    "pigId": -11,
+    "directDragonHeavyHit": true,
+    "preparedPositionChanges": true,
+    "directHeroHeavyHit": true,
+    "captureUsesRealDelayedGeometry": true,
+    "realUnanchoredBodies": true,
+    "dragonId": -10
+  },
+  "schema": 1,
+  "stableDisabled": {
+    "dragonVelocity": {
+      "y": 0.05984589457511902,
+      "x": -1.5091688965185313e-7,
+      "z": 1.3747705196465176e-8
+    },
+    "heroAnchored": false,
+    "heroState": "Running",
+    "heroPlatformStand": false,
+    "respawns": 3,
+    "dragonGrounded": true,
+    "heroPosition": {
+      "y": 3,
+      "x": -45,
+      "z": 0
+    },
+    "heroMove": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "heroESM": true,
+    "dragonActorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:enemy:1:-10",
+    "dragonMode": "Disabled",
+    "rawLife": 47,
+    "attempt": 1,
+    "dragonFloor": 3,
+    "dragonState": "Running",
+    "dragonRawLife": 31,
+    "heroVelocity": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "dragonPlatformStand": false,
+    "now": 1.2829649448394775,
+    "dragonESM": true,
+    "dragonAnchored": false,
+    "dragonUp": {
+      "y": 1,
+      "x": -9.56254595507744e-8,
+      "z": 8.701344533790234e-9
+    },
+    "dragonPosition": {
+      "y": 2.9984805583953857,
+      "x": -30.09792709350586,
+      "z": 0
+    },
+    "actorId": "DragonTransportAcceptance_648eb3ba-3dde-451f-afc8-b348b922bd75:actor:2"
+  }
+}

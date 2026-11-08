@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "scenario": "unprepared_solo_route_before_bidirectional_driver_fix",
+  "status": "stopped_after_user_report",
+  "productionSourceSha256": "111e5acea788db6c93dc5dc011c291ea974604ca4fe60c08b69f3bf733ea5eac",
+  "placeSha256": "b6661521af567b1d50ff1b53ff484b9487c27e54d1a70f2f597a5ae3e6a47ef2",
+  "runId": "f5ccc55a-8217-448e-8373-2cdf3ba19798",
+  "actors": {
+    "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46": {
+      "collide": true,
+      "pos": "53.281307220458984, 2.999999523162842, -4.7648396492004395",
+      "state": "Running",
+      "slot": 1
+    },
+    "f5ccc55a-8217-448e-8373-2cdf3ba19798:enemy:1:-6": {
+      "state": "Running",
+      "kind": "Walker",
+      "collide": true,
+      "pos": "45.63253402709961, 3.0000457763671875, -5.769619464874268"
+    }
+  },
+  "reason": "Walker knocked back to left support [4,48]; hero on right support [53,124]. Forward-only helper clamps reverse target to right support and loops attacks/retreats. High helper sequence also makes manual client inputs stale. Both are temporary acceptance-driver defects; no unprepared full-route PASS.",
+  "limits": [
+    "No health/lives/position/kill preparation during this route",
+    "Input-only RemoteEvent helper used its own sequence, so this was not normal keyboard or physical-device acceptance",
+    "Stopped bot then Play on user report; no controller remains active"
+  ],
+  "observedInputSamples": [
+    {
+      "at": 1794166085.62952,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "48.440425872802734, 2.999999523162842, -2.724510431289673",
+        "up": "9.329350803000125e-08, 1, -3.369972034761304e-08",
+        "headCollide": true,
+        "v": "15.126232147216797, 0.000013068925909465179, 5.2150774002075195"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 1000460
+    },
+    {
+      "at": 1794166111.996346,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "53.70561599731445, 3.000000476837158, -4.197205543518066",
+        "up": "-2.2692118406553163e-08, 1, 1.626765389062257e-08",
+        "headCollide": true,
+        "v": "13.186237335205078, -0.000012981418876734097, 8.917315483093262"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 289
+    },
+    {
+      "at": 1794166112.429117,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "56.66933059692383, 2.999091625213623, -7.3764495849609375",
+        "up": "-0.0000363979852409102, 0.9999999403953552, 0.0002758778864517808",
+        "headCollide": true,
+        "v": "-11.914220809936523, 0.04199228808283806, -11.807097434997559"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 294
+    },
+    {
+      "at": 1794166112.629276,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "53.81510543823242, 2.995436668395996, -7.435298442840576",
+        "up": "0.000021412048226920888, 1, -0.000004892332526651444",
+        "headCollide": true,
+        "v": "-10.315399169921875, 0.19125483930110931, 12.169654846191406"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 297
+    },
+    {
+      "at": 1794166112.778544,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "53.09479522705078, 2.999983072280884, -5.307351589202881",
+        "up": "0.0000013813877330903779, 1, -7.102376002876554e-07",
+        "headCollide": true,
+        "v": "5.701423645019531, 0.0007443477516062558, 14.899701118469238"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 299
+    },
+    {
+      "at": 1794166112.945832,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "54.88473129272461, 3, -3.702589988708496",
+        "up": "-8.345353563754543e-08, 1, -1.6864505880676006e-07",
+        "headCollide": true,
+        "v": "15.99087142944336, -2.3696559381392035e-08, -0.47797974944114685"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 302
+    },
+    {
+      "at": 1794166113.978341,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "56.93641662597656, 3, -4.628260612487793",
+        "up": "-1.226242574148273e-07, 1, -3.887329569352005e-08",
+        "headCollide": true,
+        "v": "9.687931060791016, -2.371923635280382e-08, -12.733535766601562"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 312
+    },
+    {
+      "at": 1794166114.594953,
+      "physical": {
+        "state": "Running",
+        "platform": false,
+        "floor": "Slate",
+        "torsoCollide": true,
+        "pos": "53.47404479980469, 3, -4.417837142944336",
+        "up": "1.1329583493591144e-08, 1, 4.0928757272240546e-08",
+        "headCollide": true,
+        "v": "8.212093353271484, -2.3719282538081643e-08, 13.731752395629883"
+      },
+      "actorId": "f5ccc55a-8217-448e-8373-2cdf3ba19798:actor:46",
+      "kind": "Jump",
+      "seq": 319
+    }
+  ]
+}

@@ -345,7 +345,7 @@ function Director:hit(attacker,target,action,tuning)
         local profile=action=='Dash' and 22 or 18
         local responses=tuning and tuning.responses or self.config.Impulses
         local impulse=responses and responses[profile]
-        if impulse then self.world:impulse(-99,attacker,impulse,profile) end
+        if impulse then self.world:impulse(-99,attacker,impulse,profile,tuning and tuning.impulseDirection) end
         return true
     end
     local e=self.enemies[target]
@@ -382,7 +382,7 @@ function Director:hit(attacker,target,action,tuning)
         local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
         local responses=tuning and tuning.responses or self.config.Impulses
         local impulse=responses and responses[profile]
-        if impulse then self.world:impulse(target,attacker,impulse,profile) end
+        if impulse then self.world:impulse(target,attacker,impulse,profile,tuning and tuning.impulseDirection) end
     end
     return true
 end
