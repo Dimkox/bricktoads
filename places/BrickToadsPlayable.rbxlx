@@ -933,6 +933,15 @@ return function(base,level)
     config.WalkerClub={pickupRange=4.5,pickupHeight=3,npcDamage=2}
     config.Calibration='PLAYABLE_PROTOTYPE'
     config.Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'}
+    -- Source standing28/2A and running40 effects; all seconds/studs are Roblox tuning.
+    config.Attacks.PigJab={windup=.30,cooldown=.8,reaction=28/60,reach=6,width=3,height=4,recoveryPose=.20}
+    config.Attacks.PigHeavy={windup=.55,cooldown=1.3,reaction=.75,reach=6,width=3,height=4,recoveryPose=.30}
+    config.Attacks.PigRush={windup=.22,cooldown=1.4,reaction=.75,reach=6,width=3,height=4,recoveryPose=.35}
+    config.Impulses[0]=table.clone(config.Impulses[18])
+    config.Impulses[4]=table.clone(config.Impulses[22])
+    config.Pig={rushAfterZone=3,rushSpeed=16,alignment=2,decisionInterval=.1,
+        rushRoll=32,npcDamage={PigJab=1,PigHeavy=2,PigRush=2},
+        npcProfile={PigJab=0,PigHeavy=2,PigRush=4}}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}
@@ -2450,6 +2459,22 @@ function World:catchFly(heroSlot, flyId)
     return true
 end
 
+-- Original Pig silhouettes for the trusted strike state, not NES frame timing.
+local pigPoses = {
+    PigJab = {
+        Windup = {left=.9,right=-.25,leftRoll=.2,rightRoll=-.35,hip=.1},
+        Recovery = {left=.45,right=1.85,leftRoll=.12,rightRoll=-.15,hip=0},
+    },
+    PigHeavy = {
+        Windup = {left=2.25,right=2.25,leftRoll=-.5,rightRoll=.5,hip=.35},
+        Recovery = {left=1.35,right=1.35,leftRoll=-.25,rightRoll=.25,hip=.15},
+    },
+    PigRush = {
+        Windup = {left=-.65,right=-.65,leftRoll=-.55,rightRoll=.55,hip=.55},
+        Recovery = {left=1.65,right=1.65,leftRoll=-.3,rightRoll=.3,hip=.35},
+    },
+}
+
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
@@ -2481,25 +2506,47 @@ function World:updatePresentation(session, dt, enemies)
                     end
                 end
             end
-            local velocity = actor.root.AssemblyLinearVelocity
-            local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
-            local walking = not actor.root.Anchored and actor.humanoid.Health &gt; 0
-                and actor.humanoid.FloorMaterial ~= Enum.Material.Air
-            actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * 0.8
-            local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * 0.5 or 0
             local combat = session and session.combat and session.combat[id]
             local enemy = enemies and enemies[id]
-            local attack = (combat and combat.attack) or (enemy and enemy.windup)
-            if attack then
-                actor.attackPoseUntil = self.presentationTime + 0.17
-                actor.attackPoseAction = attack.action or 'Punch'
-            end
-            local attacking = actor.attackPoseUntil and self.presentationTime &lt; actor.attackPoseUntil
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
             local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
             local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
             local club=self.equippedClubs[actor.model:GetAttribute('EquippedClub')]
             if club and club.owner~=actor then club=nil end
+            local pig = enemy and enemy.kind == 'Pig'
+            local pigAction,pigPhase
+            if pig then
+                actor.attackPoseUntil,actor.attackPoseAction = nil,nil
+                local dead = actor.humanoid.Health&lt;=0 or enemy.dead or (combat and combat.deathAt~=nil)
+                if not dead and not reacting and not carryingEnemy and not beingCarried then
+                    if enemy.windup and pigPoses[enemy.windup.action] then
+                        pigAction,pigPhase = enemy.windup.action,'Windup'
+                    elseif pigPoses[enemy.lastStrikeAction] and type(enemy.strikeRecoveryUntil)=='number'
+                        and session and type(session.now)=='number' and session.now&lt;enemy.strikeRecoveryUntil then
+                        pigAction,pigPhase = enemy.lastStrikeAction,'Recovery'
+                    elseif enemy.rushing then pigAction,pigPhase = 'PigRush','Running' end
+                end
+            else
+                local attack = (combat and combat.attack) or (enemy and enemy.windup)
+                if attack then
+                    actor.attackPoseUntil = self.presentationTime + 0.17
+                    actor.attackPoseAction = attack.action or 'Punch'
+                end
+            end
+            if pig or actor.pigPresentationActive then
+                actor.model:SetAttribute('PrimaryAttack',pigAction)
+                actor.model:SetAttribute('AttackPhase',pigPhase)
+                actor.pigPresentationActive = pig == true
+            end
+            local attacking = actor.attackPoseUntil and self.presentationTime &lt; actor.attackPoseUntil
+            local velocity = actor.root.AssemblyLinearVelocity
+            local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+            local walking = not actor.root.Anchored and actor.humanoid.Health &gt; 0
+                and actor.humanoid.FloorMaterial ~= Enum.Material.Air
+            local running = pigPhase=='Running'
+            actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * (running and 1.3 or .8)
+            local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * (running and .75 or .5) or 0
+            local pigPose = pigAction and pigPoses[pigAction][pigPhase]
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil
@@ -2513,6 +2560,12 @@ function World:updatePresentation(session, dt, enemies)
                     angle, roll = 0.65, left and -0.25 or 0.25
                 elseif shoulder and club and not left then
                     angle,roll=club.swingUntil and 1.95 or .65,club.swingUntil and -.55 or .25
+                elseif running then
+                    angle = shoulder and (-.55-stride*.6) or (stride*1.2+.2)
+                    roll = left and -.18 or .18
+                elseif pigPose then
+                    angle = shoulder and (left and pigPose.left or pigPose.right) or pigPose.hip
+                    roll = shoulder and (left and pigPose.leftRoll or pigPose.rightRoll) or 0
                 elseif shoulder and attacking then
                     angle = actor.attackPoseAction == "Dash" and 1.5 or (left and 0.45 or 1.95)
                 end
@@ -3027,7 +3080,8 @@ function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,E
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
-        strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height}},Director)
+        strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height,
+            windup=config.Enemy.windup,cooldown=config.Enemy.cooldown,recoveryPose=.17},random=math.random},Director)
     if self.route then
         self.flies=HealingFlies and HealingFlies.new(session,world,config)
         self.carry=EnemyCarry and EnemyCarry.new(self)
@@ -3110,7 +3164,7 @@ function Director:claim(userId,enemyId)
     if e.dead then return 'ENEMY_DEAD' end
     if e.ownerUserId then return 'ENEMY_OCCUPIED' end
     if e.engaged then return 'ENEMY_ENGAGED' end
-    e.ownerUserId=userId; e.connected=true; e.connectionEpoch=1; e.lastSeq=0
+    e.ownerUserId=userId; e.connected=true; e.connectionEpoch=1; e.lastSeq=0; e.rushing=nil
     self.byUserId[userId]=enemyId
     self.world:move(enemyId,0,0)
     self.world:enemyIdentity(enemyId,e.actorId,self.ownerNames[userId])
@@ -3201,16 +3255,38 @@ function Director:command(userId,payload,now,validator)
     end
     return 'OK'
 end
-function Director:_beginStrike(id,e)
-    e.engaged=true; e.windup={at=self.now+self.config.Enemy.windup}
+function Director:_strikeTarget(id,profile)
+    for _,target in ipairs(self.world:targets(id,profile)) do
+        local enemy=self.enemies[target]
+        local hero=self.session.state.heroes[target]
+        local combat=self.session.combat[target]
+        if enemy and not enemy.dead and not enemy.reactionUntil then return target end
+        if hero and hero.status=='Alive' and combat and not combat.deathAt
+            and (not combat.reactionEnd or combat.recover==true) then return target end
+    end
+end
+function Director:_beginStrike(id,e,target)
+    local action=self.config.Enemy.attack
+    local tuning=self.strikeProfile
+    if self.route and self.config.Pig and e.kind=='Pig' then
+        target=target or self:_strikeTarget(id,self.config.Attacks.PigJab)
+        local combat=target and self.session.combat[target]
+        -- Prototype enemy3HP is not raw source Life; an unknown target uses jab.
+        action=e.rushing and 'PigRush' or (combat and combat.rawLife%16&lt;4 and 'PigHeavy' or 'PigJab')
+        tuning=self.config.Attacks[action]
+    end
+    e.engaged=true; e.rushing=nil; e.strikeRecoveryUntil=nil
+    e.windup={at=self.now+tuning.windup,action=action,tuning=table.clone(tuning)}
     self.world:move(id,0,0); self.world:cue(id,true)
 end
 function Director:_resolveStrike(id,e)
-    e.windup=nil; e.nextAttack=self.now+self.config.Enemy.cooldown
-    for _,target in ipairs(self.world:targets(id,self.strikeProfile)) do
+    local pending=e.windup
+    e.windup=nil; e.nextAttack=self.now+pending.tuning.cooldown
+    e.lastStrikeAction=pending.action; e.strikeRecoveryUntil=self.now+pending.tuning.recoveryPose
+    for _,target in ipairs(self.world:targets(id,pending.tuning)) do
         local hit=false
-        if self.enemies[target] then hit=self:hit(id,target,self.config.Enemy.attack)
-        elseif self.session.state.heroes[target] then hit=self.session:_hit(id,target,self.config.Enemy.attack) end
+        if self.enemies[target] then hit=self:hit(id,target,pending.action)
+        elseif self.session.state.heroes[target] then hit=self.session:_hit(id,target,pending.action) end
         if hit then break end
     end
 end
@@ -3248,7 +3324,7 @@ function Director:_kill(id,cause)
     local e=self.enemies[id]
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
-    e.dead=true; e.windup=nil; e.health=0
+    e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
     if e.boss and self.route then e.rawLife=0 end
     self.world:enemyHealth(id,0,e.boss and self.config.Boss.hits or self.config.Enemy.hearts)
@@ -3282,18 +3358,20 @@ function Director:hit(attacker,target,action)
     if not e or e.dead or (e.reactionUntil and self.now&lt;e.reactionUntil) then return false end
     if self.carry then self.carry:forgetEnemy(target) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
-    e.engaged=true; e.windup=nil
-    local damage=action=='Club' and self.config.WalkerClub.npcDamage
-        or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage)
+    e.engaged=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil
+    local pig=self.config.Pig and self.config.Pig.npcDamage[action]
+    local damage=pig or (action=='Club' and self.config.WalkerClub.npcDamage
+        or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
     e.health=math.max(0,e.health-damage)
     self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
     self.world:cue(target,false)
     if e.health==0 then self:_kill(target,'Combat')
     else
-        local reaction=action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction
+        local reaction=pig and self.config.Attacks[action].reaction
+            or (action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction)
         e.reactionUntil=self.now+reaction
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=action=='Club' and 2 or (action=='Dash' and 22 or 18)
+        local profile=pig and self.config.Pig.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18))
         if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
     end
     return true
@@ -3310,11 +3388,13 @@ function Director:applyThrowDamage(id,heroSlot)
     if e.health==0 then self:_kill(id) end
     return true
 end
-function Director:_nearest(position)
+function Director:_nearest(position,pigEligibility)
     local selected,best=nil,math.huge
     for _,id in ipairs(self.session.order) do
         local h=self.session.state.heroes[id]
-        if h.status=='Alive' and not self.session.combat[id].deathAt then
+        local c=self.session.combat[id]
+        if h.status=='Alive' and not c.deathAt
+            and (not pigEligibility or not c.reactionEnd or c.recover==true) then
             local d=distance(position,self.world:position(id))
             if d&lt;best then selected,best=id,d end
         end
@@ -3330,6 +3410,7 @@ function Director:_enemies()
             else
                 living+=1
                 local carried=self.carry and self.carry:blocksEnemy(id)
+                if carried then e.rushing=nil; e.strikeRecoveryUntil=nil end
                 if not carried and e.reactionUntil and self.now&gt;=e.reactionUntil then
                     e.reactionUntil=nil; self.world:setReaction(id,false)
                 end
@@ -3342,12 +3423,35 @@ function Director:_enemies()
                             e.lastMove=nil; self.world:move(id,0,0)
                         end
                     else
-                        local target,range=self:_nearest(self.world:position(id))
+                        local target,range=self:_nearest(self.world:position(id),self.route and self.config.Pig and e.kind=='Pig')
+                        -- Validate the approach before either melee or movement:
+                        -- a newly invalid target cannot preserve an old running hop.
+                        if e.rushing then
+                            local a,b=self.world:position(id),target and self.world:position(target)
+                            local c=target and self.session.combat[target]
+                            local alignment=self.config.Pig.alignment
+                            if not a or not b or math.abs(a.z-b.z)&gt;alignment or math.abs(a.y-b.y)&gt;alignment
+                                or (c and c.reactionEnd) then e.rushing=nil end
+                        end
                         if target and range&lt;=self.config.Enemy.range and self.now&gt;=e.nextAttack then
-                            self.world:face(id,target); self:_beginStrike(id,e)
+                            self.world:face(id,target); self:_beginStrike(id,e,target)
                         elseif target and range&gt;self.config.Enemy.range*.8 then
-                            self.world:enemyMove(id,target,self.config.Enemy.speed)
-                        else self.world:move(id,0,0) end
+                            local speed=self.config.Enemy.speed
+                            if self.route and self.config.Pig and e.kind=='Pig' then
+                                local pig=self.config.Pig
+                                local a,b=self.world:position(id),self.world:position(target)
+                                local c=self.session.combat[target]
+                                local aligned=a and b and math.abs(a.z-b.z)&lt;=pig.alignment and math.abs(a.y-b.y)&lt;=pig.alignment
+                                if not aligned or (c and c.reactionEnd) then e.rushing=nil
+                                elseif range&gt;self.config.Enemy.range and self.zoneIndex&gt;=pig.rushAfterZone
+                                    and self.now&gt;=e.nextAttack and not e.rushing and self.now&gt;=(e.nextRushCheck or 0) then
+                                    e.nextRushCheck=self.now+pig.decisionInterval
+                                    if self.random(1,pig.rushRoll)==1 then e.rushing=true end
+                                end
+                                if e.rushing then speed=pig.rushSpeed end
+                            end
+                            self.world:enemyMove(id,target,speed)
+                        else e.rushing=nil; self.world:move(id,0,0) end
                     end
                 end
             end
@@ -3982,6 +4086,9 @@ return WalkerClubs
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
 local Combat = {}
+-- Trusted server actions; public input validation remains in Session.
+-- Pig animation40 does not satisfy the hero Dash animation16 finisher condition.
+local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22}
 local function life(value)
     assert(type(value) == "number" and value == value and value &gt;= 0
         and value &lt;= 47 and value % 1 == 0, "raw Life must be an integer in 0..47")
@@ -4000,17 +4107,17 @@ end
 
 function Combat.hit(old, action, shield)
     life(old)
-    assert(action == "Punch" or action == "Dash" or action == "Club", "unsupported action")
+    assert(fixedProfiles[action] ~= nil or action == "Dash", "unsupported action")
     assert(shield == nil or shield == "Normal" or shield == "Emergency", "unsupported shield")
-    local profile = action == "Club" and 20 or (action == "Punch" and 18 or (old &lt; 16 and 21 or 22))
+    local profile = fixedProfiles[action] or (old &lt; 16 and 21 or 22)
     local damage = profile == 18 and 4 or (profile == 21 and 255 or 16)
     local raw, dying = Combat.damage(old, damage)
     if shield then raw, dying = old, false end
     return {
         rawLife=raw, dying=dying, profile=profile, rawDamage=damage,
         impulse=shield ~= "Emergency", blocked=shield ~= nil,
-        recover=action == "Punch" and not dying and shield == nil,
-        heavyReaction=action ~= "Punch",
+        recover=profile == 18 and not dying and shield == nil,
+        heavyReaction=profile ~= 18,
     }
 end
 

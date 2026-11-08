@@ -1175,6 +1175,22 @@ function World:catchFly(heroSlot, flyId)
     return true
 end
 
+-- Original Pig silhouettes for the trusted strike state, not NES frame timing.
+local pigPoses = {
+    PigJab = {
+        Windup = {left=.9,right=-.25,leftRoll=.2,rightRoll=-.35,hip=.1},
+        Recovery = {left=.45,right=1.85,leftRoll=.12,rightRoll=-.15,hip=0},
+    },
+    PigHeavy = {
+        Windup = {left=2.25,right=2.25,leftRoll=-.5,rightRoll=.5,hip=.35},
+        Recovery = {left=1.35,right=1.35,leftRoll=-.25,rightRoll=.25,hip=.15},
+    },
+    PigRush = {
+        Windup = {left=-.65,right=-.65,leftRoll=-.55,rightRoll=.55,hip=.55},
+        Recovery = {left=1.65,right=1.65,leftRoll=-.3,rightRoll=.3,hip=.35},
+    },
+}
+
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
@@ -1206,25 +1222,47 @@ function World:updatePresentation(session, dt, enemies)
                     end
                 end
             end
-            local velocity = actor.root.AssemblyLinearVelocity
-            local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
-            local walking = not actor.root.Anchored and actor.humanoid.Health > 0
-                and actor.humanoid.FloorMaterial ~= Enum.Material.Air
-            actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * 0.8
-            local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * 0.5 or 0
             local combat = session and session.combat and session.combat[id]
             local enemy = enemies and enemies[id]
-            local attack = (combat and combat.attack) or (enemy and enemy.windup)
-            if attack then
-                actor.attackPoseUntil = self.presentationTime + 0.17
-                actor.attackPoseAction = attack.action or 'Punch'
-            end
-            local attacking = actor.attackPoseUntil and self.presentationTime < actor.attackPoseUntil
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
             local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
             local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
             local club=self.equippedClubs[actor.model:GetAttribute('EquippedClub')]
             if club and club.owner~=actor then club=nil end
+            local pig = enemy and enemy.kind == 'Pig'
+            local pigAction,pigPhase
+            if pig then
+                actor.attackPoseUntil,actor.attackPoseAction = nil,nil
+                local dead = actor.humanoid.Health<=0 or enemy.dead or (combat and combat.deathAt~=nil)
+                if not dead and not reacting and not carryingEnemy and not beingCarried then
+                    if enemy.windup and pigPoses[enemy.windup.action] then
+                        pigAction,pigPhase = enemy.windup.action,'Windup'
+                    elseif pigPoses[enemy.lastStrikeAction] and type(enemy.strikeRecoveryUntil)=='number'
+                        and session and type(session.now)=='number' and session.now<enemy.strikeRecoveryUntil then
+                        pigAction,pigPhase = enemy.lastStrikeAction,'Recovery'
+                    elseif enemy.rushing then pigAction,pigPhase = 'PigRush','Running' end
+                end
+            else
+                local attack = (combat and combat.attack) or (enemy and enemy.windup)
+                if attack then
+                    actor.attackPoseUntil = self.presentationTime + 0.17
+                    actor.attackPoseAction = attack.action or 'Punch'
+                end
+            end
+            if pig or actor.pigPresentationActive then
+                actor.model:SetAttribute('PrimaryAttack',pigAction)
+                actor.model:SetAttribute('AttackPhase',pigPhase)
+                actor.pigPresentationActive = pig == true
+            end
+            local attacking = actor.attackPoseUntil and self.presentationTime < actor.attackPoseUntil
+            local velocity = actor.root.AssemblyLinearVelocity
+            local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+            local walking = not actor.root.Anchored and actor.humanoid.Health > 0
+                and actor.humanoid.FloorMaterial ~= Enum.Material.Air
+            local running = pigPhase=='Running'
+            actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * (running and 1.3 or .8)
+            local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * (running and .75 or .5) or 0
+            local pigPose = pigAction and pigPoses[pigAction][pigPhase]
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil
@@ -1238,6 +1276,12 @@ function World:updatePresentation(session, dt, enemies)
                     angle, roll = 0.65, left and -0.25 or 0.25
                 elseif shoulder and club and not left then
                     angle,roll=club.swingUntil and 1.95 or .65,club.swingUntil and -.55 or .25
+                elseif running then
+                    angle = shoulder and (-.55-stride*.6) or (stride*1.2+.2)
+                    roll = left and -.18 or .18
+                elseif pigPose then
+                    angle = shoulder and (left and pigPose.left or pigPose.right) or pigPose.hip
+                    roll = shoulder and (left and pigPose.leftRoll or pigPose.rightRoll) or 0
                 elseif shoulder and attacking then
                     angle = actor.attackPoseAction == "Dash" and 1.5 or (left and 0.45 or 1.95)
                 end

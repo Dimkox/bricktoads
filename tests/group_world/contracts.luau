@@ -8,8 +8,12 @@ function Vec.__add(a,b) return setmetatable({X=a.X+b.X,Y=a.Y+b.Y,Z=a.Z+b.Z},Vec)
 function Vec.__sub(a,b) return setmetatable({X=a.X-b.X,Y=a.Y-b.Y,Z=a.Z-b.Z},Vec) end
 local function vector(x,y,z) return setmetatable({X=x or 0,Y=y or 0,Z=z or 0},Vec) end
 local Frame={}; Frame.__index=Frame
-function Frame.__mul(a,b) return setmetatable({Position=a.Position+b.Position},Frame) end
+function Frame.__mul(a,b)
+    return setmetatable({Position=a.Position+b.Position,rotationX=(a.rotationX or 0)+(b.rotationX or 0),
+        rotationY=(a.rotationY or 0)+(b.rotationY or 0),rotationZ=(a.rotationZ or 0)+(b.rotationZ or 0)},Frame)
+end
 function Frame.__add(a,b) return setmetatable({Position=a.Position+b},Frame) end
+function Frame:Lerp(other,alpha) return other end -- Pose selection only, not engine interpolation.
 local function frame(x,y,z)
     return setmetatable({Position=type(x)=='table' and x or vector(x,y,z)},Frame)
 end
@@ -74,7 +78,9 @@ end})
 local env=setmetatable({workspace=workspace,game={GetService=function(_,name) return name=='Workspace' and workspace or lighting end},
     Color3={fromRGB=function(...) return {...} end,new=function(...) return {...} end},Enum=enum,
     Instance={new=function(class) return node(class) end},Vector3={new=vector},
-    CFrame={new=frame,Angles=function() return frame() end,lookAt=function(p) return frame(p) end},
+    CFrame={new=frame,Angles=function(x,y,z)
+        local result=frame();result.rotationX,result.rotationY,result.rotationZ=x,y,z;return result
+    end,lookAt=function(p) return frame(p) end},
     UDim2={fromOffset=function(...) return {...} end,fromScale=function(...) return {...} end}}, {__index=getfenv()})
 local function source(text)
     local loader=assert(loadstring(text)); setfenv(loader,env); return loader()
@@ -564,3 +570,63 @@ assert(newEquipment.destroyed and wielder.model:GetAttribute('EquippedClub')==ni
 assert(otherClub.Parent~=nil,'Weapon reset must preserve another group copy of the same logical item')
 default:clubItem('walker-leg',nil)
 print('PASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset')
+
+local pigWorld=World.new(Base,{FallY=-20,Level=source(LevelSource),Enemy={speed=9},WalkSpeed=12},
+    {name='PigPoseWorld',offset={x=100,y=10,z=3072}})
+local posingPig=actor(pigWorld,-1,vector(100,13,3072))
+pigWorld.enemyKinds[-1]='Drone'
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip'}) do
+    local motor=node('Motor6D',name,posingPig.model.Torso);motor.C0=frame()
+end
+posingPig.root.AssemblyLinearVelocity=vector(9,0,0)
+local poseSession={now=1,combat={}}
+local pigState={kind='Pig',windup={at=1.2,action='PigJab'}}
+local function pose()
+    pigWorld:updatePresentation(poseSession,.1,{[-1]=pigState})
+    return posingPig.poseMotors['Right Shoulder'].joint.C0.rotationX,
+        posingPig.poseMotors['Left Shoulder'].joint.C0.rotationX
+end
+local jabRight,jabLeft=pose()
+assert(posingPig.model:GetAttribute('PrimaryAttack')=='PigJab' and posingPig.model:GetAttribute('AttackPhase')=='Windup',
+    'Pig strike presentation must expose the trusted current action and phase without controlling combat')
+pigState.windup.action='PigHeavy'
+local heavyRight,heavyLeft=pose()
+pigState.windup.action='PigRush'
+local rushRight,rushLeft=pose()
+assert(jabRight~=heavyRight and jabRight~=rushRight and heavyRight~=rushRight,
+    'Jab, finisher and rush must use distinct original shoulder poses')
+assert(jabRight~=jabLeft and heavyRight==heavyLeft and rushRight==rushLeft,
+    'Jab has a one-arm preparation while heavy/rush have separate two-arm preparations')
+pigState.windup=nil;pigState.lastStrikeAction='PigHeavy';pigState.strikeRecoveryUntil=1.6;pigState.rushing=true
+poseSession.now=1.3
+local recoveryRight=pose()
+assert(posingPig.model:GetAttribute('PrimaryAttack')=='PigHeavy' and posingPig.model:GetAttribute('AttackPhase')=='Recovery'
+    and recoveryRight~=heavyRight,'A finite server deadline selects the action-specific recovery before running')
+poseSession.now=1.6
+local beforeRun=posingPig.walkPhase;pose();local runDelta=posingPig.walkPhase-beforeRun
+assert(posingPig.model:GetAttribute('PrimaryAttack')=='PigRush' and posingPig.model:GetAttribute('AttackPhase')=='Running',
+    'An expired recovery falls through to the current NPC running approach')
+pigState.rushing=false
+local beforeWalk=posingPig.walkPhase;pose();local walkDelta=posingPig.walkPhase-beforeWalk
+assert(runDelta>walkDelta,'The running approach needs a visibly faster gait than the same-speed ordinary walk')
+assert(posingPig.model:GetAttribute('PrimaryAttack')==nil and posingPig.model:GetAttribute('AttackPhase')==nil,
+    'Idle Pig must clear both attack presentation attributes')
+assert(posingPig.attackPoseUntil==nil and posingPig.attackPoseAction==nil,'Pig phases must not leave the legacy attack latch alive')
+pigState.windup={at=2,action='PigJab'};pigState.rushing=true
+pose();assert(posingPig.model:GetAttribute('AttackPhase')=='Windup','Windup has priority over running approach')
+pigState.reactionUntil=2;pose()
+assert(posingPig.model:GetAttribute('PrimaryAttack')==nil and posingPig.model:GetAttribute('AttackPhase')==nil,
+    'An incoming reaction suppresses and clears all Pig attack presentation')
+pigState.reactionUntil=nil
+pigWorld.enemyCarries[-1]={mode='Carried'};pose()
+assert(posingPig.model:GetAttribute('AttackPhase')==nil,'A held Pig cannot retain an attack telegraph')
+pigWorld.enemyCarries[-1]=nil
+posingPig.humanoid.Health=0;pose()
+assert(posingPig.model:GetAttribute('PrimaryAttack')==nil and posingPig.model:GetAttribute('AttackPhase')==nil,
+    'Dead bodies must not show an attack or recovery telegraph')
+posingPig.humanoid.Health=100
+pigState.kind=nil;pigState.windup={at=2}
+pose()
+assert(posingPig.attackPoseAction=='Punch' and posingPig.model:GetAttribute('AttackPhase')==nil,
+    'Legacy ordinary enemy presentation keeps its original Punch fallback')
+print('PASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation')

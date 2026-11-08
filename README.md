@@ -16,6 +16,7 @@ Use **Группы** / **Выбрать команду** to create an independen
 - In the stone courtyard, then on the long bridge, six healing flies appear in a two-then-four sequence. Face a nearby fly and use **F** / **ЛОВИТЬ МУХУ** to catch it with your tongue. A successful catch consumes it once and adds8 raw Life, capped at47 (about0.85 displayed heart); it does not restore respawns. A full-health catch still consumes the fly.
 - Heroes have five hearts and three successful respawns. A living hero with zero respawns can keep playing.
 - The six districts contain a static roster of 13 ordinary actors: nine pigs, two walkers and two dragons. They have distinct original silhouettes and currently share the provisional three-heart, one-life combat profile. This source-classified roster is not a verified natural-play population or a claim of complete species mechanics.
+- Pigs now choose a short jab or a slower heavy strike from the selected hero's raw Life at attack start. A jab uses source profile18/raw4 with its light recovery; a heavy strike uses20/raw16. Later NPC pigs can make a running approach and strike with22/raw16, including at low Life. Their windups and recovery poses are distinct. Roblox ranges, speeds, random decision cadence and the later-district rush enable are calibration, not measured original frames. A human Pig's existing F uses the same standing primary choice; there are no extra attack controls.
 - Advance by defeating the current district's enemies and physically reaching its far side. Empty traversal sections still require crossing their gaps and reaching the next gate. Respawns use unlocked route supports.
 - To play an enemy, choose **Противник**, wait for the hero to start, then select an available sentry. You take its existing body and current health. Move/jump normally and use **F** or the attack button for its ordinary strike; the hero's heavy strike is unavailable.
 - A sentry becomes unavailable after its first accepted attack or an accepted hero attack directed at it, including a miss. A dead human enemy cannot take another sentry in this run/level. A separate new game resets that limit.
@@ -33,6 +34,8 @@ All three templates have the same capabilities. The server fixes the 1–3 hero 
 This is an original playable prototype. Enemy damage, timing and geometry remain provisional. The guardian pickup/throw chain and fly healing arithmetic are source-backed; their Roblox distances, timing and presentation are explicit calibration. Ordinary human-enemy control, the guardian queue and up to four independent local groups are implemented for the current level. Multiple levels, cross-server boss routing and complete source-mechanics transfer remain outstanding. This does not implement cross-server discovery. Additional enemy combat abilities are deferred at the user's request. Actual same-server reconnect remains unconfirmed; its earlier transport report is separate from this game's playability.
 
 ## Current route acceptance
+
+Pig jab/heavy selection, immutable windup choice, the later running attack and one lethal rush/respawn were checked through Studio MCP with a real hero and human Pig. See [the Pig attack report](reports/2026-11-08-pig-strikes/README.md) for the actual fly-healed health chain, preparation and source limits.
 
 Walker-club pickup/combat, friendly fire, heavy-hit drop, transfer to another hero and guardian hand priority were checked through Studio MCP, including phone pickup/swing emulation. See [the weapon report](reports/2026-11-08-walker-club/README.md) for the prepared scenarios and source/device limits.
 
@@ -84,6 +87,7 @@ luau tests/run_guardian.luau
 luau tests/run_healing_flies.luau
 luau tests/run_enemy_carry.luau
 luau tests/run_walker_clubs.luau
+luau tests/run_pig_strikes.luau
 luau tests/run.luau
 luau tests/run_stand.luau
 luau tests/run_connections.luau
