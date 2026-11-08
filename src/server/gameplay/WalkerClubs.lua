@@ -89,10 +89,10 @@ function WalkerClubs:interaction(slot)
     if not self:_active() then return {available=false,carrying=false,equipped=false} end
     local row=self:_sync(slot)
     if row then
-        return {available=self:_hero(slot)~=nil,kind='WalkerClub',label='УДАР ДУБИНОЙ',carrying=false,equipped=true}
+        return {available=self:_hero(slot)~=nil,kind='WalkerClub',label="CLUB HIT",carrying=false,equipped=true}
     end
     return {available=self:_hero(slot)~=nil and self:_nearest(slot)~=nil,
-        kind='WalkerClub',label='ВЗЯТЬ ДУБИНУ',carrying=false,equipped=false}
+        kind='WalkerClub',label="PICK UP CLUB",carrying=false,equipped=false}
 end
 
 function WalkerClubs:_swing(slot,row,now,h,c)

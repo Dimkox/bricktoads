@@ -5,6 +5,12 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
+local sharedText = ReplicatedStorage:WaitForChild("BrickToads")
+local localizationService = game:GetService("LocalizationService")
+local localization = require(sharedText:WaitForChild("TextLocalization")).new(
+    require(sharedText:WaitForChild("TextCatalog")), localizationService, Instance.new)
+local function T(source, args) return localization:text(source, args) end
+local function teamName(name, id) return localization:groupName(name, id) end
 local remotes = ReplicatedStorage:WaitForChild("BrickToadsGame")
 local intent = remotes:WaitForChild("Intent")
 local stateRemote = remotes:WaitForChild("State")
@@ -23,6 +29,7 @@ local lastReactionEpoch
 local lastHeldContext
 local sendMovement, syncGameplayContext
 local feedbackUntil = 0
+local feedbackActionId
 
 local C = {
     ink = Color3.fromRGB(12, 20, 32), panel = Color3.fromRGB(22, 35, 49),
@@ -110,6 +117,8 @@ local gui = make("ScreenGui", "BrickToadsGameUI", player:WaitForChild("PlayerGui
     ResetOnSpawn = false, DisplayOrder = 20, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
     ClipToDeviceSafeArea = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 })
+localization:bind(gui)
+localization:bindWorld(workspace)
 local safe = make("Frame", "SafeArea", gui, {BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1)})
 local overlay = frame(safe, "Menu", C.ink)
 overlay.Size, overlay.BackgroundTransparency = UDim2.fromScale(1, 1), 0.18
@@ -135,22 +144,22 @@ local menuLayout = make("UIListLayout", "MenuLayout", scroll, {
 local header = frame(scroll, "Header")
 header.BackgroundTransparency, header.LayoutOrder = 1, 1
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
-local title = label(header, "Title", "Затопленный тракт", 35, C.text, true)
-local intro = label(header, "Intro", "Оружие дозорных, захваты и страж. Пройдите тракт вместе.", 16, C.muted)
+local title = label(header, "Title", "Flooded Causeway", 35, C.text, true)
+local intro = label(header, "Intro", "Guard weapons, grabs and a Guardian. Cross the causeway together.", 16, C.muted)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
 local resultAccent = frame(resultBanner, "Accent", C.lime)
 corner(resultAccent, 3)
-local resultTitle = label(resultBanner, "ResultTitle", "ТРАКТ ПРОЙДЕН", 23, C.lime, true)
+local resultTitle = label(resultBanner, "ResultTitle", "CAUSEWAY CLEARED", 23, C.lime, true)
 local resultDetail = label(resultBanner, "ResultDetail", "", 15, C.text)
 local rolePicker = frame(scroll, "RolePreference", C.panel)
 rolePicker.LayoutOrder = 3
 corner(rolePicker, 16)
-local roleTitle = label(rolePicker, "Heading", "ВАША РОЛЬ", 13, C.lime, true)
+local roleTitle = label(rolePicker, "Heading", "YOUR ROLE", 13, C.lime, true)
 local roleNote = label(rolePicker, "Help", "", 13, C.muted)
 local roleButtons = {}
-for i, choice in ipairs({{role = "Hero", text = "Герой"}, {role = "Enemy", text = "Противник"}, {role = "Spectator", text = "Наблюдать"}}) do
+for i, choice in ipairs({{role = "Hero", text = "Hero"}, {role = "Enemy", text = "Enemy"}, {role = "Spectator", text = "Watch"}}) do
     local role = choice.role
     local item = button(rolePicker, role, choice.text, C.card, function()
         if not snapshot or snapshot.status == "Active" or snapshot.canSelect == false or pendingRole then return end
@@ -162,8 +171,8 @@ for i, choice in ipairs({{role = "Hero", text = "Герой"}, {role = "Enemy", 
 end
 local selectionHeading = frame(scroll, "ChooseHero")
 selectionHeading.LayoutOrder, selectionHeading.BackgroundTransparency = 4, 1
-local chooseTitle = label(selectionHeading, "Heading", "ВЫБЕРИТЕ ГЕРОЯ", 13, C.lime, true)
-local chooseNote = label(selectionHeading, "EqualAbilities", "Одинаковые способности. Можно выбрать одного героя всей командой.", 14, C.muted)
+local chooseTitle = label(selectionHeading, "Heading", "CHOOSE YOUR HERO", 13, C.lime, true)
+local chooseNote = label(selectionHeading, "EqualAbilities", "Equal abilities. Teammates may choose the same hero.", 14, C.muted)
 local cardsContainer = frame(scroll, "HeroCards")
 cardsContainer.LayoutOrder, cardsContainer.BackgroundTransparency = 5, 1
 local heroCards = {}
@@ -204,14 +213,14 @@ for i, template in ipairs(templates) do
         accent = frame(card, "Accent", heroColors[template]),
         art = toadPortrait(card, heroColors[template]), template = template,
         name = label(card, "HeroName", template, 21, C.text, true),
-        choice = label(card, "Selection", "ВЫБРАТЬ", 12, C.muted, true),
-        detail = label(card, "Detail", "Удар · таран · прыжок", 13, C.muted),
+        choice = label(card, "Selection", "SELECT", 12, C.muted, true),
+        detail = label(card, "Detail", "Strike · rush · jump", 13, C.muted),
     }
 end
 local party = frame(scroll, "Party", C.panel)
 party.LayoutOrder = 6
 corner(party, 16)
-local partyTitle = label(party, "PartyTitle", "УЧАСТНИКИ", 13, C.muted, true)
+local partyTitle = label(party, "PartyTitle", "PLAYERS", 13, C.muted, true)
 local partyCount = label(party, "PartyCount", "", 13, C.lime, true)
 partyCount.TextXAlignment = Enum.TextXAlignment.Right
 local partyRows = {}
@@ -219,6 +228,7 @@ local function addPartyRow(i)
     local dot = frame(party, "PlayerColor" .. i, C.line)
     corner(dot, 4)
     local owner = label(party, "Owner" .. i, "", 15, C.text, true)
+    owner.AutoLocalize = false
     owner.TextWrapped, owner.TextTruncate = false, Enum.TextTruncate.AtEnd
     local choice = label(party, "Template" .. i, "", 13, C.muted)
     choice.TextWrapped, choice.TextTruncate = false, Enum.TextTruncate.AtEnd
@@ -229,25 +239,25 @@ local partyNote = label(party, "PartyNote", "", 13, C.muted)
 -- The primary action stays visible while the hero choices scroll on phones.
 local footer = frame(shell, "StartArea", C.ink)
 footer.AnchorPoint, footer.Position = Vector2.new(0, 1), UDim2.fromScale(0, 1)
-local startButton = button(footer, "Start", "Подключаемся…", C.line, function()
+local startButton = button(footer, "Start", "Connecting…", C.line, function()
     if not snapshot or not snapshot.canStart or actionPending then return end
     actionPending, actionAt = true, os.clock()
     sendIntent({kind = "Start"})
 end)
 startButton.TextSize = 19
-local returnToWatch = button(footer, "ReturnToObservation", "Вернуться к наблюдению", C.green, function()
+local returnToWatch = button(footer, "ReturnToObservation", "Return to watching", C.green, function()
     choosingEnemy = false
     chooseView("Spectating")
 end)
 returnToWatch.TextColor3, returnToWatch.Visible = C.ink, false
-local waitLabel = label(footer, "HostWait", "Ждём ответ игры…", 14, C.muted)
+local waitLabel = label(footer, "HostWait", "Waiting for the game…", 14, C.muted)
 waitLabel.TextXAlignment = Enum.TextXAlignment.Center
 local menuNotice = label(footer, "Notice", "", 14, C.yellow)
 menuNotice.TextXAlignment = Enum.TextXAlignment.Center
 
 local hud = frame(safe, "HUD")
 hud.BackgroundTransparency, hud.Size, hud.Visible = 1, UDim2.fromScale(1, 1), false
-local bossQueue = BossQueuePanel.new(scroll, hud, sendIntent, C)
+local bossQueue = BossQueuePanel.new(scroll, hud, sendIntent, C, T, teamName)
 local roster = frame(hud, "HeroRoster")
 roster.BackgroundTransparency = 1
 local heroRows = {}
@@ -258,6 +268,7 @@ for slot = 1, 3 do
     local stripe = frame(row, "HeroColor", C.green)
     corner(stripe, 3)
     local owner = label(row, "Owner", "", 14, C.text, true)
+    owner.AutoLocalize = false
     owner.TextWrapped, owner.TextTruncate = false, Enum.TextTruncate.AtEnd
     local status = label(row, "Status", "", 11, C.muted)
     status.TextWrapped, status.TextTruncate = false, Enum.TextTruncate.AtEnd
@@ -282,8 +293,9 @@ corner(enemyStatus, 12)
 local enemyStripe = frame(enemyStatus, "EnemyColor", C.red)
 corner(enemyStripe, 3)
 local enemyOwner = label(enemyStatus, "Owner", "", 14, C.text, true)
+enemyOwner.AutoLocalize = false
 enemyOwner.TextWrapped, enemyOwner.TextTruncate = false, Enum.TextTruncate.AtEnd
-local enemyLife = label(enemyStatus, "OneLife", "Одна жизнь", 12, C.muted)
+local enemyLife = label(enemyStatus, "OneLife", "One life", 12, C.muted)
 local enemyHearts = {}
 for i = 1, 3 do
     local heart = label(enemyStatus, "Heart" .. i, "♥", 23, C.line)
@@ -297,8 +309,8 @@ end
 local objective = frame(hud, "Objective", C.ink)
 objective.BackgroundTransparency = 0.1
 corner(objective, 14)
-local stageLabel = label(objective, "Stage", "ЗАТОПЛЕННЫЙ ТРАКТ", 12, C.lime, true)
-local objectiveLabel = label(objective, "Task", "Доберитесь до ворот", 17, C.text, true)
+local stageLabel = label(objective, "Stage", "FLOODED CAUSEWAY", 12, C.lime, true)
+local objectiveLabel = label(objective, "Task", "Reach the gate", 17, C.text, true)
 local bossLabel = label(objective, "BossHits", "", 13, C.yellow)
 local feedbackLabel = label(objective, "ConfirmedFeedback", "", 12, C.muted, true)
 local function toggleMobileDetails(section)
@@ -333,8 +345,8 @@ end
 local mobileDetails = frame(hud, "MobileDetails", C.ink)
 mobileDetails.BackgroundTransparency, mobileDetails.Visible = 0.08, false
 corner(mobileDetails, 14)
-local mobileDetailsTitle = label(mobileDetails, "Heading", "Команда", 14, C.text, true)
-local mobileCollapse = button(mobileDetails, "Collapse", "СВЕРНУТЬ ↑", C.card, function() toggleMobileDetails(mobileExpanded) end)
+local mobileDetailsTitle = label(mobileDetails, "Heading", "Team", 14, C.text, true)
+local mobileCollapse = button(mobileDetails, "Collapse", "COLLAPSE ↑", C.card, function() toggleMobileDetails(mobileExpanded) end)
 mobileCollapse.TextSize = 12
 local mobileDetailsScroll = make("ScrollingFrame", "Details", mobileDetails, {
     BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
@@ -344,9 +356,9 @@ local mobileDetailsScroll = make("ScrollingFrame", "Details", mobileDetails, {
 local spectator = frame(hud, "Spectator", C.ink)
 spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5, 1)
 corner(spectator, 14)
-local spectatorText = label(spectator, "Message", "Вы наблюдаете · состав этой игры уже закреплён.", 14, C.text)
+local spectatorText = label(spectator, "Message", "You are watching · this run's heroes are already locked in.", 14, C.text)
 spectatorText.TextXAlignment = Enum.TextXAlignment.Center
-local enemyChoiceTitle = label(spectator, "EnemyChoiceTitle", "ВЫБЕРИТЕ ПРОТИВНИКА", 13, C.red, true)
+local enemyChoiceTitle = label(spectator, "EnemyChoiceTitle", "CHOOSE AN ENEMY", 13, C.red, true)
 local enemyChoiceNote = label(spectator, "EnemyChoiceNote", "", 12, C.muted)
 local enemyOffers = make("ScrollingFrame", "EnemyOffers", spectator, {
     BackgroundTransparency = 1, BorderSizePixel = 0, CanvasSize = UDim2.new(),
@@ -356,34 +368,34 @@ local enemyOffers = make("ScrollingFrame", "EnemyOffers", spectator, {
 make("UIListLayout", "OfferLayout", enemyOffers, {SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 6)})
 make("UIPadding", "OfferPadding", enemyOffers, {PaddingRight = UDim.new(0, 6), PaddingBottom = UDim.new(0, 3)})
 local offerButtons = {}
-local watchButton = button(spectator, "Watch", "Наблюдать", C.card, function()
+local watchButton = button(spectator, "Watch", "Watch", C.card, function()
     choosingEnemy = false
     chooseView("Spectating")
     render()
     layout()
 end)
-local chooseEnemyButton = button(spectator, "ChooseEnemy", "Выбрать противника", C.card, function()
+local chooseEnemyButton = button(spectator, "ChooseEnemy", "Choose an enemy", C.card, function()
     choosingEnemy = true
     render()
     layout()
 end)
-local personalMenuButton = button(spectator, "PersonalMenu", "В меню", C.card, function()
+local personalMenuButton = button(spectator, "PersonalMenu", "Menu", C.card, function()
     chooseView("Menu")
 end)
-local nextHeroButton = button(spectator, "NextHero", "Следующий герой", C.card, function()
+local nextHeroButton = button(spectator, "NextHero", "Next hero", C.card, function()
     spectatorCamera:refreshTargets()
     spectatorCamera:nextHero()
     render()
     layout()
 end)
-local freeCameraButton = button(spectator, "FreeCamera", "Свободная камера", C.card, function()
+local freeCameraButton = button(spectator, "FreeCamera", "Free camera", C.card, function()
     spectatorCamera:toggleFree(workspace.CurrentCamera)
     render()
     layout()
 end)
 local groupPanel = GroupPanel.new(scroll, spectator, safe, sendIntent, C, function()
     if render then render(); layout() end
-end)
+end, T, teamName)
 local controls = frame(hud, "Controls")
 controls.BackgroundTransparency, controls.Size = 1, UDim2.fromScale(1, 1)
 local function playable()
@@ -405,9 +417,9 @@ local function send(kind, extra)
 end
 local actions = frame(controls, "Actions")
 actions.BackgroundTransparency, actions.AnchorPoint = 1, Vector2.new(1, 1)
-local punch = button(actions, "Punch", "УДАР\nF", C.card)
-local dash = button(actions, "Dash", "МЕГА\nR · В БЕГЕ", C.card)
-local jump = button(actions, "Jump", "ПРЫЖОК · SPACE", C.lime)
+local punch = button(actions, "Punch", "ATTACK\nF", C.card)
+local dash = button(actions, "Dash", "MEGA\nR · WHILE RUNNING", C.card)
+local jump = button(actions, "Jump", "JUMP · SPACE", C.lime)
 jump.TextColor3 = C.ink
 stroke(punch, C.muted, 1)
 stroke(dash, C.muted, 1)
@@ -420,9 +432,9 @@ for _, definition in ipairs({{"Forward", "↑"}, {"Left", "←"}, {"Backward", "
     stroke(item, C.muted, 1)
     directionButtons[definition[1]] = item
 end
-local runHint = label(pad, "RunHint", "2×\nБЕГ", 11, C.muted, true)
+local runHint = label(pad, "RunHint", "2×\nRUN", 11, C.muted, true)
 runHint.TextXAlignment = Enum.TextXAlignment.Center
-local keyboardHint = label(controls, "KeyboardHint", "W A S D  ·  движение", 13, C.text)
+local keyboardHint = label(controls, "KeyboardHint", "W A S D  ·  move", 13, C.text)
 keyboardHint.AnchorPoint = Vector2.new(0, 1)
 keyboardHint.BackgroundColor3, keyboardHint.BackgroundTransparency = C.ink, 0.15
 corner(keyboardHint, 10)
@@ -440,8 +452,8 @@ corner(cameraKnob, 100)
 local cameraAxes = frame(cameraControls, "HeightAndYaw")
 cameraAxes.BackgroundTransparency, cameraAxes.AnchorPoint = 1, Vector2.new(1, 1)
 local cameraButtons = {}
-for _, definition in ipairs({{key = "Up", text = "ВЫШЕ"}, {key = "Down", text = "НИЖЕ"},
-    {key = "Left", text = "ЛЕВО"}, {key = "Right", text = "ПРАВО"}}) do
+for _, definition in ipairs({{key = "Up", text = "UP"}, {key = "Down", text = "DOWN"},
+    {key = "Left", text = "LEFT"}, {key = "Right", text = "RIGHT"}}) do
     local cameraKey = definition.key
     local item = button(cameraAxes, cameraKey, definition.text, C.card, function() end)
     item.InputBegan:Connect(function(input)
@@ -453,7 +465,7 @@ for _, definition in ipairs({{key = "Up", text = "ВЫШЕ"}, {key = "Down", tex
     end)
     cameraButtons[cameraKey] = item
 end
-local cameraHint = label(cameraControls, "KeyboardHint", "WASD · полёт   Q/E · высота   правая кнопка мыши · поворот", 13, C.text)
+local cameraHint = label(cameraControls, "KeyboardHint", "WASD · fly   Q/E · height   right mouse · turn", 13, C.text)
 cameraHint.AnchorPoint, cameraHint.TextXAlignment = Vector2.new(0.5, 1), Enum.TextXAlignment.Center
 cameraHint.BackgroundColor3, cameraHint.BackgroundTransparency = C.ink, 0.12
 corner(cameraHint, 10)
@@ -462,7 +474,7 @@ fault.AnchorPoint, fault.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 
 fault.Size, fault.Visible = UDim2.new(1, -36, 0, 92), false
 corner(fault, 16)
 make("UISizeConstraint", "MaxWidth", fault, {MaxSize = Vector2.new(540, 92)})
-local faultText = label(fault, "Message", "Игра приостановлена. Ждём восстановления игры…", 17, C.text, true)
+local faultText = label(fault, "Message", "Game paused. Waiting for recovery…", 17, C.text, true)
 faultText.Position, faultText.Size = UDim2.fromOffset(18, 12), UDim2.new(1, -36, 1, -24)
 faultText.TextXAlignment = Enum.TextXAlignment.Center
 
@@ -520,42 +532,43 @@ gameplayBindings = RobloxInputBindings.new(localInputs, {
 script.Destroying:Connect(function()
     gameplayBindings:destroy()
     localInputs:Destroy()
+    localization:destroy()
 end)
 local function heroName(hero)
-    return hero.displayName or hero.username or ("Игрок " .. tostring(hero.slot or ""))
+    return hero.displayName or hero.username or T("Player {index}", {index=hero.slot or ""})
 end
 local function hostName()
     for _, owner in ipairs(snapshot and snapshot.lobby or {}) do
-        if owner.userId == snapshot.host then return owner.displayName or owner.username or "ведущий" end
+        if owner.userId == snapshot.host then return owner.displayName or owner.username or T("host") end
     end
-    return "ведущий"
+    return T("host")
 end
 local noticeMessages = {
-    NOT_HOST = "Игру начинает ведущий команды.", HOST_ONLY = "Игру начинает ведущий команды.",
-    BAD_TEMPLATE = "Выберите одного из трёх героев.", INVALID_TEMPLATE = "Выберите одного из трёх героев.",
-    UNKNOWN_TEMPLATE = "Выберите одного из трёх героев.",
-    RUN_ACTIVE = "Смена героя доступна перед следующей игрой.",
-    ACTIVE_RUN = "Смена героя доступна перед следующей игрой.", ALREADY_ACTIVE = "Игра уже началась.",
-    ROSTER_FULL = "Команда собрана. Можно наблюдать за игрой.", NO_PLAYERS = "Ждём участников команды.",
-    START_FAILED = "Не удалось начать игру. Попробуйте ещё раз.",
-    BAD_ROLE = "Выберите роль перед началом игры.",
-    HERO_LOCKED = "В этой игре вы герой. Сменить роль можно перед новой игрой.",
-    ENEMY_LIFE_SPENT = "Ваша единственная жизнь закончилась. Наблюдайте до следующей игры.",
-    RUN_CLOSED = "Выбор противника закрыт. Роль можно сменить перед новой игрой.",
-    NO_ENEMY_AVAILABLE = "Свободных дозорных нет. Вступившего в бой выбрать уже нельзя.",
-    ENEMY_ENGAGED = "Этот дозорный уже вступил в бой. Выберите другого из списка.",
-    ENEMY_OCCUPIED = "Этим дозорным уже управляет другой игрок.",
-    ENEMY_DEAD = "Этот дозорный погиб. Выберите другого из списка.",
-    UNKNOWN_ENEMY = "Этот дозорный больше недоступен. Выберите другого из списка.",
-    ENEMY_ALREADY_OWNED = "Вы уже выбрали дозорного. У него одна жизнь.",
-    INELIGIBLE = "Очередь стража сейчас недоступна для вашей роли.",
-    ROLE_ACTIVE = "Вы уже управляете живым противником.",
-    ROLE_RESERVED = "Приглашение стража уже принято. Сначала отмените его в очереди.",
-    STALE_OFFER = "Это приглашение больше недоступно. Очередь обновляется.",
-    HELD = "Вас держит герой. Управление вернётся после освобождения.",
-    THROWN = "Вас бросили. Дождитесь окончания реакции.",
-    HANDS_FULL = "Руки заняты. Сначала бросьте то, что держите.",
-    NOT_RUNNING = "Для мегаудара дважды нажмите направление и удерживайте бег.",
+    NOT_HOST = "The team host starts the game.", HOST_ONLY = "The team host starts the game.",
+    BAD_TEMPLATE = "Choose one of the three heroes.", INVALID_TEMPLATE = "Choose one of the three heroes.",
+    UNKNOWN_TEMPLATE = "Choose one of the three heroes.",
+    RUN_ACTIVE = "Change your hero before the next game.",
+    ACTIVE_RUN = "Change your hero before the next game.", ALREADY_ACTIVE = "The game has already started.",
+    ROSTER_FULL = "The team is full. You can watch the game.", NO_PLAYERS = "Waiting for teammates.",
+    START_FAILED = "Could not start the game. Try again.",
+    BAD_ROLE = "Choose your role before the game starts.",
+    HERO_LOCKED = "You are a hero in this run. Change roles before a new game.",
+    ENEMY_LIFE_SPENT = "Your only life is over. Watch until the next game.",
+    RUN_CLOSED = "Enemy selection is closed. Change roles before a new game.",
+    NO_ENEMY_AVAILABLE = "No guards are available. Guards already in combat cannot be selected.",
+    ENEMY_ENGAGED = "This guard is already in combat. Choose another from the list.",
+    ENEMY_OCCUPIED = "Another player already controls this guard.",
+    ENEMY_DEAD = "This guard has died. Choose another from the list.",
+    UNKNOWN_ENEMY = "This guard is no longer available. Choose another from the list.",
+    ENEMY_ALREADY_OWNED = "You already chose a guard. It has one life.",
+    INELIGIBLE = "The Guardian queue is unavailable for your current role.",
+    ROLE_ACTIVE = "You already control a living enemy.",
+    ROLE_RESERVED = "You accepted a Guardian invitation. Cancel it in the queue first.",
+    STALE_OFFER = "This invitation is no longer available. Refreshing the queue.",
+    HELD = "A hero is holding you. Control returns after release.",
+    THROWN = "You were thrown. Wait until you recover.",
+    HANDS_FULL = "Your hands are full. Throw what you are holding first.",
+    NOT_RUNNING = "Double-tap a direction and keep running to use a mega strike.",
 }
 local function enemyChoiceAllowed()
     local reason = snapshot and snapshot.enemyUnavailableReason
@@ -589,8 +602,8 @@ local function renderOffers()
             offerButtons[key] = item
         end
         item.LayoutOrder = i
-        item.Text = (offer.name or "Дозорный") .. " · " .. tostring(offer.hearts or 0)
-            .. "/" .. tostring(offer.maxHearts or 3) .. " ♥  ·  " .. (pendingEnemy == id and "Выбираем…" or "Выбрать")
+        item.Text = T(offer.name or "Guard") .. " · " .. tostring(offer.hearts or 0)
+            .. "/" .. tostring(offer.maxHearts or 3) .. " ♥  ·  " .. T(pendingEnemy == id and "Selecting…" or "Select")
         item.TextColor3 = pendingEnemy and C.muted or C.text
         item.Selectable = enemyChoiceAllowed() == true and not snapshot.enemyUnavailableReason and not pendingEnemy
     end
@@ -601,18 +614,20 @@ end
 local function renderSelection()
     local preference = snapshot and snapshot.preference or "Hero"
     local personalMenu = snapshot and snapshot.status == "Active" and snapshot.view == "Menu"
-    rolePicker.Visible = not personalMenu
-    selectionHeading.Visible, cardsContainer.Visible = not personalMenu and preference == "Hero", not personalMenu and preference == "Hero"
-    roleNote.Text = preference == "Enemy" and "После старта выберите свободного дозорного до его первого боя. Три сердца, одна жизнь."
-        or (preference == "Spectator" and "Наблюдайте за героями. Во время игры можно выбрать свободного дозорного."
-            or "В команду входят 1–3 героя. Первый герой начинает игру.")
+    local stopped = snapshot and snapshot.status == "Faulted"
+    rolePicker.Visible = not personalMenu and not stopped
+    selectionHeading.Visible, cardsContainer.Visible = not personalMenu and not stopped and preference == "Hero",
+        not personalMenu and not stopped and preference == "Hero"
+    roleNote.Text = preference == "Enemy" and "After the start, choose an available guard before its first fight. Three hearts, one life."
+        or (preference == "Spectator" and "Watch the heroes. You may choose an available guard during the game."
+            or "A team has 1–3 heroes. The first hero starts the game.")
     for _, choice in ipairs(roleButtons) do
         local selected = preference == choice.role
         choice.outline.Color = selected and C.lime or C.line
         choice.outline.Thickness, choice.outline.Transparency = selected and 2 or 1, selected and 0 or 0.55
         choice.button.BackgroundColor3 = selected and Color3.fromRGB(43, 63, 65) or C.card
         choice.button.TextColor3 = selected and C.lime or C.text
-        choice.button.Text = (selected and "✓ " or "") .. choice.text .. (pendingRole == choice.role and "…" or "")
+        choice.button.Text = (selected and "✓ " or "") .. T(choice.text) .. (pendingRole == choice.role and "…" or "")
         choice.button.Selectable = snapshot ~= nil and snapshot.status ~= "Active" and snapshot.canSelect ~= false and not pendingRole
     end
     for _, card in ipairs(heroCards) do
@@ -621,9 +636,9 @@ local function renderSelection()
         card.outline.Thickness, card.outline.Transparency = selected and 2 or 1, selected and 0 or 0.55
         card.button.BackgroundColor3 = selected and Color3.fromRGB(43, 63, 65) or C.card
         card.choice.TextColor3 = selected and heroColors[card.template] or C.muted
-        card.choice.Text = selected and "✓ ВЫБРАН" or "ВЫБРАТЬ"
-        if pendingTemplate == card.template then card.choice.Text = "ВЫБИРАЕМ…" end
-        if snapshot and not snapshot.canSelect and not selected then card.choice.Text = "ВЫБОР ЗАКРЫТ" end
+        card.choice.Text = selected and "✓ SELECTED" or "SELECT"
+        if pendingTemplate == card.template then card.choice.Text = "SELECTING…" end
+        if snapshot and not snapshot.canSelect and not selected then card.choice.Text = "SELECTION CLOSED" end
         card.button.Selectable = snapshot ~= nil and snapshot.canSelect == true
     end
 end
@@ -635,81 +650,87 @@ local function renderMobileSummary(level, enemy, isBoss)
     local maximum = enemy and (tonumber(enemy.maxHearts) or 3) or 5
     local hp = personal and (tonumber(personal.hearts) or 0) or 0
     mobileStatusTitle.Visible = personal == nil
-    mobileStatusTitle.Text = "Герои " .. tostring(CombatFeedback.aliveHeroes(snapshot and snapshot.heroes))
+    mobileStatusTitle.Text = T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot and snapshot.heroes)})
     mobileReturns.Visible = personal ~= nil
-    mobileReturns.Text = enemy and "1 жизнь" or (tostring(personal and personal.respawns or 0) .. " возв.")
+    mobileReturns.Text = enemy and T("1 life") or T("{count:int} resp.", {count=personal and personal.respawns or 0})
     for n, heart in ipairs(mobileHearts) do
         heart.heart.Visible = personal ~= nil and n <= maximum
         heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1)
     end
-    local state = "Команда"
+    local state = "Team"
     if personal then
-        if not personal.connected then state = "Нет связи"
-        elseif personal.status == "Eliminated" or personal.status == "Dead" then state = "Вы выбыли"
-        elseif personal.status ~= "Alive" or personal.dying then state = "Возвращаетесь…"
-        elseif personal.carryState then state = personal.carryState == "Carried" and "Вас держат" or "Бросок"
-        elseif personal.shield then state = "Защита"
-        elseif personal.movementMode == "Run" then state = "Бег · команда"
-        elseif enemy then state = "Одна жизнь"
-        else state = "В бою · команда" end
+        if not personal.connected then state = "Disconnected"
+        elseif personal.status == "Eliminated" or personal.status == "Dead" then state = "You are out"
+        elseif personal.status ~= "Alive" or personal.dying then state = "Returning…"
+        elseif personal.carryState then state = personal.carryState == "Carried" and "Held" or "Thrown"
+        elseif personal.shield then state = "Protected"
+        elseif personal.movementMode == "Run" then state = "Running · team"
+        elseif enemy then state = "One life"
+        else state = "In combat · team" end
     end
     mobileStatusDetail.Text = state
     mobileStatusArrow.Text = mobileExpanded == "Team" and "-" or "+"
     mobileGoalArrow.Text = mobileExpanded == "Goal" and "-" or "+"
-    local shortZones = {"Ворота", "Акведук", "Двор", "Уступы", "Кузница", "Мост"}
+    local shortZones = {"Gate", "Aqueduct", "Courtyard", "Ledges", "Forge", "Bridge"}
     if level.stage == "Route" then
         mobileGoalTitle.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6)
-            .. " · " .. (shortZones[level.zoneIndex or 1] or level.zoneName or "Тракт")
-    elseif level.stage == "Exit" then mobileGoalTitle.Text = "ВЫХОД ОТКРЫТ"
-    else mobileGoalTitle.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ" end
-    if enemy then mobileGoalDetail.Text = "Героев " .. tostring(CombatFeedback.aliveHeroes(snapshot.heroes))
-    elseif level.stage == "BossReady" then mobileGoalDetail.Text = "Ждём стража"
-    elseif level.stage == "Exit" then mobileGoalDetail.Text = "Дойдите до выхода"
-    elseif isBoss then mobileGoalDetail.Text = "Попадания " .. tostring(level.bossHits or 0) .. "/" .. tostring(level.bossMax or 3)
-    else mobileGoalDetail.Text = "Враги " .. tostring(remainingEnemies(level)) end
+            .. " · " .. T(shortZones[level.zoneIndex or 1] or level.zoneName or "Causeway")
+    elseif level.stage == "Exit" then mobileGoalTitle.Text = "EXIT OPEN"
+    else mobileGoalTitle.Text = isBoss and "CAUSEWAY GUARDIAN" or "FLOODED CAUSEWAY" end
+    if enemy then mobileGoalDetail.Text = T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot.heroes)})
+    elseif level.stage == "BossReady" then mobileGoalDetail.Text = "Waiting for Guardian"
+    elseif level.stage == "Exit" then mobileGoalDetail.Text = "Reach the exit"
+    elseif isBoss then mobileGoalDetail.Text = T("Hits: {count:int}/{maximum:int}", {count=level.bossHits or 0,maximum=level.bossMax or 3})
+    else mobileGoalDetail.Text = T("Enemies: {count:int}", {count=remainingEnemies(level)}) end
     mobileGoalDetail.TextColor3 = C.text
     if feedbackUntil > os.clock() and feedbackLabel.Text ~= "" then
         mobileGoalDetail.Text, mobileGoalDetail.TextColor3 = feedbackLabel.Text, feedbackLabel.TextColor3
     end
-    mobileDetailsTitle.Text = mobileExpanded == "Goal" and "Задача" or "Команда"
+    mobileDetailsTitle.Text = mobileExpanded == "Goal" and "Objective" or "Team"
 end
 render = function()
     local active = snapshot and snapshot.status == "Active"
+    local stopped = snapshot and snapshot.status == "Faulted"
     local completed = snapshot and (snapshot.status == "Won" or snapshot.status == "Lost")
     local personalMenu = active and snapshot.view == "Menu"
     local level = snapshot and snapshot.level or {}
     local modern = level.bossMechanic == "PickupThrow"
     overlay.Visible, hud.Visible, controls.Visible = not active or personalMenu == true, active == true and not personalMenu, playable() == true
-    fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false
-    resultBanner.Visible = completed == true
-    if completed then
+    fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false and not stopped
+    resultBanner.Visible = completed == true or stopped == true
+    if stopped then
+        resultTitle.Text, resultTitle.TextColor3 = "PARTY STOPPED", C.yellow
+        resultAccent.BackgroundColor3 = C.yellow
+        resultDetail.Text = "An error stopped this party. The host can start a new game manually."
+        intro.Text, chooseTitle.Text = "A new party starts only when you press “Start again”.", "NEW PARTY"
+    elseif completed then
         local won = snapshot.status == "Won"
         local enemyPerspective = snapshot.enemyRole ~= nil
         local success = (enemyPerspective and not won) or (not enemyPerspective and won)
-        resultTitle.Text = enemyPerspective and (won and "ГЕРОИ ПРОШЛИ ТРАКТ" or "ГЕРОИ ОСТАНОВЛЕНЫ")
-            or (won and "ТРАКТ ПРОЙДЕН!" or "КОМАНДА ВЫБЫЛА")
+        resultTitle.Text = enemyPerspective and (won and "HEROES CLEARED THE CAUSEWAY" or "HEROES STOPPED")
+            or (won and "CAUSEWAY CLEARED!" or "TEAM ELIMINATED")
         resultTitle.TextColor3, resultAccent.BackgroundColor3 = success and C.lime or C.red, success and C.lime or C.red
         if enemyPerspective then
-            resultDetail.Text = modern and (won and "Герои прошли шесть районов, победили стража и открыли выход."
-                or "Герои остановлены на тракте. Следующая попытка начнётся с первого района.")
-                or (won and "Герои победили стража и открыли ворота. Выберите роль для следующей игры."
-                    or "Герои потратили все возвраты. Тракт остался под охраной.")
+            resultDetail.Text = modern and (won and "The heroes crossed six districts, defeated the Guardian and opened the exit."
+                or "The heroes were stopped on the causeway. The next attempt starts in the first district.")
+                or (won and "The heroes defeated the Guardian and opened the gate. Choose a role for the next game."
+                    or "The heroes used all their respawns. The causeway is still guarded.")
         else
-            resultDetail.Text = modern and (won and "Шесть районов пройдены. Страж повержен тяжёлыми шарами — выход открыт."
-                or "Команда не дошла до выхода. Районы и страж ждут новой попытки.")
-                or (won and "Страж побеждён. Ворота открыты — команда добралась до выхода."
-                    or "Возвраты героев закончились. Выберите роли и попробуйте пройти тракт ещё раз.")
+            resultDetail.Text = modern and (won and "Six districts cleared. The Guardian fell to heavy balls — the exit is open."
+                or "The team did not reach the exit. The districts and Guardian await another attempt.")
+                or (won and "The Guardian is defeated. The gate is open — the team reached the exit."
+                    or "The heroes have no respawns left. Choose roles and try the causeway again.")
         end
-        intro.Text, chooseTitle.Text = "Следующая попытка начинается по кнопке «Новая игра».", "ГЕРОЙ ДЛЯ СЛЕДУЮЩЕЙ ИГРЫ"
+        intro.Text, chooseTitle.Text = "Press “New game” to start the next attempt.", "HERO FOR THE NEXT GAME"
     elseif personalMenu then
         intro.Text = snapshot.enemyRole and snapshot.enemyRole.status == "Dead"
-            and (snapshot.enemyRole.template == "Boss" and "Страж побеждён. Можно продолжить наблюдать за этой игрой."
-                or "Ваша единственная жизнь закончилась. Можно продолжить наблюдать за этой игрой.")
-            or "Вы можете вернуться к наблюдению за этой же игрой."
+            and (snapshot.enemyRole.template == "Boss" and "The Guardian is defeated. You can keep watching this game."
+                or "Your only life is over. You can keep watching this game.")
+            or "You can return to watching this same game."
     else
-        intro.Text, chooseTitle.Text = "Оружие дозорных, захваты и страж. Пройдите тракт вместе.", "ВЫБЕРИТЕ ГЕРОЯ"
+        intro.Text, chooseTitle.Text = "Guard weapons, grabs and a Guardian. Cross the causeway together.", "CHOOSE YOUR HERO"
     end
-    title.Text = personalMenu and "Группа продолжает игру" or "Затопленный тракт"
+    title.Text = stopped and "Party stopped" or (personalMenu and "The team is still playing" or "Flooded Causeway")
     renderSelection()
     bossQueue:update(snapshot, mine)
     groupPanel:update(snapshot, mine)
@@ -717,7 +738,7 @@ render = function()
     local heroOnline = 0
     for _, owner in ipairs(owners) do if (owner.preference or "Hero") == "Hero" then heroOnline += 1 end end
     heroOnline = snapshot and snapshot.heroOnline or heroOnline
-    partyCount.Text = snapshot and (tostring(math.min(heroOnline, 3)) .. " / 3 героя") or ""
+    partyCount.Text = snapshot and T("{count:int} / 3 heroes", {count=math.min(heroOnline, 3)}) or ""
     for i = #partyRows + 1, #owners do addPartyRow(i) end
     for i, row in ipairs(partyRows) do
         local owner = owners[i]
@@ -726,41 +747,46 @@ render = function()
             local preference = owner.preference or "Hero"
             row.dot.BackgroundColor3 = preference == "Enemy" and C.red
                 or (preference == "Spectator" and C.muted or heroColors[owner.template] or C.green)
-            row.owner.Text = (owner.displayName or owner.username or "Игрок") .. (owner.userId == player.UserId and " · вы" or "")
-            row.choice.Text = preference == "Enemy" and "Противник · выбор после старта"
-                or (preference == "Spectator" and "Наблюдатель" or (owner.template or "Mr. Green"))
+            row.owner.Text = (owner.displayName or owner.username or T("Player")) .. (owner.userId == player.UserId and T(" · you") or "")
+            row.choice.Text = preference == "Enemy" and "Enemy · choose after start"
+                or (preference == "Spectator" and "Spectator" or (owner.template or "Mr. Green"))
         end
     end
-    partyNote.Text = snapshot and (heroOnline == 0 and "Нужен хотя бы один герой, чтобы начать игру."
-        or "Состав героев закрепляется при старте. Противник выбирает дозорного во время игры.") or "Подключаемся к игре…"
-    if personalMenu then partyNote.Text = "Команда продолжает прохождение. Возвращение к наблюдению не даёт новую жизнь." end
+    partyNote.Text = snapshot and (heroOnline == 0 and "At least one hero is needed to start the game."
+        or "Heroes are locked in at the start. Enemies choose a guard during the game.") or "Connecting to the game…"
+    if personalMenu then partyNote.Text = "The team is still playing. Returning to watch does not grant another life." end
+    if stopped then partyNote.Text = "The previous party has ended. Only the host starts a new game." end
     startButton.Visible = not personalMenu and (not snapshot or snapshot.canStart == true)
     returnToWatch.Visible = personalMenu == true and snapshot.canChooseView == true
-    returnToWatch.Text = pendingView == "Spectating" and "Возвращаемся…" or "Вернуться к наблюдению"
+    returnToWatch.Text = pendingView == "Spectating" and "Returning…" or "Return to watching"
     returnToWatch.Selectable = pendingView == nil
     startButton.BackgroundColor3, startButton.TextColor3 = snapshot and snapshot.canStart and C.lime or C.line,
         snapshot and snapshot.canStart and C.ink or C.text
-    startButton.Text = actionPending and "Начинаем…" or (completed and "Новая игра" or "Начать игру")
-    if not snapshot then startButton.Text = "Подключаемся…" end
-    waitLabel.Text = not snapshot and "Ждём ответ игры…" or (snapshot.canStart
-        and "Можно играть одному, вдвоём или втроём." or (snapshot.host == nil
-            and "Выберите роль героя, чтобы начать игру." or ("Ожидаем: " .. hostName() .. " начнёт игру.")))
-    if personalMenu then waitLabel.Text = "Вы вернётесь в эту же игру." end
+    startButton.Text = actionPending and "Starting…" or (stopped and "Start again" or (completed and "New game" or "Start game"))
+    if not snapshot then startButton.Text = "Connecting…" end
+    waitLabel.Text = not snapshot and "Waiting for the game…" or (snapshot.canStart
+        and "Play solo or with two or three heroes." or (snapshot.host == nil
+            and "Choose the hero role to start the game." or T("Waiting for {host} to start the game.", {host=hostName()})))
+    if personalMenu then waitLabel.Text = "You will return to the same game." end
+    if stopped then
+        waitLabel.Text = snapshot.canStart and "Start a new party when you are ready."
+            or T("Waiting for {host} to start a new party.", {host=hostName()})
+    end
     menuNotice.Text = snapshot and (noticeMessages[snapshot.notice] or "") or ""
     for i, row in ipairs(heroRows) do
         local hero = snapshot and snapshot.heroes and snapshot.heroes[i]
         row.row.Visible = hero ~= nil
         if hero then
-            row.owner.Text = heroName(hero) .. (hero.slot == snapshot.mine and " · вы" or "")
+            row.owner.Text = heroName(hero) .. (hero.slot == snapshot.mine and T(" · you") or "")
             row.owner.TextColor3 = hero.slot == snapshot.mine and C.lime or C.text
             row.stripe.BackgroundColor3 = heroColors[hero.template] or C.green
             row.returns.Text = "↻ " .. tostring(hero.respawns or 0)
-            local detail = hero.template or "Mr. Green"
-            if not hero.connected then detail = "Нет связи"
-            elseif hero.status == "Eliminated" then detail = "Выбыл"
-            elseif hero.status ~= "Alive" or hero.dying then detail = "Возвращается…"
-            elseif hero.shield then detail ..= " · защита" end
-            if hero.slot==snapshot.mine and snapshot.weapon then detail ..= " · дубина" end
+            local detail = T(hero.template or "Mr. Green")
+            if not hero.connected then detail = T("Disconnected")
+            elseif hero.status == "Eliminated" then detail = T("Out")
+            elseif hero.status ~= "Alive" or hero.dying then detail = T("Returning…")
+            elseif hero.shield then detail ..= T(" · protected") end
+            if hero.slot==snapshot.mine and snapshot.weapon then detail ..= T(" · club") end
             row.status.Text = detail
             local hp = tonumber(hero.hearts) or 0
             for n, heart in ipairs(row.fills) do heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1) end
@@ -770,13 +796,13 @@ render = function()
     local controlledBoss = enemy and enemy.template == "Boss"
     roster.Visible, enemyStatus.Visible = enemy == nil, enemy ~= nil
     if enemy then
-        enemyOwner.Text = controlledBoss and ((enemy.name or "Страж переправы") .. " · вы") or (player.DisplayName .. " · противник")
-        enemyLife.Text = controlledBoss and (enemy.status == "Dead" and "Страж побеждён"
-            or (enemy.connected and (tostring(enemy.hearts or 0) .. " / " .. tostring(enemy.maxHearts or 3) .. " ♥") or "Страж · нет связи"))
-            or (enemy.status == "Dead" and "Одна жизнь · выбыли" or (enemy.connected and "Одна жизнь" or "Одна жизнь · нет связи"))
+        enemyOwner.Text = controlledBoss and (T(enemy.name or "Causeway Guardian") .. T(" · you")) or (player.DisplayName .. T(" · enemy"))
+        enemyLife.Text = controlledBoss and (enemy.status == "Dead" and "Guardian defeated"
+            or (enemy.connected and (tostring(enemy.hearts or 0) .. " / " .. tostring(enemy.maxHearts or 3) .. " ♥") or "Guardian · disconnected"))
+            or (enemy.status == "Dead" and "One life · out" or (enemy.connected and "One life" or "One life · disconnected"))
         enemyLife.TextColor3 = enemy.status == "Dead" and C.red or C.muted
         if enemy.status == "Alive" and enemy.carryState then
-            enemyLife.Text = enemy.carryState == "Carried" and "Вас держат · ждите освобождения" or "Бросок · возвращаем управление"
+            enemyLife.Text = enemy.carryState == "Carried" and "You are held · wait for release" or "Thrown · recovering control"
         end
         for n, heart in ipairs(enemyHearts) do
             heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
@@ -787,33 +813,33 @@ render = function()
     local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
     dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying
     jump.Visible = not controlledBoss
-    keyboardHint.Text = controlledBoss and "W A S D · прицел · F · огонь"
-        or (carrying and interactionLabel and ("F · " .. interactionLabel))
-        or (not carrying and controlled and controlled.movementMode == "Run" and "БЕГ · F · МЕГА")
-        or (interactionLabel and ("F · " .. interactionLabel))
-        or "WASD · ходьба · 2× направление · бег · F · удар"
+    keyboardHint.Text = controlledBoss and "W A S D · aim · F · fire"
+        or (carrying and interactionLabel and ("F · " .. T(interactionLabel)))
+        or (not carrying and controlled and controlled.movementMode == "Run" and "RUNNING · F · MEGA")
+        or (interactionLabel and ("F · " .. T(interactionLabel)))
+        or "WASD · walk · double-tap direction · run · F · attack"
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
-    stageLabel.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ"
+    stageLabel.Text = isBoss and "CAUSEWAY GUARDIAN" or "FLOODED CAUSEWAY"
     if modern and level.stage == "Route" then
-        stageLabel.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6) .. " · " .. (level.zoneName or "Затопленный тракт")
-    elseif modern and level.stage == "Exit" then stageLabel.Text = "ВЫХОД ОТКРЫТ" end
-    objectiveLabel.Text = enemy and "Остановите героев" or (level.objective or "Пройдите тракт и доберитесь до ворот.")
+        stageLabel.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6) .. " · " .. T(level.zoneName or "Flooded Causeway")
+    elseif modern and level.stage == "Exit" then stageLabel.Text = "EXIT OPEN" end
+    objectiveLabel.Text = enemy and "Stop the heroes" or (level.objective or "Cross the causeway and reach the gate.")
     if modern and isBoss and not enemy then
-        objectiveLabel.Text = "Уклоняйтесь. Возьмите тяжёлый шар и бросьте в стража."
+        objectiveLabel.Text = "Dodge. Pick up a heavy ball and throw it at the Guardian."
     end
     local hits = tonumber(level.bossHits) or 0
     if enemy then
         local aliveHeroes = CombatFeedback.aliveHeroes(snapshot.heroes)
-        bossLabel.Text = "Героев в бою: " .. tostring(aliveHeroes)
+        bossLabel.Text = T("Heroes in combat: {count:int}", {count=aliveHeroes})
     elseif modern and (isBoss or level.stage == "Exit" or hits > 0) then
-        bossLabel.Text = "Попаданий шаром: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
+        bossLabel.Text = T("Ball hits: {count:int} / {maximum:int}", {count=hits,maximum=level.bossMax or 3})
     elseif modern then
-        bossLabel.Text = "Противников в районе: " .. tostring(remainingEnemies(level))
+        bossLabel.Text = T("Enemies in district: {count:int}", {count=remainingEnemies(level)})
     elseif isBoss or hits > 0 then
-        bossLabel.Text = "Отражено снарядов: " .. tostring(hits) .. " / " .. tostring(level.bossMax or 3)
+        bossLabel.Text = T("Shots reflected: {count:int} / {maximum:int}", {count=hits,maximum=level.bossMax or 3})
     else
         local alive = remainingEnemies(level)
-        bossLabel.Text = alive > 0 and ("Противников впереди: " .. tostring(alive)) or "Ударьте снаряд стража, чтобы отразить его."
+        bossLabel.Text = alive > 0 and T("Enemies ahead: {count:int}", {count=alive}) or "Strike the Guardian's projectile to reflect it."
     end
     spectator.Visible = active == true and not personalMenu and not playable()
     local canChoose = enemyChoiceAllowed()
@@ -828,35 +854,35 @@ render = function()
     end
     cameraControls.Visible = canObserve == true and spectatorCamera:isFree()
     nextHeroButton.Visible, freeCameraButton.Visible = canObserve == true, canObserve == true
-    freeCameraButton.Text = spectatorCamera:isFree() and "Следить за героем" or "Свободная камера"
+    freeCameraButton.Text = spectatorCamera:isFree() and "Follow hero" or "Free camera"
     freeCameraButton.BackgroundColor3 = spectatorCamera:isFree() and C.lime or C.card
     freeCameraButton.TextColor3 = spectatorCamera:isFree() and C.ink or C.text
     personalMenuButton.Visible = active == true and not personalMenu and snapshot.canChooseView == true
-    personalMenuButton.Text = pendingView == "Menu" and "Открываем…" or "В меню"
+    personalMenuButton.Text = pendingView == "Menu" and "Opening…" or "Menu"
     personalMenuButton.Selectable = pendingView == nil
     enemyChoiceTitle.Visible, enemyChoiceNote.Visible, enemyOffers.Visible = expanded == true, expanded == true, expanded == true
     watchButton.Visible = expanded == true or choice == true
-    watchButton.Text = pendingView == "Spectating" and "Открываем…" or "Наблюдать"
+    watchButton.Text = pendingView == "Spectating" and "Opening…" or "Watch"
     watchButton.Selectable = pendingView == nil
     chooseEnemyButton.Visible = canChoose == true and not choosingEnemy and not choice and not personalMenu
     if enemyDead then
-        spectatorText.Text = snapshot.view == "Spectating" and "Вы наблюдаете. Новую роль можно выбрать перед следующей игрой."
-            or (controlledBoss and "Страж побеждён. Можно наблюдать за продолжающейся игрой." or noticeMessages.ENEMY_LIFE_SPENT)
+        spectatorText.Text = snapshot.view == "Spectating" and "You are watching. Choose a new role before the next game."
+            or (controlledBoss and "The Guardian is defeated. You can watch the ongoing game." or noticeMessages.ENEMY_LIFE_SPENT)
     elseif choice then
-        spectatorText.Text = "Вы выбыли. Группа продолжает игру — наблюдать или перейти в меню?"
+        spectatorText.Text = "You are out. The team is still playing — watch or open the menu?"
     elseif mine then
-        spectatorText.Text = mine.status ~= "Eliminated" and mine.connected and "Герой возвращается…"
-            or (snapshot.view == "Spectating" and "Вы наблюдаете за продолжающейся игрой."
+        spectatorText.Text = mine.status ~= "Eliminated" and mine.connected and "Hero returning…"
+            or (snapshot.view == "Spectating" and "You are watching the ongoing game."
                 or (noticeMessages[snapshot.enemyUnavailableReason] or noticeMessages.HERO_LOCKED))
     elseif enemy then
-        spectatorText.Text = controlledBoss and "Связь со стражем восстанавливается…" or "Связь с дозорным восстанавливается…"
+        spectatorText.Text = controlledBoss and "Restoring the Guardian connection…" or "Restoring the guard connection…"
     elseif expanded then
-        spectatorText.Text = "Три сердца · одна жизнь · без возвратов"
+        spectatorText.Text = "Three hearts · one life · no respawns"
     else
-        spectatorText.Text = noticeMessages[snapshot and snapshot.enemyUnavailableReason] or "Вы наблюдаете за игрой."
+        spectatorText.Text = noticeMessages[snapshot and snapshot.enemyUnavailableReason] or "You are watching the game."
     end
     enemyChoiceNote.Text = snapshot and (noticeMessages[snapshot.notice] or noticeMessages[snapshot.enemyUnavailableReason])
-        or "Вы управляете выбранным дозорным до конца его жизни."
+        or "You control this guard until its life ends."
     renderMobileSummary(level, enemy, isBoss)
     renderOffers()
 end
@@ -983,7 +1009,7 @@ layout = function()
     mobileStatus.Visible, mobileGoal.Visible = isTouch, isTouch
     mobileDetails.Visible = isTouch and mobileExpanded ~= nil
     mobileStatusArrow.Visible, mobileGoalArrow.Visible = not queuePriority, not queuePriority
-    if queuePriority then mobileGoalDetail.Text = "Очередь стража · ниже" end
+    if queuePriority then mobileGoalDetail.Text = "Guardian queue · below" end
     local rosterWidth = portrait and (width - inset * 2) or math.min(292, width * 0.43)
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
@@ -1041,15 +1067,15 @@ layout = function()
     position(dash, half + 8, 0, half, topHeight)
     position(jump, 0, topHeight + 8, controlWidth, short and (isTouch and 44 or 41) or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
-    local primaryLabel = controlledBoss and "ОГОНЬ" or "УДАР"
+    local primaryLabel = controlledBoss and "FIRE" or "ATTACK"
     if not carrying and not controlledBoss and controlled and controlled.movementMode == "Run" then
-        primaryLabel = "МЕГАУДАР"
+        primaryLabel = "MEGA STRIKE"
     elseif not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
         primaryLabel = interaction.label
     end
-    punch.Text = isTouch and primaryLabel or (primaryLabel .. "\nF")
-    dash.Text = "МЕГА\nR · В БЕГЕ"
-    jump.Text = isTouch and "ПРЫЖОК" or "ПРЫЖОК · SPACE"
+    punch.Text = isTouch and T(primaryLabel) or (T(primaryLabel) .. "\nF")
+    dash.Text = "MEGA\nR · WHILE RUNNING"
+    jump.Text = isTouch and "JUMP" or "JUMP · SPACE"
     local padSize = short and 144 or (width < 360 and 146 or 164)
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
     pad.Visible, keyboardHint.Visible = isTouch, not isTouch
@@ -1288,7 +1314,7 @@ UserInputService.TextBoxFocusReleased:Connect(function() syncGameplayContext() e
 
 stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
-    local confirmed, accepted = combatFeedback:sync(data)
+    local confirmed, accepted = combatFeedback:sync(data, workspace:GetServerTimeNow())
     if accepted == false then return end
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
@@ -1307,7 +1333,7 @@ stateRemote.OnClientEvent:Connect(function(data)
         or previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
         mobileExpanded = nil
     end
-    if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; feedbackUntil = 0; resetInput()
+    if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; feedbackUntil = 0; feedbackActionId = nil; resetInput()
     elseif wasPlayable and not playable() then resetInput()
     elseif controlled and ((lastReactionEpoch ~= nil and controlled.reactionEpoch ~= lastReactionEpoch)
         or (lastHeldContext ~= nil and nextHeldContext ~= lastHeldContext)) then
@@ -1329,20 +1355,29 @@ stateRemote.OnClientEvent:Connect(function(data)
     if pendingView and (data.view == pendingView or data.notice or data.status ~= "Active") then pendingView = nil end
     if previousGroupId ~= data.groupId or previousStatus ~= data.status then scroll.CanvasPosition = Vector2.zero end
     actionPending = false
+    if feedbackActionId and (type(data.actionFeedback) ~= "table" or data.actionFeedback.id ~= feedbackActionId) then
+        feedbackUntil, feedbackActionId = 0, nil
+    end
     if os.clock() >= feedbackUntil then
-        feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(data), C.muted
+        feedbackLabel.Text, feedbackLabel.TextColor3 = T(CombatFeedback.hint(data,T)), C.muted
     end
     if #confirmed > 0 then
         local latest = confirmed[#confirmed]
-        feedbackLabel.Text = latest.text
+        feedbackLabel.Text = T(latest.text)
         feedbackLabel.TextColor3 = ({damage=C.red,shield=C.yellow,success=C.lime})[latest.style] or C.text
-        feedbackUntil = os.clock() + 1.4
+        feedbackActionId = latest.kind == "ActionResult" and latest.actionId or nil
+        feedbackUntil = os.clock() + math.min(1.4, latest.duration or 1.4)
     end
     render()
     layout()
     syncGameplayContext()
 end)
 safe:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout)
+localizationService:GetPropertyChangedSignal("RobloxLocaleId"):Connect(function()
+    feedbackUntil,feedbackActionId=0,nil
+    feedbackLabel.Text=T(CombatFeedback.hint(snapshot,T))
+    render();layout()
+end)
 UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(function() mobileExpanded = nil; layout() end)
 -- Gameplay drives server-owned bodies instead of a default Roblox character.
 task.spawn(function()
@@ -1359,7 +1394,7 @@ RunService.RenderStepped:Connect(function(dt)
     syncGameplayContext()
     if feedbackUntil > 0 and os.clock() >= feedbackUntil then
         feedbackUntil = 0
-        feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(snapshot), C.muted
+        feedbackLabel.Text, feedbackLabel.TextColor3 = T(CombatFeedback.hint(snapshot,T)), C.muted
     end
     bossQueue:step()
     groupPanel:step()

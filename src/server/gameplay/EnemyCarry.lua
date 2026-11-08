@@ -85,10 +85,10 @@ function EnemyCarry:interaction(slot)
     local id=self.holders[slot];local row=id and self.states[id]
     if row and row.mode=='Carried' then
         return {available=self:_sameHero(row,false)==true and self:_sameEnemy(row)==true and not self.world:hazard(row.id),
-            carrying=true,kind='EnemyCarry',label='БРОСИТЬ ВРАГА'}
+            carrying=true,kind='EnemyCarry',label="THROW ENEMY"}
     end
     if not self:_hero(slot) or self.pendingBySlot[slot] then return {available=false,carrying=false} end
-    return {available=self:_nearest(slot)~=nil,carrying=false,kind='EnemyCarry',label='СХВАТИТЬ'}
+    return {available=self:_nearest(slot)~=nil,carrying=false,kind='EnemyCarry',label="GRAB"}
 end
 
 function EnemyCarry:_throw(row,now)

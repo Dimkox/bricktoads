@@ -18,6 +18,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
     SourceCombat=require(gameplay.SourceCombat),DragonFlight=require(gameplay.DragonFlight),
+    LevelVariation=require(gameplay.LevelVariation),
     RunJournal=require(gameplay.RunJournal),BuildId=buildId,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
@@ -73,7 +74,7 @@ local function broadcast(requester)
     for _,player in ipairs(requester and {requester} or players) do
         if player.Parent==Players then
             local snapshot=controller:snapshot(player,players)
-            if snapshot then snapshot.fault=fault; state:FireClient(player,snapshot) end
+            if snapshot then snapshot.fault=snapshot.fault==true or fault~=nil; state:FireClient(player,snapshot) end
         end
     end
 end
@@ -92,7 +93,9 @@ intent.OnServerEvent:Connect(function(player,payload)
     if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
         or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView'
         or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss'
-        or payload.kind=='CreateGroup' or payload.kind=='JoinGroup') then
+        or payload.kind=='CreateGroup' or payload.kind=='JoinGroup'
+        or ((payload.kind=='Attack' or payload.kind=='Jump') and (code=='OK' or code=='NOT_RUNNING'
+            or code=='REACTION' or code=='COOLDOWN' or code=='HELD' or code=='THROWN'))) then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)
@@ -101,11 +104,6 @@ RunService.Heartbeat:Connect(function(dt)
     if not fault then
         local ok,err=xpcall(function()
             controller:step(at,dt)
-            for _,id in ipairs(controller.order) do
-                local group=controller.groups[id]
-                local run=group.controller
-                if run.current then group.world:updatePresentation(run.current,dt,run.director.enemies) end
-            end
         end,debug.traceback)
         if not ok then fault=tostring(err); warn('[BrickToads] '..fault) end
     end

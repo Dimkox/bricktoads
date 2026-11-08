@@ -1,4 +1,4 @@
-return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Director,BossQueue,Journal)
+return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Director,BossQueue,Journal,Variation,Level)
     local passed=0
     local function test(name,fn) fn(); passed+=1; print('PASS '..name) end
     local function fixture(realDirector,overrides)
@@ -20,6 +20,8 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
         function world:enemyIdentity(id,actorId,name) self.actors[id].id=actorId; self.actors[id].ownerName=name end
         function world:position(id) return self.positions[id] end
         function world:stage(stage) self.stageName=stage end
+        function world:progress(index) self.zoneIndex=index end
+        function world:reached() return false end
         function world:enemyHealth(id,health) self.actors[id].hearts=health end
         function world:enemyMove() end
         function world:face() end
@@ -499,5 +501,145 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
         assert(send(a,{kind='Start'})=='OK')
         assert(c.journal:snapshot().runId~=previous and c.previousJournal:snapshot().runId==previous)
     end)
+    test('action denial feedback survives Move and Sync and is private scoped and finite',function()
+        local c,list,add,send,tick=fixture();local a,b=add(10),add(20)
+        send(a,{kind='Start'})
+        local function packet(kind,seq)
+            local h=c.current.state.heroes[1]
+            local p={kind=kind,seq=seq,runId=c.current.state.runId,actorId=h.actorId,
+                attempt=h.attempt,levelEpoch=c.current.state.levelEpoch,connectionEpoch=h.connectionEpoch}
+            if kind=='Attack' then p.attack='Punch' elseif kind=='Move' then p.x,p.z=1,0 end
+            return p
+        end
+        c.current.combat[1].reactionEnd=100
+        assert(send(a,packet('Attack',1))=='REACTION')
+        local denied=c:snapshot(a,list).actionFeedback
+        assert(denied and denied.code=='REACTION' and denied.kind=='Attack' and type(denied.id)=='number',
+            'A validated action denial needs an owner-only sticky result, not a notice erased by movement')
+        assert(denied.runId==c.current.state.runId and denied.actorId==c.current.state.heroes[1].actorId
+            and denied.groupId==c.current.state.groupId and denied.expiresAt==c.current.now+1.4)
+        assert(c:snapshot(b,list).actionFeedback==nil)
+        c.current.combat[1].reactionEnd=nil
+        assert(send(a,packet('Move',2))=='OK' and send(a,{kind='Sync'})=='OK')
+        assert(c:snapshot(a,list).actionFeedback.id==denied.id)
+        assert(send(a,packet('Attack',1))=='STALE_SEQUENCE')
+        assert(c:snapshot(a,list).actionFeedback.id==denied.id,'Rejected replay cannot create another feedback id')
+        c.current.combat[1].reactionEnd=100
+        assert(send(a,packet('Jump',3))=='REACTION')
+        local jump=c:snapshot(a,list).actionFeedback;assert(jump.kind=='Jump' and jump.id>denied.id)
+        tick(1.39);assert(c:snapshot(a,list).actionFeedback.id==jump.id)
+        tick(.01);assert(c:snapshot(a,list).actionFeedback==nil,'Expiry at its server deadline removes the result')
+        c.current.combat[1].reactionEnd=nil
+        assert(send(a,packet('Jump',4))=='OK' and c:snapshot(a,list).actionFeedback==nil)
+        c.current.combat[1].reactionEnd=100
+        assert(send(a,packet('Attack',5))=='REACTION')
+        c.current:_die(1,'Feedback actor replacement');tick(.1)
+        assert(c:snapshot(a,list).actionFeedback==nil,'A new appearance cannot receive the old body denial')
+    end)
+
+    test('successful actions clear denial feedback but unknown or stale action contexts cannot create it',function()
+        local c,list,add,send=fixture();local a=add(10);send(a,{kind='Start'})
+        local h=c.current.state.heroes[1]
+        local p={kind='Attack',attack='Punch',seq=1,runId=c.current.state.runId,actorId=h.actorId,
+            attempt=h.attempt,levelEpoch=1,connectionEpoch=h.connectionEpoch}
+        local stale=table.clone(p);stale.actorId='old'
+        assert(send(a,stale)=='STALE_ACTOR' and c:snapshot(a,list).actionFeedback==nil)
+        c.current.combat[1].reactionEnd=100;assert(send(a,p)=='REACTION')
+        c.current.combat[1].reactionEnd=nil;p.seq=2
+        assert(send(a,p)=='OK' and c:snapshot(a,list).actionFeedback==nil)
+        p.seq=3;assert(send(a,p)=='COOLDOWN')
+        local denied=c:snapshot(a,list).actionFeedback;assert(denied and denied.code=='COOLDOWN')
+        local replacement=add(10)
+        assert(c:snapshot(a,list)==nil and c:snapshot(replacement,list).actionFeedback==nil,
+            'A replacement connection cannot replay its predecessor result')
+    end)
+
+    test('only the five supported actual action denials generate results and successful Jump clears one',function()
+        local c,list,add,send=fixture();local a=add(10);send(a,{kind='Start'})
+        local h=c.current.state.heroes[1];local sequence=0;local denial
+        c.current.contextualIntent=function(_,p)
+            return (p.kind=='Attack' or p.kind=='Jump') and denial or 'NO_INTERACTION'
+        end
+        local function action(kind)
+            sequence+=1
+            local packet={kind=kind,seq=sequence,runId=c.current.state.runId,actorId=h.actorId,
+                attempt=h.attempt,levelEpoch=1,connectionEpoch=h.connectionEpoch}
+            if kind=='Attack' then packet.attack='Punch' end
+            return send(a,packet)
+        end
+        local previous=0
+        for _,code in ipairs({'NOT_RUNNING','REACTION','COOLDOWN','HELD','THROWN'}) do
+            denial=code;assert(action('Jump')==code)
+            local row=c:snapshot(a,list).actionFeedback
+            assert(row.code==code and row.id>previous);previous=row.id
+        end
+        denial='INVALID_INTENT';assert(action('Attack')=='INVALID_INTENT')
+        assert(c:snapshot(a,list).actionFeedback.id==previous,'Unsupported results cannot manufacture another feedback id')
+        denial='NO_INTERACTION';assert(action('Jump')=='OK' and c:snapshot(a,list).actionFeedback==nil)
+    end)
+
+    test('only accepted new starts build one private canonical-based route and record its actual layout',function()
+        local config=table.clone(Config);config.Level=Level
+        local builds,guids,clears,rebuilds=0,0,0,0
+        local variation={seedFromId=Variation.seedFromId,build=function(base,seed)
+            assert(base==Level,'Every new map must derive from the unchanged canonical level')
+            builds+=1;return Variation.build(base,seed)
+        end}
+        local c,list,add,send=fixture(true,{Config=config,LevelVariation=variation,RunJournal=Journal,
+            guid=function() guids+=1;return 'varied-run-'..guids end})
+        c.world.config=table.clone(config)
+        local originalClear=c.world.clearActors
+        c.world.clearActors=function(world) clears+=1;return originalClear(world) end
+        c.world.rebuildLevel=function(world,route)
+            assert(next(world.actors)==nil,'Old actors must be cleared before replacing geometry')
+            rebuilds+=1;world.config.Level=route;return true
+        end
+        local a,b=add(10),add(20)
+        assert(send(b,{kind='Start'})=='HOST_ONLY')
+        assert(send(a,{kind='Start',seed=111})=='INVALID_INTENT')
+        assert(send(a,{kind='SelectRole',role='Spectator'})=='OK')
+        assert(send(b,{kind='SelectRole',role='Spectator'})=='OK')
+        assert(send(a,{kind='Start'})=='NO_HERO')
+        assert(send(a,{kind='SelectRole',role='Hero'})=='OK')
+        assert(send(b,{kind='SelectRole',role='Hero'})=='OK')
+        assert(builds==0 and guids==0 and clears==0 and rebuilds==0)
+        assert(send(a,{kind='Start'})=='OK')
+        assert(builds==1 and guids==1 and clears==1 and rebuilds==1,'One accepted start must select exactly one layout')
+        local route=c.world.config.Level
+        assert(route~=Level and c.deps.Config~=config and config.Level==Level)
+        assert(c.deps.Config.Level==route and c.current.config.Level==route and c.director.route==route)
+        assert(route.variation.seed==Variation.seedFromId(c.current.state.runId))
+        local started=c.journal:snapshot().events[1]
+        local published=c:snapshot(a,list).level.variation
+        assert(started.kind=='RunStarted' and started.data.variation.seed==route.variation.seed)
+        assert(started.data.variation.version==1 and published.version==1 and published.seed==route.variation.seed)
+        for i,choice in ipairs(route.variation.sectionChoices) do
+            assert(published.sectionChoices[i]==choice and started.data.variation.sectionChoices[i]==choice)
+        end
+        published.sectionChoices[1]=99
+        assert(route.variation.sectionChoices[1]~=99,'A public snapshot cannot mutate the selected map')
+        local body=c.world.actors[1]
+        assert(send(a,{kind='Start'})=='RUN_ACTIVE')
+        assert(builds==1 and clears==1 and rebuilds==1 and guids==1 and c.world.actors[1]==body)
+        c.director.result='Won'
+        assert(send(a,{kind='Start'})=='OK')
+        assert(builds==2 and clears==2 and rebuilds==2 and guids==2)
+        assert(c.world.config.Level~=route and c.world.config.Level.variation.seed~=route.variation.seed)
+        assert(c.previousJournal:snapshot().events[1].data.variation.seed==route.variation.seed)
+        assert(config.Level==Level and c.baseLevel==Level)
+    end)
+
+    test('a refused world rebuild cannot start a Session or consume a playable appearance',function()
+        local config=table.clone(Config);config.Level=Level
+        local creations=0;local session=table.clone(Session)
+        session.new=function(...) creations+=1;return Session.new(...) end
+        local c,_,add,send=fixture(true,{Config=config,LevelVariation=Variation,Session=session})
+        c.world.rebuildLevel=function() return false,'ACTORS_PRESENT' end
+        local a=add(10)
+        local ok=pcall(send,a,{kind='Start'})
+        assert(not ok and creations==0 and c.current==nil and c.world.spawns==0,
+            'Geometry refusal must abort before Session.new or any new body')
+    end)
+
     print('GameController: '..passed..' PASS')
 end

@@ -1,5 +1,6 @@
 """Test the development place build boundary; Studio import is checked separately."""
 import importlib.util
+import json
 import re
 from pathlib import Path
 import shutil
@@ -22,6 +23,11 @@ class BrickToadsPlaceTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location("build_bricktoads_place", BUILDER)
         self.builder = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.builder)
+
+    def test_playable_preserves_both_supported_screen_orientations(self):
+        root = ET.fromstring(self.builder.build(ROOT))
+        starter = named(root, "StarterGui")
+        self.assertEqual(starter.findtext("Properties/token[@name='ScreenOrientation']"), "4")
 
     def test_sources_are_current_and_server_code_is_private(self):
         root = ET.fromstring(self.builder.build(ROOT))
@@ -82,9 +88,51 @@ class BrickToadsPlaceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory)
             shutil.copytree(ROOT / "src", source / "src")
+            shutil.copytree(ROOT / "assets", source / "assets")
             file = source / "src/server/gameplay/GameConfig.lua"
             file.write_text(file.read_text() + "\n-- Controlled embedded source identity probe.\n")
             self.assertNotEqual(original, stamp(self.builder.build(source)))
+
+    def test_green_mesh_template_is_serialized_privately_with_exact_pbr_and_attachments(self):
+        manifest = json.loads((ROOT / "assets/characters/green-toad.json").read_text(encoding="utf-8"))
+        root = ET.fromstring(self.builder.build(ROOT, include_character_study=True))
+        folder = named(named(root, "ServerStorage"), "BrickToadsCharacterTemplates")
+        template = named(folder, "GreenToad")
+        meshes = [p for p in template.findall("Item") if p.attrib["class"] == "MeshPart"]
+        self.assertEqual(len(meshes), 15)
+        self.assertEqual({p.findtext("Properties/string[@name='Name']") for p in meshes}, {p["name"] for p in manifest["parts"]})
+        for row in manifest["parts"]:
+            mesh = named(template, row["name"])
+            self.assertEqual(mesh.findtext("Properties/Content[@name='MeshId']/url"), row["meshId"])
+            for flag in ("CanCollide", "CanTouch", "CanQuery"):
+                self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"), "false")
+            self.assertEqual(mesh.findtext("Properties/bool[@name='Massless']"), "true")
+            for surface in row["surfaceAppearances"]:
+                appearance = named(mesh, surface["name"])
+                for key, prop in (("colorMap", "ColorMap"), ("roughnessMap", "RoughnessMap"), ("metalnessMap", "MetalnessMap")):
+                    self.assertEqual(appearance.findtext(f"Properties/Content[@name='{prop}']/url"), surface[key])
+            for attachment in row["attachments"]:
+                node = named(mesh, attachment["name"])
+                self.assertEqual(node.attrib["class"], "Attachment")
+                self.assertAlmostEqual(float(node.findtext("Properties/CoordinateFrame[@name='CFrame']/X")), attachment["cframe"][0])
+        self.assertFalse({p.attrib["class"] for p in template.iter("Item")} & {"Humanoid", "AnimationConstraint", "BallSocketConstraint", "Script", "Motor6D"})
+        self.assertEqual(named(template, "AppearanceScale").findtext("Properties/double[@name='Value']"), "0.8")
+        self.assertEqual([p.findtext("Properties/string[@name='Name']") for p in folder.findall("Item")], ["GreenToad"])
+
+    def test_missing_character_resource_fails_instead_of_silently_replacing_mesh_art(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            shutil.copytree(ROOT / "src", source / "src")
+            with self.assertRaises(FileNotFoundError):
+                self.builder.build(source, include_character_study=True)
+
+    def test_rejected_explorer_is_excluded_from_the_playable_by_default(self):
+        root = ET.fromstring(self.builder.build(ROOT))
+        self.assertFalse([p for p in root.iter("Item") if p.findtext("Properties/string[@name='Name']") == "GreenToad"])
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            shutil.copytree(ROOT / "src", source / "src")
+            self.builder.build(source)
 
     def test_missing_sources_fail_without_emitting_an_empty_place(self):
         with tempfile.TemporaryDirectory() as directory:

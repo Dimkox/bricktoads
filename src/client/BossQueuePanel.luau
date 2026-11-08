@@ -1,6 +1,9 @@
 -- Private queue presentation. Joining never creates a body; the server owns the offer and role.
 local BossQueuePanel = {}
 BossQueuePanel.__index = BossQueuePanel
+local function sourceText(source,args)
+    return (source:gsub('{([%w_]+):?[%w_]*}',function(key) return tostring(args and args[key] or '') end))
+end
 
 local function make(className, name, parent, properties)
     local item = Instance.new(className)
@@ -14,9 +17,9 @@ local function position(item, x, y, width, height)
     item.Position, item.Size = UDim2.fromOffset(x, y), UDim2.fromOffset(width, height)
 end
 
-function BossQueuePanel.new(menuParent, hudParent, sendIntent, colors)
+function BossQueuePanel.new(menuParent, hudParent, sendIntent, colors, translate, groupName)
     local self = setmetatable({menuParent = menuParent, hudParent = hudParent,
-        sendIntent = sendIntent, colors = colors, compact = false}, BossQueuePanel)
+        sendIntent = sendIntent, colors = colors, compact = false, translate=translate, groupName=groupName}, BossQueuePanel)
     self.card = make("Frame", "BossQueue", menuParent, {
         BackgroundColor3 = colors.panel, BorderSizePixel = 0, LayoutOrder = 7, Visible = false,
     })
@@ -30,14 +33,14 @@ function BossQueuePanel.new(menuParent, hudParent, sendIntent, colors)
         })
     end
     self.heading = text("Heading", 12, colors.yellow, true)
-    self.heading.Text = "ОЧЕРЕДЬ БОССА"
+    self.heading.Text = "BOSS QUEUE"
     self.name = text("Guardian", 19, colors.text, true)
-    self.name.Text = "Страж переправы"
+    self.name.Text = "Causeway Guardian"
     self.status = text("QueueStatus", 13, colors.yellow, true)
     self.status.TextXAlignment = Enum.TextXAlignment.Right
     self.detail = text("Detail", 13, colors.muted, false)
     self.note = text("RoleNote", 12, colors.muted, false)
-    self.note.Text = "Очередь не даёт роль сразу и не добавляет стражу здоровье."
+    self.note.Text = "Joining the queue does not assign a role immediately or add Guardian health."
     local function action(name, callback)
         local item = make("TextButton", name, self.card, {
             BackgroundColor3 = colors.card, BorderSizePixel = 0, Text = "",
@@ -100,49 +103,50 @@ function BossQueuePanel:_draw()
     local queue = self.queue
     if not queue then return end
     local state, colors = queue.state, self.colors
+    local T=self.translate or sourceText
     local seconds = self:_remaining()
     local timed = state == "Invited" or state == "Accepted"
-    local enabled, primaryText = false, "Недоступно"
+    local enabled, primaryText = false, "Unavailable"
     self.secondary.Visible = state == "Invited"
     if state == "Queued" then
-        self.status.Text = "В очереди" .. (queue.position and " · №" .. tostring(queue.position) or "")
-        self.detail.Text = "Выбор обычного противника отменит ожидание."
-        primaryText, enabled = "Покинуть очередь", true
+        self.status.Text = queue.position and T("Queued · #{position:int}", {position=queue.position}) or T("Queued")
+        self.detail.Text = "Choosing a regular enemy leaves the queue."
+        primaryText, enabled = "Leave queue", true
     elseif state == "Invited" then
-        self.status.Text = "Приглашение · " .. seconds .. " с"
-        local target = queue.groupName and (queue.groupName .. " · ") or ""
-        self.detail.Text = self.compact and (target .. "Примите до конца таймера.")
-            or (target .. "Примите приглашение до таймера.")
-        primaryText, enabled = "Принять", seconds > 0
+        self.status.Text = T("Invitation · {seconds:int} s", {seconds=seconds})
+        local target = queue.groupName and ((self.groupName and self.groupName(queue.groupName,queue.groupId) or queue.groupName) .. " · ") or ""
+        self.detail.Text = self.compact and (target .. T("Accept before time runs out."))
+            or (target .. T("Accept the invitation before time runs out."))
+        primaryText, enabled = "Accept", seconds > 0
     elseif state == "Accepted" then
-        self.status.Text = "Подключение · " .. seconds .. " с"
-        self.detail.Text = "Подключаем автоматически… роль зарезервирована."
-        primaryText, enabled = "Отменить", true
+        self.status.Text = T("Connecting · {seconds:int} s", {seconds=seconds})
+        self.detail.Text = "Connecting automatically… your role is reserved."
+        primaryText, enabled = "Cancel", true
     elseif state == "Ready" then
-        self.status.Text = "Готово к бою"
-        self.detail.Text = "Страж закреплён за вами. Ждём начала встречи."
-        primaryText, enabled = "Отменить", true
+        self.status.Text = "Ready to fight"
+        self.detail.Text = "The Guardian is yours. Waiting for the encounter."
+        primaryText, enabled = "Cancel", true
     elseif state == "Active" then
-        self.status.Text = "В бою"
-        self.detail.Text = "Вы управляете стражем переправы."
-        primaryText = "Роль назначена"
+        self.status.Text = "In combat"
+        self.detail.Text = "You control the Causeway Guardian."
+        primaryText = "Role assigned"
     else
-        self.status.Text = queue.available == true and "Можно записаться" or "Недоступно"
-        self.detail.Text = queue.available == true and (self.compact and "Ждите приглашения перед встречей со стражем."
-            or "Встаньте в очередь и примите приглашение перед встречей героев со стражем.")
-            or "Очередь сейчас недоступна для вашей роли."
-        primaryText, enabled = "Ждать стража", queue.available == true
+        self.status.Text = queue.available == true and "Queue available" or "Unavailable"
+        self.detail.Text = queue.available == true and (self.compact and "Wait for an invitation before the Guardian encounter."
+            or "Join the queue and accept an invitation before the heroes reach the Guardian.")
+            or "The queue is unavailable for your current role."
+        primaryText, enabled = "Queue for Guardian", queue.available == true
     end
     if timed and seconds == 0 then
-        self.status.Text, self.detail.Text = "Время вышло", "Ждём подтверждения сервера…"
+        self.status.Text, self.detail.Text = "Time expired", "Waiting for server confirmation…"
         enabled = false
     end
-    if self.pending then primaryText = "Отправляем…" end
+    if self.pending then primaryText = "Sending…" end
     enabled = enabled and not self.pending
     self.primary.Text, self.primary.Active, self.primary.Selectable = primaryText, enabled, enabled
     self.primary.BackgroundColor3 = enabled and colors.yellow or colors.card
     self.primary.TextColor3 = enabled and colors.ink or colors.muted
-    self.secondary.Text = "Отказаться"
+    self.secondary.Text = "Decline"
     self.secondary.Active, self.secondary.Selectable = enabled, enabled
     self.secondary.TextColor3 = enabled and colors.text or colors.muted
 end

@@ -1,14 +1,17 @@
 -- Confirmed presentation only. This module never sends input or changes actors.
 local Feedback={}
 Feedback.__index=Feedback
-local messages={DragonMounted='ВЕРХОМ НА ДРАКОНЕ',DragonCaptured='ВАС СХВАТИЛИ',
-    DragonReleased='СНОВА НА НОГАХ',DragonFireHit='ПОПАДАНИЕ ОГНЁМ',AttackMiss='ПРОМАХ',EnemyAttackMiss='ПРОМАХ',EnemyDeath='ПРОТИВНИК ПОВЕРЖЕН',
-    EnemyClaimed='РОЛЬ ПОЛУЧЕНА',FlyCaught='ЗДОРОВЬЕ ВОССТАНОВЛЕНО',ClubEquipped='ДУБИНА В РУКАХ',
-    ClubDropped='ДУБИНА ВЫПАЛА',ClubSwingHit='УДАР ДУБИНОЙ',EnemyGrabbed='ПРОТИВНИК СХВАЧЕН',
-    EnemyThrown='ПРОТИВНИК БРОШЕН',EnemyDropped='ПРОТИВНИК ОСВОБОЖДЁН',RelocateToSafety='БЕЗОПАСНАЯ ОПОРА',
-    GuardianBallPickedUp='ШАР В РУКАХ',GuardianBallThrown='ШАР БРОШЕН',BossHit='ПОПАДАНИЕ В СТРАЖА',
-    BossShielded='СТРАЖ ЗАЩИЩЁН',BossWarning='ТЯЖЁЛЫЙ ШАР — УКЛОНЯЙТЕСЬ'}
+local messages={DragonMounted="DRAGON MOUNTED",DragonCaptured="YOU WERE CAPTURED",
+    DragonReleased="BACK ON FOOT",DragonFireHit="FIRE HIT",AttackMiss="MISS",EnemyAttackMiss="MISS",EnemyDeath="ENEMY DEFEATED",
+    EnemyClaimed="ROLE CLAIMED",FlyCaught="HEALTH RESTORED",ClubEquipped="CLUB EQUIPPED",
+    ClubDropped="CLUB DROPPED",ClubSwingHit="CLUB HIT",EnemyGrabbed="ENEMY GRABBED",
+    EnemyThrown="ENEMY THROWN",EnemyDropped="ENEMY RELEASED",RelocateToSafety="SAFE SUPPORT",
+    GuardianBallPickedUp="BALL PICKED UP",GuardianBallThrown="BALL THROWN",BossHit="GUARDIAN HIT",
+    BossShielded="GUARDIAN PROTECTED",BossWarning="HEAVY BALL — DODGE"}
 local global={RunResult=true,EnemyDeath=true,BossHit=true,BossShielded=true,BossWarning=true}
+local actionMessages={NOT_RUNNING="Run first: double-tap a direction",REACTION="Wait until you recover",
+    COOLDOWN="Wait before your next action",HELD="You are held · wait for release",
+    THROWN="You are thrown · wait until landing"}
 local function finite(v) return type(v)=='number' and v==v and v>-math.huge and v<math.huge end
 local function integer(v) return finite(v) and v>=0 and v<=1e12 and v%1==0 end
 local function identity(v) return type(v)=='string' and #v>0 and #v<=160 end
@@ -25,19 +28,44 @@ end
 
 function Feedback.new() return setmetatable({cursor=0},Feedback) end
 
-function Feedback:sync(data)
+function Feedback:_actionFeedback(data,group,observedServerNow)
+    local _,actor=owner(data)
+    if not identity(actor) or (data.view~=nil and data.view~='Playing')
+        or (data.status~=nil and data.status~='Active') then
+        self.actionScope,self.actionCursor=nil,0;return nil
+    end
+    local scope=tostring(#group)..':'..group..':'..data.runId..':'..tostring(data.levelEpoch)..':'..actor
+    local baseline=self.actionScope~=scope
+    if baseline then self.actionScope,self.actionCursor=scope,0 end
+    local row=data.actionFeedback
+    local envelopeNow=finite(data.serverNow) and data.serverNow or data.now
+    if type(row)~='table' or not integer(row.id) or row.id<1 or not actionMessages[row.code]
+        or (row.kind~='Attack' and row.kind~='Jump') or row.groupId~=group or row.runId~=data.runId
+        or row.actorId~=actor or not finite(row.expiresAt) or not finite(envelopeNow) then return nil end
+    local now=finite(observedServerNow) and math.max(observedServerNow,envelopeNow) or envelopeNow
+    local remaining=row.expiresAt-now
+    if remaining<=0 or row.expiresAt-envelopeNow>1.400001 or row.id<=(self.actionCursor or 0) then return nil end
+    self.actionCursor=row.id
+    if baseline then return nil end
+    return {kind='ActionResult',actionId=row.id,text=actionMessages[row.code],style='shield',
+        duration=math.min(1.4,remaining),expiresAt=row.expiresAt}
+end
+
+function Feedback:sync(data,observedServerNow)
     if type(data)~='table' or not integer(data.snapshotSeq) or data.snapshotSeq<1
         or (self.snapshotSeq and data.snapshotSeq<=self.snapshotSeq) then return {},false end
     self.snapshotSeq=data.snapshotSeq
-    if not identity(data.runId) then self.scope=nil;self.cursor=0;return {},true end
+    if not identity(data.runId) then self.scope=nil;self.cursor=0;self.actionScope=nil;self.actionCursor=0;return {},true end
     local group=data.groupId or 'combat-stand'
     if not identity(group) then return {},false end
+    local action=self:_actionFeedback(data,group,observedServerNow)
+    local actionRows=action and {action} or {}
     local feed=data.feedback
     if type(feed)~='table' or not integer(feed.latestSeq) or type(feed.events)~='table'
-        or #feed.events>12 or not finite(data.now) then return {},true end
+        or #feed.events>12 or not finite(data.now) then return actionRows,true end
     local scope=tostring(#group)..':'..group..':'..data.runId
-    if self.scope~=scope then self.scope=scope;self.cursor=feed.latestSeq;return {},true end
-    if feed.latestSeq<=self.cursor then return {},true end
+    if self.scope~=scope then self.scope=scope;self.cursor=feed.latestSeq;return actionRows,true end
+    if feed.latestSeq<=self.cursor then return actionRows,true end
     local serverNow=finite(data.serverNow) and data.serverNow or data.now
     local ownSlot,ownActor=owner(data)
     local pending={}
@@ -55,28 +83,31 @@ function Feedback:sync(data)
             seen[event.seq]=true
             local message,style=messages[event.kind],'neutral'
             if event.kind=='Hit' or event.kind=='EnemyHit' then
-                if event.blocked then message,style='ЗАЩИТА','shield'
-                elseif event.slot==ownSlot then message,style='ПОЛУЧЕН УРОН','damage'
-                else message,style='ПОПАДАНИЕ','success' end
+                if event.blocked then message,style="PROTECTED",'shield'
+                elseif event.slot==ownSlot then message,style="DAMAGE TAKEN",'damage'
+                else message,style="HIT",'success' end
             elseif event.kind=='CommitSpawn' and finite(event.attempt) and event.attempt>1 then
-                message,style='ВОЗВРАЩЕНИЕ','success'
+                message,style="RETURNED",'success'
             elseif event.kind=='RunResult' then
-                if event.result=='Won' then message,style='ПОБЕДА','success'
-                elseif event.result=='Lost' then message,style='ПОРАЖЕНИЕ','damage' end
+                if event.result=='Won' then message,style="VICTORY",'success'
+                elseif event.result=='Lost' then message,style="DEFEAT",'damage' end
             elseif event.kind=='BossWarning' then style='shield' end
             if message then result[#result+1]={seq=event.seq,kind=event.kind,text=message,style=style} end
         end
     end
     self.cursor=feed.latestSeq
+    if action then result[#result+1]=action end
     return result,true
 end
 
-function Feedback.hint(data)
+function Feedback.hint(data,translate)
+    local T=translate or function(source) return source end
     data=type(data)=='table' and data or {}
-    if type(data.enemyRole)=='table' and data.enemyRole.template=='Boss' then return 'ОГОНЬ: стреляйте в героев' end
+    if data.status=='Faulted' then return "Party stopped · start again" end
+    if type(data.enemyRole)=='table' and data.enemyRole.template=='Boss' then return "FIRE: shoot at the heroes" end
     local interaction=type(data.interaction)=='table' and data.interaction or {}
     if interaction.carrying and type(interaction.label)=='string' then
-        return interaction.label..(interaction.available and ' — кнопка действия' or '')
+        return T(interaction.label)..(interaction.available and T(" — action button") or '')
     end
     local controlled=type(data.enemyRole)=='table' and data.enemyRole or nil
     if data.mine and type(data.heroes)=='table' then
@@ -87,14 +118,14 @@ function Feedback.hint(data)
     end
     if controlled and controlled.status=='Alive' and controlled.connected~=false
         and controlled.movementMode=='Run' and (data.view==nil or data.view=='Playing') then
-        return 'МЕГА: удар с разбега'
+        return "MEGA: running strike"
     end
     if type(data.interaction)=='table' and data.interaction.available and type(data.interaction.label)=='string' then
-        return data.interaction.label..' — кнопка действия'
+        return T(data.interaction.label)..T(" — action button")
     end
-    if data.mine then return 'УДАР: атака или действие рядом' end
-    if data.enemyRole then return 'УДАР: остановите героев' end
-    return 'Выберите роль или наблюдайте'
+    if data.mine then return "ATTACK: strike or interact nearby" end
+    if data.enemyRole then return "ATTACK: stop the heroes" end
+    return "Choose a role or watch"
 end
 
 function Feedback.aliveHeroes(heroes)

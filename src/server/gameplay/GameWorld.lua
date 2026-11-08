@@ -101,8 +101,9 @@ local function hideRig(actor)
     end
 end
 
-local function toad(actor, template)
+local function toad(actor, template, appearance)
     hideRig(actor)
+    if appearance and appearance.attach(actor, template) then return end
     local palettes = {
         ["Mr. Green"] = {Color3.fromRGB(94, 159, 102), Color3.fromRGB(188, 209, 122), Color3.fromRGB(41, 85, 65)},
         ["Mr. Yellow"] = {Color3.fromRGB(210, 169, 61), Color3.fromRGB(246, 224, 143), Color3.fromRGB(118, 83, 41)},
@@ -241,7 +242,7 @@ local function buildGeometry(self)
         part(g, "PoolRim", Vector3.new(0.5, 0.5, 7.6), CFrame.new(x, 0.25, 15.5), COLORS.dark, Enum.Material.Rock)
     end
     local warning = part(g, "BogWarning", Vector3.new(0.4, 2.6, 0.4), CFrame.new(-1, 1.3, 12.5), COLORS.pale, Enum.Material.Wood)
-    label(warning, "ОПАСНАЯ ТОПЬ", 160, Vector3.new(0, 2, 0)).TextColor3 = COLORS.amber
+    label(warning, "DANGEROUS MARSH", 160, Vector3.new(0, 2, 0)).TextColor3 = COLORS.amber
 
     -- Broken parapets leave readable edges while keeping the route open.
     for x = -76, 118, 12 do
@@ -306,8 +307,8 @@ local function buildGeometry(self)
 
     local start = part(g, "StartSign", Vector3.new(1, 0.5, 1), CFrame.new(-63, 4.6, -15), COLORS.dark)
     start.Transparency = 1
-    label(start, "ЗАТОПЛЕННЫЙ ТРАКТ", 310, Vector3.new(0, 2.8, 0)).TextSize = 23
-    label(start, "ВПЕРЁД  →", 200, Vector3.new(0, 0.8, 0)).TextColor3 = COLORS.mint
+    label(start, "FLOODED CAUSEWAY", 310, Vector3.new(0, 2.8, 0)).TextSize = 23
+    label(start, "FORWARD  →", 200, Vector3.new(0, 0.8, 0)).TextColor3 = COLORS.mint
 
     self.gates = {}
     local function gate(x, title)
@@ -320,9 +321,9 @@ local function buildGeometry(self)
         self.gates[#self.gates + 1] = record
         return record
     end
-    gate(2, "I  ·  РАСЧИСТИТЕ ТРАКТ")
-    gate(52, "II  ·  ЗАТОПЛЕННЫЙ ДВОР")
-    self.exitGate = gate(108, "III  ·  СТРАЖ ПЕРЕПРАВЫ")
+    gate(2, "I  ·  CLEAR THE CAUSEWAY")
+    gate(52, "II  ·  FLOODED COURTYARD")
+    self.exitGate = gate(108, "III  ·  CAUSEWAY GUARDIAN")
     local exitPad = part(g, "ExitPad", Vector3.new(12, 0.13, 20), CFrame.new(115, 0.09, 0), COLORS.mint, Enum.Material.Neon)
     exitPad.Transparency = 0.6
     self.exitPad = exitPad
@@ -379,6 +380,16 @@ local function buildRoute(self, level)
     end
     for index, zone in ipairs(level.zones) do
         for _,data in ipairs(zone.platforms) do platform(data, index, zone.id) end
+        for _,data in ipairs(zone.obstacles or {}) do
+            if data.kind == 'StoneCover' then
+                local cover = part(g, 'StoneCover', Vector3.new(data.w, data.h, data.d), CFrame.new(data.x, data.y, data.z), COLORS.stone, Enum.Material.Rock, true)
+                -- A cover is physical support within its district, not a new
+                -- respawn floor or an actor with its own life/ownership.
+                cover:SetAttribute('SurfaceId', zone.id)
+                cover:SetAttribute('ZoneIndex', index)
+                part(g, 'CoverCrown', Vector3.new(data.w, .18, data.d), CFrame.new(data.x, data.y + data.h / 2, data.z), COLORS.pale, Enum.Material.Slate)
+            end
+        end
         local first, last = zone.platforms[1], zone.platforms[#zone.platforms]
         local x, y, z = first.x - first.w / 2 + 8, first.y + first.h / 2, first.z
         local sign = part(g, "DistrictSign", Vector3.new(0.8, 6, 0.8), CFrame.new(x, y + 3, z - first.d / 2 - 2), COLORS.dark, Enum.Material.Wood)
@@ -419,7 +430,7 @@ local function buildRoute(self, level)
                     local top = data.y + data.h / 2
                     part(g, "JumpEdge", Vector3.new(.45, .13, data.d - 1), CFrame.new(edge.x, top + .12, data.z), COLORS.amber, Enum.Material.Neon)
                     local marker = part(g, "JumpMarker", Vector3.new(1, .1, 1), CFrame.new(edge.x - 1, top + .15, data.z), COLORS.mint, Enum.Material.Neon)
-                    label(marker, "ПРЫЖОК  →", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
+                    label(marker, "JUMP  →", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
                 end
             end
         end
@@ -428,7 +439,7 @@ local function buildRoute(self, level)
     local boss = level.boss
     platform(boss.platform, #level.zones + 1, "GuardianCourt")
     local bossTop = boss.platform.y + boss.platform.h / 2
-    self.exitGate = gate(boss.gateX, boss.platform.z, bossTop, boss.platform.d, "СТРАЖ ПЕРЕПРАВЫ")
+    self.exitGate = gate(boss.gateX, boss.platform.z, bossTop, boss.platform.d, "CAUSEWAY GUARDIAN")
     self.exitPad = part(g, "ExitPad", Vector3.new(boss.pad.w, .13, boss.pad.d), CFrame.new(boss.pad.x, boss.pad.y, boss.pad.z), COLORS.mint, Enum.Material.Neon)
     self.exitPad.Transparency = .78
     for _,side in ipairs({-1, 1}) do
@@ -445,6 +456,28 @@ local function buildRoute(self, level)
         CFrame.new((bounds.minX + bounds.maxX) / 2, -15, (bounds.minZ + bounds.maxZ) / 2), COLORS.dark)
     depth.Transparency = .22
     self:progress(1, false)
+end
+
+local function resetOrigins(self)
+    local first = self.config.Level and self.config.Level.zones[1].platforms[1]
+    local y, z = first and first.y + first.h / 2 + 3 or 3, first and first.z or 0
+    self.origins = {
+        [1] = Vector3.new(-65, y, z - 7) + self.offset,
+        [2] = Vector3.new(-65, y, z) + self.offset,
+        [3] = Vector3.new(-65, y, z + 7) + self.offset,
+    }
+end
+
+local function translateGeometry(self)
+    for _,object in ipairs(self.geometry:GetDescendants()) do
+        if object:IsA('BasePart') then object.CFrame += self.offset end
+    end
+end
+
+local function layoutAttributes(self)
+    local variation = self.config.Level and self.config.Level.variation
+    self.folder:SetAttribute('LayoutSeed', variation and variation.seed)
+    self.folder:SetAttribute('LayoutVersion', variation and variation.version)
 end
 
 function World.new(BaseWorld, config, options)
@@ -465,10 +498,11 @@ function World.new(BaseWorld, config, options)
     worldConfig.FallY = config.FallY + translation.Y
     local self = BaseWorld.new(worldConfig)
     self._base = BaseWorld
+    self.characterAppearance = options.characterAppearance
     self.offset = translation
     setmetatable(self, {__index = function(_, key) return World[key] or BaseWorld[key] end})
     self.folder.Name = worldName
-    self.folder:SetAttribute("LevelName", "Затопленный тракт")
+    self.folder:SetAttribute("LevelName", "Flooded Causeway")
     self.folder:SetAttribute("OriginalArt", true)
     self.enemyKinds = {}
     self.healingFlyFolder = Instance.new("Folder")
@@ -483,15 +517,10 @@ function World.new(BaseWorld, config, options)
     self.clubItemFolder.Name = 'ClubItems'
     self.clubItemFolder.Parent = self.folder
     self.clubItems, self.equippedClubs = {}, {}
-    self.origins = {
-        [1] = Vector3.new(-65, 3, -7) + translation,
-        [2] = Vector3.new(-65, 3, 0) + translation,
-        [3] = Vector3.new(-65, 3, 7) + translation,
-    }
+    resetOrigins(self)
     if config.Level then buildRoute(self, config.Level) else buildGeometry(self) end
-    for _,object in ipairs(self.geometry:GetDescendants()) do
-        if object:IsA("BasePart") then object.CFrame += translation end
-    end
+    translateGeometry(self)
+    layoutAttributes(self)
     Lighting.ClockTime = 16.5
     Lighting.Brightness = 2.2
     Lighting.Ambient = Color3.fromRGB(80, 109, 111)
@@ -514,6 +543,23 @@ function World.new(BaseWorld, config, options)
     return self
 end
 
+function World:rebuildLevel(route)
+    -- The caller must finish the old run's cleanup before any geometry or
+    -- configuration changes; even a dead body still belongs to that old run.
+    if next(self.actors) ~= nil then return false, 'ACTORS_PRESENT' end
+    assert(type(route) == 'table' and type(route.zones) == 'table' and route.zones[1]
+        and route.boss and route.bounds, 'A complete level route is required')
+    self.config.Level = route
+    self.blocked = false
+    self.lastSupport, self.deathReason = {}, {}
+    buildRoute(self, route)
+    translateGeometry(self)
+    resetOrigins(self)
+    layoutAttributes(self)
+    self:stage('Approach')
+    return true
+end
+
 function World:spawn(uid, actorId, point, held, template)
     local previous=self.actors[uid]
     if not self.origins[uid] and uid > 0 then self.origins[uid] = Vector3.new(-65, 3, (uid - 2) * 7) + self.offset end
@@ -529,10 +575,12 @@ function World:spawn(uid, actorId, point, held, template)
             self.origins[uid] = p
         end
         self.actors[uid].model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
-        toad(self.actors[uid], template or "Mr. Green")
+        toad(self.actors[uid], template or "Mr. Green", self.characterAppearance)
+        ownCompletedRig(self.actors[uid])
         local actor=self.actors[uid]
         actor.humanoid.DisplayDistanceType=Enum.HumanoidDisplayDistanceType.None
         local ownerName=label(actor.root,actor.humanoid.DisplayName,220,Vector3.new(0,4.2,0))
+        ownerName.AutoLocalize=false;ownerName.Parent.AutoLocalize=false
         ownerName.TextSize=14
         ownerName.Parent.Name='OwnerNameplate'
     end
@@ -546,8 +594,8 @@ function World:spawnEnemy(id, kind, positionTable)
     local isBoss = string.lower(tostring(kind)) == "boss"
     local position = Vector3.new(x, y, z) + self.offset
     self.origins[id] = position
-    local speciesNames = {Pig = "Панцирный хряк", Walker = "Шагающий страж", Dragon = "Крылатый дозорный"}
-    self.names[id] = isBoss and "Страж переправы" or speciesNames[kind] or "Ржавый дозорный"
+    local speciesNames = {Pig = "Armored Boar", Walker = "Walking Guard", Dragon = "Winged Guard"}
+    self.names[id] = isBoss and "Causeway Guardian" or speciesNames[kind] or "Rusty Guard"
     local previous=self.actors[id]
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     if previous then self:resetLocomotion(id,previous) end
@@ -610,6 +658,7 @@ function World:enemyIdentity(id,actorId,ownerName)
         if board then board.Text.Text=ownerName
         else
             local text=label(actor.root,ownerName,220,Vector3.new(0,self.enemyKinds[id]=='Boss' and 10.2 or 5.7,0))
+            text.AutoLocalize=false;text.Parent.AutoLocalize=false
             text.TextSize=14; text.TextColor3=COLORS.amber; text.Parent.Name='OwnerNameplate'
         end
     end
@@ -889,7 +938,7 @@ function World:enemyHealth(id, raw, maximum)
     if a.healthLabel then
         local symbols = {}
         for n = 1, 3 do symbols[n] = n <= hearts and "♥" or "♡" end
-        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "СТРАЖ  ·  " or "") .. table.concat(symbols, " ")
+        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  ·  " or "") .. table.concat(symbols, " ")
     end
 end
 
@@ -905,7 +954,7 @@ function World:progress(zoneIndex, complete)
     local completed = zoneIndex - (complete and 0 or 1)
     for index,gate in ipairs(self.gates) do gateState(gate, index <= completed) end
     self.folder:SetAttribute("ZoneIndex", zoneIndex)
-    self.folder:SetAttribute("ZoneName", level.zones[zoneIndex] and level.zones[zoneIndex].name or "Страж переправы")
+    self.folder:SetAttribute("ZoneName", level.zones[zoneIndex] and level.zones[zoneIndex].name or "Causeway Guardian")
 end
 
 function World:noSafe(enabled)
@@ -937,7 +986,7 @@ function World:stage(name)
     if self.config.Level then
         local open = name == "Exit" or name == "Won"
         gateState(self.exitGate, open)
-        self.exitGate.label.Text = name == "Won" and "ТРАКТ ПРОЙДЕН!" or (open and "ВЫХОД  →  ВСТАНЬТЕ НА ПЕЧАТЬ" or "СТРАЖ ПЕРЕПРАВЫ")
+        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or (open and "EXIT  →  STAND ON THE SEAL" or "CAUSEWAY GUARDIAN")
         self.exitGate.label.TextColor3 = open and COLORS.mint or COLORS.amber
         self.exitPad.Transparency = open and .12 or .78
         return
@@ -954,11 +1003,11 @@ function World:stage(name)
         gate.label.TextTransparency = open and 0.65 or 0
     end
     if name == "Exit" or name == "Won" then
-        self.exitGate.label.Text = name == "Won" and "ТРАКТ ПРОЙДЕН!" or "ВЫХОД  →  ВСТАНЬТЕ НА ПЕЧАТЬ"
+        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or "EXIT  →  STAND ON THE SEAL"
         self.exitGate.label.TextColor3 = COLORS.mint
         self.exitGate.label.TextTransparency = 0
     else
-        self.exitGate.label.Text = "III  ·  СТРАЖ ПЕРЕПРАВЫ"
+        self.exitGate.label.Text = "III  ·  CAUSEWAY GUARDIAN"
         self.exitGate.label.TextColor3 = Color3.fromRGB(226, 244, 211)
     end
     self.exitPad.Transparency = progress >= 3 and 0.12 or 0.78
@@ -1016,7 +1065,7 @@ function World:projectile(id, positionTable, reflected, mode)
     a.model:SetAttribute("Pickup", mode == "Ground")
     a.model:SetAttribute("Carried", mode == "Carried")
     if mode == "Ground" and not a.pickupLabel then
-        a.pickupLabel = label(a.root, "ШАР  ·  ВЗЯТЬ", 190, Vector3.new(0, 2.7, 0))
+        a.pickupLabel = label(a.root, "BALL  ·  PICK UP", 190, Vector3.new(0, 2.7, 0))
         a.pickupLabel.TextColor3 = Color3.fromRGB(255, 220, 71)
     end
     if a.pickupLabel then a.pickupLabel.Parent.Enabled = mode == "Ground" end
@@ -1187,7 +1236,7 @@ function World:clubItem(id, position)
     if not item then
         item = clubArt(self.clubItemFolder,'ClubItem_'..tostring(id),frame)
         item.model:SetAttribute('ClubId',id)
-        local text=label(item.root,'ДУБИНА  ·  ВЗЯТЬ',190,Vector3.new(0,1.4,0))
+        local text=label(item.root,"CLUB  ·  PICK UP",190,Vector3.new(0,1.4,0))
         text.TextColor3,text.TextSize,text.Parent.MaxDistance=COLORS.mint,14,45
         pointLight(item.root,COLORS.mint,7,.4)
         self.clubItems[id]=item
@@ -1294,7 +1343,7 @@ function World:healingFly(id, position)
             Enum.PartType.Ball, Enum.Material.ForceField)
         aura.Transparency = .84
         pointLight(fly.root, COLORS.mint, 7, .55)
-        local text = label(fly.root, "МУХА  ·  ЛЕЧЕНИЕ", 170, Vector3.new(0,1.6,0))
+        local text = label(fly.root, "FLY  ·  HEAL", 170, Vector3.new(0,1.6,0))
         text.TextSize = 13
         text.TextColor3 = COLORS.mint
         text.Parent.MaxDistance = 38
@@ -1521,6 +1570,7 @@ function World:updatePresentation(session, dt, enemies)
                 end
                 motor.joint.C0 = motor.joint.C0:Lerp(motor.base * CFrame.Angles(angle, 0, roll), blend)
             end
+            if self.characterAppearance then self.characterAppearance.update(actor) end
         end
     end
 end
@@ -1536,11 +1586,7 @@ function World:clearActors()
     self.healingFlyVisuals, self.healingEffects = {}, {}
     self.clubItemFolder:ClearAllChildren()
     self.clubItems,self.equippedClubs={},{}
-    self.origins = {
-        [1] = Vector3.new(-65, 3, -7) + self.offset,
-        [2] = Vector3.new(-65, 3, 0) + self.offset,
-        [3] = Vector3.new(-65, 3, 7) + self.offset,
-    }
+    resetOrigins(self)
     if self.config.Level then self:progress(1, false) end
     self:stage("Approach")
 end

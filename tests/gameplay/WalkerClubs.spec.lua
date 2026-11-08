@@ -80,7 +80,7 @@ return function(Clubs,Session,Core,Combat,Config,FakeWorld)
     test('pickup equips one item exclusively without beginning an attack or changing resources',function()
         local d,s,w,c,p,_,give=fixture(true);local actor=s.state.heroes[1].actorId
         give();assert(c:hasClub(1) and not c:hasClub(2) and next(w.items)==nil and countRows(w.equipment)==1)
-        assert(c:interaction(1).equipped and c:interaction(1).label=='УДАР ДУБИНОЙ' and not c:interaction(1).carrying)
+        assert(c:interaction(1).equipped and c:interaction(1).label=="CLUB HIT" and not c:interaction(1).carrying)
         assert(s.combat[1].attack==nil and s.combat[1].rawLife==47 and s.state.heroes[1].actorId==actor
             and s.state.heroes[1].respawns==3 and d.locks==0)
         assert(c:interact(2,.2,'Punch')=='NO_INTERACTION')
@@ -92,7 +92,7 @@ return function(Clubs,Session,Core,Combat,Config,FakeWorld)
             assert(not c:interaction(1).available and c:interact(1,.1,'Punch')=='NO_INTERACTION')
         end
         local d,s,w,c,p=fixture();c:walkerDefeated(-1,{x=-1,y=3,z=0},'Combat')
-        assert(c:interaction(1).label=='ВЗЯТЬ ДУБИНУ' and s:intent(1,p(1),.1)=='OK')
+        assert(c:interaction(1).label=="PICK UP CLUB" and s:intent(1,p(1),.1)=='OK')
     end)
     test('successful ground pickup turns the hero toward the item only after equipment succeeds',function()
         local d,s,w,c,p=fixture();c:walkerDefeated(-1,{x=-1,y=3,z=2},'Combat')

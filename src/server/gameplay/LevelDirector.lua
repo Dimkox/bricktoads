@@ -13,10 +13,10 @@ local function towards(a,b,amount)
     local t=math.min(1,amount/d)
     return {x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t}
 end
-local objectives={Approach='Разбейте дозор у старых ворот',Courtyard='Освободите внутренний двор',
-    BossReady='Назначаем стража: ожидаем ответ приглашённого игрока',
-    Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
-    Won='Тракт пройден',Lost='Команда выбыла'}
+local objectives={Approach="Defeat the patrol by the old gate",Courtyard="Clear the inner courtyard",
+    BossReady="Assigning Guardian: waiting for the invited player",
+    Boss="Strike three projectiles back at the Guardian",Exit="The path is open — reach the glowing gate",
+    Won="Causeway cleared",Lost="Team eliminated"}
 
 function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs,DragonFlight)
     local profile=config.Attacks[config.Enemy.attack]
@@ -65,7 +65,7 @@ function Director:_wave(stage,roster)
         local actorId=self.session.state.runId..':enemy:'..self.session.state.levelEpoch..':'..r.id
         self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false,
             actorId=actorId,zoneIndex=self.zoneIndex,kind=r.kind,
-            name=({Pig='Болотный налётчик',Walker='Длинноногий дозорный',Dragon='Крылатый разведчик'})[r.kind] or 'Ржавый дозорный'}
+            name=({Pig="Marsh Raider",Walker="Long-legged Guard",Dragon="Winged Scout"})[r.kind] or "Rusty Guard"}
         local e=self.enemies[r.id]
         if self.config.SourceCombat and r.rawLife~=nil then
             assert(type(r.rawLife)=='number' and r.rawLife>=0 and r.rawLife<=47 and r.rawLife%1==0,'Invalid source Life')
@@ -306,7 +306,7 @@ function Director:_boss()
     assert(self.world:spawnEnemy(-99,'Boss',position),'Boss spawn failed')
     local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
     local e={boss=true,actorId=actorId,health=self.config.Boss.hits,rawLife=self.route and self.config.Boss.rawLife,
-        zoneIndex=self.zoneIndex,name='Страж переправы',aim={x=-1,z=0}}
+        zoneIndex=self.zoneIndex,name="Causeway Guardian",aim={x=-1,z=0}}
     self.enemies[-99]=e
     if controller.state=='Human' then
         e.ownerUserId=controller.userId
@@ -586,7 +586,10 @@ function Director:step(now,dt)
     if self.flies then self.flies:step(now) end
     if self.dragons then self.dragons:step(now,dt) end
     if self.session.state.status=='Lost' then
-        self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); if self.dragons then self.dragons:close() end; return
+        self.result='Lost'; self.stage='Lost'; self.world:stage('Lost')
+        if self.guardian then self.guardian:step(now,0) end
+        if self.dragons then self.dragons:close() end
+        return
     end
     if self.stage=='Approach' or self.stage=='Courtyard' or self.stage=='Route' then self:_enemies(dt) end
     if self.dragons and self.stage~='Route' and self.stage~='Approach' and self.stage~='Courtyard' then
@@ -626,10 +629,12 @@ function Director:snapshot()
     local zone=self.route and self.route.zones[self.zoneIndex]
     local objective=objectives[self.stage]
     if self.route and self.stage=='Route' then objective=zone.objective
-    elseif self.route and self.stage=='Boss' then objective='Уклоняйтесь. Возьмите тяжёлый шар и бросьте в стража.' end
+    elseif self.route and self.stage=='Boss' then objective="Dodge. Pick up a heavy ball and throw it at the Guardian." end
+    local variation=self.route and self.route.variation
     return {stage=self.stage,objective=objective,enemies=enemies,bossHits=self.bossHits,
         bossMax=self.config.Boss.hits,result=self.result,zoneIndex=self.zoneIndex,zoneCount=self.route and #self.route.zones,
         zoneName=zone and zone.name,bossMechanic=self.route and 'PickupThrow',bossRawLife=self.enemies[-99] and self.enemies[-99].rawLife,
-        healingFlies=self.flies and self.flies:snapshot()}
+        healingFlies=self.flies and self.flies:snapshot(),
+        variation=variation and {version=variation.version,seed=variation.seed,sectionChoices=table.clone(variation.sectionChoices)}}
 end
 return Director

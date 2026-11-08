@@ -163,8 +163,8 @@ function GuardianPattern:interaction(slot)
     self.now=math.max(self.now,self.director.now or self.now)
     local carried=self:_carried(slot)
     if not self:_hero(slot) then return {available=false,carrying=false} end
-    if carried then return {available=true,label='БРОСИТЬ ШАР',carrying=true} end
-    if self:_ground(slot) then return {available=true,label='ВЗЯТЬ ШАР',carrying=false} end
+    if carried then return {available=true,label="THROW BALL",carrying=true} end
+    if self:_ground(slot) then return {available=true,label="PICK UP BALL",carrying=false} end
     return {available=false,carrying=false}
 end
 

@@ -124,7 +124,7 @@ return function(Director,Definition,Config,Flies,Carry,Clubs,Combat)
         assert(d:claim(41,-1)=='OK')
         local body,identity=w.actors[-1],d.enemies[-1].actorId
         w.positions[1]={x=-37,y=3,z=-8}
-        assert(d:interaction(1).label=='СХВАТИТЬ')
+        assert(d:interaction(1).label=="GRAB")
         assert(d:interact(1,.1,'Punch')=='OK');d:step(.25,.1)
         assert(d.carry:stateFor(-1)=='Carried' and w.held[-1]==1)
         local packet={kind='Move',x=1,z=0,runId='route-run',actorId=identity,attempt=1,levelEpoch=1,connectionEpoch=1,seq=1}
@@ -145,9 +145,9 @@ return function(Director,Definition,Config,Flies,Carry,Clubs,Combat)
         local count=0;for _ in pairs(w.clubs)do count+=1 end;assert(count==1)
         d:_kill(-3,'Combat');local again=0;for _ in pairs(w.clubs)do again+=1 end;assert(again==1)
         w.positions[1]={x=-8,y=3,z=0}
-        assert(d:interaction(1).label=='ВЗЯТЬ ДУБИНУ')
+        assert(d:interaction(1).label=="PICK UP CLUB")
         assert(d:interact(1,.5,'Punch')=='OK' and d.clubs:hasClub(1))
-        assert(d:interaction(1).label=='УДАР ДУБИНОЙ')
+        assert(d:interaction(1).label=="CLUB HIT")
         d:_boss();assert(not d.clubs:hasClub(1) and w.equipped==nil)
     end)
     print('LevelRoute: '..passed..' passed')

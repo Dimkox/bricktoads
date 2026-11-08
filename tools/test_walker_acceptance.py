@@ -67,6 +67,7 @@ class WalkerAcceptanceBuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             copy = Path(directory)
             shutil.copytree(ROOT / "src", copy / "src")
+            shutil.copytree(ROOT / "assets", copy / "assets")
             shutil.copytree(ROOT / "tests/gameplay", copy / "tests/gameplay")
             path = copy / "src/server/gameplay/LevelDirector.lua"
             path.write_text(path.read_text(encoding="utf-8") + "\n-- Controlled source mutation for build identity.\n", encoding="utf-8")

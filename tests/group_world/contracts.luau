@@ -546,6 +546,80 @@ workspace.Raycast=normalRaycast
 footprintWorld:clearActors()
 print('PASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards')
 
+-- Trusted route fixtures exercise the physical boundary independently of the
+-- pure section/seed generator: the second route moves the actual aqueduct gap.
+local canonicalRebuild=source(LevelSource)
+local mapA,mapB=source(LevelSource),source(LevelSource)
+mapA.variation={version=1,seed=111,sectionChoices={1,1,1,1,1,1}}
+mapA.zones[1].obstacles={{kind='StoneCover',x=-50,y=1.5,z=-20,w=8,h=3,d=4}}
+mapB.variation={version=1,seed=222,sectionChoices={2,2,1,1,1,1}}
+mapB.zones[1].platforms[1].z=4;mapB.zones[1].platforms[1].d=56
+mapB.zones[2].platforms[1].x=29;mapB.zones[2].platforms[1].w=50
+mapB.zones[2].platforms[2].x=91.5;mapB.zones[2].platforms[2].w=65
+mapB.zones[2].gaps={{minX=54,maxX=59,minZ=-19,maxZ=19}}
+mapB.zones[3].obstacles={{kind='StoneCover',x=170,y=1.5,z=20,w=8,h=3,d=4}}
+local sharedRebuildConfig={FallY=-20,JumpPower=50,Level=canonicalRebuild}
+local rebuilding=World.new(Base,sharedRebuildConfig,{name='RebuildRouteA',offset={x=100,y=10,z=10240}})
+local untouched=World.new(Base,sharedRebuildConfig,{name='RebuildRouteB',offset={x=100,y=10,z=10752}})
+local neighbourFloor=untouched.allFloors[1]
+assert(type(rebuilding.rebuildLevel)=='function','A new run needs an explicit empty-world level rebuild boundary')
+rebuilding:clearActors();assert(rebuilding:rebuildLevel(mapA))
+assert(rebuilding.config.Level==mapA and sharedRebuildConfig.Level==canonicalRebuild and untouched.config.Level==canonicalRebuild)
+assert(rebuilding.folder:GetAttribute('LayoutSeed')==111 and rebuilding.folder:GetAttribute('LayoutVersion')==1)
+assert(rebuilding:groundPosition({x=50,y=3,z=0})==nil and rebuilding:groundPosition({x=56,y=3,z=0}),
+    'The first route must preserve its own actual gap instead of a visual-only change')
+local oldFloor,oldCover=rebuilding.allFloors[1],rebuilding.geometry:FindFirstChild('StoneCover')
+assert(oldCover and oldCover.CanCollide and oldCover.Anchored and oldCover:GetAttribute('SurfaceId')=='Floodgate')
+assert(not table.find(rebuilding.allFloors,oldCover),'Cover is collision geometry, not a new respawn platform or combat actor')
+rebuilding:progress(7,false);rebuilding:stage('Exit')
+local liveLayoutBody=actor(rebuilding,1,vector(35,13,10240))
+local oldGate,oldOrigin=rebuilding.gates[1],rebuilding.origins[1]
+local accepted,reason=rebuilding:rebuildLevel(mapB)
+assert(accepted==false and reason=='ACTORS_PRESENT','An existing body must reject a level rebuild')
+assert(rebuilding.config.Level==mapA and rebuilding.allFloors[1]==oldFloor and not oldFloor.destroyed
+    and rebuilding.geometry:FindFirstChild('StoneCover')==oldCover and rebuilding.gates[1]==oldGate
+    and not rebuilding.exitGate.beam.CanCollide and rebuilding.origins[1]==oldOrigin
+    and rebuilding.folder:GetAttribute('LayoutSeed')==111 and rebuilding.actors[1]==liveLayoutBody,
+    'Rejection must precede every config, geometry, gate, origin, body and seed mutation')
+rebuilding:healingFly('old-layout-fly',{x=-50,y=4.5,z=0});rebuilding:clubItem('old-layout-club',{x=-50,y=1.2,z=0})
+rebuilding:clearActors()
+rebuilding.lastSupport[1]='stale-layout';rebuilding.deathReason[1]='Fall';rebuilding.origins[1]=vector(777,888,999);rebuilding.blocked=true
+assert(rebuilding:rebuildLevel(mapB))
+assert(oldFloor.destroyed and oldCover.destroyed and liveLayoutBody.model.destroyed)
+assert(rebuilding.config.Level==mapB and #rebuilding.floors==1 and rebuilding.gates[1].beam.CanCollide
+    and rebuilding.exitGate.beam.CanCollide and rebuilding.stageName=='Approach' and not rebuilding.blocked)
+assert(next(rebuilding.lastSupport)==nil and next(rebuilding.deathReason)==nil and next(rebuilding.actors)==nil)
+assert(#rebuilding.healingFlyFolder:GetChildren()==0 and #rebuilding.clubItemFolder:GetChildren()==0)
+assert(rebuilding.folder:GetAttribute('LayoutSeed')==222 and rebuilding.folder:GetAttribute('LayoutVersion')==1)
+eq(rebuilding.origins[1],35,13,10237,'New safe origins follow the first support centre and one group offset')
+eq(rebuilding.allFloors[2].Position,129,9,10240,'Rebuilt geometry receives its world translation exactly once')
+assert(rebuilding:groundPosition({x=50,y=3,z=0}) and rebuilding:groundPosition({x=56,y=3,z=0})==nil,
+    'The second map must replace the collidable crossing rather than retain the old floor')
+assert(not neighbourFloor.destroyed and untouched.config.Level==canonicalRebuild and untouched.allFloors[1]==neighbourFloor)
+print('PASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata')
+
+local newCover=rebuilding.geometry:FindFirstChild('StoneCover')
+eq(newCover.Position,270,11.5,10260,'Stone cover uses domain-local layout coordinates plus the group offset once')
+eq(newCover.Size,8,3,4)
+assert(newCover.CanCollide and newCover:GetAttribute('SurfaceId')=='Courtyard' and newCover:GetAttribute('ZoneIndex')==3)
+local coverGround=rebuilding:groundPosition({x=170,y=6,z=20})
+assert(coverGround and coverGround.x==170 and coverGround.z==20 and math.abs(coverGround.y-4.2)<.00001)
+rebuilding:progress(3,false)
+local coverHero=actor(rebuilding,1,vector(270,16,10260));coverHero.humanoid.JumpPower=50
+rebuilding:hazard(1);assert(rebuilding.lastSupport[1]=='Courtyard')
+rebuilding:jump(1);assert(coverHero.humanoid.Jump and coverHero.root.AssemblyLinearVelocity.Y==50,
+    'A supplied cover must retain ordinary physical support and the existing jump rule')
+local coverRespawn=actualBase.findSafe({floors=rebuilding.floors,actors={},origins={[1]=coverHero.root.Position},
+    deathReason={},lastSupport={[1]=rebuilding.lastSupport[1]},isSafe=function() return true end},1)
+assert(coverRespawn and coverRespawn.surface:GetAttribute('SurfaceId')=='Courtyard',
+    'Standing on cover must not invent a different respawn surface from its district support')
+local keptFloor=rebuilding.allFloors[1]
+untouched:clearActors();assert(untouched:rebuildLevel(mapA))
+assert(rebuilding.allFloors[1]==keptFloor and not keptFloor.destroyed and rebuilding.config.Level==mapB)
+eq(untouched.geometry:FindFirstChild('StoneCover').Position,50,11.5,10732,'Neighbouring layout keeps its own one-time offset')
+rebuilding:clearActors();untouched:clearActors()
+print('PASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds')
+
 Base.move=actualBase.move; Base.setReaction=actualBase.setReaction
 Base.hold=actualBase.hold; Base.kill=actualBase.kill
 local locomotionWorld=World.new(Base,{FallY=-20,WalkSpeed=16,JumpPower=50,MoveTimeout=.35,Enemy={speed=9},
@@ -1302,3 +1376,30 @@ local muzzle,direction,obstructed=entryWorld:dragonMuzzle(-9)
 assert(muzzle and direction and obstructed,'A thin wall entirely before the muzzle must block the accepted shot')
 workspace.Spherecast,workspace.GetPartBoundsInRadius=saveSphere,saveOverlap
 print('PASS fire orders first contact and detects a thin wall before its projected muzzle')
+
+local appearanceCalls,appearanceUpdates=0,0
+local appearanceAdapter={}
+function appearanceAdapter.attach(body,template)
+    appearanceCalls+=1
+    if template~='Mr. Green' then return false end
+    local mesh=node('Part','GeneratedSurface',body.model)
+    mesh.Anchored=false;mesh.Massless=true;mesh.CanCollide=false
+    return true
+end
+function appearanceAdapter.update(body)
+    appearanceUpdates+=1
+    assert(body.root:GetNetworkOwner()==nil and not body.root:GetNetworkOwnershipAuto(),
+        'Pose updates must observe the fully assembled server-owned hero')
+end
+local appearanceWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50},
+    {name='HeroAppearanceIntegration',characterAppearance=appearanceAdapter})
+assert(appearanceWorld:spawn(1,'appearance-hero',nil,false,'Mr. Green'))
+local appearanceHero=appearanceWorld.actors[1]
+assert(appearanceCalls==1 and appearanceHero.root.assemblyOwnershipResets>0,
+    'The real spawn hook must attach cosmetics after basic assembly and exercise ownership reset')
+assert(appearanceHero.root:GetNetworkOwner()==nil and not appearanceHero.root:GetNetworkOwnershipAuto()
+    and appearanceHero.humanoid.Health==100,'Cosmetic assembly preserves HP and restores manual server authority')
+appearanceWorld:updatePresentation({now=0,combat={}},.1,{})
+assert(appearanceUpdates==1,'The world must update cosmetic joints after its normal pose presentation')
+appearanceWorld:clearActors()
+print('PASS hero appearance integration restores server authority after cosmetics and updates only presentation')

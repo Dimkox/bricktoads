@@ -86,12 +86,12 @@ function Flight:interaction(slot)
     local linked=self.heroes[slot]
     if linked and self:_valid(linked) then
         return {available=linked.mode=='Mounted',carrying=true,kind='Dragon',
-            label=linked.mode=='Mounted' and 'ОГОНЬ • ПРЫЖОК — СПЕШИТЬСЯ' or 'ВАС СХВАТИЛИ'}
+            label=linked.mode=='Mounted' and "FIRE • JUMP — DISMOUNT" or "YOU WERE CAPTURED"}
     end
     if not self:_hero(slot,true) then return {available=false} end
     for _,id in ipairs(sortedKeys(self.director.enemies)) do
         local row=self:_row(id)
-        if row and self:_mountable(slot,id,row) then return {available=true,kind='Dragon',label='ОСЕДЛАТЬ'} end
+        if row and self:_mountable(slot,id,row) then return {available=true,kind='Dragon',label="MOUNT"} end
     end
     return {available=false}
 end
