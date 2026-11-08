@@ -4,6 +4,16 @@ local SourceCombat={}
 function SourceCombat.bind(session,director,config)
     if not config.SourceCombat then return false end
     session.sourceCombat=config.SourceCombat
+    session.groundRunAllowed=function(slot)
+        if director.carry and director.carry:interaction(slot).carrying then return false end
+        if director.guardian and director.guardian:interaction(slot).carrying then return false end
+        if director.dragons and director.dragons.heroes[slot] then return false end
+        return true
+    end
+    session.canRunStrike=function(slot)
+        return config.Movement~=nil and session.groundRunAllowed(slot) and session.world.isRunning~=nil
+            and session.world:isRunning(slot)==true
+    end
     session.attackSelector=function(slot,input)
         director.now=session.now
         for _,target in ipairs(session.world:targets(slot,config.Attacks[input])) do

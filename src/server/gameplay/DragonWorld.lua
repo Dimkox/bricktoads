@@ -48,6 +48,7 @@ return function(World)
         if row and row.actor~=a then self:stopDragon(id);row=nil end
         if not row then
             if a.humanoid.PlatformStand then return false end
+            self:resetLocomotion(id,a)
             local attachment=Instance.new('Attachment');attachment.Name='DragonLift';attachment.Parent=a.root
             local force=Instance.new('VectorForce');force.Name='DragonGravity';force.Attachment0=attachment
             force.RelativeTo=Enum.ActuatorRelativeTo.World;force.ApplyAtCenterOfMass=true;force.Parent=a.root
@@ -91,6 +92,7 @@ return function(World)
         for other,link in pairs(self.dragonLinks) do if other~=slot and link.dragon==dragon then return false end end
         if not row then
             if hero.root.Anchored then return false end
+            self:resetLocomotion(slot,hero)
             row={hero=hero,dragon=dragon,id=id,mode=mode,collisions={},anchored=hero.root.Anchored,
                 evaluate=hero.humanoid.EvaluateStateMachine,platformStand=hero.humanoid.PlatformStand,
                 autoRotate=hero.humanoid.AutoRotate,walkSpeed=hero.humanoid.WalkSpeed}
@@ -115,6 +117,7 @@ return function(World)
         local row=self.dragonLinks[slot];if not row then return false end
         self.dragonLinks[slot]=nil
         local a=row.hero;a.model:SetAttribute('DragonLink',nil);a.model:SetAttribute('DragonId',nil)
+        self:resetLocomotion(slot,a)
         if a.root.Parent then
             a.humanoid:Move(Vector3.new(),false)
             a.root.Anchored=row.anchored;a.humanoid.EvaluateStateMachine=row.evaluate
@@ -129,23 +132,26 @@ return function(World)
         return true
     end
     function World:hold(id,held)
+        if held then self:resetLocomotion(id) end
         local row=self.dragonLinks[id]
         if row then row.anchored=held;return end
         self._base.hold(self,id,held)
     end
-    function World:move(id,x,z)
+    function World:move(id,x,z,runRequested)
         if self.dragonLinks[id] or self.dragonFlights[id] then return end
-        previousMove(self,id,x,z)
+        previousMove(self,id,x,z,runRequested)
     end
     function World:setReaction(id,active)
         local row=self.dragonLinks[id]
         if row then
+            if active then self:resetLocomotion(id,row.hero) end
             row.platformStand=active;row.autoRotate=not active;row.walkSpeed=active and 0 or self.config.WalkSpeed
             return
         end
         previousReaction(self,id,active)
     end
     function World:kill(id)
+        self:resetLocomotion(id)
         self:dragonUnlink(id)
         for slot,row in pairs(self.dragonLinks) do if row.id==id then self:dragonUnlink(slot) end end
         self:stopDragon(id)

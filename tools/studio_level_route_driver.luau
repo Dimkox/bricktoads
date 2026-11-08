@@ -21,6 +21,16 @@ function Nav.landed(position, jump, grounded, vy)
         or jump.direction == -1 and position.x <= jump.landingX - .25
     return passed and inside(position, jump.floor, 0) and math.abs(position.y - jump.landingY) < .75
 end
+function Nav.jumpOutcome(jump, position, grounded, vy, now)
+    jump.maxRise = math.max(jump.maxRise or 0, position.y - jump.launchY)
+    local elapsed = now - jump.at
+    -- Client observations can arrive after server-owned flight, or skip its arc.
+    if elapsed > .2 and Nav.landed(position, jump, grounded, vy) then return 'LANDED' end
+    if elapsed < 2 then return nil end
+    if position.y < math.min(jump.launchY, jump.landingY) - 1 then return 'FELL_BELOW_LANDING'
+    elseif jump.maxRise < .4 then return 'NO_OBSERVED_ASCENT'
+    else return 'LANDING_NOT_CONFIRMED' end
+end
 function Nav.plan(position, desired, floors, state, now, options)
     options = options or {}
     local jump = state.jump
@@ -31,11 +41,28 @@ function Nav.plan(position, desired, floors, state, now, options)
                 phase = 'Input confirmation timeout', fault = 'Jump key was not observed'}
         end
         if not jump.awaitingInput and Nav.landed(position, jump, options.grounded, options.vy) then state.jump = nil
-        elseif jump.awaitingInput or now - jump.at < 1.4 then
+        elseif jump.awaitingInput or now - jump.at < 2 then
             return {target = jump.target, crossing = true, attackAllowed = false, direction = jump.direction, phase = 'Flight'}
         else state.jump = nil end
     end
     local current, index = Nav.currentFloor(position, floors, state.previousFloor)
+    if current and not inside(position, current, .2) then current, index = nil, nil end
+    if not current and options.grounded and math.abs(options.vy or 0) <= 1 then
+        local closest, distance
+        for _, floor in ipairs(floors) do
+            local dx = position.x - clamp(position.x, floor.minX, floor.maxX)
+            local dz = position.z - clamp(position.z, floor.minZ, floor.maxZ)
+            local outside = math.sqrt(dx * dx + dz * dz)
+            if outside <= 1.1 and math.abs(position.y - (floor.top + 3)) < .75
+                and (not distance or outside < distance) then closest, distance = floor, outside end
+        end
+        if closest then
+            state.previousFloor = closest
+            return {target = point(clamp(position.x, closest.minX + 2.2, closest.maxX - 1), position.y,
+                clamp(position.z, closest.minZ + 2, closest.maxZ - 2)),
+                crossing = false, attackAllowed = false, phase = 'Recover support edge'}
+        end
+    end
     if not current then return {target = position, crossing = false, attackAllowed = false, phase = 'No support'} end
     state.previousFloor = current
     local direction = desired.x < position.x and -1 or 1
@@ -89,6 +116,50 @@ function Nav.consumeExpected(expected, key, now)
     if entry.count == 0 then expected[key] = nil end
     return true
 end
+function Nav.queueAttack(state, key, target, identity, now)
+    if state.pending then return false end
+    state.pending = {key = key, target = target, identity = identity, stage = state.stage, queuedAt = now}
+    return true
+end
+function Nav.observeAttack(state, key, now)
+    state.lastAttack = now
+    if state.pending and state.pending.key == key then state.pending = nil end
+end
+function Nav.attackInputExpired(state, now)
+    if state.pending and now - state.pending.queuedAt > 1.4 then state.pending = nil; return true end
+    return false
+end
+function Nav.attackPlan(position, enemy, state, now, cooldown)
+    if Nav.attackInputExpired(state, now) then
+        return {target = position, retreat = false, attackReady = false, fault = 'Attack key was not observed'}
+    end
+    if state.pending then return {target = enemy, retreat = false, attackReady = false} end
+    local elapsed = now - (state.lastAttack or -100)
+    local retreat = elapsed >= .35 and elapsed < cooldown
+    local target = enemy
+    if retreat then
+        local dx, dz = enemy.x - position.x, enemy.z - position.z
+        local length = math.sqrt(dx * dx + dz * dz)
+        if length > .01 then target = point(position.x - dx / length * 3, position.y, position.z - dz / length * 3) end
+    end
+    return {target = target, retreat = retreat, attackReady = elapsed >= cooldown}
+end
+function Nav.identity(data, h)
+    if not data or not h then return nil end
+    return table.concat({tostring(data.groupId), tostring(data.runId), tostring(h.actorId), tostring(h.attempt),
+        tostring(h.connectionEpoch), tostring(data.levelEpoch)}, ':')
+end
+function Nav.syncStage(state, stage)
+    if state.stage == stage then return false end
+    state.stage, state.pending = stage, nil
+    return true
+end
+function Nav.canPoll(data, h, identity, stage)
+    return data ~= nil and h ~= nil and data.status == 'Active' and not data.fault
+        and (data.view == nil or data.view == 'Playing') and h.status == 'Alive' and h.connected == true
+        and not h.dying and Nav.identity(data, h) == identity
+        and (stage == nil or (data.level or {}).stage == stage)
+end
 function Nav.inputBatch(heldKeys, desiredKeys, pulses, expected, now, running, duration)
     local actions, held = {}, keySet(heldKeys)
     local function add(action, key) table.insert(actions, {action = action, key_code = key}) end
@@ -127,7 +198,8 @@ local driver = {running = true, autoCombat = true, autoBoss = true, latest = nil
     desiredMove = Vector3.zero, expectedSyntheticKey = {}}
 _G.LevelRouteDriver = driver
 local stateConnection, inputConnection
-local lastAttack, lastCheckpoint, lastIdentity = -100, '', nil
+local lastCheckpoint, lastIdentity = '', nil
+local combat = {lastAttack = -100}
 local navigation = {}
 local jumpTrial
 local exitTargets = {{2, 0}, {122, 0}, {234, 0}, {358, -6}, {484, 0}, {588, 0}}
@@ -145,14 +217,22 @@ local function hero()
     for _, value in ipairs(data.heroes or {}) do if value.slot == data.mine then return value end end
 end
 
-local function queueKey(key)
+local function queueKey(key, target)
     for _, entry in ipairs(driver.inputQueue) do if entry.key == key then return end end
+    if (key == 'F' or key == 'R') and not Nav.queueAttack(combat, key, target, lastIdentity, os.clock()) then return end
     table.insert(driver.inputQueue, {key = key, identity = lastIdentity})
+end
+local function cancelAttack()
+    combat.pending = nil
+    for i = #driver.inputQueue, 1, -1 do
+        if driver.inputQueue[i].key == 'F' or driver.inputQueue[i].key == 'R' then table.remove(driver.inputQueue, i) end
+    end
 end
 
 function driver.stop(reason)
     if not driver.running then return end
     driver.running, driver.desiredMove, driver.inputQueue = false, Vector3.zero, {}
+    combat.pending = nil
     driver.status = reason or 'Stopped'
     log(driver.status)
     if stateConnection then stateConnection:Disconnect() end
@@ -161,6 +241,11 @@ end
 
 local function plain(v) return point(v.X, v.Y, v.Z) end
 function driver:pollInputs(heldKeys)
+    local relay = self.running and Nav.canPoll(self.latest, hero(), lastIdentity, combat.stage)
+    if not relay then
+        self.desiredMove, self.inputQueue = Vector3.zero, {}
+        combat.pending = nil
+    end
     local camera = workspace.CurrentCamera
     local forward = camera and camera.CFrame.LookVector or Vector3.new(0, 0, -1)
     local keys = Nav.keysForMove(plain(self.desiredMove), plain(forward))
@@ -172,7 +257,7 @@ function driver:pollInputs(heldKeys)
         end
     end
     self.inputQueue = {}
-    local batch = Nav.inputBatch(heldKeys, keys, pulses, self.expectedSyntheticKey, os.clock(), self.running,
+    local batch = Nav.inputBatch(heldKeys, keys, pulses, self.expectedSyntheticKey, os.clock(), relay,
         jumping and 650 or 120)
     batch.running, batch.status = self.running, self.status
     batch.summary = {position = self.physical, target = self.target and plain(self.target),
@@ -186,9 +271,13 @@ inputConnection = UserInputService.InputBegan:Connect(function(input)
         if not Nav.consumeExpected(driver.expectedSyntheticKey, key, os.clock()) then
             driver.stop('Manual input took over'); return
         end
+        if key == 'F' or key == 'R' then Nav.observeAttack(combat, key, os.clock()) end
         if key == 'Space' and navigation.jump and navigation.jump.awaitingInput then
-            navigation.jump.awaitingInput, navigation.jump.at = nil, os.clock()
-            jumpTrial = {at = os.clock(), launchY = driver.worldPosition.Y, direction = navigation.jump.direction,
+            local keyAt, keyAtServerTime = os.clock(), workspace:GetServerTimeNow()
+            navigation.jump.awaitingInput, navigation.jump.at = nil, keyAt
+            navigation.jump.keyAtServerTime = keyAtServerTime
+            jumpTrial = {at = keyAt, keyAtServerTime = keyAtServerTime,
+                launchY = driver.worldPosition.Y, direction = navigation.jump.direction,
                 landingX = navigation.jump.landingX, landingY = navigation.jump.landingY,
                 floor = navigation.jump.floor, maxRise = 0, samples = {}, start = driver.physical}
             table.insert(driver.jumps, jumpTrial)
@@ -247,19 +336,14 @@ local function observeJump(body, position, offset, h, now)
     local part, humanoid = root(body), body:FindFirstChildOfClass('Humanoid')
     local velocity, localPosition = part.AssemblyLinearVelocity, position - offset
     local grounded = humanoid and humanoid.FloorMaterial ~= Enum.Material.Air
-    jumpTrial.maxRise = math.max(jumpTrial.maxRise, position.Y - jumpTrial.launchY)
     local sample = {t = now - jumpTrial.at, x = localPosition.X, y = localPosition.Y, z = localPosition.Z,
+        serverTime = workspace:GetServerTimeNow(),
         vx = velocity.X, vy = velocity.Y, vz = velocity.Z, grounded = grounded,
         humanoidState = humanoid and humanoid:GetState().Name,
         platformStand = humanoid and humanoid.PlatformStand, anchored = part.Anchored,
         attempt = h.attempt, notice = driver.latest.notice}
     table.insert(jumpTrial.samples, sample)
-    local result
-    if sample.t > .2 and jumpTrial.maxRise > .4 and Nav.landed(plain(position), jumpTrial, grounded, velocity.Y) then
-        result = 'LANDED'
-    elseif sample.t > .3 and jumpTrial.maxRise < .4 then result = 'NO_OBSERVED_ASCENT'
-    elseif sample.t > .2 and position.Y < math.min(jumpTrial.launchY, jumpTrial.landingY) - 1 then result = 'FELL_BELOW_LANDING'
-    elseif sample.t > 1.4 then result = 'LANDING_NOT_CONFIRMED' end
+    local result = Nav.jumpOutcome(jumpTrial, plain(position), grounded, velocity.Y, now)
     if result then
         jumpTrial.result = result
         log('Jump ' .. result .. ' maxRise=' .. string.format('%.2f', jumpTrial.maxRise)
@@ -283,25 +367,25 @@ local function applyPlan(position, plan)
     if plan.jump then navigation.jump.awaitingInput = true; queueKey('Space') end
 end
 
-local function nearestEnemy(data, actors, position)
+local function nearestEnemy(data, actors, position, lockedModel)
     local ids = {}
     for _, enemy in ipairs((data.level or {}).enemies or {}) do
         -- Source Life0 remains a living combat actor until actual underflow.
         if enemy.id ~= -99 and not enemy.dead
             and (enemy.zoneIndex == nil or enemy.zoneIndex == data.level.zoneIndex) then ids[enemy.id] = true end
     end
-    local best, range
+    local best, range, bestModel
     for _, model in ipairs(actors:GetChildren()) do
         local kind, part = model:GetAttribute('EnemyKind'), root(model)
-        if part and (kind == 'Pig' or kind == 'Walker' or kind == 'Dragon') then
+        if part and (not lockedModel or model == lockedModel) and (kind == 'Pig' or kind == 'Walker' or kind == 'Dragon') then
             local id = tonumber(tostring(model:GetAttribute('ActorId')):match(':(%-?%d+)$'))
             if ids[id] then
                 local distance = (part.Position - position).Magnitude
-                if not range or distance < range then best, range = part.Position, distance end
+                if not range or distance < range then best, range, bestModel = part.Position, distance, model end
             end
         end
     end
-    return best, range
+    return best, range, bestModel
 end
 
 local function tick(now)
@@ -313,8 +397,7 @@ local function tick(now)
     end
     local body, actors, offset, floors = scene(data, h)
     if not body then driver.inputQueue = {}; driver.status = 'Waiting for streamed actor/world'; return end
-    local identity = table.concat({tostring(data.groupId), tostring(data.runId), tostring(h.actorId), tostring(h.attempt),
-        tostring(h.connectionEpoch), tostring(data.levelEpoch)}, ':')
+    local identity = Nav.identity(data, h)
     if identity ~= lastIdentity then
         if jumpTrial then
             jumpTrial.result = 'ACTOR_REPLACED'
@@ -322,9 +405,14 @@ local function tick(now)
             if driver.stopOnJumpFailure then driver.stop('PAUSED: actor replaced during jump'); return end
         end
         lastIdentity, navigation, driver.inputQueue = identity, {}, {}
+        combat = {lastAttack = -100}
         log('Body ' .. identity)
     end
     local position, level = root(body).Position, data.level or {}
+    if Nav.syncStage(combat, level.stage) then
+        driver.inputQueue, navigation = {}, {}
+    end
+    if Nav.attackInputExpired(combat, now) then driver.stop('PAUSED: Attack key was not observed'); return end
     driver.position, driver.worldPosition = position - offset, position
     local humanoid = body:FindFirstChildOfClass('Humanoid')
     local velocity = root(body).AssemblyLinearVelocity
@@ -341,36 +429,41 @@ local function tick(now)
         driver.status = 'Route zone ' .. tostring(level.zoneIndex)
         local destination = exitTargets[level.zoneIndex or 1] or exitTargets[6]
         local desired = Vector3.new(destination[1], 3, destination[2]) + offset
-        local enemy, range = nearestEnemy(data, actors, position)
+        if not driver.autoCombat then cancelAttack() end
+        local lockedModel = combat.pending and combat.pending.target
+        local enemy, range, enemyModel = nearestEnemy(data, actors, position, lockedModel)
+        if lockedModel and not enemy then
+            cancelAttack()
+            enemy, range, enemyModel = nearestEnemy(data, actors, position)
+        end
         if enemy and driver.autoCombat then desired = enemy end
         local plan = Nav.plan(plain(position), plain(desired), floors, navigation, now, options)
         -- Crossing wins before combat, including any cooldown retreat.
         if enemy and driver.autoCombat and plan.attackAllowed then
             local toward = flat(enemy - position)
             if range < 7.7 and math.abs(enemy.Y - position.Y) < 5 then
-                if now - lastAttack >= 1.1 then
+                local attackPlan = Nav.attackPlan(plain(position), plain(enemy), combat, now, 1.1)
+                if attackPlan.attackReady then
                     local facing = flat(root(body).CFrame.LookVector)
                     if toward.Magnitude > .01 and facing.Magnitude > .01 and facing.Unit:Dot(toward.Unit) > .65 then
-                        queueKey('R'); lastAttack = now
+                        queueKey('R', enemyModel)
                     end
-                elseif now - lastAttack >= .35 and toward.Magnitude > .01 then
-                    desired = position - toward.Unit * 3
+                elseif attackPlan.retreat then
+                    desired = Vector3.new(attackPlan.target.x, attackPlan.target.y, attackPlan.target.z)
                     options.allowCrossing = false
                     plan = Nav.plan(plain(position), plain(desired), floors, navigation, now, options)
                 end
             end
         end
         if plan.crossing then
-            for i = #driver.inputQueue, 1, -1 do
-                if driver.inputQueue[i].key ~= 'Space' then table.remove(driver.inputQueue, i) end
-            end
+            cancelAttack()
         end
         applyPlan(position, plan)
     elseif level.stage == 'Boss' and driver.autoBoss then
         driver.status = 'Guardian pickup/throw'
         local interaction = data.interaction or {}
-        if interaction.available and now - lastAttack >= .65 then
-            queueKey('F'); lastAttack = now
+        if interaction.available and not combat.pending and now - combat.lastAttack >= .65 then
+            queueKey('F')
             log('Interaction ' .. tostring(interaction.label))
         end
         local desired = Vector3.new(600, 3, math.sin(now * 1.8) * 8) + offset

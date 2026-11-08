@@ -3,9 +3,9 @@ local Combat = {}
 -- Trusted server actions; public input validation remains in Session.
 -- Pig animation40 does not satisfy the hero Dash animation16 finisher condition.
 local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22,WalkerLight=18,WalkerHeavy=20,DragonHeadbutt=22,DragonFire=22,
-    HeroJab=18,HeroKick=19,HeroUppercut=20,HeroPowerPunch=21,HeroBoot=24,HeroElbow=28}
+    HeroJab=18,HeroKick=19,HeroUppercut=20,HeroPowerPunch=21,HeroBoot=24,HeroElbow=28,EnemyRunStrike=22}
 local ordinaryProfiles={Punch=0,HeroJab=0,HeroKick=1,HeroUppercut=2,HeroPowerPunch=3,HeroBoot=6,HeroElbow=10,
-    Club=2,PigJab=0,PigHeavy=2,PigRush=4,WalkerLight=0,WalkerHeavy=2,DragonHeadbutt=4,DragonFire=4,EnemyThrow=17}
+    Club=2,PigJab=0,PigHeavy=2,PigRush=4,WalkerLight=0,WalkerHeavy=2,DragonHeadbutt=4,DragonFire=4,EnemyThrow=17,EnemyRunStrike=4}
 local ordinaryDamage={[0]=2,[1]=8,[2]=16,[3]=255,[4]=16,[6]=255,[10]=8,[17]=4}
 local function life(value)
     assert(type(value) == "number" and value == value and value >= 0

@@ -15,6 +15,7 @@ return function(base,level)
     config.Attacks.PigJab={windup=.30,cooldown=.8,reaction=28/60,reach=6,width=3,height=4,recoveryPose=.20}
     config.Attacks.PigHeavy={windup=.55,cooldown=1.3,reaction=.75,reach=6,width=3,height=4,recoveryPose=.30}
     config.Attacks.PigRush={windup=.22,cooldown=1.4,reaction=.75,reach=6,width=3,height=4,recoveryPose=.35}
+    config.Attacks.EnemyRunStrike=table.clone(config.Attacks.PigRush)
     config.Impulses[0]=table.clone(config.Impulses[18])
     config.Impulses[4]=table.clone(config.Impulses[22])
     config.Pig={rushAfterZone=3,rushSpeed=16,alignment=2,decisionInterval=.1,
@@ -46,6 +47,7 @@ return function(base,level)
         -- Main-route jump budget covers its5-stud gaps and2-stud rises with
         -- takeoff/landing room at16studs/s. The independent stand keeps42.
         config.JumpPower=50
+        config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75,npcRunDistance=12}
         config.SourceCombat={heavyProtection=28/60,npcLightReaction=1.05,npcHeavyReaction=.85}
         for _,action in ipairs({'HeroJab','HeroKick','HeroUppercut','HeroPowerPunch','HeroBoot','HeroElbow'}) do
             config.Attacks[action]=table.clone(config.Attacks.Punch)

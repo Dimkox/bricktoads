@@ -42,6 +42,12 @@ end
 function Director:_log(kind,id,data)
     if self.session._record then self.session:_record(kind,id,data,self.now) end
 end
+function Director:_resetLocomotion(id,e)
+    if e then e.runApproach=nil;e.rushing=nil end
+    if self.config.Movement and self.world.resetLocomotion then
+        self.world:resetLocomotion(id,self.world.actors and self.world.actors[id])
+    end
+end
 function Director:_finishReaction(id,e)
     if e~=self.enemies[id] or e.dead or not e.reactionUntil or self.now<e.reactionUntil then return false end
     if e.rawLife~=nil then
@@ -139,6 +145,7 @@ function Director:claim(userId,enemyId)
     if e.ownerUserId then return 'ENEMY_OCCUPIED' end
     if e.engaged then return 'ENEMY_ENGAGED' end
     e.ownerUserId=userId; e.connected=true; e.connectionEpoch=1; e.lastSeq=0; e.rushing=nil
+    self:_resetLocomotion(enemyId,e)
     self.byUserId[userId]=enemyId
     self.world:move(enemyId,0,0)
     self.world:enemyIdentity(enemyId,e.actorId,self.ownerNames[userId])
@@ -151,6 +158,7 @@ function Director:connection(userId,connected)
     if type(connected)~='boolean' then return 'INVALID_CONNECTION' end
     if e.connected==connected then return 'NO_CHANGE' end
     e.connected=connected; e.connectionEpoch+=1; e.lastSeq=0; e.lastMove=nil
+    self:_resetLocomotion(id,e)
     self.world:move(id,0,0)
     self:_log('EnemyConnection',id,{actorId=e.actorId,ownerUserId=userId,connected=connected,connectionEpoch=e.connectionEpoch})
     return 'OK'
@@ -161,7 +169,8 @@ function Director:controlled(userId)
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
+        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode,
+        reactionEpoch=e.reactionEpoch or 0,movementMode=self.world.movementMode and self.world:movementMode(id) or nil}
 end
 function Director:available(userId)
     local offers={}
@@ -227,7 +236,7 @@ function Director:command(userId,payload,now,validator)
         if code then return code end
     end
     if payload.kind=='Move' then
-        e.lastMove=now; self.world:move(id,payload.x,payload.z)
+        e.lastMove=now; self.world:move(id,payload.x,payload.z,payload.run)
     elseif payload.kind=='Jump' then self.world:jump(id)
     else
         if e.windup or now<e.nextAttack then return 'COOLDOWN' end
@@ -249,8 +258,13 @@ function Director:_beginStrike(id,e,target)
     if self.dragons and e.kind=='Dragon' and self.dragons:beginCapture(id,e,target) then return end
     local action=self.config.Enemy.attack
     local tuning=self.strikeProfile
+    local running=self.config.Movement and not e.boss and e.kind~='Dragon' and self.world.isRunning
+        and self.world:isRunning(id)==true
+    local sourceRush=e.kind=='Pig' and e.rushing and (not self.config.Movement or running)
     local sourceFamily=self.route and ((e.kind=='Pig' and self.config.Pig) or (e.kind=='Walker' and self.config.Walker))
-    if self.route and e.kind=='Dragon' and self.config.Dragon then
+    if running and not sourceRush then
+        action='EnemyRunStrike';tuning=self.config.Attacks[action]
+    elseif self.route and e.kind=='Dragon' and self.config.Dragon then
         action='DragonHeadbutt';tuning=self.config.Attacks[action]
     elseif sourceFamily then
         local light=e.kind=='Pig' and 'PigJab' or 'WalkerLight'
@@ -260,12 +274,12 @@ function Director:_beginStrike(id,e,target)
         local ordinary=target and self.enemies[target]
         if not combat and ordinary and ordinary.rawLife~=nil then combat=ordinary end
         -- Prototype enemy3HP is not raw source Life; an unknown target uses jab.
-        action=e.kind=='Pig' and e.rushing and 'PigRush' or (combat and combat.rawLife%16<4 and heavy or light)
+        action=sourceRush and 'PigRush' or (combat and combat.rawLife%16<4 and heavy or light)
         tuning=self.config.Attacks[action]
     end
-    e.engaged=true; e.rushing=nil; e.strikeRecoveryUntil=nil
+    e.engaged=true; e.rushing=nil; e.runApproach=nil; e.strikeRecoveryUntil=nil
     e.windup={at=self.now+tuning.windup,action=action,tuning=self.Combat.captureAttack(self.config,action,tuning)}
-    self.world:move(id,0,0); self.world:cue(id,true)
+    self.world:move(id,0,0,false); self.world:cue(id,true)
     self:_log('EnemyAttackAccepted',id,{actorId=e.actorId,action=action,ownerUserId=e.ownerUserId,effectAt=e.windup.at})
 end
 function Director:_resolveStrike(id,e)
@@ -317,6 +331,7 @@ function Director:_kill(id,cause)
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
     if self.dragons then self.dragons:forgetEnemy(id) end
+    self:_resetLocomotion(id,e)
     e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
     if e.rawLife~=nil then e.rawLife=0 end
@@ -353,12 +368,14 @@ function Director:hit(attacker,target,action,tuning)
     if e and e.rawLife~=nil then self:_finishReaction(target,e) end
     if not e or e.dead or (e.rawLife==nil and e.reactionUntil and self.now<e.reactionUntil) then return false end
     if self.carry then self.carry:forgetEnemy(target) end
+    self:_resetLocomotion(target,e)
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil
     local family=(self.config.Pig and self.config.Pig.npcDamage[action] and self.config.Pig)
         or (self.config.Walker and self.config.Walker.npcDamage[action] and self.config.Walker)
         or (self.config.Dragon and self.config.Dragon.npcDamage[action] and self.config.Dragon)
-    local damage=(family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
+    local runStrike=action=='EnemyRunStrike'
+    local damage=(runStrike and self.config.Enemy.dashDamage) or (family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
         or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
     local before=e.rawLife or e.health
     local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,action)
@@ -373,13 +390,14 @@ function Director:hit(attacker,target,action,tuning)
         local policy=tuning and tuning.sourceCombat or self.config.SourceCombat
         local reaction=source and (source.heavyReaction and policy.npcHeavyReaction
             or policy.npcLightReaction) or ((tuning and tuning.reaction) or (family and self.config.Attacks[action].reaction)
+            or (runStrike and self.config.Attacks[action].reaction)
             or (action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction)
         )
         e.heavyReaction=source and source.heavyReaction or nil
         e.reactionUntil=self.now+reaction
         if self.dragons then self.dragons:hitEnemy(target,source and source.heavyReaction) end
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
+        local profile=source and source.profile or (runStrike and 4) or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
         local responses=tuning and tuning.responses or self.config.Impulses
         local impulse=responses and responses[profile]
         if impulse then self.world:impulse(target,attacker,impulse,profile,tuning and tuning.impulseDirection) end
@@ -421,7 +439,7 @@ function Director:_enemies(dt)
             else
                 if not (self.dragons and self.dragons:isMounted(id)) then living+=1 end
                 local carried=self.carry and self.carry:blocksEnemy(id)
-                if carried then e.rushing=nil; e.strikeRecoveryUntil=nil end
+                if carried then self:_resetLocomotion(id,e); e.strikeRecoveryUntil=nil end
                 if not carried and e.reactionUntil and self.now>=e.reactionUntil then
                     self:_finishReaction(id,e)
                 end
@@ -441,6 +459,9 @@ function Director:_enemies(dt)
                             or (self.route and e.kind=='Dragon' and self.config.Dragon)
                         local target,range=self:_nearest(self.world:position(id),standing~=nil and standing~=false)
                         local attackRange=walker and walker.range or self.config.Enemy.range
+                        if walker and self.config.Movement and self.world.isRunning and self.world:isRunning(id) then
+                            attackRange=math.min(attackRange,self.config.Attacks.EnemyRunStrike.reach)
+                        end
                         -- Validate the approach before either melee or movement:
                         -- a newly invalid target cannot preserve an old running hop.
                         if e.rushing then
@@ -448,14 +469,19 @@ function Director:_enemies(dt)
                             local c=target and self.session.combat[target]
                             local alignment=self.config.Pig.alignment
                             if not a or not b or math.abs(a.z-b.z)>alignment or math.abs(a.y-b.y)>alignment
-                                or (c and c.reactionEnd) then e.rushing=nil end
+                                or (c and c.reactionEnd) then self:_resetLocomotion(id,e) end
                         end
                         if target and walker and range<walker.minRange then
+                            e.runApproach=nil
                             self.world:enemyRetreat(id,target,walker.retreatSpeed)
                         elseif target and range<=attackRange and self.now>=e.nextAttack then
                             self.world:face(id,target); self:_beginStrike(id,e,target)
                         elseif target and range>attackRange*.8 then
                             local speed=self.config.Enemy.speed
+                            if walker and self.config.Movement then
+                                if range>self.config.Movement.npcRunDistance then e.runApproach=true end
+                                if e.runApproach then speed=self.config.Movement.enemyRunSpeed end
+                            end
                             if self.route and self.config.Pig and e.kind=='Pig' then
                                 local pig=self.config.Pig
                                 local a,b=self.world:position(id),self.world:position(target)
@@ -470,7 +496,7 @@ function Director:_enemies(dt)
                                 if e.rushing then speed=pig.rushSpeed end
                             end
                             self.world:enemyMove(id,target,speed)
-                        else e.rushing=nil; self.world:move(id,0,0) end
+                        else e.rushing=nil;e.runApproach=nil; self.world:move(id,0,0,false) end
                     end
                 end
             end
@@ -593,6 +619,7 @@ function Director:snapshot()
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
             dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind,
+            reactionEpoch=e.reactionEpoch or 0,movementMode=self.world.movementMode and self.world:movementMode(id) or nil,
             carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
     end
     table.sort(enemies,function(a,b) return a.id>b.id end)

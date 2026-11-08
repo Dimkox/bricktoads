@@ -74,10 +74,24 @@ end
 function Feedback.hint(data)
     data=type(data)=='table' and data or {}
     if type(data.enemyRole)=='table' and data.enemyRole.template=='Boss' then return 'ОГОНЬ: стреляйте в героев' end
+    local interaction=type(data.interaction)=='table' and data.interaction or {}
+    if interaction.carrying and type(interaction.label)=='string' then
+        return interaction.label..(interaction.available and ' — кнопка действия' or '')
+    end
+    local controlled=type(data.enemyRole)=='table' and data.enemyRole or nil
+    if data.mine and type(data.heroes)=='table' then
+        for i=1,math.min(#data.heroes,3) do
+            local h=data.heroes[i]
+            if type(h)=='table' and h.slot==data.mine then controlled=h;break end
+        end
+    end
+    if controlled and controlled.status=='Alive' and controlled.connected~=false
+        and controlled.movementMode=='Run' and (data.view==nil or data.view=='Playing') then
+        return 'МЕГА: удар с разбега'
+    end
     if type(data.interaction)=='table' and data.interaction.available and type(data.interaction.label)=='string' then
         return data.interaction.label..' — кнопка действия'
     end
-    if type(data.interaction)=='table' and data.interaction.carrying and type(data.interaction.label)=='string' then return data.interaction.label end
     if data.mine then return 'УДАР: атака или действие рядом' end
     if data.enemyRole then return 'УДАР: остановите героев' end
     return 'Выберите роль или наблюдайте'

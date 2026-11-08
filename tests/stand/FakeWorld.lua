@@ -3,7 +3,7 @@ local World = {}
 World.__index = World
 function World.new()
     return setmetatable({actors={}, safe=true, spawnFails=false, raceUnsafe=false,
-        impulses=0, spawns=0, kills=0, relocations=0, moves=0, targetsFor={}, hazards={}}, World)
+        impulses=0, spawns=0, kills=0, relocations=0, moves=0, targetsFor={}, hazards={},actualRuns={}}, World)
 end
 function World:findSafe() if self.safe then return {safe=true} end end
 function World:isSafe() return self.safe and not self.raceUnsafe end
@@ -15,7 +15,17 @@ function World:spawn(uid, id, point, held)
     return true
 end
 function World:hold(uid, held) if self.actors[uid] then self.actors[uid].held = held end end
-function World:move(uid, x, z) self.moves=self.moves+1; self.lastMove={uid,x,z} end
+function World:move(uid, x, z, run)
+    self.moves=self.moves+1;self.lastMove={uid,x,z,run}
+    if x*x+z*z==0 or run~=true then self.actualRuns[uid]=nil end
+end
+function World:isRunning(uid) return self.actualRuns[uid]==true end
+function World:movementMode(uid) return self:isRunning(uid) and 'Run' or 'Idle' end
+function World:resetLocomotion(uid,reference)
+    local actor=reference or self.actors[uid]
+    self.lastReset={uid,actor};self.resets=(self.resets or 0)+1
+    if actor==self.actors[uid] then self.actualRuns[uid]=nil end
+end
 function World:jump(uid) self.lastJump=uid end
 function World:setReaction(uid, active) if self.actors[uid] then self.actors[uid].reaction=active end end
 function World:targets(uid) return self.targetsFor[uid] or {} end

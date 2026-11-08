@@ -12,8 +12,16 @@ local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
 local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
 local CombatFeedback = require(script.Parent:WaitForChild("CombatFeedback"))
+local MovementInput = require(script.Parent:WaitForChild("MovementInput"))
+local RobloxInputBindings = require(script.Parent:WaitForChild("RobloxInputBindings"))
 local spectatorCamera = SpectatorCamera.new()
 local combatFeedback = CombatFeedback.new()
+local movementInput = MovementInput.new()
+local gameplayBindings
+local windowFocused = true
+local lastReactionEpoch
+local lastHeldContext
+local sendMovement, syncGameplayContext
 local feedbackUntil = 0
 
 local C = {
@@ -28,7 +36,6 @@ local templates = {"Mr. Green", "Mr. Yellow", "Mr. Brown"}
 local heroColors = {[templates[1]] = C.green, [templates[2]] = C.yellow, [templates[3]] = C.brown}
 local snapshot, mine, controlled, identity = nil, nil, nil, nil
 local sequence = 0
-local keys, touchVector, dragging = {}, Vector2.zero, nil
 local pendingTemplate, pendingAt = nil, 0
 local pendingRole, pendingRoleAt = nil, 0
 local pendingEnemy, pendingEnemyAt = nil, 0
@@ -39,6 +46,7 @@ local cameraHolds = {}
 local actionPending, actionAt = false, 0
 local width, height = 900, 650
 local render, layout
+local mobileExpanded
 
 local function sendIntent(packet)
     local envelope = table.clone(packet)
@@ -91,7 +99,7 @@ local function button(parent, name, text, color, callback)
         TextSize = 16, TextWrapped = true, AutoButtonColor = false,
     })
     corner(item, 14)
-    item.Activated:Connect(callback)
+    if callback then item.Activated:Connect(callback) end
     return item
 end
 local function position(item, x, y, w, h)
@@ -293,6 +301,46 @@ local stageLabel = label(objective, "Stage", "ЗАТОПЛЕННЫЙ ТРАКТ"
 local objectiveLabel = label(objective, "Task", "Доберитесь до ворот", 17, C.text, true)
 local bossLabel = label(objective, "BossHits", "", 13, C.yellow)
 local feedbackLabel = label(objective, "ConfirmedFeedback", "", 12, C.muted, true)
+local function toggleMobileDetails(section)
+    if UserInputService.TouchEnabled and bossQueue.card.Visible and bossQueue.compact then return end
+    mobileExpanded = mobileExpanded ~= section and section or nil
+    if render then render(); layout() end
+end
+local mobileStatus = button(hud, "MobileStatus", "", C.ink, function() toggleMobileDetails("Team") end)
+mobileStatus.BackgroundTransparency, mobileStatus.Visible = 0.12, false
+local mobileStatusTitle = label(mobileStatus, "Title", "", 14, C.text, true)
+local mobileStatusDetail = label(mobileStatus, "State", "", 12, C.muted)
+local mobileReturns = label(mobileStatus, "Respawns", "", 12, C.text, true)
+mobileReturns.TextXAlignment = Enum.TextXAlignment.Right
+local mobileStatusArrow = label(mobileStatus, "Expand", "+", 15, C.muted)
+local mobileHearts = {}
+for i = 1, 5 do
+    local heart = label(mobileStatus, "Heart" .. i, "♥", 20, C.line)
+    local clip = frame(heart, "FillClip")
+    clip.BackgroundTransparency, clip.ClipsDescendants, clip.Size = 1, true, UDim2.fromScale(1, 1)
+    local fill = label(clip, "Fill", "♥", 20, C.red)
+    fill.Size = UDim2.fromOffset(18, 22)
+    mobileHearts[i] = {heart = heart, clip = clip, fill = fill}
+end
+local mobileGoal = button(hud, "MobileGoal", "", C.ink, function() toggleMobileDetails("Goal") end)
+mobileGoal.BackgroundTransparency, mobileGoal.Visible = 0.12, false
+local mobileGoalTitle = label(mobileGoal, "Stage", "", 13, C.lime, true)
+local mobileGoalDetail = label(mobileGoal, "Summary", "", 13, C.text)
+local mobileGoalArrow = label(mobileGoal, "Expand", "+", 15, C.muted)
+for _, item in ipairs({mobileStatusTitle, mobileStatusDetail, mobileGoalTitle, mobileGoalDetail}) do
+    item.TextWrapped, item.TextTruncate = false, Enum.TextTruncate.AtEnd
+end
+local mobileDetails = frame(hud, "MobileDetails", C.ink)
+mobileDetails.BackgroundTransparency, mobileDetails.Visible = 0.08, false
+corner(mobileDetails, 14)
+local mobileDetailsTitle = label(mobileDetails, "Heading", "Команда", 14, C.text, true)
+local mobileCollapse = button(mobileDetails, "Collapse", "СВЕРНУТЬ ↑", C.card, function() toggleMobileDetails(mobileExpanded) end)
+mobileCollapse.TextSize = 12
+local mobileDetailsScroll = make("ScrollingFrame", "Details", mobileDetails, {
+    BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
+    ScrollBarImageColor3 = C.muted, ScrollingDirection = Enum.ScrollingDirection.Y,
+    CanvasSize = UDim2.new(), ClipsDescendants = true,
+})
 local spectator = frame(hud, "Spectator", C.ink)
 spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5, 1)
 corner(spectator, 14)
@@ -357,24 +405,23 @@ local function send(kind, extra)
 end
 local actions = frame(controls, "Actions")
 actions.BackgroundTransparency, actions.AnchorPoint = 1, Vector2.new(1, 1)
-local punch = button(actions, "Punch", "УДАР\nF", C.card, function() send("Attack", {attack = "Punch"}) end)
-local dash = button(actions, "Dash", "ТАРАН\nR", C.card, function() send("Attack", {attack = "Dash"}) end)
-local jump = button(actions, "Jump", "ПРЫЖОК · SPACE", C.lime, function() send("Jump") end)
+local punch = button(actions, "Punch", "УДАР\nF", C.card)
+local dash = button(actions, "Dash", "МЕГА\nR · В БЕГЕ", C.card)
+local jump = button(actions, "Jump", "ПРЫЖОК · SPACE", C.lime)
 jump.TextColor3 = C.ink
 stroke(punch, C.muted, 1)
 stroke(dash, C.muted, 1)
-local pad = frame(controls, "MoveStick", C.ink)
-pad.BackgroundTransparency, pad.Active, pad.AnchorPoint = 0.15, true, Vector2.new(0, 1)
-corner(pad, 100)
-stroke(pad, C.muted, 2)
-local padRing = frame(pad, "InnerRing", C.card)
-padRing.BackgroundTransparency = 0.2
-padRing.Size, padRing.Position = UDim2.fromScale(0.68, 0.68), UDim2.fromScale(0.16, 0.16)
-corner(padRing, 100)
-local knob = frame(pad, "Knob", C.lime)
-knob.AnchorPoint, knob.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
-knob.Size = UDim2.fromScale(0.34, 0.34)
-corner(knob, 100)
+local pad = frame(controls, "DirectionPad", C.ink)
+pad.BackgroundTransparency, pad.AnchorPoint = 1, Vector2.new(0, 1)
+local directionButtons = {}
+for _, definition in ipairs({{"Forward", "↑"}, {"Left", "←"}, {"Backward", "↓"}, {"Right", "→"}}) do
+    local item = button(pad, definition[1], definition[2], C.card)
+    item.TextSize = 25
+    stroke(item, C.muted, 1)
+    directionButtons[definition[1]] = item
+end
+local runHint = label(pad, "RunHint", "2×\nБЕГ", 11, C.muted, true)
+runHint.TextXAlignment = Enum.TextXAlignment.Center
 local keyboardHint = label(controls, "KeyboardHint", "W A S D  ·  движение", 13, C.text)
 keyboardHint.AnchorPoint = Vector2.new(0, 1)
 keyboardHint.BackgroundColor3, keyboardHint.BackgroundTransparency = C.ink, 0.15
@@ -420,12 +467,60 @@ faultText.Position, faultText.Size = UDim2.fromOffset(18, 12), UDim2.new(1, -36,
 faultText.TextXAlignment = Enum.TextXAlignment.Center
 
 local function resetInput()
-    keys, dragging, touchVector = {}, nil, Vector2.zero
-    knob.Position = UDim2.fromScale(0.5, 0.5)
+    if gameplayBindings then gameplayBindings:setEnabled(false) end
+    movementInput:reset()
+    for _, item in pairs(directionButtons) do item.BackgroundColor3 = C.card end
     spectatorCamera:resetInput()
     cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
     cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
 end
+sendMovement = function()
+    local camera = workspace.CurrentCamera
+    local forward = camera and camera.CFrame.LookVector
+    local value = movementInput:vector(forward and {x = forward.X, z = forward.Z})
+    if (snapshot and snapshot.interaction and snapshot.interaction.carrying) or (controlled and controlled.carryState) then
+        value.run = false
+    end
+    if not gameplayBindings or not gameplayBindings.enabled then value = {x = 0, z = 0, run = false} end
+    send("Move", value)
+end
+syncGameplayContext = function()
+    if not gameplayBindings then return end
+    local enabled = playable() == true and windowFocused and UserInputService:GetFocusedTextBox() == nil
+    if enabled ~= gameplayBindings.enabled then
+        movementInput:reset()
+        for _, item in pairs(directionButtons) do item.BackgroundColor3 = C.card end
+        gameplayBindings:setEnabled(enabled)
+        if not enabled then sendMovement() end
+    end
+end
+local localInputs = make("Folder", "BrickToadsInputs", player:WaitForChild("PlayerScripts"))
+gameplayBindings = RobloxInputBindings.new(localInputs, {
+    Forward = directionButtons.Forward, Backward = directionButtons.Backward,
+    Left = directionButtons.Left, Right = directionButtons.Right, Jump = jump, Attack = punch, Mega = dash,
+}, {
+    press = function(direction)
+        if movementInput:press(direction, os.clock()) then
+            directionButtons[direction].BackgroundColor3 = C.line
+            sendMovement()
+        end
+    end,
+    release = function(direction)
+        if movementInput:release(direction) then
+            directionButtons[direction].BackgroundColor3 = C.card
+            sendMovement()
+        end
+    end,
+    action = function(action)
+        sendMovement()
+        if action == "Jump" then send("Jump")
+        else send("Attack", {attack = action == "Mega" and "Dash" or "Punch"}) end
+    end,
+})
+script.Destroying:Connect(function()
+    gameplayBindings:destroy()
+    localInputs:Destroy()
+end)
 local function heroName(hero)
     return hero.displayName or hero.username or ("Игрок " .. tostring(hero.slot or ""))
 end
@@ -460,6 +555,7 @@ local noticeMessages = {
     HELD = "Вас держит герой. Управление вернётся после освобождения.",
     THROWN = "Вас бросили. Дождитесь окончания реакции.",
     HANDS_FULL = "Руки заняты. Сначала бросьте то, что держите.",
+    NOT_RUNNING = "Для мегаудара дважды нажмите направление и удерживайте бег.",
 }
 local function enemyChoiceAllowed()
     local reason = snapshot and snapshot.enemyUnavailableReason
@@ -533,6 +629,49 @@ local function renderSelection()
 end
 local function remainingEnemies(level)
     return CombatFeedback.remainingEnemies(level)
+end
+local function renderMobileSummary(level, enemy, isBoss)
+    local personal = mine or enemy
+    local maximum = enemy and (tonumber(enemy.maxHearts) or 3) or 5
+    local hp = personal and (tonumber(personal.hearts) or 0) or 0
+    mobileStatusTitle.Visible = personal == nil
+    mobileStatusTitle.Text = "Герои " .. tostring(CombatFeedback.aliveHeroes(snapshot and snapshot.heroes))
+    mobileReturns.Visible = personal ~= nil
+    mobileReturns.Text = enemy and "1 жизнь" or (tostring(personal and personal.respawns or 0) .. " возв.")
+    for n, heart in ipairs(mobileHearts) do
+        heart.heart.Visible = personal ~= nil and n <= maximum
+        heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1)
+    end
+    local state = "Команда"
+    if personal then
+        if not personal.connected then state = "Нет связи"
+        elseif personal.status == "Eliminated" or personal.status == "Dead" then state = "Вы выбыли"
+        elseif personal.status ~= "Alive" or personal.dying then state = "Возвращаетесь…"
+        elseif personal.carryState then state = personal.carryState == "Carried" and "Вас держат" or "Бросок"
+        elseif personal.shield then state = "Защита"
+        elseif personal.movementMode == "Run" then state = "Бег · команда"
+        elseif enemy then state = "Одна жизнь"
+        else state = "В бою · команда" end
+    end
+    mobileStatusDetail.Text = state
+    mobileStatusArrow.Text = mobileExpanded == "Team" and "-" or "+"
+    mobileGoalArrow.Text = mobileExpanded == "Goal" and "-" or "+"
+    local shortZones = {"Ворота", "Акведук", "Двор", "Уступы", "Кузница", "Мост"}
+    if level.stage == "Route" then
+        mobileGoalTitle.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6)
+            .. " · " .. (shortZones[level.zoneIndex or 1] or level.zoneName or "Тракт")
+    elseif level.stage == "Exit" then mobileGoalTitle.Text = "ВЫХОД ОТКРЫТ"
+    else mobileGoalTitle.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ" end
+    if enemy then mobileGoalDetail.Text = "Героев " .. tostring(CombatFeedback.aliveHeroes(snapshot.heroes))
+    elseif level.stage == "BossReady" then mobileGoalDetail.Text = "Ждём стража"
+    elseif level.stage == "Exit" then mobileGoalDetail.Text = "Дойдите до выхода"
+    elseif isBoss then mobileGoalDetail.Text = "Попадания " .. tostring(level.bossHits or 0) .. "/" .. tostring(level.bossMax or 3)
+    else mobileGoalDetail.Text = "Враги " .. tostring(remainingEnemies(level)) end
+    mobileGoalDetail.TextColor3 = C.text
+    if feedbackUntil > os.clock() and feedbackLabel.Text ~= "" then
+        mobileGoalDetail.Text, mobileGoalDetail.TextColor3 = feedbackLabel.Text, feedbackLabel.TextColor3
+    end
+    mobileDetailsTitle.Text = mobileExpanded == "Goal" and "Задача" or "Команда"
 end
 render = function()
     local active = snapshot and snapshot.status == "Active"
@@ -646,10 +785,13 @@ render = function()
     local interaction = snapshot and snapshot.interaction
     local carrying = interaction and interaction.carrying == true
     local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
-    dash.Visible = enemy == nil and not carrying
+    dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying
     jump.Visible = not controlledBoss
     keyboardHint.Text = controlledBoss and "W A S D · прицел · F · огонь"
-        or (interactionLabel and ("F · " .. interactionLabel) or "W A S D · движение · F · удар")
+        or (carrying and interactionLabel and ("F · " .. interactionLabel))
+        or (not carrying and controlled and controlled.movementMode == "Run" and "БЕГ · F · МЕГА")
+        or (interactionLabel and ("F · " .. interactionLabel))
+        or "WASD · ходьба · 2× направление · бег · F · удар"
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
     stageLabel.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ"
     if modern and level.stage == "Route" then
@@ -715,6 +857,7 @@ render = function()
     end
     enemyChoiceNote.Text = snapshot and (noticeMessages[snapshot.notice] or noticeMessages[snapshot.enemyUnavailableReason])
         or "Вы управляете выбранным дозорным до конца его жизни."
+    renderMobileSummary(level, enemy, isBoss)
     renderOffers()
 end
 
@@ -827,6 +970,20 @@ layout = function()
     else waitLabel.TextSize, menuNotice.TextSize = 14, 14 end
 
     local inset, short = width < 500 and 12 or 18, height < 480
+    local isTouch = UserInputService.TouchEnabled
+    local mobileHudBottom
+    stageLabel.Visible = not isTouch
+    objectiveLabel.TextYAlignment = isTouch and Enum.TextYAlignment.Top or Enum.TextYAlignment.Center
+    -- An actionable compact queue owns this space until its invitation/context ends.
+    local queuePriority = isTouch and bossQueue.card.Visible and bossQueue.compact
+    if queuePriority then mobileExpanded = nil end
+    roster.Parent = isTouch and mobileDetailsScroll or hud
+    enemyStatus.Parent = isTouch and mobileDetailsScroll or hud
+    objective.Parent = isTouch and mobileDetailsScroll or hud
+    mobileStatus.Visible, mobileGoal.Visible = isTouch, isTouch
+    mobileDetails.Visible = isTouch and mobileExpanded ~= nil
+    mobileStatusArrow.Visible, mobileGoalArrow.Visible = not queuePriority, not queuePriority
+    if queuePriority then mobileGoalDetail.Text = "Очередь стража · ниже" end
     local rosterWidth = portrait and (width - inset * 2) or math.min(292, width * 0.43)
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
@@ -877,25 +1034,99 @@ layout = function()
     feedbackLabel.Position, feedbackLabel.Size = UDim2.new(0, 13, 1, -26), UDim2.new(1, -26, 0, 20)
     feedbackLabel.TextSize = short and 11 or 12
     local bottom, controlWidth = short and 12 or 20, width < 360 and 146 or 162
-    local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
+    local actionHeight, topHeight = short and (isTouch and 108 or 105) or 128, short and 56 or 70
     actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
     local half = (controlWidth - 8) / 2
-    position(punch, 0, 0, (enemy or carrying) and controlWidth or half, topHeight)
+    position(punch, 0, 0, (isTouch or enemy or carrying) and controlWidth or half, topHeight)
     position(dash, half + 8, 0, half, topHeight)
-    position(jump, 0, topHeight + 8, controlWidth, short and 41 or 50)
+    position(jump, 0, topHeight + 8, controlWidth, short and (isTouch and 44 or 41) or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
-    local isTouch = UserInputService.TouchEnabled
     local primaryLabel = controlledBoss and "ОГОНЬ" or "УДАР"
-    if not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
+    if not carrying and not controlledBoss and controlled and controlled.movementMode == "Run" then
+        primaryLabel = "МЕГАУДАР"
+    elseif not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
         primaryLabel = interaction.label
     end
     punch.Text = isTouch and primaryLabel or (primaryLabel .. "\nF")
-    dash.Text = isTouch and "ТАРАН" or "ТАРАН\nR"
+    dash.Text = "МЕГА\nR · В БЕГЕ"
     jump.Text = isTouch and "ПРЫЖОК" or "ПРЫЖОК · SPACE"
-    local padSize = short and 104 or (width < 360 and 106 or 122)
+    local padSize = short and 144 or (width < 360 and 146 or 164)
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
     pad.Visible, keyboardHint.Visible = isTouch, not isTouch
-    keyboardHint.Position, keyboardHint.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(190, 36)
+    local cell = (padSize - 8) / 3
+    position(directionButtons.Forward, cell + 4, 0, cell, cell)
+    position(directionButtons.Left, 0, cell + 4, cell, cell)
+    position(directionButtons.Right, (cell + 4) * 2, cell + 4, cell, cell)
+    position(directionButtons.Backward, cell + 4, (cell + 4) * 2, cell, cell)
+    position(runHint, cell + 4, cell + 4, cell, cell)
+    keyboardHint.Position, keyboardHint.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(260, 42)
+    if isTouch then
+        local mobileInset, cardGap = width < 500 and 8 or 12, 8
+        local statusWidth, goalWidth = math.min(172, width - mobileInset * 2), math.min(260, width - mobileInset * 2)
+        local twoRows = statusWidth + goalWidth + cardGap > width - mobileInset * 2
+        local goalY = mobileInset + (twoRows and 52 or 0)
+        position(mobileStatus, mobileInset, mobileInset, statusWidth, 44)
+        position(mobileGoal, width - mobileInset - goalWidth, goalY, goalWidth, 44)
+        mobileHudBottom = goalY + 44
+        position(mobileStatusTitle, 8, 1, statusWidth - 32, 21)
+        position(mobileStatusDetail, 8, 23, statusWidth - 32, 17)
+        position(mobileReturns, statusWidth - 78, 2, 54, 20)
+        position(mobileStatusArrow, statusWidth - 22, 23, 15, 17)
+        for n, heart in ipairs(mobileHearts) do position(heart.heart, 8 + (n - 1) * 18, 0, 18, 22) end
+        position(mobileGoalTitle, 10, 2, goalWidth - 34, 18)
+        position(mobileGoalDetail, 10, 22, goalWidth - 34, 18)
+        position(mobileGoalArrow, goalWidth - 23, 12, 15, 20)
+        local detailsWidth = math.min(344, width - mobileInset * 2)
+        local detailsY = mobileHudBottom + 8
+        local controlsTop = height - bottom - math.max(padSize, controlledBoss and topHeight or actionHeight)
+        local desiredHeight = mobileExpanded == "Goal" and 252 or (60 + count * 64 + (enemy and 72 or 0))
+        local availableHeight = controlsTop - detailsY - 8
+        local detailsHeight = math.max(52, math.min(desiredHeight, availableHeight))
+        local detailsX = mobileExpanded == "Goal" and (width - mobileInset - detailsWidth) or mobileInset
+        if availableHeight < 112 then
+            -- An explicitly opened panel may use the centre, leaving both control corners free.
+            local middleLeft = inset + 2 + padSize + 8
+            local middleRight = width - inset - controlWidth - 8
+            local middleWidth = middleRight - middleLeft
+            if middleWidth >= 144 then
+                detailsWidth = math.min(344, middleWidth)
+                detailsX = middleLeft + (middleWidth - detailsWidth) / 2
+                detailsHeight = math.min(desiredHeight, height - bottom - detailsY)
+            end
+        end
+        position(mobileDetails, detailsX, detailsY, detailsWidth, detailsHeight)
+        position(mobileDetailsTitle, 12, 0, detailsWidth - 144, 44)
+        position(mobileCollapse, detailsWidth - 130, 0, 122, 44)
+        position(mobileDetailsScroll, 8, 44, detailsWidth - 16, detailsHeight - 52)
+        local innerWidth, teamTop = detailsWidth - 16, enemy and 72 or 0
+        roster.Visible, enemyStatus.Visible, objective.Visible = mobileExpanded == "Team",
+            mobileExpanded == "Team" and enemy ~= nil, mobileExpanded == "Goal"
+        position(enemyStatus, 0, 0, innerWidth, 64)
+        position(enemyStripe, 0, 9, 3, 46)
+        position(enemyOwner, 11, 3, innerWidth - 22, 20)
+        enemyOwner.TextSize, enemyLife.TextSize = 14, 12
+        position(enemyLife, 94, 30, innerWidth - 106, 24)
+        for n, heart in ipairs(enemyHearts) do position(heart.heart, 10 + (n - 1) * 25, 29, 24, 27) end
+        position(roster, 0, teamTop, innerWidth, count * 64)
+        for i, row in ipairs(heroRows) do
+            position(row.row, 0, (i - 1) * 64, innerWidth, 58)
+            position(row.stripe, 0, 9, 3, 40)
+            position(row.owner, 11, 3, innerWidth - 63, 20)
+            row.owner.TextSize = 14
+            position(row.status, 126, 32, innerWidth - 137, 18)
+            position(row.returns, innerWidth - 45, 4, 34, 18)
+            for n, heart in ipairs(row.fills) do position(heart.heart, 10 + (n - 1) * 22, 28, 22, 25) end
+        end
+        position(objective, 0, 0, innerWidth, 168)
+        position(stageLabel, 12, 8, innerWidth - 24, 18)
+        position(objectiveLabel, 12, 0, innerWidth - 24, 72)
+        objectiveLabel.TextSize = 16
+        position(bossLabel, 12, 80, innerWidth - 24, 24)
+        bossLabel.TextSize = 13
+        position(feedbackLabel, 12, 108, innerWidth - 24, 50)
+        feedbackLabel.TextSize = 13
+        mobileDetailsScroll.CanvasSize = UDim2.fromOffset(0, mobileExpanded == "Goal" and 168 or (teamTop + count * 64))
+    end
     local expanded = enemyChoiceAllowed() and choosingEnemy and snapshot.view ~= "Choice"
     local spectatorWidth = math.min(500, width - inset * 2)
     local hasCameraButtons = nextHeroButton.Visible
@@ -910,10 +1141,11 @@ layout = function()
     local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
     if bossQueue.card.Visible then
         if bossQueue.compact then
-            local queueX, queueWidth = objective.Position.X.Offset, objective.Size.X.Offset
-            local queueY = objective.Position.Y.Offset + objective.Size.Y.Offset + 8
+            local queueX = isTouch and mobileGoal.Position.X.Offset or objective.Position.X.Offset
+            local queueWidth = isTouch and mobileGoal.Size.X.Offset or objective.Size.X.Offset
+            local queueY = isTouch and (mobileHudBottom + 8) or (objective.Position.Y.Offset + objective.Size.Y.Offset + 8)
             local spectatorTop = height - bottom - cameraBottom - spectatorHeight
-            if portrait and queueY + 108 > spectatorTop then
+            if not isTouch and portrait and queueY + 108 > spectatorTop then
                 -- The observer queue replaces the tall roster when a phone needs that space.
                 roster.Visible = false
                 position(objective, inset, inset, width - inset * 2, short and 112 or 120)
@@ -921,8 +1153,8 @@ layout = function()
             end
             if queueY + 108 > spectatorTop then
                 -- On very shallow windows retain the queue and its invitation buttons above observation.
-                objective.Visible = false
-                queueY = inset
+                if not isTouch then objective.Visible = false end
+                queueY = isTouch and (mobileHudBottom + 8) or inset
                 local available = height - bottom - cameraBottom - queueY - 108
                 spectatorHeight = math.min(spectatorHeight, math.max(150, available))
             end
@@ -994,22 +1226,6 @@ layout = function()
     groupPanel:layout(contentWidth, width, height, spectatorWidth)
 end
 
-local function dragTo(input)
-    if not playable() then return end
-    local center = pad.AbsolutePosition + pad.AbsoluteSize / 2
-    local radius = math.max(1, pad.AbsoluteSize.X * 0.34)
-    local delta = (Vector2.new(input.Position.X, input.Position.Y) - center) / radius
-    if delta.Magnitude > 1 then delta = delta.Unit end
-    touchVector = delta.Magnitude < 0.12 and Vector2.zero or delta
-    knob.Position = UDim2.new(0.5, touchVector.X * radius, 0.5, touchVector.Y * radius)
-end
-pad.InputBegan:Connect(function(input)
-    if not playable() or dragging then return end
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = input
-        dragTo(input)
-    end
-end)
 local function dragCameraTo(input)
     if not spectatorCamera.enabled or not spectatorCamera:isFree() then return end
     local center = cameraPad.AbsolutePosition + cameraPad.AbsoluteSize / 2
@@ -1028,8 +1244,6 @@ cameraPad.InputBegan:Connect(function(input)
     end
 end)
 UserInputService.InputChanged:Connect(function(input)
-    if dragging and (input == dragging or (dragging.UserInputType == Enum.UserInputType.MouseButton1
-        and input.UserInputType == Enum.UserInputType.MouseMovement)) then dragTo(input) end
     if cameraStickInput and (input == cameraStickInput or (cameraStickInput.UserInputType == Enum.UserInputType.MouseButton1
         and input.UserInputType == Enum.UserInputType.MouseMovement)) then dragCameraTo(input) end
     if cameraDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
@@ -1045,14 +1259,8 @@ UserInputService.InputBegan:Connect(function(input, processed)
             or key == Enum.KeyCode.Q or key == Enum.KeyCode.E then spectatorCamera:setKey(key.Name, true) end
         return
     end
-    if not playable() then return end
-    if key == Enum.KeyCode.W or key == Enum.KeyCode.A or key == Enum.KeyCode.S or key == Enum.KeyCode.D then keys[key] = true
-    elseif key == Enum.KeyCode.Space then send("Jump")
-    elseif key == Enum.KeyCode.F then send("Attack", {attack = "Punch"})
-    elseif key == Enum.KeyCode.R then send("Attack", {attack = "Dash"}) end
 end)
 UserInputService.InputEnded:Connect(function(input)
-    keys[input.KeyCode] = nil
     spectatorCamera:setKey(input.KeyCode.Name, false)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then cameraDragging = false end
     for held, key in pairs(cameraHolds) do
@@ -1068,15 +1276,15 @@ UserInputService.InputEnded:Connect(function(input)
         spectatorCamera:setTouch(0, 0)
         cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
     end
-    if input == dragging then
-        dragging, touchVector = nil, Vector2.zero
-        knob.Position = UDim2.fromScale(0.5, 0.5)
-    end
 end)
 UserInputService.WindowFocusReleased:Connect(function()
+    windowFocused = false
     resetInput()
-    send("Move", {x = 0, z = 0})
+    sendMovement()
 end)
+UserInputService.WindowFocused:Connect(function() windowFocused = true; syncGameplayContext() end)
+UserInputService.TextBoxFocused:Connect(function() syncGameplayContext() end)
+UserInputService.TextBoxFocusReleased:Connect(function() syncGameplayContext() end)
 
 stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
@@ -1087,14 +1295,27 @@ stateRemote.OnClientEvent:Connect(function(data)
     local previousGroupId = snapshot and snapshot.groupId
     local previousRunId = snapshot and snapshot.runId
     local previousLevelEpoch = snapshot and snapshot.levelEpoch
+    local previousView = snapshot and snapshot.view
     snapshot, mine = data, nil
     for _, hero in ipairs(data.heroes or {}) do if hero.slot == data.mine then mine = hero; break end end
     controlled = mine or data.enemyRole
     spectatorCamera:sync(data, controlled)
     local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
+    local nextHeldContext = tostring(data.interaction ~= nil and data.interaction.carrying == true) .. ":" .. tostring(controlled and controlled.carryState)
+    if nextIdentity ~= identity or previousStatus ~= data.status or previousView ~= data.view
+        or previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
+        mobileExpanded = nil
+    end
     if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; feedbackUntil = 0; resetInput()
-    elseif wasPlayable and not playable() then resetInput() end
+    elseif wasPlayable and not playable() then resetInput()
+    elseif controlled and ((lastReactionEpoch ~= nil and controlled.reactionEpoch ~= lastReactionEpoch)
+        or (lastHeldContext ~= nil and nextHeldContext ~= lastHeldContext)) then
+        movementInput:reset(gameplayBindings:heldDirections())
+        sendMovement()
+    end
+    lastReactionEpoch = controlled and controlled.reactionEpoch
+    lastHeldContext = nextHeldContext
     if previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
         choosingEnemy = data.preference ~= "Spectator"
         pendingTemplate, pendingRole = nil, nil
@@ -1119,9 +1340,10 @@ stateRemote.OnClientEvent:Connect(function(data)
     end
     render()
     layout()
+    syncGameplayContext()
 end)
 safe:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout)
-UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(layout)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(function() mobileExpanded = nil; layout() end)
 -- Gameplay drives server-owned bodies instead of a default Roblox character.
 task.spawn(function()
     local scripts = player:WaitForChild("PlayerScripts")
@@ -1134,6 +1356,7 @@ task.spawn(function()
 end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
+    syncGameplayContext()
     if feedbackUntil > 0 and os.clock() >= feedbackUntil then
         feedbackUntil = 0
         feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(snapshot), C.muted
@@ -1171,15 +1394,7 @@ RunService.RenderStepped:Connect(function(dt)
     if moveElapsed >= 0.1 then
         moveElapsed = 0
         if playable() then
-            local function down(key) return keys[key] and 1 or 0 end
-            local x = down(Enum.KeyCode.D) - down(Enum.KeyCode.A) + touchVector.X
-            local z = down(Enum.KeyCode.S) - down(Enum.KeyCode.W) + touchVector.Y
-            if UserInputService:GetFocusedTextBox() then x, z = 0, 0 end
-            local forward = camera and Vector3.new(camera.CFrame.LookVector.X, 0, camera.CFrame.LookVector.Z) or Vector3.new(0, 0, -1)
-            forward = forward.Magnitude > 0.01 and forward.Unit or Vector3.new(0, 0, -1)
-            local direction = Vector3.new(-forward.Z, 0, forward.X) * x - forward * z
-            if direction.Magnitude > 1 then direction = direction.Unit end
-            send("Move", {x = direction.X, z = direction.Z})
+            sendMovement()
         end
     end
 end)

@@ -1057,6 +1057,7 @@ return function(World)
         if row and row.actor~=a then self:stopDragon(id);row=nil end
         if not row then
             if a.humanoid.PlatformStand then return false end
+            self:resetLocomotion(id,a)
             local attachment=Instance.new('Attachment');attachment.Name='DragonLift';attachment.Parent=a.root
             local force=Instance.new('VectorForce');force.Name='DragonGravity';force.Attachment0=attachment
             force.RelativeTo=Enum.ActuatorRelativeTo.World;force.ApplyAtCenterOfMass=true;force.Parent=a.root
@@ -1100,6 +1101,7 @@ return function(World)
         for other,link in pairs(self.dragonLinks) do if other~=slot and link.dragon==dragon then return false end end
         if not row then
             if hero.root.Anchored then return false end
+            self:resetLocomotion(slot,hero)
             row={hero=hero,dragon=dragon,id=id,mode=mode,collisions={},anchored=hero.root.Anchored,
                 evaluate=hero.humanoid.EvaluateStateMachine,platformStand=hero.humanoid.PlatformStand,
                 autoRotate=hero.humanoid.AutoRotate,walkSpeed=hero.humanoid.WalkSpeed}
@@ -1124,6 +1126,7 @@ return function(World)
         local row=self.dragonLinks[slot];if not row then return false end
         self.dragonLinks[slot]=nil
         local a=row.hero;a.model:SetAttribute('DragonLink',nil);a.model:SetAttribute('DragonId',nil)
+        self:resetLocomotion(slot,a)
         if a.root.Parent then
             a.humanoid:Move(Vector3.new(),false)
             a.root.Anchored=row.anchored;a.humanoid.EvaluateStateMachine=row.evaluate
@@ -1138,23 +1141,26 @@ return function(World)
         return true
     end
     function World:hold(id,held)
+        if held then self:resetLocomotion(id) end
         local row=self.dragonLinks[id]
         if row then row.anchored=held;return end
         self._base.hold(self,id,held)
     end
-    function World:move(id,x,z)
+    function World:move(id,x,z,runRequested)
         if self.dragonLinks[id] or self.dragonFlights[id] then return end
-        previousMove(self,id,x,z)
+        previousMove(self,id,x,z,runRequested)
     end
     function World:setReaction(id,active)
         local row=self.dragonLinks[id]
         if row then
+            if active then self:resetLocomotion(id,row.hero) end
             row.platformStand=active;row.autoRotate=not active;row.walkSpeed=active and 0 or self.config.WalkSpeed
             return
         end
         previousReaction(self,id,active)
     end
     function World:kill(id)
+        self:resetLocomotion(id)
         self:dragonUnlink(id)
         for slot,row in pairs(self.dragonLinks) do if row.id==id then self:dragonUnlink(slot) end end
         self:stopDragon(id)
@@ -1469,6 +1475,7 @@ return function(base,level)
     config.Attacks.PigJab={windup=.30,cooldown=.8,reaction=28/60,reach=6,width=3,height=4,recoveryPose=.20}
     config.Attacks.PigHeavy={windup=.55,cooldown=1.3,reaction=.75,reach=6,width=3,height=4,recoveryPose=.30}
     config.Attacks.PigRush={windup=.22,cooldown=1.4,reaction=.75,reach=6,width=3,height=4,recoveryPose=.35}
+    config.Attacks.EnemyRunStrike=table.clone(config.Attacks.PigRush)
     config.Impulses[0]=table.clone(config.Impulses[18])
     config.Impulses[4]=table.clone(config.Impulses[22])
     config.Pig={rushAfterZone=3,rushSpeed=16,alignment=2,decisionInterval=.1,
@@ -1500,6 +1507,7 @@ return function(base,level)
         -- Main-route jump budget covers its5-stud gaps and2-stud rises with
         -- takeoff/landing room at16studs/s. The independent stand keeps42.
         config.JumpPower=50
+        config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75,npcRunDistance=12}
         config.SourceCombat={heavyProtection=28/60,npcLightReaction=1.05,npcHeavyReaction=.85}
         for _,action in ipairs({'HeroJab','HeroKick','HeroUppercut','HeroPowerPunch','HeroBoot','HeroElbow'}) do
             config.Attacks[action]=table.clone(config.Attacks.Punch)
@@ -2361,9 +2369,11 @@ function World.new(BaseWorld, config, options)
 end
 
 function World:spawn(uid, actorId, point, held, template)
+    local previous=self.actors[uid]
     if not self.origins[uid] and uid &gt; 0 then self.origins[uid] = Vector3.new(-65, 3, (uid - 2) * 7) + self.offset end
     local ok = self._base.spawn(self, uid, actorId, point, held, template or "Mr. Green")
     if ok then
+        if previous then self:resetLocomotion(uid,previous) end
         -- BaseWorld places a spawn without a safe point at absolute Y=3.
         -- Keep that emergency-spawn rule relative to this arena's elevation.
         if not point and self.offset.Y ~= 0 then
@@ -2392,7 +2402,9 @@ function World:spawnEnemy(id, kind, positionTable)
     self.origins[id] = position
     local speciesNames = {Pig = "Панцирный хряк", Walker = "Шагающий страж", Dragon = "Крылатый дозорный"}
     self.names[id] = isBoss and "Страж переправы" or speciesNames[kind] or "Ржавый дозорный"
+    local previous=self.actors[id]
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
+    if previous then self:resetLocomotion(id,previous) end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
     -- BaseWorld's ordinary spawn is deliberately y=3, so preserve the supplied
@@ -2453,17 +2465,30 @@ function World:enemyIdentity(id,actorId,ownerName)
     end
 end
 
-function World:move(id,x,z)
-    if self.enemyCarries[id] then return end
-    local actor=self.actors[id]
-    if actor and self.enemyKinds[id]=='Drone' and not actor.humanoid.PlatformStand then
-        actor.humanoid.WalkSpeed=self.config.Enemy.speed
-    end
-    self._base.move(self,id,x,z)
-end
-
 -- Modern route jump grace uses only this body's server-observed support. A
 -- delayed packet may arrive just beyond an edge while its client still sees floor.
+local function jumpSupportAt(world,position)
+    local hit=Workspace:Raycast(position,Vector3.new(0,-3.4,0),world.ray)
+    return hit~=nil and hit.Normal.Y&gt;=.95 and not hit.Instance:GetAttribute('Hazard')
+        and hit.Instance:GetAttribute('SurfaceId')~=nil
+end
+
+local function hasJumpSupport(world,root)
+    if jumpSupportAt(world,root.Position) then return true end
+    -- This rig's root and physical torso have the same footprint. Its centre
+    -- can pass an edge while the body still stands on it; cosmetic art must
+    -- never enlarge the physical support test. Project the actual oriented
+    -- half-extents horizontally, without adding a support margin.
+    local cf,size=root.CFrame,root.Size
+    local right=Vector3.new(cf.RightVector.X,0,cf.RightVector.Z)*(size.X/2)
+    local forward=Vector3.new(cf.LookVector.X,0,cf.LookVector.Z)*(size.Z/2)
+    for _,offset in ipairs({forward,-forward,right,-right,
+        right+forward,right-forward,-right+forward,-right-forward}) do
+        if jumpSupportAt(world,root.Position+offset) then return true end
+    end
+    return false
+end
+
 local function sampleJumpSupport(world,actor,now)
     local root,humanoid=actor.root,actor.humanoid
     local state=actor.routeJumpSupport
@@ -2471,9 +2496,7 @@ local function sampleJumpSupport(world,actor,now)
     local velocity=root.AssemblyLinearVelocity
     local grounded=false
     if humanoid.FloorMaterial~=Enum.Material.Air and velocity.Y&lt;=1 then
-        local hit=Workspace:Raycast(root.Position,Vector3.new(0,-3.4,0),world.ray)
-        grounded=hit~=nil and hit.Normal.Y&gt;=.95 and not hit.Instance:GetAttribute('Hazard')
-            and hit.Instance:GetAttribute('SurfaceId')~=nil
+        grounded=hasJumpSupport(world,root)
     end
     if state.consumed then
         -- FloorMaterial can retain its old value until the next physics step.
@@ -2486,13 +2509,121 @@ local function sampleJumpSupport(world,actor,now)
     return state,grounded
 end
 
+local function locomotionWalkSpeed(world,id)
+    if world.enemyKinds[id]=='Boss' then return 0 end
+    return world.enemyKinds[id]=='Drone' and world.config.Enemy.speed or world.config.WalkSpeed
+end
+
+local function locomotionRunSpeed(world,id)
+    return world.enemyKinds[id]=='Drone' and world.config.Movement.enemyRunSpeed or world.config.Movement.heroRunSpeed
+end
+
+local function locomotionCanRun(world,id,a)
+    return a and a.root.Parent and a.humanoid.Health&gt;0 and not a.root.Anchored and not a.humanoid.PlatformStand
+        and world.enemyKinds[id]~='Boss' and id&gt;-1000 and not world.enemyCarries[id]
+        and not (world.dragonLinks and world.dragonLinks[id]) and not (world.dragonFlights and world.dragonFlights[id])
+        and not a.model:GetAttribute('DragonLink') and not a.model:GetAttribute('DragonFlight')
+        and a.model:GetAttribute('EnemyKind')~='Dragon' and not a.model:GetAttribute('CarryingEnemy')
+end
+
+local function locomotionGrounded(world,a)
+    return a.humanoid.FloorMaterial~=Enum.Material.Air and a.root.AssemblyLinearVelocity.Y&lt;=1
+        and hasJumpSupport(world,a.root)
+end
+
+local function locomotionFresh(world,row)
+    return row and row.at and Workspace:GetServerTimeNow()&lt;row.at+(world.config.MoveTimeout or .35)
+end
+
+local function locomotionQualifies(world,id,a,row)
+    if not row or not row.runRequested or row.airSpeed or not locomotionFresh(world,row)
+        or not locomotionCanRun(world,id,a) or not locomotionGrounded(world,a) then return false end
+    local v=a.root.AssemblyLinearVelocity
+    return v.X*row.x+v.Z*row.z&gt;=locomotionRunSpeed(world,id)*world.config.Movement.runThresholdRatio
+end
+
+function World:resetLocomotion(id,actorReference)
+    if not self.config.Movement then return end
+    local a=actorReference or self.actors[id]
+    if not a then return end
+    local walk=a.locomotion and a.locomotion.walkSpeed or locomotionWalkSpeed(self,id)
+    a.locomotion=nil
+    a.model:SetAttribute('MovementMode','Idle')
+    if a.root.Parent then
+        a.humanoid:Move(Vector3.new(),false)
+        a.humanoid.WalkSpeed=a.humanoid.PlatformStand and 0 or walk
+    end
+end
+
+function World:isRunning(id)
+    if not self.config.Movement then return false end
+    local a=self.actors[id]
+    return a~=nil and locomotionQualifies(self,id,a,a.locomotion) or false
+end
+
+function World:movementMode(id)
+    local a=self.actors[id]
+    if not a or not a.root.Parent or a.humanoid.Health&lt;=0 or a.root.Anchored or a.humanoid.PlatformStand then return 'Idle' end
+    if not self.config.Movement then return 'Idle' end
+    local row=a.locomotion
+    if not locomotionGrounded(self,a) or (row and row.airSpeed) then return 'Air' end
+    if self:isRunning(id) then return 'Run' end
+    if locomotionFresh(self,row) then
+        local v=a.root.AssemblyLinearVelocity
+        if v.X*row.x+v.Z*row.z&gt;0 then return 'Walk' end
+    end
+    return 'Idle'
+end
+
+function World:move(id,x,z,runRequested)
+    if self.enemyCarries[id] then return end
+    local a=self.actors[id]
+    if not self.config.Movement then
+        if a and self.enemyKinds[id]=='Drone' and not a.humanoid.PlatformStand then a.humanoid.WalkSpeed=self.config.Enemy.speed end
+        return self._base.move(self,id,x,z)
+    end
+    if not a or not a.root.Parent or a.humanoid.Health&lt;=0 or a.root.Anchored or a.humanoid.PlatformStand then
+        self:resetLocomotion(id);return
+    end
+    local length=math.sqrt(x*x+z*z)
+    if length&gt;1 then x,z=x/length,z/length end
+    local row=a.locomotion or {walkSpeed=locomotionWalkSpeed(self,id)}
+    a.locomotion=row
+    local grounded=locomotionGrounded(self,a)
+    if row.airSpeed and grounded and not (a.routeJumpSupport and a.routeJumpSupport.consumed) then row.airSpeed=nil end
+    if not grounded and not row.airSpeed then row.airSpeed=row.groundRun and locomotionRunSpeed(self,id) or row.walkSpeed end
+    row.x,row.z=x,z
+    row.runRequested=runRequested==true and length&gt;0 and locomotionCanRun(self,id,a) or false
+    row.at=length&gt;0 and Workspace:GetServerTimeNow() or nil
+    a.humanoid.WalkSpeed=row.airSpeed or (row.runRequested and locomotionRunSpeed(self,id) or row.walkSpeed)
+    self._base.move(self,id,x,z)
+    row.groundRun=locomotionQualifies(self,id,a,row)
+    a.model:SetAttribute('MovementMode',self:movementMode(id))
+end
+
 function World:hazard(id)
     local reason=self._base.hazard(self,id)
     if not self.config.Level then return reason end
     local actor=self.actors[id]
     if actor then
-        if reason or actor.root.Anchored or actor.humanoid.PlatformStand then actor.routeJumpSupport=nil
-        else sampleJumpSupport(self,actor,Workspace:GetServerTimeNow()) end
+        if reason or actor.root.Anchored or actor.humanoid.PlatformStand then
+            actor.routeJumpSupport=nil;self:resetLocomotion(id)
+        else
+            local support,grounded=sampleJumpSupport(self,actor,Workspace:GetServerTimeNow())
+            local row=actor.locomotion
+            if self.config.Movement and row then
+                if row.airSpeed and grounded and not support.consumed then row.airSpeed=nil end
+                if not grounded and not row.airSpeed then
+                    row.airSpeed=row.groundRun and locomotionRunSpeed(self,id) or row.walkSpeed
+                end
+                if row.at and not locomotionFresh(self,row) then self:move(id,0,0,false)
+                else
+                    row.groundRun=locomotionQualifies(self,id,actor,row)
+                    actor.humanoid.WalkSpeed=row.airSpeed or (row.runRequested and locomotionRunSpeed(self,id) or row.walkSpeed)
+                end
+                actor.model:SetAttribute('MovementMode',self:movementMode(id))
+            end
+        end
     end
     return reason
 end
@@ -2511,6 +2642,15 @@ function World:jump(id)
     if not grounded and not grace then return end
     local power=actor.humanoid.JumpPower or self.config.JumpPower
     if type(power)~='number' or power&lt;=0 or power~=power or power==math.huge then return end
+    if self.config.Movement then
+        local row=actor.locomotion or {walkSpeed=locomotionWalkSpeed(self,id),x=0,z=0}
+        local running=self:isRunning(id)
+        actor.locomotion=row
+        row.airSpeed=row.airSpeed or (running and locomotionRunSpeed(self,id) or row.walkSpeed)
+        row.groundRun=false
+        actor.humanoid.WalkSpeed=row.airSpeed
+        actor.model:SetAttribute('MovementMode','Air')
+    end
     state.consumed=true; state.airborne=false; state.launchY=actor.root.Position.Y
     local velocity=actor.root.AssemblyLinearVelocity
     actor.root.AssemblyLinearVelocity=Vector3.new(velocity.X,power,velocity.Z)
@@ -2518,6 +2658,7 @@ function World:jump(id)
 end
 
 function World:setReaction(id,active)
+    if active then self:resetLocomotion(id) end
     local carried = self.enemyCarries[id]
     if carried then
         -- Reaction deadlines may expire while the body is held or in flight.
@@ -2572,7 +2713,11 @@ local function moveEnemySafely(self, id, targetId, speed, away)
     end
     -- Stop voluntary movement at an unsafe edge. External impulses and gravity
     -- remain untouched, so combat can still knock a mechanical enemy off.
-    a.humanoid:Move(direction, false)
+    if self.config.Movement then
+        local requested=(speed or 8)&gt;=self.config.Movement.enemyRunSpeed
+        self:move(id,direction.X,direction.Z,requested)
+        if direction.Magnitude&gt;0 then a.humanoid.WalkSpeed=speed or 8 end
+    else a.humanoid:Move(direction, false) end
 end
 
 function World:enemyMove(id, targetId, speed)
@@ -2778,6 +2923,8 @@ function World:carryEnemy(enemyId, heroId)
     if not carried then
         if enemy.root.Anchored or self.enemyKinds[enemyId] ~= 'Drone'
             or hero.model:GetAttribute('CarryingEnemy') ~= nil then return false end
+        self:resetLocomotion(enemyId,enemy)
+        self:resetLocomotion(heroId,hero)
         carried = {actor = enemy, holder = hero, holderId = heroId, mode = 'Carried', collisions = {},
             platformStand = enemy.humanoid.PlatformStand, autoRotate = enemy.humanoid.AutoRotate,
             walkSpeed = enemy.humanoid.WalkSpeed, anchored = enemy.root.Anchored,
@@ -3072,6 +3219,11 @@ local walkerPoses = {
     },
 }
 
+-- The generic grounded run strike reuses each family's original heavy silhouette.
+-- These poses only present the server-selected action; they never choose damage.
+pigPoses.EnemyRunStrike=pigPoses.PigRush
+walkerPoses.EnemyRunStrike=walkerPoses.WalkerHeavy
+
 local dragonPoses = {
     DragonHeadbutt = {
         Windup = {left=-.4,right=-.4,leftRoll=-.3,rightRoll=.3,hip=-.15,neck=-.55},
@@ -3177,9 +3329,12 @@ function World:updatePresentation(session, dt, enemies)
             local attacking = actor.attackPoseUntil and self.presentationTime &lt; actor.attackPoseUntil
             local velocity = actor.root.AssemblyLinearVelocity
             local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+            local movementMode=self.config.Movement and self:movementMode(id)
+            if movementMode then actor.model:SetAttribute('MovementMode',movementMode) end
             local walking = not actor.root.Anchored and actor.humanoid.Health &gt; 0
                 and actor.humanoid.FloorMaterial ~= Enum.Material.Air
-            local running = primaryPhase=='Running'
+            if self.config.Movement then walking=movementMode=='Walk' or movementMode=='Run' end
+            local running = primaryPhase=='Running' or (movementMode=='Run' and not primaryAction)
             actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * (running and 1.3 or .8)
             local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * (running and .75 or .5) or 0
             local primaryPose = primaryAction and poses[primaryAction][primaryPhase]
@@ -3221,6 +3376,7 @@ end
 function World:clearActors()
     for id in pairs(self.equippedClubs) do self:unequipClub(id) end
     for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
+    for id,actor in pairs(self.actors) do self:resetLocomotion(id,actor) end
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.healingFlyFolder:ClearAllChildren()
@@ -3756,6 +3912,12 @@ end
 function Director:_log(kind,id,data)
     if self.session._record then self.session:_record(kind,id,data,self.now) end
 end
+function Director:_resetLocomotion(id,e)
+    if e then e.runApproach=nil;e.rushing=nil end
+    if self.config.Movement and self.world.resetLocomotion then
+        self.world:resetLocomotion(id,self.world.actors and self.world.actors[id])
+    end
+end
 function Director:_finishReaction(id,e)
     if e~=self.enemies[id] or e.dead or not e.reactionUntil or self.now&lt;e.reactionUntil then return false end
     if e.rawLife~=nil then
@@ -3853,6 +4015,7 @@ function Director:claim(userId,enemyId)
     if e.ownerUserId then return 'ENEMY_OCCUPIED' end
     if e.engaged then return 'ENEMY_ENGAGED' end
     e.ownerUserId=userId; e.connected=true; e.connectionEpoch=1; e.lastSeq=0; e.rushing=nil
+    self:_resetLocomotion(enemyId,e)
     self.byUserId[userId]=enemyId
     self.world:move(enemyId,0,0)
     self.world:enemyIdentity(enemyId,e.actorId,self.ownerNames[userId])
@@ -3865,6 +4028,7 @@ function Director:connection(userId,connected)
     if type(connected)~='boolean' then return 'INVALID_CONNECTION' end
     if e.connected==connected then return 'NO_CHANGE' end
     e.connected=connected; e.connectionEpoch+=1; e.lastSeq=0; e.lastMove=nil
+    self:_resetLocomotion(id,e)
     self.world:move(id,0,0)
     self:_log('EnemyConnection',id,{actorId=e.actorId,ownerUserId=userId,connected=connected,connectionEpoch=e.connectionEpoch})
     return 'OK'
@@ -3875,7 +4039,8 @@ function Director:controlled(userId)
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
+        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode,
+        reactionEpoch=e.reactionEpoch or 0,movementMode=self.world.movementMode and self.world:movementMode(id) or nil}
 end
 function Director:available(userId)
     local offers={}
@@ -3941,7 +4106,7 @@ function Director:command(userId,payload,now,validator)
         if code then return code end
     end
     if payload.kind=='Move' then
-        e.lastMove=now; self.world:move(id,payload.x,payload.z)
+        e.lastMove=now; self.world:move(id,payload.x,payload.z,payload.run)
     elseif payload.kind=='Jump' then self.world:jump(id)
     else
         if e.windup or now&lt;e.nextAttack then return 'COOLDOWN' end
@@ -3963,8 +4128,13 @@ function Director:_beginStrike(id,e,target)
     if self.dragons and e.kind=='Dragon' and self.dragons:beginCapture(id,e,target) then return end
     local action=self.config.Enemy.attack
     local tuning=self.strikeProfile
+    local running=self.config.Movement and not e.boss and e.kind~='Dragon' and self.world.isRunning
+        and self.world:isRunning(id)==true
+    local sourceRush=e.kind=='Pig' and e.rushing and (not self.config.Movement or running)
     local sourceFamily=self.route and ((e.kind=='Pig' and self.config.Pig) or (e.kind=='Walker' and self.config.Walker))
-    if self.route and e.kind=='Dragon' and self.config.Dragon then
+    if running and not sourceRush then
+        action='EnemyRunStrike';tuning=self.config.Attacks[action]
+    elseif self.route and e.kind=='Dragon' and self.config.Dragon then
         action='DragonHeadbutt';tuning=self.config.Attacks[action]
     elseif sourceFamily then
         local light=e.kind=='Pig' and 'PigJab' or 'WalkerLight'
@@ -3974,12 +4144,12 @@ function Director:_beginStrike(id,e,target)
         local ordinary=target and self.enemies[target]
         if not combat and ordinary and ordinary.rawLife~=nil then combat=ordinary end
         -- Prototype enemy3HP is not raw source Life; an unknown target uses jab.
-        action=e.kind=='Pig' and e.rushing and 'PigRush' or (combat and combat.rawLife%16&lt;4 and heavy or light)
+        action=sourceRush and 'PigRush' or (combat and combat.rawLife%16&lt;4 and heavy or light)
         tuning=self.config.Attacks[action]
     end
-    e.engaged=true; e.rushing=nil; e.strikeRecoveryUntil=nil
+    e.engaged=true; e.rushing=nil; e.runApproach=nil; e.strikeRecoveryUntil=nil
     e.windup={at=self.now+tuning.windup,action=action,tuning=self.Combat.captureAttack(self.config,action,tuning)}
-    self.world:move(id,0,0); self.world:cue(id,true)
+    self.world:move(id,0,0,false); self.world:cue(id,true)
     self:_log('EnemyAttackAccepted',id,{actorId=e.actorId,action=action,ownerUserId=e.ownerUserId,effectAt=e.windup.at})
 end
 function Director:_resolveStrike(id,e)
@@ -4031,6 +4201,7 @@ function Director:_kill(id,cause)
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
     if self.dragons then self.dragons:forgetEnemy(id) end
+    self:_resetLocomotion(id,e)
     e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
     if e.rawLife~=nil then e.rawLife=0 end
@@ -4067,12 +4238,14 @@ function Director:hit(attacker,target,action,tuning)
     if e and e.rawLife~=nil then self:_finishReaction(target,e) end
     if not e or e.dead or (e.rawLife==nil and e.reactionUntil and self.now&lt;e.reactionUntil) then return false end
     if self.carry then self.carry:forgetEnemy(target) end
+    self:_resetLocomotion(target,e)
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil
     local family=(self.config.Pig and self.config.Pig.npcDamage[action] and self.config.Pig)
         or (self.config.Walker and self.config.Walker.npcDamage[action] and self.config.Walker)
         or (self.config.Dragon and self.config.Dragon.npcDamage[action] and self.config.Dragon)
-    local damage=(family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
+    local runStrike=action=='EnemyRunStrike'
+    local damage=(runStrike and self.config.Enemy.dashDamage) or (family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
         or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
     local before=e.rawLife or e.health
     local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,action)
@@ -4087,13 +4260,14 @@ function Director:hit(attacker,target,action,tuning)
         local policy=tuning and tuning.sourceCombat or self.config.SourceCombat
         local reaction=source and (source.heavyReaction and policy.npcHeavyReaction
             or policy.npcLightReaction) or ((tuning and tuning.reaction) or (family and self.config.Attacks[action].reaction)
+            or (runStrike and self.config.Attacks[action].reaction)
             or (action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction)
         )
         e.heavyReaction=source and source.heavyReaction or nil
         e.reactionUntil=self.now+reaction
         if self.dragons then self.dragons:hitEnemy(target,source and source.heavyReaction) end
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
+        local profile=source and source.profile or (runStrike and 4) or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
         local responses=tuning and tuning.responses or self.config.Impulses
         local impulse=responses and responses[profile]
         if impulse then self.world:impulse(target,attacker,impulse,profile,tuning and tuning.impulseDirection) end
@@ -4135,7 +4309,7 @@ function Director:_enemies(dt)
             else
                 if not (self.dragons and self.dragons:isMounted(id)) then living+=1 end
                 local carried=self.carry and self.carry:blocksEnemy(id)
-                if carried then e.rushing=nil; e.strikeRecoveryUntil=nil end
+                if carried then self:_resetLocomotion(id,e); e.strikeRecoveryUntil=nil end
                 if not carried and e.reactionUntil and self.now&gt;=e.reactionUntil then
                     self:_finishReaction(id,e)
                 end
@@ -4155,6 +4329,9 @@ function Director:_enemies(dt)
                             or (self.route and e.kind=='Dragon' and self.config.Dragon)
                         local target,range=self:_nearest(self.world:position(id),standing~=nil and standing~=false)
                         local attackRange=walker and walker.range or self.config.Enemy.range
+                        if walker and self.config.Movement and self.world.isRunning and self.world:isRunning(id) then
+                            attackRange=math.min(attackRange,self.config.Attacks.EnemyRunStrike.reach)
+                        end
                         -- Validate the approach before either melee or movement:
                         -- a newly invalid target cannot preserve an old running hop.
                         if e.rushing then
@@ -4162,14 +4339,19 @@ function Director:_enemies(dt)
                             local c=target and self.session.combat[target]
                             local alignment=self.config.Pig.alignment
                             if not a or not b or math.abs(a.z-b.z)&gt;alignment or math.abs(a.y-b.y)&gt;alignment
-                                or (c and c.reactionEnd) then e.rushing=nil end
+                                or (c and c.reactionEnd) then self:_resetLocomotion(id,e) end
                         end
                         if target and walker and range&lt;walker.minRange then
+                            e.runApproach=nil
                             self.world:enemyRetreat(id,target,walker.retreatSpeed)
                         elseif target and range&lt;=attackRange and self.now&gt;=e.nextAttack then
                             self.world:face(id,target); self:_beginStrike(id,e,target)
                         elseif target and range&gt;attackRange*.8 then
                             local speed=self.config.Enemy.speed
+                            if walker and self.config.Movement then
+                                if range&gt;self.config.Movement.npcRunDistance then e.runApproach=true end
+                                if e.runApproach then speed=self.config.Movement.enemyRunSpeed end
+                            end
                             if self.route and self.config.Pig and e.kind=='Pig' then
                                 local pig=self.config.Pig
                                 local a,b=self.world:position(id),self.world:position(target)
@@ -4184,7 +4366,7 @@ function Director:_enemies(dt)
                                 if e.rushing then speed=pig.rushSpeed end
                             end
                             self.world:enemyMove(id,target,speed)
-                        else e.rushing=nil; self.world:move(id,0,0) end
+                        else e.rushing=nil;e.runApproach=nil; self.world:move(id,0,0,false) end
                     end
                 end
             end
@@ -4307,6 +4489,7 @@ function Director:snapshot()
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
             dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind,
+            reactionEpoch=e.reactionEpoch or 0,movementMode=self.world.movementMode and self.world:movementMode(id) or nil,
             carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
     end
     table.sort(enemies,function(a,b) return a.id&gt;b.id end)
@@ -4730,6 +4913,16 @@ local SourceCombat={}
 function SourceCombat.bind(session,director,config)
     if not config.SourceCombat then return false end
     session.sourceCombat=config.SourceCombat
+    session.groundRunAllowed=function(slot)
+        if director.carry and director.carry:interaction(slot).carrying then return false end
+        if director.guardian and director.guardian:interaction(slot).carrying then return false end
+        if director.dragons and director.dragons.heroes[slot] then return false end
+        return true
+    end
+    session.canRunStrike=function(slot)
+        return config.Movement~=nil and session.groundRunAllowed(slot) and session.world.isRunning~=nil
+            and session.world:isRunning(slot)==true
+    end
     session.attackSelector=function(slot,input)
         director.now=session.now
         for _,target in ipairs(session.world:targets(slot,config.Attacks[input])) do
@@ -4990,9 +5183,9 @@ local Combat = {}
 -- Trusted server actions; public input validation remains in Session.
 -- Pig animation40 does not satisfy the hero Dash animation16 finisher condition.
 local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22,WalkerLight=18,WalkerHeavy=20,DragonHeadbutt=22,DragonFire=22,
-    HeroJab=18,HeroKick=19,HeroUppercut=20,HeroPowerPunch=21,HeroBoot=24,HeroElbow=28}
+    HeroJab=18,HeroKick=19,HeroUppercut=20,HeroPowerPunch=21,HeroBoot=24,HeroElbow=28,EnemyRunStrike=22}
 local ordinaryProfiles={Punch=0,HeroJab=0,HeroKick=1,HeroUppercut=2,HeroPowerPunch=3,HeroBoot=6,HeroElbow=10,
-    Club=2,PigJab=0,PigHeavy=2,PigRush=4,WalkerLight=0,WalkerHeavy=2,DragonHeadbutt=4,DragonFire=4,EnemyThrow=17}
+    Club=2,PigJab=0,PigHeavy=2,PigRush=4,WalkerLight=0,WalkerHeavy=2,DragonHeadbutt=4,DragonFire=4,EnemyThrow=17,EnemyRunStrike=4}
 local ordinaryDamage={[0]=2,[1]=8,[2]=16,[3]=255,[4]=16,[6]=255,[10]=8,[17]=4}
 local function life(value)
     assert(type(value) == "number" and value == value and value &gt;= 0
@@ -5072,7 +5265,7 @@ return Combat
 local Session = {}
 Session.__index = Session
 local common = {kind=true,runId=true,actorId=true,attempt=true,levelEpoch=true,connectionEpoch=true,seq=true}
-local extras = {Attack={attack=true},Move={x=true,z=true},Jump={}}
+local extras = {Attack={attack=true},Move={x=true,z=true,run=true},Jump={}}
 local function finite(n) return type(n)=="number" and n==n and n&gt;-math.huge and n&lt;math.huge end
 local function integer(n) return finite(n) and n&gt;=1 and n&lt;=1000000000 and n%1==0 end
 local function valid(p)
@@ -5080,13 +5273,14 @@ local function valid(p)
     local count=0
     for k,v in pairs(p) do
         count=count+1
-        if count&gt;9 or not (common[k] or extras[p.kind][k]) or type(v)=="table" then return false end
+        if count&gt;(p.kind=='Move' and 10 or 9) or not (common[k] or extras[p.kind][k]) or type(v)=="table" then return false end
     end
     if type(p.runId)~="string" or #p.runId&gt;160 or type(p.actorId)~="string" or #p.actorId&gt;160
         or not integer(p.attempt) or not integer(p.levelEpoch) or not integer(p.connectionEpoch)
         or not integer(p.seq) then return false end
     if p.kind=="Attack" then return p.attack=="Punch" or p.attack=="Dash" end
-    if p.kind=="Move" then return finite(p.x) and finite(p.z) and p.x*p.x+p.z*p.z&lt;=1.01 end
+    if p.kind=="Move" then return finite(p.x) and finite(p.z) and p.x*p.x+p.z*p.z&lt;=1.01
+        and (p.run==nil or type(p.run)=='boolean') end
     return true
 end
 
@@ -5111,6 +5305,12 @@ function Session:_clock(now)
     if now&lt;self.now then return "TIME_REVERSED" end
     self.now=now
     return "OK"
+end
+
+function Session:_resetLocomotion(uid)
+    if self.config.Movement and self.world.resetLocomotion then
+        self.world:resetLocomotion(uid,self.world.actors and self.world.actors[uid])
+    end
 end
 
 function Session:_record(kind, uid, data, at)
@@ -5173,6 +5373,7 @@ function Session:_spawn(uid)
     assert(code=="OK","Synchronous spawn commit violated its reservation: "..code)
     self.combat[uid]={rawLife=47,nextAttack=self.now}
     self.lastSeq[uid]=0; self.lastMove[uid]=nil; self.nextSpawn[uid]=nil
+    self:_resetLocomotion(uid)
     self.world:hold(uid,not safe)
 end
 
@@ -5182,6 +5383,7 @@ function Session:_die(uid, reason)
     if self:_event("Death",uid)~="OK" then return end
     self.combat[uid]={rawLife=0,nextAttack=self.now}
     self.lastMove[uid]=nil
+    self:_resetLocomotion(uid)
     self.world:kill(uid)
     self:_record("ConfirmedDeath",uid,{reason=reason,actorId=h.actorId,observed=self.world:observe(uid)})
 end
@@ -5207,6 +5409,7 @@ function Session:connection(uid, connected, now)
     code=self:_event("Connection",uid,{connectionEpoch=h.connectionEpoch,connected=connected})
     if code=="OK" then
         self.lastSeq[uid]=0; self.buckets[uid]=nil; self.lastMove[uid]=nil
+        self:_resetLocomotion(uid)
         self.world:move(uid,0,0)
     end
     return code
@@ -5239,30 +5442,38 @@ function Session:intent(uid, p, now)
     if c.reactionEnd or c.deathAt then return "REACTION" end
     if p.kind=="Move" then
         self.lastMove[uid]=now
-        self.world:move(uid,p.x,p.z)
+        local run=p.run
+        if self.groundRunAllowed and not self.groundRunAllowed(uid) then run=false end
+        self.world:move(uid,p.x,p.z,run)
     elseif p.kind=="Jump" then
         self.world:jump(uid)
     else
         if now&lt;c.nextAttack or c.attack then return "COOLDOWN" end
-        if self.contextualAttack then
+        local running=self.config.Movement and (self.canRunStrike and self.canRunStrike(uid)
+            or (not self.canRunStrike and self.world.isRunning and self.world:isRunning(uid)))==true
+        if not running and self.contextualAttack then
             local interaction=self.contextualAttack(uid,now,p.attack)
             if interaction~='NO_INTERACTION' then
                 if interaction=='OK' then
+                    self:_resetLocomotion(uid)
                     c.nextAttack=math.max(c.nextAttack,now+self.config.Attacks[p.attack].cooldown)
                     self:_record('InteractionAccepted',uid,{action=p.attack,seq=p.seq})
                 end
                 return interaction
             end
         end
+        if self.config.Movement and p.attack=='Dash' and not running then return 'NOT_RUNNING' end
         code=self:_event("BeginAttack",uid,{connectionEpoch=h.connectionEpoch})
         if code~="OK" then return code end
         self.world:hold(uid,false)
-        local action=self.attackSelector and self.attackSelector(uid,p.attack) or p.attack
+        local input=running and 'Dash' or p.attack
+        local action=self.attackSelector and self.attackSelector(uid,input) or input
         local cfg=self.config.Attacks[action]
         assert(cfg,'Unknown trusted action')
         c.nextAttack=now+cfg.cooldown
         c.attack={action=action,inputAction=p.attack,tuning=self.Combat.captureAttack(self.config,action,cfg),actorId=h.actorId,at=now+cfg.windup,
             untilTime=now+cfg.windup+cfg.window,order=self.serial}
+        if running then self.world:move(uid,0,0,false);self.lastMove[uid]=nil end
         self:_record("AttackAccepted",uid,{action=action,inputAction=p.attack,seq=p.seq})
     end
     return "OK"
@@ -5286,6 +5497,7 @@ function Session:_hit(attacker, target, action, tuning)
     end
     if result.impulse then
         if self.beforeHitImpulse then self.beforeHitImpulse(target) end
+        self:_resetLocomotion(target)
         -- Pending contextual actions must still see an interrupt after recovery
         -- has cleared reactionEnd during a later (possibly long) server step.
         c.reactionEpoch=(c.reactionEpoch or 0)+1
@@ -5373,7 +5585,7 @@ function Session:step(now)
         local h=self.state.heroes[uid]
         if h.status=="Alive" then
             if self.lastMove[uid] and now-self.lastMove[uid]&gt;=self.config.MoveTimeout then
-                self.world:move(uid,0,0); self.lastMove[uid]=nil
+                self.world:move(uid,0,0,false); self.lastMove[uid]=nil
             end
             local reason=self.world:hazard(uid)
             local held=h.shield and h.shield.kind=="Emergency" and now&lt;h.shield.deadline
@@ -5392,7 +5604,8 @@ function Session:snapshot()
             connectionEpoch=h.connectionEpoch,connected=h.connected,status=h.status,view=h.view,
             hearts=self.Combat.hearts(c.rawLife),rawLife=c.rawLife,respawns=h.respawns,
             shield=h.shield and h.shield.kind,shieldUntil=h.shield and h.shield.deadline,
-            dying=c.deathAt~=nil}
+            dying=c.deathAt~=nil,reactionEpoch=c.reactionEpoch or 0,
+            movementMode=self.world.movementMode and self.world:movementMode(uid) or nil}
     end
     return {runId=self.state.runId,levelEpoch=self.state.levelEpoch,status=self.state.status,
         now=self.now,heroes=heroes,calibration=self.config.Calibration}
@@ -5772,10 +5985,10 @@ return World
           </Properties>
         </Item>
       </Item>
-      <Item class="ModuleScript" referent="BT42">
+      <Item class="ModuleScript" referent="BT44">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='111e5acea788db6c93dc5dc011c291ea974604ca4fe60c08b69f3bf733ea5eac'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='ca590a35b8ea4f9b6f2280490886117a4779cb338345ca6fe44d91692f94e96a'})
 </ProtectedString>
         </Properties>
       </Item>
@@ -6042,8 +6255,16 @@ local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
 local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
 local CombatFeedback = require(script.Parent:WaitForChild("CombatFeedback"))
+local MovementInput = require(script.Parent:WaitForChild("MovementInput"))
+local RobloxInputBindings = require(script.Parent:WaitForChild("RobloxInputBindings"))
 local spectatorCamera = SpectatorCamera.new()
 local combatFeedback = CombatFeedback.new()
+local movementInput = MovementInput.new()
+local gameplayBindings
+local windowFocused = true
+local lastReactionEpoch
+local lastHeldContext
+local sendMovement, syncGameplayContext
 local feedbackUntil = 0
 
 local C = {
@@ -6058,7 +6279,6 @@ local templates = {"Mr. Green", "Mr. Yellow", "Mr. Brown"}
 local heroColors = {[templates[1]] = C.green, [templates[2]] = C.yellow, [templates[3]] = C.brown}
 local snapshot, mine, controlled, identity = nil, nil, nil, nil
 local sequence = 0
-local keys, touchVector, dragging = {}, Vector2.zero, nil
 local pendingTemplate, pendingAt = nil, 0
 local pendingRole, pendingRoleAt = nil, 0
 local pendingEnemy, pendingEnemyAt = nil, 0
@@ -6069,6 +6289,7 @@ local cameraHolds = {}
 local actionPending, actionAt = false, 0
 local width, height = 900, 650
 local render, layout
+local mobileExpanded
 
 local function sendIntent(packet)
     local envelope = table.clone(packet)
@@ -6121,7 +6342,7 @@ local function button(parent, name, text, color, callback)
         TextSize = 16, TextWrapped = true, AutoButtonColor = false,
     })
     corner(item, 14)
-    item.Activated:Connect(callback)
+    if callback then item.Activated:Connect(callback) end
     return item
 end
 local function position(item, x, y, w, h)
@@ -6323,6 +6544,46 @@ local stageLabel = label(objective, "Stage", "ЗАТОПЛЕННЫЙ ТРАКТ"
 local objectiveLabel = label(objective, "Task", "Доберитесь до ворот", 17, C.text, true)
 local bossLabel = label(objective, "BossHits", "", 13, C.yellow)
 local feedbackLabel = label(objective, "ConfirmedFeedback", "", 12, C.muted, true)
+local function toggleMobileDetails(section)
+    if UserInputService.TouchEnabled and bossQueue.card.Visible and bossQueue.compact then return end
+    mobileExpanded = mobileExpanded ~= section and section or nil
+    if render then render(); layout() end
+end
+local mobileStatus = button(hud, "MobileStatus", "", C.ink, function() toggleMobileDetails("Team") end)
+mobileStatus.BackgroundTransparency, mobileStatus.Visible = 0.12, false
+local mobileStatusTitle = label(mobileStatus, "Title", "", 14, C.text, true)
+local mobileStatusDetail = label(mobileStatus, "State", "", 12, C.muted)
+local mobileReturns = label(mobileStatus, "Respawns", "", 12, C.text, true)
+mobileReturns.TextXAlignment = Enum.TextXAlignment.Right
+local mobileStatusArrow = label(mobileStatus, "Expand", "+", 15, C.muted)
+local mobileHearts = {}
+for i = 1, 5 do
+    local heart = label(mobileStatus, "Heart" .. i, "♥", 20, C.line)
+    local clip = frame(heart, "FillClip")
+    clip.BackgroundTransparency, clip.ClipsDescendants, clip.Size = 1, true, UDim2.fromScale(1, 1)
+    local fill = label(clip, "Fill", "♥", 20, C.red)
+    fill.Size = UDim2.fromOffset(18, 22)
+    mobileHearts[i] = {heart = heart, clip = clip, fill = fill}
+end
+local mobileGoal = button(hud, "MobileGoal", "", C.ink, function() toggleMobileDetails("Goal") end)
+mobileGoal.BackgroundTransparency, mobileGoal.Visible = 0.12, false
+local mobileGoalTitle = label(mobileGoal, "Stage", "", 13, C.lime, true)
+local mobileGoalDetail = label(mobileGoal, "Summary", "", 13, C.text)
+local mobileGoalArrow = label(mobileGoal, "Expand", "+", 15, C.muted)
+for _, item in ipairs({mobileStatusTitle, mobileStatusDetail, mobileGoalTitle, mobileGoalDetail}) do
+    item.TextWrapped, item.TextTruncate = false, Enum.TextTruncate.AtEnd
+end
+local mobileDetails = frame(hud, "MobileDetails", C.ink)
+mobileDetails.BackgroundTransparency, mobileDetails.Visible = 0.08, false
+corner(mobileDetails, 14)
+local mobileDetailsTitle = label(mobileDetails, "Heading", "Команда", 14, C.text, true)
+local mobileCollapse = button(mobileDetails, "Collapse", "СВЕРНУТЬ ↑", C.card, function() toggleMobileDetails(mobileExpanded) end)
+mobileCollapse.TextSize = 12
+local mobileDetailsScroll = make("ScrollingFrame", "Details", mobileDetails, {
+    BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
+    ScrollBarImageColor3 = C.muted, ScrollingDirection = Enum.ScrollingDirection.Y,
+    CanvasSize = UDim2.new(), ClipsDescendants = true,
+})
 local spectator = frame(hud, "Spectator", C.ink)
 spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5, 1)
 corner(spectator, 14)
@@ -6387,24 +6648,23 @@ local function send(kind, extra)
 end
 local actions = frame(controls, "Actions")
 actions.BackgroundTransparency, actions.AnchorPoint = 1, Vector2.new(1, 1)
-local punch = button(actions, "Punch", "УДАР\nF", C.card, function() send("Attack", {attack = "Punch"}) end)
-local dash = button(actions, "Dash", "ТАРАН\nR", C.card, function() send("Attack", {attack = "Dash"}) end)
-local jump = button(actions, "Jump", "ПРЫЖОК · SPACE", C.lime, function() send("Jump") end)
+local punch = button(actions, "Punch", "УДАР\nF", C.card)
+local dash = button(actions, "Dash", "МЕГА\nR · В БЕГЕ", C.card)
+local jump = button(actions, "Jump", "ПРЫЖОК · SPACE", C.lime)
 jump.TextColor3 = C.ink
 stroke(punch, C.muted, 1)
 stroke(dash, C.muted, 1)
-local pad = frame(controls, "MoveStick", C.ink)
-pad.BackgroundTransparency, pad.Active, pad.AnchorPoint = 0.15, true, Vector2.new(0, 1)
-corner(pad, 100)
-stroke(pad, C.muted, 2)
-local padRing = frame(pad, "InnerRing", C.card)
-padRing.BackgroundTransparency = 0.2
-padRing.Size, padRing.Position = UDim2.fromScale(0.68, 0.68), UDim2.fromScale(0.16, 0.16)
-corner(padRing, 100)
-local knob = frame(pad, "Knob", C.lime)
-knob.AnchorPoint, knob.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
-knob.Size = UDim2.fromScale(0.34, 0.34)
-corner(knob, 100)
+local pad = frame(controls, "DirectionPad", C.ink)
+pad.BackgroundTransparency, pad.AnchorPoint = 1, Vector2.new(0, 1)
+local directionButtons = {}
+for _, definition in ipairs({{"Forward", "↑"}, {"Left", "←"}, {"Backward", "↓"}, {"Right", "→"}}) do
+    local item = button(pad, definition[1], definition[2], C.card)
+    item.TextSize = 25
+    stroke(item, C.muted, 1)
+    directionButtons[definition[1]] = item
+end
+local runHint = label(pad, "RunHint", "2×\nБЕГ", 11, C.muted, true)
+runHint.TextXAlignment = Enum.TextXAlignment.Center
 local keyboardHint = label(controls, "KeyboardHint", "W A S D  ·  движение", 13, C.text)
 keyboardHint.AnchorPoint = Vector2.new(0, 1)
 keyboardHint.BackgroundColor3, keyboardHint.BackgroundTransparency = C.ink, 0.15
@@ -6450,12 +6710,60 @@ faultText.Position, faultText.Size = UDim2.fromOffset(18, 12), UDim2.new(1, -36,
 faultText.TextXAlignment = Enum.TextXAlignment.Center
 
 local function resetInput()
-    keys, dragging, touchVector = {}, nil, Vector2.zero
-    knob.Position = UDim2.fromScale(0.5, 0.5)
+    if gameplayBindings then gameplayBindings:setEnabled(false) end
+    movementInput:reset()
+    for _, item in pairs(directionButtons) do item.BackgroundColor3 = C.card end
     spectatorCamera:resetInput()
     cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
     cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
 end
+sendMovement = function()
+    local camera = workspace.CurrentCamera
+    local forward = camera and camera.CFrame.LookVector
+    local value = movementInput:vector(forward and {x = forward.X, z = forward.Z})
+    if (snapshot and snapshot.interaction and snapshot.interaction.carrying) or (controlled and controlled.carryState) then
+        value.run = false
+    end
+    if not gameplayBindings or not gameplayBindings.enabled then value = {x = 0, z = 0, run = false} end
+    send("Move", value)
+end
+syncGameplayContext = function()
+    if not gameplayBindings then return end
+    local enabled = playable() == true and windowFocused and UserInputService:GetFocusedTextBox() == nil
+    if enabled ~= gameplayBindings.enabled then
+        movementInput:reset()
+        for _, item in pairs(directionButtons) do item.BackgroundColor3 = C.card end
+        gameplayBindings:setEnabled(enabled)
+        if not enabled then sendMovement() end
+    end
+end
+local localInputs = make("Folder", "BrickToadsInputs", player:WaitForChild("PlayerScripts"))
+gameplayBindings = RobloxInputBindings.new(localInputs, {
+    Forward = directionButtons.Forward, Backward = directionButtons.Backward,
+    Left = directionButtons.Left, Right = directionButtons.Right, Jump = jump, Attack = punch, Mega = dash,
+}, {
+    press = function(direction)
+        if movementInput:press(direction, os.clock()) then
+            directionButtons[direction].BackgroundColor3 = C.line
+            sendMovement()
+        end
+    end,
+    release = function(direction)
+        if movementInput:release(direction) then
+            directionButtons[direction].BackgroundColor3 = C.card
+            sendMovement()
+        end
+    end,
+    action = function(action)
+        sendMovement()
+        if action == "Jump" then send("Jump")
+        else send("Attack", {attack = action == "Mega" and "Dash" or "Punch"}) end
+    end,
+})
+script.Destroying:Connect(function()
+    gameplayBindings:destroy()
+    localInputs:Destroy()
+end)
 local function heroName(hero)
     return hero.displayName or hero.username or ("Игрок " .. tostring(hero.slot or ""))
 end
@@ -6490,6 +6798,7 @@ local noticeMessages = {
     HELD = "Вас держит герой. Управление вернётся после освобождения.",
     THROWN = "Вас бросили. Дождитесь окончания реакции.",
     HANDS_FULL = "Руки заняты. Сначала бросьте то, что держите.",
+    NOT_RUNNING = "Для мегаудара дважды нажмите направление и удерживайте бег.",
 }
 local function enemyChoiceAllowed()
     local reason = snapshot and snapshot.enemyUnavailableReason
@@ -6563,6 +6872,49 @@ local function renderSelection()
 end
 local function remainingEnemies(level)
     return CombatFeedback.remainingEnemies(level)
+end
+local function renderMobileSummary(level, enemy, isBoss)
+    local personal = mine or enemy
+    local maximum = enemy and (tonumber(enemy.maxHearts) or 3) or 5
+    local hp = personal and (tonumber(personal.hearts) or 0) or 0
+    mobileStatusTitle.Visible = personal == nil
+    mobileStatusTitle.Text = "Герои " .. tostring(CombatFeedback.aliveHeroes(snapshot and snapshot.heroes))
+    mobileReturns.Visible = personal ~= nil
+    mobileReturns.Text = enemy and "1 жизнь" or (tostring(personal and personal.respawns or 0) .. " возв.")
+    for n, heart in ipairs(mobileHearts) do
+        heart.heart.Visible = personal ~= nil and n &lt;= maximum
+        heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1)
+    end
+    local state = "Команда"
+    if personal then
+        if not personal.connected then state = "Нет связи"
+        elseif personal.status == "Eliminated" or personal.status == "Dead" then state = "Вы выбыли"
+        elseif personal.status ~= "Alive" or personal.dying then state = "Возвращаетесь…"
+        elseif personal.carryState then state = personal.carryState == "Carried" and "Вас держат" or "Бросок"
+        elseif personal.shield then state = "Защита"
+        elseif personal.movementMode == "Run" then state = "Бег · команда"
+        elseif enemy then state = "Одна жизнь"
+        else state = "В бою · команда" end
+    end
+    mobileStatusDetail.Text = state
+    mobileStatusArrow.Text = mobileExpanded == "Team" and "-" or "+"
+    mobileGoalArrow.Text = mobileExpanded == "Goal" and "-" or "+"
+    local shortZones = {"Ворота", "Акведук", "Двор", "Уступы", "Кузница", "Мост"}
+    if level.stage == "Route" then
+        mobileGoalTitle.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6)
+            .. " · " .. (shortZones[level.zoneIndex or 1] or level.zoneName or "Тракт")
+    elseif level.stage == "Exit" then mobileGoalTitle.Text = "ВЫХОД ОТКРЫТ"
+    else mobileGoalTitle.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ" end
+    if enemy then mobileGoalDetail.Text = "Героев " .. tostring(CombatFeedback.aliveHeroes(snapshot.heroes))
+    elseif level.stage == "BossReady" then mobileGoalDetail.Text = "Ждём стража"
+    elseif level.stage == "Exit" then mobileGoalDetail.Text = "Дойдите до выхода"
+    elseif isBoss then mobileGoalDetail.Text = "Попадания " .. tostring(level.bossHits or 0) .. "/" .. tostring(level.bossMax or 3)
+    else mobileGoalDetail.Text = "Враги " .. tostring(remainingEnemies(level)) end
+    mobileGoalDetail.TextColor3 = C.text
+    if feedbackUntil &gt; os.clock() and feedbackLabel.Text ~= "" then
+        mobileGoalDetail.Text, mobileGoalDetail.TextColor3 = feedbackLabel.Text, feedbackLabel.TextColor3
+    end
+    mobileDetailsTitle.Text = mobileExpanded == "Goal" and "Задача" or "Команда"
 end
 render = function()
     local active = snapshot and snapshot.status == "Active"
@@ -6676,10 +7028,13 @@ render = function()
     local interaction = snapshot and snapshot.interaction
     local carrying = interaction and interaction.carrying == true
     local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
-    dash.Visible = enemy == nil and not carrying
+    dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying
     jump.Visible = not controlledBoss
     keyboardHint.Text = controlledBoss and "W A S D · прицел · F · огонь"
-        or (interactionLabel and ("F · " .. interactionLabel) or "W A S D · движение · F · удар")
+        or (carrying and interactionLabel and ("F · " .. interactionLabel))
+        or (not carrying and controlled and controlled.movementMode == "Run" and "БЕГ · F · МЕГА")
+        or (interactionLabel and ("F · " .. interactionLabel))
+        or "WASD · ходьба · 2× направление · бег · F · удар"
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
     stageLabel.Text = isBoss and "СТРАЖ ПЕРЕПРАВЫ" or "ЗАТОПЛЕННЫЙ ТРАКТ"
     if modern and level.stage == "Route" then
@@ -6745,6 +7100,7 @@ render = function()
     end
     enemyChoiceNote.Text = snapshot and (noticeMessages[snapshot.notice] or noticeMessages[snapshot.enemyUnavailableReason])
         or "Вы управляете выбранным дозорным до конца его жизни."
+    renderMobileSummary(level, enemy, isBoss)
     renderOffers()
 end
 
@@ -6857,6 +7213,20 @@ layout = function()
     else waitLabel.TextSize, menuNotice.TextSize = 14, 14 end
 
     local inset, short = width &lt; 500 and 12 or 18, height &lt; 480
+    local isTouch = UserInputService.TouchEnabled
+    local mobileHudBottom
+    stageLabel.Visible = not isTouch
+    objectiveLabel.TextYAlignment = isTouch and Enum.TextYAlignment.Top or Enum.TextYAlignment.Center
+    -- An actionable compact queue owns this space until its invitation/context ends.
+    local queuePriority = isTouch and bossQueue.card.Visible and bossQueue.compact
+    if queuePriority then mobileExpanded = nil end
+    roster.Parent = isTouch and mobileDetailsScroll or hud
+    enemyStatus.Parent = isTouch and mobileDetailsScroll or hud
+    objective.Parent = isTouch and mobileDetailsScroll or hud
+    mobileStatus.Visible, mobileGoal.Visible = isTouch, isTouch
+    mobileDetails.Visible = isTouch and mobileExpanded ~= nil
+    mobileStatusArrow.Visible, mobileGoalArrow.Visible = not queuePriority, not queuePriority
+    if queuePriority then mobileGoalDetail.Text = "Очередь стража · ниже" end
     local rosterWidth = portrait and (width - inset * 2) or math.min(292, width * 0.43)
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
@@ -6907,25 +7277,99 @@ layout = function()
     feedbackLabel.Position, feedbackLabel.Size = UDim2.new(0, 13, 1, -26), UDim2.new(1, -26, 0, 20)
     feedbackLabel.TextSize = short and 11 or 12
     local bottom, controlWidth = short and 12 or 20, width &lt; 360 and 146 or 162
-    local actionHeight, topHeight = short and 105 or 128, short and 56 or 70
+    local actionHeight, topHeight = short and (isTouch and 108 or 105) or 128, short and 56 or 70
     actions.Position, actions.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(controlWidth, controlledBoss and topHeight or actionHeight)
     local half = (controlWidth - 8) / 2
-    position(punch, 0, 0, (enemy or carrying) and controlWidth or half, topHeight)
+    position(punch, 0, 0, (isTouch or enemy or carrying) and controlWidth or half, topHeight)
     position(dash, half + 8, 0, half, topHeight)
-    position(jump, 0, topHeight + 8, controlWidth, short and 41 or 50)
+    position(jump, 0, topHeight + 8, controlWidth, short and (isTouch and 44 or 41) or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
-    local isTouch = UserInputService.TouchEnabled
     local primaryLabel = controlledBoss and "ОГОНЬ" or "УДАР"
-    if not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
+    if not carrying and not controlledBoss and controlled and controlled.movementMode == "Run" then
+        primaryLabel = "МЕГАУДАР"
+    elseif not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
         primaryLabel = interaction.label
     end
     punch.Text = isTouch and primaryLabel or (primaryLabel .. "\nF")
-    dash.Text = isTouch and "ТАРАН" or "ТАРАН\nR"
+    dash.Text = "МЕГА\nR · В БЕГЕ"
     jump.Text = isTouch and "ПРЫЖОК" or "ПРЫЖОК · SPACE"
-    local padSize = short and 104 or (width &lt; 360 and 106 or 122)
+    local padSize = short and 144 or (width &lt; 360 and 146 or 164)
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
     pad.Visible, keyboardHint.Visible = isTouch, not isTouch
-    keyboardHint.Position, keyboardHint.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(190, 36)
+    local cell = (padSize - 8) / 3
+    position(directionButtons.Forward, cell + 4, 0, cell, cell)
+    position(directionButtons.Left, 0, cell + 4, cell, cell)
+    position(directionButtons.Right, (cell + 4) * 2, cell + 4, cell, cell)
+    position(directionButtons.Backward, cell + 4, (cell + 4) * 2, cell, cell)
+    position(runHint, cell + 4, cell + 4, cell, cell)
+    keyboardHint.Position, keyboardHint.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(260, 42)
+    if isTouch then
+        local mobileInset, cardGap = width &lt; 500 and 8 or 12, 8
+        local statusWidth, goalWidth = math.min(172, width - mobileInset * 2), math.min(260, width - mobileInset * 2)
+        local twoRows = statusWidth + goalWidth + cardGap &gt; width - mobileInset * 2
+        local goalY = mobileInset + (twoRows and 52 or 0)
+        position(mobileStatus, mobileInset, mobileInset, statusWidth, 44)
+        position(mobileGoal, width - mobileInset - goalWidth, goalY, goalWidth, 44)
+        mobileHudBottom = goalY + 44
+        position(mobileStatusTitle, 8, 1, statusWidth - 32, 21)
+        position(mobileStatusDetail, 8, 23, statusWidth - 32, 17)
+        position(mobileReturns, statusWidth - 78, 2, 54, 20)
+        position(mobileStatusArrow, statusWidth - 22, 23, 15, 17)
+        for n, heart in ipairs(mobileHearts) do position(heart.heart, 8 + (n - 1) * 18, 0, 18, 22) end
+        position(mobileGoalTitle, 10, 2, goalWidth - 34, 18)
+        position(mobileGoalDetail, 10, 22, goalWidth - 34, 18)
+        position(mobileGoalArrow, goalWidth - 23, 12, 15, 20)
+        local detailsWidth = math.min(344, width - mobileInset * 2)
+        local detailsY = mobileHudBottom + 8
+        local controlsTop = height - bottom - math.max(padSize, controlledBoss and topHeight or actionHeight)
+        local desiredHeight = mobileExpanded == "Goal" and 252 or (60 + count * 64 + (enemy and 72 or 0))
+        local availableHeight = controlsTop - detailsY - 8
+        local detailsHeight = math.max(52, math.min(desiredHeight, availableHeight))
+        local detailsX = mobileExpanded == "Goal" and (width - mobileInset - detailsWidth) or mobileInset
+        if availableHeight &lt; 112 then
+            -- An explicitly opened panel may use the centre, leaving both control corners free.
+            local middleLeft = inset + 2 + padSize + 8
+            local middleRight = width - inset - controlWidth - 8
+            local middleWidth = middleRight - middleLeft
+            if middleWidth &gt;= 144 then
+                detailsWidth = math.min(344, middleWidth)
+                detailsX = middleLeft + (middleWidth - detailsWidth) / 2
+                detailsHeight = math.min(desiredHeight, height - bottom - detailsY)
+            end
+        end
+        position(mobileDetails, detailsX, detailsY, detailsWidth, detailsHeight)
+        position(mobileDetailsTitle, 12, 0, detailsWidth - 144, 44)
+        position(mobileCollapse, detailsWidth - 130, 0, 122, 44)
+        position(mobileDetailsScroll, 8, 44, detailsWidth - 16, detailsHeight - 52)
+        local innerWidth, teamTop = detailsWidth - 16, enemy and 72 or 0
+        roster.Visible, enemyStatus.Visible, objective.Visible = mobileExpanded == "Team",
+            mobileExpanded == "Team" and enemy ~= nil, mobileExpanded == "Goal"
+        position(enemyStatus, 0, 0, innerWidth, 64)
+        position(enemyStripe, 0, 9, 3, 46)
+        position(enemyOwner, 11, 3, innerWidth - 22, 20)
+        enemyOwner.TextSize, enemyLife.TextSize = 14, 12
+        position(enemyLife, 94, 30, innerWidth - 106, 24)
+        for n, heart in ipairs(enemyHearts) do position(heart.heart, 10 + (n - 1) * 25, 29, 24, 27) end
+        position(roster, 0, teamTop, innerWidth, count * 64)
+        for i, row in ipairs(heroRows) do
+            position(row.row, 0, (i - 1) * 64, innerWidth, 58)
+            position(row.stripe, 0, 9, 3, 40)
+            position(row.owner, 11, 3, innerWidth - 63, 20)
+            row.owner.TextSize = 14
+            position(row.status, 126, 32, innerWidth - 137, 18)
+            position(row.returns, innerWidth - 45, 4, 34, 18)
+            for n, heart in ipairs(row.fills) do position(heart.heart, 10 + (n - 1) * 22, 28, 22, 25) end
+        end
+        position(objective, 0, 0, innerWidth, 168)
+        position(stageLabel, 12, 8, innerWidth - 24, 18)
+        position(objectiveLabel, 12, 0, innerWidth - 24, 72)
+        objectiveLabel.TextSize = 16
+        position(bossLabel, 12, 80, innerWidth - 24, 24)
+        bossLabel.TextSize = 13
+        position(feedbackLabel, 12, 108, innerWidth - 24, 50)
+        feedbackLabel.TextSize = 13
+        mobileDetailsScroll.CanvasSize = UDim2.fromOffset(0, mobileExpanded == "Goal" and 168 or (teamTop + count * 64))
+    end
     local expanded = enemyChoiceAllowed() and choosingEnemy and snapshot.view ~= "Choice"
     local spectatorWidth = math.min(500, width - inset * 2)
     local hasCameraButtons = nextHeroButton.Visible
@@ -6940,10 +7384,11 @@ layout = function()
     local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
     if bossQueue.card.Visible then
         if bossQueue.compact then
-            local queueX, queueWidth = objective.Position.X.Offset, objective.Size.X.Offset
-            local queueY = objective.Position.Y.Offset + objective.Size.Y.Offset + 8
+            local queueX = isTouch and mobileGoal.Position.X.Offset or objective.Position.X.Offset
+            local queueWidth = isTouch and mobileGoal.Size.X.Offset or objective.Size.X.Offset
+            local queueY = isTouch and (mobileHudBottom + 8) or (objective.Position.Y.Offset + objective.Size.Y.Offset + 8)
             local spectatorTop = height - bottom - cameraBottom - spectatorHeight
-            if portrait and queueY + 108 &gt; spectatorTop then
+            if not isTouch and portrait and queueY + 108 &gt; spectatorTop then
                 -- The observer queue replaces the tall roster when a phone needs that space.
                 roster.Visible = false
                 position(objective, inset, inset, width - inset * 2, short and 112 or 120)
@@ -6951,8 +7396,8 @@ layout = function()
             end
             if queueY + 108 &gt; spectatorTop then
                 -- On very shallow windows retain the queue and its invitation buttons above observation.
-                objective.Visible = false
-                queueY = inset
+                if not isTouch then objective.Visible = false end
+                queueY = isTouch and (mobileHudBottom + 8) or inset
                 local available = height - bottom - cameraBottom - queueY - 108
                 spectatorHeight = math.min(spectatorHeight, math.max(150, available))
             end
@@ -7024,22 +7469,6 @@ layout = function()
     groupPanel:layout(contentWidth, width, height, spectatorWidth)
 end
 
-local function dragTo(input)
-    if not playable() then return end
-    local center = pad.AbsolutePosition + pad.AbsoluteSize / 2
-    local radius = math.max(1, pad.AbsoluteSize.X * 0.34)
-    local delta = (Vector2.new(input.Position.X, input.Position.Y) - center) / radius
-    if delta.Magnitude &gt; 1 then delta = delta.Unit end
-    touchVector = delta.Magnitude &lt; 0.12 and Vector2.zero or delta
-    knob.Position = UDim2.new(0.5, touchVector.X * radius, 0.5, touchVector.Y * radius)
-end
-pad.InputBegan:Connect(function(input)
-    if not playable() or dragging then return end
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = input
-        dragTo(input)
-    end
-end)
 local function dragCameraTo(input)
     if not spectatorCamera.enabled or not spectatorCamera:isFree() then return end
     local center = cameraPad.AbsolutePosition + cameraPad.AbsoluteSize / 2
@@ -7058,8 +7487,6 @@ cameraPad.InputBegan:Connect(function(input)
     end
 end)
 UserInputService.InputChanged:Connect(function(input)
-    if dragging and (input == dragging or (dragging.UserInputType == Enum.UserInputType.MouseButton1
-        and input.UserInputType == Enum.UserInputType.MouseMovement)) then dragTo(input) end
     if cameraStickInput and (input == cameraStickInput or (cameraStickInput.UserInputType == Enum.UserInputType.MouseButton1
         and input.UserInputType == Enum.UserInputType.MouseMovement)) then dragCameraTo(input) end
     if cameraDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
@@ -7075,14 +7502,8 @@ UserInputService.InputBegan:Connect(function(input, processed)
             or key == Enum.KeyCode.Q or key == Enum.KeyCode.E then spectatorCamera:setKey(key.Name, true) end
         return
     end
-    if not playable() then return end
-    if key == Enum.KeyCode.W or key == Enum.KeyCode.A or key == Enum.KeyCode.S or key == Enum.KeyCode.D then keys[key] = true
-    elseif key == Enum.KeyCode.Space then send("Jump")
-    elseif key == Enum.KeyCode.F then send("Attack", {attack = "Punch"})
-    elseif key == Enum.KeyCode.R then send("Attack", {attack = "Dash"}) end
 end)
 UserInputService.InputEnded:Connect(function(input)
-    keys[input.KeyCode] = nil
     spectatorCamera:setKey(input.KeyCode.Name, false)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then cameraDragging = false end
     for held, key in pairs(cameraHolds) do
@@ -7098,15 +7519,15 @@ UserInputService.InputEnded:Connect(function(input)
         spectatorCamera:setTouch(0, 0)
         cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
     end
-    if input == dragging then
-        dragging, touchVector = nil, Vector2.zero
-        knob.Position = UDim2.fromScale(0.5, 0.5)
-    end
 end)
 UserInputService.WindowFocusReleased:Connect(function()
+    windowFocused = false
     resetInput()
-    send("Move", {x = 0, z = 0})
+    sendMovement()
 end)
+UserInputService.WindowFocused:Connect(function() windowFocused = true; syncGameplayContext() end)
+UserInputService.TextBoxFocused:Connect(function() syncGameplayContext() end)
+UserInputService.TextBoxFocusReleased:Connect(function() syncGameplayContext() end)
 
 stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
@@ -7117,14 +7538,27 @@ stateRemote.OnClientEvent:Connect(function(data)
     local previousGroupId = snapshot and snapshot.groupId
     local previousRunId = snapshot and snapshot.runId
     local previousLevelEpoch = snapshot and snapshot.levelEpoch
+    local previousView = snapshot and snapshot.view
     snapshot, mine = data, nil
     for _, hero in ipairs(data.heroes or {}) do if hero.slot == data.mine then mine = hero; break end end
     controlled = mine or data.enemyRole
     spectatorCamera:sync(data, controlled)
     local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
+    local nextHeldContext = tostring(data.interaction ~= nil and data.interaction.carrying == true) .. ":" .. tostring(controlled and controlled.carryState)
+    if nextIdentity ~= identity or previousStatus ~= data.status or previousView ~= data.view
+        or previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
+        mobileExpanded = nil
+    end
     if nextIdentity ~= identity then identity, sequence = nextIdentity, 0; feedbackUntil = 0; resetInput()
-    elseif wasPlayable and not playable() then resetInput() end
+    elseif wasPlayable and not playable() then resetInput()
+    elseif controlled and ((lastReactionEpoch ~= nil and controlled.reactionEpoch ~= lastReactionEpoch)
+        or (lastHeldContext ~= nil and nextHeldContext ~= lastHeldContext)) then
+        movementInput:reset(gameplayBindings:heldDirections())
+        sendMovement()
+    end
+    lastReactionEpoch = controlled and controlled.reactionEpoch
+    lastHeldContext = nextHeldContext
     if previousGroupId ~= data.groupId or previousRunId ~= data.runId or previousLevelEpoch ~= data.levelEpoch then
         choosingEnemy = data.preference ~= "Spectator"
         pendingTemplate, pendingRole = nil, nil
@@ -7149,9 +7583,10 @@ stateRemote.OnClientEvent:Connect(function(data)
     end
     render()
     layout()
+    syncGameplayContext()
 end)
 safe:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout)
-UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(layout)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(function() mobileExpanded = nil; layout() end)
 -- Gameplay drives server-owned bodies instead of a default Roblox character.
 task.spawn(function()
     local scripts = player:WaitForChild("PlayerScripts")
@@ -7164,6 +7599,7 @@ task.spawn(function()
 end)
 local moveElapsed, syncElapsed = 0, 0
 RunService.RenderStepped:Connect(function(dt)
+    syncGameplayContext()
     if feedbackUntil &gt; 0 and os.clock() &gt;= feedbackUntil then
         feedbackUntil = 0
         feedbackLabel.Text, feedbackLabel.TextColor3 = CombatFeedback.hint(snapshot), C.muted
@@ -7201,15 +7637,7 @@ RunService.RenderStepped:Connect(function(dt)
     if moveElapsed &gt;= 0.1 then
         moveElapsed = 0
         if playable() then
-            local function down(key) return keys[key] and 1 or 0 end
-            local x = down(Enum.KeyCode.D) - down(Enum.KeyCode.A) + touchVector.X
-            local z = down(Enum.KeyCode.S) - down(Enum.KeyCode.W) + touchVector.Y
-            if UserInputService:GetFocusedTextBox() then x, z = 0, 0 end
-            local forward = camera and Vector3.new(camera.CFrame.LookVector.X, 0, camera.CFrame.LookVector.Z) or Vector3.new(0, 0, -1)
-            forward = forward.Magnitude &gt; 0.01 and forward.Unit or Vector3.new(0, 0, -1)
-            local direction = Vector3.new(-forward.Z, 0, forward.X) * x - forward * z
-            if direction.Magnitude &gt; 1 then direction = direction.Unit end
-            send("Move", {x = direction.X, z = direction.Z})
+            sendMovement()
         end
     end
 end)
@@ -7298,10 +7726,24 @@ end
 function Feedback.hint(data)
     data=type(data)=='table' and data or {}
     if type(data.enemyRole)=='table' and data.enemyRole.template=='Boss' then return 'ОГОНЬ: стреляйте в героев' end
+    local interaction=type(data.interaction)=='table' and data.interaction or {}
+    if interaction.carrying and type(interaction.label)=='string' then
+        return interaction.label..(interaction.available and ' — кнопка действия' or '')
+    end
+    local controlled=type(data.enemyRole)=='table' and data.enemyRole or nil
+    if data.mine and type(data.heroes)=='table' then
+        for i=1,math.min(#data.heroes,3) do
+            local h=data.heroes[i]
+            if type(h)=='table' and h.slot==data.mine then controlled=h;break end
+        end
+    end
+    if controlled and controlled.status=='Alive' and controlled.connected~=false
+        and controlled.movementMode=='Run' and (data.view==nil or data.view=='Playing') then
+        return 'МЕГА: удар с разбега'
+    end
     if type(data.interaction)=='table' and data.interaction.available and type(data.interaction.label)=='string' then
         return data.interaction.label..' — кнопка действия'
     end
-    if type(data.interaction)=='table' and data.interaction.carrying and type(data.interaction.label)=='string' then return data.interaction.label end
     if data.mine then return 'УДАР: атака или действие рядом' end
     if data.enemyRole then return 'УДАР: остановите героев' end
     return 'Выберите роль или наблюдайте'
@@ -7558,6 +8000,127 @@ return GroupPanel
           </Properties>
         </Item>
         <Item class="ModuleScript" referent="BT41">
+          <Properties>
+            <string name="Name">MovementInput</string>
+            <ProtectedString name="Source">-- Native Bool actions own hardware/touch aggregation; this model owns tap timing.
+local MovementInput={}
+MovementInput.__index=MovementInput
+local directions={Forward=true,Backward=true,Left=true,Right=true}
+local opposite={Forward='Backward',Backward='Forward',Left='Right',Right='Left'}
+
+function MovementInput.new()
+    return setmetatable({down={},lastPress={},runDirection=nil},MovementInput)
+end
+function MovementInput:press(direction,now)
+    if not directions[direction] or self.down[direction] then return false end
+    local previous=self.lastPress[direction]
+    self.down[direction]=true
+    if self.runDirection and opposite[direction]==self.runDirection then self.runDirection=nil
+    elseif not self.down[opposite[direction]] and previous and now&gt;=previous and now-previous&lt;=.25 then self.runDirection=direction end
+    self.lastPress[direction]=now
+    return true
+end
+function MovementInput:release(direction)
+    if not self.down[direction] then return false end
+    self.down[direction]=nil
+    if self.runDirection==direction then self.runDirection=nil end
+    return true
+end
+function MovementInput:reset(held)
+    self.down,self.lastPress,self.runDirection={}, {}, nil
+    for direction,value in pairs(held or {}) do if directions[direction] and value then self.down[direction]=true end end
+end
+function MovementInput:vector(forward)
+    local function down(direction) return self.down[direction] and 1 or 0 end
+    local x,z=down('Right')-down('Left'),down('Backward')-down('Forward')
+    local length=math.sqrt(x*x+z*z)
+    if length&gt;1 then x,z=x/length,z/length end
+    local fx,fz=forward and forward.x or 0,forward and forward.z or -1
+    length=math.sqrt(fx*fx+fz*fz)
+    if length&lt;.01 then fx,fz,length=0,-1,1 end
+    fx,fz=fx/length,fz/length
+    local run=self.runDirection~=nil and self.down[self.runDirection]==true
+        and not self.down[opposite[self.runDirection]] and (x~=0 or z~=0)
+    return {x=-fz*x-fx*z,z=fx*x-fz*z,run=run==true}
+end
+return MovementInput
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT42">
+          <Properties>
+            <string name="Name">RobloxInputBindings</string>
+            <ProtectedString name="Source">-- Standard IAS Bool actions aggregate keyboard and UIButton presses natively.
+-- https://create.roblox.com/docs/input/input-action-system
+local RobloxInputBindings={}
+RobloxInputBindings.__index=RobloxInputBindings
+local definitions={
+    {name='Forward',key='W',direction=true},{name='Backward',key='S',direction=true},
+    {name='Left',key='A',direction=true},{name='Right',key='D',direction=true},
+    {name='Jump',key='Space'},{name='Attack',key='F'},{name='Mega',key='R'},
+}
+
+function RobloxInputBindings.new(parent,buttons,callbacks,engine)
+    local factory,enums=engine and engine.Instance or Instance,engine and engine.Enum or Enum
+    local context=factory.new('InputContext')
+    context.Name,context.Enabled,context.Priority,context.Sink='Gameplay',false,2000,true
+    context.Parent=parent
+    local self=setmetatable({context=context,enabled=false,actions={},connections={}},RobloxInputBindings)
+    for _,definition in ipairs(definitions) do
+        local action=factory.new('InputAction')
+        action.Name,action.Type,action.Enabled=definition.name,enums.InputActionType.Bool,true
+        action.Parent=context;self.actions[definition.name]=action
+        local keyboard=factory.new('InputBinding')
+        keyboard.Name,keyboard.Type,keyboard.KeyCode='Keyboard',enums.InputBindingType.Automatic,enums.KeyCode[definition.key]
+        keyboard.Parent=action
+        if buttons[definition.name] then
+            local touch=factory.new('InputBinding')
+            touch.Name,touch.Type,touch.UIButton='Button',enums.InputBindingType.Automatic,buttons[definition.name]
+            touch.Parent=action
+        end
+        table.insert(self.connections,action.Pressed:Connect(function()
+            if not self.enabled then return end
+            if definition.direction then
+                if callbacks.press then callbacks.press(definition.name) end
+            elseif callbacks.action then callbacks.action(definition.name) end
+        end))
+        if definition.direction then
+            table.insert(self.connections,action.Released:Connect(function()
+                if self.enabled and callbacks.release then callbacks.release(definition.name) end
+            end))
+        end
+    end
+    return self
+end
+function RobloxInputBindings:setEnabled(enabled)
+    enabled=enabled==true
+    if self.enabled==enabled then return false end
+    self.enabled=enabled;self.context.Enabled=enabled
+    return true
+end
+function RobloxInputBindings:heldDirections()
+    local held={}
+    if self.enabled then
+        for _,definition in ipairs(definitions) do
+            if definition.direction and self.actions[definition.name]:GetState()==true then held[definition.name]=true end
+        end
+    end
+    return held
+end
+function RobloxInputBindings:reset()
+    local enabled=self.enabled
+    self:setEnabled(false);self:setEnabled(enabled)
+end
+function RobloxInputBindings:destroy()
+    self:setEnabled(false)
+    for _,connection in ipairs(self.connections) do connection:Disconnect() end
+    self.connections={};self.context:Destroy()
+end
+return RobloxInputBindings
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT43">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.

@@ -506,9 +506,11 @@ function World.new(BaseWorld, config, options)
 end
 
 function World:spawn(uid, actorId, point, held, template)
+    local previous=self.actors[uid]
     if not self.origins[uid] and uid > 0 then self.origins[uid] = Vector3.new(-65, 3, (uid - 2) * 7) + self.offset end
     local ok = self._base.spawn(self, uid, actorId, point, held, template or "Mr. Green")
     if ok then
+        if previous then self:resetLocomotion(uid,previous) end
         -- BaseWorld places a spawn without a safe point at absolute Y=3.
         -- Keep that emergency-spawn rule relative to this arena's elevation.
         if not point and self.offset.Y ~= 0 then
@@ -537,7 +539,9 @@ function World:spawnEnemy(id, kind, positionTable)
     self.origins[id] = position
     local speciesNames = {Pig = "Панцирный хряк", Walker = "Шагающий страж", Dragon = "Крылатый дозорный"}
     self.names[id] = isBoss and "Страж переправы" or speciesNames[kind] or "Ржавый дозорный"
+    local previous=self.actors[id]
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
+    if previous then self:resetLocomotion(id,previous) end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
     -- BaseWorld's ordinary spawn is deliberately y=3, so preserve the supplied
@@ -598,17 +602,30 @@ function World:enemyIdentity(id,actorId,ownerName)
     end
 end
 
-function World:move(id,x,z)
-    if self.enemyCarries[id] then return end
-    local actor=self.actors[id]
-    if actor and self.enemyKinds[id]=='Drone' and not actor.humanoid.PlatformStand then
-        actor.humanoid.WalkSpeed=self.config.Enemy.speed
-    end
-    self._base.move(self,id,x,z)
-end
-
 -- Modern route jump grace uses only this body's server-observed support. A
 -- delayed packet may arrive just beyond an edge while its client still sees floor.
+local function jumpSupportAt(world,position)
+    local hit=Workspace:Raycast(position,Vector3.new(0,-3.4,0),world.ray)
+    return hit~=nil and hit.Normal.Y>=.95 and not hit.Instance:GetAttribute('Hazard')
+        and hit.Instance:GetAttribute('SurfaceId')~=nil
+end
+
+local function hasJumpSupport(world,root)
+    if jumpSupportAt(world,root.Position) then return true end
+    -- This rig's root and physical torso have the same footprint. Its centre
+    -- can pass an edge while the body still stands on it; cosmetic art must
+    -- never enlarge the physical support test. Project the actual oriented
+    -- half-extents horizontally, without adding a support margin.
+    local cf,size=root.CFrame,root.Size
+    local right=Vector3.new(cf.RightVector.X,0,cf.RightVector.Z)*(size.X/2)
+    local forward=Vector3.new(cf.LookVector.X,0,cf.LookVector.Z)*(size.Z/2)
+    for _,offset in ipairs({forward,-forward,right,-right,
+        right+forward,right-forward,-right+forward,-right-forward}) do
+        if jumpSupportAt(world,root.Position+offset) then return true end
+    end
+    return false
+end
+
 local function sampleJumpSupport(world,actor,now)
     local root,humanoid=actor.root,actor.humanoid
     local state=actor.routeJumpSupport
@@ -616,9 +633,7 @@ local function sampleJumpSupport(world,actor,now)
     local velocity=root.AssemblyLinearVelocity
     local grounded=false
     if humanoid.FloorMaterial~=Enum.Material.Air and velocity.Y<=1 then
-        local hit=Workspace:Raycast(root.Position,Vector3.new(0,-3.4,0),world.ray)
-        grounded=hit~=nil and hit.Normal.Y>=.95 and not hit.Instance:GetAttribute('Hazard')
-            and hit.Instance:GetAttribute('SurfaceId')~=nil
+        grounded=hasJumpSupport(world,root)
     end
     if state.consumed then
         -- FloorMaterial can retain its old value until the next physics step.
@@ -631,13 +646,121 @@ local function sampleJumpSupport(world,actor,now)
     return state,grounded
 end
 
+local function locomotionWalkSpeed(world,id)
+    if world.enemyKinds[id]=='Boss' then return 0 end
+    return world.enemyKinds[id]=='Drone' and world.config.Enemy.speed or world.config.WalkSpeed
+end
+
+local function locomotionRunSpeed(world,id)
+    return world.enemyKinds[id]=='Drone' and world.config.Movement.enemyRunSpeed or world.config.Movement.heroRunSpeed
+end
+
+local function locomotionCanRun(world,id,a)
+    return a and a.root.Parent and a.humanoid.Health>0 and not a.root.Anchored and not a.humanoid.PlatformStand
+        and world.enemyKinds[id]~='Boss' and id>-1000 and not world.enemyCarries[id]
+        and not (world.dragonLinks and world.dragonLinks[id]) and not (world.dragonFlights and world.dragonFlights[id])
+        and not a.model:GetAttribute('DragonLink') and not a.model:GetAttribute('DragonFlight')
+        and a.model:GetAttribute('EnemyKind')~='Dragon' and not a.model:GetAttribute('CarryingEnemy')
+end
+
+local function locomotionGrounded(world,a)
+    return a.humanoid.FloorMaterial~=Enum.Material.Air and a.root.AssemblyLinearVelocity.Y<=1
+        and hasJumpSupport(world,a.root)
+end
+
+local function locomotionFresh(world,row)
+    return row and row.at and Workspace:GetServerTimeNow()<row.at+(world.config.MoveTimeout or .35)
+end
+
+local function locomotionQualifies(world,id,a,row)
+    if not row or not row.runRequested or row.airSpeed or not locomotionFresh(world,row)
+        or not locomotionCanRun(world,id,a) or not locomotionGrounded(world,a) then return false end
+    local v=a.root.AssemblyLinearVelocity
+    return v.X*row.x+v.Z*row.z>=locomotionRunSpeed(world,id)*world.config.Movement.runThresholdRatio
+end
+
+function World:resetLocomotion(id,actorReference)
+    if not self.config.Movement then return end
+    local a=actorReference or self.actors[id]
+    if not a then return end
+    local walk=a.locomotion and a.locomotion.walkSpeed or locomotionWalkSpeed(self,id)
+    a.locomotion=nil
+    a.model:SetAttribute('MovementMode','Idle')
+    if a.root.Parent then
+        a.humanoid:Move(Vector3.new(),false)
+        a.humanoid.WalkSpeed=a.humanoid.PlatformStand and 0 or walk
+    end
+end
+
+function World:isRunning(id)
+    if not self.config.Movement then return false end
+    local a=self.actors[id]
+    return a~=nil and locomotionQualifies(self,id,a,a.locomotion) or false
+end
+
+function World:movementMode(id)
+    local a=self.actors[id]
+    if not a or not a.root.Parent or a.humanoid.Health<=0 or a.root.Anchored or a.humanoid.PlatformStand then return 'Idle' end
+    if not self.config.Movement then return 'Idle' end
+    local row=a.locomotion
+    if not locomotionGrounded(self,a) or (row and row.airSpeed) then return 'Air' end
+    if self:isRunning(id) then return 'Run' end
+    if locomotionFresh(self,row) then
+        local v=a.root.AssemblyLinearVelocity
+        if v.X*row.x+v.Z*row.z>0 then return 'Walk' end
+    end
+    return 'Idle'
+end
+
+function World:move(id,x,z,runRequested)
+    if self.enemyCarries[id] then return end
+    local a=self.actors[id]
+    if not self.config.Movement then
+        if a and self.enemyKinds[id]=='Drone' and not a.humanoid.PlatformStand then a.humanoid.WalkSpeed=self.config.Enemy.speed end
+        return self._base.move(self,id,x,z)
+    end
+    if not a or not a.root.Parent or a.humanoid.Health<=0 or a.root.Anchored or a.humanoid.PlatformStand then
+        self:resetLocomotion(id);return
+    end
+    local length=math.sqrt(x*x+z*z)
+    if length>1 then x,z=x/length,z/length end
+    local row=a.locomotion or {walkSpeed=locomotionWalkSpeed(self,id)}
+    a.locomotion=row
+    local grounded=locomotionGrounded(self,a)
+    if row.airSpeed and grounded and not (a.routeJumpSupport and a.routeJumpSupport.consumed) then row.airSpeed=nil end
+    if not grounded and not row.airSpeed then row.airSpeed=row.groundRun and locomotionRunSpeed(self,id) or row.walkSpeed end
+    row.x,row.z=x,z
+    row.runRequested=runRequested==true and length>0 and locomotionCanRun(self,id,a) or false
+    row.at=length>0 and Workspace:GetServerTimeNow() or nil
+    a.humanoid.WalkSpeed=row.airSpeed or (row.runRequested and locomotionRunSpeed(self,id) or row.walkSpeed)
+    self._base.move(self,id,x,z)
+    row.groundRun=locomotionQualifies(self,id,a,row)
+    a.model:SetAttribute('MovementMode',self:movementMode(id))
+end
+
 function World:hazard(id)
     local reason=self._base.hazard(self,id)
     if not self.config.Level then return reason end
     local actor=self.actors[id]
     if actor then
-        if reason or actor.root.Anchored or actor.humanoid.PlatformStand then actor.routeJumpSupport=nil
-        else sampleJumpSupport(self,actor,Workspace:GetServerTimeNow()) end
+        if reason or actor.root.Anchored or actor.humanoid.PlatformStand then
+            actor.routeJumpSupport=nil;self:resetLocomotion(id)
+        else
+            local support,grounded=sampleJumpSupport(self,actor,Workspace:GetServerTimeNow())
+            local row=actor.locomotion
+            if self.config.Movement and row then
+                if row.airSpeed and grounded and not support.consumed then row.airSpeed=nil end
+                if not grounded and not row.airSpeed then
+                    row.airSpeed=row.groundRun and locomotionRunSpeed(self,id) or row.walkSpeed
+                end
+                if row.at and not locomotionFresh(self,row) then self:move(id,0,0,false)
+                else
+                    row.groundRun=locomotionQualifies(self,id,actor,row)
+                    actor.humanoid.WalkSpeed=row.airSpeed or (row.runRequested and locomotionRunSpeed(self,id) or row.walkSpeed)
+                end
+                actor.model:SetAttribute('MovementMode',self:movementMode(id))
+            end
+        end
     end
     return reason
 end
@@ -656,6 +779,15 @@ function World:jump(id)
     if not grounded and not grace then return end
     local power=actor.humanoid.JumpPower or self.config.JumpPower
     if type(power)~='number' or power<=0 or power~=power or power==math.huge then return end
+    if self.config.Movement then
+        local row=actor.locomotion or {walkSpeed=locomotionWalkSpeed(self,id),x=0,z=0}
+        local running=self:isRunning(id)
+        actor.locomotion=row
+        row.airSpeed=row.airSpeed or (running and locomotionRunSpeed(self,id) or row.walkSpeed)
+        row.groundRun=false
+        actor.humanoid.WalkSpeed=row.airSpeed
+        actor.model:SetAttribute('MovementMode','Air')
+    end
     state.consumed=true; state.airborne=false; state.launchY=actor.root.Position.Y
     local velocity=actor.root.AssemblyLinearVelocity
     actor.root.AssemblyLinearVelocity=Vector3.new(velocity.X,power,velocity.Z)
@@ -663,6 +795,7 @@ function World:jump(id)
 end
 
 function World:setReaction(id,active)
+    if active then self:resetLocomotion(id) end
     local carried = self.enemyCarries[id]
     if carried then
         -- Reaction deadlines may expire while the body is held or in flight.
@@ -717,7 +850,11 @@ local function moveEnemySafely(self, id, targetId, speed, away)
     end
     -- Stop voluntary movement at an unsafe edge. External impulses and gravity
     -- remain untouched, so combat can still knock a mechanical enemy off.
-    a.humanoid:Move(direction, false)
+    if self.config.Movement then
+        local requested=(speed or 8)>=self.config.Movement.enemyRunSpeed
+        self:move(id,direction.X,direction.Z,requested)
+        if direction.Magnitude>0 then a.humanoid.WalkSpeed=speed or 8 end
+    else a.humanoid:Move(direction, false) end
 end
 
 function World:enemyMove(id, targetId, speed)
@@ -923,6 +1060,8 @@ function World:carryEnemy(enemyId, heroId)
     if not carried then
         if enemy.root.Anchored or self.enemyKinds[enemyId] ~= 'Drone'
             or hero.model:GetAttribute('CarryingEnemy') ~= nil then return false end
+        self:resetLocomotion(enemyId,enemy)
+        self:resetLocomotion(heroId,hero)
         carried = {actor = enemy, holder = hero, holderId = heroId, mode = 'Carried', collisions = {},
             platformStand = enemy.humanoid.PlatformStand, autoRotate = enemy.humanoid.AutoRotate,
             walkSpeed = enemy.humanoid.WalkSpeed, anchored = enemy.root.Anchored,
@@ -1217,6 +1356,11 @@ local walkerPoses = {
     },
 }
 
+-- The generic grounded run strike reuses each family's original heavy silhouette.
+-- These poses only present the server-selected action; they never choose damage.
+pigPoses.EnemyRunStrike=pigPoses.PigRush
+walkerPoses.EnemyRunStrike=walkerPoses.WalkerHeavy
+
 local dragonPoses = {
     DragonHeadbutt = {
         Windup = {left=-.4,right=-.4,leftRoll=-.3,rightRoll=.3,hip=-.15,neck=-.55},
@@ -1322,9 +1466,12 @@ function World:updatePresentation(session, dt, enemies)
             local attacking = actor.attackPoseUntil and self.presentationTime < actor.attackPoseUntil
             local velocity = actor.root.AssemblyLinearVelocity
             local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+            local movementMode=self.config.Movement and self:movementMode(id)
+            if movementMode then actor.model:SetAttribute('MovementMode',movementMode) end
             local walking = not actor.root.Anchored and actor.humanoid.Health > 0
                 and actor.humanoid.FloorMaterial ~= Enum.Material.Air
-            local running = primaryPhase=='Running'
+            if self.config.Movement then walking=movementMode=='Walk' or movementMode=='Run' end
+            local running = primaryPhase=='Running' or (movementMode=='Run' and not primaryAction)
             actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * (running and 1.3 or .8)
             local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * (running and .75 or .5) or 0
             local primaryPose = primaryAction and poses[primaryAction][primaryPhase]
@@ -1366,6 +1513,7 @@ end
 function World:clearActors()
     for id in pairs(self.equippedClubs) do self:unequipClub(id) end
     for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
+    for id,actor in pairs(self.actors) do self:resetLocomotion(id,actor) end
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.healingFlyFolder:ClearAllChildren()

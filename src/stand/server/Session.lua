@@ -2,7 +2,7 @@
 local Session = {}
 Session.__index = Session
 local common = {kind=true,runId=true,actorId=true,attempt=true,levelEpoch=true,connectionEpoch=true,seq=true}
-local extras = {Attack={attack=true},Move={x=true,z=true},Jump={}}
+local extras = {Attack={attack=true},Move={x=true,z=true,run=true},Jump={}}
 local function finite(n) return type(n)=="number" and n==n and n>-math.huge and n<math.huge end
 local function integer(n) return finite(n) and n>=1 and n<=1000000000 and n%1==0 end
 local function valid(p)
@@ -10,13 +10,14 @@ local function valid(p)
     local count=0
     for k,v in pairs(p) do
         count=count+1
-        if count>9 or not (common[k] or extras[p.kind][k]) or type(v)=="table" then return false end
+        if count>(p.kind=='Move' and 10 or 9) or not (common[k] or extras[p.kind][k]) or type(v)=="table" then return false end
     end
     if type(p.runId)~="string" or #p.runId>160 or type(p.actorId)~="string" or #p.actorId>160
         or not integer(p.attempt) or not integer(p.levelEpoch) or not integer(p.connectionEpoch)
         or not integer(p.seq) then return false end
     if p.kind=="Attack" then return p.attack=="Punch" or p.attack=="Dash" end
-    if p.kind=="Move" then return finite(p.x) and finite(p.z) and p.x*p.x+p.z*p.z<=1.01 end
+    if p.kind=="Move" then return finite(p.x) and finite(p.z) and p.x*p.x+p.z*p.z<=1.01
+        and (p.run==nil or type(p.run)=='boolean') end
     return true
 end
 
@@ -41,6 +42,12 @@ function Session:_clock(now)
     if now<self.now then return "TIME_REVERSED" end
     self.now=now
     return "OK"
+end
+
+function Session:_resetLocomotion(uid)
+    if self.config.Movement and self.world.resetLocomotion then
+        self.world:resetLocomotion(uid,self.world.actors and self.world.actors[uid])
+    end
 end
 
 function Session:_record(kind, uid, data, at)
@@ -103,6 +110,7 @@ function Session:_spawn(uid)
     assert(code=="OK","Synchronous spawn commit violated its reservation: "..code)
     self.combat[uid]={rawLife=47,nextAttack=self.now}
     self.lastSeq[uid]=0; self.lastMove[uid]=nil; self.nextSpawn[uid]=nil
+    self:_resetLocomotion(uid)
     self.world:hold(uid,not safe)
 end
 
@@ -112,6 +120,7 @@ function Session:_die(uid, reason)
     if self:_event("Death",uid)~="OK" then return end
     self.combat[uid]={rawLife=0,nextAttack=self.now}
     self.lastMove[uid]=nil
+    self:_resetLocomotion(uid)
     self.world:kill(uid)
     self:_record("ConfirmedDeath",uid,{reason=reason,actorId=h.actorId,observed=self.world:observe(uid)})
 end
@@ -137,6 +146,7 @@ function Session:connection(uid, connected, now)
     code=self:_event("Connection",uid,{connectionEpoch=h.connectionEpoch,connected=connected})
     if code=="OK" then
         self.lastSeq[uid]=0; self.buckets[uid]=nil; self.lastMove[uid]=nil
+        self:_resetLocomotion(uid)
         self.world:move(uid,0,0)
     end
     return code
@@ -169,30 +179,38 @@ function Session:intent(uid, p, now)
     if c.reactionEnd or c.deathAt then return "REACTION" end
     if p.kind=="Move" then
         self.lastMove[uid]=now
-        self.world:move(uid,p.x,p.z)
+        local run=p.run
+        if self.groundRunAllowed and not self.groundRunAllowed(uid) then run=false end
+        self.world:move(uid,p.x,p.z,run)
     elseif p.kind=="Jump" then
         self.world:jump(uid)
     else
         if now<c.nextAttack or c.attack then return "COOLDOWN" end
-        if self.contextualAttack then
+        local running=self.config.Movement and (self.canRunStrike and self.canRunStrike(uid)
+            or (not self.canRunStrike and self.world.isRunning and self.world:isRunning(uid)))==true
+        if not running and self.contextualAttack then
             local interaction=self.contextualAttack(uid,now,p.attack)
             if interaction~='NO_INTERACTION' then
                 if interaction=='OK' then
+                    self:_resetLocomotion(uid)
                     c.nextAttack=math.max(c.nextAttack,now+self.config.Attacks[p.attack].cooldown)
                     self:_record('InteractionAccepted',uid,{action=p.attack,seq=p.seq})
                 end
                 return interaction
             end
         end
+        if self.config.Movement and p.attack=='Dash' and not running then return 'NOT_RUNNING' end
         code=self:_event("BeginAttack",uid,{connectionEpoch=h.connectionEpoch})
         if code~="OK" then return code end
         self.world:hold(uid,false)
-        local action=self.attackSelector and self.attackSelector(uid,p.attack) or p.attack
+        local input=running and 'Dash' or p.attack
+        local action=self.attackSelector and self.attackSelector(uid,input) or input
         local cfg=self.config.Attacks[action]
         assert(cfg,'Unknown trusted action')
         c.nextAttack=now+cfg.cooldown
         c.attack={action=action,inputAction=p.attack,tuning=self.Combat.captureAttack(self.config,action,cfg),actorId=h.actorId,at=now+cfg.windup,
             untilTime=now+cfg.windup+cfg.window,order=self.serial}
+        if running then self.world:move(uid,0,0,false);self.lastMove[uid]=nil end
         self:_record("AttackAccepted",uid,{action=action,inputAction=p.attack,seq=p.seq})
     end
     return "OK"
@@ -216,6 +234,7 @@ function Session:_hit(attacker, target, action, tuning)
     end
     if result.impulse then
         if self.beforeHitImpulse then self.beforeHitImpulse(target) end
+        self:_resetLocomotion(target)
         -- Pending contextual actions must still see an interrupt after recovery
         -- has cleared reactionEnd during a later (possibly long) server step.
         c.reactionEpoch=(c.reactionEpoch or 0)+1
@@ -303,7 +322,7 @@ function Session:step(now)
         local h=self.state.heroes[uid]
         if h.status=="Alive" then
             if self.lastMove[uid] and now-self.lastMove[uid]>=self.config.MoveTimeout then
-                self.world:move(uid,0,0); self.lastMove[uid]=nil
+                self.world:move(uid,0,0,false); self.lastMove[uid]=nil
             end
             local reason=self.world:hazard(uid)
             local held=h.shield and h.shield.kind=="Emergency" and now<h.shield.deadline
@@ -322,7 +341,8 @@ function Session:snapshot()
             connectionEpoch=h.connectionEpoch,connected=h.connected,status=h.status,view=h.view,
             hearts=self.Combat.hearts(c.rawLife),rawLife=c.rawLife,respawns=h.respawns,
             shield=h.shield and h.shield.kind,shieldUntil=h.shield and h.shield.deadline,
-            dying=c.deathAt~=nil}
+            dying=c.deathAt~=nil,reactionEpoch=c.reactionEpoch or 0,
+            movementMode=self.world.movementMode and self.world:movementMode(uid) or nil}
     end
     return {runId=self.state.runId,levelEpoch=self.state.levelEpoch,status=self.state.status,
         now=self.now,heroes=heroes,calibration=self.config.Calibration}
