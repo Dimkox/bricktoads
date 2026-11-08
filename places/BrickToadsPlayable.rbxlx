@@ -87,6 +87,8 @@ local HttpService=game:GetService('HttpService')
 Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
+local worldType=require(gameplay.GameWorld)
+require(gameplay.DragonWorld)(worldType)
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
 local buildInfo=script.Parent:FindFirstChild('BuildInfo')
 local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
@@ -96,7 +98,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
-    SourceCombat=require(gameplay.SourceCombat),
+    SourceCombat=require(gameplay.SourceCombat),DragonFlight=require(gameplay.DragonFlight),
     RunJournal=require(gameplay.RunJournal),BuildId=buildId,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
@@ -109,7 +111,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
                 legacy:Destroy()
             end
         end
-        local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config,{
+        local world=worldType.new(require(runtime.RobloxWorld),config,{
             name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing}})
         world.folder:SetAttribute('GroupId',groupId)
         return world
@@ -713,6 +715,513 @@ return BossQueue
         </Item>
         <Item class="ModuleScript" referent="BT11">
           <Properties>
+            <string name="Name">DragonFlight</string>
+            <ProtectedString name="Source">-- Temporary transport over existing actors. Damage/resources remain owned by Session/Director.
+local Flight={}
+Flight.__index=Flight
+local function finite(n) return type(n)=='number' and n==n and math.abs(n)&lt;math.huge end
+local function sortedKeys(t) local r={};for k in pairs(t) do r[#r+1]=k end;table.sort(r);return r end
+function Flight.new(director)
+    local self=setmetatable({director=director,session=director.session,world=director.world,
+        config=table.clone(director.config.DragonFlight),states={},heroes={},shots={},serial=0,now=director.now},Flight)
+    local previousIntent=self.session.contextualIntent
+    self.session.contextualIntent=function(slot,p,now)
+        local code=self:heroIntent(slot,p,now)
+        if code~='NO_INTERACTION' then return code end
+        return previousIntent and previousIntent(slot,p,now) or 'NO_INTERACTION'
+    end
+    local previousHit=self.session.beforeHitImpulse
+    self.session.beforeHitImpulse=function(slot)
+        self:heroHit(slot)
+        if previousHit then previousHit(slot) end
+    end
+    return self
+end
+function Flight:_active() return not self.closed and not self.director.result and self.session.state.status=='Active' end
+function Flight:_row(id)
+    local e=self.director.enemies[id]
+    if not e or e.dead or e.kind~='Dragon' then return nil end
+    local row=self.states[id]
+    if row and (row.enemy~=e or row.actorId~=e.actorId) then self:forgetEnemy(id);row=nil end
+    if not row then
+        local p=self.world:position(id);if not p then return nil end
+        row={id=id,enemy=e,actorId=e.actorId,mode='Approach',homeY=self.world:dragonFloor(id) or p.y}
+        self.states[id]=row
+    end
+    return row
+end
+function Flight:_hero(slot,ready)
+    local h,c=self.session.state.heroes[slot],self.session.combat[slot]
+    if not self:_active() or not h or h.status~='Alive' or not h.actorId or not c or c.deathAt
+        or self.world:hazard(slot) then return nil end
+    if ready and (not h.connected or c.reactionEnd or c.attack) then return nil end
+    return h,c
+end
+function Flight:_valid(row)
+    local h,c=self:_hero(row.slot)
+    return h and self.director.enemies[row.id]==row.enemy and not row.enemy.dead
+        and row.enemy.actorId==row.actorId and h.actorId==row.heroActorId and h.attempt==row.attempt
+        and self.session.state.levelEpoch==row.levelEpoch and c==row.combat
+        and (c.reactionEpoch or 0)==row.heroReactionEpoch
+end
+function Flight:_log(kind,row,data)
+    data=data or {};data.enemyId=row.id;data.enemyActorId=row.actorId;data.mode=row.mode
+    self.session:_record(kind,row.slot,data)
+end
+function Flight:_release(row,reason,jump)
+    if not row.slot then return end
+    local slot=row.slot
+    self.world:dragonUnlink(slot,jump)
+    if self.heroes[slot]==row then self.heroes[slot]=nil end
+    self:_log('DragonReleased',row,{reason=reason})
+    row.slot=nil;row.mode='Turn';row.turnUntil=self.now+self.config.turnSeconds;row.move=nil
+end
+function Flight:isMounted(id) local r=self.states[id];return r~=nil and r.mode=='Mounted' end
+function Flight:heroHit(slot)
+    self.now=math.max(self.now,self.session.now)
+    local row=self.heroes[slot];if row then self:_release(row,'Hit') end
+end
+function Flight:hitEnemy(id,heavy)
+    local row=self:_row(id);if not row then return end
+    self.now=math.max(self.now,self.director.now)
+    self:_release(row,'DragonHit');row.capture=nil
+    self.world:stopDragon(id)
+    row.mode=heavy and 'Disabled' or 'Turn'
+    row.disabledUntil=heavy and self.now+self.config.disabledSeconds or nil
+    row.turnUntil=self.now+self.config.turnSeconds
+end
+function Flight:forgetEnemy(id)
+    local row=self.states[id]
+    if row then self:_release(row,'DragonRemoved');self.world:stopDragon(id);self.states[id]=nil end
+end
+function Flight:_mountable(slot,id,row)
+    return row.mode=='Disabled' and self.now&lt;row.disabledUntil and not row.slot and not row.capture
+        and not row.enemy.reactionUntil and self.world:dragonGrounded(id)
+        and self.world:dragonCanMount(slot,id,self.config.mountRange,self.config.mountHeight)
+end
+function Flight:interaction(slot)
+    self.now=math.max(self.now,self.session.now,self.director.now)
+    local linked=self.heroes[slot]
+    if linked and self:_valid(linked) then
+        return {available=linked.mode=='Mounted',carrying=true,kind='Dragon',
+            label=linked.mode=='Mounted' and 'ОГОНЬ • ПРЫЖОК — СПЕШИТЬСЯ' or 'ВАС СХВАТИЛИ'}
+    end
+    if not self:_hero(slot,true) then return {available=false} end
+    for _,id in ipairs(sortedKeys(self.director.enemies)) do
+        local row=self:_row(id)
+        if row and self:_mountable(slot,id,row) then return {available=true,kind='Dragon',label='ОСЕДЛАТЬ'} end
+    end
+    return {available=false}
+end
+function Flight:interact(slot,now,action)
+    self.now=math.max(self.now,now)
+    if not self:_active() or action~='Punch' or self.heroes[slot] then return 'NO_INTERACTION' end
+    local h,c=self:_hero(slot,true);if not h then return 'NO_INTERACTION' end
+    for _,id in ipairs(sortedKeys(self.director.enemies)) do
+        local row=self:_row(id)
+        if row and self:_mountable(slot,id,row) then
+            if not self.world:dragonLink(id,slot,'Mounted') then return 'NO_INTERACTION' end
+            local code=self.session:_event('BeginAttack',slot,{connectionEpoch=h.connectionEpoch})
+            if code~='OK' then self.world:dragonUnlink(slot);return code end
+            self.world:hold(slot,false)
+            row.mode='Mounted';row.slot=slot;row.heroActorId=h.actorId;row.attempt=h.attempt
+            row.levelEpoch=self.session.state.levelEpoch;row.combat=c;row.heroReactionEpoch=c.reactionEpoch or 0
+            row.enemy.windup=nil;row.enemy.engaged=true;row.enemy.lastMove=nil;row.enemy.dragonMove=nil
+            self.heroes[slot]=row
+            if self.director.clubs then self.director.clubs:drop(slot,'DragonMount') end
+            self:_log('DragonMounted',row,{ownerUserId=row.enemy.ownerUserId})
+            return 'OK'
+        end
+    end
+    return 'NO_INTERACTION'
+end
+function Flight:_fire(row,h,c)
+    if self.now&lt;c.nextAttack or c.attack then return 'COOLDOWN' end
+    local count=0;for _ in pairs(self.shots) do count+=1 end
+    if count&gt;=2 then return 'PROJECTILE_LIMIT' end
+    local origin,direction,obstructed=self.world:dragonMuzzle(row.id)
+    if not origin or not direction then return 'NO_INTERACTION' end
+    local code=self.session:_event('BeginAttack',row.slot,{connectionEpoch=h.connectionEpoch})
+    if code~='OK' then return code end
+    self.world:hold(row.slot,false)
+    local tuning=self.director.Combat.captureAttack(self.director.config,'DragonFire')
+    c.nextAttack=self.now+tuning.cooldown
+    if obstructed then self:_log('DragonFireBlocked',row);return 'OK' end
+    self.serial+=1;local id=-5000-self.serial
+    self.shots[id]={position=table.clone(origin),direction=table.clone(direction),created=self.now,
+        expires=self.now+self.config.fireLife,slot=row.slot,dragon=row.id,heroActorId=h.actorId,
+        tuning=tuning,speed=self.config.fireSpeed,radius=self.config.fireRadius}
+    self.world:dragonFire(id,origin)
+    self:_log('DragonFireAccepted',row,{projectileId=id,profile=22})
+    return 'OK'
+end
+function Flight:heroIntent(slot,p,now)
+    self.now=math.max(self.now,now)
+    local row=self.heroes[slot]
+    if not row then return 'NO_INTERACTION' end
+    if not self:_valid(row) then self:_release(row,'ActorChanged');return 'NO_INTERACTION' end
+    if row.mode=='Captured' then return 'HELD' end
+    local h,c=self:_hero(slot,true);if not h then return 'REACTION' end
+    if p.kind=='Move' then row.move={x=p.x,z=p.z,at=now};return 'OK' end
+    if p.kind=='Jump' or (p.kind=='Attack' and p.attack=='Dash') then self:_release(row,'Dismount',p.kind=='Jump');return 'OK' end
+    if p.kind=='Attack' then return self:_fire(row,h,c) end
+    return 'NO_INTERACTION'
+end
+function Flight:enemyCommand(id,e,p,now)
+    local row=self:_row(id);if not row then return nil end
+    if row.mode=='Mounted' then return 'MOUNTED' end
+    if row.mode=='Captured' or row.capture then return 'CAPTURING' end
+    if row.mode=='Disabled' and now&lt;row.disabledUntil then return 'DISABLED' end
+    if p.kind=='Move' then e.dragonMove={x=p.x,z=p.z,at=now};return 'OK' end
+    if p.kind=='Jump' then row.liftUntil=now+self.config.liftSeconds;return 'OK' end
+    return nil
+end
+function Flight:_capturable(slot)
+    local h,c=self:_hero(slot)
+    return h and not self.heroes[slot] and c.reactionEnd and self.now&lt;c.reactionEnd and c.heavyReaction==true
+        and not (h.shield and self.now&lt;h.shield.deadline)
+end
+function Flight:beginCapture(id,e,target)
+    self.now=math.max(self.now,self.director.now)
+    local row=self:_row(id)
+    if not row or row.slot or row.capture or e.reactionUntil or self.now&lt;(e.nextAttack or 0) then return false end
+    local geometry=self.config.captureGeometry
+    for _,slot in ipairs(self.world:targets(id,geometry)) do
+        if (not target or slot==target) and self:_capturable(slot) then
+            row.capture={at=self.now+self.config.captureWindup,expires=self.now+self.config.captureWindup+self.config.captureWindow,
+                reactionEpoch=e.reactionEpoch or 0,geometry=table.clone(geometry)}
+            e.engaged=true;e.windup=nil
+            self:_log('DragonCaptureAccepted',row)
+            return true
+        end
+    end
+    return false
+end
+function Flight:_capture(row)
+    local pending=row.capture;row.capture=nil
+    row.enemy.nextAttack=self.now+self.config.turnSeconds
+    if self.now&gt;pending.expires or (row.enemy.reactionEpoch or 0)~=pending.reactionEpoch or row.enemy.reactionUntil then return end
+    for _,slot in ipairs(self.world:targets(row.id,pending.geometry)) do
+        if self:_capturable(slot) then
+            local h,c=self:_hero(slot)
+            if self.world:dragonLink(row.id,slot,'Captured') then
+                row.slot=slot;row.heroActorId=h.actorId;row.attempt=h.attempt;row.levelEpoch=self.session.state.levelEpoch
+                row.combat=c;row.heroReactionEpoch=c.reactionEpoch or 0;row.mode='Captured'
+                row.releaseAt=self.now+self.config.captureSeconds;self.heroes[slot]=row
+                self:_log('DragonCaptured',row)
+                return
+            end
+        end
+    end
+    self:_log('DragonCaptureMiss',row)
+end
+function Flight:enemyStep(id,e,dt)
+    local row=self:_row(id);if not row then return end
+    if e.reactionUntil then self.world:stopDragon(id);return end
+    if row.mode=='Disabled' then
+        self.world:stopDragon(id)
+        if self.now&lt;row.disabledUntil then return end
+        row.mode='Approach';row.disabledUntil=nil
+    end
+    local floor=self.world:dragonFloor(id);if floor then row.homeY=floor end
+    local height=row.homeY+self.config.altitude
+    if row.liftUntil and self.now&lt;row.liftUntil then height+=self.config.liftHeight end
+    local x,z=0,0
+    if row.mode=='Mounted' then
+        local move=row.move
+        if row.slot and self.session.state.heroes[row.slot].connected and move and self.now-move.at&lt;self.director.config.MoveTimeout then x,z=move.x,move.z end
+    elseif row.mode=='Captured' then
+        height+=self.config.captureHeight
+    elseif row.capture then
+        if self.now&gt;=row.capture.at then self:_capture(row) end
+    elseif e.windup then
+        if self.now&gt;=e.windup.at then
+            self.director:_resolveStrike(id,e);row.mode='Turn';row.turnUntil=self.now+self.config.turnSeconds
+        end
+    elseif row.mode=='Turn' and self.now&lt;(row.turnUntil or 0) then
+        x,z=0,0
+    elseif e.ownerUserId then
+        local move=e.dragonMove
+        if e.connected and move and self.now-move.at&lt;self.director.config.MoveTimeout then x,z=move.x,move.z end
+    else
+        row.mode='Approach'
+        local target,range=self.director:_nearest(self.world:position(id))
+        if target then
+            local a,b=self.world:position(id),self.world:position(target)
+            local dx,dz=b.x-a.x,b.z-a.z;local length=math.sqrt(dx*dx+dz*dz)
+            if range&lt;=self.config.attackRange and self.now&gt;=e.nextAttack then
+                self.world:face(id,target);self.director:_beginStrike(id,e,target)
+            elseif length&gt;.5 then x,z=dx/length,dz/length end
+        end
+    end
+    self.world:dragonMotion(id,x,z,height,self.config.speed)
+end
+function Flight:_shotStep(id,shot,dt)
+    if self.now&gt;=shot.expires then return true end
+    local a=shot.position;local d=shot.direction;local amount=shot.speed*dt
+    local b={x=a.x+d.x*amount,y=a.y+d.y*amount,z=a.z+d.z*amount}
+    local targets,wall=self.world:dragonFireTargets(a,b,shot.radius,{[shot.slot]=true,[shot.dragon]=true})
+    for _,target in ipairs(targets) do
+        local e=self.director.enemies[target];local h=self.session.state.heroes[target];local c=self.session.combat[target]
+        local hit=false
+        if e and not e.dead and not e.boss and not e.heavyReaction then hit=self.director:hit(shot.slot,target,'DragonFire',shot.tuning)
+        elseif h and h.status=='Alive' and c and not (c.reactionEnd and c.heavyReaction) then
+            hit=self.session:_hit(shot.slot,target,'DragonFire',shot.tuning)
+        end
+        if hit then self.session:_record('DragonFireHit',shot.slot,{target=target,projectileId=id,heroActorId=shot.heroActorId});return true end
+    end
+    if wall then return true end
+    shot.position=b;self.world:dragonFire(id,b)
+    return false
+end
+function Flight:step(now,dt)
+    if not finite(now) or now&lt;self.now then return 'INVALID_TIME' end
+    self.now=now
+    if not self:_active() then self:close();return 'RUN_CLOSED' end
+    for _,id in ipairs(sortedKeys(self.states)) do
+        local row=self.states[id]
+        if row.slot then
+            if not self:_valid(row) then self:_release(row,'ActorChanged')
+            elseif row.mode=='Captured' and now&gt;=row.releaseAt then self:_release(row,'CaptureComplete')
+            elseif not self.world:dragonLink(id,row.slot,row.mode) then self:_release(row,'PhysicalLinkLost') end
+        end
+    end
+    local delta=finite(dt) and math.clamp(dt,0,.1) or 0
+    for _,id in ipairs(sortedKeys(self.shots)) do
+        if self:_shotStep(id,self.shots[id],delta) then self.world:removeDragonFire(id);self.shots[id]=nil end
+    end
+    return 'OK'
+end
+function Flight:close()
+    if self.closed then return end
+    self.closed=true
+    for _,id in ipairs(sortedKeys(self.states)) do self:forgetEnemy(id) end
+    for id in pairs(self.shots) do self.world:removeDragonFire(id) end
+    self.shots={}
+end
+return Flight
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT12">
+          <Properties>
+            <string name="Name">DragonWorld</string>
+            <ProtectedString name="Source">-- Roblox physical boundary for same-body Dragon transport; all coordinates passed in are group-local.
+local Workspace=game:GetService('Workspace')
+local function living(world,id)
+    local a=world.actors[id]
+    return a and a.root.Parent and a.humanoid.Health&gt;0 and a or nil
+end
+local function facing(a)
+    local v=a.root.CFrame.LookVector
+    if not v then return 1,0 end
+    local n=math.sqrt(v.X*v.X+v.Z*v.Z)
+    if n&lt;.001 then return 1,0 end
+    return v.X/n,v.Z/n
+end
+return function(World)
+    if World.dragonMotion then return World end
+    local previousNew,previousMove,previousReaction,previousClear=World.new,World.move,World.setReaction,World.clearActors
+    function World.new(...)
+        local self=previousNew(...)
+        self.dragonFlights,self.dragonLinks,self.dragonFires={},{},{}
+        self.dragonOverlap=OverlapParams.new();self.dragonOverlap.FilterType=Enum.RaycastFilterType.Include
+        self.dragonOverlap.FilterDescendantsInstances={self.geometry};self.dragonOverlap.RespectCanCollide=true
+        self.dragonFireFolder=Instance.new('Folder');self.dragonFireFolder.Name='DragonFire';self.dragonFireFolder.Parent=self.folder
+        return self
+    end
+    function World:dragonFloor(id)
+        local a=living(self,id);if not a then return nil end
+        local p=a.root.Position
+        local hit=Workspace:Raycast(p,Vector3.new(0,-64,0),self.ray)
+        if hit and hit.Normal.Y&gt;.9 and not hit.Instance:GetAttribute('Hazard') then return hit.Position.Y-self.offset.Y+3 end
+    end
+    function World:dragonGrounded(id)
+        local a=living(self,id);if not a or a.root.Anchored then return false end
+        local hit=Workspace:Raycast(a.root.Position,Vector3.new(0,-3.5,0),self.ray)
+        return hit~=nil and hit.Normal.Y&gt;.9 and not hit.Instance:GetAttribute('Hazard')
+            and math.abs(a.root.AssemblyLinearVelocity.Y)&lt;2
+    end
+    function World:dragonCanMount(slot,id,range,height)
+        local hero,dragon=living(self,slot),living(self,id)
+        if not hero or not dragon or hero.root.Anchored or hero.humanoid.PlatformStand
+            or self.dragonLinks[slot] or hero.model:GetAttribute('CarryingEnemy') then return false end
+        local delta=dragon.root.Position-hero.root.Position
+        if delta.Magnitude&gt;range or math.abs(delta.Y)&gt;height or not self:dragonGrounded(slot) then return false end
+        return Workspace:Raycast(hero.root.Position,delta,self.ray)==nil
+    end
+    function World:dragonMotion(id,x,z,height,speed)
+        local a=living(self,id);if not a or a.root.Anchored then return false end
+        local row=self.dragonFlights[id]
+        if row and row.actor~=a then self:stopDragon(id);row=nil end
+        if not row then
+            if a.humanoid.PlatformStand then return false end
+            local attachment=Instance.new('Attachment');attachment.Name='DragonLift';attachment.Parent=a.root
+            local force=Instance.new('VectorForce');force.Name='DragonGravity';force.Attachment0=attachment
+            force.RelativeTo=Enum.ActuatorRelativeTo.World;force.ApplyAtCenterOfMass=true;force.Parent=a.root
+            row={actor=a,attachment=attachment,force=force,platformStand=a.humanoid.PlatformStand,
+                evaluate=a.humanoid.EvaluateStateMachine,autoRotate=a.humanoid.AutoRotate,walkSpeed=a.humanoid.WalkSpeed}
+            self.dragonFlights[id]=row
+            if a.root:CanSetNetworkOwnership() then a.root:SetNetworkOwner(nil) end
+        end
+        a.humanoid.EvaluateStateMachine=false;a.humanoid.PlatformStand=true;a.humanoid.AutoRotate=false;a.humanoid.WalkSpeed=0
+        row.force.Force=Vector3.new(0,a.root.AssemblyMass*Workspace.Gravity,0)
+        local p=a.root.Position-self.offset
+        local bounds=self.config.Level and self.config.Level.bounds
+        if bounds then
+            if (p.X&lt;=bounds.minX+2 and x&lt;0) or (p.X&gt;=bounds.maxX-2 and x&gt;0) then x=0 end
+            if (p.Z&lt;=bounds.minZ+2 and z&lt;0) or (p.Z&gt;=bounds.maxZ-2 and z&gt;0) then z=0 end
+        end
+        local vertical=math.clamp((height-p.Y)*6,-14,14)
+        a.root.AssemblyLinearVelocity=Vector3.new(x*speed,vertical,z*speed)
+        a.root.AssemblyAngularVelocity=Vector3.new()
+        if x*x+z*z&gt;.001 then
+            local origin=a.root.Position;a.root.CFrame=CFrame.lookAt(origin,origin+Vector3.new(x,0,z))
+        end
+        a.model:SetAttribute('DragonFlight',true)
+        return true
+    end
+    function World:stopDragon(id)
+        local row=self.dragonFlights[id];if not row then return end
+        self.dragonFlights[id]=nil;row.force:Destroy();row.attachment:Destroy()
+        local a=row.actor;a.model:SetAttribute('DragonFlight',nil)
+        if a.root.Parent then
+            a.humanoid.EvaluateStateMachine=row.evaluate;a.humanoid.PlatformStand=row.platformStand
+            a.humanoid.AutoRotate=row.autoRotate;a.humanoid.WalkSpeed=row.walkSpeed
+            a.root.AssemblyLinearVelocity=Vector3.new();a.root.AssemblyAngularVelocity=Vector3.new()
+        end
+    end
+    function World:dragonLink(id,slot,mode)
+        local dragon,hero=living(self,id),living(self,slot)
+        if not dragon or not hero or (mode~='Mounted' and mode~='Captured') then return false end
+        local row=self.dragonLinks[slot]
+        if row and (row.hero~=hero or row.dragon~=dragon or row.mode~=mode) then return false end
+        for other,link in pairs(self.dragonLinks) do if other~=slot and link.dragon==dragon then return false end end
+        if not row then
+            if hero.root.Anchored then return false end
+            row={hero=hero,dragon=dragon,id=id,mode=mode,collisions={},anchored=hero.root.Anchored,
+                evaluate=hero.humanoid.EvaluateStateMachine,platformStand=hero.humanoid.PlatformStand,
+                autoRotate=hero.humanoid.AutoRotate,walkSpeed=hero.humanoid.WalkSpeed}
+            for _,p in ipairs(hero.model:GetDescendants()) do if p:IsA('BasePart') then row.collisions[p]=p.CanCollide;p.CanCollide=false end end
+            self.dragonLinks[slot]=row
+        end
+        hero.humanoid.EvaluateStateMachine=false;hero.humanoid.PlatformStand=true
+        hero.humanoid.AutoRotate=false;hero.humanoid.WalkSpeed=0;hero.root.Anchored=true
+        hero.root.AssemblyLinearVelocity=Vector3.new();hero.root.AssemblyAngularVelocity=Vector3.new()
+        local p=dragon.root.Position;local x,z=facing(dragon)
+        local y=p.Y+(mode=='Mounted' and 3.2 or -2.4)
+        if mode=='Captured' then local floor=self:dragonFloor(id);if floor then y=math.max(y,floor+self.offset.Y) end end
+        local position=Vector3.new(p.X,y,p.Z)
+        hero.model:PivotTo(CFrame.lookAt(position,position+Vector3.new(x,0,z)))
+        hero.model:SetAttribute('DragonLink',mode);hero.model:SetAttribute('DragonId',id)
+        return true
+    end
+    function World:dragonUnlink(slot,jump)
+        local row=self.dragonLinks[slot];if not row then return false end
+        self.dragonLinks[slot]=nil
+        local a=row.hero;a.model:SetAttribute('DragonLink',nil);a.model:SetAttribute('DragonId',nil)
+        if a.root.Parent then
+            a.root.Anchored=row.anchored;a.humanoid.EvaluateStateMachine=row.evaluate
+            a.humanoid.PlatformStand=row.platformStand;a.humanoid.AutoRotate=row.autoRotate;a.humanoid.WalkSpeed=row.walkSpeed
+            for p,value in pairs(row.collisions) do if p.Parent then p.CanCollide=a.humanoid.Health&gt;0 and value or false end end
+            if a.root:CanSetNetworkOwnership() then a.root:SetNetworkOwner(nil) end
+            if jump and a.humanoid.Health&gt;0 and not row.anchored and not row.platformStand then
+                local velocity=row.dragon.root.Parent and row.dragon.root.AssemblyLinearVelocity or Vector3.new()
+                a.root.AssemblyLinearVelocity=Vector3.new(velocity.X,18,velocity.Z)
+            end
+        end
+        return true
+    end
+    function World:hold(id,held)
+        local row=self.dragonLinks[id]
+        if row then row.anchored=held;return end
+        self._base.hold(self,id,held)
+    end
+    function World:move(id,x,z)
+        if self.dragonLinks[id] or self.dragonFlights[id] then return end
+        previousMove(self,id,x,z)
+    end
+    function World:setReaction(id,active)
+        local row=self.dragonLinks[id]
+        if row then
+            row.platformStand=active;row.autoRotate=not active;row.walkSpeed=active and 0 or self.config.WalkSpeed
+            return
+        end
+        previousReaction(self,id,active)
+    end
+    function World:kill(id)
+        self:dragonUnlink(id)
+        for slot,row in pairs(self.dragonLinks) do if row.id==id then self:dragonUnlink(slot) end end
+        self:stopDragon(id)
+        self._base.kill(self,id)
+    end
+    function World:dragonMuzzle(id)
+        local a=living(self,id);if not a then return nil end
+        local p=self:position(id);local x,z=facing(a)
+        local origin=Vector3.new(p.x,p.y+.25,p.z)+self.offset
+        local reach=Vector3.new(x*2.8,0,z*2.8)
+        local radius=self.config.DragonFlight and self.config.DragonFlight.fireRadius or 1
+        local blocked=#Workspace:GetPartBoundsInRadius(origin,radius,self.dragonOverlap)&gt;0
+            or Workspace:Spherecast(origin,radius,reach,self.ray)~=nil
+        return {x=p.x+x*2.8,y=p.y+.25,z=p.z+z*2.8},{x=x,y=0,z=z},blocked
+    end
+    function World:dragonFire(id,position)
+        local p=self.dragonFires[id]
+        if not p then
+            p=Instance.new('Part');p.Name='Fire_'..id;p.Shape=Enum.PartType.Ball;p.Size=Vector3.new(1.3,1.3,1.3)
+            p.Anchored=true;p.CanCollide=false;p.CanTouch=false;p.CanQuery=false
+            p.Material=Enum.Material.Neon;p.Color=Color3.fromRGB(255,174,55);p.Parent=self.dragonFireFolder
+            self.dragonFires[id]=p
+        end
+        p.CFrame=CFrame.new(Vector3.new(position.x,position.y,position.z)+self.offset)
+    end
+    function World:removeDragonFire(id)
+        local p=self.dragonFires[id];if p then p:Destroy();self.dragonFires[id]=nil end
+    end
+    function World:dragonFireTargets(from,to,radius,exclude)
+        local origin=Vector3.new(from.x,from.y,from.z)+self.offset
+        local delta=Vector3.new(to.x-from.x,to.y-from.y,to.z-from.z)
+        local length=delta.Magnitude;local length2=length*length
+        if #Workspace:GetPartBoundsInRadius(origin,radius,self.dragonOverlap)&gt;0 then return {},true end
+        local wall=length&gt;0 and Workspace:Spherecast(origin,radius,delta,self.ray) or nil
+        local limit=wall and math.min(1,wall.Distance/length) or 1
+        local candidates={}
+        for id in pairs(self.actors) do
+            local a=living(self,id)
+            if a and not exclude[id] then
+                local p=a.root.Position-origin
+                local raw=length2&gt;0 and (p.X*delta.X+p.Y*delta.Y+p.Z*delta.Z)/length2 or 0
+                local expanded=radius+2
+                local distance2=p.X*p.X+p.Y*p.Y+p.Z*p.Z
+                local entry
+                if distance2&lt;=expanded*expanded then entry=0
+                elseif length2&gt;0 then
+                    local dot=p.X*delta.X+p.Y*delta.Y+p.Z*delta.Z
+                    local discriminant=dot*dot-length2*(distance2-expanded*expanded)
+                    if discriminant&gt;=0 then entry=(dot-math.sqrt(discriminant))/length2 end
+                end
+                if entry and entry&gt;=0 and entry&lt;=limit and (not wall or raw&lt;=limit) then
+                    candidates[#candidates+1]={id=id,t=entry}
+                end
+            end
+        end
+        table.sort(candidates,function(a,b) if a.t~=b.t then return a.t&lt;b.t end;return a.id&lt;b.id end)
+        local result={};for _,row in ipairs(candidates) do result[#result+1]=row.id end
+        return result,wall~=nil
+    end
+    function World:clearActors()
+        for slot in pairs(self.dragonLinks) do self:dragonUnlink(slot) end
+        for id in pairs(self.dragonFlights) do self:stopDragon(id) end
+        for id in pairs(self.dragonFires) do self:removeDragonFire(id) end
+        previousClear(self)
+    end
+    return World
+end
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT13">
+          <Properties>
             <string name="Name">EnemyCarry</string>
             <ProtectedString name="Source">-- Existing-body Pig pickup/throw. Reach, timing and ordinary damage are Roblox calibration.
 -- Source throw profile17/raw4 is provenance; this module never creates projectile collateral damage.
@@ -935,7 +1444,7 @@ return EnemyCarry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT12">
+        <Item class="ModuleScript" referent="BT14">
           <Properties>
             <string name="Name">GameConfig</string>
             <ProtectedString name="Source">-- Original playable prototype calibration. Resource limits are canonical.
@@ -966,7 +1475,12 @@ return function(base,level)
         npcDamage={WalkerLight=1,WalkerHeavy=2},npcProfile={WalkerLight=0,WalkerHeavy=2}}
     -- Ordinary Dragon animation32 has base4/hero22, never the hero Dash finisher.
     config.Attacks.DragonHeadbutt={windup=.35,cooldown=1.25,reaction=.75,reach=6,width=3,height=4,recoveryPose=.25}
-    config.Dragon={npcDamage={DragonHeadbutt=2},npcProfile={DragonHeadbutt=4}}
+    config.Dragon={npcDamage={DragonHeadbutt=2,DragonFire=2},npcProfile={DragonHeadbutt=4,DragonFire=4}}
+    config.Attacks.DragonFire={cooldown=.45,reaction=.75}
+    config.DragonFlight={speed=10,altitude=1.5,liftSeconds=.4,liftHeight=4,turnSeconds=.3,
+        disabledSeconds=6,mountRange=5,mountHeight=4,attackRange=5,
+        captureWindup=.25,captureWindow=.3,captureSeconds=1.25,captureHeight=3,
+        captureGeometry={reach=6,width=3,height=4},fireLife=2,fireSpeed=32,fireRadius=1}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}
@@ -1003,7 +1517,7 @@ end
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT13">
+        <Item class="ModuleScript" referent="BT15">
           <Properties>
             <string name="Name">GameController</string>
             <ProtectedString name="Source">-- One group's runtime. Player identity comes from the server, never from payload fields.
@@ -1118,7 +1632,7 @@ function Controller:_begin(player,players)
     for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
     self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners})
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs,self.deps.DragonFlight)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end
@@ -1328,7 +1842,7 @@ return Controller
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT14">
+        <Item class="ModuleScript" referent="BT16">
           <Properties>
             <string name="Name">GameWorld</string>
             <ProtectedString name="Source">-- Original first-level presentation. Combat and hero physics stay in BaseWorld.
@@ -1501,7 +2015,11 @@ local function drone(actor, kind)
         cosmetic(m, m.Head, "WalkerCrest", Vector3.new(0.5, 1.5, 1.2), CFrame.new(0, 0.9, 0), COLORS.pale)
     elseif kind == "Dragon" then
         for _,side in ipairs({-1, 1}) do
-            cosmetic(m, m.Torso, "DragonWing", Vector3.new(3.2, 0.28, 2.1), CFrame.new(side * 2.3, 0.45, 0.45) * CFrame.Angles(0, 0, side * 0.3), COLORS.moss)
+            local offset=CFrame.new(side*2.3,.45,.45)*CFrame.Angles(0,0,side*.3)
+            local wing=cosmetic(m,m.Torso,'DragonWing',Vector3.new(3.2,.28,2.1),offset,COLORS.moss)
+            for _,joint in ipairs(wing:GetChildren()) do if joint:IsA('WeldConstraint') then joint:Destroy() end end
+            local motor=Instance.new('Motor6D');motor.Name='DragonWingMotor';motor.Part0=m.Torso;motor.Part1=wing;motor.C0=offset;motor.Parent=wing
+            actor.wingMotors=actor.wingMotors or {};actor.wingMotors[#actor.wingMotors+1]={joint=motor,base=offset,side=side}
             cosmetic(m, m.Head, "DragonHorn", Vector3.new(0.3, 1.4, 0.4), CFrame.new(side * 0.6, 0.9, 0.3) * CFrame.Angles(0.2, 0, -side * 0.2), COLORS.amber)
         end
         cosmetic(m, m.Torso, "DragonTail", Vector3.new(0.7, 0.65, 3.2), CFrame.new(0, -0.7, 2), COLORS.moss, Enum.PartType.Ball)
@@ -2602,10 +3120,19 @@ function World:updatePresentation(session, dt, enemies)
                     end
                 end
             end
+            if actor.wingMotors then
+                local e=enemies and enemies[id]
+                local flying=actor.model:GetAttribute('DragonFlight') and actor.humanoid.Health&gt;0 and not (e and e.reactionUntil)
+                for _,wing in ipairs(actor.wingMotors) do
+                    local stroke=flying and math.sin(self.presentationTime*10)*.45*wing.side or 0
+                    wing.joint.C0=wing.joint.C0:Lerp(wing.base*CFrame.Angles(0,0,stroke),blend)
+                end
+            end
             local combat = session and session.combat and session.combat[id]
             local enemy = enemies and enemies[id]
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
             local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
+            local dragonLink=actor.model:GetAttribute('DragonLink')
             local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
             local club=self.equippedClubs[actor.model:GetAttribute('EquippedClub')]
             if club and club.owner~=actor then club=nil end
@@ -2657,6 +3184,10 @@ function World:updatePresentation(session, dt, enemies)
                     angle=primaryPose and primaryPose.neck or 0
                 elseif shoulder and carryingEnemy then
                     angle, roll = 2.65, left and -.2 or .2
+                elseif dragonLink=='Mounted' then
+                    angle=shoulder and .55 or 1.2;roll=left and -.2 or .2
+                elseif dragonLink=='Captured' then
+                    angle=shoulder and 2.5 or .35;roll=left and -.2 or .2
                 elseif beingCarried then
                     angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
                 elseif shoulder and reacting then
@@ -2702,7 +3233,7 @@ return World
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT15">
+        <Item class="ModuleScript" referent="BT17">
           <Properties>
             <string name="Name">GuardianPattern</string>
             <ProtectedString name="Source">-- Original 3D tuning around the source's ground-ball pickup/throw guardian chain.
@@ -2980,7 +3511,7 @@ return GuardianPattern
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT16">
+        <Item class="ModuleScript" referent="BT18">
           <Properties>
             <string name="Name">HealingFlies</string>
             <ProtectedString name="Source">-- Source-backed food arithmetic; flight, reach and timing are Roblox calibration.
@@ -3116,7 +3647,7 @@ return HealingFlies
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT17">
+        <Item class="ModuleScript" referent="BT19">
           <Properties>
             <string name="Name">LevelDefinition</string>
             <ProtectedString name="Source">-- Original Brick Toads geography; static actor order is derived from upstream level1_cfg.
@@ -3170,7 +3701,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT18">
+        <Item class="ModuleScript" referent="BT20">
           <Properties>
             <string name="Name">LevelDirector</string>
             <ProtectedString name="Source">-- Original prototype encounters. All decisions run on the server.
@@ -3193,7 +3724,7 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs,DragonFlight)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,Combat=Combat,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
@@ -3203,6 +3734,7 @@ function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,E
         self.flies=HealingFlies and HealingFlies.new(session,world,config)
         self.carry=EnemyCarry and EnemyCarry.new(self)
         self.clubs=WalkerClubs and WalkerClubs.new(self)
+        self.dragons=DragonFlight and config.DragonFlight and DragonFlight.new(self)
         self:_enterZone(1)
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
@@ -3267,6 +3799,8 @@ function Director:interaction(slot)
     end
     local fly=self.flies and self.flies:interaction(slot)
     if fly and fly.available then return fly end
+    local dragon=self.dragons and self.dragons:interaction(slot)
+    if dragon and (dragon.available or dragon.carrying) then return dragon end
     local club=self.clubs and self.clubs:interaction(slot)
     if club and club.available then return club end
     return carry or {available=false}
@@ -3283,6 +3817,10 @@ function Director:interact(slot,now,attack)
     if attack~='Punch' then return 'NO_INTERACTION' end
     if self.flies then
         local result=self.flies:interact(slot,now)
+        if result~='NO_INTERACTION' then return result end
+    end
+    if self.dragons then
+        local result=self.dragons:interact(slot,now,attack)
         if result~='NO_INTERACTION' then return result end
     end
     if self.clubs then
@@ -3329,7 +3867,7 @@ function Director:controlled(userId)
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id)}
+        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
 end
 function Director:available(userId)
     local offers={}
@@ -3390,6 +3928,10 @@ function Director:command(userId,payload,now,validator)
         return 'OK'
     end
     if e.reactionUntil then return 'REACTION' end
+    if self.dragons and e.kind=='Dragon' then
+        local code=self.dragons:enemyCommand(id,e,payload,now)
+        if code then return code end
+    end
     if payload.kind=='Move' then
         e.lastMove=now; self.world:move(id,payload.x,payload.z)
     elseif payload.kind=='Jump' then self.world:jump(id)
@@ -3410,6 +3952,7 @@ function Director:_strikeTarget(id,profile)
     end
 end
 function Director:_beginStrike(id,e,target)
+    if self.dragons and e.kind=='Dragon' and self.dragons:beginCapture(id,e,target) then return end
     local action=self.config.Enemy.attack
     local tuning=self.strikeProfile
     local sourceFamily=self.route and ((e.kind=='Pig' and self.config.Pig) or (e.kind=='Walker' and self.config.Walker))
@@ -3479,6 +4022,7 @@ function Director:_kill(id,cause)
     local e=self.enemies[id]
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
+    if self.dragons then self.dragons:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
     if e.rawLife~=nil then e.rawLife=0 end
@@ -3539,6 +4083,7 @@ function Director:hit(attacker,target,action,tuning)
         )
         e.heavyReaction=source and source.heavyReaction or nil
         e.reactionUntil=self.now+reaction
+        if self.dragons then self.dragons:hitEnemy(target,source and source.heavyReaction) end
         self.world:move(target,0,0); self.world:setReaction(target,true)
         local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
         local responses=tuning and tuning.responses or self.config.Impulses
@@ -3573,20 +4118,22 @@ function Director:_nearest(position,standingEligibility)
     end
     return selected,best
 end
-function Director:_enemies()
+function Director:_enemies(dt)
     local living=0
     for id,e in pairs(self.enemies) do
         if not e.dead then
             local hazard=self.world:hazard(id)
             if hazard then self:_kill(id,hazard)
             else
-                living+=1
+                if not (self.dragons and self.dragons:isMounted(id)) then living+=1 end
                 local carried=self.carry and self.carry:blocksEnemy(id)
                 if carried then e.rushing=nil; e.strikeRecoveryUntil=nil end
                 if not carried and e.reactionUntil and self.now&gt;=e.reactionUntil then
                     self:_finishReaction(id,e)
                 end
-                if not carried and not e.reactionUntil then
+                if self.dragons and e.kind=='Dragon' then
+                    self.dragons:enemyStep(id,e,dt)
+                elseif not carried and not e.reactionUntil then
                     if e.windup then
                         self.world:move(id,0,0)
                         if self.now&gt;=e.windup.at then self:_resolveStrike(id,e) end
@@ -3635,6 +4182,7 @@ function Director:_enemies()
             end
         end
     end
+    if living&gt;0 and self.route then self.world:progress(self.zoneIndex,false) end
     if living==0 then
         if self.route then
             self.world:progress(self.zoneIndex,true)
@@ -3709,16 +4257,27 @@ function Director:step(now,dt)
         if self.flies then self.flies:close() end
         if self.carry then self.carry:close() end
         if self.clubs then self.clubs:close() end
+        if self.dragons then self.dragons:close() end
         return
     end
     self.now=now
     if self.carry then self.carry:step(now) end
     if self.clubs then self.clubs:step(now) end
     if self.flies then self.flies:step(now) end
+    if self.dragons then self.dragons:step(now,dt) end
     if self.session.state.status=='Lost' then
-        self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
+        self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); if self.dragons then self.dragons:close() end; return
     end
-    if self.stage=='Approach' or self.stage=='Courtyard' or self.stage=='Route' then self:_enemies() end
+    if self.stage=='Approach' or self.stage=='Courtyard' or self.stage=='Route' then self:_enemies(dt) end
+    if self.dragons and self.stage~='Route' and self.stage~='Approach' and self.stage~='Courtyard' then
+        for id,e in pairs(self.enemies) do
+            if e.kind=='Dragon' and not e.dead then
+                local hazard=self.world:hazard(id)
+                if hazard then self:_kill(id,hazard)
+                else self:_finishReaction(id,e);self.dragons:enemyStep(id,e,dt) end
+            end
+        end
+    end
     if self.stage=='BossReady' then self:_boss() end
     if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
@@ -3729,6 +4288,7 @@ function Director:step(now,dt)
                 if self.flies then self.flies:close() end
                 if self.carry then self.carry:close() end
                 if self.clubs then self.clubs:close() end
+                if self.dragons then self.dragons:close() end
                 break
             end
         end
@@ -3739,7 +4299,7 @@ function Director:snapshot()
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
             dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind,
-            carryState=self.carry and self.carry:stateFor(id)}
+            carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
     end
     table.sort(enemies,function(a,b) return a.id&gt;b.id end)
     local zone=self.route and self.route.zones[self.zoneIndex]
@@ -3755,7 +4315,7 @@ return Director
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT19">
+        <Item class="ModuleScript" referent="BT21">
           <Properties>
             <string name="Name">MatchHub</string>
             <ProtectedString name="Source">-- Current-Player authority and routing for independent local playable groups.
@@ -4043,7 +4603,7 @@ return MatchHub
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT20">
+        <Item class="ModuleScript" referent="BT22">
           <Properties>
             <string name="Name">RunJournal</string>
             <ProtectedString name="Source">-- Bounded private evidence and an allowlisted view of the same server records.
@@ -4052,6 +4612,7 @@ Journal.__index=Journal
 local public={Hit=true,EnemyHit=true,AttackMiss=true,EnemyAttackMiss=true,CommitSpawn=true,
     RelocateToSafety=true,EnemyDeath=true,EnemyClaimed=true,FlyCaught=true,ClubEquipped=true,
     ClubDropped=true,ClubSwingHit=true,EnemyGrabbed=true,EnemyThrown=true,EnemyDropped=true,
+    DragonMounted=true,DragonCaptured=true,DragonReleased=true,DragonFireHit=true,
     RunResult=true,GuardianBallPickedUp=true,GuardianBallThrown=true,BossHit=true,BossShielded=true,BossWarning=true}
 local function finite(v) return type(v)=='number' and v==v and v&gt;-math.huge and v&lt;math.huge end
 local function text(v)
@@ -4152,7 +4713,7 @@ return Journal
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT21">
+        <Item class="ModuleScript" referent="BT23">
           <Properties>
             <string name="Name">SourceCombat</string>
             <ProtectedString name="Source">-- Source-state action choice. Public controls never carry target, Life or profile.
@@ -4195,7 +4756,7 @@ return SourceCombat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT22">
+        <Item class="ModuleScript" referent="BT24">
           <Properties>
             <string name="Name">WalkerClubs</string>
             <ProtectedString name="Source">-- One source-backed Walker leg-club per combat death. Geometry/timing/NPC HP are Roblox calibration.
@@ -4409,21 +4970,21 @@ return WalkerClubs
           </Properties>
         </Item>
       </Item>
-      <Item class="Folder" referent="BT23">
+      <Item class="Folder" referent="BT25">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT24">
+        <Item class="ModuleScript" referent="BT26">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
 local Combat = {}
 -- Trusted server actions; public input validation remains in Session.
 -- Pig animation40 does not satisfy the hero Dash animation16 finisher condition.
-local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22,WalkerLight=18,WalkerHeavy=20,DragonHeadbutt=22,
+local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22,WalkerLight=18,WalkerHeavy=20,DragonHeadbutt=22,DragonFire=22,
     HeroJab=18,HeroKick=19,HeroUppercut=20,HeroPowerPunch=21,HeroBoot=24,HeroElbow=28}
 local ordinaryProfiles={Punch=0,HeroJab=0,HeroKick=1,HeroUppercut=2,HeroPowerPunch=3,HeroBoot=6,HeroElbow=10,
-    Club=2,PigJab=0,PigHeavy=2,PigRush=4,WalkerLight=0,WalkerHeavy=2,DragonHeadbutt=4,EnemyThrow=17}
+    Club=2,PigJab=0,PigHeavy=2,PigRush=4,WalkerLight=0,WalkerHeavy=2,DragonHeadbutt=4,DragonFire=4,EnemyThrow=17}
 local ordinaryDamage={[0]=2,[1]=8,[2]=16,[3]=255,[4]=16,[6]=255,[10]=8,[17]=4}
 local function life(value)
     assert(type(value) == "number" and value == value and value &gt;= 0
@@ -4496,7 +5057,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT25">
+        <Item class="ModuleScript" referent="BT27">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -4663,6 +5224,10 @@ function Session:intent(uid, p, now)
     b.tokens=b.tokens-1
     local c=self.combat[uid]
     if self.sourceCombat then self:_finishReaction(uid) end
+    if self.contextualIntent then
+        local result=self.contextualIntent(uid,p,now)
+        if result~='NO_INTERACTION' then return result end
+    end
     if c.reactionEnd or c.deathAt then return "REACTION" end
     if p.kind=="Move" then
         self.lastMove[uid]=now
@@ -4712,6 +5277,7 @@ function Session:_hit(attacker, target, action, tuning)
         c.rawLife=result.rawLife
     end
     if result.impulse then
+        if self.beforeHitImpulse then self.beforeHitImpulse(target) end
         -- Pending contextual actions must still see an interrupt after recovery
         -- has cleared reactionEnd during a later (possibly long) server step.
         c.reactionEpoch=(c.reactionEpoch or 0)+1
@@ -4828,7 +5394,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT26">
+        <Item class="ModuleScript" referent="BT28">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -4858,7 +5424,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT27">
+        <Item class="ModuleScript" referent="BT29">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -4918,7 +5484,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT28">
+        <Item class="ModuleScript" referent="BT30">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -5185,24 +5751,24 @@ return World
           </Properties>
         </Item>
       </Item>
-      <Item class="ModuleScript" referent="BT40">
+      <Item class="ModuleScript" referent="BT42">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='d47b4c1f530b636bbd220e6a93252d116056ab41a1e5dd3d13a6e6ca35258e9b'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='00b19a40bd98ebe1839f40f6a88cca202ac2f60fef2cf3aada00213edef254aa'})
 </ProtectedString>
         </Properties>
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT29">
+  <Item class="ReplicatedStorage" referent="BT31">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT30">
+    <Item class="Folder" referent="BT32">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT31">
+      <Item class="ModuleScript" referent="BT33">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -5214,19 +5780,19 @@ return table.freeze({
       </Item>
     </Item>
   </Item>
-  <Item class="StarterPlayer" referent="BT32">
+  <Item class="StarterPlayer" referent="BT34">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT33">
+    <Item class="StarterPlayerScripts" referent="BT35">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT34">
+      <Item class="Folder" referent="BT36">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT35">
+        <Item class="ModuleScript" referent="BT37">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -5438,7 +6004,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT36">
+        <Item class="LocalScript" referent="BT38">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -6632,13 +7198,14 @@ sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT37">
+        <Item class="ModuleScript" referent="BT39">
           <Properties>
             <string name="Name">CombatFeedback</string>
             <ProtectedString name="Source">-- Confirmed presentation only. This module never sends input or changes actors.
 local Feedback={}
 Feedback.__index=Feedback
-local messages={AttackMiss='ПРОМАХ',EnemyAttackMiss='ПРОМАХ',EnemyDeath='ПРОТИВНИК ПОВЕРЖЕН',
+local messages={DragonMounted='ВЕРХОМ НА ДРАКОНЕ',DragonCaptured='ВАС СХВАТИЛИ',
+    DragonReleased='СНОВА НА НОГАХ',DragonFireHit='ПОПАДАНИЕ ОГНЁМ',AttackMiss='ПРОМАХ',EnemyAttackMiss='ПРОМАХ',EnemyDeath='ПРОТИВНИК ПОВЕРЖЕН',
     EnemyClaimed='РОЛЬ ПОЛУЧЕНА',FlyCaught='ЗДОРОВЬЕ ВОССТАНОВЛЕНО',ClubEquipped='ДУБИНА В РУКАХ',
     ClubDropped='ДУБИНА ВЫПАЛА',ClubSwingHit='УДАР ДУБИНОЙ',EnemyGrabbed='ПРОТИВНИК СХВАЧЕН',
     EnemyThrown='ПРОТИВНИК БРОШЕН',EnemyDropped='ПРОТИВНИК ОСВОБОЖДЁН',RelocateToSafety='БЕЗОПАСНАЯ ОПОРА',
@@ -6713,6 +7280,7 @@ function Feedback.hint(data)
     if type(data.interaction)=='table' and data.interaction.available and type(data.interaction.label)=='string' then
         return data.interaction.label..' — кнопка действия'
     end
+    if type(data.interaction)=='table' and data.interaction.carrying and type(data.interaction.label)=='string' then return data.interaction.label end
     if data.mine then return 'УДАР: атака или действие рядом' end
     if data.enemyRole then return 'УДАР: остановите героев' end
     return 'Выберите роль или наблюдайте'
@@ -6731,7 +7299,7 @@ function Feedback.remainingEnemies(level)
     for _,actor in ipairs(level.enemies or {}) do
         local current=actor.zoneIndex==nil or level.zoneIndex==nil or actor.zoneIndex==level.zoneIndex
         local ordinary=actor.boss~=true and actor.template~='Boss' and actor.id~=-99 and actor.enemyId~=-99
-        if current and ordinary and actor.dead~=true and actor.alive~=false
+        if current and ordinary and actor.dragonMode~='Mounted' and actor.dead~=true and actor.alive~=false
             and actor.status~='Dead' and actor.status~='Eliminated' then count+=1 end
     end
     return count
@@ -6741,7 +7309,7 @@ return Feedback
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT38">
+        <Item class="ModuleScript" referent="BT40">
           <Properties>
             <string name="Name">GroupPanel</string>
             <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
@@ -6968,7 +7536,7 @@ return GroupPanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT39">
+        <Item class="ModuleScript" referent="BT41">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.

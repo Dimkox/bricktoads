@@ -6,6 +6,8 @@ local HttpService=game:GetService('HttpService')
 Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
+local worldType=require(gameplay.GameWorld)
+require(gameplay.DragonWorld)(worldType)
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
 local buildInfo=script.Parent:FindFirstChild('BuildInfo')
 local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
@@ -15,7 +17,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
-    SourceCombat=require(gameplay.SourceCombat),
+    SourceCombat=require(gameplay.SourceCombat),DragonFlight=require(gameplay.DragonFlight),
     RunJournal=require(gameplay.RunJournal),BuildId=buildId,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
@@ -28,7 +30,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
                 legacy:Destroy()
             end
         end
-        local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config,{
+        local world=worldType.new(require(runtime.RobloxWorld),config,{
             name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing}})
         world.folder:SetAttribute('GroupId',groupId)
         return world

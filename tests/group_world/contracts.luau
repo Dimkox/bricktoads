@@ -85,6 +85,7 @@ local enum=setmetatable({},{__index=function(self,key)
     local group=setmetatable({},{__index=function(_,value) return value end}); rawset(self,key,group); return group
 end})
 local env=setmetatable({workspace=workspace,game={GetService=function(_,name) return name=='Workspace' and workspace or lighting end},
+    OverlapParams={new=function() return {} end},
     Color3={fromRGB=function(...) return {...} end,new=function(...) return {...} end},Enum=enum,
     Instance={new=function(class) return node(class) end},Vector3={new=vector},
     CFrame={new=frame,Angles=function(x,y,z)
@@ -94,7 +95,14 @@ local env=setmetatable({workspace=workspace,game={GetService=function(_,name) re
 local function source(text)
     local loader=assert(loadstring(text)); setfenv(loader,env); return loader()
 end
+function workspace:GetPartBoundsInRadius() return {} end
+function workspace:Spherecast(origin,radius,direction,params)
+    local hit=self:Raycast(origin,direction,params)
+    if hit and hit.Position then hit.Distance=(hit.Position-origin).Magnitude end
+    return hit
+end
 local World,Camera=source(WorldSource),source(CameraSource)
+source(DragonWorldSource)(World)
 local Base={}
 function Base.new(config)
     local folder=node('Folder','CombatStandWorld',workspace)
@@ -781,3 +789,105 @@ eq(responseTarget.root.lastApplied,18,0,0,'A captured response survives removal 
 local bound=pcall(actualBase.impulse,responseWorld,1,2,{profile=18,horizontal=9,vertical=0},22)
 assert(not bound and applied==1,'A snapshot cannot be rebound to a different profile')
 print('PASS accepted response snapshots stay bound to their own profile without a live config table')
+
+-- Physical API contracts execute the real adapter; they do not integrate Roblox physics.
+assert(type(World.dragonMotion)=='function','Dragon flight needs a real world adapter')
+workspace.Gravity=196.2
+local flightWorld=World.new(Base,{FallY=-20,Enemy={speed=9},WalkSpeed=12,JumpPower=42},{name='DragonPhysical',offset={x=102,y=10,z=4096}})
+local deck=node('Part','DragonDeck',flightWorld.geometry);deck.CFrame=frame(106,9,4096);deck.Size=vector(40,2,30);deck.CanCollide=true;deck:SetAttribute('SurfaceId','dragon-deck')
+local dragon=actor(flightWorld,-1,vector(102,13,4096));dragon.root.AssemblyMass=12;dragon.root.CFrame.LookVector=vector(1,0,0)
+flightWorld.enemyKinds[-1]='Drone';dragon.model:SetAttribute('EnemyKind','Dragon')
+local rider=actor(flightWorld,1,vector(106,13,4096));rider.root.CFrame.LookVector=vector(-1,0,0)
+for _,p in ipairs(rider.model:GetDescendants()) do if p:IsA('BasePart') then p.CanCollide=p.Name=='Torso' end end
+assert(flightWorld:dragonGrounded(-1) and flightWorld:dragonFloor(-1)==3)
+assert(flightWorld:dragonMotion(-1,1,0,4.5,10))
+eq(dragon.root.AssemblyLinearVelocity,10,9,0,'Flight height is local to its group elevation')
+local force=flightWorld.dragonFlights[-1].force
+assert(math.abs(force.Force.Y-2354.4)<1e-6 and dragon.humanoid.PlatformStand)
+flightWorld:stopDragon(-1)
+assert(force.Parent==nil and not dragon.humanoid.PlatformStand and dragon.humanoid.EvaluateStateMachine==true)
+assert(flightWorld:dragonCanMount(1,-1,5,4))
+assert(flightWorld:dragonLink(-1,1,'Mounted'))
+assert(rider.root.Anchored and not rider.humanoid.EvaluateStateMachine and not rider.model.Torso.CanCollide)
+eq(rider.root.Position,102,16.2,4096,'Mounted hero must get group translation once')
+flightWorld:hold(1,false);assert(rider.root.Anchored,'Shield removal cannot unanchor a linked rider')
+flightWorld:setReaction(1,true);flightWorld:setReaction(1,false)
+flightWorld:dragonUnlink(1)
+assert(not rider.root.Anchored and rider.humanoid.EvaluateStateMachine and not rider.humanoid.PlatformStand
+    and rider.humanoid.WalkSpeed==12 and rider.model.Torso.CanCollide)
+print('PASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates')
+
+rider.root.CFrame=frame(106,13,4096)
+assert(flightWorld:dragonLink(-1,1,'Captured'))
+local predecessor=rider
+rider=actor(flightWorld,1,vector(120,13,4096))
+flightWorld:dragonUnlink(1,true)
+assert(not predecessor.root.Anchored and not rider.root.Anchored and rider.humanoid.PlatformStand==false)
+eq(rider.root.Position,120,13,4096,'Releasing the old body cannot teleport the replacement')
+local target=actor(flightWorld,2,vector(111,13,4096))
+local nearer=actor(flightWorld,-2,vector(109,13,4096))
+local found,blocked=flightWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{[-1]=true,[1]=true})
+assert(found[1]==-2 and found[2]==2 and not blocked,'Swept shots use deterministic nearest live actors from this group')
+local originalRay=workspace.Raycast
+function workspace:Raycast(origin,direction,params)
+    if direction.X>0 then return {Position=vector(110,13,4096),Instance=deck} end
+    return originalRay(self,origin,direction,params)
+end
+found,blocked=flightWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{[-1]=true,[1]=true})
+assert(blocked and #found==1 and found[1]==-2,'A wall must prevent hits on the actor behind it')
+workspace.Raycast=originalRay
+flightWorld:dragonFire(-5001,{x=3,y=4,z=0})
+eq(flightWorld.dragonFires[-5001].Position,105,14,4096)
+flightWorld:clearActors()
+assert(next(flightWorld.dragonFires)==nil and next(flightWorld.dragonLinks)==nil and next(flightWorld.dragonFlights)==nil)
+assert(default.folder.Parent==workspace and route.folder.Parent==workspace,'Flight cleanup stays inside its group')
+print('PASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped')
+
+local fireWorld=World.new(Base,{FallY=-20},{name='DragonFireVolume',offset={x=0,y=0,z=4608}})
+local sphereCalls=0
+function workspace:GetPartBoundsInRadius(origin,radius,params)
+    assert(radius==1 and params.RespectCanCollide==true and params.FilterDescendantsInstances[1]==fireWorld.geometry)
+    return self.fireOverlap and {fireWorld.floors[1]} or {}
+end
+function workspace:Spherecast(origin,radius,delta,params)
+    sphereCalls+=1;assert(radius==1 and delta.X==12 and params==fireWorld.ray)
+    return {Position=vector(9,3,4608),Distance=8,Instance=fireWorld.floors[1]}
+end
+actor(fireWorld,2,vector(9,3,4608))
+local ids,wall=fireWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{})
+assert(wall and #ids==0 and sphereCalls==1,'Fire needs a radius sweep and center-travel wall bound')
+workspace.fireOverlap=true
+ids,wall=fireWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{})
+assert(wall and #ids==0 and sphereCalls==1,'Initial wall overlap consumes fire before a sweep or damage')
+workspace.fireOverlap=nil
+print('PASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage')
+
+local artWorld=World.new(Base,{FallY=-20,WalkSpeed=12},{name='DragonArt'})
+assert(artWorld:spawnEnemy(-9,'Dragon',{x=0,y=3,z=0}))
+local art=artWorld.actors[-9]
+assert(art.wingMotors and #art.wingMotors==2,'Original Dragon wings need articulated motors')
+local wing=art.wingMotors[1]
+art.model:SetAttribute('DragonFlight',true)
+artWorld:updatePresentation({now=0,combat={}},.1,{[-9]={kind='Dragon'}})
+assert(wing.joint.C0.rotationZ~=wing.base.rotationZ,'Active flight needs a visible wing stroke')
+art.model:SetAttribute('DragonFlight',nil)
+artWorld:updatePresentation({now=1,combat={}},.1,{[-9]={kind='Dragon'}})
+assert(wing.joint.C0.rotationZ==wing.base.rotationZ,'Stopped flight must return its wing pose')
+print('PASS original wing motors move only for authoritative flight and return to rest')
+
+local entryWorld=World.new(Base,{FallY=-20},{name='DragonFireEntry'})
+local saveSphere,saveOverlap=workspace.Spherecast,workspace.GetPartBoundsInRadius
+function workspace:GetPartBoundsInRadius() return {} end
+function workspace:Spherecast() return nil end
+actor(entryWorld,-1,vector(2,3,2.9));actor(entryWorld,2,vector(3,3,0))
+local order=entryWorld:dragonFireTargets({x=0,y=3,z=0},{x=3.2,y=3,z=0},1,{})
+assert(order[1]==2 and order[2]==-1,'An initial actor overlap must precede a later grazing entry')
+local emitter=actor(entryWorld,-9,vector(0,3,0));emitter.root.CFrame.LookVector=vector(1,0,0)
+function workspace:Spherecast(origin,radius,direction,params)
+    assert(origin.X==0 and radius==1 and direction.X==2.8)
+    return {Position=vector(.9,3.25,0),Distance=0,Instance=entryWorld.floors[1]}
+end
+local muzzle,direction,obstructed=entryWorld:dragonMuzzle(-9)
+assert(muzzle and direction and obstructed,'A thin wall entirely before the muzzle must block the accepted shot')
+workspace.Spherecast,workspace.GetPartBoundsInRadius=saveSphere,saveOverlap
+print('PASS fire orders first contact and detects a thin wall before its projected muzzle')

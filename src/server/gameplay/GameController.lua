@@ -110,7 +110,7 @@ function Controller:_begin(player,players)
     for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
     self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners})
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs,self.deps.DragonFlight)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end

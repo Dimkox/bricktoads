@@ -18,7 +18,7 @@ local objectives={Approach='Разбейте дозор у старых воро
     Boss='Отбейте ударом три снаряда обратно в стража',Exit='Путь открыт — доберитесь до светящихся ворот',
     Won='Тракт пройден',Lost='Команда выбыла'}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs,DragonFlight)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,Combat=Combat,enemies={},projectiles={},byUserId={},ownerNames={},
         stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
@@ -28,6 +28,7 @@ function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,E
         self.flies=HealingFlies and HealingFlies.new(session,world,config)
         self.carry=EnemyCarry and EnemyCarry.new(self)
         self.clubs=WalkerClubs and WalkerClubs.new(self)
+        self.dragons=DragonFlight and config.DragonFlight and DragonFlight.new(self)
         self:_enterZone(1)
     else self:_wave('Approach',{{id=-1,x=-24,z=-6},{id=-2,x=-18,z=7}}) end
     return self
@@ -92,6 +93,8 @@ function Director:interaction(slot)
     end
     local fly=self.flies and self.flies:interaction(slot)
     if fly and fly.available then return fly end
+    local dragon=self.dragons and self.dragons:interaction(slot)
+    if dragon and (dragon.available or dragon.carrying) then return dragon end
     local club=self.clubs and self.clubs:interaction(slot)
     if club and club.available then return club end
     return carry or {available=false}
@@ -108,6 +111,10 @@ function Director:interact(slot,now,attack)
     if attack~='Punch' then return 'NO_INTERACTION' end
     if self.flies then
         local result=self.flies:interact(slot,now)
+        if result~='NO_INTERACTION' then return result end
+    end
+    if self.dragons then
+        local result=self.dragons:interact(slot,now,attack)
         if result~='NO_INTERACTION' then return result end
     end
     if self.clubs then
@@ -154,7 +161,7 @@ function Director:controlled(userId)
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id)}
+        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
 end
 function Director:available(userId)
     local offers={}
@@ -215,6 +222,10 @@ function Director:command(userId,payload,now,validator)
         return 'OK'
     end
     if e.reactionUntil then return 'REACTION' end
+    if self.dragons and e.kind=='Dragon' then
+        local code=self.dragons:enemyCommand(id,e,payload,now)
+        if code then return code end
+    end
     if payload.kind=='Move' then
         e.lastMove=now; self.world:move(id,payload.x,payload.z)
     elseif payload.kind=='Jump' then self.world:jump(id)
@@ -235,6 +246,7 @@ function Director:_strikeTarget(id,profile)
     end
 end
 function Director:_beginStrike(id,e,target)
+    if self.dragons and e.kind=='Dragon' and self.dragons:beginCapture(id,e,target) then return end
     local action=self.config.Enemy.attack
     local tuning=self.strikeProfile
     local sourceFamily=self.route and ((e.kind=='Pig' and self.config.Pig) or (e.kind=='Walker' and self.config.Walker))
@@ -304,6 +316,7 @@ function Director:_kill(id,cause)
     local e=self.enemies[id]
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
+    if self.dragons then self.dragons:forgetEnemy(id) end
     e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
     if e.rawLife~=nil then e.rawLife=0 end
@@ -364,6 +377,7 @@ function Director:hit(attacker,target,action,tuning)
         )
         e.heavyReaction=source and source.heavyReaction or nil
         e.reactionUntil=self.now+reaction
+        if self.dragons then self.dragons:hitEnemy(target,source and source.heavyReaction) end
         self.world:move(target,0,0); self.world:setReaction(target,true)
         local profile=source and source.profile or (family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18)))
         local responses=tuning and tuning.responses or self.config.Impulses
@@ -398,20 +412,22 @@ function Director:_nearest(position,standingEligibility)
     end
     return selected,best
 end
-function Director:_enemies()
+function Director:_enemies(dt)
     local living=0
     for id,e in pairs(self.enemies) do
         if not e.dead then
             local hazard=self.world:hazard(id)
             if hazard then self:_kill(id,hazard)
             else
-                living+=1
+                if not (self.dragons and self.dragons:isMounted(id)) then living+=1 end
                 local carried=self.carry and self.carry:blocksEnemy(id)
                 if carried then e.rushing=nil; e.strikeRecoveryUntil=nil end
                 if not carried and e.reactionUntil and self.now>=e.reactionUntil then
                     self:_finishReaction(id,e)
                 end
-                if not carried and not e.reactionUntil then
+                if self.dragons and e.kind=='Dragon' then
+                    self.dragons:enemyStep(id,e,dt)
+                elseif not carried and not e.reactionUntil then
                     if e.windup then
                         self.world:move(id,0,0)
                         if self.now>=e.windup.at then self:_resolveStrike(id,e) end
@@ -460,6 +476,7 @@ function Director:_enemies()
             end
         end
     end
+    if living>0 and self.route then self.world:progress(self.zoneIndex,false) end
     if living==0 then
         if self.route then
             self.world:progress(self.zoneIndex,true)
@@ -534,16 +551,27 @@ function Director:step(now,dt)
         if self.flies then self.flies:close() end
         if self.carry then self.carry:close() end
         if self.clubs then self.clubs:close() end
+        if self.dragons then self.dragons:close() end
         return
     end
     self.now=now
     if self.carry then self.carry:step(now) end
     if self.clubs then self.clubs:step(now) end
     if self.flies then self.flies:step(now) end
+    if self.dragons then self.dragons:step(now,dt) end
     if self.session.state.status=='Lost' then
-        self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); return
+        self.result='Lost'; self.stage='Lost'; self.world:stage('Lost'); if self.dragons then self.dragons:close() end; return
     end
-    if self.stage=='Approach' or self.stage=='Courtyard' or self.stage=='Route' then self:_enemies() end
+    if self.stage=='Approach' or self.stage=='Courtyard' or self.stage=='Route' then self:_enemies(dt) end
+    if self.dragons and self.stage~='Route' and self.stage~='Approach' and self.stage~='Courtyard' then
+        for id,e in pairs(self.enemies) do
+            if e.kind=='Dragon' and not e.dead then
+                local hazard=self.world:hazard(id)
+                if hazard then self:_kill(id,hazard)
+                else self:_finishReaction(id,e);self.dragons:enemyStep(id,e,dt) end
+            end
+        end
+    end
     if self.stage=='BossReady' then self:_boss() end
     if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
@@ -554,6 +582,7 @@ function Director:step(now,dt)
                 if self.flies then self.flies:close() end
                 if self.carry then self.carry:close() end
                 if self.clubs then self.clubs:close() end
+                if self.dragons then self.dragons:close() end
                 break
             end
         end
@@ -564,7 +593,7 @@ function Director:snapshot()
     for id,e in pairs(self.enemies) do
         enemies[#enemies+1]={id=id,hearts=e.health,maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
             dead=e.dead==true,attacking=e.windup~=nil,zoneIndex=e.zoneIndex,kind=e.kind,
-            carryState=self.carry and self.carry:stateFor(id)}
+            carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode}
     end
     table.sort(enemies,function(a,b) return a.id>b.id end)
     local zone=self.route and self.route.zones[self.zoneIndex]

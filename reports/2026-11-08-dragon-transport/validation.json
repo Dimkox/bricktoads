@@ -1,0 +1,343 @@
+{
+  "commands": [
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-01.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_boss_queue.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-02.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_connections.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-03.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_dragon_strikes.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-04.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_dragon_flight.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-05.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_enemy_carry.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-06.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_feedback.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-07.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_gameplay.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-08.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_groups.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-09.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_guardian.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-10.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_healing_flies.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-11.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_journal.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-12.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_level_route.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-13.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_pig_strikes.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-14.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_source_combat.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-15.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_stand.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-16.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_walker_clubs.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-17.log"
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_walker_strikes.luau"
+      ],
+      "exit_code": 0,
+      "log": "final-18.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tests/group_world/run.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0,
+      "log": "final-19.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_stand_gateway.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0,
+      "log": "final-20.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_bricktoads_place.py"
+      ],
+      "exit_code": 0,
+      "log": "final-21.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_build.py"
+      ],
+      "exit_code": 0,
+      "log": "final-22.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_combat_stand.py"
+      ],
+      "exit_code": 0,
+      "log": "final-23.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_lua54.py"
+      ],
+      "exit_code": 0,
+      "log": "final-24.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_walker_acceptance.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0,
+      "log": "final-25.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py"
+      ],
+      "exit_code": 0,
+      "log": "final-26.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py"
+      ],
+      "exit_code": 0,
+      "log": "final-27.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_test_place.py"
+      ],
+      "exit_code": 0,
+      "log": "final-28.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_walker_acceptance.py"
+      ],
+      "exit_code": 0,
+      "log": "final-29.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "final-30.log"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "final-31.log"
+    }
+  ],
+  "compiled": [
+    "src/client/BossQueuePanel.luau",
+    "src/client/BrickToadsClient.client.luau",
+    "src/client/CombatFeedback.luau",
+    "src/client/GroupPanel.luau",
+    "src/client/SpectatorCamera.luau",
+    "src/server/BrickToadsServer.server.luau",
+    "src/server/RunLifecycle.lua",
+    "src/server/gameplay/BossQueue.lua",
+    "src/server/gameplay/DragonFlight.lua",
+    "src/server/gameplay/DragonWorld.lua",
+    "src/server/gameplay/EnemyCarry.lua",
+    "src/server/gameplay/GameConfig.lua",
+    "src/server/gameplay/GameController.lua",
+    "src/server/gameplay/GameWorld.lua",
+    "src/server/gameplay/GuardianPattern.lua",
+    "src/server/gameplay/HealingFlies.lua",
+    "src/server/gameplay/LevelDefinition.lua",
+    "src/server/gameplay/LevelDirector.lua",
+    "src/server/gameplay/MatchHub.lua",
+    "src/server/gameplay/RunJournal.lua",
+    "src/server/gameplay/SourceCombat.lua",
+    "src/server/gameplay/WalkerClubs.lua",
+    "src/shared/BrickToadsConfig.luau",
+    "src/stand/client/Stand.client.lua",
+    "src/stand/server/Combat.lua",
+    "src/stand/server/Config.lua",
+    "src/stand/server/ConnectionRegistry.lua",
+    "src/stand/server/RobloxWorld.lua",
+    "src/stand/server/Session.lua",
+    "src/stand/server/Stand.server.lua",
+    "tests/CombatFeedback.spec.luau",
+    "tests/Lifecycle.spec.lua",
+    "tests/SpectatorCamera.spec.luau",
+    "tests/gameplay/BossQueue.spec.lua",
+    "tests/gameplay/DragonFlight.spec.lua",
+    "tests/gameplay/DragonStrikes.spec.lua",
+    "tests/gameplay/EnemyCarry.spec.lua",
+    "tests/gameplay/GameController.spec.lua",
+    "tests/gameplay/GuardianPattern.spec.lua",
+    "tests/gameplay/GuardianSession.spec.lua",
+    "tests/gameplay/HealingFlies.spec.lua",
+    "tests/gameplay/LevelDirector.spec.lua",
+    "tests/gameplay/LevelRoute.spec.lua",
+    "tests/gameplay/MatchHub.spec.lua",
+    "tests/gameplay/PigStrikes.spec.lua",
+    "tests/gameplay/RunJournal.spec.lua",
+    "tests/gameplay/SourceCombat.spec.lua",
+    "tests/gameplay/WalkerClubs.spec.lua",
+    "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau",
+    "tests/gameplay/WalkerStrikes.spec.lua",
+    "tests/group_world/contracts.luau",
+    "tests/run.luau",
+    "tests/run_boss_queue.luau",
+    "tests/run_connections.luau",
+    "tests/run_dragon_flight.luau",
+    "tests/run_dragon_strikes.luau",
+    "tests/run_enemy_carry.luau",
+    "tests/run_feedback.luau",
+    "tests/run_gameplay.luau",
+    "tests/run_groups.luau",
+    "tests/run_guardian.luau",
+    "tests/run_healing_flies.luau",
+    "tests/run_journal.luau",
+    "tests/run_level_route.luau",
+    "tests/run_pig_strikes.luau",
+    "tests/run_source_combat.luau",
+    "tests/run_stand.luau",
+    "tests/run_walker_clubs.luau",
+    "tests/run_walker_strikes.luau",
+    "tests/stand/Combat.spec.lua",
+    "tests/stand/CombatStandSecurityScenarios.lua",
+    "tests/stand/CombatStandStudioAcceptance.server.lua",
+    "tests/stand/CombatStandStudioClient.client.lua",
+    "tests/stand/ConnectionRegistry.spec.lua",
+    "tests/stand/FakeWorld.lua",
+    "tests/stand/Session.spec.lua",
+    "tests/stand/StandGateway.spec.lua",
+    "tests/stand/StandGatewayFixture.lua",
+    "tests/stand/StudioReconnectTransportProbe.server.lua",
+    "tests/stand/observe_actual_reconnect.luau"
+  ],
+  "compile_failures": []
+}

@@ -22,6 +22,8 @@ prefix = "\n".join(
     f"local {name} = [====[{(ROOT / path).read_text(encoding='utf-8')}]====]"
     for name, path in SCRIPTS
 )
+adapter = ROOT / 'src/server/gameplay/DragonWorld.lua'
+prefix += '\nlocal DragonWorldSource = [====[' + adapter.read_text(encoding='utf-8') + ']====]'
 with tempfile.TemporaryDirectory(prefix="bricktoads-world-") as directory:
     runner = Path(directory) / "world_contracts.luau"
     runner.write_text(prefix + "\n" + (Path(__file__).with_name("contracts.luau")).read_text(encoding="utf-8"), encoding="utf-8")

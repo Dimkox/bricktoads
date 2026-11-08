@@ -70,5 +70,13 @@ return function(Journal,Session,Core,Combat,Config,FakeWorld)
             and spawn.status=='Alive' and spawn.connected==true)
         assert(death and death.actorId==actor and death.data.observed.actor==actor)
     end)
+    test('Dragon confirmations project bounded public feedback without private owner data',function()
+        local j=journal()
+        for i,kind in ipairs({'DragonMounted','DragonCaptured','DragonReleased','DragonFireHit'}) do
+            assert(j:record(row(kind,i,{enemyId=-9,ownerUserId=123456})))
+        end
+        local f=j:feedback();assert(#f.events==4 and f.events[1].kind=='DragonMounted')
+        assert(f.events[1].ownerUserId==nil and f.events[1].enemyId==nil)
+    end)
     print('RunJournal: '..passed..' PASS')
 end

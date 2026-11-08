@@ -26,7 +26,12 @@ return function(base,level)
         npcDamage={WalkerLight=1,WalkerHeavy=2},npcProfile={WalkerLight=0,WalkerHeavy=2}}
     -- Ordinary Dragon animation32 has base4/hero22, never the hero Dash finisher.
     config.Attacks.DragonHeadbutt={windup=.35,cooldown=1.25,reaction=.75,reach=6,width=3,height=4,recoveryPose=.25}
-    config.Dragon={npcDamage={DragonHeadbutt=2},npcProfile={DragonHeadbutt=4}}
+    config.Dragon={npcDamage={DragonHeadbutt=2,DragonFire=2},npcProfile={DragonHeadbutt=4,DragonFire=4}}
+    config.Attacks.DragonFire={cooldown=.45,reaction=.75}
+    config.DragonFlight={speed=10,altitude=1.5,liftSeconds=.4,liftHeight=4,turnSeconds=.3,
+        disabledSeconds=6,mountRange=5,mountHeight=4,attackRange=5,
+        captureWindup=.25,captureWindow=.3,captureSeconds=1.25,captureHeight=3,
+        captureGeometry={reach=6,width=3,height=4},fireLife=2,fireSpeed=32,fireRadius=1}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}

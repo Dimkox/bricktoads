@@ -1,7 +1,8 @@
 -- Confirmed presentation only. This module never sends input or changes actors.
 local Feedback={}
 Feedback.__index=Feedback
-local messages={AttackMiss='ПРОМАХ',EnemyAttackMiss='ПРОМАХ',EnemyDeath='ПРОТИВНИК ПОВЕРЖЕН',
+local messages={DragonMounted='ВЕРХОМ НА ДРАКОНЕ',DragonCaptured='ВАС СХВАТИЛИ',
+    DragonReleased='СНОВА НА НОГАХ',DragonFireHit='ПОПАДАНИЕ ОГНЁМ',AttackMiss='ПРОМАХ',EnemyAttackMiss='ПРОМАХ',EnemyDeath='ПРОТИВНИК ПОВЕРЖЕН',
     EnemyClaimed='РОЛЬ ПОЛУЧЕНА',FlyCaught='ЗДОРОВЬЕ ВОССТАНОВЛЕНО',ClubEquipped='ДУБИНА В РУКАХ',
     ClubDropped='ДУБИНА ВЫПАЛА',ClubSwingHit='УДАР ДУБИНОЙ',EnemyGrabbed='ПРОТИВНИК СХВАЧЕН',
     EnemyThrown='ПРОТИВНИК БРОШЕН',EnemyDropped='ПРОТИВНИК ОСВОБОЖДЁН',RelocateToSafety='БЕЗОПАСНАЯ ОПОРА',
@@ -76,6 +77,7 @@ function Feedback.hint(data)
     if type(data.interaction)=='table' and data.interaction.available and type(data.interaction.label)=='string' then
         return data.interaction.label..' — кнопка действия'
     end
+    if type(data.interaction)=='table' and data.interaction.carrying and type(data.interaction.label)=='string' then return data.interaction.label end
     if data.mine then return 'УДАР: атака или действие рядом' end
     if data.enemyRole then return 'УДАР: остановите героев' end
     return 'Выберите роль или наблюдайте'
@@ -94,7 +96,7 @@ function Feedback.remainingEnemies(level)
     for _,actor in ipairs(level.enemies or {}) do
         local current=actor.zoneIndex==nil or level.zoneIndex==nil or actor.zoneIndex==level.zoneIndex
         local ordinary=actor.boss~=true and actor.template~='Boss' and actor.id~=-99 and actor.enemyId~=-99
-        if current and ordinary and actor.dead~=true and actor.alive~=false
+        if current and ordinary and actor.dragonMode~='Mounted' and actor.dead~=true and actor.alive~=false
             and actor.status~='Dead' and actor.status~='Eliminated' then count+=1 end
     end
     return count

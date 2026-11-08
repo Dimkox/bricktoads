@@ -168,7 +168,11 @@ local function drone(actor, kind)
         cosmetic(m, m.Head, "WalkerCrest", Vector3.new(0.5, 1.5, 1.2), CFrame.new(0, 0.9, 0), COLORS.pale)
     elseif kind == "Dragon" then
         for _,side in ipairs({-1, 1}) do
-            cosmetic(m, m.Torso, "DragonWing", Vector3.new(3.2, 0.28, 2.1), CFrame.new(side * 2.3, 0.45, 0.45) * CFrame.Angles(0, 0, side * 0.3), COLORS.moss)
+            local offset=CFrame.new(side*2.3,.45,.45)*CFrame.Angles(0,0,side*.3)
+            local wing=cosmetic(m,m.Torso,'DragonWing',Vector3.new(3.2,.28,2.1),offset,COLORS.moss)
+            for _,joint in ipairs(wing:GetChildren()) do if joint:IsA('WeldConstraint') then joint:Destroy() end end
+            local motor=Instance.new('Motor6D');motor.Name='DragonWingMotor';motor.Part0=m.Torso;motor.Part1=wing;motor.C0=offset;motor.Parent=wing
+            actor.wingMotors=actor.wingMotors or {};actor.wingMotors[#actor.wingMotors+1]={joint=motor,base=offset,side=side}
             cosmetic(m, m.Head, "DragonHorn", Vector3.new(0.3, 1.4, 0.4), CFrame.new(side * 0.6, 0.9, 0.3) * CFrame.Angles(0.2, 0, -side * 0.2), COLORS.amber)
         end
         cosmetic(m, m.Torso, "DragonTail", Vector3.new(0.7, 0.65, 3.2), CFrame.new(0, -0.7, 2), COLORS.moss, Enum.PartType.Ball)
@@ -1269,10 +1273,19 @@ function World:updatePresentation(session, dt, enemies)
                     end
                 end
             end
+            if actor.wingMotors then
+                local e=enemies and enemies[id]
+                local flying=actor.model:GetAttribute('DragonFlight') and actor.humanoid.Health>0 and not (e and e.reactionUntil)
+                for _,wing in ipairs(actor.wingMotors) do
+                    local stroke=flying and math.sin(self.presentationTime*10)*.45*wing.side or 0
+                    wing.joint.C0=wing.joint.C0:Lerp(wing.base*CFrame.Angles(0,0,stroke),blend)
+                end
+            end
             local combat = session and session.combat and session.combat[id]
             local enemy = enemies and enemies[id]
             local reacting = (combat and combat.reactionEnd ~= nil) or (enemy and enemy.reactionUntil ~= nil)
             local carryingEnemy = actor.model:GetAttribute('CarryingEnemy') ~= nil
+            local dragonLink=actor.model:GetAttribute('DragonLink')
             local beingCarried = self.enemyCarries[id] and self.enemyCarries[id].mode == 'Carried'
             local club=self.equippedClubs[actor.model:GetAttribute('EquippedClub')]
             if club and club.owner~=actor then club=nil end
@@ -1324,6 +1337,10 @@ function World:updatePresentation(session, dt, enemies)
                     angle=primaryPose and primaryPose.neck or 0
                 elseif shoulder and carryingEnemy then
                     angle, roll = 2.65, left and -.2 or .2
+                elseif dragonLink=='Mounted' then
+                    angle=shoulder and .55 or 1.2;roll=left and -.2 or .2
+                elseif dragonLink=='Captured' then
+                    angle=shoulder and 2.5 or .35;roll=left and -.2 or .2
                 elseif beingCarried then
                     angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
                 elseif shoulder and reacting then

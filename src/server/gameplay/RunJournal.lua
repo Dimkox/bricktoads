@@ -4,6 +4,7 @@ Journal.__index=Journal
 local public={Hit=true,EnemyHit=true,AttackMiss=true,EnemyAttackMiss=true,CommitSpawn=true,
     RelocateToSafety=true,EnemyDeath=true,EnemyClaimed=true,FlyCaught=true,ClubEquipped=true,
     ClubDropped=true,ClubSwingHit=true,EnemyGrabbed=true,EnemyThrown=true,EnemyDropped=true,
+    DragonMounted=true,DragonCaptured=true,DragonReleased=true,DragonFireHit=true,
     RunResult=true,GuardianBallPickedUp=true,GuardianBallThrown=true,BossHit=true,BossShielded=true,BossWarning=true}
 local function finite(v) return type(v)=='number' and v==v and v>-math.huge and v<math.huge end
 local function text(v)

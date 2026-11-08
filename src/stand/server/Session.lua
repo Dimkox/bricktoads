@@ -162,6 +162,10 @@ function Session:intent(uid, p, now)
     b.tokens=b.tokens-1
     local c=self.combat[uid]
     if self.sourceCombat then self:_finishReaction(uid) end
+    if self.contextualIntent then
+        local result=self.contextualIntent(uid,p,now)
+        if result~='NO_INTERACTION' then return result end
+    end
     if c.reactionEnd or c.deathAt then return "REACTION" end
     if p.kind=="Move" then
         self.lastMove[uid]=now
@@ -211,6 +215,7 @@ function Session:_hit(attacker, target, action, tuning)
         c.rawLife=result.rawLife
     end
     if result.impulse then
+        if self.beforeHitImpulse then self.beforeHitImpulse(target) end
         -- Pending contextual actions must still see an interrupt after recovery
         -- has cleared reactionEnd during a later (possibly long) server step.
         c.reactionEpoch=(c.reactionEpoch or 0)+1
