@@ -20,6 +20,10 @@ return function(base,level)
     config.Pig={rushAfterZone=3,rushSpeed=16,alignment=2,decisionInterval=.1,
         rushRoll=32,npcDamage={PigJab=1,PigHeavy=2,PigRush=2},
         npcProfile={PigJab=0,PigHeavy=2,PigRush=4}}
+    config.Attacks.WalkerLight={windup=.40,cooldown=1.0,reaction=28/60,reach=7.5,width=3.25,height=4,recoveryPose=.20}
+    config.Attacks.WalkerHeavy={windup=.65,cooldown=1.6,reaction=.75,reach=7.5,width=3.25,height=4,recoveryPose=.35}
+    config.Walker={range=6.5,minRange=2.5,retreatSpeed=7,
+        npcDamage={WalkerLight=1,WalkerHeavy=2},npcProfile={WalkerLight=0,WalkerHeavy=2}}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}

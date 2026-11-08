@@ -1,0 +1,5666 @@
+{
+  "date": "2026-11-08",
+  "scope": "Prepared finite two-client Walker acceptance: one hero, one human Walker. Actual primary input, walk-away miss, fly-healed heavy choice, NPC long-range light, safe NPC retreat, combat death and one club pickup. No direct health/reserve assignments. Not full unprepared progression, natural population, physical-device or reconnect proof.",
+  "source": "feos-tas/DisAssemble@f1a43b69577246850d136473700a333b3cdfe93f",
+  "production": {
+    "verifiedSources": 23,
+    "playableBytes": 342918,
+    "sha256": "275b4fab2758a107f0e1769f9c66f5859c78a99ffc56c6532ee4be70796a89bf",
+    "starterSha256": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353"
+  },
+  "preparation": "Fixed actions reposition original actors and pause/anchor other NPCs. QA selects zones2/3 to make original Walker-6, Pig-7/8 and flies available while earlier actors persist; this is not natural progression/population. Human Walker remains same original-3, owner,3HP and one life throughout. One existing Session PigRush prepares hero47→31; actual F catches a fly31→39, actual NPC jab39→35 and real human F selects WalkerHeavy. NPC range and combat-death targets are anchored to isolate those checks; hero remains unanchored with ordinary impulses. Retreat/edge target is unanchored. No rawLife/HP/respawn assignment occurs.",
+  "checkpoints": {
+    "claimedHumanRole": {
+      "view": "Playing",
+      "role": {
+        "connected": true,
+        "enemyId": -3,
+        "attempt": 1,
+        "connectionEpoch": 1,
+        "hearts": 3,
+        "maxHearts": 3,
+        "status": "Alive",
+        "template": "Sentry",
+        "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+        "name": "Длинноногий дозорный"
+      }
+    },
+    "beforeHumanLight": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": -65,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-3": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -58,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -20,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -30,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Расчистите ворота и доберитесь до акведука",
+        "zoneName": "Затопленные ворота",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 1,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 0,
+          "total": 6,
+          "active": 0
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134265.864835,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 5,
+            "status": "Alive",
+            "rawLife": 47,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "actualHumanLight": {
+      "actors": {
+        "1": {
+          "state": "PlatformStanding",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 0.9989808201789856,
+            "x": -66.27425384521484,
+            "z": -0.0005425232811830938
+          },
+          "speed": 0,
+          "velocity": "0.0001395395229337737, -0.00032949948217719793, -0.000017457219655625522",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-3": {
+          "state": "FallingDown",
+          "velocity": "1.450818657875061, -0.18613506853580475, -0.22098830342292786",
+          "health": 3,
+          "position": {
+            "y": 2.9882006645202637,
+            "x": -58.46548080444336,
+            "z": -0.03652063384652138
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -20,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -30,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Расчистите ворота и доберитесь до акведука",
+        "zoneName": "Затопленные ворота",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 1,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 0,
+          "total": 6,
+          "active": 0
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "carrying": false
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134266.665073,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 4.574468085106383,
+            "status": "Alive",
+            "rawLife": 43,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "beforeWhiff": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": -65,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -58,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -20,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -30,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Расчистите ворота и доберитесь до акведука",
+        "zoneName": "Затопленные ворота",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 1,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 0,
+          "total": 6,
+          "active": 0
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134286.047037,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 5,
+            "status": "Alive",
+            "rawLife": 47,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "actualKeyboardWalkAwayMiss": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": -75.63579559326172,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "-6.394380467830696e-15, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3.0000457763671875,
+            "x": -57.999908447265625,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -20,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": -30,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Расчистите ворота и доберитесь до акведука",
+        "zoneName": "Затопленные ворота",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 1,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 0,
+          "total": 6,
+          "active": 0
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134287.166857,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 5,
+            "status": "Alive",
+            "rawLife": 47,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "existingHitPreparesFly": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 174.5,
+            "z": -5
+          },
+          "speed": 0,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 0,
+          "total": 6,
+          "active": 2
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "carrying": false
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134287.265095,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "actualFlyF": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 174.5,
+            "z": -5
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134288.931845,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 4.148936170212766,
+            "status": "Alive",
+            "rawLife": 39,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "heavyBefore": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 171.5,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 182.5,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134297.680539,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 4.148936170212766,
+            "status": "Alive",
+            "rawLife": 39,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "actualHumanHeavy": {
+      "actors": {
+        "1": {
+          "state": "PlatformStanding",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 1.2909907102584839,
+            "x": 179.8084716796875,
+            "z": 0.00209404737688601
+          },
+          "speed": 0,
+          "velocity": "-0.011240558698773384, 3.4194631576538086, -0.00018522885511629283",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3.0000457763671875,
+            "x": 171.4987030029297,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 182.5,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "carrying": false
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134299.482268,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "npcRangeBefore": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 184.39999389648438,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134318.130598,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "npcRangeEffect": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 2.999999523162842,
+            "x": 176.72569274902344,
+            "z": -0.00003145277878502384
+          },
+          "speed": 16,
+          "velocity": "-5.9276032970956294e-08, 0.000022426109353546053, 3.575211682260715e-09",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 184.39999389648438,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134319.763711,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "retreatBefore": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 179.5,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134319.845397,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "earlyRetreat": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": -6.872649151168364e-13
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 2.9961395263671875,
+            "x": 179.4988250732422,
+            "z": 0
+          },
+          "speed": 7,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "1, 0, 4.585358243276716e-13"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134320.164639,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "afterEarlyRetreat": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": -6.872649151168364e-13
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 2.9961395263671875,
+            "x": 179.4988250732422,
+            "z": 0
+          },
+          "speed": 7,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "1, 0, 4.585358243276716e-13"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134321.047872,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "settledRetreat": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": -6.872649151168364e-13
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3.0000457763671875,
+            "x": 182.43637084960938,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134340.097062,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "secondRetreatBefore": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 179.5,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134360.978469,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "secondRetreat": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "2.030332568736526e-10, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 180.63729858398438,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134361.262538,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "edgeBefore": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 180,
+            "z": 24.5
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 180,
+            "z": 26
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134340.178797,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "edgeStopped": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 180,
+            "z": 24.5
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 180,
+            "z": 26
+          },
+          "speed": 7,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134341.24686,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "beforeCombatDefeat": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 183.5,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134361.362532,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "actualRLeaves1HP": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 1,
+          "position": {
+            "y": 3,
+            "x": 183.5,
+            "z": 0
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": [],
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 1,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134362.796244,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "actualFKills": {
+      "actors": {
+        "1": {
+          "state": "Running",
+          "move": "0, 0, 0",
+          "position": {
+            "y": 3,
+            "x": 178,
+            "z": 0
+          },
+          "speed": 16,
+          "velocity": "0, 0, 0",
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "anchored": false
+        },
+        "-8": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+          "move": "0, 0, 0"
+        },
+        "-3": {
+          "state": "Running",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 220,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+          "move": "0, 0, 0"
+        },
+        "-2": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+          "move": "0, 0, 0"
+        },
+        "-1": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+          "move": "0, 0, 0"
+        },
+        "-4": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": 20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+          "move": "0, 0, 0"
+        },
+        "-5": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 223,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+          "move": "0, 0, 0"
+        },
+        "-6": {
+          "state": "Dead",
+          "velocity": "0.000028499303880380467, -0.0001324415352428332, -0.00003673366882139817",
+          "health": 0,
+          "position": {
+            "y": 2.9965412616729736,
+            "x": 183.49996948242188,
+            "z": -0.000031262006814358756
+          },
+          "speed": 9,
+          "anchored": false,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+          "move": "0, 0, 0"
+        },
+        "-7": {
+          "state": "FallingDown",
+          "velocity": "0, 0, 0",
+          "health": 3,
+          "position": {
+            "y": 3,
+            "x": 226,
+            "z": -20
+          },
+          "speed": 9,
+          "anchored": true,
+          "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+          "move": "0, 0, 0"
+        }
+      },
+      "clubs": {
+        "walker-club:d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6": {
+          "state": "Ground",
+          "position": {
+            "y": 1.2000000476837158,
+            "x": 183.5,
+            "z": 0
+          }
+        }
+      },
+      "level": {
+        "objective": "Освободите двор перед обрывом",
+        "zoneName": "Каменный двор",
+        "enemies": {
+          "1": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -1,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "2": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -2,
+            "kind": "Pig",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "3": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -3,
+            "kind": "Walker",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          "4": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -4,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "5": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -5,
+            "kind": "Pig",
+            "zoneIndex": 2,
+            "dead": false
+          },
+          "6": {
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "id": -6,
+            "kind": "Walker",
+            "zoneIndex": 2,
+            "dead": true
+          },
+          "7": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -7,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          },
+          "8": {
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "id": -8,
+            "kind": "Pig",
+            "zoneIndex": 3,
+            "dead": false
+          }
+        },
+        "bossHits": 0,
+        "bossMax": 3,
+        "zoneIndex": 3,
+        "bossMechanic": "PickupThrow",
+        "zoneCount": 6,
+        "stage": "Route",
+        "healingFlies": {
+          "consumed": 1,
+          "total": 6,
+          "active": 1
+        }
+      },
+      "heroInteraction": {
+        "available": false,
+        "kind": "EnemyCarry",
+        "carrying": false,
+        "label": "СХВАТИТЬ"
+      },
+      "session": {
+        "levelEpoch": 1,
+        "now": 1794134363.414767,
+        "status": "Active",
+        "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+        "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+        "heroes": {
+          "1": {
+            "view": "Playing",
+            "connected": true,
+            "slot": 1,
+            "attempt": 1,
+            "connectionEpoch": 1,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "hearts": 3.297872340425532,
+            "status": "Alive",
+            "rawLife": 31,
+            "respawns": 3,
+            "dying": false
+          }
+        }
+      }
+    },
+    "actualPickupButton": {
+      "interaction": {
+        "carrying": false,
+        "available": true,
+        "kind": "WalkerClub",
+        "equipped": false,
+        "label": "ВЗЯТЬ ДУБИНУ"
+      },
+      "heroes": {
+        "1": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "slot": 1,
+          "attempt": 1,
+          "userId": -1,
+          "displayName": "Player1",
+          "username": "Player1",
+          "connectionEpoch": 1,
+          "hearts": 3.297872340425532,
+          "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+          "status": "Alive",
+          "rawLife": 31,
+          "respawns": 3,
+          "dying": false
+        }
+      }
+    },
+    "final": {
+      "version": "0.746.0.7461269",
+      "universeId": 10775039796,
+      "evidence": {
+        "actors": {
+          "1": {
+            "state": "Running",
+            "move": "0, 0, 0",
+            "position": {
+              "y": 3.0000457763671875,
+              "x": 180.13165283203125,
+              "z": 0
+            },
+            "speed": 16,
+            "velocity": "0, 0, 0",
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "anchored": false
+          },
+          "-8": {
+            "state": "FallingDown",
+            "velocity": "0, 0, 0",
+            "health": 3,
+            "position": {
+              "y": 3,
+              "x": 223,
+              "z": 20
+            },
+            "speed": 9,
+            "anchored": true,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-8",
+            "move": "0, 0, 0"
+          },
+          "-3": {
+            "state": "Running",
+            "velocity": "0, 0, 0",
+            "health": 3,
+            "position": {
+              "y": 3,
+              "x": 220,
+              "z": -20
+            },
+            "speed": 9,
+            "anchored": true,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+            "move": "0, 0, 0"
+          },
+          "-2": {
+            "state": "FallingDown",
+            "velocity": "0, 0, 0",
+            "health": 3,
+            "position": {
+              "y": 3,
+              "x": 223,
+              "z": 20
+            },
+            "speed": 9,
+            "anchored": true,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-2",
+            "move": "0, 0, 0"
+          },
+          "-1": {
+            "state": "FallingDown",
+            "velocity": "0, 0, 0",
+            "health": 3,
+            "position": {
+              "y": 3,
+              "x": 226,
+              "z": -20
+            },
+            "speed": 9,
+            "anchored": true,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-1",
+            "move": "0, 0, 0"
+          },
+          "-4": {
+            "state": "FallingDown",
+            "velocity": "0, 0, 0",
+            "health": 3,
+            "position": {
+              "y": 3,
+              "x": 226,
+              "z": 20
+            },
+            "speed": 9,
+            "anchored": true,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-4",
+            "move": "0, 0, 0"
+          },
+          "-5": {
+            "state": "FallingDown",
+            "velocity": "0, 0, 0",
+            "health": 3,
+            "position": {
+              "y": 3,
+              "x": 223,
+              "z": -20
+            },
+            "speed": 9,
+            "anchored": true,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-5",
+            "move": "0, 0, 0"
+          },
+          "-6": {
+            "state": "Dead",
+            "velocity": "0, 0, 0",
+            "health": 0,
+            "position": {
+              "y": 2.9922332763671875,
+              "x": 183.49888610839844,
+              "z": 0
+            },
+            "speed": 9,
+            "anchored": false,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6",
+            "move": "0, 0, 0"
+          },
+          "-7": {
+            "state": "FallingDown",
+            "velocity": "0, 0, 0",
+            "health": 3,
+            "position": {
+              "y": 3,
+              "x": 226,
+              "z": -20
+            },
+            "speed": 9,
+            "anchored": true,
+            "identity": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-7",
+            "move": "0, 0, 0"
+          }
+        },
+        "events": {
+          "1": {
+            "revision": 3,
+            "rawLife": 43,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "now": 1794134266.365737,
+            "kind": "Hit",
+            "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+            "data": {
+              "after": 43,
+              "attacker": -3,
+              "before": 47,
+              "observed": {
+                "velocity": {
+                  "1": 0,
+                  "2": 0,
+                  "3": 0
+                },
+                "held": false,
+                "position": {
+                  "1": -65,
+                  "2": 3,
+                  "3": 0
+                }
+              },
+              "blocked": false,
+              "action": "WalkerLight",
+              "impulse": true,
+              "profile": 18,
+              "dying": false
+            }
+          },
+          "2": {
+            "revision": 5,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "now": 1794134287.265095,
+            "kind": "Hit",
+            "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+            "data": {
+              "after": 31,
+              "attacker": -7,
+              "before": 47,
+              "observed": {
+                "velocity": {
+                  "1": 0,
+                  "2": 0,
+                  "3": 0
+                },
+                "held": false,
+                "position": {
+                  "1": 174.5,
+                  "2": 3,
+                  "3": -5
+                }
+              },
+              "blocked": false,
+              "action": "PigRush",
+              "impulse": true,
+              "profile": 22,
+              "dying": false
+            }
+          },
+          "3": {
+            "revision": 8,
+            "rawLife": 35,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "now": 1794134298.213254,
+            "kind": "Hit",
+            "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+            "data": {
+              "after": 35,
+              "attacker": -7,
+              "before": 39,
+              "observed": {
+                "velocity": {
+                  "1": 0,
+                  "2": 0,
+                  "3": 0
+                },
+                "held": false,
+                "position": {
+                  "1": 178,
+                  "2": 3,
+                  "3": 0
+                }
+              },
+              "blocked": false,
+              "action": "PigJab",
+              "impulse": true,
+              "profile": 18,
+              "dying": false
+            }
+          },
+          "4": {
+            "revision": 10,
+            "rawLife": 31,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "now": 1794134299.114929,
+            "kind": "Hit",
+            "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+            "data": {
+              "after": 31,
+              "attacker": -3,
+              "before": 39,
+              "observed": {
+                "velocity": {
+                  "1": -5.918030865359469e-8,
+                  "2": 0.000009234461685991846,
+                  "3": 3.6288581028998124e-9
+                },
+                "held": false,
+                "position": {
+                  "1": 176.72569274902344,
+                  "2": 2.999999761581421,
+                  "3": -0.000031273317290470004
+                }
+              },
+              "blocked": false,
+              "action": "WalkerHeavy",
+              "impulse": true,
+              "profile": 20,
+              "dying": false
+            }
+          },
+          "5": {
+            "revision": 11,
+            "rawLife": 27,
+            "attempt": 1,
+            "userId": 1,
+            "respawns": 3,
+            "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+            "now": 1794134318.864534,
+            "kind": "Hit",
+            "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+            "data": {
+              "after": 27,
+              "attacker": -6,
+              "before": 31,
+              "observed": {
+                "velocity": {
+                  "1": 0,
+                  "2": 0,
+                  "3": 0
+                },
+                "held": false,
+                "position": {
+                  "1": 178,
+                  "2": 3,
+                  "3": 0
+                }
+              },
+              "blocked": false,
+              "action": "WalkerLight",
+              "impulse": true,
+              "profile": 18,
+              "dying": false
+            }
+          }
+        },
+        "clubs": {
+          "walker-club:d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-6": {
+            "state": "Equipped",
+            "slot": 1,
+            "position": {
+              "y": 1.2000000476837158,
+              "x": 183.5,
+              "z": 0
+            }
+          }
+        },
+        "level": {
+          "objective": "Освободите двор перед обрывом",
+          "zoneName": "Каменный двор",
+          "enemies": {
+            "1": {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -1,
+              "kind": "Pig",
+              "zoneIndex": 1,
+              "dead": false
+            },
+            "2": {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -2,
+              "kind": "Pig",
+              "zoneIndex": 1,
+              "dead": false
+            },
+            "3": {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -3,
+              "kind": "Walker",
+              "zoneIndex": 1,
+              "dead": false
+            },
+            "4": {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -4,
+              "kind": "Pig",
+              "zoneIndex": 2,
+              "dead": false
+            },
+            "5": {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -5,
+              "kind": "Pig",
+              "zoneIndex": 2,
+              "dead": false
+            },
+            "6": {
+              "attacking": false,
+              "hearts": 0,
+              "maxHearts": 3,
+              "id": -6,
+              "kind": "Walker",
+              "zoneIndex": 2,
+              "dead": true
+            },
+            "7": {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -7,
+              "kind": "Pig",
+              "zoneIndex": 3,
+              "dead": false
+            },
+            "8": {
+              "attacking": false,
+              "hearts": 3,
+              "maxHearts": 3,
+              "id": -8,
+              "kind": "Pig",
+              "zoneIndex": 3,
+              "dead": false
+            }
+          },
+          "bossHits": 0,
+          "bossMax": 3,
+          "zoneIndex": 3,
+          "bossMechanic": "PickupThrow",
+          "zoneCount": 6,
+          "stage": "Route",
+          "healingFlies": {
+            "consumed": 1,
+            "total": 6,
+            "active": 1
+          }
+        },
+        "heroInteraction": {
+          "available": true,
+          "carrying": false,
+          "kind": "WalkerClub",
+          "equipped": true,
+          "label": "УДАР ДУБИНОЙ"
+        },
+        "session": {
+          "levelEpoch": 1,
+          "now": 1794134393.593472,
+          "status": "Active",
+          "calibration": "ORIGINAL_3D_ROUTE_STATIC_ROSTER",
+          "runId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b",
+          "heroes": {
+            "1": {
+              "view": "Playing",
+              "connected": true,
+              "slot": 1,
+              "attempt": 1,
+              "connectionEpoch": 1,
+              "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+              "hearts": 3.297872340425532,
+              "status": "Alive",
+              "rawLife": 31,
+              "respawns": 3,
+              "dying": false
+            }
+          }
+        },
+        "phases": {
+          "1": {
+            "at": 1794134264.317129,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 5,
+                "status": "Alive",
+                "rawLife": 47,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": []
+            }
+          },
+          "2": {
+            "at": 1794134265.964997,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 5,
+                "status": "Alive",
+                "rawLife": 47,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "pending": "WalkerLight"
+              }
+            }
+          },
+          "3": {
+            "at": 1794134266.015502,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 5,
+                "status": "Alive",
+                "rawLife": 47,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "phase": "Windup",
+                "pending": "WalkerLight",
+                "action": "WalkerLight"
+              }
+            }
+          },
+          "4": {
+            "at": 1794134266.415345,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 4.574468085106383,
+                "status": "Alive",
+                "rawLife": 43,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "phase": "Recovery",
+                "action": "WalkerLight"
+              }
+            }
+          },
+          "5": {
+            "at": 1794134266.615477,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 4.574468085106383,
+                "status": "Alive",
+                "rawLife": 43,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": []
+            }
+          },
+          "6": {
+            "at": 1794134286.165422,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 5,
+                "status": "Alive",
+                "rawLife": 47,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "pending": "WalkerLight"
+              }
+            }
+          },
+          "7": {
+            "at": 1794134286.215304,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 5,
+                "status": "Alive",
+                "rawLife": 47,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "phase": "Windup",
+                "pending": "WalkerLight",
+                "action": "WalkerLight"
+              }
+            }
+          },
+          "8": {
+            "at": 1794134286.614387,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 5,
+                "status": "Alive",
+                "rawLife": 47,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "phase": "Recovery",
+                "action": "WalkerLight"
+              }
+            }
+          },
+          "9": {
+            "at": 1794134286.814373,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 5,
+                "status": "Alive",
+                "rawLife": 47,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": []
+            }
+          },
+          "10": {
+            "at": 1794134287.319991,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 3.297872340425532,
+                "status": "Alive",
+                "rawLife": 31,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": [],
+              "-6": []
+            }
+          },
+          "11": {
+            "at": 1794134298.464581,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 3.723404255319149,
+                "status": "Alive",
+                "rawLife": 35,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "pending": "WalkerHeavy"
+              },
+              "-6": []
+            }
+          },
+          "12": {
+            "at": 1794134298.513997,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 3.723404255319149,
+                "status": "Alive",
+                "rawLife": 35,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "phase": "Windup",
+                "pending": "WalkerHeavy",
+                "action": "WalkerHeavy"
+              },
+              "-6": []
+            }
+          },
+          "13": {
+            "at": 1794134299.166582,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 3.297872340425532,
+                "status": "Alive",
+                "rawLife": 31,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": {
+                "phase": "Recovery",
+                "action": "WalkerHeavy"
+              },
+              "-6": []
+            }
+          },
+          "14": {
+            "at": 1794134299.514353,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 3.297872340425532,
+                "status": "Alive",
+                "rawLife": 31,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": [],
+              "-6": []
+            }
+          },
+          "15": {
+            "at": 1794134318.480782,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 3.297872340425532,
+                "status": "Alive",
+                "rawLife": 31,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": [],
+              "-6": {
+                "phase": "Windup",
+                "pending": "WalkerLight",
+                "action": "WalkerLight"
+              }
+            }
+          },
+          "16": {
+            "at": 1794134318.879712,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 2.872340425531915,
+                "status": "Alive",
+                "rawLife": 27,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": [],
+              "-6": {
+                "phase": "Recovery",
+                "action": "WalkerLight"
+              }
+            }
+          },
+          "17": {
+            "at": 1794134319.130611,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 2.872340425531915,
+                "status": "Alive",
+                "rawLife": 27,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": [],
+              "-6": []
+            }
+          },
+          "18": {
+            "at": 1794134363.060682,
+            "heroes": {
+              "1": {
+                "view": "Playing",
+                "connected": true,
+                "slot": 1,
+                "attempt": 1,
+                "connectionEpoch": 1,
+                "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:actor:2",
+                "hearts": 3.297872340425532,
+                "status": "Alive",
+                "rawLife": 31,
+                "respawns": 3,
+                "dying": false
+              }
+            },
+            "actors": {
+              "-3": []
+            }
+          }
+        }
+      },
+      "placeId": 117412694427208
+    },
+    "finalHumanRole": {
+      "view": "Playing",
+      "role": {
+        "connected": true,
+        "enemyId": -3,
+        "attempt": 1,
+        "connectionEpoch": 1,
+        "hearts": 3,
+        "maxHearts": 3,
+        "status": "Alive",
+        "template": "Sentry",
+        "actorId": "d4782eb9-2b8b-4fe8-8d69-583fa0686a5b:enemy:1:-3",
+        "name": "Длинноногий дозорный"
+      }
+    }
+  },
+  "corrections": [
+    "Excluded preflight run9e744f78-46bb-44c1-ae71-964eeac4d7b7 clicked a third offer whose centre was outside the clipped scroll frame, so no human claim occurred. Unpausing that NPC later produced a hit; it is not evidence of human F. The valid fresh run scrolled CanvasPosition to30, explicitly confirmed owner-2, and then used real F.",
+    "An early retreat sample retained the FallingDown state caused by long QA anchoring. No physical retreat was claimed from that sample. After normal recovery the unanchored Walker moved179.5→182.436 away from hero178; a fresh Running-state repetition moved179.5→180.637 and stopped beyond the2.5 band. Its measured instantaneous velocity at inspection had already settled, so no measured7studs/s claim is made."
+  ],
+  "console": "[BrickToads] playable causeway ready",
+  "preparationHook": "\n-- Fixed temporary Studio acceptance only; not part of repository entry/build.\nlocal qa=Instance.new('BindableFunction');qa.Name='BrickToadsWalkerQA';qa.Parent=game.ServerStorage\nlocal data={events={},phases={}};local seen,lastPhase,lastSample=nil,'',0;local stopOn\nlocal function current()local c=controller.groups['group-1'].controller;return c,c.world,c.current,c.director end\nlocal function pose(w,id,x,z,dx,dz)\n local a=assert(w.actors[id]);local p=Vector3.new(x,3,z)+w.offset\n a.model:PivotTo(CFrame.lookAt(p,p+Vector3.new(dx or 1,0,dz or 0)));a.root.AssemblyLinearVelocity=Vector3.zero;a.root.AssemblyAngularVelocity=Vector3.zero\nend\nlocal function pause(w,d)\n for id,e in d.enemies do if not e.dead then\n  e.nextAttack=workspace:GetServerTimeNow()+3600;e.windup=nil;e.rushing=nil\n  local a=w.actors[id];if a then a.root.Anchored=true;w:move(id,0,0) end\n end end\nend\nlocal function inspect()\n local c,w,s,d=current();if not s then return {ready=false}end\n local actors,clubs={},{}\n for id,a in w.actors do if id>-1000 then\n  actors[tostring(id)]={position=w:position(id),velocity=tostring(a.root.AssemblyLinearVelocity),move=tostring(a.humanoid.MoveDirection),\n   speed=a.humanoid.WalkSpeed,state=a.humanoid:GetState().Name,identity=a.model:GetAttribute('ActorId'),health=a.model:GetAttribute('HealthRaw'),\n   action=a.model:GetAttribute('PrimaryAttack'),phase=a.model:GetAttribute('AttackPhase'),anchored=a.root.Anchored}\n end end\n for id,item in d.clubs.items do clubs[id]={state=item.state,slot=item.slot,position=item.position}end\n return {session=s:snapshot(),level=d:snapshot(),actors=actors,clubs=clubs,heroInteraction=d:interaction(1),events=data.events,phases=data.phases}\nend\nlocal function initial()\n local c,w,s,d=current();pause(w,d);pose(w,1,-65,0,1);pose(w,-3,-58,0,-1)\n pose(w,-1,-30,20,-1);pose(w,-2,-20,-20,-1)\nend\nRunService.Heartbeat:Connect(function()\n local c,w,s,d=current();if not s then return end\n if seen~=s then\n  seen=s;local old=s.logger\n  s.logger=function(row)\n   if old then old(row)end\n   if row.kind=='Hit' or row.kind=='ClubSpawned' or row.kind=='ClubPickedUp' then\n    table.insert(data.events,row)\n    if row.kind=='Hit' and stopOn and stopOn[row.data.action]then pause(w,d);stopOn=nil end\n   end\n  end\n  initial()\n end\n local now=workspace:GetServerTimeNow()\n if now-lastSample>.04 then\n  lastSample=now;local phases={}\n  for id,e in d.enemies do if e.kind=='Walker' and not e.dead then\n   local a=w.actors[id];phases[tostring(id)]={action=a.model:GetAttribute('PrimaryAttack'),phase=a.model:GetAttribute('AttackPhase'),pending=e.windup and e.windup.action}\n  end end\n  local encoded=HttpService:JSONEncode(phases)\n  if encoded~=lastPhase then lastPhase=encoded;table.insert(data.phases,{at=now,heroes=s:snapshot().heroes,actors=phases})end\n end\nend)\nqa.OnInvoke=function(action)\n local c,w,s,d=current();assert(s,'Start first')\n if action=='humanReady' then\n  assert(d.enemies[-3].ownerUserId,'Claim the actual Walker offer first')\n  w.actors[-3].root.Anchored=false;d.enemies[-3].nextAttack=workspace:GetServerTimeNow();stopOn={WalkerLight=true}\n elseif action=='whiff' then\n  pause(w,d);pose(w,1,-65,0,1);pose(w,-3,-58,0,-1)\n  w.actors[-3].root.Anchored=false;d.enemies[-3].nextAttack=workspace:GetServerTimeNow();stopOn=nil\n elseif action=='fly' then\n  pause(w,d);d:_enterZone(2);d:_enterZone(3);pause(w,d)\n  pose(w,1,174.5,-5,1)\n  for id,e in d.enemies do if not e.dead then pose(w,id,220+(id%3)*3,id%2==0 and 20 or -20,-1)end end\n  assert(s:_hit(-7,1,'PigRush'))\n  task.delay(.9,function()pose(w,1,174.5,-5,1)end)\n elseif action=='heavyWindow' then\n  assert(s.combat[1].rawLife==39,'Catch the real fly first')\n  pause(w,d);pose(w,1,178,0,1);pose(w,-7,182.5,0,-1);pose(w,-3,171.5,0,1)\n  w.actors[-3].root.Anchored=false;d.enemies[-3].nextAttack=workspace:GetServerTimeNow()\n  d.enemies[-7].nextAttack=workspace:GetServerTimeNow()+.2;stopOn={WalkerHeavy=true}\n elseif action=='npcLight' then\n  pause(w,d)\n  for id,e in d.enemies do if not e.dead then pose(w,id,220+(id%3)*3,id%2==0 and 20 or -20,-1)end end\n  pose(w,1,178,0,1);pose(w,-6,184.4,0,-1);d.enemies[-6].nextAttack=workspace:GetServerTimeNow()+.3;stopOn={WalkerLight=true}\n elseif action=='retreat' then\n  pause(w,d);pose(w,1,178,0,1);pose(w,-6,179.5,0,-1);w.actors[-6].root.Anchored=false;stopOn=nil\n elseif action=='edge' then\n  pause(w,d);pose(w,1,180,24.5,0,1);pose(w,-6,180,26,0,-1);w.actors[-6].root.Anchored=false;stopOn=nil\n elseif action=='defeat' then\n  pause(w,d);pose(w,1,178,0,1);pose(w,-6,183.5,0,-1);stopOn=nil\n elseif action=='inspect' then return inspect()\n else error('Unknown fixed action')end\n return inspect()\nend\n",
+  "limits": "Native contracts cover both shields, NPC friendly fire, takeover/offline, old windup interruption and duplicate/fall drop paths. These were not additional multiplayer engine scenarios. Engine NPC heavy was not separately run; actual human primary heavy and actual NPC light plus shared native selection are separate evidence. Physical target hop/precise source gait/retreat/cadence/health, natural full combat route, additional groups, physical phones/tablets and actual same-account reconnect remain open."
+}

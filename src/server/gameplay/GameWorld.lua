@@ -689,11 +689,13 @@ function World:aim(id,x,z)
     end
 end
 
-function World:enemyMove(id, targetId, speed)
+local function moveEnemySafely(self, id, targetId, speed, away)
     if self.enemyCarries[id] then return end
     local a, b = self.actors[id], self.actors[targetId]
-    if not a or not b or not a.root.Parent or not b.root.Parent or a.root.Anchored or a.humanoid.Health <= 0 then return end
+    if not a or not b or not a.root.Parent or not b.root.Parent or a.root.Anchored
+        or a.humanoid.PlatformStand or a.humanoid.Health <= 0 then return end
     local delta = b.root.Position - a.root.Position
+    if away then delta = -delta end
     local flat = Vector3.new(delta.X, 0, delta.Z)
     a.humanoid.WalkSpeed = speed or 8
     local direction = flat.Magnitude > 0.2 and flat.Unit or Vector3.new()
@@ -709,9 +711,17 @@ function World:enemyMove(id, targetId, speed)
             end
         end
     end
-    -- Stop voluntary pursuit at an unsafe edge. External impulses and gravity
+    -- Stop voluntary movement at an unsafe edge. External impulses and gravity
     -- remain untouched, so combat can still knock a mechanical enemy off.
     a.humanoid:Move(direction, false)
+end
+
+function World:enemyMove(id, targetId, speed)
+    moveEnemySafely(self,id,targetId,speed,false)
+end
+
+function World:enemyRetreat(id, targetId, speed)
+    moveEnemySafely(self,id,targetId,speed,true)
 end
 
 function World:enemyHealth(id, raw, maximum)
@@ -1191,6 +1201,18 @@ local pigPoses = {
     },
 }
 
+-- The Walker's mechanical legs distinguish a light kick from the heavy launch.
+local walkerPoses = {
+    WalkerLight = {
+        Windup = {left=.25,right=.55,leftRoll=-.2,rightRoll=.2,leftHip=.15,rightHip=-.9},
+        Recovery = {left=.5,right=.6,leftRoll=-.15,rightRoll=.15,leftHip=0,rightHip=1.1},
+    },
+    WalkerHeavy = {
+        Windup = {left=1.1,right=1.1,leftRoll=-.4,rightRoll=.4,leftHip=.8,rightHip=.8},
+        Recovery = {left=1.65,right=1.65,leftRoll=-.25,rightRoll=.25,leftHip=-.25,rightHip=-.25},
+    },
+}
+
 function World:updatePresentation(session, dt, enemies)
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
@@ -1230,17 +1252,18 @@ function World:updatePresentation(session, dt, enemies)
             local club=self.equippedClubs[actor.model:GetAttribute('EquippedClub')]
             if club and club.owner~=actor then club=nil end
             local pig = enemy and enemy.kind == 'Pig'
-            local pigAction,pigPhase
-            if pig then
+            local poses = pig and pigPoses or (enemy and enemy.kind=='Walker' and walkerPoses)
+            local primaryAction,primaryPhase
+            if poses then
                 actor.attackPoseUntil,actor.attackPoseAction = nil,nil
                 local dead = actor.humanoid.Health<=0 or enemy.dead or (combat and combat.deathAt~=nil)
                 if not dead and not reacting and not carryingEnemy and not beingCarried then
-                    if enemy.windup and pigPoses[enemy.windup.action] then
-                        pigAction,pigPhase = enemy.windup.action,'Windup'
-                    elseif pigPoses[enemy.lastStrikeAction] and type(enemy.strikeRecoveryUntil)=='number'
+                    if enemy.windup and poses[enemy.windup.action] then
+                        primaryAction,primaryPhase = enemy.windup.action,'Windup'
+                    elseif poses[enemy.lastStrikeAction] and type(enemy.strikeRecoveryUntil)=='number'
                         and session and type(session.now)=='number' and session.now<enemy.strikeRecoveryUntil then
-                        pigAction,pigPhase = enemy.lastStrikeAction,'Recovery'
-                    elseif enemy.rushing then pigAction,pigPhase = 'PigRush','Running' end
+                        primaryAction,primaryPhase = enemy.lastStrikeAction,'Recovery'
+                    elseif pig and enemy.rushing then primaryAction,primaryPhase = 'PigRush','Running' end
                 end
             else
                 local attack = (combat and combat.attack) or (enemy and enemy.windup)
@@ -1249,20 +1272,20 @@ function World:updatePresentation(session, dt, enemies)
                     actor.attackPoseAction = attack.action or 'Punch'
                 end
             end
-            if pig or actor.pigPresentationActive then
-                actor.model:SetAttribute('PrimaryAttack',pigAction)
-                actor.model:SetAttribute('AttackPhase',pigPhase)
-                actor.pigPresentationActive = pig == true
+            if poses or actor.primaryPresentationActive then
+                actor.model:SetAttribute('PrimaryAttack',primaryAction)
+                actor.model:SetAttribute('AttackPhase',primaryPhase)
+                actor.primaryPresentationActive = poses~=nil and poses~=false
             end
             local attacking = actor.attackPoseUntil and self.presentationTime < actor.attackPoseUntil
             local velocity = actor.root.AssemblyLinearVelocity
             local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
             local walking = not actor.root.Anchored and actor.humanoid.Health > 0
                 and actor.humanoid.FloorMaterial ~= Enum.Material.Air
-            local running = pigPhase=='Running'
+            local running = primaryPhase=='Running'
             actor.walkPhase = (actor.walkPhase or 0) + dt * math.min(speed, 20) * (running and 1.3 or .8)
             local stride = walking and math.sin(actor.walkPhase) * math.clamp(speed / 12, 0, 1) * (running and .75 or .5) or 0
-            local pigPose = pigAction and pigPoses[pigAction][pigPhase]
+            local primaryPose = primaryAction and poses[primaryAction][primaryPhase]
             for name, motor in pairs(actor.poseMotors) do
                 local shoulder = string.find(name, "Shoulder", 1, true) ~= nil
                 local left = string.find(name, "Left", 1, true) ~= nil
@@ -1279,9 +1302,10 @@ function World:updatePresentation(session, dt, enemies)
                 elseif running then
                     angle = shoulder and (-.55-stride*.6) or (stride*1.2+.2)
                     roll = left and -.18 or .18
-                elseif pigPose then
-                    angle = shoulder and (left and pigPose.left or pigPose.right) or pigPose.hip
-                    roll = shoulder and (left and pigPose.leftRoll or pigPose.rightRoll) or 0
+                elseif primaryPose then
+                    angle = shoulder and (left and primaryPose.left or primaryPose.right)
+                        or (left and primaryPose.leftHip or primaryPose.rightHip) or primaryPose.hip
+                    roll = shoulder and (left and primaryPose.leftRoll or primaryPose.rightRoll) or 0
                 elseif shoulder and attacking then
                     angle = actor.attackPoseAction == "Dash" and 1.5 or (left and 0.45 or 1.95)
                 end

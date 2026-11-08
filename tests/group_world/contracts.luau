@@ -2,10 +2,19 @@
 local Vec={}
 Vec.__index=function(self,key)
     if key=='Magnitude' then return math.sqrt(self.X*self.X+self.Y*self.Y+self.Z*self.Z) end
+    if key=='Unit' then
+        local length=math.sqrt(self.X*self.X+self.Y*self.Y+self.Z*self.Z)
+        return setmetatable({X=self.X/length,Y=self.Y/length,Z=self.Z/length},Vec)
+    end
     return Vec[key]
 end
 function Vec.__add(a,b) return setmetatable({X=a.X+b.X,Y=a.Y+b.Y,Z=a.Z+b.Z},Vec) end
 function Vec.__sub(a,b) return setmetatable({X=a.X-b.X,Y=a.Y-b.Y,Z=a.Z-b.Z},Vec) end
+function Vec.__mul(a,b)
+    if type(a)=='number' then a,b=b,a end
+    return setmetatable({X=a.X*b,Y=a.Y*b,Z=a.Z*b},Vec)
+end
+function Vec.__unm(a) return setmetatable({X=-a.X,Y=-a.Y,Z=-a.Z},Vec) end
 local function vector(x,y,z) return setmetatable({X=x or 0,Y=y or 0,Z=z or 0},Vec) end
 local Frame={}; Frame.__index=Frame
 function Frame.__mul(a,b)
@@ -630,3 +639,86 @@ pose()
 assert(posingPig.attackPoseAction=='Punch' and posingPig.model:GetAttribute('AttackPhase')==nil,
     'Legacy ordinary enemy presentation keeps its original Punch fallback')
 print('PASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation')
+
+local walkerPose=actor(pigWorld,-2,vector(103,13,3072));pigWorld.enemyKinds[-2]='Drone'
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip'}) do
+    local motor=node('Motor6D',name,walkerPose.model.Torso);motor.C0=frame()
+end
+local walkerState={kind='Walker',windup={at=2.5,action='WalkerLight'}}
+poseSession.now=2
+local function poseWalker()
+    pigWorld:updatePresentation(poseSession,.1,{[-2]=walkerState})
+    return walkerPose.poseMotors['Right Hip'].joint.C0.rotationX,
+        walkerPose.poseMotors['Left Hip'].joint.C0.rotationX
+end
+local lightLeg,lightSupport=poseWalker()
+assert(walkerPose.model:GetAttribute('PrimaryAttack')=='WalkerLight' and walkerPose.model:GetAttribute('AttackPhase')=='Windup',
+    'Walker needs its own trusted primary telegraph rather than the generic Punch fallback')
+walkerState.windup.action='WalkerHeavy'
+local heavyLeg,heavySupport=poseWalker()
+assert(lightLeg~=heavyLeg and lightLeg~=lightSupport and heavyLeg==heavySupport,
+    'The light leg preparation must differ from the two-leg heavy launch preparation')
+walkerState.windup=nil;walkerState.lastStrikeAction='WalkerHeavy';walkerState.strikeRecoveryUntil=2.35
+poseSession.now=2.2
+local recoveryLeg=poseWalker()
+assert(walkerPose.model:GetAttribute('AttackPhase')=='Recovery' and recoveryLeg~=heavyLeg,
+    'Walker recovery has a separate finite leg pose selected by Session time')
+poseSession.now=2.35;poseWalker()
+assert(walkerPose.model:GetAttribute('PrimaryAttack')==nil and walkerPose.model:GetAttribute('AttackPhase')==nil
+    and walkerPose.attackPoseUntil==nil and walkerPose.attackPoseAction==nil,'Walker expiry clears all primary presentation state')
+walkerState.windup={at=3,action='WalkerLight'};walkerState.reactionUntil=3
+poseWalker();assert(walkerPose.model:GetAttribute('AttackPhase')==nil,'Incoming reactions suppress Walker telegraphs')
+walkerState.reactionUntil=nil;pigWorld.enemyCarries[-2]={mode='Carried'}
+poseWalker();assert(walkerPose.model:GetAttribute('AttackPhase')==nil,'Held bodies cannot retain Walker strike poses')
+pigWorld.enemyCarries[-2]=nil;walkerPose.humanoid.Health=0
+poseWalker();assert(walkerPose.model:GetAttribute('AttackPhase')==nil,'Dead Walker cannot display an active strike')
+walkerPose.humanoid.Health=100
+pigState={kind='Pig',windup={at=3,action='PigJab'}}
+pigWorld:updatePresentation(poseSession,.1,{[-1]=pigState,[-2]=walkerState})
+assert(posingPig.model:GetAttribute('PrimaryAttack')=='PigJab','Walker presentation must not replace Pig primary states')
+print('PASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption')
+
+local retreatWorld=World.new(Base,{FallY=-20,Level=source(LevelSource),Enemy={speed=9},WalkSpeed=12},
+    {name='WalkerRetreatWorld',offset={x=100,y=10,z=3584}})
+local retreatWalker=actor(retreatWorld,-1,vector(100,13,3584))
+local closeHero=actor(retreatWorld,1,vector(102,13,3584))
+closeHero.humanoid.FloorMaterial=enum.Material.Air -- Target grounding is not a movement prerequisite.
+retreatWalker.root.AssemblyLinearVelocity=vector(4,5,6)
+local originalFrame=retreatWalker.root.CFrame
+assert(type(retreatWorld.enemyRetreat)=='function','Walker close-range movement needs a safe away-from-target command')
+oldRaycast=workspace.Raycast
+local retreatRays=0
+function workspace:Raycast(origin,direction,params)
+    if params==retreatWorld.ray then retreatRays+=1 end
+    return oldRaycast(self,origin,direction,params)
+end
+retreatWorld:enemyRetreat(-1,1,7)
+eq(retreatWalker.humanoid.lastMove,-1,0,0,'Retreat must move away from the actual same-group target')
+assert(retreatWalker.humanoid.WalkSpeed==7 and retreatRays==3,'Retreat uses its configured speed and all three edge-support rays')
+assert(retreatWalker.root.CFrame==originalFrame,'Backstep must not teleport or rotate the physical root')
+eq(retreatWalker.root.AssemblyLinearVelocity,4,5,6,'Backstep must preserve existing impulses and gravity velocity')
+retreatWorld:enemyMove(-1,1,9)
+eq(retreatWalker.humanoid.lastMove,1,0,0,'Shared safety must preserve normal pursuit toward the target')
+assert(retreatWalker.humanoid.WalkSpeed==9)
+retreatWalker.root.CFrame=frame(20,13,3584);closeHero.root.CFrame=frame(22,13,3584)
+retreatWorld:enemyRetreat(-1,1,7)
+eq(retreatWalker.humanoid.lastMove,0,0,0,'A backward step across the real platform edge must stop voluntary movement')
+eq(retreatWalker.root.Position,20,13,3584)
+eq(retreatWalker.root.AssemblyLinearVelocity,4,5,6,'Unsafe-edge stopping cannot erase an outside impulse')
+retreatWalker.root.CFrame=frame(100,13,3609.5);closeHero.root.CFrame=frame(102,13,3609.5)
+retreatWorld:enemyRetreat(-1,1,7)
+eq(retreatWalker.humanoid.lastMove,0,0,0,'A safe centre ray is insufficient when a side support ray crosses the edge')
+retreatWalker.root.CFrame=frame(100,13,3584);closeHero.root.CFrame=frame(102,13,3584)
+for _,guard in ipairs({'Anchored','Reaction','Carried','Dead','MissingTarget'}) do
+    retreatWalker.root.Anchored=guard=='Anchored';retreatWalker.humanoid.PlatformStand=guard=='Reaction'
+    retreatWalker.humanoid.Health=guard=='Dead' and 0 or 100
+    retreatWorld.enemyCarries[-1]=guard=='Carried' and {mode='Carried'} or nil
+    if guard=='MissingTarget' then closeHero.root.Parent=nil end
+    local before=retreatWalker.humanoid.lastMove
+    retreatWorld:enemyRetreat(-1,1,7)
+    assert(retreatWalker.humanoid.lastMove==before,'Held, reacting, dead, anchored or targetless bodies cannot start a backstep')
+end
+retreatWorld.enemyCarries[-1]=nil
+workspace.Raycast=oldRaycast
+assert(default.folder.Parent==workspace and pigWorld.folder.Parent==workspace,'Retreat affects no other group world')
+print('PASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses')

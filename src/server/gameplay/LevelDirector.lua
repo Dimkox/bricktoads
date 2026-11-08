@@ -210,11 +210,14 @@ end
 function Director:_beginStrike(id,e,target)
     local action=self.config.Enemy.attack
     local tuning=self.strikeProfile
-    if self.route and self.config.Pig and e.kind=='Pig' then
-        target=target or self:_strikeTarget(id,self.config.Attacks.PigJab)
+    local sourceFamily=self.route and ((e.kind=='Pig' and self.config.Pig) or (e.kind=='Walker' and self.config.Walker))
+    if sourceFamily then
+        local light=e.kind=='Pig' and 'PigJab' or 'WalkerLight'
+        local heavy=e.kind=='Pig' and 'PigHeavy' or 'WalkerHeavy'
+        target=target or self:_strikeTarget(id,self.config.Attacks[light])
         local combat=target and self.session.combat[target]
         -- Prototype enemy3HP is not raw source Life; an unknown target uses jab.
-        action=e.rushing and 'PigRush' or (combat and combat.rawLife%16<4 and 'PigHeavy' or 'PigJab')
+        action=e.kind=='Pig' and e.rushing and 'PigRush' or (combat and combat.rawLife%16<4 and heavy or light)
         tuning=self.config.Attacks[action]
     end
     e.engaged=true; e.rushing=nil; e.strikeRecoveryUntil=nil
@@ -301,19 +304,20 @@ function Director:hit(attacker,target,action)
     if self.carry then self.carry:forgetEnemy(target) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil
-    local pig=self.config.Pig and self.config.Pig.npcDamage[action]
-    local damage=pig or (action=='Club' and self.config.WalkerClub.npcDamage
+    local family=(self.config.Pig and self.config.Pig.npcDamage[action] and self.config.Pig)
+        or (self.config.Walker and self.config.Walker.npcDamage[action] and self.config.Walker)
+    local damage=(family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
         or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
     e.health=math.max(0,e.health-damage)
     self.world:enemyHealth(target,e.health,self.config.Enemy.hearts)
     self.world:cue(target,false)
     if e.health==0 then self:_kill(target,'Combat')
     else
-        local reaction=pig and self.config.Attacks[action].reaction
+        local reaction=family and self.config.Attacks[action].reaction
             or (action=='Club' and self.config.Attacks.Club.reaction or self.config.Enemy.reaction)
         e.reactionUntil=self.now+reaction
         self.world:move(target,0,0); self.world:setReaction(target,true)
-        local profile=pig and self.config.Pig.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18))
+        local profile=family and family.npcProfile[action] or (action=='Club' and 2 or (action=='Dash' and 22 or 18))
         if self.config.Impulses then self.world:impulse(target,attacker,self.config.Impulses[profile],profile) end
     end
     return true
@@ -330,13 +334,13 @@ function Director:applyThrowDamage(id,heroSlot)
     if e.health==0 then self:_kill(id) end
     return true
 end
-function Director:_nearest(position,pigEligibility)
+function Director:_nearest(position,standingEligibility)
     local selected,best=nil,math.huge
     for _,id in ipairs(self.session.order) do
         local h=self.session.state.heroes[id]
         local c=self.session.combat[id]
         if h.status=='Alive' and not c.deathAt
-            and (not pigEligibility or not c.reactionEnd or c.recover==true) then
+            and (not standingEligibility or not c.reactionEnd or c.recover==true) then
             local d=distance(position,self.world:position(id))
             if d<best then selected,best=id,d end
         end
@@ -365,7 +369,10 @@ function Director:_enemies()
                             e.lastMove=nil; self.world:move(id,0,0)
                         end
                     else
-                        local target,range=self:_nearest(self.world:position(id),self.route and self.config.Pig and e.kind=='Pig')
+                        local walker=self.route and e.kind=='Walker' and self.config.Walker
+                        local standing=walker or (self.route and e.kind=='Pig' and self.config.Pig)
+                        local target,range=self:_nearest(self.world:position(id),standing~=nil and standing~=false)
+                        local attackRange=walker and walker.range or self.config.Enemy.range
                         -- Validate the approach before either melee or movement:
                         -- a newly invalid target cannot preserve an old running hop.
                         if e.rushing then
@@ -375,9 +382,11 @@ function Director:_enemies()
                             if not a or not b or math.abs(a.z-b.z)>alignment or math.abs(a.y-b.y)>alignment
                                 or (c and c.reactionEnd) then e.rushing=nil end
                         end
-                        if target and range<=self.config.Enemy.range and self.now>=e.nextAttack then
+                        if target and walker and range<walker.minRange then
+                            self.world:enemyRetreat(id,target,walker.retreatSpeed)
+                        elseif target and range<=attackRange and self.now>=e.nextAttack then
                             self.world:face(id,target); self:_beginStrike(id,e,target)
-                        elseif target and range>self.config.Enemy.range*.8 then
+                        elseif target and range>attackRange*.8 then
                             local speed=self.config.Enemy.speed
                             if self.route and self.config.Pig and e.kind=='Pig' then
                                 local pig=self.config.Pig

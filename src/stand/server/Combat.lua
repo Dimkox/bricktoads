@@ -2,7 +2,7 @@
 local Combat = {}
 -- Trusted server actions; public input validation remains in Session.
 -- Pig animation40 does not satisfy the hero Dash animation16 finisher condition.
-local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22}
+local fixedProfiles = {Punch=18,Club=20,PigJab=18,PigHeavy=20,PigRush=22,WalkerLight=18,WalkerHeavy=20}
 local function life(value)
     assert(type(value) == "number" and value == value and value >= 0
         and value <= 47 and value % 1 == 0, "raw Life must be an integer in 0..47")

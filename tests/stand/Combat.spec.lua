@@ -53,6 +53,22 @@ return function(Combat)
             end
         end
     end
+    -- Walker animations3C/3A use fixed hero18/20, including low-Life and exact-zero boundaries.
+    for _,case in ipairs(pigCases) do
+        for _,action in ipairs({'WalkerLight','WalkerHeavy'}) do
+            local light=action=='WalkerLight'
+            for _,shieldName in ipairs({'None','Normal','Emergency'}) do
+                local shield=shieldName~='None' and shieldName or nil
+                v=Combat.hit(case.old,action,shield)
+                eq(v.rawLife,shield and case.old or (light and case.jab or case.heavy))
+                eq(v.dying,not shield and (light and case.jabDying or (not light and case.heavyDying)) or false)
+                eq(v.profile,light and 18 or 20);eq(v.rawDamage,light and 4 or 16)
+                eq(v.heavyReaction,not light)
+                eq(v.recover,light and not shield and not case.jabDying or false)
+                eq(v.impulse,shield~='Emergency');eq(v.blocked,shield~=nil)
+            end
+        end
+    end
     -- Independent rows from the previously verified common-routine table, not a hitbox proof.
     local expected4 = {0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,15,15,15,15,16,17,18,19,20,21,22,23,24,25,26,27,31,31,31,31,32,33,34,35,36,37,38,39,40,41,42,43}
     local expected16 = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31}
