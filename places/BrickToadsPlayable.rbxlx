@@ -801,7 +801,7 @@ local CLIPS={
     [0x8A]={label="byte_3000_E80A",line=178,endLine=179,fallthrough=false,bytes={0x01,0x01,0xE0,0x40,0xE2,0x80,0x70,0xF5,0x02,0x02,0x02,0x01,0x01,0x01,0xE0,0x40,0xE2,0x80,0x70,0xF5,0x02,0x02,0x02,0x01,0xE0,0xA0,0xE1,0x03,0x01,0x01,0xE2,0x82,0x30,0x02,0x02,0x02,0x02,0x02,0x02,0x02,0x02,0x00}},
 }
 local DASH_TAIL={label='udar_s_razbega:low_life_tail',line=97,endLine=97,bytes={0x31,0xE1,0x04,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x23,0x23,0x23,0x23,0x00}}
-local CATALOG_SHA='40830129550af498c2b8f52b6c9e6d16cb413df5dea3c0bcad08648407285289'
+local CATALOG_SHA='fad66ea121c6d92f8c60b2992298738f1a36f6bcaf9731b075772d481f7716f4'
 -- END SOURCE CLIPS
 
 local OPCODES={
@@ -6959,7 +6959,7 @@ return World
       <Item class="ModuleScript" referent="BT51">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='8f36c327f1e1a6ddb4c901ea034bdad99495f88bf04cccde1232fea41bdffc94'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='12afe6605bf9fadd641300a26f0f8f6e90743b3a39d7dc58413655a091bddcf3'})
 </ProtectedString>
         </Properties>
       </Item>

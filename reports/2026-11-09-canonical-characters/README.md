@@ -18,3 +18,7 @@ The playable now clones the real imported fifteen-part Green/P1 and orange-brown
 The neutral source-palette prototypes use the existing inferred R6 presentation. Source-driven authored3D poses, enlarged fist/boot shapes, fear32/33 and the real boss appearance/camera sequence are not complete. The owner's new sunglasses/red bands/spiked knee cuffs/massive lime-front brawler revision is being authored separately; it is not represented by this screenshot.
 
 Tall Walker's five-node GLB and source leg contract are authored/validated locally; cloud import and game binding remain pending. Other character families, third hero adaptation, all13 modes/six bosses, full normal-input route, real multi-client/reconnect, physical phone/tablet readability, performance budgets and public-experience asset permissions remain open. No public production release was performed.
+
+## Checkout portability follow-up
+
+GitHub's first check of `cd18bcc` exposed a catalog-provenance hash calculated from Windows CRLF bytes while Git stores the same JSON with LF. The animation bytes and native contracts matched; only the generated receipt comparison failed. The generator now hashes UTF-8 text with normalized LF, matching the repository content. A regression test reproduced the failure before the fix and now verifies both LF/CRLF checkouts without modifying the module. All16 animation tests and the focused builder checks passed after the fix. The playable was regenerated; only `CanonicalAnimation` and its derived `BuildInfo` source changed in that follow-up.

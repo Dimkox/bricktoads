@@ -10,7 +10,8 @@ parser.add_argument('--check',action='store_true',help='Verify the literal witho
 args=parser.parse_args()
 CATALOG=ROOT/'research/2026-11-09-canonical-character-animation-catalog.json'
 MODULE=ROOT/'src/server/gameplay/CanonicalAnimation.lua'
-catalog=json.loads(CATALOG.read_text(encoding='utf-8'))
+catalog_text=CATALOG.read_text(encoding='utf-8')
+catalog=json.loads(catalog_text)
 assert catalog['reference']['commit']=='f1a43b69577246850d136473700a333b3cdfe93f'
 assert len(catalog['animations'])==69
 
@@ -41,7 +42,9 @@ for row in catalog['animations']:
 literal.append('}')
 tail=catalog['dashLowLifeTail']['playbackFromEffectEntry']
 literal.append(f"local DASH_TAIL={{label='udar_s_razbega:low_life_tail',line=97,endLine=97,bytes={bytecode(tail)}}}")
-literal.append(f"local CATALOG_SHA='{hashlib.sha256(CATALOG.read_bytes()).hexdigest()}'")
+# read_text normalizes checkout line endings; provenance stays identical on
+# Windows CRLF and the repository's canonical UTF-8/LF content in Linux CI.
+literal.append(f"local CATALOG_SHA='{hashlib.sha256(catalog_text.encode('utf-8')).hexdigest()}'")
 source=MODULE.read_text(encoding='utf-8')
 start='-- BEGIN SOURCE CLIPS\n';end='-- END SOURCE CLIPS'
 before,remaining=source.split(start,1)

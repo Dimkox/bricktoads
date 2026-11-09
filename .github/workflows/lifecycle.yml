@@ -64,7 +64,9 @@ jobs:
       - name: English source and localization coverage
         run: python3 tools/test_localization.py
       - name: Canonical animation data matches the pinned catalog
-        run: python3 research/generate_canonical_animation_data.py --check
+        run: |
+          python3 research/generate_canonical_animation_data.py --check
+          python3 tools/test_canonical_animation_data.py
       - name: Development place build tests
         run: python3 tools/test_bricktoads_place.py
       - name: Isolated Walker acceptance package tests
