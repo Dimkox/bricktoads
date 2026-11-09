@@ -499,6 +499,7 @@ function World.new(BaseWorld, config, options)
     local self = BaseWorld.new(worldConfig)
     self._base = BaseWorld
     self.characterAppearance = options.characterAppearance
+    self.guardianAppearance = options.guardianAppearance
     self.offset = translation
     setmetatable(self, {__index = function(_, key) return World[key] or BaseWorld[key] end})
     self.folder.Name = worldName
@@ -598,6 +599,7 @@ function World:spawnEnemy(id, kind, positionTable)
     self.names[id] = isBoss and "Causeway Guardian" or speciesNames[kind] or "Rusty Guard"
     local previous=self.actors[id]
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
+    if previous and self.guardianAppearance then self.guardianAppearance.detach(previous) end
     if previous then self:resetLocomotion(id,previous) end
     local actor = self.actors[id]
     actor.model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
@@ -611,7 +613,10 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
     actor.humanoid.WalkSpeed = isBoss and 0 or 8
     self.enemyKinds[id] = isBoss and "Boss" or "Drone"
-    if isBoss then boss(actor) else drone(actor, kind) end
+    if isBoss then
+        local imported=self.guardianAppearance and self.guardianAppearance.attach(actor)
+        if not imported then boss(actor) end
+    else drone(actor, kind) end
     actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0, isBoss and 7.6 or 4.5, 0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
@@ -935,10 +940,20 @@ function World:enemyHealth(id, raw, maximum)
     a.model:SetAttribute("Hearts", hearts)
     a.model:SetAttribute("HealthRaw", raw)
     a.model:SetAttribute("HealthMax", maximum)
+    if self.enemyKinds[id]=='Boss' and self.guardianAppearance then
+        self.guardianAppearance.health(a,raw,maximum,self.presentationTime or 0)
+    end
     if a.healthLabel then
         local symbols = {}
         for n = 1, 3 do symbols[n] = n <= hearts and "♥" or "♡" end
         a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  ·  " or "") .. table.concat(symbols, " ")
+    end
+end
+
+function World:bossShot(mode)
+    local actor=self.actors[-99]
+    if actor and self.guardianAppearance then
+        self.guardianAppearance.shot(actor,mode,self.presentationTime or 0)
     end
 end
 
@@ -1605,12 +1620,20 @@ function World:updatePresentation(session, dt, enemies)
             end
         end
     end
+    if self.guardianAppearance then
+        for id,actor in pairs(self.actors) do
+            if self.enemyKinds[id]=='Boss' then self.guardianAppearance.update(actor,self.presentationTime) end
+        end
+    end
 end
 
 function World:clearActors()
     for id in pairs(self.equippedClubs) do self:unequipClub(id) end
     for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
     for id,actor in pairs(self.actors) do self:resetLocomotion(id,actor) end
+    if self.guardianAppearance then
+        for _,actor in pairs(self.actors) do self.guardianAppearance.detach(actor) end
+    end
     self._base.clearActors(self)
     self.enemyKinds = {}
     self.healingFlyFolder:ClearAllChildren()

@@ -1,4 +1,47 @@
 local sourceContexts={}
+local bossCalls={attach=0,shots={},health={},updates=0}
+local bossAdapter={}
+function bossAdapter.attach(body)
+    bossCalls.attach+=1
+    local p=node('Part','ImportedGuardianSurface',body.model);p.Anchored=false;p.Massless=true;p.CanCollide=false
+    return true
+end
+function bossAdapter.shot(body,mode,now)bossCalls.shots[#bossCalls.shots+1]={body=body,mode=mode,now=now}end
+function bossAdapter.health(body,raw,maximum,now)bossCalls.health[#bossCalls.health+1]={raw=raw,maximum=maximum,now=now}end
+function bossAdapter.update(body,now)
+    bossCalls.updates+=1
+    assert(body.root:GetNetworkOwner()==nil and not body.root:GetNetworkOwnershipAuto())
+end
+function bossAdapter.detach(body)bossCalls.detached=body end
+local bossWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50},
+    {name='GuardianAppearanceHook',guardianAppearance=bossAdapter})
+assert(bossWorld:spawnEnemy(-99,'Boss',{x=10,y=3,z=0}))
+local guardian=bossWorld.actors[-99]
+assert(bossCalls.attach==1 and not guardian.model:FindFirstChild('GuardianBase'),
+    'A valid imported model replaces the generic cosmetic builder')
+assert(guardian.root.assemblyOwnershipResets>0 and guardian.root:GetNetworkOwner()==nil
+    and not guardian.root:GetNetworkOwnershipAuto() and guardian.humanoid.Health==100)
+bossWorld:bossShot('Bullet');assert(#bossCalls.shots==1 and bossCalls.shots[1].body==guardian)
+bossWorld:enemyHealth(-99,31,47);assert(bossCalls.health[#bossCalls.health].raw==31)
+bossWorld:updatePresentation({now=1,combat={}},.1,{[-99]={boss=true}})
+assert(bossCalls.updates==1 and bossCalls.shots[1].mode=='Bullet')
+local bossBase=bossWorld._base;bossWorld._base=table.clone(bossBase)
+bossWorld._base.spawn=function()return false end
+assert(not bossWorld:spawnEnemy(-99,'Boss',{x=10,y=3,z=0}) and not bossCalls.detached,
+    'A failed replacement cannot detach the existing living Guardian appearance')
+bossWorld._base=bossBase
+bossWorld:clearActors()
+assert(bossCalls.detached==guardian)
+print('PASS imported Guardian integration preserves authority and uses distinct shot health and update hooks')
+local rejectedBossAdapter=table.clone(bossAdapter);rejectedBossAdapter.attach=function()return false end
+local rejectedBossWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50},
+    {name='GuardianSafeFallback',guardianAppearance=rejectedBossAdapter})
+assert(rejectedBossWorld:spawnEnemy(-99,'Boss',{x=10,y=3,z=0}))
+local fallbackBoss=rejectedBossWorld.actors[-99]
+assert(fallbackBoss.model:FindFirstChild('GuardianBase') and fallbackBoss.humanoid.Health==100
+    and fallbackBoss.root:GetNetworkOwner()==nil and not fallbackBoss.root:GetNetworkOwnershipAuto())
+rejectedBossWorld:clearActors()
+print('PASS missing or rejected Guardian art retains the existing playable fallback')
 local sourceAdapter={attach=function()return true end,update=function(body,context)sourceContexts[body]=context end}
 local sourceWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50},
     {name='SourceFrameContext',characterAppearance=sourceAdapter})

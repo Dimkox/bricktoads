@@ -132,6 +132,7 @@ function GuardianPattern:_spawn(mode,aim,target)
     d.projectiles[id]=p
     if target and not d.enemies[-99].ownerUserId and self.world.face then self.world:face(-99,target) end
     self.world:cue(-99,true); self:_render(id,p)
+    if self.world.bossShot then self.world:bossShot(mode) end
     self:_log(mode=='Heavy' and 'BossWarning' or 'BossShot',-99,{projectileId=id,mode=mode,target=target})
     return true
 end

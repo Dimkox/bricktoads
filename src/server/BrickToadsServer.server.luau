@@ -35,7 +35,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
         end
         local world=worldType.new(require(runtime.RobloxWorld),config,{
             name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing},
-            characterAppearance=require(gameplay.CharacterAppearance)})
+            characterAppearance=require(gameplay.CharacterAppearance),guardianAppearance=require(gameplay.GuardianAppearance)})
         world.folder:SetAttribute('GroupId',groupId)
         return world
     end)

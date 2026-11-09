@@ -1,0 +1,475 @@
+{
+  "schema": 1,
+  "status": "frozen-preupload-source-informed-cosmetics",
+  "glbSha256": "4f1d852e369f83da380dd05b37a5d999886aea036eba220852678ed4a47adc08",
+  "bytes": 3821508,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "units": {
+    "metadata": "Roblox studs",
+    "gltf": "metres",
+    "metresPerStud": 0.28,
+    "up": [
+      0,
+      1,
+      0
+    ],
+    "forward": [
+      0,
+      0,
+      -1
+    ],
+    "battleOrigin": "R6 HumanoidRootPart identity; ground y=-3 at root worldY3",
+    "introOrigin": "separate ground-contact identity [0,0,0] near toe, actual geometry minY0"
+  },
+  "parts": [
+    {
+      "name": "GuardianChassis",
+      "role": "battle-chassis",
+      "boundsStuds": [
+        [
+          -2.999,
+          -3.0,
+          -2.555
+        ],
+        [
+          2.999,
+          5.419,
+          4.2299999999999995
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        1.2094999999999998,
+        0.8374999999999997
+      ],
+      "boundingBoxSizeStuds": [
+        5.998,
+        8.419,
+        6.785
+      ],
+      "layoutOffsetStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        0,
+        0,
+        0
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        0.0,
+        -1.2094999999999998,
+        -0.8374999999999997
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "split red impact armor -Z; broad black engine grille +Z",
+      "closedOrientableShellComponents": 130,
+      "triangles": 6704,
+      "authoringVertices": 3612,
+      "exportedVertices": 20112
+    },
+    {
+      "name": "GuardianLeftCannon",
+      "role": "battle-cannon",
+      "boundsStuds": [
+        [
+          -4.484,
+          -0.55,
+          -4.709
+        ],
+        [
+          -1.85,
+          2.17,
+          2.25
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -3.167,
+        0.8099999999999999,
+        -1.2294999999999998
+      ],
+      "boundingBoxSizeStuds": [
+        2.634,
+        2.7199999999999998,
+        6.959
+      ],
+      "layoutOffsetStuds": [
+        -16,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -4.48,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        -2.5,
+        0.7,
+        0.5
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        0.6669999999999998,
+        -0.10999999999999999,
+        1.7294999999999998
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "muzzle cavity faces -Z; service latch outboard",
+      "closedOrientableShellComponents": 44,
+      "triangles": 7324,
+      "authoringVertices": 3738,
+      "exportedVertices": 21972,
+      "muzzlePointStuds": [
+        -3.1,
+        0.7,
+        -4.6
+      ],
+      "muzzleForwardStuds": [
+        0,
+        0,
+        -1
+      ],
+      "muzzleAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "muzzleAttachmentInIdentityBoundingBoxPartStuds": [
+        0.06699999999999973,
+        -0.10999999999999999,
+        -3.3705
+      ],
+      "muzzleBoreRadiusStuds": 0.67,
+      "muzzleCavityRearStuds": [
+        -3.1,
+        0.7,
+        -3.66
+      ]
+    },
+    {
+      "name": "GuardianRightCannon",
+      "role": "battle-cannon",
+      "boundsStuds": [
+        [
+          1.85,
+          -0.55,
+          -4.709
+        ],
+        [
+          4.484,
+          2.17,
+          2.25
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        3.167,
+        0.8099999999999999,
+        -1.2294999999999998
+      ],
+      "boundingBoxSizeStuds": [
+        2.634,
+        2.7199999999999998,
+        6.959
+      ],
+      "layoutOffsetStuds": [
+        16,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        4.48,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        2.5,
+        0.7,
+        0.5
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        -0.6669999999999998,
+        -0.10999999999999999,
+        1.7294999999999998
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "muzzle cavity faces -Z; service latch outboard",
+      "closedOrientableShellComponents": 44,
+      "triangles": 7324,
+      "authoringVertices": 3738,
+      "exportedVertices": 21972,
+      "muzzlePointStuds": [
+        3.1,
+        0.7,
+        -4.6
+      ],
+      "muzzleForwardStuds": [
+        0,
+        0,
+        -1
+      ],
+      "muzzleAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "muzzleAttachmentInIdentityBoundingBoxPartStuds": [
+        -0.06699999999999973,
+        -0.10999999999999999,
+        -3.3705
+      ],
+      "muzzleBoreRadiusStuds": 0.67,
+      "muzzleCavityRearStuds": [
+        3.1,
+        0.7,
+        -3.66
+      ]
+    },
+    {
+      "name": "IntroLeg12",
+      "role": "intro-ground-origin-leg",
+      "boundsStuds": [
+        [
+          -1.455,
+          0.0,
+          -1.6800000000000002
+        ],
+        [
+          4.9106250000000005,
+          23.28,
+          1.44
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        1.7278125000000002,
+        11.64,
+        -0.1200000000000001
+      ],
+      "boundingBoxSizeStuds": [
+        6.3656250000000005,
+        23.28,
+        3.12
+      ],
+      "layoutOffsetStuds": [
+        35,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        9.8,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        0,
+        0,
+        0
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        -1.7278125000000002,
+        -11.64,
+        0.1200000000000001
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "source XY upper assembly leans +X, red joint and raised shaft runner on -Z",
+      "closedOrientableShellComponents": 36,
+      "triangles": 13284,
+      "authoringVertices": 6704,
+      "exportedVertices": 39852,
+      "sourceAnchorStuds": [
+        0,
+        2.1825,
+        0
+      ],
+      "sourceAnchorImagePixel": [
+        8,
+        116
+      ],
+      "authoredGroundOriginImageBoundary": [
+        8,
+        128
+      ],
+      "sourcePixelSize": [
+        35,
+        128
+      ],
+      "sourceStudsPerPixel": 0.181875,
+      "sourceXYMapping": "x=(pixelBoundaryX-8)*.181875; y=(128-pixelBoundaryY)*.181875",
+      "originAttachmentName": "IntroOriginRigAttachment",
+      "groundOriginStuds": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "sourceFacts": [
+    "graphics12 visible alpha silhouette is35x128 with a long narrow diagonal red shaft, small toe and large circular upper joint beneath diagonal plate",
+    "graphics10 is31x24 red/black cannon in camera-relative boss presentation; two source turret records",
+    "graphics11 reticle andC7 cracked glass are HUD/camera overlays and are absent from this physical asset",
+    "source palette indices are verified; RGB rendering tables are approximate"
+  ],
+  "authoredReconstruction": [
+    "entire compact chassis, brackets, short ground supports and rear engine are inferred, not an exact NES complete robot",
+    "barrel length, 3D cross section, bore cavity, breech, recoil rails, bolts, muzzle marker and scale are authored",
+    "intro depth, back, metallic response and raised mechanical details are authored around the source XY silhouette",
+    "full arena camera projection, final nametable composition and live game presentation are not established by component references"
+  ],
+  "material": {
+    "oneSharedMaterial": true,
+    "onePrimitivePerMesh": true,
+    "bakedAlbedo": "embedded4096x4096 padded8x8 unique triangle atlas",
+    "COLOR_0": "absent",
+    "emissive": "absent",
+    "alphaMode": "OPAQUE",
+    "roughnessFactor": 0.48,
+    "metallicFactor": 0.32,
+    "meaning": "source-informed red/black painted metal; PBR response and RGB approximate authored"
+  },
+  "runtimeContract": {
+    "cosmeticOnly": true,
+    "meshNodes": 4,
+    "extraAttachmentNodes": false,
+    "battleAssembly": "geometry already root-local; preserve measured bbox center and subtract layout only",
+    "nativeImport": "native mesh frame may includeY180; preserve it and solve attachment CFrames from actual imported orientation",
+    "mountAttachment": "GuardianMountRigAttachment; MeshPart.CFrame*attachment.CFrame equals root*CFrame.new(mountPointStuds) with root axes identity",
+    "muzzleAttachment": "MuzzleRigAttachment; same equation using muzzlePointStuds and root axes identity, forward -Z",
+    "introAttachment": "IntroOriginRigAttachment; nativeMesh.CFrame*attachment.CFrame equals intro ground-origin frame",
+    "chassisMountPointStuds": [
+      0,
+      0,
+      0
+    ],
+    "introMustRemainSeparate": true,
+    "gameplay": "no Humanoid, collision, damage, movement or camera logic in this asset"
+  },
+  "sourceFiles": {
+    "research/canonical-visuals/BOSS_WALKER_SOURCE.md": "703a81aa84a9a73047fd28920601d039f24eeeb3854b5112260997e2e9b93b43",
+    "research/canonical-visuals/frames/object-12.png": "7c56228b6216b2ca0f51254b59ebb44332e1291213f07d2b6ef016845803c2bb",
+    "research/canonical-visuals/boss-intro-foot-source-reference.png": "c898e2f14d27ce8ebe3c216f95433abea212e8b20503d203fc9d317442edd0ee",
+    "research/canonical-visuals/boss-walker-arena-component-reference.png": "9a58486688d1e3ecdc1eb43a780fa811fcf69e4a8d02a5cf088ab41e2482d537",
+    "research/canonical-visuals/boss-walker-arena-component-catalog.json": "bf2744e2ac330c1c86625e321dc95d7b8dfd67daf9a8398324cef1fcc7b3092d"
+  },
+  "frozenEarlierGlbs": {
+    "canonical-hero.glb": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c",
+    "canonical-hero-player1.glb": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+    "canonical-hero-player2.glb": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+    "green-brawler.glb": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+    "hero-attack-morphs.glb": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+    "hero-fear-morphs.glb": "ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a"
+  },
+  "studioImport": "NOT_RUN; root owns reviewed upload and Studio integration"
+}

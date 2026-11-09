@@ -62,6 +62,8 @@ jobs:
           python3 tests/group_world/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/character_appearance/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/canonical_hero_presentation/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/guardian_appearance/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/boss_intro_asset/run.py --luau /tmp/bricktoads-luau/luau
       - name: Structural build tests
         run: python3 tools/test_build.py
       - name: English source and localization coverage

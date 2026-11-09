@@ -48,6 +48,67 @@ return function(World)
         end
         return parts
     end
+    local function importedLeg(folder)
+        if not game then return nil end
+        local storage=game:GetService('ServerStorage'):FindFirstChild('BrickToadsBossTemplates')
+        local template=storage and storage:FindFirstChild('BossWalkerIntroLeg')
+        if not template or not template:IsA('Model') then return nil end
+        local ok,parts=pcall(function()
+            local profile=template:FindFirstChild('AppearanceProfile')
+            local scale=template:FindFirstChild('AppearanceScale')
+            assert(profile and profile:IsA('StringValue') and profile.Value=='CanonicalBossWalkerIntroLeg')
+            assert(scale and scale:IsA('NumberValue') and scale.Value==1)
+            local source,count,seen=nil,0,{}
+            for _,child in ipairs(template:GetChildren())do
+                assert(not seen[child.Name],'Duplicate intro resource child');seen[child.Name]=true
+                if child:IsA('MeshPart') then source=child;count+=1
+                else
+                    assert(#child:GetChildren()==0,'Nested metadata content')
+                    if child.Name=='AppearanceProfile' then
+                        assert(child:IsA('StringValue') and child.Value=='CanonicalBossWalkerIntroLeg')
+                    elseif child.Name=='AppearanceScale' then assert(child:IsA('NumberValue') and child.Value==1)
+                    elseif child.Name=='SourceAssetId' then
+                        assert(child:IsA('StringValue') and child.Value:match('^%d+$') and tonumber(child.Value)>0)
+                    elseif child.Name=='SourceGlbSha256' or child.Name=='AssetManifestSha256' then
+                        assert(child:IsA('StringValue') and #child.Value==64 and child.Value:match('^[0-9a-f]+$'))
+                    else error('Unexpected intro metadata') end
+                end
+            end
+            assert(count==1 and source.Name=='IntroLeg12' and source.MeshId:match('^rbxassetid://%d+$')
+                and tonumber(source.MeshId:sub(14))>0)
+            local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
+            for _,n in ipairs({source.Size.X,source.Size.Y,source.Size.Z})do assert(finite(n) and n>0)end
+            local hasMeshSize,meshSize=pcall(function()return source.MeshSize end)
+            if hasMeshSize and meshSize~=nil then
+                for _,n in ipairs({meshSize.X,meshSize.Y,meshSize.Z})do assert(finite(n) and n>0)end
+            end
+            assert(finite(source.Transparency) and source.Transparency>=0 and source.Transparency<1)
+            local origin,n,surfaces=nil,0,0
+            for _,child in ipairs(source:GetChildren())do
+                assert(#child:GetChildren()==0,'Nested intro mesh content')
+                if child:IsA('Attachment')then assert(child.Name=='IntroOriginRigAttachment');origin=child;n+=1
+                else
+                    assert(child:IsA('SurfaceAppearance') and child.Name=='SurfaceAppearance')
+                    surfaces+=1;assert(surfaces<=1)
+                end
+            end
+            assert(n==1)
+            local identity=source.CFrame*origin.CFrame
+            local x,y,z=identity:ToEulerAnglesXYZ()
+            for _,v in ipairs({identity.Position.X,identity.Position.Y,identity.Position.Z,x,y,z})do
+                assert(finite(v) and math.abs(v)<=1e-4)
+            end
+            -- Clone only the validated mesh; no behaviour travels with this resource.
+            local mesh=source:Clone();mesh.Anchored=true;mesh.Massless=true
+            mesh.CanCollide=false;mesh.CanTouch=false;mesh.CanQuery=false
+            local model=Instance.new('Model');model.Name='IntroFoot12'
+            model:SetAttribute('SourceFrame',0x12);model:SetAttribute('Appearance','CanonicalBossWalkerIntroLeg')
+            model:SetAttribute('Adaptation','Source12 silhouette; authored3D depth and path')
+            mesh.Parent=model;model.PrimaryPart=mesh;model.Parent=folder
+            return {{part=mesh,offset=mesh.CFrame}}
+        end)
+        return ok and parts or nil
+    end
     local function footFrame(state,offset)
         local c=state.counter==0xE0 and 0xDF or state.counter
         local p=state.bossPosition
@@ -75,7 +136,7 @@ return function(World)
         if not self.bossIntroFolder then
             local folder=Instance.new('Folder');folder.Name='BossIntro';folder.Parent=self.folder
             folder:SetAttribute('IntroId',state.id)
-            self.bossIntroFolder=folder;self.bossIntroParts=makeFoot(folder);self.bossIntroRipples={}
+            self.bossIntroFolder=folder;self.bossIntroParts=importedLeg(folder) or makeFoot(folder);self.bossIntroRipples={}
             -- Exactly two reused markers, even across skipped heartbeats.
             for _,counter in ipairs({0x30,0x64}) do
                 local ring=piece(folder,'StompRipple'..counter,Vector3.new(.08,1,1),CFrame.new(),light,Enum.PartType.Cylinder).part

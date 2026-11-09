@@ -44,7 +44,171 @@ class BrickToadsPlaceTests(unittest.TestCase):
             path = folder / f'roblox-{family}-morphs.json'
             path.write_text(json.dumps(manifest), encoding='utf-8')
             manifests[family] = path, manifest
+        self.boss_fixture(source)
         return manifests['attack']
+
+    def boss_fixture(self, source):
+        folder = source / 'assets/characters/canonical-hero'
+        base = json.loads((folder / 'roblox-player1.json').read_text())['parts'][0]
+        rotation = [-1,0,0, 0,1,0, 0,0,-1]
+        def mesh(name, position, mount_name, mount, asset_id, muzzle=None):
+            row = copy.deepcopy(base)
+            row.update(name=name, meshId='rbxassetid://' + asset_id,
+                       size=[4,6,8], meshSize=[2,3,4], color=[.25,.5,1], material='Metal',
+                       cframe=position+rotation, attachments=[{'name':mount_name, 'cframe':mount+rotation}])
+            if muzzle is not None:
+                row['attachments'].append({'name':'MuzzleRigAttachment', 'cframe':muzzle+rotation})
+            return row
+        blob = b'explicit four-mesh boss packaging fixture, never uploaded as an asset'
+        (folder / 'boss-walker.glb').write_bytes(blob)
+        manifest = {'schema':1, 'appearanceProfile':'CanonicalBossWalkerAssets',
+                    'sourceAssetId':'987654323', 'sourceGlbFile':'boss-walker.glb',
+                    'sourceGlbSha256':hashlib.sha256(blob).hexdigest(), 'templates':[
+            {'name':'BossWalkerGuardian', 'appearanceProfile':'CanonicalBossWalker', 'appearanceScale':1,
+             'parts':[mesh('GuardianChassis',[2,3,4],'GuardianMountRigAttachment',[2,-3,4],'201'),
+                      mesh('GuardianLeftCannon',[-4,2,-1],'GuardianMountRigAttachment',[-1,-2,-1],'202',[-1,-2,3]),
+                      mesh('GuardianRightCannon',[4,2,-1],'GuardianMountRigAttachment',[1,-2,-1],'203',[1,-2,3])]},
+            {'name':'BossWalkerIntroLeg', 'appearanceProfile':'CanonicalBossWalkerIntroLeg', 'appearanceScale':1,
+             'parts':[mesh('IntroLeg12',[2,5,3],'IntroOriginRigAttachment',[2,-5,3],'204')]}]}
+        path = folder / 'boss-walker-roblox.json'
+        path.write_text(json.dumps(manifest), encoding='utf-8')
+        return path, manifest
+
+    def test_boss_templates_preserve_private_resources_rest_frames_origins_and_pbr(self):
+        path = self.root / 'assets/characters/canonical-hero/boss-walker-roblox.json'
+        manifest = json.loads(path.read_bytes())
+        root = ET.fromstring(self.builder.build(self.root))
+        storage = named(root,'ServerStorage')
+        self.assertIn('BrickToadsBossTemplates',
+                      [p.findtext("Properties/string[@name='Name']") for p in storage.findall('Item')])
+        folder = named(storage,'BrickToadsBossTemplates')
+        self.assertEqual({p.findtext("Properties/string[@name='Name']") for p in folder.findall('Item')},
+                         {'BossWalkerGuardian','BossWalkerIntroLeg'})
+        for row in manifest['templates']:
+            model = named(folder,row['name'])
+            self.assertEqual(model.attrib['class'],'Model')
+            for name,value in [('AppearanceProfile',row['appearanceProfile']),('SourceAssetId','987654323'),
+                               ('SourceGlbSha256',manifest['sourceGlbSha256']),
+                               ('AssetManifestSha256',hashlib.sha256(path.read_bytes()).hexdigest())]:
+                self.assertEqual(named(model,name).findtext("Properties/string[@name='Value']"),value)
+            self.assertEqual(named(model,'AppearanceScale').findtext("Properties/double[@name='Value']"),'1')
+            self.assertEqual(len([n for n in model.findall('Item') if n.attrib['class']=='MeshPart']),len(row['parts']))
+            self.assertFalse({n.attrib['class'] for n in model.iter('Item')}
+                             - {'Model','MeshPart','Attachment','SurfaceAppearance','StringValue','NumberValue'})
+            for part in row['parts']:
+                mesh = named(model,part['name'])
+                self.assertEqual(mesh.findtext("Properties/Content[@name='MeshId']/url"),part['meshId'])
+                self.assertEqual(mesh.findtext("Properties/Color3uint8[@name='Color3uint8']"),str(0xFF4080FF))
+                self.assertEqual(mesh.findtext("Properties/token[@name='Material']"),'1088')
+                for axis,value in zip('XYZ',[2,3,4]):
+                    self.assertEqual(float(mesh.findtext(f"Properties/Vector3[@name='InitialSize']/{axis}")),value)
+                for axis,value in zip('XYZ',[4,6,8]):
+                    self.assertEqual(float(mesh.findtext(f"Properties/Vector3[@name='size']/{axis}")),value)
+                for field,value in zip(('X','Y','Z','R00','R01','R02','R10','R11','R12','R20','R21','R22'),part['cframe']):
+                    self.assertEqual(float(mesh.findtext(f"Properties/CoordinateFrame[@name='CFrame']/{field}")),value)
+                self.assertEqual(len([n for n in mesh.findall('Item') if n.attrib['class']=='Attachment']),len(part['attachments']))
+                for attachment in part['attachments']:
+                    child = named(mesh,attachment['name'])
+                    for field,value in zip(('X','Y','Z','R00','R01','R02','R10','R11','R12','R20','R21','R22'),attachment['cframe']):
+                        self.assertEqual(float(child.findtext(f"Properties/CoordinateFrame[@name='CFrame']/{field}")),value)
+                for appearance in part['surfaceAppearances']:
+                    surface = named(mesh,appearance['name'])
+                    for key,prop in [('colorMap','ColorMap'),('normalMap','NormalMap'),
+                                     ('roughnessMap','RoughnessMap'),('metalnessMap','MetalnessMap')]:
+                        self.assertEqual(surface.findtext(f"Properties/Content[@name='{prop}']/url"),appearance[key])
+                for flag,value in [('Anchored','true'),('Massless','true'),('CanCollide','false'),('CanTouch','false'),('CanQuery','false')]:
+                    self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"),value)
+        self.assertNotIn('BrickToadsBossTemplates',''.join(named(root,'ReplicatedStorage').itertext()))
+        self.assertNotIn('BrickToadsBossTemplates',''.join(named(root,'Workspace').itertext()))
+
+    def assert_boss_rejects(self, cases):
+        path = self.root / 'assets/characters/canonical-hero/boss-walker-roblox.json'
+        original = path.read_bytes()
+        base = json.loads(original)
+        for name,change in cases:
+            with self.subTest(case=name):
+                manifest = copy.deepcopy(base); change(manifest)
+                path.write_text(json.dumps(manifest), encoding='utf-8')
+                with self.assertRaises(ValueError):
+                    self.builder.build(self.root)
+        path.write_bytes(original)
+
+    def test_boss_templates_reject_family_identity_missing_duplicate_and_extra_resources(self):
+        self.assert_boss_rejects([
+            ('schema',lambda r:r.update(schema=True)),
+            ('family',lambda r:r.update(appearanceProfile='CanonicalNESHeroMorph')),
+            ('missing-template',lambda r:r['templates'].pop()),
+            ('duplicate-template',lambda r:r['templates'][1].update(name='BossWalkerGuardian')),
+            ('unknown-template',lambda r:r['templates'][1].update(name='UnknownBoss')),
+            ('profile',lambda r:r['templates'][0].update(appearanceProfile='CanonicalBossWalkerIntroLeg')),
+            ('scale',lambda r:r['templates'][0].update(appearanceScale=.5)),
+            ('missing-part',lambda r:r['templates'][0]['parts'].pop()),
+            ('duplicate-part',lambda r:r['templates'][0]['parts'][1].update(name='GuardianChassis')),
+            ('unknown-part',lambda r:r['templates'][1]['parts'][0].update(name='Morph')),
+            ('extra-part',lambda r:r['templates'][0]['parts'].append(copy.deepcopy(r['templates'][1]['parts'][0]))),
+            ('template-script',lambda r:r['templates'][0].update(children=[{'class':'Script'}])),
+            ('mesh-humanoid',lambda r:r['templates'][0]['parts'][0].update(children=[{'class':'Humanoid'}])),
+            ('attachment-child',lambda r:r['templates'][0]['parts'][0]['attachments'][0].update(children=[])),
+            ('surface-child',lambda r:r['templates'][0]['parts'][0]['surfaceAppearances'][0].update(children=[]))])
+
+    def test_boss_templates_reject_invalid_mesh_geometry_visibility_and_content(self):
+        cases = [('invisible',lambda r:r['templates'][0]['parts'][0].update(transparency=1)),
+                 ('missing-mesh',lambda r:r['templates'][0]['parts'][0].update(meshId='')),
+                 ('foreign-mesh',lambda r:r['templates'][0]['parts'][0].update(meshId='https://example.invalid/mesh')),
+                 ('missing-mesh-size',lambda r:r['templates'][0]['parts'][0].pop('meshSize')),
+                 ('zero-size',lambda r:r['templates'][0]['parts'][0].update(size=[0,1,1])),
+                 ('nan-frame',lambda r:r['templates'][0]['parts'][0]['cframe'].__setitem__(0,float('nan'))),
+                 ('reflected-frame',lambda r:r['templates'][0]['parts'][0]['cframe'].__setitem__(3,1)),
+                 ('invalid-rotation',lambda r:r['templates'][0]['parts'][0]['cframe'].__setitem__(4,.1))]
+        for name,value in [('short',[1,2]),('null',None),('zero',[1,0,1]),('negative',[-1,1,1]),
+                           ('nan',[1,float('nan'),1]),('infinite',[1,1,float('inf')]),('boolean',[True,1,1])]:
+            cases.append(('mesh-size-'+name,lambda r,v=value:r['templates'][0]['parts'][0].update(meshSize=v)))
+        self.assert_boss_rejects(cases)
+
+    def test_boss_templates_reject_missing_extra_or_misaligned_mounts_and_muzzles(self):
+        self.assert_boss_rejects([
+            ('missing-mount',lambda r:r['templates'][0]['parts'][0].update(attachments=[])),
+            ('wrong-mount',lambda r:r['templates'][0]['parts'][0]['attachments'][0].update(name='UnknownAttachment')),
+            ('duplicate-mount',lambda r:r['templates'][0]['parts'][0]['attachments'].append(copy.deepcopy(r['templates'][0]['parts'][0]['attachments'][0]))),
+            ('chassis-muzzle',lambda r:r['templates'][0]['parts'][0]['attachments'].append(copy.deepcopy(r['templates'][0]['parts'][1]['attachments'][1]))),
+            ('missing-muzzle',lambda r:r['templates'][0]['parts'][1]['attachments'].pop()),
+            ('mount-axis',lambda r:r['templates'][0]['parts'][0]['attachments'][0]['cframe'].__setitem__(3,1)),
+            ('mount-axis-tolerance',lambda r:r['templates'][0]['parts'][0]['attachments'][0].update(cframe=[2,-3,4,-1,.0005,0,.0005,1,0,0,0,-1])),
+            ('chassis-origin',lambda r:r['templates'][0]['parts'][0]['attachments'][0]['cframe'].__setitem__(0,2.0005)),
+            ('left-sign',lambda r:r['templates'][0]['parts'][1]['attachments'][0]['cframe'].__setitem__(0,-5)),
+            ('right-sign',lambda r:r['templates'][0]['parts'][2]['attachments'][0]['cframe'].__setitem__(0,5)),
+            ('left-near-root',lambda r:r['templates'][0]['parts'][1]['attachments'][0]['cframe'].__setitem__(0,-3.99995)),
+            ('right-near-root',lambda r:r['templates'][0]['parts'][2]['attachments'][0]['cframe'].__setitem__(0,3.99995)),
+            ('muzzle-behind-mount',lambda r:r['templates'][0]['parts'][1]['attachments'][1]['cframe'].__setitem__(2,-2)),
+            ('muzzle-at-mount',lambda r:r['templates'][0]['parts'][1]['attachments'][1]['cframe'].__setitem__(2,-1)),
+            ('muzzle-near-mount',lambda r:r['templates'][0]['parts'][1]['attachments'][1]['cframe'].__setitem__(2,-.99995)),
+            ('muzzle-orthonormal-quarter-turn',lambda r:r['templates'][0]['parts'][1]['attachments'][1].update(
+                cframe=[-1,-2,3,0,0,1,0,1,0,-1,0,0])),
+            ('muzzle-nan',lambda r:r['templates'][0]['parts'][1]['attachments'][1]['cframe'].__setitem__(0,float('nan'))),
+            ('intro-origin',lambda r:r['templates'][1]['parts'][0]['attachments'][0]['cframe'].__setitem__(0,2.0005)),
+            ('intro-axis',lambda r:r['templates'][1]['parts'][0]['attachments'][0]['cframe'].__setitem__(3,1)),
+            ('intro-extra-origin',lambda r:r['templates'][1]['parts'][0]['attachments'].append(copy.deepcopy(r['templates'][1]['parts'][0]['attachments'][0])))])
+
+    def test_boss_templates_reject_invalid_provenance_and_source_paths(self):
+        cases = [('invalid-id',lambda r:r.update(sourceAssetId='not-uploaded')),
+                 ('zero-id',lambda r:r.update(sourceAssetId='0')),
+                 ('numeric-id',lambda r:r.update(sourceAssetId=123)),
+                 ('bad-sha',lambda r:r.update(sourceGlbSha256='bad')),
+                 ('wrong-sha',lambda r:r.update(sourceGlbSha256='0'*64))]
+        for filename in ('../outside.glb','..\\outside.glb','/outside.glb','C:\\outside.glb',
+                         'C:outside.glb','nested/boss-walker.glb','boss-walker.obj','',None,1,
+                         'boss-walker.glb:stream','boss-walker.glb ','CON.glb','other-boss.glb'):
+            cases.append(('source-file-'+str(filename),lambda r,v=filename:r.update(sourceGlbFile=v)))
+        self.assert_boss_rejects(cases)
+
+    def test_missing_boss_manifest_and_selected_source_fail_closed(self):
+        folder = self.root / 'assets/characters/canonical-hero'
+        manifest = folder / 'boss-walker-roblox.json'
+        original = manifest.read_bytes(); manifest.unlink()
+        with self.assertRaises(FileNotFoundError):self.builder.build(self.root)
+        manifest.write_bytes(original)
+        (folder / 'boss-walker.glb').unlink()
+        with self.assertRaises(FileNotFoundError):self.builder.build(self.root)
 
     def test_attack_morphs_preserve_private_identity_origin_extents_and_pbr(self):
         with tempfile.TemporaryDirectory() as directory:

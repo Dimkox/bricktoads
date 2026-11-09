@@ -201,7 +201,7 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
         # uploaded mesh content, never fabricated through a P2 Color override.
         color = [round(v * 255) for v in row["color"]]
         prop(mesh, "Color3uint8", "Color3uint8", 0xFF000000 | color[0] << 16 | color[1] << 8 | color[2])
-        prop(mesh, "token", "Material", enum_value({"Plastic": 256}, row["material"], "Material"))
+        prop(mesh, "token", "Material", enum_value({"Plastic": 256, "Metal": 1088}, row["material"], "Material"))
         prop(mesh, "token", "RenderFidelity", enum_value({"Automatic": 0, "Precise": 1, "Performance": 2}, row["renderFidelity"], "RenderFidelity"))
         if type(row["doubleSided"]) is not bool:
             raise ValueError("Invalid character DoubleSided flag")
@@ -343,6 +343,99 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
 
     morph_family('attack', ('PowerFist', 'BigBoot'))
     morph_family('fear', ('FearBeforeCut', 'FearAfterCut'))
+
+    # Boss art is mandatory private content, including its separately mounted
+    # intro leg. Never replace an absent import receipt with a generated proxy.
+    boss_bytes = (root_path / 'assets/characters/canonical-hero/boss-walker-roblox.json').read_bytes()
+    boss_assets = json.loads(boss_bytes)
+    boss_models = {
+        'BossWalkerGuardian': ('CanonicalBossWalker',
+                               {'GuardianChassis', 'GuardianLeftCannon', 'GuardianRightCannon'}),
+        'BossWalkerIntroLeg': ('CanonicalBossWalkerIntroLeg', {'IntroLeg12'}),
+    }
+    records = boss_assets.get('templates') if isinstance(boss_assets, dict) else None
+    if not isinstance(boss_assets, dict) or type(boss_assets.get('schema')) is not int \
+            or boss_assets['schema'] != 1 or boss_assets.get('appearanceProfile') != 'CanonicalBossWalkerAssets' \
+            or not isinstance(records, list) or len(records) != 2 \
+            or any(not isinstance(row, dict) or not isinstance(row.get('name'), str) for row in records) \
+            or {row['name'] for row in records} != set(boss_models):
+        raise ValueError('Expected exactly two tagged Boss Walker template resources')
+    asset_id, source_sha = boss_assets.get('sourceAssetId'), boss_assets.get('sourceGlbSha256')
+    if not isinstance(asset_id, str) or not asset_id.isdigit() or int(asset_id) <= 0 \
+            or not isinstance(source_sha, str) or not re.fullmatch('[0-9a-f]{64}', source_sha):
+        raise ValueError('Invalid Boss Walker source provenance')
+    if boss_assets.get('sourceGlbFile') != 'boss-walker.glb':
+        raise ValueError('Boss Walker source GLB must be the boss-walker.glb basename')
+    asset_folder = root_path / 'assets/characters/canonical-hero'
+    source_file = asset_folder / 'boss-walker.glb'
+    if source_file.resolve().parent != asset_folder.resolve():
+        raise ValueError('Boss Walker source GLB must remain inside its asset folder')
+    if hashlib.sha256(source_file.read_bytes()).hexdigest() != source_sha:
+        raise ValueError('Boss Walker source GLB SHA256 mismatch')
+
+    def composed_frame(first, second):
+        a = numbers(first, 12, 'Boss Walker rest frame')
+        b = numbers(second, 12, 'Boss Walker attachment frame')
+        position = [a[i] + sum(a[3+i*3+j] * b[j] for j in range(3)) for i in range(3)]
+        rotation = [sum(a[3+i*3+k] * b[3+k*3+j] for k in range(3))
+                    for i in range(3) for j in range(3)]
+        return position, rotation
+
+    boss_folder = item(storage, 'Folder', 'BrickToadsBossTemplates')
+    mesh_fields = {'name', 'meshId', 'textureId', 'size', 'meshSize', 'cframe', 'color', 'material',
+                   'renderFidelity', 'doubleSided', 'transparency', 'reflectance', 'attachments', 'surfaceAppearances'}
+    surface_fields = {'name', 'colorMap', 'normalMap', 'roughnessMap', 'metalnessMap', 'color', 'alphaMode'}
+    for record in sorted(records, key=lambda row: row['name']):
+        profile, part_names = boss_models[record['name']]
+        rows = record.get('parts')
+        if set(record) != {'name', 'appearanceProfile', 'appearanceScale', 'parts'} \
+                or record.get('appearanceProfile') != profile \
+                or not isinstance(rows, list) or len(rows) != len(part_names) \
+                or any(not isinstance(row, dict) or not isinstance(row.get('name'), str) for row in rows) \
+                or {row['name'] for row in rows} != part_names:
+            raise ValueError('Boss Walker template profile or exact named MeshParts do not match')
+        number(record.get('appearanceScale'), 'Boss Walker AppearanceScale', 1, 1)
+        model = item(boss_folder, 'Model', record['name'])
+        prop(item(model, 'NumberValue', 'AppearanceScale'), 'double', 'Value', 1)
+        for name, value in dict(AppearanceProfile=profile, SourceAssetId=asset_id, SourceGlbSha256=source_sha,
+                                AssetManifestSha256=hashlib.sha256(boss_bytes).hexdigest()).items():
+            prop(item(model, 'StringValue', name), 'string', 'Value', value)
+        for row in sorted(rows, key=lambda part: part['name']):
+            if set(row) != mesh_fields:
+                raise ValueError('Boss Walker MeshParts may contain only mesh resource fields')
+            if number(row['transparency'], 'Boss Walker Transparency', 0, 1) >= 1:
+                raise ValueError('Boss Walker source mesh must be visible')
+            intro = row['name'] == 'IntroLeg12'
+            cannon = row['name'] in {'GuardianLeftCannon', 'GuardianRightCannon'}
+            origin_name = 'IntroOriginRigAttachment' if intro else 'GuardianMountRigAttachment'
+            attachment_names = {origin_name} | ({'MuzzleRigAttachment'} if cannon else set())
+            attachments = row['attachments']
+            if not isinstance(attachments, list) or len(attachments) != len(attachment_names) \
+                    or any(not isinstance(a, dict) or set(a) != {'name', 'cframe'}
+                           or not isinstance(a.get('name'), str) for a in attachments) \
+                    or {a['name'] for a in attachments} != attachment_names:
+                raise ValueError('Boss Walker requires exactly its named mount and muzzle attachments')
+            origins = {a['name']: a['cframe'] for a in attachments}
+            mount, rotation = composed_frame(row['cframe'], origins[origin_name])
+            if any(abs(value - (i in (0, 4, 8))) >= .0001 for i, value in enumerate(rotation)):
+                raise ValueError('Boss Walker mount must use authored root axes')
+            if (intro or row['name'] == 'GuardianChassis') and any(abs(value) >= .0001 for value in mount):
+                raise ValueError('Boss Walker chassis or intro origin must resolve to the root origin')
+            if cannon:
+                if (row['name'] == 'GuardianLeftCannon' and mount[0] >= -.0001) \
+                        or (row['name'] == 'GuardianRightCannon' and mount[0] <= .0001):
+                    raise ValueError('Boss Walker cannon mount must remain on its named side')
+                muzzle, muzzle_rotation = composed_frame(row['cframe'], origins['MuzzleRigAttachment'])
+                if any(abs(value - (i in (0, 4, 8))) >= .0001 for i, value in enumerate(muzzle_rotation)):
+                    raise ValueError('Boss Walker muzzle must use authored root axes')
+                if muzzle[2] >= mount[2] - .0001:
+                    raise ValueError('Boss Walker cannon muzzle must be forward of its mount along -Z')
+            appearances = row['surfaceAppearances']
+            if not isinstance(appearances, list) or len(appearances) > 1 \
+                    or any(not isinstance(a, dict) or set(a) != surface_fields
+                           or a.get('name') != 'SurfaceAppearance' for a in appearances):
+                raise ValueError('Boss Walker may contain only one named SurfaceAppearance')
+            mesh_resource(model, row)
 
     # Explicit research switch; this rejected study is absent from default builds.
     if include_character_study:
