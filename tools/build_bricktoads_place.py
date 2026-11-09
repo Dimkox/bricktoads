@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -198,7 +199,14 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
             if not isinstance(source_sha, str) or len(source_sha) != 64 or any(c not in "0123456789abcdef" for c in source_sha):
                 raise ValueError("Invalid canonical SourceGlbSha256")
             player = template_name[-1]
-            glb = root_path / f"assets/characters/canonical-hero/canonical-hero-player{player}.glb"
+            source_file = manifest.get("sourceGlbFile", f"canonical-hero-player{player}.glb")
+            if not isinstance(source_file, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*\.glb", source_file) \
+                    or re.match(r"(?i)(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])\.", source_file):
+                raise ValueError("Invalid canonical sourceGlbFile: expected a safe .glb basename")
+            asset_folder = root_path / "assets/characters/canonical-hero"
+            glb = asset_folder / source_file
+            if glb.resolve().parent != asset_folder.resolve():
+                raise ValueError("Canonical source GLB must remain inside its asset folder")
             if hashlib.sha256(glb.read_bytes()).hexdigest() != source_sha:
                 raise ValueError("Canonical source GLB SHA256 mismatch")
             metadata.update(AppearanceProfile="CanonicalNESHero", SourceAssetId=asset_id, SourceGlbSha256=source_sha)
@@ -234,6 +242,12 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
             if any(v <= 0 for v in numbers(row["size"], 3, "size")):
                 raise ValueError("Character mesh size must be positive")
             compound(mesh, "Vector3", "size", row["size"], ("X", "Y", "Z"))
+            # MeshSize is read-only in scripts. The place format persists its
+            # source geometry extent as InitialSize, separately from scaled size.
+            mesh_size = row.get("meshSize") if canonical else row.get("meshSize", row["size"])
+            if any(v <= 0 for v in numbers(mesh_size, 3, "meshSize")):
+                raise ValueError("Character source mesh size must be positive")
+            compound(mesh, "Vector3", "InitialSize", mesh_size, ("X", "Y", "Z"))
             frame(mesh, row["cframe"])
             numbers(row["color"], 3, "Color", 0, 1)
             # Preserve actual exported mesh tint. Player palettes are in separate

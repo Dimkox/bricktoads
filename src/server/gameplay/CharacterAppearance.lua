@@ -1,8 +1,10 @@
 -- Tagged canonical P1/P2 resources and an explicit legacy Green study fallback.
--- Retargeting still follows existing R6 deltas; source pose/morph binding is separate.
+-- Canonical idle/walk/run and seven accepted attacks use source-frame 3D poses.
+-- Priority/unsupported states retain R6 retargeting. Mesh morphs remain separate.
 -- Never replaces the R6 physical rig.
 -- Caller must pin server network ownership AFTER all cosmetic parts are attached.
 local Appearance={}
+local HeroPresentation=script and require(script.Parent.CanonicalHeroPresentation)
 local JOINTS={
     {'Waist','LowerTorso','UpperTorso'}, {'Neck','UpperTorso','Head','Neck'},
     {'LeftShoulder','UpperTorso','LeftUpperArm','Left Shoulder'},
@@ -52,6 +54,7 @@ function Appearance.detach(actor)
     local state=actor.appearance
     if not state then return end
     actor.appearance=nil
+    state.presentation=nil;state.sourcePose=nil
     state.model:Destroy()
     for part,transparency in pairs(state.hidden) do
         if part.Parent and part:IsDescendantOf(state.ownerModel) then part.Transparency=transparency end
@@ -62,12 +65,22 @@ function Appearance.detach(actor)
     end
 end
 
-function Appearance.update(actor)
+function Appearance.update(actor,context)
     local state=actor.appearance
     if not state then return end
     if actor.model~=state.ownerModel or state.model.Parent~=state.ownerModel then
         Appearance.detach(actor);return
     end
+    local sourcePose,fallback
+    if HeroPresentation and state.profile=='CanonicalNESHero' and context then
+        state.presentation=state.presentation or HeroPresentation.new()
+        sourcePose,fallback=HeroPresentation.sample(state.presentation,context)
+    elseif state.presentation then
+        -- No trusted server context: discard the old sequence instead of
+        -- allowing an extended limb to persist or resume on a later update.
+        state.presentation=nil
+    end
+    state.sourcePose,state.sourceFallback=sourcePose,fallback
     local deltas,pitches={},{}
     for _,name in ipairs(RIG_NAMES) do
         local r=state.rig[name]
@@ -79,7 +92,10 @@ function Appearance.update(actor)
         local delta=source and deltas[source] or CFrame.new()
         -- Only the old generated study needs the splayed-arm correction.
         -- Canonical resources keep their authored shoulder orientation.
-        if name=='LeftShoulder' then delta=delta*CFrame.Angles(0,0,state.shoulderRoll)
+        if sourcePose then
+            local angles=sourcePose.joints[name]
+            delta=CFrame.Angles(angles[1],angles[2],angles[3])
+        elseif name=='LeftShoulder' then delta=delta*CFrame.Angles(0,0,state.shoulderRoll)
         elseif name=='RightShoulder' then delta=delta*CFrame.Angles(0,0,-state.shoulderRoll)
         elseif name=='LeftElbow' or name=='RightElbow' then
             local shoulder=name=='LeftElbow' and 'Left Shoulder' or 'Right Shoulder'
@@ -89,7 +105,14 @@ function Appearance.update(actor)
             delta=CFrame.Angles(math.clamp(math.min(0,pitches[hip])*.6,-.75,0),0,0)
         end
         local joint=state.joints[name]
-        joint.motor.C0=CFrame.new(joint.base.Position)*delta*joint.base.Rotation
+        if state.profile=='CanonicalNESHero' then
+            -- The importer keeps a rotated MeshPart rest frame. Its authored
+            -- attachment axes compensate for that rotation; apply the pose in
+            -- those axes so a forward punch still follows the face's -Z axis.
+            joint.motor.C0=joint.base*delta
+        else
+            joint.motor.C0=CFrame.new(joint.base.Position)*delta*joint.base.Rotation
+        end
     end
 end
 

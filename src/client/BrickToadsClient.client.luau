@@ -6,6 +6,7 @@ local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
 local sharedText = ReplicatedStorage:WaitForChild("BrickToads")
+local heroPortraitAssets = require(sharedText:WaitForChild("HeroPortraits"))
 local localizationService = game:GetService("LocalizationService")
 local localization = require(sharedText:WaitForChild("TextLocalization")).new(
     require(sharedText:WaitForChild("TextCatalog")), localizationService, Instance.new)
@@ -177,8 +178,8 @@ local cardsContainer = frame(scroll, "HeroCards")
 cardsContainer.LayoutOrder, cardsContainer.BackgroundTransparency = 5, 1
 local heroCards = {}
 
--- Original asset-free portraits remain readable at small phone sizes.
-local function toadPortrait(parent, color)
+-- Local portraits cover loading/failure; loaded thumbnails show the real model.
+local function toadPortrait(parent, color, template)
     local art = frame(parent, "Portrait", C.ink)
     art.BackgroundTransparency, art.ClipsDescendants = 0.2, true
     corner(art, 18)
@@ -198,6 +199,34 @@ local function toadPortrait(parent, color)
     end
     shape("Mouth", 0.36, 0.47, 0.28, 0.025, C.ink, 2)
     shape("Belt", 0.25, 0.81, 0.5, 0.06, C.ink, 2)
+    local assetId = heroPortraitAssets[template]
+    if assetId then
+        local portrait = Instance.new("ImageLabel")
+        portrait.Name = "ModelPortrait"
+        portrait.Size, portrait.BackgroundTransparency = UDim2.fromScale(1, 1), 1
+        portrait.ScaleType, portrait.ZIndex = Enum.ScaleType.Fit, 2
+        portrait.Visible = false
+        portrait.Image = "rbxthumb://type=Asset&id=" .. assetId .. "&w=420&h=420"
+        portrait.Parent = art
+        local function loaded()
+            if not portrait.Parent then return end
+            for _, child in ipairs(art:GetChildren()) do
+                if child:IsA("GuiObject") and child ~= portrait then child.Visible = false end
+            end
+            portrait.Visible = true
+        end
+        task.spawn(function()
+            local fetched = false
+            local ok = pcall(function()
+                game:GetService("ContentProvider"):PreloadAsync({portrait.Image}, function(_, status)
+                    fetched = status == Enum.AssetFetchStatus.Success
+                end)
+            end)
+            -- Hidden or scrolled-out images can keep IsLoaded=false despite a
+            -- successful fetch. Show the fetched image as a single replacement.
+            if ok and fetched then loaded() end
+        end)
+    end
     return art
 end
 for i, template in ipairs(templates) do
@@ -211,7 +240,7 @@ for i, template in ipairs(templates) do
     heroCards[i] = {
         button = card, outline = stroke(card, C.line, 1),
         accent = frame(card, "Accent", heroColors[template]),
-        art = toadPortrait(card, heroColors[template]), template = template,
+        art = toadPortrait(card, heroColors[template], template), template = template,
         name = label(card, "HeroName", template, 21, C.text, true),
         choice = label(card, "Selection", "SELECT", 12, C.muted, true),
         detail = label(card, "Detail", "Strike · rush · jump", 13, C.muted),

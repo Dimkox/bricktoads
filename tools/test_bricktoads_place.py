@@ -109,6 +109,10 @@ class BrickToadsPlaceTests(unittest.TestCase):
             for flag in ("CanCollide", "CanTouch", "CanQuery"):
                 self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"), "false")
             self.assertEqual(mesh.findtext("Properties/bool[@name='Massless']"), "true")
+            initial = mesh.find("Properties/Vector3[@name='InitialSize']")
+            self.assertIsNotNone(initial, 'Saved MeshParts must preserve their source geometry extent')
+            for axis, value in zip('XYZ', row.get('meshSize', row['size'])):
+                self.assertEqual(float(initial.findtext(axis)), value)
             for surface in row["surfaceAppearances"]:
                 appearance = named(mesh, surface["name"])
                 for key, prop in (("colorMap", "ColorMap"), ("roughnessMap", "RoughnessMap"), ("metalnessMap", "MetalnessMap")):
@@ -170,6 +174,12 @@ class BrickToadsPlaceTests(unittest.TestCase):
                 self.assertIsNotNone(mesh.find("Properties/Content[@name='TextureID']/null"))
                 for axis,value in zip('XYZ',row['size']):
                     self.assertEqual(float(mesh.findtext(f"Properties/Vector3[@name='size']/{axis}")),value)
+                initial = mesh.find("Properties/Vector3[@name='InitialSize']")
+                self.assertIsNotNone(initial, 'MeshId and resized size alone restore MeshSize as zero')
+                for axis, value in zip('XYZ', row['meshSize']):
+                    self.assertEqual(float(initial.findtext(axis)), value)
+                self.assertIsNone(mesh.find("Properties/Vector3[@name='MeshSize']"),
+                                  'Read-only MeshSize is saved under the InitialSize property')
                 fields=('X','Y','Z','R00','R01','R02','R10','R11','R12','R20','R21','R22')
                 for field,value in zip(fields,row['cframe']):
                     self.assertEqual(float(mesh.findtext(f"Properties/CoordinateFrame[@name='CFrame']/{field}")),value)
@@ -202,6 +212,81 @@ class BrickToadsPlaceTests(unittest.TestCase):
                 (source/f'assets/characters/canonical-hero/roblox-player{player}.json').unlink()
                 with self.assertRaises(FileNotFoundError):self.builder.build(source)
 
+    def test_explicit_canonical_glb_basename_replaces_only_the_default_source_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            shutil.copytree(ROOT / 'src', source / 'src')
+            folder = source / 'assets/characters/canonical-hero'
+            shutil.copytree(ROOT / 'assets/characters/canonical-hero', folder)
+            path = folder / 'roblox-player1.json'
+            manifest = json.loads(path.read_text(encoding='utf-8'))
+            default = folder / manifest.get('sourceGlbFile', 'canonical-hero-player1.glb')
+            selected = folder / 'review-versioned-hero.glb'
+            default.rename(selected)
+            manifest['sourceGlbFile'] = selected.name
+            path.write_text(json.dumps(manifest), encoding='utf-8')
+            root = ET.fromstring(self.builder.build(source))
+            template = named(named(named(root, 'ServerStorage'), 'BrickToadsCharacterTemplates'), 'CanonicalPlayer1')
+            self.assertEqual(named(template, 'SourceGlbSha256').findtext("Properties/string[@name='Value']"),
+                             manifest['sourceGlbSha256'])
+            self.assertEqual(len([p for p in template.findall('Item') if p.attrib['class'] == 'MeshPart']), 15)
+
+    def test_canonical_glb_filename_rejects_paths_extensions_and_empty_values(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            shutil.copytree(ROOT / 'src', source / 'src')
+            folder = source / 'assets/characters/canonical-hero'
+            shutil.copytree(ROOT / 'assets/characters/canonical-hero', folder)
+            path = folder / 'roblox-player1.json'
+            manifest = json.loads(path.read_text(encoding='utf-8'))
+            for filename in ('../outside.glb', '..\\outside.glb', '/outside.glb', 'C:\\outside.glb',
+                             'C:outside.glb', 'nested/hero.glb', 'hero.obj', '', None, 1,
+                             'hero.glb:stream', 'hero.glb ', 'hero\x00.glb', 'CON.glb', 'com1.glb'):
+                with self.subTest(filename=filename):
+                    manifest['sourceGlbFile'] = filename
+                    path.write_text(json.dumps(manifest), encoding='utf-8')
+                    with self.assertRaises(ValueError):
+                        self.builder.build(source)
+
+    def test_explicit_canonical_glb_missing_or_wrong_hash_never_uses_the_default(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            shutil.copytree(ROOT / 'src', source / 'src')
+            folder = source / 'assets/characters/canonical-hero'
+            shutil.copytree(ROOT / 'assets/characters/canonical-hero', folder)
+            path = folder / 'roblox-player1.json'
+            manifest = json.loads(path.read_text(encoding='utf-8'))
+            manifest['sourceGlbFile'] = 'review-missing-hero.glb'
+            path.write_text(json.dumps(manifest), encoding='utf-8')
+            with self.assertRaises(FileNotFoundError):
+                self.builder.build(source)
+            # The ordinary source still exists, but only the selected bytes count.
+            (folder / manifest['sourceGlbFile']).write_bytes(b'wrong source GLB bytes')
+            with self.assertRaisesRegex(ValueError, 'SHA256 mismatch'):
+                self.builder.build(source)
+
+    def test_canonical_surface_appearance_maps_are_preserved(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            shutil.copytree(ROOT / 'src', source / 'src')
+            folder = source / 'assets/characters/canonical-hero'
+            shutil.copytree(ROOT / 'assets/characters/canonical-hero', folder)
+            path = folder / 'roblox-player1.json'
+            manifest = json.loads(path.read_text(encoding='utf-8'))
+            surface = {'name': 'SurfaceAppearance', 'colorMap': 'rbxassetid://101',
+                       'normalMap': 'rbxassetid://102', 'roughnessMap': 'rbxassetid://103',
+                       'metalnessMap': 'rbxassetid://104', 'color': [.8, .9, 1], 'alphaMode': 'Overlay'}
+            manifest['parts'][0]['surfaceAppearances'] = [surface]
+            path.write_text(json.dumps(manifest), encoding='utf-8')
+            root = ET.fromstring(self.builder.build(source))
+            template = named(named(named(root, 'ServerStorage'), 'BrickToadsCharacterTemplates'), 'CanonicalPlayer1')
+            appearance = named(named(template, manifest['parts'][0]['name']), 'SurfaceAppearance')
+            for key, prop in (('colorMap', 'ColorMap'), ('normalMap', 'NormalMap'),
+                              ('roughnessMap', 'RoughnessMap'), ('metalnessMap', 'MetalnessMap')):
+                self.assertEqual(appearance.findtext(f"Properties/Content[@name='{prop}']/url"), surface[key])
+            for axis, value in zip('RGB', surface['color']):
+                self.assertEqual(float(appearance.findtext(f"Properties/Color3[@name='Color']/{axis}")), value)
+
     def test_invalid_canonical_geometry_content_profile_or_provenance_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             source=Path(directory)
@@ -225,6 +310,11 @@ class BrickToadsPlaceTests(unittest.TestCase):
             altered('missing-mesh-id',lambda r:r['parts'][0].update(meshId=''))
             altered('foreign-content-url',lambda r:r['parts'][0].update(meshId='https://example.invalid/mesh'))
             altered('negative-size',lambda r:r['parts'][0]['size'].__setitem__(0,-1))
+            altered('missing-mesh-size',lambda r:r['parts'][0].pop('meshSize', None))
+            for name, value in [('short', [1, 2]), ('null', None), ('zero', [1, 0, 1]),
+                                ('negative', [-1, 1, 1]), ('nan', [1, float('nan'), 1]),
+                                ('infinite', [1, 1, float('inf')]), ('boolean', [True, 1, 1])]:
+                altered('mesh-size-' + name, lambda r, v=value: r['parts'][0].update(meshSize=v))
             altered('nan-position',lambda r:r['parts'][0]['cframe'].__setitem__(0,float('nan')))
             altered('invalid-rotation',lambda r:r['parts'][0]['cframe'].__setitem__(3,8))
             altered('color-out-of-range',lambda r:r['parts'][0]['color'].__setitem__(1,1.5))

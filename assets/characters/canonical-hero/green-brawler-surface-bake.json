@@ -1,0 +1,101 @@
+{
+  "status": "PASS",
+  "sourceGlbSha256": "8bd9045d07ebfa228784114470d4790967e9af7a99a4a807e1e2b24c3d5b9ea7",
+  "sha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+  "bytes": 16143164,
+  "trianglePositionsAndNormalsSha256": "5929985f8336955a57428c699616cfab18574bf3df51c6cb3686cd104d843eca",
+  "geometryAndNodeTransformsUnchanged": true,
+  "triangles": 53400,
+  "nodes": 15,
+  "materials": 1,
+  "embeddedTextureCount": 3,
+  "atlasResolution": [
+    2048,
+    2048
+  ],
+  "tileSize": 8,
+  "vertices": 160200,
+  "parts": {
+    "LowerTorso": {
+      "vertices": 14640,
+      "triangles": 4880,
+      "sourceVertices": 2442
+    },
+    "UpperTorso": {
+      "vertices": 39276,
+      "triangles": 13092,
+      "sourceVertices": 6586
+    },
+    "Head": {
+      "vertices": 12996,
+      "triangles": 4332,
+      "sourceVertices": 2218
+    },
+    "LeftUpperArm": {
+      "vertices": 9492,
+      "triangles": 3164,
+      "sourceVertices": 1618
+    },
+    "RightUpperArm": {
+      "vertices": 9492,
+      "triangles": 3164,
+      "sourceVertices": 1618
+    },
+    "LeftLowerArm": {
+      "vertices": 6852,
+      "triangles": 2284,
+      "sourceVertices": 1170
+    },
+    "RightLowerArm": {
+      "vertices": 6852,
+      "triangles": 2284,
+      "sourceVertices": 1170
+    },
+    "LeftHand": {
+      "vertices": 6876,
+      "triangles": 2292,
+      "sourceVertices": 1164
+    },
+    "RightHand": {
+      "vertices": 6876,
+      "triangles": 2292,
+      "sourceVertices": 1164
+    },
+    "LeftUpperLeg": {
+      "vertices": 8052,
+      "triangles": 2684,
+      "sourceVertices": 1376
+    },
+    "RightUpperLeg": {
+      "vertices": 8052,
+      "triangles": 2684,
+      "sourceVertices": 1376
+    },
+    "LeftLowerLeg": {
+      "vertices": 11028,
+      "triangles": 3676,
+      "sourceVertices": 1878
+    },
+    "RightLowerLeg": {
+      "vertices": 11028,
+      "triangles": 3676,
+      "sourceVertices": 1878
+    },
+    "LeftFoot": {
+      "vertices": 4344,
+      "triangles": 1448,
+      "sourceVertices": 734
+    },
+    "RightFoot": {
+      "vertices": 4344,
+      "triangles": 1448,
+      "sourceVertices": 734
+    }
+  },
+  "COLOR_0": "omitted",
+  "emissiveTexture": "omitted; geometric highlights retained",
+  "colorSpace": "macro linear COLOR_0 multiplied by decoded sRGB texture, encoded IEC sRGB into albedo",
+  "padding": "each triangle has its own8x8 cell, clamp-barycentric dilation across cell;1.5texel minimum gutter",
+  "normalTransfer": "old tangent normal at .55 strength transformed into new triangle UV basis; new normal scale1",
+  "actualStudioImport": "PENDING"
+}

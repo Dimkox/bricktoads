@@ -1266,7 +1266,19 @@ function World:equipClub(id, heroId)
     local equipped=self.equippedClubs[id]
     if equipped then return equipped.owner==hero and equipped.heroId==heroId and equipped.model.Parent==hero.model end
     if hero.model:GetAttribute('EquippedClub')~=nil then return false end
-    local art=clubArt(hero.model,'EquippedClub_'..tostring(id),arm.CFrame*CFrame.new(0,-1.05,0),arm)
+    local grip=arm.CFrame*CFrame.new(0,-1.05,0)
+    local appearance=hero.appearance
+    if appearance and appearance.profile=='CanonicalNESHero' and appearance.ownerModel==hero.model
+        and appearance.model and appearance.model.Parent==hero.model then
+        local hand=appearance.model:FindFirstChild('RightHand')
+        local wrist=hand and hand:FindFirstChild('RightWristRigAttachment')
+        if hand and hand:IsA('BasePart') and wrist and wrist:IsA('Attachment') then
+            -- The visible hand moves independently of its hidden R6 fallback.
+            -- Use the palm centre; the wrist rotation corrects imported axes.
+            arm,grip=hand,hand.CFrame*wrist.CFrame.Rotation
+        end
+    end
+    local art=clubArt(hero.model,'EquippedClub_'..tostring(id),grip,arm)
     art.model:SetAttribute('ClubId',id)
     art.owner,art.heroId=hero,heroId
     self.equippedClubs[id]=art
@@ -1570,7 +1582,23 @@ function World:updatePresentation(session, dt, enemies)
                 end
                 motor.joint.C0 = motor.joint.C0:Lerp(motor.base * CFrame.Angles(angle, 0, roll), blend)
             end
-            if self.characterAppearance then self.characterAppearance.update(actor) end
+            if self.characterAppearance then
+                -- Accepted server state only. Source-stream commands remain
+                -- inert; this context drives cosmetic joints after R6 fallback.
+                local blocked=(actor.humanoid.Health<=0 or (enemy and enemy.dead) or (combat and combat.deathAt~=nil)) and 'Dead'
+                    or (reacting and 'Reaction') or (carryingEnemy and 'Carrying') or (beingCarried and 'Carried')
+                    or (dragonLink and 'Dragon') or (club and 'Club')
+                    or ((actor.root.Anchored or actor.humanoid.PlatformStand) and 'Paused')
+                    or (actor.humanoid.FloorMaterial==Enum.Material.Air and 'Airborne') or nil
+                self.characterAppearance.update(actor,{
+                    enabled=combat~=nil and not enemy and session.sourceCombat and true or false,
+                    actorId=actor.model:GetAttribute('ActorId'),now=session and session.now,dt=dt,
+                    attack=combat and combat.attack,recoveryAction=combat and combat.lastStrikeAction,
+                    recoveryUntil=combat and combat.strikeRecoveryUntil,reactionEpoch=combat and combat.reactionEpoch,
+                    blocked=blocked,grounded=actor.humanoid.FloorMaterial~=Enum.Material.Air,
+                    mode=movementMode or (walking and 'Walk' or 'Idle'),speed=speed,
+                })
+            end
         end
     end
 end
