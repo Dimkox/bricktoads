@@ -100,6 +100,7 @@ end
 
 function Controller:quarantine()
     self.faulted=true
+    if self.director and self.director.cancelBossIntro then pcall(function() self.director:cancelBossIntro('Quarantine') end) end
     self.actionFeedback=setmetatable({},{__mode='k'})
     if self.bossQueue and self.bossSlot then pcall(function() self.bossQueue:close(self.bossSlot,self.deps.clock()) end) end
     for id in pairs(self.world.actors or {}) do
@@ -153,6 +154,7 @@ function Controller:_begin(player,players)
         route=self.deps.LevelVariation.build(self.baseLevel,self.deps.LevelVariation.seedFromId(runId))
     end
     if self.bossQueue and self.bossSlot then self.bossQueue:close(self.bossSlot,at) end
+    if self.director and self.director.cancelBossIntro then self.director:cancelBossIntro('RunReplaced') end
     self.world:clearActors(); self.ownerSlots={}; self.owners={}; self.viewChoices={}
     if route then
         local rebuilt,reason=self.world:rebuildLevel(route)
@@ -180,7 +182,7 @@ function Controller:_begin(player,players)
     for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
     self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners,variation=variationMetadata(self.deps.Config.Level)})
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs,self.deps.DragonFlight)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs,self.deps.DragonFlight,self.deps.BossIntro)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end

@@ -21,7 +21,9 @@ local RIG_NAMES={'Neck','Left Shoulder','Right Shoulder','Left Hip','Right Hip'}
 local HIDDEN={Torso=true,Head=true,['Left Arm']=true,['Right Arm']=true,['Left Leg']=true,['Right Leg']=true,Eye=true}
 local CANONICAL={['Mr. Green']='CanonicalPlayer1',['Mr. Yellow']='CanonicalPlayer2'}
 local MORPHS={PowerFist={part='RightHand',attachment='RightWristRigAttachment'},
-    BigBoot={part='RightFoot',attachment='RightAnkleRigAttachment'}}
+    BigBoot={part='RightFoot',attachment='RightAnkleRigAttachment'},
+    FearBeforeCut={part='Head',attachment='NeckRigAttachment'},
+    FearAfterCut={part='Head',attachment='NeckRigAttachment'}}
 local MORPH_PREFIX={['Mr. Green']='Green',['Mr. Yellow']='PlayerTwo'}
 local function resource(templates,heroTemplate)
     local name=CANONICAL[heroTemplate]
@@ -131,13 +133,14 @@ local function updateMorphs(state,sourcePose)
         and active.joint.Parent==active.part and active.joint.Part0==active.originalPart and active.joint.Part1==active.part
         and tag(active.model,'AppearanceProfile','CanonicalNESHeroMorph') and tag(active.model,'HeroTemplate',state.heroTemplate)
         and tag(active.model,'MorphKind',requested)) then active=nil end
-    for _,row in pairs(state.morphs or {}) do
-        if row==active then
-            -- Capture at entry, not every render: an already hidden limb's1
-            -- must never overwrite its exact original (possibly nonzero) value.
-            if row.originalTransparency==nil then row.originalTransparency=row.originalPart.Transparency end
-            row.part.Transparency=row.visibleTransparency;row.originalPart.Transparency=1
-        else restoreMorph(state,row) end
+    -- Two fear forms share the same original Head. Restore the old form before
+    -- capturing/hiding the new one; pairs() order cannot decide skin visibility.
+    for _,row in pairs(state.morphs or {}) do if row~=active then restoreMorph(state,row) end end
+    if active then
+        -- Capture at entry, not every render: an already hidden limb's1
+        -- must never overwrite its exact original (possibly nonzero) value.
+        if active.originalTransparency==nil then active.originalTransparency=active.originalPart.Transparency end
+        active.part.Transparency=active.visibleTransparency;active.originalPart.Transparency=1
     end
     state.activeMorph=active and requested or nil
 end

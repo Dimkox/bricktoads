@@ -89,6 +89,7 @@ local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
 local worldType=require(gameplay.GameWorld)
 require(gameplay.DragonWorld)(worldType)
+require(gameplay.BossIntroWorld)(worldType)
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
 local buildInfo=script.Parent:FindFirstChild('BuildInfo')
 local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
@@ -96,6 +97,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
+    BossIntro=require(gameplay.BossIntro)(require(gameplay.CanonicalAnimation)),
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
     SourceCombat=require(gameplay.SourceCombat),DragonFlight=require(gameplay.DragonFlight),
@@ -492,6 +494,219 @@ return Core
         </Properties>
         <Item class="ModuleScript" referent="BT10">
           <Properties>
+            <string name="Name">BossIntro</string>
+            <ProtectedString name="Source">-- Finite first-route Boss Walker INTRO. Source counters/events come from the
+-- canonical profile; 60 Hz / 4.25 seconds is a local presentation calibration.
+-- Provenance: research/2026-11-09-canonical-character-animation-source.md,
+-- "Boss Walker appearance": main 4103-4187 and bank-six arena setup.
+-- The source addresses two heroes. Applying fear to the party's three captured
+-- identities is an explicit cooperative adaptation, with no gameplay effects.
+return function(Animation)
+    local Intro={}
+    Intro.__index=Intro
+    local function finite(n) return type(n)=='number' and n==n and n&gt;-math.huge and n&lt;math.huge end
+
+    function Intro.new(director)
+        local s=director.session
+        local actors={}
+        for _,slot in ipairs(s.order) do
+            local h,c=s.state.heroes[slot],s.combat[slot]
+            if h and h.status=='Alive' and h.actorId and c and not c.deathAt then actors[slot]=h.actorId end
+        end
+        local state={id=s.state.runId..':boss-intro:'..s.state.levelEpoch,runId=s.state.runId,
+            levelEpoch=s.state.levelEpoch,startedAt=director.now,counter=0,active=true,cameraCut=false,
+            phase='BeforeCut',heroActors=actors,bossPosition=table.clone(director.route.boss.position),events={}}
+        local self=setmetatable({director=director,session=s,world=director.world,state=state},Intro)
+        self:_advance(1)
+        return self
+    end
+
+    function Intro:_advance(counter)
+        local state=self.state
+        local row=assert(Animation.bossWalkerIntro(counter))
+        state.events=assert(Animation.bossWalkerEventsBetween(state.counter,counter))
+        -- E0 and FF skip write_anim_fear, rather than clearing the previous
+        -- animation. Recover the preceding write even when a heartbeat skips it.
+        local written=row.fearAnimation and row or Animation.bossWalkerIntro(counter-1)
+        if written and written.fearAnimation then
+            state.fearAnimation=written.fearAnimation;state.fearFrame=written.fearFrame
+            state.fearPointerMask=written.fearPointerMask
+        end
+        state.counter=counter;state.phase=row.phase
+        state.footFrame=row.footFrame;state.footMotion=row.footMotion
+        for _,event in ipairs(state.events) do if event.kind=='ArenaCut' then state.cameraCut=true end end
+        -- Every published context is plain data. Actor replacements can never
+        -- inherit this intro's presentation, even within the same party slot.
+        local actors={}
+        for slot,actorId in pairs(state.heroActors) do
+            local h,c=self.session.state.heroes[slot],self.session.combat[slot]
+            if h and h.actorId==actorId and h.status=='Alive' and c and not c.deathAt then actors[slot]=actorId end
+        end
+        state.heroActors=actors
+        if self.world.bossIntro then self.world:bossIntro(state) end
+        if row.ended then
+            state.active=false;self.complete=true
+            if self.world.bossIntro then self.world:bossIntro(nil) end
+            return 'Complete'
+        end
+        return 'Active'
+    end
+
+    function Intro:step(now)
+        if self.cancelled then return 'Cancelled' end
+        if self.complete then return 'Complete' end
+        local state=self.state
+        if self.director.result or self.session.state.status~='Active' then return self:cancel('RunEnded') end
+        if self.session.state.runId~=state.runId or self.session.state.levelEpoch~=state.levelEpoch then
+            return self:cancel('RunReplaced')
+        end
+        if not finite(now) or now&lt;state.startedAt then return 'INVALID_TIME' end
+        local counter=math.clamp(math.floor((now-state.startedAt)*60+1e-7),1,255)
+        if counter&lt;=state.counter then return 'Active' end
+        return self:_advance(counter)
+    end
+
+    function Intro:cancel(reason)
+        if self.cancelled or self.complete then return self.complete and 'Complete' or 'Cancelled' end
+        self.cancelled=true;self.state.active=false;self.state.phase='Cancelled';self.state.events={}
+        self.state.cancelReason=reason
+        if self.world.bossIntro then self.world:bossIntro(nil) end
+        return 'Cancelled'
+    end
+
+    function Intro:snapshot()
+        local s=self.state
+        return {id=s.id,runId=s.runId,levelEpoch=s.levelEpoch,counter=s.counter,fearFrame=s.fearFrame,
+            phase=s.phase,startedAt=s.startedAt,cameraCut=s.cameraCut,active=s.active}
+    end
+    return Intro
+end
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT11">
+          <Properties>
+            <string name="Name">BossIntroWorld</string>
+            <ProtectedString name="Source">-- Party-owned, cosmetic-only Boss Walker INTRO boundary. No hero assembly,
+-- ownership, collision, damage, Lighting or Camera is changed here.
+-- Replicated interface: world.folder/BossIntro (Folder) exposes Active(bool),
+-- IntroId(string), RunId(string), LevelEpoch(number), Counter(number), Phase(string),
+-- CameraCut(bool, latched from E0), FearFrame(number), StartedAt(server seconds),
+-- and Focus(Vector3: group-local boss position + group offset + 6 vertical studs).
+-- The folder is destroyed on FF/cancellation/clearActors; clients must release
+-- their intro view when it disappears. World.bossIntroState contains plain data.
+return function(World)
+    if World.bossIntro then return World end
+    local previousClear=World.clearActors
+    local steel=Color3.fromRGB(81,93,101)
+    local dark=Color3.fromRGB(33,39,44)
+    local copper=Color3.fromRGB(184,119,57)
+    local light=Color3.fromRGB(255,194,87)
+    local function piece(parent,name,size,offset,color,shape)
+        local p=Instance.new('Part');p.Name=name;p.Size=size;p.Color=color
+        p.Material=Enum.Material.Metal;p.Anchored=true;p.Massless=true
+        p.CanCollide=false;p.CanTouch=false;p.CanQuery=false;p.CastShadow=true
+        p.TopSurface=Enum.SurfaceType.Smooth;p.BottomSurface=Enum.SurfaceType.Smooth
+        if shape then p.Shape=shape end
+        p.CFrame=offset;p.Parent=parent
+        return {part=p,offset=offset}
+    end
+    local function makeFoot(folder)
+        local model=Instance.new('Model');model.Name='IntroFoot12';model.Parent=folder
+        model:SetAttribute('SourceFrame',0x12)
+        model:SetAttribute('SourceScaleHeroHeights',3.88)
+        model:SetAttribute('Adaptation','Authored 3D cosmetic path; no stomp damage')
+        local parts={}
+        local function add(name,x,y,z,sx,sy,sz,color,shape)
+            parts[#parts+1]=piece(model,name,Vector3.new(sx,sy,sz),CFrame.new(x,y,z),color,shape)
+        end
+        -- A six-stud local hero reference yields a 23.28-stud silhouette.
+        -- Original mechanical boot forms retain frame12's exaggerated scale.
+        add('Sole',-1,1.05,0,12,2.1,8.8,dark)
+        add('ToeArmor',-3.7,3.1,0,7,2.2,9.2,steel)
+        add('HeelArmor',3.4,3.5,0,3.8,3.2,8.4,steel)
+        add('Instep',0,5.2,0,5.8,3.6,7.8,copper)
+        add('AnkleJoint',2,7.5,0,5.2,4.2,6.3,dark,Enum.PartType.Ball)
+        add('ShinArmor',2,15.1,0,5.9,13.4,6.7,steel)
+        add('ShinInset',-1.04,15.3,0,.32,9.8,3.2,copper)
+        add('UpperBand',2,22.24,0,6.5,2.08,7.3,dark)
+        for _,side in ipairs({-1,1}) do
+            add('Piston'..side,2.1,14.5,side*3.65,1.2,12.5,1.1,copper)
+            add('AnkleBolt'..side,2,7.5,side*3.4,2.2,2.2,.55,light,Enum.PartType.Ball)
+            add('ToeRidge'..side,-3.7,4.32,side*2.5,6.8,.35,.7,dark)
+        end
+        return parts
+    end
+    local function footFrame(state,offset)
+        local c=state.counter==0xE0 and 0xDF or state.counter
+        local p=state.bossPosition
+        local x,y
+        if c&lt;0x64 then
+            local t=math.clamp((c-0x50)/20,0,1)
+            x=p.x-29+13*t;y=22*(1-t)^2
+        elseif c&lt;0xE0 then
+            local t=(c-0x64)/(0xE0-0x64)
+            x=p.x-16+16*t;y=4*math.sin(math.pi*t)
+        else
+            local t=math.clamp((c-0xE0)/30,0,1)
+            x=p.x+10*t;y=17*t
+        end
+        return CFrame.new(Vector3.new(x,p.y-3+y,p.z)+offset)
+    end
+    function World:bossIntro(state)
+        if not state then
+            self.bossIntroState=nil
+            if self.bossIntroFolder then self.bossIntroFolder:Destroy() end
+            self.bossIntroFolder=nil;self.bossIntroParts=nil;self.bossIntroRipples=nil
+            return
+        end
+        if self.bossIntroFolder and self.bossIntroFolder:GetAttribute('IntroId')~=state.id then self:bossIntro(nil) end
+        if not self.bossIntroFolder then
+            local folder=Instance.new('Folder');folder.Name='BossIntro';folder.Parent=self.folder
+            folder:SetAttribute('IntroId',state.id)
+            self.bossIntroFolder=folder;self.bossIntroParts=makeFoot(folder);self.bossIntroRipples={}
+            -- Exactly two reused markers, even across skipped heartbeats.
+            for _,counter in ipairs({0x30,0x64}) do
+                local ring=piece(folder,'StompRipple'..counter,Vector3.new(.08,1,1),CFrame.new(),light,Enum.PartType.Cylinder).part
+                ring.Material=Enum.Material.Neon;ring.CastShadow=false;ring.Transparency=1
+                self.bossIntroRipples[counter]=ring
+            end
+        end
+        self.bossIntroState=state
+        local folder=self.bossIntroFolder
+        folder:SetAttribute('Active',state.active==true)
+        folder:SetAttribute('RunId',state.runId);folder:SetAttribute('LevelEpoch',state.levelEpoch)
+        folder:SetAttribute('Counter',state.counter);folder:SetAttribute('Phase',state.phase)
+        folder:SetAttribute('CameraCut',state.cameraCut==true);folder:SetAttribute('FearFrame',state.fearFrame)
+        folder:SetAttribute('StartedAt',state.startedAt)
+        local p=state.bossPosition
+        folder:SetAttribute('Focus',Vector3.new(p.x,p.y+6,p.z)+self.offset)
+        local frame=footFrame(state,self.offset)
+        for _,row in ipairs(self.bossIntroParts) do
+            row.part.CFrame=frame*row.offset
+            row.part.Transparency=state.footFrame==0x12 and 0 or 1
+        end
+        for counter,ring in pairs(self.bossIntroRipples) do
+            local age=state.counter-counter
+            local visible=age&gt;=0 and age&lt;24
+            ring.Transparency=visible and .2+.8*age/24 or 1
+            local diameter=visible and 5+age*1.4 or 1
+            ring.Size=Vector3.new(.08,diameter,diameter)
+            local x=p.x-(counter==0x30 and 29 or 16)
+            ring.CFrame=CFrame.new(Vector3.new(x,p.y-2.9,p.z)+self.offset)*CFrame.Angles(0,0,math.pi/2)
+        end
+    end
+    function World:clearActors()
+        self:bossIntro(nil)
+        previousClear(self)
+    end
+    return World
+end
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT12">
+          <Properties>
             <string name="Name">BossQueue</string>
             <ProtectedString name="Source">-- Server-owned FIFO selection. Slots may compete, but each user has one queue/role state.
 -- All methods are synchronous; eligibility is supplied by the authoritative controller.
@@ -712,7 +927,7 @@ return BossQueue
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT11">
+        <Item class="ModuleScript" referent="BT13">
           <Properties>
             <string name="Name">CanonicalAnimation</string>
             <ProtectedString name="Source">-- Source-derived presentation queries only: no physics, health, damage or remotes.
@@ -1029,7 +1244,7 @@ return freeze(Animation)
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT12">
+        <Item class="ModuleScript" referent="BT14">
           <Properties>
             <string name="Name">CanonicalHeroPresentation</string>
             <ProtectedString name="Source">-- Cosmetic, source-FRAME driven poses. NES sprites have no 3D skeleton:
@@ -1053,6 +1268,16 @@ end
 -- an authored joint-pose approximation. Source uppercut1A is a different move.
 local POSES={
     [0x01]=pose({}),[0x02]=pose({}),
+    -- Source32 is the asymmetric stretched-jaw fear,33 the frontal scream.
+    -- Head geometry and these full-body joint angles are authored3D adaptations.
+    [0x32]=pose({Waist={-.14,.55,-.06},Neck={-.12,-.1,-.12},
+        LeftShoulder={-.65,0,-.8},LeftElbow={.45,0,0},LeftWrist={0,0,-.15},
+        RightShoulder={-.3,0,.65},RightElbow={.7,0,0},RightWrist={0,0,.15},
+        LeftHip={-.12,0,-.12},LeftKnee={-.22,0,0},RightHip={.15,0,.12},RightKnee={-.25,0,0}}),
+    [0x33]=pose({Waist={.08,0,0},Neck={-.1,0,0},
+        LeftShoulder={-.4,0,-1},LeftElbow={.3,0,0},LeftWrist={0,0,-.2},
+        RightShoulder={-.4,0,1},RightElbow={.3,0,0},RightWrist={0,0,.2},
+        LeftHip={.12,0,-.17},LeftKnee={-.25,0,0},RightHip={.12,0,.17},RightKnee={-.25,0,0}}),
     [0x03]=pose({Waist={-.08,0,0},LeftShoulder={.65,0,-.08},LeftElbow={.75,0,0},
         RightShoulder={.4,0,.08},RightElbow={1,0,0},LeftHip={-.55,0,0},LeftKnee={-.85,0,0},
         LeftAnkle={.25,0,0},RightHip={.3,0,0},RightAnkle={-.1,0,0}}),
@@ -1142,6 +1367,17 @@ function Presentation.sample(state,c)
     state.reactionEpoch=c.reactionEpoch
     local blocked=c.enabled~=true and 'Disabled' or c.blocked or (c.grounded==false and 'Airborne')
     if blocked then cancel(state,attack);state.gaitPhase=0;return nil,blocked end
+    local fear=c.fearIntro
+    if type(fear)=='table' and type(fear.id)=='string' and #fear.id&gt;0 and fear.actorId==c.actorId
+        and finite(fear.counter) and fear.counter%1==0 and fear.counter&gt;=1 and fear.counter&lt;255
+        and ((fear.frameId==0x32 and fear.counter&lt;=0xE0) or (fear.frameId==0x33 and fear.counter&gt;0xE0)) then
+        -- The server's finite intro reassigns fear; no animation byte writes
+        -- here move a physical body or block accepted player intents.
+        cancel(state,attack);state.gaitPhase=0
+        return {kind='Fear',animationId=fear.frameId==0x32 and 0x2C or 0x2E,frameId=fear.frameId,
+            introId=fear.id,sourceCounter=fear.counter,morphKind=fear.frameId==0x32 and 'FearBeforeCut' or 'FearAfterCut',
+            adaptation='Authored3DJointAngles',joints=POSES[fear.frameId],events=EMPTY}
+    end
     if attack and attack==state.observedAttack and attack.action~=state.observedAction then
         state.sequence=nil;state.invalidAttack='AttackChanged'
     elseif attack and attack~=state.observedAttack then
@@ -1198,14 +1434,14 @@ end
 Presentation.provenance=table.freeze({sourceCommit=Animation.provenance.commit,sourceCatalogSha256=Animation.provenance.sourceCatalogSha256,
     firstFrameCounterPhase=0,firstRead='Read',callerMask=1,callsPerSecond=CALLS_PER_SECOND,
     locomotionStudsPerPhase=DISTANCE_PER_PHASE,adaptation='Authored3DJointAngles',
-    scope='IdleWalkRunAndSevenAcceptedActions',
+    scope='IdleWalkRunSevenAcceptedActionsAndFirstBossFear',
     morphBindings='Graphics1C=PowerFist;Graphics1E=BigBoot;RightLimb3DAdaptation',
-    pending='RemainingMorphMeshes;Folded1FWindupSilhouette;BossFear;AirborneSourceZMapping;Carry;Club;Damage;Death'})
+    pending='RemainingMorphMeshes;Folded1FWindupSilhouette;CompleteFearBodySilhouette;AirborneSourceZMapping;Carry;Club;Damage;Death'})
 return Presentation
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT13">
+        <Item class="ModuleScript" referent="BT15">
           <Properties>
             <string name="Name">CanonicalWalker</string>
             <ProtectedString name="Source">-- Source-pixel presentation only: pinned Battletoads USA NES renderer.
@@ -1306,7 +1542,7 @@ return table.freeze(Walker)
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT14">
+        <Item class="ModuleScript" referent="BT16">
           <Properties>
             <string name="Name">CharacterAppearance</string>
             <ProtectedString name="Source">-- Tagged canonical P1/P2 resources and an explicit legacy Green study fallback.
@@ -1332,7 +1568,9 @@ local RIG_NAMES={'Neck','Left Shoulder','Right Shoulder','Left Hip','Right Hip'}
 local HIDDEN={Torso=true,Head=true,['Left Arm']=true,['Right Arm']=true,['Left Leg']=true,['Right Leg']=true,Eye=true}
 local CANONICAL={['Mr. Green']='CanonicalPlayer1',['Mr. Yellow']='CanonicalPlayer2'}
 local MORPHS={PowerFist={part='RightHand',attachment='RightWristRigAttachment'},
-    BigBoot={part='RightFoot',attachment='RightAnkleRigAttachment'}}
+    BigBoot={part='RightFoot',attachment='RightAnkleRigAttachment'},
+    FearBeforeCut={part='Head',attachment='NeckRigAttachment'},
+    FearAfterCut={part='Head',attachment='NeckRigAttachment'}}
 local MORPH_PREFIX={['Mr. Green']='Green',['Mr. Yellow']='PlayerTwo'}
 local function resource(templates,heroTemplate)
     local name=CANONICAL[heroTemplate]
@@ -1442,13 +1680,14 @@ local function updateMorphs(state,sourcePose)
         and active.joint.Parent==active.part and active.joint.Part0==active.originalPart and active.joint.Part1==active.part
         and tag(active.model,'AppearanceProfile','CanonicalNESHeroMorph') and tag(active.model,'HeroTemplate',state.heroTemplate)
         and tag(active.model,'MorphKind',requested)) then active=nil end
-    for _,row in pairs(state.morphs or {}) do
-        if row==active then
-            -- Capture at entry, not every render: an already hidden limb's1
-            -- must never overwrite its exact original (possibly nonzero) value.
-            if row.originalTransparency==nil then row.originalTransparency=row.originalPart.Transparency end
-            row.part.Transparency=row.visibleTransparency;row.originalPart.Transparency=1
-        else restoreMorph(state,row) end
+    -- Two fear forms share the same original Head. Restore the old form before
+    -- capturing/hiding the new one; pairs() order cannot decide skin visibility.
+    for _,row in pairs(state.morphs or {}) do if row~=active then restoreMorph(state,row) end end
+    if active then
+        -- Capture at entry, not every render: an already hidden limb's1
+        -- must never overwrite its exact original (possibly nonzero) value.
+        if active.originalTransparency==nil then active.originalTransparency=active.originalPart.Transparency end
+        active.part.Transparency=active.visibleTransparency;active.originalPart.Transparency=1
     end
     state.activeMorph=active and requested or nil
 end
@@ -1594,7 +1833,7 @@ return Appearance
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT15">
+        <Item class="ModuleScript" referent="BT17">
           <Properties>
             <string name="Name">DragonFlight</string>
             <ProtectedString name="Source">-- Temporary transport over existing actors. Damage/resources remain owned by Session/Director.
@@ -1885,7 +2124,7 @@ return Flight
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT16">
+        <Item class="ModuleScript" referent="BT18">
           <Properties>
             <string name="Name">DragonWorld</string>
             <ProtectedString name="Source">-- Roblox physical boundary for same-body Dragon transport; all coordinates passed in are group-local.
@@ -2112,7 +2351,7 @@ end
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT17">
+        <Item class="ModuleScript" referent="BT19">
           <Properties>
             <string name="Name">EnemyCarry</string>
             <ProtectedString name="Source">-- Existing-body Pig pickup/throw. Reach, timing and ordinary damage are Roblox calibration.
@@ -2336,7 +2575,7 @@ return EnemyCarry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT18">
+        <Item class="ModuleScript" referent="BT20">
           <Properties>
             <string name="Name">GameConfig</string>
             <ProtectedString name="Source">-- Original playable prototype calibration. Resource limits are canonical.
@@ -2414,7 +2653,7 @@ end
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT19">
+        <Item class="ModuleScript" referent="BT21">
           <Properties>
             <string name="Name">GameController</string>
             <ProtectedString name="Source">-- One group's runtime. Player identity comes from the server, never from payload fields.
@@ -2519,6 +2758,7 @@ end
 
 function Controller:quarantine()
     self.faulted=true
+    if self.director and self.director.cancelBossIntro then pcall(function() self.director:cancelBossIntro('Quarantine') end) end
     self.actionFeedback=setmetatable({},{__mode='k'})
     if self.bossQueue and self.bossSlot then pcall(function() self.bossQueue:close(self.bossSlot,self.deps.clock()) end) end
     for id in pairs(self.world.actors or {}) do
@@ -2572,6 +2812,7 @@ function Controller:_begin(player,players)
         route=self.deps.LevelVariation.build(self.baseLevel,self.deps.LevelVariation.seedFromId(runId))
     end
     if self.bossQueue and self.bossSlot then self.bossQueue:close(self.bossSlot,at) end
+    if self.director and self.director.cancelBossIntro then self.director:cancelBossIntro('RunReplaced') end
     self.world:clearActors(); self.ownerSlots={}; self.owners={}; self.viewChoices={}
     if route then
         local rebuilt,reason=self.world:rebuildLevel(route)
@@ -2599,7 +2840,7 @@ function Controller:_begin(player,players)
     for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
     self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners,variation=variationMetadata(self.deps.Config.Level)})
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs,self.deps.DragonFlight)
+    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs,self.deps.DragonFlight,self.deps.BossIntro)
     self.current.contextualAttack=function(slot,now,action)
         return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
     end
@@ -2825,7 +3066,7 @@ return Controller
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT20">
+        <Item class="ModuleScript" referent="BT22">
           <Properties>
             <string name="Name">GameWorld</string>
             <ProtectedString name="Source">-- Original first-level presentation. Combat and hero physics stay in BaseWorld.
@@ -4427,6 +4668,10 @@ function World:updatePresentation(session, dt, enemies)
                     recoveryUntil=combat and combat.strikeRecoveryUntil,reactionEpoch=combat and combat.reactionEpoch,
                     blocked=blocked,grounded=actor.humanoid.FloorMaterial~=Enum.Material.Air,
                     mode=movementMode or (walking and 'Walk' or 'Idle'),speed=speed,
+                    fearIntro=self.bossIntroState and self.bossIntroState.heroActors
+                        and self.bossIntroState.heroActors[id]==actor.model:GetAttribute('ActorId') and {
+                            id=self.bossIntroState.id,actorId=self.bossIntroState.heroActors[id],
+                            counter=self.bossIntroState.counter,frameId=self.bossIntroState.fearFrame} or nil,
                 })
             end
         end
@@ -4453,7 +4698,7 @@ return World
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT21">
+        <Item class="ModuleScript" referent="BT23">
           <Properties>
             <string name="Name">GuardianPattern</string>
             <ProtectedString name="Source">-- Original 3D tuning around the source's ground-ball pickup/throw guardian chain.
@@ -4731,7 +4976,7 @@ return GuardianPattern
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT22">
+        <Item class="ModuleScript" referent="BT24">
           <Properties>
             <string name="Name">HealingFlies</string>
             <ProtectedString name="Source">-- Source-backed food arithmetic; flight, reach and timing are Roblox calibration.
@@ -4867,7 +5112,7 @@ return HealingFlies
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT23">
+        <Item class="ModuleScript" referent="BT25">
           <Properties>
             <string name="Name">LevelDefinition</string>
             <ProtectedString name="Source">-- Original Brick Toads geography; static actor order is derived from upstream level1_cfg.
@@ -4921,7 +5166,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT24">
+        <Item class="ModuleScript" referent="BT26">
           <Properties>
             <string name="Name">LevelDirector</string>
             <ProtectedString name="Source">-- Original prototype encounters. All decisions run on the server.
@@ -4940,14 +5185,14 @@ local function towards(a,b,amount)
     return {x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t}
 end
 local objectives={Approach="Defeat the patrol by the old gate",Courtyard="Clear the inner courtyard",
-    BossReady="Assigning Guardian: waiting for the invited player",
+    BossReady="Assigning Guardian: waiting for the invited player",BossIntro="The Guardian approaches",
     Boss="Strike three projectiles back at the Guardian",Exit="The path is open — reach the glowing gate",
     Won="Causeway cleared",Lost="Team eliminated"}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs,DragonFlight)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs,DragonFlight,BossIntro)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,Combat=Combat,enemies={},projectiles={},byUserId={},ownerNames={},
-        stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
+        stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,BossIntro=BossIntro,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height,
             windup=config.Enemy.windup,cooldown=config.Enemy.cooldown,recoveryPose=.17},random=math.random},Director)
     if self.route then
@@ -5222,12 +5467,34 @@ function Director:_resolveStrike(id,e)
     if not landed then self:_log('EnemyAttackMiss',id,{actorId=e.actorId,action=pending.action}) end
 end
 function Director:_boss()
+    if self.bossIntro or self.enemies[-99] then return end
     local controller=self.bossGate and self.bossGate(self.now) or {state='NPC'}
     if controller.state=='Waiting' then
         self.stage='BossReady'; self.world:stage('BossReady'); return
     end
-    self.stage='Boss'; self.world:stage('Boss')
     if self.clubs then self.clubs:bossIntro() end
+    if self.route and self.BossIntro then
+        -- Drop carried bodies and pending captures through their normal release
+        -- path. Carry remains available after this single intro transition.
+        if self.carry then
+            local released={}
+            for id,row in pairs(self.carry.states) do if row.mode=='Carried' then released[id]=true end end
+            for _,row in ipairs(self.carry.pending) do released[row.id]=true end
+            for id in pairs(released) do self.carry:forgetEnemy(id) end
+        end
+        self.bossController=controller
+        self.stage='BossIntro';self.world:stage('BossIntro')
+        self.bossIntro=self.BossIntro.new(self)
+        return
+    end
+    self:_activateBoss(controller)
+end
+function Director:cancelBossIntro(reason)
+    if self.bossIntro then return self.bossIntro:cancel(reason) end
+end
+function Director:_activateBoss(controller)
+    if self.enemies[-99] then return end
+    self.stage='Boss'; self.world:stage('Boss')
     local position=self.route and self.route.boss.position or {x=82,y=3,z=0}
     assert(self.world:spawnEnemy(-99,'Boss',position),'Boss spawn failed')
     local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
@@ -5500,6 +5767,7 @@ function Director:_projectiles(dt)
 end
 function Director:step(now,dt)
     if self.result then
+        self:cancelBossIntro('RunEnded')
         if self.flies then self.flies:close() end
         if self.carry then self.carry:close() end
         if self.clubs then self.clubs:close() end
@@ -5512,6 +5780,7 @@ function Director:step(now,dt)
     if self.flies then self.flies:step(now) end
     if self.dragons then self.dragons:step(now,dt) end
     if self.session.state.status=='Lost' then
+        self:cancelBossIntro('RunEnded')
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost')
         if self.guardian then self.guardian:step(now,0) end
         if self.dragons then self.dragons:close() end
@@ -5528,6 +5797,9 @@ function Director:step(now,dt)
         end
     end
     if self.stage=='BossReady' then self:_boss() end
+    if self.stage=='BossIntro' and self.bossIntro and self.bossIntro:step(now)=='Complete' then
+        self:_activateBoss(self.bossController)
+    end
     if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
     if self.stage=='Exit' then
@@ -5560,14 +5832,14 @@ function Director:snapshot()
     return {stage=self.stage,objective=objective,enemies=enemies,bossHits=self.bossHits,
         bossMax=self.config.Boss.hits,result=self.result,zoneIndex=self.zoneIndex,zoneCount=self.route and #self.route.zones,
         zoneName=zone and zone.name,bossMechanic=self.route and 'PickupThrow',bossRawLife=self.enemies[-99] and self.enemies[-99].rawLife,
-        healingFlies=self.flies and self.flies:snapshot(),
+        healingFlies=self.flies and self.flies:snapshot(),bossIntro=self.bossIntro and self.bossIntro:snapshot(),
         variation=variation and {version=variation.version,seed=variation.seed,sectionChoices=table.clone(variation.sectionChoices)}}
 end
 return Director
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT25">
+        <Item class="ModuleScript" referent="BT27">
           <Properties>
             <string name="Name">LevelVariation</string>
             <ProtectedString name="Source">-- Original authored sections, not copied NES layouts or player navigation assistance.
@@ -5718,7 +5990,7 @@ return Variation
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT26">
+        <Item class="ModuleScript" referent="BT28">
           <Properties>
             <string name="Name">MatchHub</string>
             <ProtectedString name="Source">-- Current-Player authority and routing for independent local playable groups.
@@ -6089,7 +6361,7 @@ return MatchHub
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT27">
+        <Item class="ModuleScript" referent="BT29">
           <Properties>
             <string name="Name">RunJournal</string>
             <ProtectedString name="Source">-- Bounded private evidence and an allowlisted view of the same server records.
@@ -6199,7 +6471,7 @@ return Journal
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT28">
+        <Item class="ModuleScript" referent="BT30">
           <Properties>
             <string name="Name">SourceCombat</string>
             <ProtectedString name="Source">-- Source-state action choice. Public controls never carry target, Life or profile.
@@ -6252,7 +6524,7 @@ return SourceCombat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT29">
+        <Item class="ModuleScript" referent="BT31">
           <Properties>
             <string name="Name">WalkerClubs</string>
             <ProtectedString name="Source">-- One source-backed Walker leg-club per combat death. Geometry/timing/NPC HP are Roblox calibration.
@@ -6466,11 +6738,11 @@ return WalkerClubs
           </Properties>
         </Item>
       </Item>
-      <Item class="Folder" referent="BT30">
+      <Item class="Folder" referent="BT32">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT31">
+        <Item class="ModuleScript" referent="BT33">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
@@ -6553,7 +6825,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT32">
+        <Item class="ModuleScript" referent="BT34">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -6910,7 +7182,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT33">
+        <Item class="ModuleScript" referent="BT35">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -6940,7 +7212,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT34">
+        <Item class="ModuleScript" referent="BT36">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -7000,7 +7272,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT35">
+        <Item class="ModuleScript" referent="BT37">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -7280,24 +7552,24 @@ return World
           </Properties>
         </Item>
       </Item>
-      <Item class="ModuleScript" referent="BT53">
+      <Item class="ModuleScript" referent="BT55">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='4492378ddb9f182c5b6f9f2eec637ef9f6251b0a82e6f25bf5c86bc9074e2f31'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='a9a7efd51486d814d2cf35ffefb9170b94456e49bb08d626008e9cd8c52459ca'})
 </ProtectedString>
         </Properties>
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT36">
+  <Item class="ReplicatedStorage" referent="BT38">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT37">
+    <Item class="Folder" referent="BT39">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT38">
+      <Item class="ModuleScript" referent="BT40">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -7307,7 +7579,7 @@ return table.freeze({
 </ProtectedString>
         </Properties>
       </Item>
-      <Item class="ModuleScript" referent="BT39">
+      <Item class="ModuleScript" referent="BT41">
         <Properties>
           <string name="Name">HeroPortraits</string>
           <ProtectedString name="Source">-- Front portraits rendered directly from the authored game meshes.
@@ -7319,12 +7591,13 @@ return table.freeze({
 </ProtectedString>
         </Properties>
       </Item>
-      <Item class="ModuleScript" referent="BT40">
+      <Item class="ModuleScript" referent="BT42">
         <Properties>
           <string name="Name">TextCatalog</string>
           <ProtectedString name="Source">-- English source strings and curated Russian translations. No user display names.
 -- Roblox LocalizationTable entries; add supported languages to Values here.
 local Catalog={entries={
+    {Key="The Guardian approaches",Source="The Guardian approaches",Values={["en-us"]="The Guardian approaches",["ru"]="Страж приближается"}},
     {Key="1  ·  Flooded Gate",Source="1  ·  Flooded Gate",Values={["en-us"]="1  ·  Flooded Gate",["ru"]="1  ·  Затопленные ворота"}},
     {Key="2  ·  Broken Aqueduct",Source="2  ·  Broken Aqueduct",Values={["en-us"]="2  ·  Broken Aqueduct",["ru"]="2  ·  Разбитый акведук"}},
     {Key="3  ·  Stone Courtyard",Source="3  ·  Stone Courtyard",Values={["en-us"]="3  ·  Stone Courtyard",["ru"]="3  ·  Каменный двор"}},
@@ -7694,7 +7967,7 @@ return Catalog
 </ProtectedString>
         </Properties>
       </Item>
-      <Item class="ModuleScript" referent="BT41">
+      <Item class="ModuleScript" referent="BT43">
         <Properties>
           <string name="Name">TextLocalization</string>
           <ProtectedString name="Source">-- Standard Roblox table/translator adapter. Engine services are injected for native contracts.
@@ -7790,25 +8063,25 @@ return Localization
       </Item>
     </Item>
   </Item>
-  <Item class="StarterGui" referent="BT42">
+  <Item class="StarterGui" referent="BT44">
     <Properties>
       <string name="Name">StarterGui</string>
       <token name="ScreenOrientation">4</token>
     </Properties>
   </Item>
-  <Item class="StarterPlayer" referent="BT43">
+  <Item class="StarterPlayer" referent="BT45">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT44">
+    <Item class="StarterPlayerScripts" referent="BT46">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT45">
+      <Item class="Folder" referent="BT47">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT46">
+        <Item class="ModuleScript" referent="BT48">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -8024,7 +8297,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT47">
+        <Item class="LocalScript" referent="BT49">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -9497,7 +9770,7 @@ sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT48">
+        <Item class="ModuleScript" referent="BT50">
           <Properties>
             <string name="Name">CombatFeedback</string>
             <ProtectedString name="Source">-- Confirmed presentation only. This module never sends input or changes actors.
@@ -9653,7 +9926,7 @@ return Feedback
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT49">
+        <Item class="ModuleScript" referent="BT51">
           <Properties>
             <string name="Name">GroupPanel</string>
             <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
@@ -9898,7 +10171,7 @@ return GroupPanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT50">
+        <Item class="ModuleScript" referent="BT52">
           <Properties>
             <string name="Name">MovementInput</string>
             <ProtectedString name="Source">-- Native Bool actions own hardware/touch aggregation; this model owns tap timing.
@@ -9946,7 +10219,7 @@ return MovementInput
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT51">
+        <Item class="ModuleScript" referent="BT53">
           <Properties>
             <string name="Name">RobloxInputBindings</string>
             <ProtectedString name="Source">-- Standard IAS Bool actions aggregate keyboard and UIButton presses natively.
@@ -10019,7 +10292,7 @@ return RobloxInputBindings
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT52">
+        <Item class="ModuleScript" referent="BT54">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.
@@ -10061,6 +10334,7 @@ function SpectatorCamera:sync(snapshot, controlled)
         or self.worldName ~= snapshot.worldName or self.groupId ~= snapshot.groupId then
         self.mode, self.selectedActorId, self.point, self.freePosition = "Follow", nil, nil, nil
         self.models, self.targets = {}, {}
+        self.introCameraId,self.introCounter,self.introShake=nil,nil,nil
         self:resetInput()
         self.refreshElapsed = 1
     end
@@ -10129,12 +10403,59 @@ function SpectatorCamera:rotate(amount)
     if self.enabled and self:isFree() then self.yaw += amount end
 end
 
+function SpectatorCamera:stepIntro(dt,camera)
+    local function release()
+        self.introCameraId,self.introCounter,self.introShake=nil,nil,nil
+        camera:SetAttribute('BossIntroId',nil)
+        return false
+    end
+    if self:isFree() or not self.worldName then return release() end
+    local world=workspace:FindFirstChild(self.worldName)
+    local intro=world and world:FindFirstChild('BossIntro')
+    if not intro or intro:GetAttribute('Active')~=true or intro:GetAttribute('RunId')~=self.runId
+        or intro:GetAttribute('LevelEpoch')~=self.levelEpoch then return release() end
+    local counter,id,focus=intro:GetAttribute('Counter'),intro:GetAttribute('IntroId'),intro:GetAttribute('Focus')
+    local function finite(n)return type(n)=='number' and n==n and math.abs(n)&lt;math.huge end
+    local focusType=typeof(focus)
+    if not finite(counter) or counter%1~=0 or counter&lt;1 or counter&gt;=255 or type(id)~='string'
+        or (focusType~='Vector3' and focusType~='table')
+        or not finite(focus.X) or not finite(focus.Y) or not finite(focus.Z) then return release() end
+    if self.introCameraId~=id then
+        self.introCameraId,self.introCounter,self.introShake=id,counter,0
+    end
+    for _,mark in ipairs({0x30,0x64})do
+        if self.introCounter&lt;mark and counter&gt;=mark then self.introShake=.16 end
+    end
+    self.introCounter=counter
+    self.introShake=math.max(0,(self.introShake or 0)-math.clamp(dt,0,.1))
+    local cut=intro:GetAttribute('CameraCut')==true
+    local target,offset=focus,Vector3.new(-19,15,27)
+    if not cut then
+        local controlled=self.controlled
+        local model=controlled and self.models and self.models[controlled.actorId]
+        if not model and self.targets[1] then model=self.targets[1].model end
+        local root=model and model.Parent and model:FindFirstChild('HumanoidRootPart')
+        if root then
+            local distance=(root.Position-focus).Magnitude
+            target=(root.Position+focus)/2
+            offset=Vector3.new(14,math.max(16,distance*.35),math.max(28,distance*.7))
+        else offset=Vector3.new(15,18,30) end
+    end
+    -- Camera distance, short shake and perspective are authored3D adaptation.
+    -- The server's source counter determines the two impacts and the E0 cut.
+    local shake=math.sin((.16-self.introShake)*100)*self.introShake*1.25
+    camera.CFrame=CFrame.lookAt(target+offset+Vector3.new(shake,0,0),target)
+    camera:SetAttribute('BossIntroId',id)
+    return true
+end
+
 function SpectatorCamera:step(dt, camera)
     if not camera then return end
     self.refreshElapsed += dt
     if self.refreshElapsed &gt;= 0.2 then self.refreshElapsed = 0; self:refreshTargets() end
     camera.CameraType = Enum.CameraType.Scriptable
     camera:SetAttribute("SpectatorMode", self.mode)
+    if self:stepIntro(dt,camera) then return end
     if self:isFree() and self.freePosition then
         if self.enabled then
             local function down(key) return self.keys[key] and 1 or 0 end
@@ -10189,49 +10510,49 @@ return SpectatorCamera
       </Item>
     </Item>
   </Item>
-  <Item class="ServerStorage" referent="BT54">
+  <Item class="ServerStorage" referent="BT56">
     <Properties>
       <string name="Name">ServerStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT55">
+    <Item class="Folder" referent="BT57">
       <Properties>
         <string name="Name">BrickToadsCharacterTemplates</string>
       </Properties>
-      <Item class="Model" referent="BT56">
+      <Item class="Model" referent="BT58">
         <Properties>
           <string name="Name">CanonicalPlayer1</string>
         </Properties>
-        <Item class="NumberValue" referent="BT57">
+        <Item class="NumberValue" referent="BT59">
           <Properties>
             <string name="Name">AppearanceScale</string>
             <double name="Value">1</double>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT58">
+        <Item class="StringValue" referent="BT60">
           <Properties>
             <string name="Name">AssetManifestSha256</string>
             <string name="Value">3a440d464f435c2f8f8249ae01752fc780d449e8ae6aa8418f6582948e56c86e</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT59">
+        <Item class="StringValue" referent="BT61">
           <Properties>
             <string name="Name">AppearanceProfile</string>
             <string name="Value">CanonicalNESHero</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT60">
+        <Item class="StringValue" referent="BT62">
           <Properties>
             <string name="Name">SourceAssetId</string>
             <string name="Value">98446273547261</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT61">
+        <Item class="StringValue" referent="BT63">
           <Properties>
             <string name="Name">SourceGlbSha256</string>
             <string name="Value">22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543</string>
           </Properties>
         </Item>
-        <Item class="MeshPart" referent="BT62">
+        <Item class="MeshPart" referent="BT64">
           <Properties>
             <string name="Name">Head</string>
             <Content name="MeshId">
@@ -10276,7 +10597,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT63">
+          <Item class="Attachment" referent="BT65">
             <Properties>
               <string name="Name">NeckRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10295,7 +10616,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT64">
+          <Item class="SurfaceAppearance" referent="BT66">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -10319,7 +10640,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT65">
+        <Item class="MeshPart" referent="BT67">
           <Properties>
             <string name="Name">LeftFoot</string>
             <Content name="MeshId">
@@ -10364,7 +10685,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT66">
+          <Item class="Attachment" referent="BT68">
             <Properties>
               <string name="Name">LeftAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10383,7 +10704,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT67">
+          <Item class="SurfaceAppearance" referent="BT69">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -10407,7 +10728,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT68">
+        <Item class="MeshPart" referent="BT70">
           <Properties>
             <string name="Name">LeftHand</string>
             <Content name="MeshId">
@@ -10452,7 +10773,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT69">
+          <Item class="Attachment" referent="BT71">
             <Properties>
               <string name="Name">LeftWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10471,7 +10792,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT70">
+          <Item class="SurfaceAppearance" referent="BT72">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -10495,7 +10816,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT71">
+        <Item class="MeshPart" referent="BT73">
           <Properties>
             <string name="Name">LeftLowerArm</string>
             <Content name="MeshId">
@@ -10540,7 +10861,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT72">
+          <Item class="Attachment" referent="BT74">
             <Properties>
               <string name="Name">LeftElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10559,7 +10880,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT73">
+          <Item class="Attachment" referent="BT75">
             <Properties>
               <string name="Name">LeftWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10578,7 +10899,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT74">
+          <Item class="SurfaceAppearance" referent="BT76">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -10602,7 +10923,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT75">
+        <Item class="MeshPart" referent="BT77">
           <Properties>
             <string name="Name">LeftLowerLeg</string>
             <Content name="MeshId">
@@ -10647,7 +10968,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT76">
+          <Item class="Attachment" referent="BT78">
             <Properties>
               <string name="Name">LeftAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10666,7 +10987,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT77">
+          <Item class="Attachment" referent="BT79">
             <Properties>
               <string name="Name">LeftKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10685,7 +11006,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT78">
+          <Item class="SurfaceAppearance" referent="BT80">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -10709,7 +11030,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT79">
+        <Item class="MeshPart" referent="BT81">
           <Properties>
             <string name="Name">LeftUpperArm</string>
             <Content name="MeshId">
@@ -10754,7 +11075,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT80">
+          <Item class="Attachment" referent="BT82">
             <Properties>
               <string name="Name">LeftElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10773,7 +11094,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT81">
+          <Item class="Attachment" referent="BT83">
             <Properties>
               <string name="Name">LeftShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10792,7 +11113,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT82">
+          <Item class="SurfaceAppearance" referent="BT84">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -10816,7 +11137,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT83">
+        <Item class="MeshPart" referent="BT85">
           <Properties>
             <string name="Name">LeftUpperLeg</string>
             <Content name="MeshId">
@@ -10861,7 +11182,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT84">
+          <Item class="Attachment" referent="BT86">
             <Properties>
               <string name="Name">LeftHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10880,7 +11201,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT85">
+          <Item class="Attachment" referent="BT87">
             <Properties>
               <string name="Name">LeftKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10899,7 +11220,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT86">
+          <Item class="SurfaceAppearance" referent="BT88">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -10923,7 +11244,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT87">
+        <Item class="MeshPart" referent="BT89">
           <Properties>
             <string name="Name">LowerTorso</string>
             <Content name="MeshId">
@@ -10968,7 +11289,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT88">
+          <Item class="Attachment" referent="BT90">
             <Properties>
               <string name="Name">LeftHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -10987,7 +11308,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT89">
+          <Item class="Attachment" referent="BT91">
             <Properties>
               <string name="Name">RightHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11006,7 +11327,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT90">
+          <Item class="Attachment" referent="BT92">
             <Properties>
               <string name="Name">WaistRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11025,7 +11346,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT91">
+          <Item class="SurfaceAppearance" referent="BT93">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11049,7 +11370,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT92">
+        <Item class="MeshPart" referent="BT94">
           <Properties>
             <string name="Name">RightFoot</string>
             <Content name="MeshId">
@@ -11094,7 +11415,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT93">
+          <Item class="Attachment" referent="BT95">
             <Properties>
               <string name="Name">RightAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11113,7 +11434,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT94">
+          <Item class="SurfaceAppearance" referent="BT96">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11137,7 +11458,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT95">
+        <Item class="MeshPart" referent="BT97">
           <Properties>
             <string name="Name">RightHand</string>
             <Content name="MeshId">
@@ -11182,7 +11503,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT96">
+          <Item class="Attachment" referent="BT98">
             <Properties>
               <string name="Name">RightWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11201,7 +11522,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT97">
+          <Item class="SurfaceAppearance" referent="BT99">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11225,7 +11546,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT98">
+        <Item class="MeshPart" referent="BT100">
           <Properties>
             <string name="Name">RightLowerArm</string>
             <Content name="MeshId">
@@ -11270,7 +11591,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT99">
+          <Item class="Attachment" referent="BT101">
             <Properties>
               <string name="Name">RightElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11289,7 +11610,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT100">
+          <Item class="Attachment" referent="BT102">
             <Properties>
               <string name="Name">RightWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11308,7 +11629,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT101">
+          <Item class="SurfaceAppearance" referent="BT103">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11332,7 +11653,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT102">
+        <Item class="MeshPart" referent="BT104">
           <Properties>
             <string name="Name">RightLowerLeg</string>
             <Content name="MeshId">
@@ -11377,7 +11698,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT103">
+          <Item class="Attachment" referent="BT105">
             <Properties>
               <string name="Name">RightAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11396,7 +11717,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT104">
+          <Item class="Attachment" referent="BT106">
             <Properties>
               <string name="Name">RightKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11415,7 +11736,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT105">
+          <Item class="SurfaceAppearance" referent="BT107">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11439,7 +11760,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT106">
+        <Item class="MeshPart" referent="BT108">
           <Properties>
             <string name="Name">RightUpperArm</string>
             <Content name="MeshId">
@@ -11484,7 +11805,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT107">
+          <Item class="Attachment" referent="BT109">
             <Properties>
               <string name="Name">RightElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11503,7 +11824,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT108">
+          <Item class="Attachment" referent="BT110">
             <Properties>
               <string name="Name">RightShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11522,7 +11843,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT109">
+          <Item class="SurfaceAppearance" referent="BT111">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11546,7 +11867,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT110">
+        <Item class="MeshPart" referent="BT112">
           <Properties>
             <string name="Name">RightUpperLeg</string>
             <Content name="MeshId">
@@ -11591,7 +11912,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT111">
+          <Item class="Attachment" referent="BT113">
             <Properties>
               <string name="Name">RightHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11610,7 +11931,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT112">
+          <Item class="Attachment" referent="BT114">
             <Properties>
               <string name="Name">RightKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11629,7 +11950,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT113">
+          <Item class="SurfaceAppearance" referent="BT115">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11653,7 +11974,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT114">
+        <Item class="MeshPart" referent="BT116">
           <Properties>
             <string name="Name">UpperTorso</string>
             <Content name="MeshId">
@@ -11698,7 +12019,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT115">
+          <Item class="Attachment" referent="BT117">
             <Properties>
               <string name="Name">LeftShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11717,7 +12038,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT116">
+          <Item class="Attachment" referent="BT118">
             <Properties>
               <string name="Name">NeckRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11736,7 +12057,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT117">
+          <Item class="Attachment" referent="BT119">
             <Properties>
               <string name="Name">RightShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11755,7 +12076,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT118">
+          <Item class="Attachment" referent="BT120">
             <Properties>
               <string name="Name">WaistRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11774,7 +12095,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="SurfaceAppearance" referent="BT119">
+          <Item class="SurfaceAppearance" referent="BT121">
             <Properties>
               <string name="Name">SurfaceAppearance</string>
               <Content name="ColorMap">
@@ -11799,41 +12120,41 @@ return SpectatorCamera
           </Item>
         </Item>
       </Item>
-      <Item class="Model" referent="BT120">
+      <Item class="Model" referent="BT122">
         <Properties>
           <string name="Name">CanonicalPlayer2</string>
         </Properties>
-        <Item class="NumberValue" referent="BT121">
+        <Item class="NumberValue" referent="BT123">
           <Properties>
             <string name="Name">AppearanceScale</string>
             <double name="Value">1</double>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT122">
+        <Item class="StringValue" referent="BT124">
           <Properties>
             <string name="Name">AssetManifestSha256</string>
             <string name="Value">8efe62c77d805aafc35d9b9410c4a5190471dac3a82f3639dc14a78c8332f6c5</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT123">
+        <Item class="StringValue" referent="BT125">
           <Properties>
             <string name="Name">AppearanceProfile</string>
             <string name="Value">CanonicalNESHero</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT124">
+        <Item class="StringValue" referent="BT126">
           <Properties>
             <string name="Name">SourceAssetId</string>
             <string name="Value">110833474840144</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT125">
+        <Item class="StringValue" referent="BT127">
           <Properties>
             <string name="Name">SourceGlbSha256</string>
             <string name="Value">9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be</string>
           </Properties>
         </Item>
-        <Item class="MeshPart" referent="BT126">
+        <Item class="MeshPart" referent="BT128">
           <Properties>
             <string name="Name">Head</string>
             <Content name="MeshId">
@@ -11878,7 +12199,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT127">
+          <Item class="Attachment" referent="BT129">
             <Properties>
               <string name="Name">NeckRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11898,7 +12219,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT128">
+        <Item class="MeshPart" referent="BT130">
           <Properties>
             <string name="Name">LeftFoot</string>
             <Content name="MeshId">
@@ -11943,7 +12264,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT129">
+          <Item class="Attachment" referent="BT131">
             <Properties>
               <string name="Name">LeftAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -11963,7 +12284,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT130">
+        <Item class="MeshPart" referent="BT132">
           <Properties>
             <string name="Name">LeftHand</string>
             <Content name="MeshId">
@@ -12008,7 +12329,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT131">
+          <Item class="Attachment" referent="BT133">
             <Properties>
               <string name="Name">LeftWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12028,7 +12349,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT132">
+        <Item class="MeshPart" referent="BT134">
           <Properties>
             <string name="Name">LeftLowerArm</string>
             <Content name="MeshId">
@@ -12073,7 +12394,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT133">
+          <Item class="Attachment" referent="BT135">
             <Properties>
               <string name="Name">LeftElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12092,7 +12413,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT134">
+          <Item class="Attachment" referent="BT136">
             <Properties>
               <string name="Name">LeftWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12112,7 +12433,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT135">
+        <Item class="MeshPart" referent="BT137">
           <Properties>
             <string name="Name">LeftLowerLeg</string>
             <Content name="MeshId">
@@ -12157,7 +12478,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT136">
+          <Item class="Attachment" referent="BT138">
             <Properties>
               <string name="Name">LeftAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12176,7 +12497,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT137">
+          <Item class="Attachment" referent="BT139">
             <Properties>
               <string name="Name">LeftKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12196,7 +12517,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT138">
+        <Item class="MeshPart" referent="BT140">
           <Properties>
             <string name="Name">LeftUpperArm</string>
             <Content name="MeshId">
@@ -12241,7 +12562,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT139">
+          <Item class="Attachment" referent="BT141">
             <Properties>
               <string name="Name">LeftElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12260,7 +12581,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT140">
+          <Item class="Attachment" referent="BT142">
             <Properties>
               <string name="Name">LeftShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12280,7 +12601,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT141">
+        <Item class="MeshPart" referent="BT143">
           <Properties>
             <string name="Name">LeftUpperLeg</string>
             <Content name="MeshId">
@@ -12325,7 +12646,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT142">
+          <Item class="Attachment" referent="BT144">
             <Properties>
               <string name="Name">LeftHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12344,7 +12665,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT143">
+          <Item class="Attachment" referent="BT145">
             <Properties>
               <string name="Name">LeftKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12364,7 +12685,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT144">
+        <Item class="MeshPart" referent="BT146">
           <Properties>
             <string name="Name">LowerTorso</string>
             <Content name="MeshId">
@@ -12409,7 +12730,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT145">
+          <Item class="Attachment" referent="BT147">
             <Properties>
               <string name="Name">LeftHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12428,7 +12749,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT146">
+          <Item class="Attachment" referent="BT148">
             <Properties>
               <string name="Name">RightHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12447,7 +12768,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT147">
+          <Item class="Attachment" referent="BT149">
             <Properties>
               <string name="Name">WaistRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12467,7 +12788,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT148">
+        <Item class="MeshPart" referent="BT150">
           <Properties>
             <string name="Name">RightFoot</string>
             <Content name="MeshId">
@@ -12512,7 +12833,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT149">
+          <Item class="Attachment" referent="BT151">
             <Properties>
               <string name="Name">RightAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12532,7 +12853,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT150">
+        <Item class="MeshPart" referent="BT152">
           <Properties>
             <string name="Name">RightHand</string>
             <Content name="MeshId">
@@ -12577,7 +12898,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT151">
+          <Item class="Attachment" referent="BT153">
             <Properties>
               <string name="Name">RightWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12597,7 +12918,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT152">
+        <Item class="MeshPart" referent="BT154">
           <Properties>
             <string name="Name">RightLowerArm</string>
             <Content name="MeshId">
@@ -12642,7 +12963,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT153">
+          <Item class="Attachment" referent="BT155">
             <Properties>
               <string name="Name">RightElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12661,7 +12982,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT154">
+          <Item class="Attachment" referent="BT156">
             <Properties>
               <string name="Name">RightWristRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12681,7 +13002,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT155">
+        <Item class="MeshPart" referent="BT157">
           <Properties>
             <string name="Name">RightLowerLeg</string>
             <Content name="MeshId">
@@ -12726,7 +13047,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT156">
+          <Item class="Attachment" referent="BT158">
             <Properties>
               <string name="Name">RightAnkleRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12745,7 +13066,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT157">
+          <Item class="Attachment" referent="BT159">
             <Properties>
               <string name="Name">RightKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12765,7 +13086,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT158">
+        <Item class="MeshPart" referent="BT160">
           <Properties>
             <string name="Name">RightUpperArm</string>
             <Content name="MeshId">
@@ -12810,7 +13131,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT159">
+          <Item class="Attachment" referent="BT161">
             <Properties>
               <string name="Name">RightElbowRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12829,7 +13150,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT160">
+          <Item class="Attachment" referent="BT162">
             <Properties>
               <string name="Name">RightShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12849,7 +13170,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT161">
+        <Item class="MeshPart" referent="BT163">
           <Properties>
             <string name="Name">RightUpperLeg</string>
             <Content name="MeshId">
@@ -12894,7 +13215,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT162">
+          <Item class="Attachment" referent="BT164">
             <Properties>
               <string name="Name">RightHipRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12913,7 +13234,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT163">
+          <Item class="Attachment" referent="BT165">
             <Properties>
               <string name="Name">RightKneeRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12933,7 +13254,7 @@ return SpectatorCamera
             </Properties>
           </Item>
         </Item>
-        <Item class="MeshPart" referent="BT164">
+        <Item class="MeshPart" referent="BT166">
           <Properties>
             <string name="Name">UpperTorso</string>
             <Content name="MeshId">
@@ -12978,7 +13299,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT165">
+          <Item class="Attachment" referent="BT167">
             <Properties>
               <string name="Name">LeftShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -12997,7 +13318,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT166">
+          <Item class="Attachment" referent="BT168">
             <Properties>
               <string name="Name">NeckRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -13016,7 +13337,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT167">
+          <Item class="Attachment" referent="BT169">
             <Properties>
               <string name="Name">RightShoulderRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -13035,7 +13356,7 @@ return SpectatorCamera
               </CoordinateFrame>
             </Properties>
           </Item>
-          <Item class="Attachment" referent="BT168">
+          <Item class="Attachment" referent="BT170">
             <Properties>
               <string name="Name">WaistRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -13057,57 +13378,57 @@ return SpectatorCamera
         </Item>
       </Item>
     </Item>
-    <Item class="Folder" referent="BT169">
+    <Item class="Folder" referent="BT171">
       <Properties>
         <string name="Name">BrickToadsCharacterMorphs</string>
       </Properties>
-      <Item class="Model" referent="BT170">
+      <Item class="Model" referent="BT172">
         <Properties>
           <string name="Name">GreenBigBoot</string>
         </Properties>
-        <Item class="NumberValue" referent="BT171">
+        <Item class="NumberValue" referent="BT173">
           <Properties>
             <string name="Name">AppearanceScale</string>
             <double name="Value">1</double>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT172">
+        <Item class="StringValue" referent="BT174">
           <Properties>
             <string name="Name">AppearanceProfile</string>
             <string name="Value">CanonicalNESHeroMorph</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT173">
+        <Item class="StringValue" referent="BT175">
           <Properties>
             <string name="Name">HeroTemplate</string>
             <string name="Value">Mr. Green</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT174">
+        <Item class="StringValue" referent="BT176">
           <Properties>
             <string name="Name">MorphKind</string>
             <string name="Value">BigBoot</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT175">
+        <Item class="StringValue" referent="BT177">
           <Properties>
             <string name="Name">SourceAssetId</string>
             <string name="Value">134209153804955</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT176">
+        <Item class="StringValue" referent="BT178">
           <Properties>
             <string name="Name">SourceGlbSha256</string>
             <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT177">
+        <Item class="StringValue" referent="BT179">
           <Properties>
             <string name="Name">AssetManifestSha256</string>
             <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
           </Properties>
         </Item>
-        <Item class="MeshPart" referent="BT178">
+        <Item class="MeshPart" referent="BT180">
           <Properties>
             <string name="Name">Morph</string>
             <Content name="MeshId">
@@ -13152,7 +13473,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT179">
+          <Item class="Attachment" referent="BT181">
             <Properties>
               <string name="Name">MorphOriginRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -13173,53 +13494,53 @@ return SpectatorCamera
           </Item>
         </Item>
       </Item>
-      <Item class="Model" referent="BT180">
+      <Item class="Model" referent="BT182">
         <Properties>
           <string name="Name">GreenPowerFist</string>
         </Properties>
-        <Item class="NumberValue" referent="BT181">
+        <Item class="NumberValue" referent="BT183">
           <Properties>
             <string name="Name">AppearanceScale</string>
             <double name="Value">1</double>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT182">
+        <Item class="StringValue" referent="BT184">
           <Properties>
             <string name="Name">AppearanceProfile</string>
             <string name="Value">CanonicalNESHeroMorph</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT183">
+        <Item class="StringValue" referent="BT185">
           <Properties>
             <string name="Name">HeroTemplate</string>
             <string name="Value">Mr. Green</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT184">
+        <Item class="StringValue" referent="BT186">
           <Properties>
             <string name="Name">MorphKind</string>
             <string name="Value">PowerFist</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT185">
+        <Item class="StringValue" referent="BT187">
           <Properties>
             <string name="Name">SourceAssetId</string>
             <string name="Value">134209153804955</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT186">
+        <Item class="StringValue" referent="BT188">
           <Properties>
             <string name="Name">SourceGlbSha256</string>
             <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT187">
+        <Item class="StringValue" referent="BT189">
           <Properties>
             <string name="Name">AssetManifestSha256</string>
             <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
           </Properties>
         </Item>
-        <Item class="MeshPart" referent="BT188">
+        <Item class="MeshPart" referent="BT190">
           <Properties>
             <string name="Name">Morph</string>
             <Content name="MeshId">
@@ -13264,7 +13585,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT189">
+          <Item class="Attachment" referent="BT191">
             <Properties>
               <string name="Name">MorphOriginRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -13285,53 +13606,53 @@ return SpectatorCamera
           </Item>
         </Item>
       </Item>
-      <Item class="Model" referent="BT190">
+      <Item class="Model" referent="BT192">
         <Properties>
           <string name="Name">PlayerTwoBigBoot</string>
         </Properties>
-        <Item class="NumberValue" referent="BT191">
+        <Item class="NumberValue" referent="BT193">
           <Properties>
             <string name="Name">AppearanceScale</string>
             <double name="Value">1</double>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT192">
+        <Item class="StringValue" referent="BT194">
           <Properties>
             <string name="Name">AppearanceProfile</string>
             <string name="Value">CanonicalNESHeroMorph</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT193">
+        <Item class="StringValue" referent="BT195">
           <Properties>
             <string name="Name">HeroTemplate</string>
             <string name="Value">Mr. Yellow</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT194">
+        <Item class="StringValue" referent="BT196">
           <Properties>
             <string name="Name">MorphKind</string>
             <string name="Value">BigBoot</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT195">
+        <Item class="StringValue" referent="BT197">
           <Properties>
             <string name="Name">SourceAssetId</string>
             <string name="Value">134209153804955</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT196">
+        <Item class="StringValue" referent="BT198">
           <Properties>
             <string name="Name">SourceGlbSha256</string>
             <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT197">
+        <Item class="StringValue" referent="BT199">
           <Properties>
             <string name="Name">AssetManifestSha256</string>
             <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
           </Properties>
         </Item>
-        <Item class="MeshPart" referent="BT198">
+        <Item class="MeshPart" referent="BT200">
           <Properties>
             <string name="Name">Morph</string>
             <Content name="MeshId">
@@ -13376,7 +13697,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT199">
+          <Item class="Attachment" referent="BT201">
             <Properties>
               <string name="Name">MorphOriginRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -13397,53 +13718,53 @@ return SpectatorCamera
           </Item>
         </Item>
       </Item>
-      <Item class="Model" referent="BT200">
+      <Item class="Model" referent="BT202">
         <Properties>
           <string name="Name">PlayerTwoPowerFist</string>
         </Properties>
-        <Item class="NumberValue" referent="BT201">
+        <Item class="NumberValue" referent="BT203">
           <Properties>
             <string name="Name">AppearanceScale</string>
             <double name="Value">1</double>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT202">
+        <Item class="StringValue" referent="BT204">
           <Properties>
             <string name="Name">AppearanceProfile</string>
             <string name="Value">CanonicalNESHeroMorph</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT203">
+        <Item class="StringValue" referent="BT205">
           <Properties>
             <string name="Name">HeroTemplate</string>
             <string name="Value">Mr. Yellow</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT204">
+        <Item class="StringValue" referent="BT206">
           <Properties>
             <string name="Name">MorphKind</string>
             <string name="Value">PowerFist</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT205">
+        <Item class="StringValue" referent="BT207">
           <Properties>
             <string name="Name">SourceAssetId</string>
             <string name="Value">134209153804955</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT206">
+        <Item class="StringValue" referent="BT208">
           <Properties>
             <string name="Name">SourceGlbSha256</string>
             <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
           </Properties>
         </Item>
-        <Item class="StringValue" referent="BT207">
+        <Item class="StringValue" referent="BT209">
           <Properties>
             <string name="Name">AssetManifestSha256</string>
             <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
           </Properties>
         </Item>
-        <Item class="MeshPart" referent="BT208">
+        <Item class="MeshPart" referent="BT210">
           <Properties>
             <string name="Name">Morph</string>
             <Content name="MeshId">
@@ -13488,7 +13809,7 @@ return SpectatorCamera
             <float name="Transparency">0</float>
             <float name="Reflectance">0</float>
           </Properties>
-          <Item class="Attachment" referent="BT209">
+          <Item class="Attachment" referent="BT211">
             <Properties>
               <string name="Name">MorphOriginRigAttachment</string>
               <CoordinateFrame name="CFrame">
@@ -13502,6 +13823,454 @@ return SpectatorCamera
                 <R11>1</R11>
                 <R12>0</R12>
                 <R20>0</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT212">
+        <Properties>
+          <string name="Name">GreenFearAfterCut</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT213">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT214">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT215">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Green</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT216">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">FearAfterCut</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT217">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">94539676546833</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT218">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT219">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">653f7dee77ff86eacecb444e673b0d737e0c14b5ad633d8119178492ca80c39a</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT220">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://130444582819136</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://84359931596705</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.5681480169296265</X>
+              <Y>2.808382272720337</Y>
+              <Z>1.6322097778320312</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.43908143043518066</X>
+              <Y>0.7863470315933228</Y>
+              <Z>0.45701873302459717</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0</X>
+              <Y>1.2042207717895508</Y>
+              <Z>-0.1761060506105423</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>1.1920928955078125e-07</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-1.1920928955078125e-07</R20>
+              <R21>0</R21>
+              <R22>-0.9999998807907104</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT221">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-2.0993477178876674e-08</X>
+                <Y>-1.2042207717895508</Y>
+                <Z>-0.1761060357093811</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-1.1920927533992653e-07</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>1.1920927533992653e-07</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT222">
+        <Properties>
+          <string name="Name">GreenFearBeforeCut</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT223">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT224">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT225">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Green</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT226">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">FearBeforeCut</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT227">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">94539676546833</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT228">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT229">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">653f7dee77ff86eacecb444e673b0d737e0c14b5ad633d8119178492ca80c39a</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT230">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://107905673920853</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://84359931596705</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.6778613328933716</X>
+              <Y>3.0815412998199463</Y>
+              <Z>1.6337918043136597</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.4698011875152588</X>
+              <Y>0.8628315925598145</Y>
+              <Z>0.45746171474456787</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.022396372631192207</X>
+              <Y>1.3408002853393555</Y>
+              <Z>-0.17816190421581268</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>1.1920928955078125e-07</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-1.1920928955078125e-07</R20>
+              <R21>0</R21>
+              <R22>-0.9999998807907104</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT231">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.022396354004740715</X>
+                <Y>-1.3408002853393555</Y>
+                <Z>-0.1781618893146515</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-1.1920927533992653e-07</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>1.1920927533992653e-07</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT232">
+        <Properties>
+          <string name="Name">PlayerTwoFearAfterCut</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT233">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT234">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT235">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Yellow</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT236">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">FearAfterCut</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT237">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">94539676546833</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT238">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT239">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">653f7dee77ff86eacecb444e673b0d737e0c14b5ad633d8119178492ca80c39a</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT240">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://135316111350129</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://84359931596705</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.434881329536438</X>
+              <Y>2.961803436279297</Y>
+              <Z>1.5220308303833008</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.4017667770385742</X>
+              <Y>0.8293049335479736</Y>
+              <Z>0.42616862058639526</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0</X>
+              <Y>1.2668668031692505</Y>
+              <Z>-0.16421836614608765</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>1.1920928955078125e-07</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-1.1920928955078125e-07</R20>
+              <R21>0</R21>
+              <R22>-0.9999998807907104</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT241">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-1.9576354759465175e-08</X>
+                <Y>-1.2668668031692505</Y>
+                <Z>-0.16421835124492645</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-1.1920927533992653e-07</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>1.1920927533992653e-07</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT242">
+        <Properties>
+          <string name="Name">PlayerTwoFearBeforeCut</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT243">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT244">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT245">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Yellow</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT246">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">FearBeforeCut</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT247">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">94539676546833</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT248">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT249">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">653f7dee77ff86eacecb444e673b0d737e0c14b5ad633d8119178492ca80c39a</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT250">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://73050232728371</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://84359931596705</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.5352710485458374</X>
+              <Y>3.2982733249664307</Y>
+              <Z>1.5235061645507812</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.429875910282135</X>
+              <Y>0.9235165119171143</Y>
+              <Z>0.4265817403793335</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.020493054762482643</X>
+              <Y>1.435101866722107</Y>
+              <Z>-0.16613544523715973</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>1.1920928955078125e-07</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-1.1920928955078125e-07</R20>
+              <R21>0</R21>
+              <R22>-0.9999998807907104</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT251">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.02049303613603115</X>
+                <Y>-1.435101866722107</Y>
+                <Z>-0.16613543033599854</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-1.1920927533992653e-07</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>1.1920927533992653e-07</R20>
                 <R21>0</R21>
                 <R22>-1</R22>
               </CoordinateFrame>

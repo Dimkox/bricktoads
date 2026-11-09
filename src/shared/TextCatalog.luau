@@ -1,6 +1,7 @@
 -- English source strings and curated Russian translations. No user display names.
 -- Roblox LocalizationTable entries; add supported languages to Values here.
 local Catalog={entries={
+    {Key="The Guardian approaches",Source="The Guardian approaches",Values={["en-us"]="The Guardian approaches",["ru"]="Страж приближается"}},
     {Key="1  ·  Flooded Gate",Source="1  ·  Flooded Gate",Values={["en-us"]="1  ·  Flooded Gate",["ru"]="1  ·  Затопленные ворота"}},
     {Key="2  ·  Broken Aqueduct",Source="2  ·  Broken Aqueduct",Values={["en-us"]="2  ·  Broken Aqueduct",["ru"]="2  ·  Разбитый акведук"}},
     {Key="3  ·  Stone Courtyard",Source="3  ·  Stone Courtyard",Values={["en-us"]="3  ·  Stone Courtyard",["ru"]="3  ·  Каменный двор"}},

@@ -150,6 +150,40 @@ return function(Presentation,Animation)
         c.now=.1;local p,reason=Presentation.sample(first,c);eq(p,nil);eq(reason,'ClockRewind')
         c.now=.2;eq(Presentation.sample(first,c).kind,'Idle')
     end)
+    test('captured intro selects actual source fear forms without applying source motion',function()
+        local state=Presentation.new();local c=context()
+        c.fearIntro={id='run:1:intro',actorId=c.actorId,counter=1,frameId=0x32}
+        local p=assert(Presentation.sample(state,c));eq(p.kind,'Fear');eq(p.frameId,0x32)
+        eq(p.animationId,0x2C);eq(p.morphKind,'FearBeforeCut');eq(#p.events,0)
+        c.now=1;c.fearIntro.counter=0xE0
+        eq(Presentation.sample(state,c).frameId,0x32)
+        c.now=2;c.fearIntro.counter=0xE1;c.fearIntro.frameId=0x33
+        p=assert(Presentation.sample(state,c));eq(p.animationId,0x2E);eq(p.morphKind,'FearAfterCut')
+        eq(p.frameId,0x33);eq(p.adaptation,'Authored3DJointAngles')
+        local count=0;for _,angles in pairs(p.joints)do count+=1;assert(table.isfrozen(angles))end;eq(count,14)
+    end)
+    test('fear requires the captured living actor and respects higher priority interruption',function()
+        for _,invalid in ipairs({'OtherActor','Complete','UnknownFrame','NoIdentity'})do
+            local c=context();c.fearIntro={id='intro',actorId=c.actorId,counter=1,frameId=0x32}
+            if invalid=='OtherActor'then c.fearIntro.actorId='replacement'
+            elseif invalid=='Complete'then c.fearIntro.counter=255
+            elseif invalid=='UnknownFrame'then c.fearIntro.frameId=0x1C
+            else c.fearIntro.id=nil end
+            eq(Presentation.sample(Presentation.new(),c).kind,'Idle')
+        end
+        for _,reason in ipairs({'Reaction','Dead','Club','Carrying','Dragon','Airborne'})do
+            local c=context();c.fearIntro={id='intro',actorId=c.actorId,counter=1,frameId=0x32};c.blocked=reason
+            local p,code=Presentation.sample(Presentation.new(),c);eq(p,nil);eq(code,reason)
+        end
+    end)
+    test('intro replaces cosmetic attack state and cannot resume that old accepted action afterward',function()
+        local state=Presentation.new();local c=context(.5);c.attack=attack('HeroPowerPunch')
+        eq(Presentation.sample(state,c).morphKind,'PowerFist')
+        c.now=.6;c.fearIntro={id='intro',actorId=c.actorId,counter=1,frameId=0x32}
+        eq(Presentation.sample(state,c).kind,'Fear')
+        c.now=.7;c.fearIntro=nil;eq(Presentation.sample(state,c).kind,'Idle')
+        c.now=.8;c.attack=attack('HeroJab',.8);eq(Presentation.sample(state,c).kind,'Attack')
+    end)
     print(string.format('Canonical hero presentation: %d passed, %d failed',passed,failed))
     assert(failed==0,'Canonical hero presentation contracts failed')
 end

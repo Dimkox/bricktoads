@@ -282,62 +282,67 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
         manifest = (root_path / f"assets/characters/canonical-hero/roblox-player{player}.json").read_bytes()
         character(manifest, f"CanonicalPlayer{player}", canonical=True)
 
-    morph_bytes = (root_path / 'assets/characters/canonical-hero/roblox-attack-morphs.json').read_bytes()
-    morphs = json.loads(morph_bytes)
-    expected_morphs = {prefix + kind: (hero, kind)
-                       for prefix, hero in (('Green', 'Mr. Green'), ('PlayerTwo', 'Mr. Yellow'))
-                       for kind in ('PowerFist', 'BigBoot')}
-    records = morphs.get('templates')
-    if type(morphs.get('schema')) is not int or morphs['schema'] != 1 \
-            or morphs.get('appearanceProfile') != 'CanonicalNESHeroMorph' \
-            or not isinstance(records, list) or len(records) != 4 \
-            or any(not isinstance(row, dict) for row in records) \
-            or {row.get('name') for row in records} != set(expected_morphs):
-        raise ValueError('Expected four tagged canonical attack morph resources')
-    asset_id, source_sha = morphs.get('sourceAssetId'), morphs.get('sourceGlbSha256')
-    if not isinstance(asset_id, str) or not asset_id.isdigit() or int(asset_id) <= 0 \
-            or not isinstance(source_sha, str) or not re.fullmatch('[0-9a-f]{64}', source_sha):
-        raise ValueError('Invalid morph source provenance')
-    filename = morphs.get('sourceGlbFile')
-    if not isinstance(filename, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*\.glb', filename) \
-            or re.match(r'(?i)(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])\.', filename):
-        raise ValueError('Invalid morph source GLB basename')
-    asset_folder = root_path / 'assets/characters/canonical-hero'
-    source_file = asset_folder / filename
-    if source_file.resolve().parent != asset_folder.resolve() \
-            or hashlib.sha256(source_file.read_bytes()).hexdigest() != source_sha:
-        raise ValueError('Morph source GLB SHA256 mismatch or path escape')
     morph_folder = item(storage, 'Folder', 'BrickToadsCharacterMorphs')
-    for row in sorted(records, key=lambda r: r['name']):
-        hero, kind = expected_morphs[row['name']]
-        if row.get('heroTemplate') != hero or row.get('morphKind') != kind:
-            raise ValueError('Morph palette or kind does not match its resource name')
-        number(row.get('appearanceScale'), 'Morph AppearanceScale', 1, 1)
-        mesh_row = row.get('part')
-        if not isinstance(mesh_row, dict) or mesh_row.get('name') != 'Morph':
-            raise ValueError('Morph requires exactly one named MeshPart')
-        if number(mesh_row.get('transparency'), 'Morph Transparency', 0, 1) >= 1:
-            raise ValueError('Morph source mesh must be visible')
-        attachments = mesh_row.get('attachments')
-        if not isinstance(attachments, list) or len(attachments) != 1 \
-                or not isinstance(attachments[0], dict) \
-                or attachments[0].get('name') != 'MorphOriginRigAttachment':
-            raise ValueError('Morph requires exactly one origin attachment')
-        a = numbers(mesh_row.get('cframe'), 12, 'Morph rest frame')
-        b = numbers(attachments[0].get('cframe'), 12, 'Morph origin frame')
-        for i in range(3):
-            if abs(a[i] + sum(a[3 + i*3 + j] * b[j] for j in range(3))) > .0001:
-                raise ValueError('Morph origin must resolve to its joint origin')
-            for j in range(3):
-                if abs(sum(a[3 + i*3 + k] * b[3 + k*3 + j] for k in range(3)) - (i == j)) > .0001:
-                    raise ValueError('Morph origin must use authored joint axes')
-        model = item(morph_folder, 'Model', row['name'])
-        prop(item(model, 'NumberValue', 'AppearanceScale'), 'double', 'Value', 1)
-        for name, value in dict(AppearanceProfile='CanonicalNESHeroMorph', HeroTemplate=hero,
-                                MorphKind=kind, SourceAssetId=asset_id, SourceGlbSha256=source_sha,
-                                AssetManifestSha256=hashlib.sha256(morph_bytes).hexdigest()).items():
-            prop(item(model, 'StringValue', name), 'string', 'Value', value)
-        mesh_resource(model, mesh_row)
+
+    def morph_family(family, kinds):
+        morph_bytes = (root_path / f'assets/characters/canonical-hero/roblox-{family}-morphs.json').read_bytes()
+        morphs = json.loads(morph_bytes)
+        expected_morphs = {prefix + kind: (hero, kind)
+                           for prefix, hero in (('Green', 'Mr. Green'), ('PlayerTwo', 'Mr. Yellow'))
+                           for kind in kinds}
+        records = morphs.get('templates')
+        if type(morphs.get('schema')) is not int or morphs['schema'] != 1 \
+                or morphs.get('appearanceProfile') != 'CanonicalNESHeroMorph' \
+                or not isinstance(records, list) or len(records) != 4 \
+                or any(not isinstance(row, dict) for row in records) \
+                or {row.get('name') for row in records} != set(expected_morphs):
+            raise ValueError(f'Expected four tagged canonical {family} morph resources')
+        asset_id, source_sha = morphs.get('sourceAssetId'), morphs.get('sourceGlbSha256')
+        if not isinstance(asset_id, str) or not asset_id.isdigit() or int(asset_id) <= 0 \
+                or not isinstance(source_sha, str) or not re.fullmatch('[0-9a-f]{64}', source_sha):
+            raise ValueError('Invalid morph source provenance')
+        filename = morphs.get('sourceGlbFile')
+        if not isinstance(filename, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*\.glb', filename) \
+                or re.match(r'(?i)(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])\.', filename):
+            raise ValueError('Invalid morph source GLB basename')
+        asset_folder = root_path / 'assets/characters/canonical-hero'
+        source_file = asset_folder / filename
+        if source_file.resolve().parent != asset_folder.resolve() \
+                or hashlib.sha256(source_file.read_bytes()).hexdigest() != source_sha:
+            raise ValueError('Morph source GLB SHA256 mismatch or path escape')
+        for row in sorted(records, key=lambda r: r['name']):
+            hero, kind = expected_morphs[row['name']]
+            if row.get('heroTemplate') != hero or row.get('morphKind') != kind:
+                raise ValueError('Morph palette or kind does not match its resource name')
+            number(row.get('appearanceScale'), 'Morph AppearanceScale', 1, 1)
+            mesh_row = row.get('part')
+            if not isinstance(mesh_row, dict) or mesh_row.get('name') != 'Morph':
+                raise ValueError('Morph requires exactly one named MeshPart')
+            if number(mesh_row.get('transparency'), 'Morph Transparency', 0, 1) >= 1:
+                raise ValueError('Morph source mesh must be visible')
+            attachments = mesh_row.get('attachments')
+            if not isinstance(attachments, list) or len(attachments) != 1 \
+                    or not isinstance(attachments[0], dict) \
+                    or attachments[0].get('name') != 'MorphOriginRigAttachment':
+                raise ValueError('Morph requires exactly one origin attachment')
+            a = numbers(mesh_row.get('cframe'), 12, 'Morph rest frame')
+            b = numbers(attachments[0].get('cframe'), 12, 'Morph origin frame')
+            for i in range(3):
+                if abs(a[i] + sum(a[3 + i*3 + j] * b[j] for j in range(3))) > .0001:
+                    raise ValueError('Morph origin must resolve to its joint origin')
+                for j in range(3):
+                    if abs(sum(a[3 + i*3 + k] * b[3 + k*3 + j] for k in range(3)) - (i == j)) > .0001:
+                        raise ValueError('Morph origin must use authored joint axes')
+            model = item(morph_folder, 'Model', row['name'])
+            prop(item(model, 'NumberValue', 'AppearanceScale'), 'double', 'Value', 1)
+            for name, value in dict(AppearanceProfile='CanonicalNESHeroMorph', HeroTemplate=hero,
+                                    MorphKind=kind, SourceAssetId=asset_id, SourceGlbSha256=source_sha,
+                                    AssetManifestSha256=hashlib.sha256(morph_bytes).hexdigest()).items():
+                prop(item(model, 'StringValue', name), 'string', 'Value', value)
+            mesh_resource(model, mesh_row)
+
+    morph_family('attack', ('PowerFist', 'BigBoot'))
+    morph_family('fear', ('FearBeforeCut', 'FearAfterCut'))
 
     # Explicit research switch; this rejected study is absent from default builds.
     if include_character_study:

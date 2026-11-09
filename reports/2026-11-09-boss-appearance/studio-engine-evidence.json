@@ -1,0 +1,2267 @@
+{
+  "build": {
+    "bytes": 744382,
+    "placeSha256": "a20b157339a40161f387a3bdab95703a249df205b5a3cb36d340a3b81f031f03",
+    "sourceSha256": "a9a7efd51486d814d2cf35ffefb9170b94456e49bb08d626008e9cd8c52459ca",
+    "scripts": [
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BrickToadsServer"
+        ],
+        "className": "Script",
+        "characters": 6652,
+        "sha256": "a6550988f2952250a5287ac9da0ef45851ad2649cae21fccaadca26a81304d31"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "RunLifecycle"
+        ],
+        "className": "ModuleScript",
+        "characters": 13753,
+        "sha256": "cda5e4089bb04e76b2b075d21d119368db670d17bbfccdf5cb638b5f8375b968"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossIntro"
+        ],
+        "className": "ModuleScript",
+        "characters": 4446,
+        "sha256": "97bcda80277a05a096bdc2636816f52bbd425b1d759466aee3dd6c35e994ba36"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossIntroWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 5956,
+        "sha256": "13e6e890e58808cc805b01d906fb7b4bd84dfae2271a4555e4d20949d5e9553a"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossQueue"
+        ],
+        "className": "ModuleScript",
+        "characters": 8816,
+        "sha256": "09bd54c98a25daabef3e12c215305eeeae8115091dec202dac069b48ddd6a2b1"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CanonicalAnimation"
+        ],
+        "className": "ModuleScript",
+        "characters": 27424,
+        "sha256": "fa49be0615ae2c302ec7f4d8ebba748037ed6a2e7a9c913469fa8c03b5805793"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CanonicalHeroPresentation"
+        ],
+        "className": "ModuleScript",
+        "characters": 12949,
+        "sha256": "f6eea811ec98e27de45873dd6dded53f809a48a0103e7110c515ef5d26f08ca2"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CanonicalWalker"
+        ],
+        "className": "ModuleScript",
+        "characters": 4468,
+        "sha256": "1b8329646899e193474f5769685cdb65ce652e1a2eead3b20de97edd9d6ac412"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CharacterAppearance"
+        ],
+        "className": "ModuleScript",
+        "characters": 16472,
+        "sha256": "c52530a9f2ac80a3d4315029cb3230fbe80e287f83805df037f7d8c667a1ab4f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonFlight"
+        ],
+        "className": "ModuleScript",
+        "characters": 14599,
+        "sha256": "dd5a04599865fc60c1fcaf7577c35bd4cd874c98a26e917c104e08517186a270"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 12533,
+        "sha256": "0a72c52677909f7de24aba566c2e7d2a9aeeadb8d8e37388525bc22eb3a2bdf5"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "EnemyCarry"
+        ],
+        "className": "ModuleScript",
+        "characters": 9958,
+        "sha256": "f295b57bca701817cd9a848b77a05703631807847de9e58c28829929490abc21"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 4800,
+        "sha256": "ce9d6db0068ec8074eb67d13d1e5c498ebe68140f080cb90beabdaf7617b6b88"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameController"
+        ],
+        "className": "ModuleScript",
+        "characters": 22732,
+        "sha256": "70a3e23b0199c11e4d2dbb97b61afdc072e007c3fccde9698ab982927e61db71"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 86428,
+        "sha256": "54b6714964bd97b1111da02ab8f9b76595a7a01b3fd0c35aa5c0aa27e46a6921"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GuardianPattern"
+        ],
+        "className": "ModuleScript",
+        "characters": 12662,
+        "sha256": "efe246ecce32225480d172ae4180fe6cf54c0e0327af0b9c8e52b39e6abde87c"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "HealingFlies"
+        ],
+        "className": "ModuleScript",
+        "characters": 5447,
+        "sha256": "e188e25a8dc27e0ea33f44be902bc2c7530b28ae728f16eebd22068bbee7832a"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDefinition"
+        ],
+        "className": "ModuleScript",
+        "characters": 3346,
+        "sha256": "d9e37ed8138dd5df83439fc0de370489f7644f5a6b4d078a6558995864414566"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDirector"
+        ],
+        "className": "ModuleScript",
+        "characters": 36946,
+        "sha256": "88f29bae58257d4a0ae1c1129f16d764e76be828a931185a10ad6a15db31d97d"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelVariation"
+        ],
+        "className": "ModuleScript",
+        "characters": 5979,
+        "sha256": "2ebba71d49207d77b5d05234706019f36d5eb850e16f6b472e60d6ec3f5a7a32"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "MatchHub"
+        ],
+        "className": "ModuleScript",
+        "characters": 17073,
+        "sha256": "f0a77737e1b2fdf5eea3d3b5066fd3363350357fc8ce746de67cc5f88f1e67fc"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "RunJournal"
+        ],
+        "className": "ModuleScript",
+        "characters": 5181,
+        "sha256": "c62046c1bde00c75aef8d4a759d56e07d1cd8f85189c46e16257b36fa4b5437f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "SourceCombat"
+        ],
+        "className": "ModuleScript",
+        "characters": 2434,
+        "sha256": "af6b9f57c514f60980bf9a37f32ece85a38784c407898684efe3e64e8586d3c4"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "WalkerClubs"
+        ],
+        "className": "ModuleScript",
+        "characters": 9543,
+        "sha256": "c65a104c6a1779b5c10d5cd214af3e1915f0af0fbf148bd6e6457a854b77aed5"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Combat"
+        ],
+        "className": "ModuleScript",
+        "characters": 3364,
+        "sha256": "9472b0e88151e1d14b55b018618dab3626fd54c671617dbf246695e1b421bfda"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Session"
+        ],
+        "className": "ModuleScript",
+        "characters": 16818,
+        "sha256": "3bc7ae00c87ca343bd53188f4354714e28774fac420798eccd9ead7a0feb467b"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Config"
+        ],
+        "className": "ModuleScript",
+        "characters": 747,
+        "sha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "ConnectionRegistry"
+        ],
+        "className": "ModuleScript",
+        "characters": 1717,
+        "sha256": "7f6cd4b6216cc993a359a55d318c46a819c90ecf0f893f4d34843cb168956c92"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "RobloxWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 14159,
+        "sha256": "487cdb395fcdf61c4ebf0dab41396fa860678d4291bd3d3b8729344af2799672"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BuildInfo"
+        ],
+        "className": "ModuleScript",
+        "characters": 112,
+        "sha256": "8e85902fd58648222d0d5f307301cdefdedb680edc79b44e6a4cbcf0e52bf6b8"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "BrickToadsConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 119,
+        "sha256": "e5183fd2f3eda75057cdf62e5cf2b462fc7e62fcfbc62ddff2bd5fa2a3ab8360"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "HeroPortraits"
+        ],
+        "className": "ModuleScript",
+        "characters": 246,
+        "sha256": "d2c98d99d1a8f0034be706a4ee69a998d12d1bd43871201834a459a682d39d8a"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "TextCatalog"
+        ],
+        "className": "ModuleScript",
+        "characters": 56167,
+        "sha256": "9965d38d89093a984abd1396aa281132c98c476930d9fa6f466feb1bb1c4588c"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "TextLocalization"
+        ],
+        "className": "ModuleScript",
+        "characters": 3326,
+        "sha256": "a39c207952633e8b049bc8cb85ecf77310f37183d8a9df0d71eaf5f748b2a148"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BossQueuePanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 10547,
+        "sha256": "6c9c3b16ec931f79cb389a0681d88790a417793722b7634dd4b73db639ad803b"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BrickToadsClient"
+        ],
+        "className": "LocalScript",
+        "characters": 84258,
+        "sha256": "682a285ed49c0ba8a50bcafd0ee25fba89d5c9220a6a65e77a70727844092469"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "CombatFeedback"
+        ],
+        "className": "ModuleScript",
+        "characters": 8432,
+        "sha256": "4accb5bd6fde2095de335f60ad04cb92ad3a40ad4bc76d344d15ff33f899d8b0"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "GroupPanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 13140,
+        "sha256": "a85a97ef9f6958b1b51850df864ae3701e13781e91c2dbbe51a261f1c64c3642"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "MovementInput"
+        ],
+        "className": "ModuleScript",
+        "characters": 2001,
+        "sha256": "cf225a4334a50dd21fa0fe8437f6bbb240bf860f608d2915d7815912c96743b8"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "RobloxInputBindings"
+        ],
+        "className": "ModuleScript",
+        "characters": 3082,
+        "sha256": "7f85db79b5e2fad1b319b596f35ecfe094b7bab487150d27ff8cfe208669e2da"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "SpectatorCamera"
+        ],
+        "className": "ModuleScript",
+        "characters": 9649,
+        "sha256": "9ce2683a1268b39490e0042082281a5ca484e5c48955bb0332936e1d68346f5d"
+      }
+    ]
+  },
+  "import": {
+    "assetId": "94539676546833",
+    "checks": [
+      {
+        "name": "GreenFearBeforeCut",
+        "texture": "rbxassetid://84359931596705",
+        "normalizedOriginError": 3.003425064207477e-8,
+        "importPositionError": 0,
+        "importSizeError": 6.664001972467304e-8
+      },
+      {
+        "name": "GreenFearAfterCut",
+        "texture": "rbxassetid://84359931596705",
+        "normalizedOriginError": 2.9802322387695312e-8,
+        "importPositionError": 2.384185791015625e-7,
+        "importSizeError": 2.9802322387695312e-8
+      },
+      {
+        "name": "PlayerTwoFearBeforeCut",
+        "texture": "rbxassetid://84359931596705",
+        "normalizedOriginError": 3.003425064207477e-8,
+        "importPositionError": 0,
+        "importSizeError": 5.960464477539063e-8
+      },
+      {
+        "name": "PlayerTwoFearAfterCut",
+        "texture": "rbxassetid://84359931596705",
+        "normalizedOriginError": 2.9802322387695312e-8,
+        "importPositionError": 5.331201577973843e-7,
+        "importSizeError": 8.429369557916289e-8
+      }
+    ]
+  },
+  "sequence": {
+    "1": {
+      "folder": true,
+      "bossExists": false,
+      "intro": {
+        "fearFrame": 50,
+        "active": true,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": false,
+        "phase": "BeforeCut",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 1
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "stage": "BossIntro",
+      "counter": 1
+    },
+    "48": {
+      "folder": true,
+      "bossExists": false,
+      "intro": {
+        "fearFrame": 50,
+        "active": true,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": false,
+        "phase": "BeforeCut",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 48
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "stage": "BossIntro",
+      "counter": 48
+    },
+    "80": {
+      "folder": true,
+      "bossExists": false,
+      "intro": {
+        "fearFrame": 50,
+        "active": true,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": false,
+        "phase": "BeforeCut",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 80
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "stage": "BossIntro",
+      "counter": 80
+    },
+    "100": {
+      "folder": true,
+      "bossExists": false,
+      "intro": {
+        "fearFrame": 50,
+        "active": true,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": false,
+        "phase": "BeforeCut",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 100
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "stage": "BossIntro",
+      "counter": 100
+    },
+    "224": {
+      "folder": true,
+      "bossExists": false,
+      "intro": {
+        "fearFrame": 50,
+        "active": true,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": true,
+        "phase": "AfterCut",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 224
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 50,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearBeforeCut"
+      },
+      "stage": "BossIntro",
+      "counter": 224
+    },
+    "225": {
+      "folder": true,
+      "bossExists": false,
+      "intro": {
+        "fearFrame": 51,
+        "active": true,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": true,
+        "phase": "AfterCut",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 225
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 51,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearAfterCut"
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 51,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearAfterCut"
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 51,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearAfterCut"
+      },
+      "stage": "BossIntro",
+      "counter": 225
+    },
+    "254": {
+      "folder": true,
+      "bossExists": false,
+      "intro": {
+        "fearFrame": 51,
+        "active": true,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": true,
+        "phase": "AfterCut",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 254
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 51,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearAfterCut"
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 51,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearAfterCut"
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 0,
+            "original": 1,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 1,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Fear",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 51,
+        "rootIsAssemblyRoot": true,
+        "morph": "FearAfterCut"
+      },
+      "stage": "BossIntro",
+      "counter": 254
+    },
+    "255": {
+      "folder": false,
+      "bossExists": true,
+      "intro": {
+        "fearFrame": 51,
+        "active": false,
+        "id": "Native-BossIntroEngineReview:boss-intro:1",
+        "levelEpoch": 1,
+        "startedAt": 100,
+        "cameraCut": true,
+        "phase": "Complete",
+        "runId": "Native-BossIntroEngineReview",
+        "counter": 255
+      },
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Idle",
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 1,
+        "rootIsAssemblyRoot": true
+      },
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Idle",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 1,
+        "rootIsAssemblyRoot": true
+      },
+      "three": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 3,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:8",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "kind": "Idle",
+        "actorId": "Native-BossIntroEngineReview:actor:8",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "frame": 1,
+        "rootIsAssemblyRoot": true
+      },
+      "stage": "Boss",
+      "counter": 255
+    },
+    "scope": "Prepared native real Session/Director/World fixture, explicitly positioned actors/support and advanced intro clock; not a normal-input route",
+    "passed": true,
+    "bossOwner": 999,
+    "otherPartyUntouched": true,
+    "before": {
+      "one": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 37,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Green",
+          "attempt": 1,
+          "userId": 1,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:2",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "rootIsAssemblyRoot": true
+      },
+      "otherFolder": false,
+      "two": {
+        "morphs": {
+          "FearAfterCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "FearBeforeCut": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "PowerFist": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          },
+          "BigBoot": {
+            "visible": 1,
+            "original": 0,
+            "jointError": 0
+          }
+        },
+        "meshes": 19,
+        "rawLife": 47,
+        "hp": 100,
+        "grounded": true,
+        "state": {
+          "view": "Playing",
+          "connected": true,
+          "template": "Mr. Yellow",
+          "attempt": 1,
+          "userId": 2,
+          "connectionEpoch": 1,
+          "health": 5,
+          "status": "Alive",
+          "actorId": "Native-BossIntroEngineReview:actor:5",
+          "respawns": 3,
+          "retryReady": false
+        },
+        "actorId": "Native-BossIntroEngineReview:actor:5",
+        "manualServerOwner": true,
+        "cosmeticMotors": 19,
+        "rootIsAssemblyRoot": true
+      }
+    }
+  },
+  "interruptions": {
+    "air": {
+      "morphs": {
+        "FearAfterCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "FearBeforeCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 19,
+      "rawLife": 47,
+      "fallback": "Airborne",
+      "hp": 37,
+      "grounded": false,
+      "state": {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "attempt": 1,
+        "userId": 1,
+        "connectionEpoch": 1,
+        "health": 5,
+        "status": "Alive",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "respawns": 3,
+        "retryReady": false
+      },
+      "actorId": "Native-BossIntroEngineReview:actor:2",
+      "manualServerOwner": true,
+      "cosmeticMotors": 19,
+      "rootIsAssemblyRoot": true
+    },
+    "landed": {
+      "morphs": {
+        "FearAfterCut": {
+          "visible": 0,
+          "original": 1,
+          "jointError": 0
+        },
+        "FearBeforeCut": {
+          "visible": 1,
+          "original": 1,
+          "jointError": 0
+        },
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 19,
+      "rawLife": 47,
+      "hp": 37,
+      "grounded": true,
+      "state": {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "attempt": 1,
+        "userId": 1,
+        "connectionEpoch": 1,
+        "health": 5,
+        "status": "Alive",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "respawns": 3,
+        "retryReady": false
+      },
+      "kind": "Fear",
+      "actorId": "Native-BossIntroEngineReview:actor:2",
+      "manualServerOwner": true,
+      "cosmeticMotors": 19,
+      "frame": 51,
+      "rootIsAssemblyRoot": true,
+      "morph": "FearAfterCut"
+    },
+    "reaction": {
+      "morphs": {
+        "FearAfterCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "FearBeforeCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 19,
+      "rawLife": 47,
+      "fallback": "Reaction",
+      "hp": 37,
+      "grounded": true,
+      "state": {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "attempt": 1,
+        "userId": 1,
+        "connectionEpoch": 1,
+        "health": 5,
+        "status": "Alive",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "respawns": 3,
+        "retryReady": false
+      },
+      "actorId": "Native-BossIntroEngineReview:actor:2",
+      "manualServerOwner": true,
+      "cosmeticMotors": 19,
+      "rootIsAssemblyRoot": true
+    },
+    "replacement": {
+      "morphs": {
+        "FearAfterCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "FearBeforeCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 19,
+      "rawLife": 47,
+      "hp": 100,
+      "grounded": true,
+      "state": {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "attempt": 1,
+        "userId": 1,
+        "connectionEpoch": 1,
+        "health": 5,
+        "status": "Alive",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "respawns": 3,
+        "retryReady": false
+      },
+      "kind": "Idle",
+      "actorId": "NativeReviewReplacement",
+      "manualServerOwner": true,
+      "cosmeticMotors": 19,
+      "frame": 1,
+      "rootIsAssemblyRoot": true
+    },
+    "hpRetained": true,
+    "resumed": {
+      "morphs": {
+        "FearAfterCut": {
+          "visible": 0,
+          "original": 1,
+          "jointError": 0
+        },
+        "FearBeforeCut": {
+          "visible": 1,
+          "original": 1,
+          "jointError": 0
+        },
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 19,
+      "rawLife": 47,
+      "hp": 37,
+      "grounded": true,
+      "state": {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "attempt": 1,
+        "userId": 1,
+        "connectionEpoch": 1,
+        "health": 5,
+        "status": "Alive",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "respawns": 3,
+        "retryReady": false
+      },
+      "kind": "Fear",
+      "actorId": "Native-BossIntroEngineReview:actor:2",
+      "manualServerOwner": true,
+      "cosmeticMotors": 19,
+      "frame": 51,
+      "rootIsAssemblyRoot": true,
+      "morph": "FearAfterCut"
+    },
+    "cancel": {
+      "morphs": {
+        "FearAfterCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "FearBeforeCut": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 19,
+      "rawLife": 47,
+      "hp": 37,
+      "grounded": true,
+      "state": {
+        "view": "Playing",
+        "connected": true,
+        "template": "Mr. Green",
+        "attempt": 1,
+        "userId": 1,
+        "connectionEpoch": 1,
+        "health": 5,
+        "status": "Alive",
+        "actorId": "Native-BossIntroEngineReview:actor:2",
+        "respawns": 3,
+        "retryReady": false
+      },
+      "kind": "Idle",
+      "actorId": "Native-BossIntroEngineReview:actor:2",
+      "manualServerOwner": true,
+      "cosmeticMotors": 19,
+      "frame": 1,
+      "rootIsAssemblyRoot": true
+    }
+  },
+  "camera": {
+    "before": {
+      "applied": true,
+      "mode": "before",
+      "intro": "Native-BossIntroEngineReview:boss-intro:1",
+      "cf": [
+        643,
+        27,
+        -330,
+        0.8944271802902222,
+        -0.21147222816944122,
+        0.39405521750450134,
+        0,
+        0.8811342716217041,
+        0.4728662669658661,
+        -0.4472135901451111,
+        -0.42294445633888245,
+        0.7881104350090027
+      ]
+    },
+    "after": {
+      "applied": true,
+      "mode": "after",
+      "intro": "Native-BossIntroEngineReview:boss-intro:1",
+      "cf": [
+        609,
+        24,
+        -333,
+        0.8178064227104187,
+        0.23805029690265656,
+        -0.5239510536193848,
+        0,
+        0.9104379415512085,
+        0.41364556550979614,
+        0.5754933953285217,
+        -0.3382819890975952,
+        0.744562029838562
+      ]
+    },
+    "otherParty": {
+      "applied": false,
+      "mode": "other",
+      "cf": [
+        305,
+        25,
+        30,
+        1,
+        0,
+        0,
+        0,
+        0.7936063408851624,
+        0.6084315180778503,
+        0,
+        -0.6084315180778503,
+        0.7936063408851624
+      ]
+    },
+    "stale": {
+      "applied": false,
+      "mode": "stale",
+      "cf": [
+        305,
+        25,
+        30,
+        1,
+        0,
+        0,
+        0,
+        0.7936063408851624,
+        0.6084315180778503,
+        0,
+        -0.6084315180778503,
+        0.7936063408851624
+      ]
+    },
+    "free": {
+      "applied": false,
+      "mode": "free",
+      "cf": [
+        305,
+        25,
+        30,
+        1,
+        0,
+        0,
+        0,
+        0.7936063408851624,
+        0.6084315180778503,
+        0,
+        -0.6084315180778503,
+        0.7936063408851624
+      ]
+    },
+    "ended": {
+      "applied": false,
+      "mode": "ended",
+      "cf": [
+        305,
+        25,
+        30,
+        1,
+        0,
+        0,
+        0,
+        0.7936063408851624,
+        0.6084315180778503,
+        0,
+        -0.6084315180778503,
+        0.7936063408851624
+      ]
+    }
+  }
+}

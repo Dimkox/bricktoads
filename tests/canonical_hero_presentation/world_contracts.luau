@@ -36,8 +36,18 @@ sourceBody.humanoid.FloorMaterial=enum.Material.Air;blocked('Airborne');sourceBo
 assert(capture().blocked==nil,'Removing priority must provide fresh locomotion context')
 sourceSession.sourceCombat=nil;assert(capture().enabled==false,'Stand/unsupported combat keeps its established retarget')
 assert(sourceState.attack==accepted and sourceBody.humanoid.Health==100 and sourceBody.root:GetNetworkOwner()==nil)
+sourceWorld.bossIntroState={id='run:intro',counter=0xE1,fearFrame=0x33,
+    heroActors={[1]='source-context-p1',[2]='stale-p2'}}
+ctx=capture()
+assert(ctx.fearIntro and ctx.fearIntro.id=='run:intro' and ctx.fearIntro.actorId=='source-context-p1'
+    and ctx.fearIntro.frameId==0x33 and ctx.fearIntro.counter==0xE1,'Forward the captured intro only to its exact actor')
+assert(sourceContexts[sourceWorld.actors[2]].fearIntro==nil,'A replacement cannot borrow an earlier body fear')
+sourceBody.model:SetAttribute('ActorId','replacement');assert(capture().fearIntro==nil)
+sourceBody.model:SetAttribute('ActorId','source-context-p1')
+sourceWorld.bossIntroState=nil;assert(capture().fearIntro==nil,'Ending intro removes its presentation context')
 sourceWorld:clearActors()
 print('PASS source context gives death reaction carry club Dragon air and paused states priority without altering combat')
+print('PASS fear context uses captured actor identity and never leaks to replaced bodies')
 
 -- Weld target/initial grip contracts only. Native doubles do not solve welds;
 -- following the moving mesh during a real swing is checked in Studio.

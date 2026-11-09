@@ -37,6 +37,7 @@ function SpectatorCamera:sync(snapshot, controlled)
         or self.worldName ~= snapshot.worldName or self.groupId ~= snapshot.groupId then
         self.mode, self.selectedActorId, self.point, self.freePosition = "Follow", nil, nil, nil
         self.models, self.targets = {}, {}
+        self.introCameraId,self.introCounter,self.introShake=nil,nil,nil
         self:resetInput()
         self.refreshElapsed = 1
     end
@@ -105,12 +106,59 @@ function SpectatorCamera:rotate(amount)
     if self.enabled and self:isFree() then self.yaw += amount end
 end
 
+function SpectatorCamera:stepIntro(dt,camera)
+    local function release()
+        self.introCameraId,self.introCounter,self.introShake=nil,nil,nil
+        camera:SetAttribute('BossIntroId',nil)
+        return false
+    end
+    if self:isFree() or not self.worldName then return release() end
+    local world=workspace:FindFirstChild(self.worldName)
+    local intro=world and world:FindFirstChild('BossIntro')
+    if not intro or intro:GetAttribute('Active')~=true or intro:GetAttribute('RunId')~=self.runId
+        or intro:GetAttribute('LevelEpoch')~=self.levelEpoch then return release() end
+    local counter,id,focus=intro:GetAttribute('Counter'),intro:GetAttribute('IntroId'),intro:GetAttribute('Focus')
+    local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
+    local focusType=typeof(focus)
+    if not finite(counter) or counter%1~=0 or counter<1 or counter>=255 or type(id)~='string'
+        or (focusType~='Vector3' and focusType~='table')
+        or not finite(focus.X) or not finite(focus.Y) or not finite(focus.Z) then return release() end
+    if self.introCameraId~=id then
+        self.introCameraId,self.introCounter,self.introShake=id,counter,0
+    end
+    for _,mark in ipairs({0x30,0x64})do
+        if self.introCounter<mark and counter>=mark then self.introShake=.16 end
+    end
+    self.introCounter=counter
+    self.introShake=math.max(0,(self.introShake or 0)-math.clamp(dt,0,.1))
+    local cut=intro:GetAttribute('CameraCut')==true
+    local target,offset=focus,Vector3.new(-19,15,27)
+    if not cut then
+        local controlled=self.controlled
+        local model=controlled and self.models and self.models[controlled.actorId]
+        if not model and self.targets[1] then model=self.targets[1].model end
+        local root=model and model.Parent and model:FindFirstChild('HumanoidRootPart')
+        if root then
+            local distance=(root.Position-focus).Magnitude
+            target=(root.Position+focus)/2
+            offset=Vector3.new(14,math.max(16,distance*.35),math.max(28,distance*.7))
+        else offset=Vector3.new(15,18,30) end
+    end
+    -- Camera distance, short shake and perspective are authored3D adaptation.
+    -- The server's source counter determines the two impacts and the E0 cut.
+    local shake=math.sin((.16-self.introShake)*100)*self.introShake*1.25
+    camera.CFrame=CFrame.lookAt(target+offset+Vector3.new(shake,0,0),target)
+    camera:SetAttribute('BossIntroId',id)
+    return true
+end
+
 function SpectatorCamera:step(dt, camera)
     if not camera then return end
     self.refreshElapsed += dt
     if self.refreshElapsed >= 0.2 then self.refreshElapsed = 0; self:refreshTargets() end
     camera.CameraType = Enum.CameraType.Scriptable
     camera:SetAttribute("SpectatorMode", self.mode)
+    if self:stepIntro(dt,camera) then return end
     if self:isFree() and self.freePosition then
         if self.enabled then
             local function down(key) return self.keys[key] and 1 or 0 end

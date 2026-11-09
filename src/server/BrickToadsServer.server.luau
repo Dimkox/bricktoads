@@ -8,6 +8,7 @@ local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
 local worldType=require(gameplay.GameWorld)
 require(gameplay.DragonWorld)(worldType)
+require(gameplay.BossIntroWorld)(worldType)
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
 local buildInfo=script.Parent:FindFirstChild('BuildInfo')
 local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
@@ -15,6 +16,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
+    BossIntro=require(gameplay.BossIntro)(require(gameplay.CanonicalAnimation)),
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
     SourceCombat=require(gameplay.SourceCombat),DragonFlight=require(gameplay.DragonFlight),

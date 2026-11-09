@@ -14,14 +14,14 @@ local function towards(a,b,amount)
     return {x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t}
 end
 local objectives={Approach="Defeat the patrol by the old gate",Courtyard="Clear the inner courtyard",
-    BossReady="Assigning Guardian: waiting for the invited player",
+    BossReady="Assigning Guardian: waiting for the invited player",BossIntro="The Guardian approaches",
     Boss="Strike three projectiles back at the Guardian",Exit="The path is open — reach the glowing gate",
     Won="Causeway cleared",Lost="Team eliminated"}
 
-function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs,DragonFlight)
+function Director.new(session,world,Combat,config,GuardianPattern,HealingFlies,EnemyCarry,WalkerClubs,DragonFlight,BossIntro)
     local profile=config.Attacks[config.Enemy.attack]
     local self=setmetatable({session=session,world=world,config=config,Combat=Combat,enemies={},projectiles={},byUserId={},ownerNames={},
-        stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,
+        stage='Approach',now=session.now or 0,bossHits=0,serial=0,route=config.Level,GuardianPattern=GuardianPattern,BossIntro=BossIntro,
         strikeProfile={reach=config.Enemy.range+1,width=profile.width,height=profile.height,
             windup=config.Enemy.windup,cooldown=config.Enemy.cooldown,recoveryPose=.17},random=math.random},Director)
     if self.route then
@@ -296,12 +296,34 @@ function Director:_resolveStrike(id,e)
     if not landed then self:_log('EnemyAttackMiss',id,{actorId=e.actorId,action=pending.action}) end
 end
 function Director:_boss()
+    if self.bossIntro or self.enemies[-99] then return end
     local controller=self.bossGate and self.bossGate(self.now) or {state='NPC'}
     if controller.state=='Waiting' then
         self.stage='BossReady'; self.world:stage('BossReady'); return
     end
-    self.stage='Boss'; self.world:stage('Boss')
     if self.clubs then self.clubs:bossIntro() end
+    if self.route and self.BossIntro then
+        -- Drop carried bodies and pending captures through their normal release
+        -- path. Carry remains available after this single intro transition.
+        if self.carry then
+            local released={}
+            for id,row in pairs(self.carry.states) do if row.mode=='Carried' then released[id]=true end end
+            for _,row in ipairs(self.carry.pending) do released[row.id]=true end
+            for id in pairs(released) do self.carry:forgetEnemy(id) end
+        end
+        self.bossController=controller
+        self.stage='BossIntro';self.world:stage('BossIntro')
+        self.bossIntro=self.BossIntro.new(self)
+        return
+    end
+    self:_activateBoss(controller)
+end
+function Director:cancelBossIntro(reason)
+    if self.bossIntro then return self.bossIntro:cancel(reason) end
+end
+function Director:_activateBoss(controller)
+    if self.enemies[-99] then return end
+    self.stage='Boss'; self.world:stage('Boss')
     local position=self.route and self.route.boss.position or {x=82,y=3,z=0}
     assert(self.world:spawnEnemy(-99,'Boss',position),'Boss spawn failed')
     local actorId=self.session.state.runId..':boss:'..self.session.state.levelEpoch
@@ -574,6 +596,7 @@ function Director:_projectiles(dt)
 end
 function Director:step(now,dt)
     if self.result then
+        self:cancelBossIntro('RunEnded')
         if self.flies then self.flies:close() end
         if self.carry then self.carry:close() end
         if self.clubs then self.clubs:close() end
@@ -586,6 +609,7 @@ function Director:step(now,dt)
     if self.flies then self.flies:step(now) end
     if self.dragons then self.dragons:step(now,dt) end
     if self.session.state.status=='Lost' then
+        self:cancelBossIntro('RunEnded')
         self.result='Lost'; self.stage='Lost'; self.world:stage('Lost')
         if self.guardian then self.guardian:step(now,0) end
         if self.dragons then self.dragons:close() end
@@ -602,6 +626,9 @@ function Director:step(now,dt)
         end
     end
     if self.stage=='BossReady' then self:_boss() end
+    if self.stage=='BossIntro' and self.bossIntro and self.bossIntro:step(now)=='Complete' then
+        self:_activateBoss(self.bossController)
+    end
     if self.stage=='Boss' and self.world:hazard(-99) then self:_kill(-99) end
     if self.stage=='Boss' or next(self.projectiles) then self:_projectiles(math.min(math.max(dt or 0,0),.1)) end
     if self.stage=='Exit' then
@@ -634,7 +661,7 @@ function Director:snapshot()
     return {stage=self.stage,objective=objective,enemies=enemies,bossHits=self.bossHits,
         bossMax=self.config.Boss.hits,result=self.result,zoneIndex=self.zoneIndex,zoneCount=self.route and #self.route.zones,
         zoneName=zone and zone.name,bossMechanic=self.route and 'PickupThrow',bossRawLife=self.enemies[-99] and self.enemies[-99].rawLife,
-        healingFlies=self.flies and self.flies:snapshot(),
+        healingFlies=self.flies and self.flies:snapshot(),bossIntro=self.bossIntro and self.bossIntro:snapshot(),
         variation=variation and {version=variation.version,seed=variation.seed,sectionChoices=table.clone(variation.sectionChoices)}}
 end
 return Director

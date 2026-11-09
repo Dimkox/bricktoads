@@ -1597,6 +1597,10 @@ function World:updatePresentation(session, dt, enemies)
                     recoveryUntil=combat and combat.strikeRecoveryUntil,reactionEpoch=combat and combat.reactionEpoch,
                     blocked=blocked,grounded=actor.humanoid.FloorMaterial~=Enum.Material.Air,
                     mode=movementMode or (walking and 'Walk' or 'Idle'),speed=speed,
+                    fearIntro=self.bossIntroState and self.bossIntroState.heroActors
+                        and self.bossIntroState.heroActors[id]==actor.model:GetAttribute('ActorId') and {
+                            id=self.bossIntroState.id,actorId=self.bossIntroState.heroActors[id],
+                            counter=self.bossIntroState.counter,frameId=self.bossIntroState.fearFrame} or nil,
                 })
             end
         end

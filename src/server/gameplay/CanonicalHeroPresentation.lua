@@ -19,6 +19,16 @@ end
 -- an authored joint-pose approximation. Source uppercut1A is a different move.
 local POSES={
     [0x01]=pose({}),[0x02]=pose({}),
+    -- Source32 is the asymmetric stretched-jaw fear,33 the frontal scream.
+    -- Head geometry and these full-body joint angles are authored3D adaptations.
+    [0x32]=pose({Waist={-.14,.55,-.06},Neck={-.12,-.1,-.12},
+        LeftShoulder={-.65,0,-.8},LeftElbow={.45,0,0},LeftWrist={0,0,-.15},
+        RightShoulder={-.3,0,.65},RightElbow={.7,0,0},RightWrist={0,0,.15},
+        LeftHip={-.12,0,-.12},LeftKnee={-.22,0,0},RightHip={.15,0,.12},RightKnee={-.25,0,0}}),
+    [0x33]=pose({Waist={.08,0,0},Neck={-.1,0,0},
+        LeftShoulder={-.4,0,-1},LeftElbow={.3,0,0},LeftWrist={0,0,-.2},
+        RightShoulder={-.4,0,1},RightElbow={.3,0,0},RightWrist={0,0,.2},
+        LeftHip={.12,0,-.17},LeftKnee={-.25,0,0},RightHip={.12,0,.17},RightKnee={-.25,0,0}}),
     [0x03]=pose({Waist={-.08,0,0},LeftShoulder={.65,0,-.08},LeftElbow={.75,0,0},
         RightShoulder={.4,0,.08},RightElbow={1,0,0},LeftHip={-.55,0,0},LeftKnee={-.85,0,0},
         LeftAnkle={.25,0,0},RightHip={.3,0,0},RightAnkle={-.1,0,0}}),
@@ -108,6 +118,17 @@ function Presentation.sample(state,c)
     state.reactionEpoch=c.reactionEpoch
     local blocked=c.enabled~=true and 'Disabled' or c.blocked or (c.grounded==false and 'Airborne')
     if blocked then cancel(state,attack);state.gaitPhase=0;return nil,blocked end
+    local fear=c.fearIntro
+    if type(fear)=='table' and type(fear.id)=='string' and #fear.id>0 and fear.actorId==c.actorId
+        and finite(fear.counter) and fear.counter%1==0 and fear.counter>=1 and fear.counter<255
+        and ((fear.frameId==0x32 and fear.counter<=0xE0) or (fear.frameId==0x33 and fear.counter>0xE0)) then
+        -- The server's finite intro reassigns fear; no animation byte writes
+        -- here move a physical body or block accepted player intents.
+        cancel(state,attack);state.gaitPhase=0
+        return {kind='Fear',animationId=fear.frameId==0x32 and 0x2C or 0x2E,frameId=fear.frameId,
+            introId=fear.id,sourceCounter=fear.counter,morphKind=fear.frameId==0x32 and 'FearBeforeCut' or 'FearAfterCut',
+            adaptation='Authored3DJointAngles',joints=POSES[fear.frameId],events=EMPTY}
+    end
     if attack and attack==state.observedAttack and attack.action~=state.observedAction then
         state.sequence=nil;state.invalidAttack='AttackChanged'
     elseif attack and attack~=state.observedAttack then
@@ -164,7 +185,7 @@ end
 Presentation.provenance=table.freeze({sourceCommit=Animation.provenance.commit,sourceCatalogSha256=Animation.provenance.sourceCatalogSha256,
     firstFrameCounterPhase=0,firstRead='Read',callerMask=1,callsPerSecond=CALLS_PER_SECOND,
     locomotionStudsPerPhase=DISTANCE_PER_PHASE,adaptation='Authored3DJointAngles',
-    scope='IdleWalkRunAndSevenAcceptedActions',
+    scope='IdleWalkRunSevenAcceptedActionsAndFirstBossFear',
     morphBindings='Graphics1C=PowerFist;Graphics1E=BigBoot;RightLimb3DAdaptation',
-    pending='RemainingMorphMeshes;Folded1FWindupSilhouette;BossFear;AirborneSourceZMapping;Carry;Club;Damage;Death'})
+    pending='RemainingMorphMeshes;Folded1FWindupSilhouette;CompleteFearBodySilhouette;AirborneSourceZMapping;Carry;Club;Damage;Death'})
 return Presentation

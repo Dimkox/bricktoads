@@ -260,6 +260,26 @@ eq(view.CFrame.Position,121,35,542,'A group without loaded actors must keep its 
 camera:sync({heroes={{actorId='same-id',status='Alive'}}})
 camera:refreshTargets(); assert(camera.models['same-id']==defaultActor.model,'Old snapshots retain default-world compatibility')
 print('PASS camera selects one world, clears cross-group state and never falls back from an explicit missing world')
+local introFolder=node('Folder','BossIntro',second.folder)
+for k,v in pairs({Active=true,IntroId='group2-intro',RunId='same-run',LevelEpoch=1,Counter=1,
+    Phase='BeforeCut',CameraCut=false,Focus=vector(115,19,512)})do introFolder:SetAttribute(k,v)end
+local introAttrs={};local introView={SetAttribute=function(_,k,v)introAttrs[k]=v end}
+camera:sync({runId='same-run',levelEpoch=1,groupId='G1',worldName='BrickToadsWorld',heroes={}})
+assert(not camera:stepIntro(.01,introView),'Another party intro must never move this camera')
+camera:sync({runId='same-run',levelEpoch=1,groupId='G2',worldName='BrickToadsWorld_G2',heroes={}})
+assert(camera:stepIntro(.01,introView) and introAttrs.BossIntroId=='group2-intro')
+local beforeCut=introView.CFrame.Position
+introFolder:SetAttribute('Counter',0xE0);introFolder:SetAttribute('CameraCut',true)
+assert(camera:stepIntro(.01,introView) and (introView.CFrame.Position-beforeCut).Magnitude>1,
+    'The source E0 marker must make an actual finite perspective cut')
+introFolder:SetAttribute('RunId','stale-run')
+assert(not camera:stepIntro(.01,introView) and introAttrs.BossIntroId==nil)
+introFolder:SetAttribute('RunId','same-run');camera.mode='Free';camera.freePosition=vector(1,2,3)
+assert(not camera:stepIntro(.01,introView),'Free spectators retain their chosen view')
+camera.mode='Follow';introFolder:SetAttribute('Counter',255)
+assert(not camera:stepIntro(.01,introView),'A finished intro cannot retain camera control')
+introFolder:Destroy();assert(not camera:stepIntro(.01,introView))
+print('PASS boss intro camera follows only current party/run and releases after cut completion or free view')
 
 local route=World.new(Base,{FallY=-20,Level=source(LevelSource)},
     {name='RouteWorld',offset={x=100,y=10,z=1024}})

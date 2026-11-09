@@ -46,9 +46,10 @@ harness = harness.replace(anchor, "local env=setmetatable({script={Parent={Canon
 contracts = Path(__file__).with_name('appearance_contracts.luau').read_text(encoding='utf-8')
 rotated_contracts = Path(__file__).with_name('rotated_rest_contracts.luau').read_text(encoding='utf-8')
 morph_contracts = Path(__file__).with_name('morph_contracts.luau').read_text(encoding='utf-8')
+fear_contracts = Path(__file__).with_name('fear_contracts.luau').read_text(encoding='utf-8')
 with tempfile.TemporaryDirectory(prefix='bricktoads-source-presentation-') as directory:
     runner = Path(directory) / 'presentation_contracts.luau'
-    runner.write_text(prefix + harness + '\n' + contracts + '\n' + rotated_contracts + '\n' + morph_contracts, encoding='utf-8')
+    runner.write_text(prefix + harness + '\n' + contracts + '\n' + rotated_contracts + '\n' + morph_contracts + '\n' + fear_contracts, encoding='utf-8')
     result = subprocess.run([args.luau, str(runner)], cwd=ROOT)
     if result.returncode:
         raise SystemExit(result.returncode)
