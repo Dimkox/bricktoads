@@ -5,7 +5,10 @@ return function(options)
     assert(type(options)=="table"and type(options.name)=="string"and #options.name>0,"Name this role run")
     assert(type(options.sourceId)=="string"and #options.sourceId>0,"Exact expected BuildId required")
     assert(type(options.players)=="number"and options.players%1==0 and options.players>=2 and options.players<=4,"Actual client count2..4 required")
-    assert(options.scenario=="Invader"or options.scenario=="HeroCrash"or options.scenario=="RocketRat","Supported scenarios: Invader, HeroCrash, RocketRat")
+    assert(options.scenario=="Invader"or options.scenario=="InvaderDisconnect"or options.scenario=="HeroCrash"
+        or options.scenario=="HeroDisconnectCrash"or options.scenario=="HeroOfflineDeathLateJoin"
+        or options.scenario=="RocketRat"or options.scenario=="RocketRatDisconnect",
+        "Supported role, crash and actual disconnect scenario required")
     assert(options.invaderOutcome==nil or options.invaderOutcome=="Return"or options.invaderOutcome=="Escape","Invader outcome Return/Escape required")
     local storage=game:GetService("ServerStorage");local evidence=storage:FindFirstChild("BrickToadsScooterRoleNetworkEvidence")
     if not evidence then evidence=Instance.new("Folder");evidence.Name="BrickToadsScooterRoleNetworkEvidence";evidence.Parent=storage end

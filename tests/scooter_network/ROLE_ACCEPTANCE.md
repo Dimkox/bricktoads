@@ -32,6 +32,10 @@ Use a fresh name for every run and preserve failures.
 | Invader escape | 2 | 1 | `scenario="Invader", invaderOutcome="Escape"` |
 | Authored-hazard crash | 3 | 3 | `scenario="HeroCrash"` |
 | Human RocketRat drop/crash | 3 | 2 | `scenario="RocketRat"` |
+| Invader owner exit | 2 | 1 | `scenario="InvaderDisconnect"` |
+| Rat owner exits after accepted drop | 3 | 2 | `scenario="RocketRatDisconnect"` |
+| Offline living rider and shared rewind | 3 | 3 | `scenario="HeroDisconnectCrash"` |
+| Offline death and different late spectator | 3 initially, then one different new client | 3 fixed original heroes | `scenario="HeroOfflineDeathLateJoin"` |
 
 Poll `ServerStorage.BrickToadsScooterRoleNetworkEvidence.<name>` in the same Edit instance. After Status becomes PASS/FAIL/ERROR, concatenate Chunk0001 through the Chunks count and JSON-decode. ERROR may instead contain a Failure StringValue. The active server owns EndTest cleanup and its bounded watchdog; the Edit evidence deadline alone does not prove teardown.
 
@@ -40,5 +44,7 @@ Actual clients choose roles and Start through production remotes. Only seed/stag
 Server snapshots, journal events, original/current body references and client readbacks provide separate evidence. A transmitted packet is not immediate server acceptance, and an updated server result alone is not proof that clients have received it. Final reports retain the exact source, client count, resource changes, test preparation and any incomplete conditions.
 
 These automated clients disable presentation/UI to own their input sequence. They do not establish physical multitouch, human UI usability, Internet-network performance or registered-account reconnect.
+
+Disconnect scenarios use the existing client Leave command and actual LeaveTest. The server requires PlayerRemoving, registry invalidation and native connected=false/epoch before asserting consequences. Final readbacks query remaining original participants while comparing all fixed hero states, including offline ones. The late-arrival scenario separately validates the new actual Player in the original group/run; its different UserId cannot count as a returned owner. [Disconnect receipts and remaining limits](../../reports/2026-11-09-scooter-disconnect-acceptance/README.md).
 
 Run local driver checks with the same commands as the hero runbook; CI also compiles both new helper files. Native receipts and limitations live in `reports/2026-11-09-scooter-role-network-acceptance/`.

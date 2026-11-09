@@ -1,0 +1,1387 @@
+[
+  {
+    "scenario": "InvaderDisconnect",
+    "status": "PASS",
+    "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "expectedSourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "requestedClients": 2,
+    "heroes": 1,
+    "summary": {
+      "passed": 50,
+      "commands": 26,
+      "failed": 0,
+      "samples": 80
+    },
+    "elapsedSeconds": 26.261980500000163,
+    "remainingOriginalParticipants": 1,
+    "networkSettings": {
+      "OutboundNetworkMinDelayMs": 0,
+      "OutboundNetworkJitterMs": 0,
+      "OutboundNetworkLossPercent": 0,
+      "InboundNetworkMinDelayMs": 0,
+      "InboundNetworkLossPercent": 0,
+      "InboundNetworkJitterMs": 0
+    },
+    "departures": [
+      {
+        "userId": -2,
+        "name": "Player2",
+        "removingAt": 1794246480.109538,
+        "observedDisconnectedAt": 1794246480.149791,
+        "registryCurrentAfter": false,
+        "nativeConnectionEvent": {
+          "levelEpoch": 3,
+          "revision": 5,
+          "now": 1794246480.098075,
+          "groupId": "group-1",
+          "runId": "d434dc9d-515a-40dd-9df2-304e290c01a3",
+          "kind": "EnemyConnection",
+          "data": {
+            "connectionEpoch": 2,
+            "connected": false,
+            "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:enemy:3:-1",
+            "ownerUserId": -2
+          },
+          "userId": -1
+        }
+      }
+    ],
+    "finalHeroes": [
+      {
+        "slot": 1,
+        "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:actor:2",
+        "status": "Alive",
+        "connected": true,
+        "connectionEpoch": 1,
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 39
+      }
+    ],
+    "finalClientRows": [
+      {
+        "userId": -1,
+        "groupId": "group-1",
+        "runId": "d434dc9d-515a-40dd-9df2-304e290c01a3",
+        "levelEpoch": 3,
+        "now": 1794246484.566812,
+        "enemies": [
+          {
+            "id": -1,
+            "movementMode": "Idle",
+            "reactionEpoch": 0,
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "kind": "Invader",
+            "zoneIndex": 1,
+            "dead": true
+          }
+        ],
+        "heroes": [
+          {
+            "slot": 1,
+            "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:actor:2",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 39
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-3",
+          "code": "OK"
+        },
+        "userId": 1,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246475.887991,
+        "revision": 2,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 3,
+        "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:actor:2"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 39,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "before": 47,
+          "after": 39,
+          "attacker": -1
+        },
+        "userId": 1,
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246479.514537,
+        "revision": 5,
+        "late": false,
+        "kind": "LifeStolen",
+        "seq": 28,
+        "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:actor:2"
+      },
+      {
+        "revision": 5,
+        "data": {
+          "connectionEpoch": 2,
+          "connected": false,
+          "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:enemy:3:-1",
+          "ownerUserId": -2
+        },
+        "levelEpoch": 3,
+        "now": 1794246480.098075,
+        "userId": -1,
+        "late": false,
+        "kind": "EnemyConnection",
+        "seq": 29,
+        "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:enemy:3:-1"
+      },
+      {
+        "revision": 5,
+        "data": {
+          "ownerUserId": -2,
+          "cause": "InvaderEscape",
+          "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:enemy:3:-1",
+          "position": {
+            "y": 2.999997615814209,
+            "x": 0.07578709721565247,
+            "z": -6.010919094085693
+          }
+        },
+        "levelEpoch": 3,
+        "now": 1794246484.515193,
+        "userId": -1,
+        "late": false,
+        "kind": "EnemyDeath",
+        "seq": 30,
+        "actorId": "d434dc9d-515a-40dd-9df2-304e290c01a3:enemy:3:-1"
+      }
+    ]
+  },
+  {
+    "scenario": "RocketRatDisconnect",
+    "status": "PASS",
+    "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "expectedSourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "requestedClients": 3,
+    "heroes": 2,
+    "summary": {
+      "passed": 55,
+      "commands": 29,
+      "failed": 0,
+      "samples": 77
+    },
+    "elapsedSeconds": 25.152857999999924,
+    "remainingOriginalParticipants": 2,
+    "networkSettings": {
+      "OutboundNetworkMinDelayMs": 0,
+      "OutboundNetworkJitterMs": 0,
+      "OutboundNetworkLossPercent": 0,
+      "InboundNetworkMinDelayMs": 0,
+      "InboundNetworkLossPercent": 0,
+      "InboundNetworkJitterMs": 0
+    },
+    "departures": [
+      {
+        "userId": -3,
+        "name": "Player3",
+        "removingAt": 1794246579.450052,
+        "observedDisconnectedAt": 1794246579.456044,
+        "registryCurrentAfter": false,
+        "nativeConnectionEvent": {
+          "levelEpoch": 3,
+          "revision": 8,
+          "now": 1794246579.43758,
+          "groupId": "group-1",
+          "runId": "6d9b5dc1-150f-4722-8f1b-81b423890d19",
+          "kind": "EnemyConnection",
+          "data": {
+            "connectionEpoch": 2,
+            "connected": false,
+            "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-201:spawn:1",
+            "ownerUserId": -3
+          },
+          "userId": -201
+        }
+      }
+    ],
+    "drop": {
+      "acceptedElapsed": 0.3333430290222168,
+      "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-201:spawn:1",
+      "observedElapsed": 0.35027194023132324,
+      "position": {
+        "y": 13.695279598236084,
+        "x": 149.33366298675537,
+        "z": 9.9999418258667
+      },
+      "id": -6002,
+      "owner": -201,
+      "created": 1794246579.02022,
+      "expiresAt": 1794246583.02022
+    },
+    "contact": {
+      "at": 1794246579.654568,
+      "slot": 1,
+      "sourceActorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-201:spawn:1",
+      "ownerCurrent": false,
+      "ownerRegistryCurrent": false,
+      "ownerConnected": false,
+      "serialBefore": 0,
+      "serialAfter": 1
+    },
+    "finalHeroes": [
+      {
+        "slot": 1,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:13",
+        "status": "Alive",
+        "connected": true,
+        "connectionEpoch": 1,
+        "attempt": 2,
+        "respawns": 2,
+        "rawLife": 47
+      },
+      {
+        "slot": 2,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:5",
+        "status": "Alive",
+        "connected": true,
+        "connectionEpoch": 1,
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      }
+    ],
+    "finalClientRows": [
+      {
+        "userId": -1,
+        "groupId": "group-1",
+        "runId": "6d9b5dc1-150f-4722-8f1b-81b423890d19",
+        "levelEpoch": 3,
+        "now": 1794246580.55374,
+        "enemies": [
+          {
+            "id": -1,
+            "movementMode": "Idle",
+            "reactionEpoch": 1,
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "kind": "Invader",
+            "zoneIndex": 1,
+            "dead": true
+          },
+          {
+            "id": -201,
+            "movementMode": "Idle",
+            "reactionEpoch": 0,
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "kind": "RocketRat",
+            "zoneIndex": 1,
+            "dead": true
+          }
+        ],
+        "heroes": [
+          {
+            "slot": 1,
+            "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:13",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 2,
+            "respawns": 2,
+            "rawLife": 47
+          },
+          {
+            "slot": 2,
+            "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:5",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          }
+        ]
+      },
+      {
+        "userId": -2,
+        "groupId": "group-1",
+        "runId": "6d9b5dc1-150f-4722-8f1b-81b423890d19",
+        "levelEpoch": 3,
+        "now": 1794246580.55374,
+        "enemies": [
+          {
+            "id": -1,
+            "movementMode": "Idle",
+            "reactionEpoch": 1,
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "kind": "Invader",
+            "zoneIndex": 1,
+            "dead": true
+          },
+          {
+            "id": -201,
+            "movementMode": "Idle",
+            "reactionEpoch": 0,
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "kind": "RocketRat",
+            "zoneIndex": 1,
+            "dead": true
+          }
+        ],
+        "heroes": [
+          {
+            "slot": 1,
+            "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:13",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 2,
+            "respawns": 2,
+            "rawLife": 47
+          },
+          {
+            "slot": 2,
+            "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:5",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-3",
+          "code": "OK"
+        },
+        "userId": 1,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246572.085326,
+        "revision": 2,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 3,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:2"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-6",
+          "code": "OK"
+        },
+        "userId": 2,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246572.085326,
+        "revision": 4,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 5,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:5"
+      },
+      {
+        "revision": 8,
+        "data": {
+          "cause": "InvaderTransformation",
+          "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-1",
+          "position": {
+            "y": 2.9900264739990234,
+            "x": 5.289109706878662,
+            "z": -6.755777359008789
+          }
+        },
+        "levelEpoch": 3,
+        "now": 1794246574.570991,
+        "userId": -1,
+        "late": false,
+        "kind": "EnemyDeath",
+        "seq": 34,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-1"
+      },
+      {
+        "revision": 8,
+        "data": {
+          "connectionEpoch": 2,
+          "connected": false,
+          "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-201:spawn:1",
+          "ownerUserId": -3
+        },
+        "levelEpoch": 3,
+        "now": 1794246579.43758,
+        "userId": -201,
+        "late": false,
+        "kind": "EnemyConnection",
+        "seq": 44,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-201:spawn:1"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "data": {
+          "eventId": "s-11",
+          "code": "OK"
+        },
+        "status": "AwaitingRespawn",
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246579.653994,
+        "userId": 1,
+        "late": false,
+        "kind": "Death",
+        "seq": 45,
+        "revision": 9
+      },
+      {
+        "revision": 9,
+        "data": {
+          "ownerUserId": -3,
+          "cause": "CourseRewind",
+          "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-201:spawn:1",
+          "position": {
+            "y": 14,
+            "x": 170.88197326660156,
+            "z": 6.1972975730896
+          }
+        },
+        "levelEpoch": 3,
+        "now": 1794246579.653994,
+        "userId": -201,
+        "late": false,
+        "kind": "EnemyDeath",
+        "seq": 48,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:enemy:3:-201:spawn:1"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 0,
+        "attempt": 1,
+        "data": {
+          "mode": "Speeder",
+          "serial": 1,
+          "checkpoint": 1
+        },
+        "status": "AwaitingRespawn",
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246579.653994,
+        "userId": 1,
+        "late": false,
+        "kind": "CampaignGroupStopped",
+        "seq": 49,
+        "revision": 9
+      },
+      {
+        "view": "Playing",
+        "data": {
+          "eventId": "s-14",
+          "code": "OK"
+        },
+        "levelEpoch": 3,
+        "respawns": 2,
+        "status": "Alive",
+        "connected": true,
+        "rawLife": 0,
+        "attempt": 2,
+        "userId": 1,
+        "shieldKind": "Normal",
+        "shieldUntil": 1794246581.670923,
+        "now": 1794246579.670923,
+        "revision": 11,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 51,
+        "actorId": "6d9b5dc1-150f-4722-8f1b-81b423890d19:actor:13"
+      },
+      {
+        "levelEpoch": 3,
+        "revision": 11,
+        "now": 1794246580.586397,
+        "late": false,
+        "kind": "CampaignGroupRewound",
+        "data": {
+          "mode": "Speeder",
+          "serial": 1,
+          "checkpoint": 1
+        },
+        "seq": 53
+      }
+    ]
+  },
+  {
+    "scenario": "HeroDisconnectCrash",
+    "status": "PASS",
+    "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "expectedSourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "requestedClients": 3,
+    "heroes": 3,
+    "summary": {
+      "passed": 44,
+      "commands": 22,
+      "failed": 0,
+      "samples": 62
+    },
+    "elapsedSeconds": 23.39680139999996,
+    "remainingOriginalParticipants": 2,
+    "networkSettings": {
+      "OutboundNetworkMinDelayMs": 0,
+      "OutboundNetworkJitterMs": 0,
+      "OutboundNetworkLossPercent": 0,
+      "InboundNetworkMinDelayMs": 0,
+      "InboundNetworkLossPercent": 0,
+      "InboundNetworkJitterMs": 0
+    },
+    "departures": [
+      {
+        "userId": -3,
+        "name": "Player3",
+        "removingAt": 1794246397.978535,
+        "observedDisconnectedAt": 1794246398.015307,
+        "registryCurrentAfter": false,
+        "nativeConnectionEvent": {
+          "view": "Playing",
+          "connected": false,
+          "groupId": "group-1",
+          "attempt": 1,
+          "rawLife": 47,
+          "data": {
+            "eventId": "s-14",
+            "code": "OK"
+          },
+          "userId": 3,
+          "levelEpoch": 3,
+          "respawns": 3,
+          "now": 1794246397.97832,
+          "revision": 11,
+          "status": "Alive",
+          "kind": "Connection",
+          "runId": "052538dc-98a3-4866-a840-694b028e4d50",
+          "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:8"
+        }
+      }
+    ],
+    "offlineSlot": 3,
+    "offlineAdvance": {
+      "to": {
+        "y": 3,
+        "x": 44.93196955422103,
+        "z": 2.5410855934023857
+      },
+      "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:8",
+      "from": {
+        "y": 3,
+        "x": 41.659059912355495,
+        "z": 2.5410855934023857
+      }
+    },
+    "finalHeroes": [
+      {
+        "slot": 1,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:17",
+        "status": "Alive",
+        "connected": true,
+        "connectionEpoch": 1,
+        "attempt": 2,
+        "respawns": 2,
+        "rawLife": 47
+      },
+      {
+        "slot": 2,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:5",
+        "status": "Alive",
+        "connected": true,
+        "connectionEpoch": 1,
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      },
+      {
+        "slot": 3,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:8",
+        "status": "Alive",
+        "connected": false,
+        "connectionEpoch": 2,
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      }
+    ],
+    "finalClientRows": [
+      {
+        "userId": -1,
+        "groupId": "group-1",
+        "runId": "052538dc-98a3-4866-a840-694b028e4d50",
+        "levelEpoch": 3,
+        "now": 1794246400.082718,
+        "enemies": [
+          {
+            "id": -1,
+            "movementMode": "Idle",
+            "reactionEpoch": 1,
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "kind": "Invader",
+            "zoneIndex": 1,
+            "dead": true
+          }
+        ],
+        "heroes": [
+          {
+            "slot": 1,
+            "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:17",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 2,
+            "respawns": 2,
+            "rawLife": 47
+          },
+          {
+            "slot": 2,
+            "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:5",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          },
+          {
+            "slot": 3,
+            "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:8",
+            "status": "Alive",
+            "connected": false,
+            "connectionEpoch": 2,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          }
+        ]
+      },
+      {
+        "userId": -2,
+        "groupId": "group-1",
+        "runId": "052538dc-98a3-4866-a840-694b028e4d50",
+        "levelEpoch": 3,
+        "now": 1794246400.082718,
+        "enemies": [
+          {
+            "id": -1,
+            "movementMode": "Idle",
+            "reactionEpoch": 1,
+            "attacking": false,
+            "hearts": 0,
+            "maxHearts": 3,
+            "kind": "Invader",
+            "zoneIndex": 1,
+            "dead": true
+          }
+        ],
+        "heroes": [
+          {
+            "slot": 1,
+            "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:17",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 2,
+            "respawns": 2,
+            "rawLife": 47
+          },
+          {
+            "slot": 2,
+            "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:5",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          },
+          {
+            "slot": 3,
+            "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:8",
+            "status": "Alive",
+            "connected": false,
+            "connectionEpoch": 2,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-3",
+          "code": "OK"
+        },
+        "userId": 1,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246393.353386,
+        "revision": 2,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 3,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:2"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-6",
+          "code": "OK"
+        },
+        "userId": 2,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246393.353386,
+        "revision": 4,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 5,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:5"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-9",
+          "code": "OK"
+        },
+        "userId": 3,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246393.353386,
+        "revision": 6,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 7,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:8"
+      },
+      {
+        "revision": 10,
+        "data": {
+          "cause": "InvaderTransformation",
+          "actorId": "052538dc-98a3-4866-a840-694b028e4d50:enemy:3:-1",
+          "position": {
+            "y": 2.997868061065674,
+            "x": 5.334851264953613,
+            "z": -6.762370586395264
+          }
+        },
+        "levelEpoch": 3,
+        "now": 1794246395.899896,
+        "userId": -1,
+        "late": false,
+        "kind": "EnemyDeath",
+        "seq": 36,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:enemy:3:-1"
+      },
+      {
+        "view": "Playing",
+        "connected": false,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-14",
+          "code": "OK"
+        },
+        "userId": 3,
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246397.97832,
+        "revision": 11,
+        "late": false,
+        "kind": "Connection",
+        "seq": 43,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:8"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "data": {
+          "eventId": "s-15",
+          "code": "OK"
+        },
+        "status": "AwaitingRespawn",
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246399.215642,
+        "userId": 1,
+        "late": false,
+        "kind": "Death",
+        "seq": 44,
+        "revision": 12
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 0,
+        "attempt": 1,
+        "data": {
+          "mode": "Speeder",
+          "serial": 1,
+          "checkpoint": 1
+        },
+        "status": "AwaitingRespawn",
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246399.215642,
+        "userId": 1,
+        "late": false,
+        "kind": "CampaignGroupStopped",
+        "seq": 47,
+        "revision": 12
+      },
+      {
+        "view": "Playing",
+        "data": {
+          "eventId": "s-18",
+          "code": "OK"
+        },
+        "levelEpoch": 3,
+        "respawns": 2,
+        "status": "Alive",
+        "connected": true,
+        "rawLife": 0,
+        "attempt": 2,
+        "userId": 1,
+        "shieldKind": "Normal",
+        "shieldUntil": 1794246401.233545,
+        "now": 1794246399.233545,
+        "revision": 14,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 49,
+        "actorId": "052538dc-98a3-4866-a840-694b028e4d50:actor:17"
+      },
+      {
+        "levelEpoch": 3,
+        "revision": 14,
+        "now": 1794246400.149472,
+        "late": false,
+        "kind": "CampaignGroupRewound",
+        "data": {
+          "mode": "Speeder",
+          "serial": 1,
+          "checkpoint": 1
+        },
+        "seq": 51
+      }
+    ]
+  },
+  {
+    "scenario": "HeroOfflineDeathLateJoin",
+    "status": "PASS",
+    "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "expectedSourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "requestedClients": 3,
+    "heroes": 3,
+    "summary": {
+      "passed": 46,
+      "commands": 23,
+      "failed": 0,
+      "samples": 183
+    },
+    "elapsedSeconds": 37.299513399999796,
+    "remainingOriginalParticipants": 2,
+    "networkSettings": {
+      "OutboundNetworkMinDelayMs": 0,
+      "OutboundNetworkJitterMs": 0,
+      "OutboundNetworkLossPercent": 0,
+      "InboundNetworkMinDelayMs": 0,
+      "InboundNetworkLossPercent": 0,
+      "InboundNetworkJitterMs": 0
+    },
+    "departures": [
+      {
+        "userId": -3,
+        "name": "Player3",
+        "removingAt": 1794246679.486281,
+        "observedDisconnectedAt": 1794246679.507357,
+        "registryCurrentAfter": false,
+        "nativeConnectionEvent": {
+          "view": "Playing",
+          "connected": false,
+          "groupId": "group-1",
+          "attempt": 1,
+          "rawLife": 47,
+          "data": {
+            "eventId": "s-14",
+            "code": "OK"
+          },
+          "userId": 3,
+          "levelEpoch": 3,
+          "respawns": 3,
+          "now": 1794246679.48608,
+          "revision": 11,
+          "status": "Alive",
+          "kind": "Connection",
+          "runId": "2bb17928-ed55-4652-9058-ebb95214a2d1",
+          "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:8"
+        }
+      }
+    ],
+    "offlineSlot": 3,
+    "lateArrival": {
+      "registryCurrent": true,
+      "differentUserId": true,
+      "actualPlayersAtOutcome": 3,
+      "userId": -4,
+      "oldUserId": -3,
+      "differentObject": true,
+      "originalOwnerUserIds": [
+        -1,
+        -2,
+        -3
+      ],
+      "name": "Player4",
+      "actualPlayer": true,
+      "selectedGroupId": "group-1",
+      "requestedAt": 1794246683.906258,
+      "readyObservedAt": 1794246694.92315
+    },
+    "finalHeroes": [
+      {
+        "slot": 1,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:2",
+        "status": "Alive",
+        "connected": true,
+        "connectionEpoch": 1,
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      },
+      {
+        "slot": 2,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:5",
+        "status": "Alive",
+        "connected": true,
+        "connectionEpoch": 1,
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      },
+      {
+        "slot": 3,
+        "status": "AwaitingRespawn",
+        "connected": false,
+        "connectionEpoch": 2,
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 0
+      }
+    ],
+    "finalClientRows": [
+      {
+        "userId": -1,
+        "groupId": "group-1",
+        "runId": "2bb17928-ed55-4652-9058-ebb95214a2d1",
+        "levelEpoch": 4,
+        "now": 1794246694.990221,
+        "enemies": [
+          {
+            "id": -1,
+            "movementMode": "Walk",
+            "reactionEpoch": 0,
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "kind": "Snowman",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          {
+            "id": -2,
+            "movementMode": "Walk",
+            "reactionEpoch": 0,
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "kind": "Snowman",
+            "zoneIndex": 1,
+            "dead": false
+          }
+        ],
+        "heroes": [
+          {
+            "slot": 1,
+            "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:2",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          },
+          {
+            "slot": 2,
+            "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:5",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          },
+          {
+            "slot": 3,
+            "status": "AwaitingRespawn",
+            "connected": false,
+            "connectionEpoch": 2,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 0
+          }
+        ]
+      },
+      {
+        "userId": -2,
+        "groupId": "group-1",
+        "runId": "2bb17928-ed55-4652-9058-ebb95214a2d1",
+        "levelEpoch": 4,
+        "now": 1794246694.990221,
+        "enemies": [
+          {
+            "id": -1,
+            "movementMode": "Walk",
+            "reactionEpoch": 0,
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "kind": "Snowman",
+            "zoneIndex": 1,
+            "dead": false
+          },
+          {
+            "id": -2,
+            "movementMode": "Walk",
+            "reactionEpoch": 0,
+            "attacking": false,
+            "hearts": 3,
+            "maxHearts": 3,
+            "kind": "Snowman",
+            "zoneIndex": 1,
+            "dead": false
+          }
+        ],
+        "heroes": [
+          {
+            "slot": 1,
+            "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:2",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          },
+          {
+            "slot": 2,
+            "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:5",
+            "status": "Alive",
+            "connected": true,
+            "connectionEpoch": 1,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 47
+          },
+          {
+            "slot": 3,
+            "status": "AwaitingRespawn",
+            "connected": false,
+            "connectionEpoch": 2,
+            "attempt": 1,
+            "respawns": 3,
+            "rawLife": 0
+          }
+        ]
+      }
+    ],
+    "lateClientRows": [
+      {
+        "view": "Playing",
+        "movementMode": "Idle",
+        "reactionEpoch": 0,
+        "username": "Player1",
+        "respawns": 3,
+        "hearts": 5,
+        "status": "Alive",
+        "connected": true,
+        "template": "Mr. Green",
+        "rawLife": 47,
+        "attempt": 1,
+        "displayName": "Player1",
+        "connectionEpoch": 1,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:2",
+        "userId": -1,
+        "slot": 1,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "movementMode": "Idle",
+        "reactionEpoch": 0,
+        "username": "Player2",
+        "respawns": 3,
+        "hearts": 5,
+        "status": "Alive",
+        "connected": true,
+        "template": "Mr. Yellow",
+        "rawLife": 47,
+        "attempt": 1,
+        "displayName": "Player2",
+        "connectionEpoch": 1,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:5",
+        "userId": -2,
+        "slot": 2,
+        "dying": false
+      },
+      {
+        "view": "Playing",
+        "connected": false,
+        "template": "Mr. Brown",
+        "rawLife": 0,
+        "attempt": 1,
+        "slot": 3,
+        "movementMode": "Idle",
+        "displayName": "Player3",
+        "username": "Player3",
+        "connectionEpoch": 2,
+        "hearts": 0,
+        "userId": -3,
+        "status": "AwaitingRespawn",
+        "respawns": 3,
+        "reactionEpoch": 0,
+        "dying": false
+      }
+    ],
+    "events": [
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-3",
+          "code": "OK"
+        },
+        "userId": 1,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246674.867442,
+        "revision": 2,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 3,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:2"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-6",
+          "code": "OK"
+        },
+        "userId": 2,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246674.867442,
+        "revision": 4,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 5,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:5"
+      },
+      {
+        "view": "Playing",
+        "connected": true,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-9",
+          "code": "OK"
+        },
+        "userId": 3,
+        "levelEpoch": 1,
+        "respawns": 3,
+        "now": 1794246674.867442,
+        "revision": 6,
+        "late": false,
+        "kind": "CommitSpawn",
+        "seq": 7,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:8"
+      },
+      {
+        "revision": 10,
+        "data": {
+          "cause": "InvaderTransformation",
+          "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:enemy:3:-1",
+          "position": {
+            "y": 2.9980528354644775,
+            "x": 4.976190567016602,
+            "z": -6.7112555503845215
+          }
+        },
+        "levelEpoch": 3,
+        "now": 1794246677.424477,
+        "userId": -1,
+        "late": false,
+        "kind": "EnemyDeath",
+        "seq": 36,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:enemy:3:-1"
+      },
+      {
+        "view": "Playing",
+        "connected": false,
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive",
+        "data": {
+          "eventId": "s-14",
+          "code": "OK"
+        },
+        "userId": 3,
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246679.48608,
+        "revision": 11,
+        "late": false,
+        "kind": "Connection",
+        "seq": 43,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:actor:8"
+      },
+      {
+        "view": "Playing",
+        "connected": false,
+        "rawLife": 47,
+        "attempt": 1,
+        "data": {
+          "eventId": "s-15",
+          "code": "OK"
+        },
+        "status": "AwaitingRespawn",
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246683.856805,
+        "userId": 3,
+        "late": false,
+        "kind": "Death",
+        "seq": 52,
+        "revision": 12
+      },
+      {
+        "revision": 12,
+        "data": {
+          "cause": "CourseRewind",
+          "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:enemy:3:-201:spawn:1",
+          "position": {
+            "y": 14,
+            "x": 210.48609924316406,
+            "z": -0.7916650772094727
+          }
+        },
+        "levelEpoch": 3,
+        "now": 1794246683.856805,
+        "userId": -201,
+        "late": false,
+        "kind": "EnemyDeath",
+        "seq": 55,
+        "actorId": "2bb17928-ed55-4652-9058-ebb95214a2d1:enemy:3:-201:spawn:1"
+      },
+      {
+        "view": "Playing",
+        "connected": false,
+        "rawLife": 0,
+        "attempt": 1,
+        "data": {
+          "mode": "Speeder",
+          "serial": 1,
+          "checkpoint": 2
+        },
+        "status": "AwaitingRespawn",
+        "levelEpoch": 3,
+        "respawns": 3,
+        "now": 1794246683.856805,
+        "userId": 3,
+        "late": false,
+        "kind": "CampaignGroupStopped",
+        "seq": 56,
+        "revision": 12
+      },
+      {
+        "levelEpoch": 3,
+        "revision": 12,
+        "now": 1794246684.774339,
+        "late": false,
+        "kind": "CampaignGroupRewound",
+        "data": {
+          "mode": "Speeder",
+          "serial": 1,
+          "checkpoint": 2
+        },
+        "seq": 57
+      }
+    ]
+  }
+]

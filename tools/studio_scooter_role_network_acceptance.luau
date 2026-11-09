@@ -9,9 +9,10 @@ function Acceptance.install(hub)
     local argsOK,args=pcall(function() return STS:GetTestArgs() end)
     if not argsOK or type(args)~="table" or args.tag~="BrickToadsScooterRoleNetworkTest" then return false end
     local started,finished,serial=os.clock(),false,0
-    local result={tag=args.tag,status="RUNNING",scenario=args.scenario,invaderOutcome=args.invaderOutcome or "Return",
+    local result={tag=args.tag,status="RUNNING",scenario=args.scenario,
+        invaderOutcome=args.scenario=="InvaderDisconnect"and "Escape"or args.invaderOutcome or "Return",
         players=args.players,heroes=args.heroes,sourceId=hub.deps.BuildId,expectedSourceId=args.expectedSourceId,
-        seed=args.seed or 41,checks={},commands={},trace={},heartbeats={},contacts={},startup={},
+        seed=args.seed or 41,checks={},commands={},trace={},heartbeats={},contacts={},startup={},departures={},
         preparation="Actual clients choose roles/heroes and Start. Only seed and two campaign advances prepare stage 3.",
         scope="Actual Studio clients and production Intent/State; no direct gameplay input, pose, health or stock injection.",
         skipped={"Physical touch/mobile hardware","Impaired networks","Registered-account reconnect"}}
@@ -19,9 +20,19 @@ function Acceptance.install(hub)
     bridge:SetAttribute("SourceId",hub.deps.BuildId or "unknown");bridge:SetAttribute("Tag",args.tag);bridge.Parent=Storage
     local command=Instance.new("RemoteEvent");command.Name="Command";command.Parent=bridge
     local reply=Instance.new("RemoteEvent");reply.Name="Reply";reply.Parent=bridge
-    local ready,pending,latest,lastSeen,lastBeat={},{},{},{},{}
+    local ready,pending,latest,lastSeen,lastBeat,departed={},{},{},{},{},{}
     local members,heroes,enemyPlayer,group,c,observer,ridingObserver
     local function real(p) return typeof(p)=="Instance" and p:IsA("Player") and p.Parent==Players and Players:GetPlayerByUserId(p.UserId)==p end
+    Players.PlayerRemoving:Connect(function(player)
+        if finished then return end
+        local row={name=player.Name,userId=player.UserId,removingAt=workspace:GetServerTimeNow(),
+            typeof=typeof(player),className=player.ClassName,wasCurrentAtEvent=hub.connections:isCurrent(player)}
+        departed[player]=row;result.departures[#result.departures+1]=row
+    end)
+    local function remainingMembers()
+        local active={};for _,player in ipairs(members or {})do if real(player)then active[#active+1]=player end end
+        return active
+    end
     local function state()
         if not c then return {at=workspace:GetServerTimeNow()} end
         local s,d=c.current,c.director;local hs,es,ps={},{},{}
@@ -40,7 +51,8 @@ function Acceptance.install(hub)
         for id,e in pairs(d and d.enemies or {})do
             local a=c.world.actors[id]
             es[#es+1]={id=id,kind=e.kind,actorId=e.actorId,ownerUserId=e.ownerUserId,dead=e.dead==true,
-                engaged=e.engaged==true,rawLife=e.rawLife,lifeEscapeAt=e.lifeEscapeAt,position=c.world:position(id),
+                engaged=e.engaged==true,connected=e.connected,connectionEpoch=e.connectionEpoch,
+                rawLife=e.rawLife,lifeEscapeAt=e.lifeEscapeAt,position=c.world:position(id),
                 bodyActorId=a and a.model:GetAttribute("ActorId"),lastSeq=e.lastSeq}
         end
         for id,p in pairs(d and d.campaignEnemies and d.campaignEnemies.projectiles or {})do
@@ -121,6 +133,38 @@ function Acceptance.install(hub)
     local function actor(p,kind,fields)
         local packet={kind=kind};for k,v in pairs(fields or {})do packet[k]=v end;return ask(p,"Actor",packet)
     end
+    local function leaveActual(player)
+        check("Departing participant is an actual current client",true,real(player),real(player))
+        local departingSlot=c.ownerSlots[player.UserId]
+        local beforeControlled=departingSlot and c.current.state.heroes[departingSlot]or c.director:controlled(player.UserId)
+        local beforeEpoch=assert(beforeControlled and beforeControlled.connectionEpoch,"Departing role has no connection epoch")
+        local rowBefore={at=workspace:GetServerTimeNow(),userId=player.UserId,name=player.Name,
+            registryCurrent=hub.connections:isCurrent(player),connectionEpoch=beforeEpoch,state=state()}
+        ask(player,"Leave")
+        waitFor("Actual LeaveTest removes the Player and native connection",6,function()
+            local slot=c.ownerSlots[player.UserId]
+            local controlled=slot and c.current.state.heroes[slot]or c.director:controlled(player.UserId)
+            return departed[player]~=nil and not real(player)and not hub.connections:isCurrent(player)
+                and controlled~=nil and controlled.connected==false,
+                {removingObserved=departed[player]~=nil,currentPlayer=real(player),
+                    registryCurrent=hub.connections:isCurrent(player),controlled=controlled}
+        end)
+        local row=departed[player]
+        row.before=rowBefore;row.observedDisconnectedAt=workspace:GetServerTimeNow()
+        row.registryCurrentAfter=hub.connections:isCurrent(player);row.after=state()
+        local controlled=departingSlot and c.current.state.heroes[departingSlot]or c.director:controlled(player.UserId)
+        check("Actual departure advances the native role connection epoch",beforeEpoch+1,controlled.connectionEpoch,
+            controlled.connected==false and controlled.connectionEpoch==beforeEpoch+1)
+        for _,event in ipairs(c.current.logs)do
+            if departingSlot and event.kind=="Connection"and event.userId==departingSlot and event.connected==false
+                and event.data and event.data.code=="OK"then row.nativeConnectionEvent=event
+            elseif not departingSlot and event.kind=="EnemyConnection"and event.data
+                and event.data.ownerUserId==player.UserId and event.data.connected==false then row.nativeConnectionEvent=event end
+        end
+        check("Departure has the native connection journal event",true,row.nativeConnectionEvent~=nil,row.nativeConnectionEvent~=nil)
+        check("Exactly one real participant departed",args.players-1,#Players:GetPlayers(),#Players:GetPlayers()==args.players-1)
+        return row
+    end
     local function synced(list)
         return waitFor("Clients observe exact production stage/identity",10,function()
             local ss=askAll(list,"Status");local valid=true
@@ -134,10 +178,11 @@ function Acceptance.install(hub)
     end
     local function outcomeSynced()
         local reads=waitFor("Every actual client observes final authoritative outcome",8,function()
-            local ss=askAll(members,"Status");local matches=true;local details={}
+            local active=remainingMembers()
+            local ss=askAll(active,"Status");local matches=#active==args.players-#result.departures;local details={}
             local session=c.current
             for index,value in ipairs(ss)do
-                local snapshot=value.snapshot;local valid=real(members[index])and value.userId==members[index].UserId
+                local snapshot=value.snapshot;local valid=real(active[index])and value.userId==active[index].UserId
                     and value.sourceId==args.expectedSourceId and snapshot~=nil
                     and snapshot.groupId==group.id and snapshot.worldName==c.world.folder.Name
                     and snapshot.runId==session.state.runId and snapshot.levelEpoch==session.state.levelEpoch
@@ -148,29 +193,48 @@ function Acceptance.install(hub)
                     for _,hero in ipairs(snapshot and snapshot.heroes or {})do if hero.slot==slot then seen=hero;break end end
                     local heroMatches=seen~=nil and seen.actorId==current.actorId and seen.attempt==current.attempt
                         and seen.respawns==current.respawns and seen.status==current.status
+                        and seen.connected==current.connected and seen.connectionEpoch==current.connectionEpoch
                         and(seen.rawLife==nil or seen.rawLife==session.combat[slot].rawLife)
                     compared[#compared+1]={slot=slot,pass=heroMatches,server={actorId=current.actorId,attempt=current.attempt,
                         respawns=current.respawns,rawLife=session.combat[slot].rawLife,status=current.status},client=seen}
                     valid=valid and heroMatches
                 end
-                local ownSlot=c.ownerSlots[members[index].UserId]
+                local ownSlot=c.ownerSlots[active[index].UserId]
                 if ownSlot then
                     local current=session.state.heroes[ownSlot]
                     valid=valid and snapshot.mine==ownSlot and value.body~=nil and value.body.actorId==current.actorId
-                elseif members[index]==enemyPlayer then
+                elseif active[index]==enemyPlayer then
                     local expected=c.director:controlled(enemyPlayer.UserId);local seen=snapshot and snapshot.enemyRole
                     valid=valid and expected~=nil and expected.status=="Dead"and seen~=nil
                         and seen.status=="Dead"and seen.actorId==expected.actorId
                 end
+                local expectedEnemy=enemyPlayer and c.director:controlled(enemyPlayer.UserId)
+                if args.scenario=="InvaderDisconnect"and expectedEnemy and expectedEnemy.status=="Dead"then
+                    local authoritative=c.director.enemies[expectedEnemy.enemyId];local seenEnemy
+                    for _,enemy in ipairs(snapshot and snapshot.level and snapshot.level.enemies or {})do
+                        if enemy.id==expectedEnemy.enemyId then seenEnemy=enemy;break end
+                    end
+                    local deathAt
+                    for _,event in ipairs(session.logs)do
+                        if event.kind=="EnemyDeath"and event.data and event.data.actorId==expectedEnemy.actorId then deathAt=event.now end
+                    end
+                    valid=valid and authoritative~=nil and seenEnemy~=nil and seenEnemy.dead==true
+                        and seenEnemy.kind==authoritative.kind and type(snapshot.now)=="number"
+                        and deathAt~=nil and snapshot.now>=deathAt
+                end
                 matches=matches and valid
-                details[#details+1]={name=members[index].Name,userId=members[index].UserId,pass=valid,
+                details[#details+1]={name=active[index].Name,userId=active[index].UserId,pass=valid,
                     snapshotSeq=snapshot and snapshot.snapshotSeq,heroes=compared,enemyRole=snapshot and snapshot.enemyRole}
             end
             if matches then return true,ss end
             return false,details
         end)
         result.finalClients=reads
-        check("Final outcome replicated to every actual participant",#members,#reads,#reads==#members)
+        result.finalParticipantCount=#remainingMembers();result.finalOriginalParticipantCount=#reads
+        check(result.lateArrival and "Final outcome replicated to every remaining original participant"
+            or #result.departures>0 and "Final outcome replicated to every remaining actual participant"
+            or "Final outcome replicated to every actual participant",args.players-#result.departures,#reads,
+            #reads==args.players-#result.departures)
         return reads
     end
     local function approach(p,slot,targetSlot,range,seconds)
@@ -222,6 +286,17 @@ function Acceptance.install(hub)
             if event.kind=="LifeStolen"and event.userId==slot and event.actorId==victimId and event.data.before==47 and event.data.after==39 then theftEvent=event;break end
         end
         check("Actual theft journal belongs to original hero",victimId,theftEvent,theftEvent~=nil)
+        if args.scenario=="InvaderDisconnect"then
+            local attacks=0;for _,event in ipairs(c.current.logs)do
+                if event.kind=="CampaignEnemyAttack"and(event.actorId or event.data and event.data.actorId)==e.actorId then attacks+=1 end
+            end
+            check("Human Invader attack is present before departure",">=1",attacks,attacks>=1)
+            result.enemyDeparture=leaveActual(enemyPlayer)
+            check("Disconnected Invader retains original owner, body and deadline",escapeAt,e.lifeEscapeAt,
+                e.ownerUserId==enemyPlayer.UserId and e.connected==false and e.connectionEpoch==2
+                    and e.actorId==body.model:GetAttribute("ActorId")and c.world.actors[id]==body and e.lifeEscapeAt==escapeAt)
+            result.attacksBeforeDeparture=attacks
+        end
         if result.invaderOutcome=="Return"then
             waitFor("Invader attack finishes on its original body",2,function()
                 local mode=c.director.campaignEnemies.states[id]
@@ -256,10 +331,21 @@ function Acceptance.install(hub)
         end
         local role=c.director:controlled(enemyPlayer.UserId)
         check("Spent enemy owner has no new playable life","Dead",role and role.status,role and role.status=="Dead")
+        if args.scenario=="InvaderDisconnect"then
+            local attacks=0;for _,event in ipairs(c.current.logs)do
+                if event.kind=="CampaignEnemyAttack"and(event.actorId or event.data and event.data.actorId)==e.actorId then attacks+=1 end
+            end
+            check("Departure does not hand Invader back to NPC attacks",result.attacksBeforeDeparture,attacks,
+                attacks==result.attacksBeforeDeparture and e.ownerUserId==enemyPlayer.UserId and role.connected==false)
+            check("Offline Invader retains original finite escape deadline",5,escapeAt-theftEvent.now,
+                math.abs(escapeAt-theftEvent.now-5)<.05 and e.lifeEscapeAt==escapeAt)
+        end
         outcomeSynced()
     end
     local function heroCrash()
         local s,m=c.current,c.director.modes;result.before=state();local beforeBodies={};local lastRiding
+        local offlineBody,offlineModel,offlineId
+        local offline=args.scenario=="HeroDisconnectCrash"
         ridingObserver=function()
             if m.vehicleGroup.serial==0 and m.vehicleGroup.phase=="Riding"then
                 -- Capture a fresh immutable value after entry combat and boarding.
@@ -267,11 +353,33 @@ function Acceptance.install(hub)
                 for _,slot in ipairs(s.order)do beforeBodies[slot]=c.world.actors[slot]end
             end
         end
-        askAll(heroes,"Drive",function(_,i)return{course=c.director.definition.course,mode=i==1 and"Crash"or"Course",fighterSlot=1,timeout=60}end)
+        askAll(heroes,"Drive",function(_,i)return{course=c.director.definition.course,mode=not offline and i==1 and"Crash"or"Course",fighterSlot=1,timeout=60}end)
+        if offline then
+            local departingPlayer=heroes[#heroes];local slot=c.ownerSlots[departingPlayer.UserId]
+            waitFor("Every actual hero boards before survivor departure",40,function()
+                local all=m.vehicleGroup.phase=="Riding";for _,heroSlot in ipairs(s.order)do all=all and m.actors[heroSlot].mounted==true end
+                return all,{phase=m.vehicleGroup.phase}
+            end)
+            offlineBody=c.world.actors[slot];offlineModel=offlineBody.model;offlineId=s.state.heroes[slot].actorId
+            result.heroDeparture=leaveActual(departingPlayer);result.offlineSlot=slot
+            local from=copyPoint(m.actors[slot].position)
+            waitFor("Disconnected living rider continues native automatic travel",2,function()
+                local h=s.state.heroes[slot];local a=m.actors[slot]
+                return h.connected==false and h.status=="Alive"and a.position.x>=from.x+3,
+                    {connected=h.connected,status=h.status,from=from,position=copyPoint(a.position)}
+            end)
+            result.offlineAdvance={from=from,to=copyPoint(m.actors[slot].position),actorId=s.state.heroes[slot].actorId}
+            check("Offline automatic travel keeps original physical hero",offlineId,s.state.heroes[slot].actorId,
+                c.world.actors[slot]==offlineBody and s.state.heroes[slot].actorId==offlineId
+                    and s.state.heroes[slot].attempt==1 and s.state.heroes[slot].respawns==3)
+            local input=m.actors[slot].input
+            check("Departed rider receives no residual steering",{x=0,z=0},{x=input.x,z=input.z},input.x==0 and input.z==0)
+            ask(heroes[1],"Drive",{course=c.director.definition.course,mode="Crash",fighterSlot=1,timeout=60})
+        end
         waitFor("Real client causes native authored-hazard group crash",60,function()return m.vehicleGroup.serial>=1,{serial=m.vehicleGroup.serial,phase=m.vehicleGroup.phase}end)
         result.crashed=state();result.lastRiding=lastRiding;ridingObserver=nil
         check("Immutable Riding resource snapshot precedes first crash",true,lastRiding~=nil,lastRiding~=nil)
-        askAll(heroes,"Stop")
+        askAll(remainingMembers(),"Stop")
         waitFor("Native group rewind resumes riding",8,function()return m.vehicleGroup.serial==1 and m.vehicleGroup.phase=="Riding",{serial=m.vehicleGroup.serial,phase=m.vehicleGroup.phase}end)
         waitFor("Only collided hero receives paid replacement",5,function()local h=s.state.heroes[1];return h.attempt==2,{attempt=h.attempt,status=h.status,respawns=h.respawns}end)
         result.rewound=state()
@@ -283,6 +391,15 @@ function Acceptance.install(hub)
                 c.world.actors[slot]==beforeBodies[slot]and h.actorId==before.actorId and h.attempt==before.attempt and h.respawns==before.respawns and s.combat[slot].rawLife==before.rawLife)
         end end
         check("Exactly one native group rewind",1,m.vehicleGroup.serial,m.vehicleGroup.serial==1)
+        if offline then
+            local slot=result.offlineSlot;local h=s.state.heroes[slot];local commits=0
+            for _,event in ipairs(s.logs)do if event.kind=="CommitSpawn"and event.userId==slot
+                and event.now>=result.heroDeparture.removingAt then commits+=1 end end
+            check("Offline survivor remains disconnected through native rewind",false,h.connected,
+                h.connected==false and h.connectionEpoch==2 and h.status=="Alive"and h.actorId==offlineId
+                    and c.world.actors[slot]==offlineBody and c.world.actors[slot].model==offlineModel)
+            check("Offline survivor receives no replacement spawn",0,commits,commits==0)
+        end
         outcomeSynced()
     end
     local function rocketRat()
@@ -296,6 +413,11 @@ function Acceptance.install(hub)
             local evidence={at=workspace:GetServerTimeNow(),slot=slot,sourceEnemyId=owner,sourceActorId=actorId,
                 serialBefore=modes.vehicleGroup.serial,phaseBefore=modes.vehicleGroup.phase,
                 victimActorId=hero and hero.actorId,before=before}
+            if args.scenario=="RocketRatDisconnect"then
+                local ownerRole=c.director:controlled(enemyPlayer.UserId)
+                evidence.ownerCurrent=real(enemyPlayer);evidence.ownerRegistryCurrent=hub.connections:isCurrent(enemyPlayer)
+                evidence.ownerConnected=ownerRole and ownerRole.connected
+            end
             local handled=originalHit(slot,owner,actorId)
             evidence.handled=handled;evidence.serialAfter=modes.vehicleGroup.serial;evidence.phaseAfter=modes.vehicleGroup.phase
             if evidence.serialAfter>evidence.serialBefore then causalBodies=bodies end
@@ -319,6 +441,16 @@ function Acceptance.install(hub)
         check("Human movement preserves authored rat trajectory",expected,position,distance(expected,position)<1 and math.abs(expected.y-position.y)<1)
         actor(enemyPlayer,"Jump")
         waitFor("Native rat Jump has NO_JUMP denial",1,function()return c.notices[enemyPlayer]=="NO_JUMP",c.notices[enemyPlayer]end)
+        local targetPlayer=heroes[1];local targetSlot=c.ownerSlots[targetPlayer.UserId]
+        if args.scenario=="RocketRatDisconnect"then
+            -- Earn lateral alignment while there is still forward runway. Waiting
+            -- until LeaveTest has completed can make a real early drop unreachable.
+            ask(targetPlayer,"Stop")
+            local own=modes.actors[targetSlot];local lane=c.world:position(id).z
+            actor(targetPlayer,"Move",{x=0,z=math.clamp((lane-own.position.z)*.8,-1,1),run=false})
+            result.preDropSteering={at=workspace:GetServerTimeNow(),slot=targetSlot,
+                position=copyPoint(own.position),targetLane=lane}
+        end
         local dropStarted=workspace:GetServerTimeNow();sequence=e.lastSeq or 0
         actor(enemyPlayer,"Attack",{attack="Punch"})
         local drop=waitFor("Human primary creates original rat's sole obstacle",1,function()
@@ -336,10 +468,20 @@ function Acceptance.install(hub)
             drop.acceptedElapsed<(trajectory.dropAt or 1.5)and(e.lastSeq or 0)>sequence and drop.created>=dropStarted-.15)
         actor(enemyPlayer,"Attack",{attack="Punch"})
         waitFor("Second human drop is denied NO_AMMO",1,function()return c.notices[enemyPlayer]=="NO_AMMO",c.notices[enemyPlayer]end)
+        if args.scenario=="RocketRatDisconnect"then
+            local originalProjectile=assert(family.projectiles[drop.id],"Accepted obstacle disappeared before departure")
+            result.enemyDeparture=leaveActual(enemyPlayer)
+            local retained=family.projectiles[drop.id]
+            check("Accepted original obstacle survives actual owner departure",drop.id,retained and retained.owner,
+                retained==originalProjectile and retained.owner==id and retained.actorId==actorId
+                    and retained.created==drop.created and retained.expiresAt==drop.expiresAt)
+            check("Offline rat keeps original owner and trajectory body",actorId,e.actorId,
+                e.ownerUserId==enemyPlayer.UserId and e.connected==false and e.connectionEpoch==2
+                    and e.actorId==actorId and c.world.actors[id]==body)
+        end
         result.beforeDropContact=state()
         -- Stop only the selected pilot; normal mounted X continues in production.
-        local targetPlayer=heroes[1];local targetSlot=c.ownerSlots[targetPlayer.UserId]
-        ask(targetPlayer,"Stop")
+        if args.scenario~="RocketRatDisconnect"then ask(targetPlayer,"Stop")end
         local deadline=os.clock()+5
         repeat
             if modes.vehicleGroup.serial>=1 then break end
@@ -355,6 +497,14 @@ function Acceptance.install(hub)
         check("Original human rat obstacle causally triggers native vehicle crash",actorId,result.contacts,contact~=nil)
         check("Contact is the intended actual hero",targetSlot,contact.slot,contact.slot==targetSlot)
         result.causalContact=contact;askAll(heroes,"Stop")
+        if args.scenario=="RocketRatDisconnect"then
+            local departure=result.enemyDeparture
+            check("Original rat obstacle contacts only after actual owner departure",true,
+                {removingAt=departure.removingAt,connectionAt=departure.nativeConnectionEvent.now,contactAt=contact.at,
+                    current=contact.ownerCurrent,registryCurrent=contact.ownerRegistryCurrent,connected=contact.ownerConnected},
+                departure.removingAt<contact.at and departure.nativeConnectionEvent.now<=contact.at
+                    and contact.ownerCurrent==false and contact.ownerRegistryCurrent==false and contact.ownerConnected==false)
+        end
         waitFor("Native rat collision rewinds group and resumes Riding",8,function()
             return modes.vehicleGroup.serial==1 and modes.vehicleGroup.phase=="Riding",{serial=modes.vehicleGroup.serial,phase=modes.vehicleGroup.phase}
         end)
@@ -377,13 +527,105 @@ function Acceptance.install(hub)
         check("Rewind does not grant spent human rat another life","Dead",role and role.status,role and role.status=="Dead"and role.actorId==actorId)
         outcomeSynced()
     end
+    local function offlineDeathLateJoin()
+        local session,modes=c.current,c.director.modes
+        local departingPlayer=heroes[#heroes];local slot=c.ownerSlots[departingPlayer.UserId]
+        local originalRun=session.state.runId;local ownerIds={};local originalIds={}
+        for _,player in ipairs(members)do originalIds[player.UserId]=true end
+        for _,heroSlot in ipairs(session.order)do ownerIds[heroSlot]=c.owners[heroSlot].userId end
+        result.lateJoinScope="AddPlayers creates a new actual UserId. This is a fixed-roster late-arrival test, not a same-account reconnect."
+        askAll(heroes,"Drive",{course=c.director.definition.course,mode="Course",fighterSlot=1,timeout=60})
+        waitFor("All heroes board before offline death scenario",40,function()
+            local all=modes.vehicleGroup.phase=="Riding"
+            for _,heroSlot in ipairs(session.order)do all=all and modes.actors[heroSlot].mounted==true end
+            return all,{phase=modes.vehicleGroup.phase}
+        end)
+        local originalActorId=session.state.heroes[slot].actorId
+        result.heroDeparture=leaveActual(departingPlayer);result.offlineSlot=slot
+        waitFor("Disconnected rider naturally dies without steering or jump",20,function()
+            local h=session.state.heroes[slot]
+            return h.connected==false and h.status=="AwaitingRespawn",{status=h.status,connected=h.connected,
+                attempt=h.attempt,respawns=h.respawns,position=c.world:position(slot)}
+        end)
+        result.offlineDeath=state();local afterDeath=session.state.heroes[slot]
+        local deathEvent
+        for _,event in ipairs(session.logs)do
+            if event.kind=="ConfirmedDeath"and event.userId==slot and event.data
+                and event.data.actorId==originalActorId and event.now>=result.heroDeparture.removingAt then deathEvent=event end
+        end
+        check("Offline death belongs to the original actual rider",originalActorId,deathEvent,deathEvent~=nil)
+        check("Offline death spends no respawn before reconnect",{attempt=1,respawns=3},result.offlineDeath.heroes[slot],
+            afterDeath.attempt==1 and afterDeath.respawns==3 and afterDeath.connected==false and afterDeath.connectionEpoch==2)
+        result.offlineDeathEvent=deathEvent
+        local requestedAt=workspace:GetServerTimeNow()
+        local addOK,addError=pcall(function()STS:AddPlayers(1)end)
+        check("Studio adds one actual late test client",true,addOK and true or tostring(addError),addOK)
+        local newcomer=waitFor("New actual UserId becomes ready after rendering",60,function()
+            local proof={}
+            for _,player in ipairs(Players:GetPlayers())do
+                if not originalIds[player.UserId]then
+                    proof[#proof+1]={name=player.Name,userId=player.UserId,current=real(player),ready=ready[player]==true}
+                    if real(player)and ready[player]and hub.connections:isCurrent(player)then return true,player end
+                end
+            end
+            return false,proof
+        end)
+        local selected=assert(hub:selected(newcomer),"Late actual client has no selected group")
+        local newIds=0;for _,player in ipairs(Players:GetPlayers())do if not originalIds[player.UserId]then newIds+=1 end end
+        check("Exactly one new actual client joins after one departure",{players=args.players,newIds=1},
+            {players=#Players:GetPlayers(),newIds=newIds},#Players:GetPlayers()==args.players and newIds==1)
+        result.lateArrival={name=newcomer.Name,userId=newcomer.UserId,oldUserId=departingPlayer.UserId,
+            requestedAt=requestedAt,readyObservedAt=workspace:GetServerTimeNow(),selectedGroupId=selected.id,
+            actualPlayer=real(newcomer),registryCurrent=hub.connections:isCurrent(newcomer),
+            differentObject=newcomer~=departingPlayer,differentUserId=newcomer.UserId~=departingPlayer.UserId}
+        check("Late arrival is a new Player and UserId, not a reconnect",true,result.lateArrival,
+            real(newcomer)and newcomer~=departingPlayer and not originalIds[newcomer.UserId]
+                and newcomer.UserId~=departingPlayer.UserId and Players:GetPlayerByUserId(departingPlayer.UserId)==nil)
+        check("Original fixed run remains active during late arrival","Active",session.state.status,
+            c.current==session and session.state.runId==originalRun and session.state.status=="Active"and not c.director.result)
+        check("Late arrival selects the original active fixed group",group.id,selected.id,selected.id==group.id)
+        ask(newcomer,"Menu",{kind="SelectRole",role="Hero"})
+        waitFor("Late client's hero selection is refused in the active run",3,function()
+            return c.notices[newcomer]=="RUN_ACTIVE",c.notices[newcomer]
+        end)
+        result.lateClient=waitFor("Late actual client sees its own non-owner state",8,function()
+            local value=ask(newcomer,"Status");local snapshot=value.snapshot
+            return real(newcomer)and hub.connections:isCurrent(newcomer)and value.userId==newcomer.UserId
+                and value.sourceId==args.expectedSourceId and value.presentationDisabled==true and snapshot~=nil
+                and snapshot.groupId==group.id and snapshot.worldName==c.world.folder.Name
+                and snapshot.runId==originalRun and snapshot.levelEpoch==session.state.levelEpoch
+                and snapshot.status==session.state.status and snapshot.campaign and snapshot.campaign.index==c.campaignIndex
+                and snapshot.mine==nil and c.ownerSlots[newcomer.UserId]==nil,value
+        end)
+        local ownersUnchanged=#session.order==#ownerIds and c.current==session and session.state.runId==originalRun
+        for _,heroSlot in ipairs(session.order)do
+            ownersUnchanged=ownersUnchanged and c.owners[heroSlot].userId==ownerIds[heroSlot]
+                and c.ownerSlots[ownerIds[heroSlot]]==heroSlot
+        end
+        check("New UserId cannot inherit or replace fixed run owners",ownerIds,c.owners,
+            ownersUnchanged and c.ownerSlots[newcomer.UserId]==nil)
+        local finalOffline=session.state.heroes[slot];local commits=0
+        for _,event in ipairs(session.logs)do if event.kind=="CommitSpawn"and event.userId==slot
+            and event.now>=deathEvent.now then commits+=1 end end
+        check("Offline slot still awaits its own identity without spending stock",{attempt=1,respawns=3},state().heroes[slot],
+            finalOffline.status=="AwaitingRespawn"and finalOffline.connected==false and finalOffline.connectionEpoch==2
+                and finalOffline.attempt==1 and finalOffline.respawns==3 and session.combat[slot].rawLife==0)
+        check("Late new identity does not commit the offline respawn",0,commits,commits==0)
+        result.lateArrival.actualPlayersAtOutcome=#Players:GetPlayers()
+        result.lateArrival.originalOwnerUserIds=ownerIds
+        askAll(remainingMembers(),"Stop")
+        outcomeSynced()
+    end
     task.spawn(function()
         local ok,err=xpcall(function()
             check("Exact expected source identity",args.expectedSourceId,hub.deps.BuildId,type(args.expectedSourceId)=="string"and #args.expectedSourceId>0 and args.expectedSourceId==hub.deps.BuildId)
-            check("Supported role/crash scenario","Invader, HeroCrash or RocketRat",args.scenario,args.scenario=="Invader"or args.scenario=="HeroCrash"or args.scenario=="RocketRat")
+            local heroScenario=args.scenario=="HeroCrash"or args.scenario=="HeroDisconnectCrash"or args.scenario=="HeroOfflineDeathLateJoin"
+            check("Supported role/crash scenario","Invader/RocketRat/HeroCrash with optional actual disconnect",args.scenario,
+                args.scenario=="Invader"or args.scenario=="InvaderDisconnect"or heroScenario
+                    or args.scenario=="RocketRat"or args.scenario=="RocketRatDisconnect")
             check("Actual client count","Integer2..4",args.players,type(args.players)=="number"and args.players%1==0 and args.players>=2 and args.players<=4)
-            local hc=args.heroes or(args.scenario=="HeroCrash"and args.players or args.players-1);result.heroes=hc
-            check("Actual hero/enemy roster",args.players,hc,type(hc)=="number"and hc%1==0 and hc>=1 and hc<=3 and args.players==hc+(args.scenario=="HeroCrash"and 0 or 1))
+            local hc=args.heroes or(heroScenario and args.players or args.players-1);result.heroes=hc
+            check("Actual hero/enemy roster",args.players,hc,type(hc)=="number"and hc%1==0 and hc>=1 and hc<=3 and args.players==hc+(heroScenario and 0 or 1))
             members=waitFor("Actual clients ready after rendering",90,function()
                 local list=Players:GetPlayers();local count=0;for _,p in ipairs(list)do if real(p)and ready[p]then count+=1 end end
                 return #list==args.players and count==args.players,#list==args.players and count==args.players and list or{actual=#list,ready=count}
@@ -407,10 +649,11 @@ function Acceptance.install(hub)
                     if os.clock()-lastSample>=.1 and #result.trace<900 then lastSample=os.clock();result.trace[#result.trace+1]=state()end
                 end
             end)
-            if args.scenario=="Invader"then invader()
+            if args.scenario=="Invader"or args.scenario=="InvaderDisconnect"then invader()
             else
                 result.initialClients=synced(members)
-                if args.scenario=="HeroCrash"then heroCrash()else rocketRat()end
+                if args.scenario=="HeroOfflineDeathLateJoin"then offlineDeathLateJoin()
+                elseif heroScenario then heroCrash()else rocketRat()end
             end
             check("Production controller remains fault free",false,c.faulted,c.faulted~=true)
             finish("PASS")

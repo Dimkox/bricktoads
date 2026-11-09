@@ -1,0 +1,144 @@
+{
+  "scope": "Read-only official metadata check; no connection call, identity mutation or same-user rejoin performed.",
+  "metadataUrl": "https://clientsettingscdn.roblox.com/v2/client-version/WindowsStudio64/channel/LIVE",
+  "metadata": {
+    "version": "0.746.0.7461269",
+    "clientVersionUpload": "version-67c8b1dedbb74fed",
+    "bootstrapperVersion": ""
+  },
+  "fullApiDumpUrl": "https://setup.rbxcdn.com/version-67c8b1dedbb74fed-Full-API-Dump.json",
+  "fullApiDumpSha256": "6983b313405cf1e6f8c03fe621bcba0daa5a99cda70482adebddc0353997bfb4",
+  "classCount": 950,
+  "selectedMembers": {
+    "NetworkClient": {
+      "PlayerConnect": null,
+      "Connect": null,
+      "Disconnect": null
+    },
+    "NetworkPeer": {
+      "Connect": null,
+      "Disconnect": null
+    },
+    "NetworkReplicator": {
+      "CloseConnection": null,
+      "RequestCharacter": null
+    },
+    "Players": {
+      "CreateLocalPlayer": {
+        "Capabilities": [
+          "Players"
+        ],
+        "MemberType": "Function",
+        "Name": "CreateLocalPlayer",
+        "Parameters": [],
+        "ReturnType": {
+          "Category": "Class",
+          "Name": "Player"
+        },
+        "Security": "LocalUserSecurity",
+        "ThreadSafety": "Unsafe"
+      },
+      "ResetLocalPlayer": {
+        "Capabilities": [
+          "Players"
+        ],
+        "MemberType": "Function",
+        "Name": "ResetLocalPlayer",
+        "Parameters": [],
+        "ReturnType": {
+          "Category": "Primitive",
+          "Name": "null"
+        },
+        "Security": "LocalUserSecurity",
+        "ThreadSafety": "Unsafe"
+      },
+      "SetLocalPlayerInfo": {
+        "Capabilities": [
+          "Players"
+        ],
+        "MemberType": "Function",
+        "Name": "SetLocalPlayerInfo",
+        "Parameters": [
+          {
+            "Name": "userId",
+            "Type": {
+              "Category": "Primitive",
+              "Name": "int64"
+            }
+          },
+          {
+            "Name": "userName",
+            "Type": {
+              "Category": "Primitive",
+              "Name": "string"
+            }
+          },
+          {
+            "Name": "displayName",
+            "Type": {
+              "Category": "Primitive",
+              "Name": "string"
+            }
+          },
+          {
+            "Name": "membershipType",
+            "Type": {
+              "Category": "Enum",
+              "Name": "MembershipType"
+            }
+          },
+          {
+            "Name": "isUnder13",
+            "Type": {
+              "Category": "Primitive",
+              "Name": "bool"
+            }
+          },
+          {
+            "Default": "false",
+            "Name": "hasRobloxSubscription",
+            "Type": {
+              "Category": "Primitive",
+              "Name": "bool"
+            }
+          },
+          {
+            "Default": "Unchecked",
+            "Name": "ageCheckedStatus",
+            "Type": {
+              "Category": "Enum",
+              "Name": "AgeCheckStatus"
+            }
+          }
+        ],
+        "ReturnType": {
+          "Category": "Primitive",
+          "Name": "null"
+        },
+        "Security": "RobloxScriptSecurity",
+        "ThreadSafety": "Unsafe"
+      }
+    },
+    "StudioTestService": {
+      "AddPlayers": {
+        "MemberType": "Function",
+        "Name": "AddPlayers",
+        "Parameters": [
+          {
+            "Name": "numPlayers",
+            "Type": {
+              "Category": "Primitive",
+              "Name": "int"
+            }
+          }
+        ],
+        "ReturnType": {
+          "Category": "Primitive",
+          "Name": "null"
+        },
+        "Security": "None",
+        "ThreadSafety": "Unsafe"
+      }
+    }
+  }
+}
