@@ -590,6 +590,14 @@ function Modes:_die(s,reason)
     end
     if self.world.campaignRelease then self.world:campaignRelease(s.slot) end
 end
+function Modes:vehicleObstacleHit(slot)
+    local s=self.actors[slot]
+    if not self.vehicleGroup or not s or not s.mounted or s.finished then return false end
+    -- A mounted obstacle belongs to the course collision policy, including
+    -- protected/paused bodies. Never fall through to ordinary melee damage.
+    if not self.closed and self.vehicleGroup.phase=='Riding' and self:_living(slot) then self:_die(s,'CampaignCrash') end
+    return true
+end
 function Modes:_hazards(s,old)
     if s.mounted and self.vehicleGroup and self.vehicleGroup.phase~='Riding' then return end
     for _,h in ipairs(self.hazards) do

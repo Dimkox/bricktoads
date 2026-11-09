@@ -283,6 +283,36 @@ return function(Enemies,Director,Session,Core,Combat,Config,FakeWorld,Boss)
         local token=s:_stealLife(-1,1);s.state.levelEpoch+=1
         eq(s:_recoverStolenLife(token),false);eq(s.combat[1].rawLife,31)
     end)
+    test('Invader escape stays finite after its victim dies or respawns while another hero survives',function()
+        for _,human in ipairs({false,true}) do for _,victimOffline in ipairs({false,true}) do
+            local c,d,w,s,step,command=fixture('Invader',human);w.positions[1]={x=8,y=3,z=0}
+            if human then eq(command('Attack','Punch',nil,nil,.1),'OK') end
+            for n=1,20 do step(.1+n*.05,.05) end
+            eq(s.combat[1].rawLife,39);eq(count(c.lifeTokens),1)
+            local victimActor=s.state.heroes[1].actorId;local victimCombat=s.combat[1]
+            local thiefActor=d.enemies[-1].actorId
+            if human then eq(d:connection(99,false),'OK') end
+            if victimOffline then eq(s:connection(1,false,1.2),'OK') end
+            s.now=1.2;eq(s:_hit(2,1,'HeroBoot'),true);assert(s.combat[1].deathAt)
+            step(1.3,.1);eq(count(c.lifeTokens),0,'a dying linked body cannot receive a return')
+            eq(not d.enemies[-1].dead,true,'token invalidation does not invent immediate enemy death')
+            eq(s:step(2),'OK');eq(s.state.heroes[1].status,'AwaitingRespawn')
+            eq(s:step(2.1),'OK');eq(s.state.heroes[2].status,'Alive');eq(s.state.heroes[2].respawns,3)
+            if victimOffline then
+                eq(s.state.heroes[1].actorId,nil);eq(s.state.heroes[1].attempt,1);eq(s.state.heroes[1].respawns,3)
+                eq(s.state.heroes[1].status,'AwaitingRespawn')
+            else
+                assert(s.state.heroes[1].actorId~=victimActor);eq(s.state.heroes[1].attempt,2)
+                eq(s.state.heroes[1].respawns,2);eq(s.combat[1].rawLife,47)
+            end
+            step(8,5.9)
+            eq(d.enemies[-1].dead,true,'discarded victim token must not erase the thief escape deadline')
+            eq(d.enemies[-1].actorId,thiefActor);eq(victimCombat.rawLife,0);eq(count(c.lifeTokens),0)
+            eq(d:claim(100,-1),'ENEMY_DEAD')
+            if human then eq(d:claim(99,-1),'ENEMY_LIFE_SPENT');eq(d.enemies[-1].ownerUserId,99) end
+            for _,row in ipairs(s.logs) do assert(row.kind~='StolenLifeRecovered','invalidated link cannot heal either body') end
+        end end
+    end)
     test('wall families retain their authored anchor for both controllers even while reacting',function()
         for _,kind in ipairs({'RetroBlaster','SaturnToadtrap'}) do for _,human in ipairs({false,true}) do
             local _,d,w,_,step,command=fixture(kind,human);local p=table.clone(w.positions[-1])
@@ -370,6 +400,27 @@ return function(Enemies,Director,Session,Core,Combat,Config,FakeWorld,Boss)
         assert(owners[-2] and owners[-3] and not owners[-1])
         eq(c:expireEncounter(-3),0,'non-rocket family cleanup is outside this hook');eq(count(c.projectiles),2)
         eq(c:expireEncounter(-1),0,'course cleanup is idempotent')
+    end)
+    test('authored entry Invader stays offered for one second of real-speed approach before attacking',function()
+        local route=require('../../src/server/gameplay/CampaignDefinition').build(3,41)
+        local _,d,w,_,step=fixture('Invader',false)
+        d.config.Level=route;d.route=route;d:_wave('Route',route.zones[1].enemies)
+        w.positions[1]={x=0,y=3,z=-6};w.positions[2]={x=0,y=3,z=0}
+        local dt=1/60;local walked=0;local before=table.clone(w.positions[-1]);local enemyMove=w.enemyMove
+        function w:enemyMove(id,target,speed)
+            enemyMove(self,id,target,speed);eq(speed,9,'normal Invader approach speed')
+            local p,q=self.positions[id],self.positions[target];local dx,dz=q.x-p.x,q.z-p.z
+            local length=math.sqrt(dx*dx+dz*dz);local amount=math.min(length,speed*dt)
+            p.x+=dx/length*amount;p.z+=dz/length*amount;walked+=amount
+        end
+        eq(#d:available(999),1,'fresh authored actor is initially available')
+        step(dt,dt)
+        eq(#d:available(999),1,'first client role snapshot must still contain the human Invader offer')
+        for n=2,60 do step(n*dt,dt);eq(#d:available(999),1,'one-second visible role window') end
+        assert(math.abs(walked-9)<.001,'the offer window must include actual normal-speed movement')
+        assert(w.positions[-1].x<before.x-8,'an immobile world double cannot establish this window')
+        for n=61,100 do step(n*dt,dt) end
+        eq(d.enemies[-1].engaged,true);eq(#d:available(999),0,'ordinary range entry still starts and permanently closes the first attack')
     end)
     print('CampaignEnemies: '..passed..' passed')
 end

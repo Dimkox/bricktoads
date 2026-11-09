@@ -45,7 +45,7 @@ The [course mechanics notes](research/2026-11-09-campaign-courses.md) distinguis
 | --- | --- |
 | 1. Flooded Causeway | Six districts of ground combat, carrying/throwing, clubs, flies, Dragon transport and Guardian pickup/throw battle. |
 | 2. Echo Shaft | Rope descent/swing, contextual strikes, real Raven/Large Raven/Retro Blaster/Toadtrap actors, finite claw pickup and electrical phases. |
-| 3. Copper Rush | Entry patrol and boarding, automatic speeder travel, steering/jumps/ramps, swept crashes, shared checkpoint rewind and a later scripted Rocket Rat drop. |
+| 3. Copper Rush | Entry patrol and boarding, a continuous solid road across all steering lanes, automatic travel, jumps/ramps, swept crashes, shared checkpoint rewind and a later scripted Rocket Rat drop. |
 | 4. Frostworks | Ice inertia/braking, gaps, pushable blocks, moving walls/platforms, falling ice and spikes. |
 | 5. Tidal Foundry | Surfboard steering/jumps, current drift, water hazards/projectiles and Big Blag. |
 | 6. Four Coil Vaults | Four ordered rooms with moving multi-segment serpent supports, timed jumps, spikes and checkpoints. |
@@ -59,7 +59,13 @@ The [course mechanics notes](research/2026-11-09-campaign-courses.md) distinguis
 
 Course controls act in the mode's own axes. Vehicles require primary-action boarding after the entry patrol is cleared. A crash kills only the collided hero through Session; surviving riders stop and rewind without healing or spending another life. Emergency-held bodies wait for Session's safe release, and offline living bodies continue their physical course without new steering. Rope primary strikes hit actual actors; Invader theft/return tokens and claw equipment are bound to the current body and level. Race bombs are decided by real rival contact or a fresh nearby primary action, never an arrival timer. Boss raw Life and separate reaction progress retain their distinct models rather than becoming linear hearts.
 
+The entry Invader now approaches from outside its initial attack range, leaving a visible role offer before engagement. Its existing escape deadline survives the stolen-Life victim's death or replacement, without healing an old body. A Rocket Rat drop hitting a mounted hero now enters the same shared crash lifecycle as a course obstacle; a protected contact consumes the drop without damage or extending protection. On Speeder/Surf/Jet, the hero HUD hides unavailable Attack/Mega/ground-run prompts and retains Jump/lift; Dragon and carried-item actions keep their own controls. A human Rocket Rat keeps **DROP OBSTACLE** and has no Jump control.
+
 The campaign runners cover course inputs, swept hazards, resources/epochs, actor identity, one-life role claims, shared rewinds and real Session progression. Test pilots complete ten course modes for three seeds using ordinary inputs; prepared fixtures exercise other boundaries. These checks do not replace an unprepared human run through all thirteen stages and their ordinary combat/boss encounters.
+
+The [current scooter acceptance report](reports/2026-11-09-scooter-acceptance/README.md) records **56/56 passing checks and 161 successful Luau compilations** for source `b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff`. A separate Python check also executes the client's real action-visibility block against desktop/touch snapshots. On this final source, **9/9 native engine courses** passed: one/two/three hero bodies × seeds 1/41/8125, through entry combat, boarding, riding and the next stage in 14.62–15.16 real seconds. These use one actual client, synthetic co-owners and scripted validated inputs after prepared stage-3 selection; the pilots do not directly write health, pose, geometry or lives. Every hero retained attempt 1 and three respawns.
+
+Final-source mouse UI start and keyboard/IAS/remote riding also reached stage 4, 13.882 seconds after the keyboard phase began, preserving the hero's body, attempt 1 and three respawns. The native client showed Jump with Attack/Mega hidden, a steering/jump hint and the visible road. Separate prepared role fixtures confirmed a human Rocket Rat drop causes one shared rewind (stocks 2/3/3, survivor bodies retained, second drop rejected), and an Invader still escapes without stale healing after a victim death deliberately injected through Session and a paid replacement. These role fixtures do not represent multiple connected clients or an unprepared human campaign. The earlier [campaign checkpoint](reports/2026-11-09-campaign-mechanics/README.md) retains its historical receipts. Physical-phone/tablet and real multiclient acceptance remain open.
 
 Server-confirmed hit/miss/shield/item/boss text is shown in the existing objective feedback line and compact mobile goal. Short owner-only action refusals explain missing run-up, recovery or occupied control; they expire without replaying or extending on movement updates. Recent events are deduplicated and never replayed on first sync. A bounded private run journal and source receipt prepare later Studio diagnosis; only a small allowlisted feed reaches the client. This is not product retention analytics or completed sound work.
 
@@ -159,6 +165,7 @@ luau tests/run_campaign_enemies.luau
 luau tests/run_campaign_roster.luau
 luau tests/run_campaign_race.luau
 luau tests/run_campaign_input.luau
+luau tests/run_scooter_acceptance.luau
 luau tests/run.luau
 luau tests/run_stand.luau
 luau tests/run_connections.luau
@@ -167,6 +174,7 @@ python tests/group_world/run.py
 python tests/canonical_hero_presentation/run.py --luau <path-to-luau>
 python tests/guardian_appearance/run.py --luau <path-to-luau>
 python tests/campaign_world/run.py --luau <path-to-luau>
+python tests/campaign_input/run.py --luau <path-to-luau>
 python tools/test_stand_gateway.py --luau <path-to-luau>
 ```
 

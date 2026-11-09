@@ -59,7 +59,7 @@ function Definition.build(index,seed)
         c.mount=point(24,3,0);c.mountRange=7;c.finishDistance=420;c.laneLimit=18;c.steerSpeed=22;c.jumpSpeed=42
         -- Only the entry foot patrol blocks boarding. Rocket rats are actual
         -- later scripted encounters, never an enemy that must die before riding.
-        addFloor(5,0,0,58,46);foe('Invader',12,3,-10)
+        addFloor(5,0,0,58,46);foe('Invader',28,3,-10)
         c.restart={stopSeconds=.35,rewindSeconds=.55,acceleration=110,tuning='ROBLOX_ORIGINAL_RESTART_TIMING'}
         c.encounters={}
         if index==3 or index==7 then c.encounters[1]={id='rocket-rat-pass-1',kind='RocketRat',progress=90,
@@ -84,6 +84,12 @@ function Definition.build(index,seed)
         end
         if surf or jet then for n=1,3 do c.emitters[n]={id='ride-launcher-'..n,kind='RocketLauncher',position=point(100+n*85,jet and 20 or 4,23),interval=3,speed=18,life=2} end end
         addFloor(439,0,0,62,48);finish=point(434,3,0);d.bounds.maxX=495;c.axis='x'
+        if index==3 then
+            -- The logical speeder floor is y=0 across every steering lane.
+            -- Render that same solid road, overlapping both arrival and finish
+            -- ledges; water and flight retain their distinct support geometry.
+            addFloor((c.mount.x+finish.x)/2,0,0,finish.x-c.mount.x+24,c.laneLimit*2+10)
+        end
     elseif index==4 then
         c.acceleration=19;c.friction=2.4;c.maxSpeed=25;c.gravity=150;c.jumpSpeed=51
         local cursor=-12

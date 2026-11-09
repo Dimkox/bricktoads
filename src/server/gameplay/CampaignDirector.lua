@@ -31,6 +31,7 @@ function CampaignDirector.new(session,world,Combat,config,deps)
         self.ordinary.campaignEnemies=self.campaignEnemies
         self.campaignEnemies.externalEnemies=self.enemies
         self.campaignEnemies.enemyHit=function(attacker,target,action,tuning) return self:hit(attacker,target,action,tuning) end
+        self.campaignEnemies.vehicleObstacleHit=function(slot,owner,actorId) return self.modes:vehicleObstacleHit(slot) end
     end
     if self.modes.race then
         self.enemies[self.modes.race.enemyId]=self.modes.race.enemy

@@ -1471,7 +1471,7 @@ function Definition.build(index,seed)
         c.mount=point(24,3,0);c.mountRange=7;c.finishDistance=420;c.laneLimit=18;c.steerSpeed=22;c.jumpSpeed=42
         -- Only the entry foot patrol blocks boarding. Rocket rats are actual
         -- later scripted encounters, never an enemy that must die before riding.
-        addFloor(5,0,0,58,46);foe('Invader',12,3,-10)
+        addFloor(5,0,0,58,46);foe('Invader',28,3,-10)
         c.restart={stopSeconds=.35,rewindSeconds=.55,acceleration=110,tuning='ROBLOX_ORIGINAL_RESTART_TIMING'}
         c.encounters={}
         if index==3 or index==7 then c.encounters[1]={id='rocket-rat-pass-1',kind='RocketRat',progress=90,
@@ -1496,6 +1496,12 @@ function Definition.build(index,seed)
         end
         if surf or jet then for n=1,3 do c.emitters[n]={id='ride-launcher-'..n,kind='RocketLauncher',position=point(100+n*85,jet and 20 or 4,23),interval=3,speed=18,life=2} end end
         addFloor(439,0,0,62,48);finish=point(434,3,0);d.bounds.maxX=495;c.axis='x'
+        if index==3 then
+            -- The logical speeder floor is y=0 across every steering lane.
+            -- Render that same solid road, overlapping both arrival and finish
+            -- ledges; water and flight retain their distinct support geometry.
+            addFloor((c.mount.x+finish.x)/2,0,0,finish.x-c.mount.x+24,c.laneLimit*2+10)
+        end
     elseif index==4 then
         c.acceleration=19;c.friction=2.4;c.maxSpeed=25;c.gravity=150;c.jumpSpeed=51
         local cursor=-12
@@ -1665,6 +1671,7 @@ function CampaignDirector.new(session,world,Combat,config,deps)
         self.ordinary.campaignEnemies=self.campaignEnemies
         self.campaignEnemies.externalEnemies=self.enemies
         self.campaignEnemies.enemyHit=function(attacker,target,action,tuning) return self:hit(attacker,target,action,tuning) end
+        self.campaignEnemies.vehicleObstacleHit=function(slot,owner,actorId) return self.modes:vehicleObstacleHit(slot) end
     end
     if self.modes.race then
         self.enemies[self.modes.race.enemyId]=self.modes.race.enemy
@@ -2208,6 +2215,9 @@ function Enemies:_steal(id,e,s,target,hits)
     self.serial+=1;local key=-6000-self.serial*2
     self.lifeTokens[key]={owner=id,actorId=e.actorId,link=link,mode='Carried',expiresAt=self.now+5,
         position=copy(self.world:position(id)),lastAt=self.now}
+    -- The thief's finite escape belongs to its own life, not to the victim's
+    -- return eligibility. A dead/replaced hero invalidates only that link.
+    e.lifeEscapeAt=self.now+5
     s.hasStolen=true;s.stolenKey=key
     self.world:projectile(key,self.lifeTokens[key].position,false,'StolenLife')
 end
@@ -2415,6 +2425,12 @@ function Enemies:enemyStep(id,e,dt)
     self.now=self.director.now
     if self.closed or e.dead or not point(self.world:position(id)) then self:forgetEnemy(id);return true end
     local s=self:_state(id,e);local family=families[e.kind]
+    if e.kind=='Invader' and e.lifeEscapeAt and self.now&gt;=e.lifeEscapeAt then
+        -- Escape consumes the carried resource; ordinary hits still release
+        -- its return through onHit before spending this actor's one life.
+        if s.stolenKey then self:_removeLife(s.stolenKey) end
+        self.director:_kill(id,'InvaderEscape');return true
+    end
     if e.kind=='RocketRat' then return self:_rocketStep(id,e,s) end
     if family.mode=='Wall' then self:_pose(id,s.origin,'Wall',s.aim) end
     if e.reactionUntil or self.director.carry and self.director.carry:blocksEnemy(id) then self:onHit(id);return true end
@@ -2486,7 +2502,11 @@ function Enemies:step(now,dt)
     self:_debrisStep(now)
     local ids={};for id in pairs(self.projectiles) do ids[#ids+1]=id end;table.sort(ids)
     for _,id in ipairs(ids) do
-        local p=self.projectiles[id];local at=math.min(now,p.expiresAt);local duration=math.max(0,at-p.lastAt)
+        local p=self.projectiles[id]
+        -- A mounted crash can synchronously rewind the course and remove other
+        -- encounter effects whose keys are still in this frame's snapshot.
+        if not p then continue end
+        local at=math.min(now,p.expiresAt);local duration=math.max(0,at-p.lastAt)
         local before=p.position;local after={x=before.x+p.direction.x*p.speed*duration,y=before.y,z=before.z+p.direction.z*p.speed*duration}
         if p.mode=='Obstacle' then after.y=math.max(p.groundY,before.y-18*duration) end
         local radius=p.mode=='GasCloud' and math.min(4,1+(at-p.created)*1.5) or p.mode=='Obstacle' and 3 or 1.8
@@ -2500,7 +2520,9 @@ function Enemies:step(now,dt)
         for _,target in ipairs(candidates) do
             local position=self.world:position(target.id)
             if self.world.campaignProjectileBlocked and self.world:campaignProjectileBlocked(before,position) then consumed=true;break end
-            self:_hit(p.owner,target.id,p.action,p.hits,position)
+            local handled=p.mode=='Obstacle' and self.session.state.heroes[target.id]~=nil
+                and self.vehicleObstacleHit and self.vehicleObstacleHit(target.id,p.owner,p.actorId)
+            if not handled then self:_hit(p.owner,target.id,p.action,p.hits,position) end
             if p.mode~='GasCloud' then consumed=true;break end
         end
         if not consumed and self.world.campaignProjectileBlocked and self.world:campaignProjectileBlocked(before,after) then consumed=true end
@@ -3118,6 +3140,14 @@ function Modes:_die(s,reason)
         if not others then self.chaseNeedsReset=true end
     end
     if self.world.campaignRelease then self.world:campaignRelease(s.slot) end
+end
+function Modes:vehicleObstacleHit(slot)
+    local s=self.actors[slot]
+    if not self.vehicleGroup or not s or not s.mounted or s.finished then return false end
+    -- A mounted obstacle belongs to the course collision policy, including
+    -- protected/paused bodies. Never fall through to ordinary melee damage.
+    if not self.closed and self.vehicleGroup.phase=='Riding' and self:_living(slot) then self:_die(s,'CampaignCrash') end
+    return true
 end
 function Modes:_hazards(s,old)
     if s.mounted and self.vehicleGroup and self.vehicleGroup.phase~='Riding' then return end
@@ -11590,7 +11620,7 @@ return World
       <Item class="ModuleScript" referent="BT64">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff'})
 </ProtectedString>
         </Properties>
       </Item>
@@ -13364,10 +13394,24 @@ render = function()
     local interaction = snapshot and snapshot.interaction
     local carrying = interaction and interaction.carrying == true
     local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
-    dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying
-    jump.Visible = not controlledBoss and not (enemy and (enemy.movementKind=='Swim' or enemy.movementKind=='Ride' or enemy.movementKind=='Wall'))
-    punch.Visible=not (enemy and enemy.resourceKind=='CourseRival')
-    keyboardHint.Text = enemy and enemy.resourceKind=='CourseRival' and T('MOVE · JUMP: race to the bomb')
+    local course=snapshot and snapshot.level and snapshot.level.modeState
+    local courseRide
+    if not enemy and controlled and course then
+        for _,actor in ipairs(course.actors or {}) do
+            if actor.slot==snapshot.mine and actor.actorId==controlled.actorId and not actor.finished then
+                if actor.mounted and (course.mode=='Speeder' or course.mode=='Surf' or course.mode=='Jet')
+                    or course.mode=='Clinger' then courseRide=course.mode end
+                break
+            end
+        end
+    end
+    dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying and not courseRide
+    jump.Visible = courseRide~='Clinger' and not controlledBoss
+        and not (enemy and (enemy.movementKind=='Swim' or enemy.movementKind=='Ride' or enemy.movementKind=='Wall'))
+    punch.Visible=not courseRide and not (enemy and enemy.resourceKind=='CourseRival')
+    runHint.Visible=not courseRide
+    keyboardHint.Text = courseRide and CombatFeedback.hint(snapshot,T)
+        or enemy and enemy.resourceKind=='CourseRival' and T('MOVE · JUMP: race to the bomb')
         or enemy and enemy.movementKind=='Ride' and T('SCRIPTED FLIGHT · ATTACK: drop one obstacle')
         or enemy and enemy.movementKind=='Wall' and T('AIM · ATTACK: defend the wall')
         or controlledBoss and (enemy.bossType and 'W A S D · aim · F · attack' or "W A S D · aim · F · fire")

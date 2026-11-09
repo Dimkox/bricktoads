@@ -267,6 +267,9 @@ function Enemies:_steal(id,e,s,target,hits)
     self.serial+=1;local key=-6000-self.serial*2
     self.lifeTokens[key]={owner=id,actorId=e.actorId,link=link,mode='Carried',expiresAt=self.now+5,
         position=copy(self.world:position(id)),lastAt=self.now}
+    -- The thief's finite escape belongs to its own life, not to the victim's
+    -- return eligibility. A dead/replaced hero invalidates only that link.
+    e.lifeEscapeAt=self.now+5
     s.hasStolen=true;s.stolenKey=key
     self.world:projectile(key,self.lifeTokens[key].position,false,'StolenLife')
 end
@@ -474,6 +477,12 @@ function Enemies:enemyStep(id,e,dt)
     self.now=self.director.now
     if self.closed or e.dead or not point(self.world:position(id)) then self:forgetEnemy(id);return true end
     local s=self:_state(id,e);local family=families[e.kind]
+    if e.kind=='Invader' and e.lifeEscapeAt and self.now>=e.lifeEscapeAt then
+        -- Escape consumes the carried resource; ordinary hits still release
+        -- its return through onHit before spending this actor's one life.
+        if s.stolenKey then self:_removeLife(s.stolenKey) end
+        self.director:_kill(id,'InvaderEscape');return true
+    end
     if e.kind=='RocketRat' then return self:_rocketStep(id,e,s) end
     if family.mode=='Wall' then self:_pose(id,s.origin,'Wall',s.aim) end
     if e.reactionUntil or self.director.carry and self.director.carry:blocksEnemy(id) then self:onHit(id);return true end
@@ -545,7 +554,11 @@ function Enemies:step(now,dt)
     self:_debrisStep(now)
     local ids={};for id in pairs(self.projectiles) do ids[#ids+1]=id end;table.sort(ids)
     for _,id in ipairs(ids) do
-        local p=self.projectiles[id];local at=math.min(now,p.expiresAt);local duration=math.max(0,at-p.lastAt)
+        local p=self.projectiles[id]
+        -- A mounted crash can synchronously rewind the course and remove other
+        -- encounter effects whose keys are still in this frame's snapshot.
+        if not p then continue end
+        local at=math.min(now,p.expiresAt);local duration=math.max(0,at-p.lastAt)
         local before=p.position;local after={x=before.x+p.direction.x*p.speed*duration,y=before.y,z=before.z+p.direction.z*p.speed*duration}
         if p.mode=='Obstacle' then after.y=math.max(p.groundY,before.y-18*duration) end
         local radius=p.mode=='GasCloud' and math.min(4,1+(at-p.created)*1.5) or p.mode=='Obstacle' and 3 or 1.8
@@ -559,7 +572,9 @@ function Enemies:step(now,dt)
         for _,target in ipairs(candidates) do
             local position=self.world:position(target.id)
             if self.world.campaignProjectileBlocked and self.world:campaignProjectileBlocked(before,position) then consumed=true;break end
-            self:_hit(p.owner,target.id,p.action,p.hits,position)
+            local handled=p.mode=='Obstacle' and self.session.state.heroes[target.id]~=nil
+                and self.vehicleObstacleHit and self.vehicleObstacleHit(target.id,p.owner,p.actorId)
+            if not handled then self:_hit(p.owner,target.id,p.action,p.hits,position) end
             if p.mode~='GasCloud' then consumed=true;break end
         end
         if not consumed and self.world.campaignProjectileBlocked and self.world:campaignProjectileBlocked(before,after) then consumed=true end

@@ -886,10 +886,24 @@ render = function()
     local interaction = snapshot and snapshot.interaction
     local carrying = interaction and interaction.carrying == true
     local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
-    dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying
-    jump.Visible = not controlledBoss and not (enemy and (enemy.movementKind=='Swim' or enemy.movementKind=='Ride' or enemy.movementKind=='Wall'))
-    punch.Visible=not (enemy and enemy.resourceKind=='CourseRival')
-    keyboardHint.Text = enemy and enemy.resourceKind=='CourseRival' and T('MOVE · JUMP: race to the bomb')
+    local course=snapshot and snapshot.level and snapshot.level.modeState
+    local courseRide
+    if not enemy and controlled and course then
+        for _,actor in ipairs(course.actors or {}) do
+            if actor.slot==snapshot.mine and actor.actorId==controlled.actorId and not actor.finished then
+                if actor.mounted and (course.mode=='Speeder' or course.mode=='Surf' or course.mode=='Jet')
+                    or course.mode=='Clinger' then courseRide=course.mode end
+                break
+            end
+        end
+    end
+    dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying and not courseRide
+    jump.Visible = courseRide~='Clinger' and not controlledBoss
+        and not (enemy and (enemy.movementKind=='Swim' or enemy.movementKind=='Ride' or enemy.movementKind=='Wall'))
+    punch.Visible=not courseRide and not (enemy and enemy.resourceKind=='CourseRival')
+    runHint.Visible=not courseRide
+    keyboardHint.Text = courseRide and CombatFeedback.hint(snapshot,T)
+        or enemy and enemy.resourceKind=='CourseRival' and T('MOVE · JUMP: race to the bomb')
         or enemy and enemy.movementKind=='Ride' and T('SCRIPTED FLIGHT · ATTACK: drop one obstacle')
         or enemy and enemy.movementKind=='Wall' and T('AIM · ATTACK: defend the wall')
         or controlledBoss and (enemy.bossType and 'W A S D · aim · F · attack' or "W A S D · aim · F · fire")
