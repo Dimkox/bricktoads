@@ -113,7 +113,8 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
             end
         end
         local world=worldType.new(require(runtime.RobloxWorld),config,{
-            name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing}})
+            name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing},
+            characterAppearance=require(gameplay.CharacterAppearance)})
         world.folder:SetAttribute('GroupId',groupId)
         return world
     end)
@@ -713,8 +714,428 @@ return BossQueue
         </Item>
         <Item class="ModuleScript" referent="BT11">
           <Properties>
+            <string name="Name">CanonicalAnimation</string>
+            <ProtectedString name="Source">-- Source-derived presentation queries only: no physics, health, damage or remotes.
+-- Clock units are unpaused interpreter calls, never claimed wall-clock parity.
+local Animation={}
+local MAX_CALLS=4096
+local function freeze(value)
+    if type(value)=='table' and not table.isfrozen(value) then
+        for _,item in pairs(value) do freeze(item) end
+        table.freeze(value)
+    end
+    return value
+end
+local function integer(v) return type(v)=='number' and v==v and v&gt;-math.huge and v&lt;math.huge and v%1==0 end
+
+-- BEGIN SOURCE CLIPS
+local CLIPS={
+    [0x02]={label="udar_small_punch",line=71,endLine=71,fallthrough=false,bytes={0x19,0xE0,0x30,0xE1,0x01,0xE2,0x00,0x10,0x19,0x19,0x19,0x1D,0xE6,0x1D,0x1D,0x1D,0x1D,0x1D,0x1D,0x1D,0x00}},
+    [0x04]={label="udar_small_punch2",line=72,endLine=72,fallthrough=false,bytes={0x1B,0xE0,0x30,0xE1,0x01,0xE2,0x00,0x10,0x1B,0x1B,0x1B,0x1D,0xE6,0x1D,0x1D,0x1D,0x1D,0x1D,0x1D,0x1D,0x00}},
+    [0x06]={label="udar_uppercut",line=73,endLine=74,fallthrough=false,bytes={0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x1D,0x1D,0xE0,0x40,0x22,0xE2,0x02,0x23,0xE1,0x03,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x22,0x1D,0x1D,0x00}},
+    [0x08]={label="move_pick_obj",line=75,endLine=75,fallthrough=false,bytes={0x0B,0x0B,0x0B,0x0B,0x0B,0x0B,0x0D,0x0D,0x0D,0x0D,0x0D,0x0D,0xE3,0x0B,0x0B,0x0B,0x0B,0x00}},
+    [0x0A]={label="move_pick_enemy",line=76,endLine=76,fallthrough=false,bytes={0x0B,0xE0,0x00,0x0B,0x0B,0x0B,0x0D,0x0D,0x0D,0x0D,0x0D,0x0D,0x0B,0xE4,0x0B,0x0B,0x0B,0x00}},
+    [0x0C]={label="move_brosok",line=77,endLine=78,fallthrough=false,bytes={0x0E,0x0E,0x0E,0x0E,0x0E,0x0E,0x0E,0x0E,0xE1,0x04,0xE5,0x0F,0xE0,0x50,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x0F,0xF4,0x00}},
+    [0x0E]={label="udar_big_punch",line=81,endLine=82,fallthrough=false,bytes={0x1D,0x1D,0x1D,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0xE0,0xA0,0x1C,0xE1,0x03,0xE2,0x03,0x37,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0xE1,0x02,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1C,0x1D,0x1D,0x1D,0x1D,0x00}},
+    [0x10]={label="udar_big_uppercut",line=89,endLine=89,fallthrough=false,bytes={0x18,0x18,0x18,0x18,0x1D,0x1D,0xE0,0x80,0x1A,0xE2,0x05,0x37,0xE1,0x03,0x1A,0x1A,0x1A,0x1A,0x1A,0x1A,0x1A,0x1A,0x00}},
+    [0x12]={label="udar_big_uppercut2",line=90,endLine=91,fallthrough=false,bytes={0x21,0x21,0x21,0x21,0x21,0x21,0x21,0x21,0xE2,0x41,0x53,0x20,0xE0,0x20,0xE1,0x03,0x20,0x20,0x20,0xE6,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x00}},
+    [0x14]={label="udar_big_bad_boot",line=92,endLine=94,fallthrough=false,bytes={0x1F,0x1F,0xE0,0x00,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0xE0,0xA0,0x1E,0xE2,0x86,0x37,0xE1,0x05,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x00}},
+    [0x16]={label="udar_s_razbega",line=95,endLine=97,fallthrough=false,bytes={0x23,0xE1,0x04,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0xE2,0x04,0x25,0x23,0x23,0x23,0x23,0x23,0x23,0x23,0x00}},
+    [0x18]={label="move_yazik",line=100,endLine=101,fallthrough=false,bytes={0x29,0x29,0x29,0x29,0x29,0x29,0x2A,0xE9,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x00}},
+    [0x1A]={label="udar_palkoi",line=104,endLine=105,fallthrough=false,bytes={0x26,0x26,0x26,0x26,0x26,0x26,0xE1,0x03,0xF1,0x15,0x5C,0xE2,0x82,0x44,0xED,0x28,0x28,0x28,0x28,0x28,0xE6,0x28,0x28,0x28,0x28,0x28,0x28,0x00}},
+    [0x1C]={label="udar_s_verevki",line=108,endLine=108,fallthrough=false,bytes={0x2C,0xE0,0x60,0xEC,0x2C,0x2C,0xE0,0xF0,0xE2,0x87,0x13,0x2B,0x2B,0xE0,0x00,0xE6,0x2B,0x2B,0x2B,0x2B,0x00}},
+    [0x1E]={label="udar_s_verevki2",line=120,endLine=121,fallthrough=false,bytes={0x2C,0xE0,0xFE,0xE8,0x2B,0x2B,0xE0,0xFE,0xE8,0xE2,0x87,0x24,0x2B,0x2B,0xE0,0xFE,0xE8,0x2B,0x2B,0xE0,0xFE,0xE8,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2B,0x2C,0x2C,0x24,0x00}},
+    [0x20]={label="move_yazik_s_verevki",line=98,endLine=99,fallthrough=false,bytes={0x36,0x36,0x36,0x36,0x36,0x36,0x37,0xE9,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x37,0x00}},
+    [0x22]={label="udar_nogami_s_verevki",line=113,endLine=114,fallthrough=false,bytes={0x2C,0xE0,0xC0,0xEC,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0xE0,0xFF,0x4C,0x4C,0xE2,0x8D,0x36,0x4C,0xE2,0x8D,0x36,0x4C,0xE2,0x8D,0x36,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0xE0,0x20,0x2C,0x2C,0x24,0x00}},
+    [0x24]={label="ugar_girya",line=122,endLine=124,fallthrough=false,bytes={0x2C,0xE0,0xFF,0xE8,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0xE2,0x88,0x36,0x34,0x34,0x34,0x34,0x2B,0x34,0x2B,0x34,0x2B,0x2C,0x2C,0x24,0x00}},
+    [0x26]={label="move_jump_hit?",line=127,endLine=128,fallthrough=true,bytes={0x05,0xE0,0x80,0xE1,0x04,0xEA,0x8C,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0xF1,0x15,0x5C,0xE2,0x02,0x20,0xED,0x06,0x06,0x06,0x06,0x06,0x06,0x00}},
+    [0x28]={label="move_jump_mini?",line=129,endLine=129,fallthrough=false,bytes={0x05,0x05,0x05,0xE2,0x00,0x10,0x06,0x06,0x00}},
+    [0x2A]={label="udar_jump_hit2?",line=128,endLine=128,fallthrough=false,bytes={0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0xF1,0x15,0x5C,0xE2,0x02,0x20,0xED,0x06,0x06,0x06,0x06,0x06,0x06,0x00}},
+    [0x2C]={label="move_fear",line=131,endLine=131,fallthrough=false,bytes={0x32,0xE1,0x01,0xEB,0x32,0x32,0x32,0x32,0x32,0x00}},
+    [0x2E]={label="move_fear_front",line=132,endLine=132,fallthrough=false,bytes={0x33,0xE1,0x02,0x33,0x33,0x33,0x33,0x33,0x33,0x00}},
+    [0x30]={label="udar_small_foot",line=134,endLine=134,fallthrough=false,bytes={0x1F,0x1F,0xE0,0xC0,0x1F,0xE2,0x87,0x50,0xE0,0x60,0x1F,0x1F,0x1F,0x1F,0x00}},
+    [0x32]={label="udar_golova?",line=135,endLine=135,fallthrough=false,bytes={0x0B,0x0B,0x0B,0xE2,0x84,0x20,0x0B,0x0B,0x0B,0x0B,0x0B,0x0B,0x0B,0x0B,0x00}},
+    [0x34]={label="move_golova?",line=136,endLine=136,fallthrough=false,bytes={0x0B,0xE1,0xFF,0x0B,0x0B,0xE4,0x0B,0x0B,0x0B,0x0B,0x0B,0x00}},
+    [0x36]={label="udar_po_golove_razmah",line=106,endLine=107,fallthrough=false,bytes={0x26,0xE1,0x05,0x26,0x26,0x26,0x26,0x26,0x26,0x26,0x26,0x26,0x26,0x26,0x26,0x26,0x57,0xE2,0x8A,0x26,0x57,0x57,0x57,0x57,0x57,0x57,0x57,0x57,0x57,0x57,0x57,0x00}},
+    [0x38]={label="move_jump_hit?",line=127,endLine=128,fallthrough=true,bytes={0x05,0xE0,0x80,0xE1,0x04,0xEA,0x8C,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0x05,0xF1,0x15,0x5C,0xE2,0x02,0x20,0xED,0x06,0x06,0x06,0x06,0x06,0x06,0x00}},
+    [0x3A]={label="udar_i_podkid?",line=137,endLine=139,fallthrough=false,bytes={0x18,0xE0,0x00,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x16,0x14,0x12,0x10,0x0E,0x0C,0x0A,0x09,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0xE1,0x03,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0xE0,0x60,0x0C,0x10,0x16,0x1E,0x24,0xE2,0x82,0x20,0x2A,0x2A,0x2A,0x2A,0x2A,0x2A,0x28,0x26,0x24,0x22,0x20,0x1E,0x1C,0x1A,0x00}},
+    [0x3C]={label="byte_3000_E5A0",line=140,endLine=140,fallthrough=false,bytes={0x14,0xE0,0x00,0x10,0x0C,0x08,0x08,0x08,0x08,0x0E,0x14,0x1C,0x24,0xE2,0x40,0x40,0x28,0x28,0x28,0x24,0x20,0x1C,0x18,0x00}},
+    [0x3E]={label="udar_po_golove_palka?",line=102,endLine=103,fallthrough=false,bytes={0x3F,0x3F,0x3F,0x3F,0x3F,0x3F,0xF1,0x15,0x5C,0xE2,0x82,0x24,0xED,0x40,0x40,0x40,0x40,0x40,0xE6,0x40,0x40,0x40,0x40,0x40,0x40,0x00}},
+    [0x40]={label="udar_i_prijok",line=130,endLine=130,fallthrough=false,bytes={0x06,0xE1,0x03,0xE2,0x04,0x20,0x06,0x06,0x06,0x06,0x06,0x00}},
+    [0x42]={label="move_effect_ot_electro",line=145,endLine=146,fallthrough=false,bytes={0x5D,0xE0,0x6F,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0xE0,0x00,0x5E,0x5E,0x5E,0x5E,0xE4,0xF0,0x18,0x5D,0x5D,0x5D,0xE0,0x6F,0xEC,0x5D,0x5D,0x5D,0x5D,0x5D,0x5D,0x5D,0x5D,0x5D,0x5D,0xE0,0x00,0x5D,0x00}},
+    [0x44]={label="move_effect_ot_electro2",line=149,endLine=149,fallthrough=false,bytes={0x5D,0xE0,0xFF,0x5D,0x5D,0x5D,0x5D,0x5E,0x5E,0xE5,0xE0,0xFF,0xEC,0x5E,0x5E,0x5E,0x5D,0x5D,0x5D,0xE0,0x00,0x5D,0x00}},
+    [0x46]={label="udar_s_verevki_fast",line=109,endLine=109,fallthrough=false,bytes={0x43,0x43,0x43,0x43,0x43,0x43,0xE0,0xF0,0xE2,0x07,0x53,0xE0,0x00,0x44,0xE6,0x44,0x44,0x44,0x00}},
+    [0x48]={label="udar_s_verevki_kluvom",line=111,endLine=112,fallthrough=false,bytes={0x43,0x43,0x43,0x43,0x43,0x43,0x43,0xE0,0xF0,0xF1,0x15,0x5C,0xE2,0xC7,0x23,0xED,0xE0,0x00,0x44,0xE6,0x44,0x44,0x44,0x00}},
+    [0x4A]={label="move_effect_ot_electro3",line=150,endLine=150,fallthrough=false,bytes={0x61,0x61,0x61,0x61,0x62,0x62,0x63,0x63,0x63,0xEF,0x80,0x63,0x63,0x63,0x62,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x00}},
+    [0x4C]={label="byte_3000_E627",line=147,endLine=148,fallthrough=false,bytes={0x5D,0xE0,0xF0,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0xE0,0x00,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0x5E,0xE4,0xF0,0x18,0x5D,0x5D,0x5D,0xE0,0xF0,0xEC,0x5D,0x5D,0x5D,0x5D,0x5D,0x5D,0xE0,0x00,0x5D,0x00}},
+    [0x4E]={label="udar_girei_po_pushke",line=125,endLine=126,fallthrough=false,bytes={0x2C,0xE0,0xF0,0xEC,0x2C,0x2C,0x2C,0xE0,0xFE,0x34,0x34,0x34,0x34,0xE2,0x8D,0x36,0x34,0x34,0x34,0x34,0x34,0x34,0x34,0x2B,0x34,0x2B,0x24,0x00}},
+    [0x50]={label="udar_botinkami_po_pushke",line=116,endLine=117,fallthrough=false,bytes={0x2C,0xE0,0x80,0xEC,0x2C,0x2C,0x2C,0x2C,0xE0,0xF0,0x4C,0x4C,0xE2,0x87,0x75,0xE0,0x80,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x4C,0x00}},
+    [0x52]={label="udar_vs_big_raven",line=118,endLine=119,fallthrough=false,bytes={0x43,0xE0,0x80,0xEC,0x43,0x43,0x43,0x43,0xE0,0xF0,0x4D,0x4D,0xE2,0x87,0x75,0xE0,0x80,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x4D,0x00}},
+    [0x54]={label="byte_3000_E5B8",line=141,endLine=142,fallthrough=false,bytes={0x5D,0xE0,0x00,0xF2,0x5E,0xF2,0x5E,0xF2,0x5E,0xF2,0x5E,0xF2,0xF1,0x15,0x1A,0x5D,0x5D,0x5E,0x5E,0xF1,0x15,0x1A,0x5D,0x5D,0xEC,0x5D,0x5D,0x5D,0xE0,0x00,0x5D,0x00}},
+    [0x56]={label="byte_3000_E5D8",line=143,endLine=144,fallthrough=false,bytes={0x5D,0xE0,0xF0,0x5E,0x5E,0x5E,0x5E,0xE0,0x00,0x5E,0xF1,0x15,0x1A,0x5D,0x5D,0x5E,0x5D,0xF1,0x15,0x1A,0x5D,0x5D,0xE0,0xF0,0xEC,0xF2,0x5D,0xF2,0x5D,0xF2,0x5D,0xF2,0x5D,0xE0,0x00,0x5D,0x00}},
+    [0x58]={label="byte_3000_E693",line=153,endLine=153,fallthrough=false,bytes={0x6C,0x6C,0x6C,0xF1,0x15,0x5C,0xF3,0x03,0x6E,0x6E,0x6E,0x6E,0x64,0x00}},
+    [0x5A]={label="anim_throw_snowball",line=158,endLine=159,fallthrough=false,bytes={0x0B,0x0B,0x0D,0x0D,0x0D,0xF4,0x0D,0xF4,0x52,0xF4,0x52,0xF4,0x52,0xF4,0x52,0xF1,0x15,0x5C,0xF3,0x04,0x53,0x53,0xE6,0x53,0x53,0x53,0x53,0x53,0x53,0x53,0x1D,0x1D,0x00}},
+    [0x5C]={label="byte_3000_E67B",line=151,endLine=152,fallthrough=false,bytes={0x6C,0xE1,0x02,0x6C,0x6C,0x6C,0x6C,0x6C,0x6C,0x6C,0x6C,0x6E,0xE2,0x83,0x30,0x6E,0x6E,0x6E,0x6E,0x6E,0x6E,0x6E,0x64,0x00}},
+    [0x5E]={label="byte_3000_E6C8",line=157,endLine=157,fallthrough=false,bytes={0xE1,0x03,0xE2,0x89,0x20,0x00}},
+    [0x60]={label="byte_3000_E6A1",line=154,endLine=154,fallthrough=false,bytes={0x6C,0x6C,0x6C,0xF1,0x15,0x5C,0xF3,0x14,0x6E,0x6E,0x6E,0x6E,0x64,0x00}},
+    [0x62]={label="byte_3000_E6AF",line=155,endLine=155,fallthrough=false,bytes={0x6C,0x6C,0x6C,0xF1,0x15,0x5C,0xF3,0x85,0x6E,0x6E,0x6E,0x6E,0x64,0x00}},
+    [0x64]={label="byte_3000_E6BD",line=156,endLine=156,fallthrough=false,bytes={0x6C,0x6C,0xF1,0x15,0x5C,0xF3,0x15,0x6E,0x6E,0x64,0x00}},
+    [0x66]={label="byte_3000_E708",line=162,endLine=163,fallthrough=false,bytes={0x85,0xE0,0x00,0x85,0x85,0x85,0x85,0x85,0x85,0xE1,0x03,0xE0,0x60,0x85,0x86,0x86,0xE2,0x84,0x20,0x87,0x87,0x87,0x87,0x87,0x87,0x86,0x86,0x86,0x00}},
+    [0x68]={label="byte_3000_E6EF",line=160,endLine=163,fallthrough=true,bytes={0x85,0xE0,0x00,0x85,0x85,0x85,0x85,0x85,0x85,0xE0,0x20,0x86,0xE2,0x80,0x50,0x87,0xF5,0xE0,0x20,0x86,0xE2,0x80,0x50,0x87,0xF5,0x85,0xE0,0x00,0x85,0x85,0x85,0x85,0x85,0x85,0xE1,0x03,0xE0,0x60,0x85,0x86,0x86,0xE2,0x84,0x20,0x87,0x87,0x87,0x87,0x87,0x87,0x86,0x86,0x86,0x00}},
+    [0x6A]={label="byte_3000_E725",line=164,endLine=165,fallthrough=false,bytes={0xB9,0xE1,0x04,0xE0,0x80,0xB9,0xB9,0xB9,0xB9,0xB9,0xB9,0xB9,0xB9,0xE0,0x20,0xE1,0x02,0xB9,0xF1,0x15,0x2E,0xBA,0xBA,0xE1,0x01,0xBA,0xBA,0xE1,0x01,0xBA,0xBA,0xBA,0x00}},
+    [0x6C]={label="byte_3000_E746",line=166,endLine=167,fallthrough=false,bytes={0xC6,0xE0,0x01,0xB8,0xB8,0xB8,0xB8,0xB8,0xB8,0xB8,0xE0,0xF0,0xE1,0x03,0xE2,0x84,0x20,0xC6,0xE2,0x84,0x20,0xC6,0xE2,0x84,0x20,0xC6,0xE2,0x84,0x20,0xC6,0xE2,0x84,0x20,0xC6,0xE2,0x84,0x20,0xE0,0x40,0xC6,0x00}},
+    [0x6E]={label="byte_3000_E76F",line=168,endLine=168,fallthrough=false,bytes={0xE2,0x89,0xA0,0x00}},
+    [0x70]={label="move_brosok_shara_vpered",line=79,endLine=80,fallthrough=false,bytes={0x0E,0x0E,0x0E,0x0E,0x0E,0x0E,0x0E,0x0E,0xE1,0x04,0xE5,0x61,0xE0,0x60,0xEA,0xC0,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x61,0x00}},
+    [0x72]={label="udar_big_punch_fast",line=83,endLine=84,fallthrough=false,bytes={0x1D,0x18,0x18,0xE0,0x60,0x1C,0xE1,0x03,0xE2,0x03,0x36,0x1C,0x1C,0x1C,0x1C,0x1C,0xE1,0x02,0x1C,0x1C,0x1D,0x1D,0x1D,0x1D,0x00}},
+    [0x74]={label="udar_big_uppercut_fast",line=85,endLine=85,fallthrough=false,bytes={0x18,0x18,0x1D,0xE0,0x80,0x1A,0xE2,0x06,0x36,0xE1,0x03,0x1A,0x1A,0x1A,0x1A,0x1A,0x1A,0x00}},
+    [0x76]={label="udar_big_bad_boot_fast",line=86,endLine=87,fallthrough=false,bytes={0x1F,0xE0,0x00,0x1F,0x1F,0x1F,0xE0,0x60,0x1E,0xE2,0x86,0x36,0xE1,0x03,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x1E,0x00}},
+    [0x78]={label="udar_po_golove_fast",line=88,endLine=88,fallthrough=false,bytes={0x26,0xE0,0x10,0xE1,0x03,0x26,0x26,0x26,0x57,0xE2,0x8A,0x26,0x57,0x57,0x57,0x57,0x57,0x00}},
+    [0x7A]={label="udar_po_robotam",line=169,endLine=169,fallthrough=false,bytes={0x0B,0x0B,0x0B,0x1D,0x1D,0x1D,0xE1,0x02,0x0F,0x0F,0x0F,0x0F,0x1D,0x1D,0x1D,0x1D,0x00}},
+    [0x7C]={label="anim_moved_by_wind",line=170,endLine=170,fallthrough=false,bytes={0x61,0xE0,0x80,0x61,0x61,0x61,0xF0,0x18,0xE2,0x4C,0x80,0x5F,0xE0,0x40,0x5F,0x5F,0x00}},
+    [0x7E]={label="udar_akuli",line=171,endLine=172,fallthrough=false,bytes={0xD7,0xE0,0xF0,0xD7,0xD7,0xE2,0x4C,0x20,0xD7,0xD7,0xE2,0x4C,0x20,0xD7,0xE0,0x40,0xD7,0xD7,0xD7,0xD7,0xD7,0xD7,0xD7,0xD7,0xD7,0xD7,0xD7,0x00}},
+    [0x80]={label="udar_utki",line=173,endLine=174,fallthrough=false,bytes={0x67,0xE0,0xA0,0xEC,0x67,0x67,0xEC,0x67,0x67,0xE0,0x20,0x67,0xE2,0x80,0x50,0x68,0x68,0x68,0xF5,0x67,0xE0,0xF0,0xEC,0x67,0x67,0x67,0xEC,0x67,0x67,0x67,0xE2,0x83,0x30,0x68,0x68,0x68,0xF5,0x00}},
+    [0x82]={label="nogoi_s_propellera",line=115,endLine=115,fallthrough=false,bytes={0x2C,0x2C,0x2C,0xE0,0x60,0xE2,0x88,0x35,0x2B,0xE0,0x00,0x2B,0x2B,0x2B,0x2B,0x2B,0x00}},
+    [0x84]={label="udar_big_blag",line=175,endLine=175,fallthrough=false,bytes={0x6F,0x6F,0xE2,0x84,0x20,0x71,0x71,0x71,0x71,0x71,0x71,0x71,0x71,0x71,0x71,0x00}},
+    [0x86]={label="byte_3000_E7E7",line=176,endLine=176,fallthrough=false,bytes={0x73,0x73,0x73,0xE2,0x89,0x20,0x74,0x74,0x74,0x74,0x74,0x74,0x74,0x74,0x74,0x74,0x74,0x74,0x74,0x00}},
+    [0x88]={label="byte_3000_E7FB",line=177,endLine=177,fallthrough=false,bytes={0x78,0x78,0xF3,0x06,0x78,0x78,0xF3,0x06,0x78,0x78,0xF3,0x06,0x78,0x78,0x00}},
+    [0x8A]={label="byte_3000_E80A",line=178,endLine=179,fallthrough=false,bytes={0x01,0x01,0xE0,0x40,0xE2,0x80,0x70,0xF5,0x02,0x02,0x02,0x01,0x01,0x01,0xE0,0x40,0xE2,0x80,0x70,0xF5,0x02,0x02,0x02,0x01,0xE0,0xA0,0xE1,0x03,0x01,0x01,0xE2,0x82,0x30,0x02,0x02,0x02,0x02,0x02,0x02,0x02,0x02,0x00}},
+}
+local DASH_TAIL={label='udar_s_razbega:low_life_tail',line=97,endLine=97,bytes={0x31,0xE1,0x04,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x31,0x23,0x23,0x23,0x23,0x00}}
+local CATALOG_SHA='40830129550af498c2b8f52b6c9e6d16cb413df5dea3c0bcad08648407285289'
+-- END SOURCE CLIPS
+
+local OPCODES={
+    [0xE0]={'XSpeed',1},[0xE1]={'ZSpeed',1},[0xE2]={'HitOpportunity',2},
+    [0xE3]={'PickupObject',0},[0xE4]={'LinkObject',0},[0xE5]={'DamageLinked',0},
+    [0xE6]={'SetFlag4',0},[0xE7]={'AddXSpeed',1},[0xE8]={'SwapDirection',0},
+    [0xE9]={'Tongue',0},[0xEA]={'WriteDirection',1},[0xEB]={'XSpeedByShadow',0},
+    [0xEC]={'SwapDirection',0},[0xED]={'CreateImpactFrame37',0},[0xEE]={'CreateImpactFrame38',0},
+    [0xEF]={'CreateObject32',0},[0xF0]={'SoundFlag',1},[0xF1]={'PlaySound',2},
+    [0xF2]={'AddZ',0},[0xF3]={'CreateWeapon',1},[0xF4]={'HeldJumpZSpeed',0},
+    [0xF5]={'ClearDamageLatch',0},[0xF6]={'DirectionByX',0},
+}
+local EMPTY=table.freeze({})
+local IDS={}
+local function event(opcode,params,sourceByte,advance)
+    return freeze({kind=OPCODES[opcode][1],opcode=opcode,params=params,sourceByte=sourceByte,
+        advance=advance,appliesDamage=false})
+end
+local function prepare(clip)
+    local frames,events={},{}
+    local pointer,advance=1,0
+    while pointer&lt;=#clip.bytes do
+        local byte=clip.bytes[pointer]
+        if byte==0 then break end
+        if byte&lt;0xE0 then frames[#frames+1]=byte;advance+=1;pointer+=1
+        else
+            local count=OPCODES[byte][2]
+            local params={}
+            for i=1,count do params[i]=clip.bytes[pointer+i] end
+            events[#events+1]=event(byte,params,pointer-1+(clip.byteOffset or 0),advance)
+            pointer+=count+1
+        end
+    end
+    assert(pointer==#clip.bytes and clip.bytes[pointer]==0,'Source clip must end at its decoded terminator')
+    clip.frames=freeze(frames);clip.events=freeze(events)
+    clip.description=freeze({animationId=clip.id,label=clip.label,displayAdvances=#frames,
+        sourceLine=clip.line,sourceEndLine=clip.endLine,sourceFile='data/anims_moves.asm',
+        fallsThroughDeclaredBlock=clip.fallthrough==true,branch=clip.branch or 'Normal',
+        frameInterpretation='Caller postprocessing may transform these source frame values'})
+    freeze(clip.bytes)
+    return clip
+end
+for id,clip in pairs(CLIPS) do clip.id=id;prepare(clip);IDS[#IDS+1]=id end
+table.sort(IDS);freeze(IDS)
+DASH_TAIL.id=0x16;DASH_TAIL.branch='DashLowLifeTail';DASH_TAIL.byteOffset=0x37;prepare(DASH_TAIL)
+Animation.provenance=freeze({repository='feos-tas/DisAssemble',commit='f1a43b69577246850d136473700a333b3cdfe93f',
+    game='Battletoads USA NES',sourceCatalogSha256=CATALOG_SHA,
+    mainSha256='71042cf2a4a8fad952e9eb3bcb591cece666c5a790d7ea177b1908d052fca074',
+    animationSourceSha256='5dfbe797fa1299d6f6342dbd3a0b6af9e45ff44a0c214bf0cac676ef85e5d181',
+    scope='Static presentation domain; emulator timing, full family FSMs and three-player parity unverified',
+    unknown={'Complete remaining family animation state traces','Remaining boss appearances','Lag PCM and PAL timing','3D velocity/proportion mapping'}})
+
+local function selected(id,options)
+    local clip=integer(id) and CLIPS[id]
+    if not clip then return nil,'UNKNOWN_ANIMATION' end
+    if options~=nil and type(options)~='table' then return nil,'INVALID_OPTIONS' end
+    local branch=options and options.branch or 'Normal'
+    if branch=='Normal' then return clip end
+    if id==0x16 and branch=='DashLowLifeTail' then return DASH_TAIL end
+    return nil,'UNKNOWN_BRANCH'
+end
+function Animation.ids() return IDS end
+function Animation.describe(id,options)
+    local clip,code=selected(id,options)
+    return clip and clip.description or nil,code
+end
+function Animation.sampleAdvance(id,advance,options)
+    local clip,code=selected(id,options)
+    if not clip then return nil,code end
+    if not integer(advance) or advance&lt;0 then return nil,'INVALID_ADVANCE' end
+    local events={}
+    for _,row in ipairs(clip.events) do if row.advance==advance then events[#events+1]=row end end
+    return freeze({animationId=id,branch=clip.description.branch,advance=advance,
+        frameId=clip.frames[advance+1],ended=advance&gt;=#clip.frames,events=events})
+end
+function Animation.eventsBetween(id,previous,nextAdvance,options)
+    local clip,code=selected(id,options)
+    if not clip then return nil,code end
+    if not integer(previous) or previous&lt; -1 or not integer(nextAdvance) or nextAdvance&lt;previous then return nil,'INVALID_ADVANCE' end
+    local result={}
+    for _,row in ipairs(clip.events) do
+        if row.advance&gt;previous and row.advance&lt;=nextAdvance then result[#result+1]=row end
+    end
+    return freeze(result)
+end
+
+-- Models the byte interpreter and its caller clock only. Commands are markers:
+-- contact, speed, linkage and successful-hit pointer changes never execute here.
+-- Dash's verified alternate continuation is selected explicitly.
+local schedules={}
+local function schedule(clip,mask,phase,firstRead)
+    local key=clip.id..':'..clip.description.branch..':'..mask..':'..phase..':'..firstRead
+    if schedules[key] then return schedules[key] end
+    local result={rows={}}
+    local pointer=1
+    for tick=0,MAX_CALLS do
+        if (tick&gt;0 or firstRead=='Advance') and (phase+tick)%(mask+1)==0 then pointer+=1 end
+        local events={}
+        while true do
+            local byte=clip.bytes[pointer]
+            if byte==nil then result.error='SOURCE_BOUNDS';result.endTick=tick;break end
+            if byte==0 then
+                result.endTick=tick
+                result.rows[tick+1]=freeze({animationId=clip.id,branch=clip.description.branch,ended=true,
+                    sourceByte=pointer-1+(clip.byteOffset or 0),events=events})
+                break
+            end
+            if byte&lt;0xE0 then
+                result.rows[tick+1]=freeze({animationId=clip.id,branch=clip.description.branch,frameId=byte,ended=false,
+                    sourceByte=pointer-1+(clip.byteOffset or 0),events=events})
+                break
+            end
+            local opcode=OPCODES[byte]
+            if not opcode then result.error='UNKNOWN_OPCODE';result.endTick=tick;break end
+            local params={}
+            for i=1,opcode[2] do
+                params[i]=clip.bytes[pointer+i]
+                if params[i]==nil then result.error='SOURCE_BOUNDS' end
+            end
+            if result.error then result.endTick=tick;break end
+            events[#events+1]=event(byte,params,pointer-1+(clip.byteOffset or 0),nil)
+            pointer+=opcode[2]+1
+        end
+        if result.endTick then break end
+    end
+    assert(result.endTick,'Finite source clip exceeded the explicit clock bound')
+    schedules[key]=result
+    return result
+end
+function Animation.sampleClock(id,clock)
+    local clip,code=selected(id,clock)
+    if not clip then return nil,code end
+    if type(clock)~='table' then return nil,'INVALID_CLOCK' end
+    local calls,mask,phase=clock.elapsedCalls,clock.callerMask,clock.firstFrameCounterPhase
+    local firstRead=clock.firstRead or (clock.branch=='DashLowLifeTail' and 'Read' or 'Advance')
+    if not integer(calls) or calls&lt;0 or calls&gt;MAX_CALLS or (mask~=0 and mask~=1 and mask~=3)
+        or not integer(phase) or phase&lt;0 or phase&gt;mask or (firstRead~='Read' and firstRead~='Advance')
+        or (clock.branch=='DashLowLifeTail' and firstRead~='Read') then return nil,'INVALID_CLOCK' end
+    local timeline=schedule(clip,mask,phase,firstRead)
+    if calls&gt;=timeline.endTick and timeline.error then return nil,timeline.error end
+    local sample=timeline.rows[math.min(calls,timeline.endTick)+1]
+    -- End-command markers belong to the termination call, not every later sample.
+    if calls&gt;timeline.endTick then return freeze({animationId=id,branch=clip.description.branch,ended=true,
+        sourceByte=sample.sourceByte,events=EMPTY,endedAtCall=timeline.endTick}) end
+    return sample
+end
+function Animation.callerMask(family)
+    local masks={Hero=1,Pig=3,TallWalker=0,Dragon=3}
+    local mask=masks[family]
+    if mask==nil then return nil,'UNKNOWN_CALLER' end
+    return mask
+end
+
+local HERO={Walk={4,5,4,8,6,7,6,3},Run={5,5,8,8,7,7,3,3},CarryWalk={0x11,0x12,0x11,0x10},DepthWalk={1,9,1,0xA}}
+local DRAGON={9,9,10,10}
+local function inputRow(input)
+    if input==nil then return {} end
+    if type(input)=='table' then return input end
+end
+local function phaseIndex(input,length)
+    local phase=input.phase or 0
+    if not integer(phase) or phase&lt;0 then return nil end
+    return phase%length+1
+end
+local function rawByte(value) return integer(value) and value&gt;= -128 and value&lt;=255 end
+function Animation.heroFrame(state,input)
+    input=inputRow(input)
+    if not input then return nil,'INVALID_STATE_INPUT' end
+    if state=='Idle' then return input.blink==true and 2 or 1 end
+    if state=='CarryIdle' then return 0x11 end
+    if HERO[state] then
+        local index=phaseIndex(input,#HERO[state])
+        if not index then return nil,'INVALID_STATE_INPUT' end
+        return HERO[state][index]
+    end
+    if state=='Air' then
+        if input.holding==true then return 0x2E end
+        if not rawByte(input.zSpeedRaw) then return nil,'INVALID_STATE_INPUT' end
+        return (input.zSpeedRaw+2)%256&lt;5 and 0x2D or 5
+    end
+    return nil,'UNKNOWN_STATE'
+end
+function Animation.dragonFrame(state,input)
+    input=inputRow(input)
+    if not input then return nil,'INVALID_STATE_INPUT' end
+    if state=='Disabled' then return 0xA end
+    if state=='Attack' or state=='Capture' then return 0xB end
+    if state=='LightReaction' then
+        if not integer(input.timerRaw) or input.timerRaw&lt;0 or input.timerRaw&gt;255 then return nil,'INVALID_STATE_INPUT' end
+        if input.timerRaw&gt;=0x26 then return 0xC end
+    elseif state~='Locomotion' then return nil,'UNKNOWN_STATE' end
+    local index=phaseIndex(input,4)
+    if not index then return nil,'INVALID_STATE_INPUT' end
+    if input.zSpeedRaw~=nil and not rawByte(input.zSpeedRaw) then return nil,'INVALID_STATE_INPUT' end
+    if state=='Locomotion' and input.approaching==true and input.zSpeedRaw~=nil and input.zSpeedRaw%256~=0 then return 9 end
+    return DRAGON[index]
+end
+
+local INTRO_EVENTS=freeze({
+    {counter=0x30,kind='Stomp',soundId=0x62,shakeRaw=0xF8},
+    {counter=0x50,kind='FootMotionStarted',frameId=0x12},
+    {counter=0x64,kind='Stomp',soundId=0x62,shakeRaw=0xF8},
+    {counter=0xE0,kind='ArenaCut',musicLevelId=0xE,bank6Function=0x5D},
+    {counter=0xFF,kind='IntroEnded'},
+})
+function Animation.bossWalkerIntro(counter)
+    if not integer(counter) or counter&lt;1 or counter&gt;255 then return nil,'INVALID_COUNTER' end
+    local ended=counter==255
+    local cut=counter==0xE0
+    local fear=not ended and not cut and (counter&lt;0xE0 and 0x2C or 0x2E) or nil
+    return freeze({counter=counter,ended=ended,phase=ended and 'Complete' or (counter&lt;0xE0 and 'BeforeCut' or 'AfterCut'),
+        stomp=counter==0x30 or counter==0x64,footFrame=counter&gt;=0x50 and not ended and 0x12 or nil,
+        footMotion=counter&gt;=0x50 and not ended and not cut,cameraCut=cut,
+        fearAnimation=fear,fearFrame=fear and (fear==0x2C and 0x32 or 0x33) or nil,
+        fearPointerMask=fear and 7 or nil,clearExistingFear=false,
+        dropStick=fear~=nil,unlinkCarriedObject=fear~=nil,sourceHeroSlots=2})
+end
+function Animation.bossWalkerEventsBetween(previous,counter)
+    if not integer(previous) or previous&lt;0 or previous&gt;255 or not integer(counter) or counter&lt;previous or counter&gt;255 then return nil,'INVALID_COUNTER' end
+    local result={}
+    for _,row in ipairs(INTRO_EVENTS) do if row.counter&gt;previous and row.counter&lt;=counter then result[#result+1]=row end end
+    return freeze(result)
+end
+return freeze(Animation)
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT12">
+          <Properties>
+            <string name="Name">CanonicalWalker</string>
+            <ProtectedString name="Source">-- Source-pixel presentation only: pinned Battletoads USA NES renderer.
+-- Coordinates are relative to the prepared ground anchor, not world studs.
+-- Actor identity, world motion, source clock, hit acceptance and physics belong to callers.
+local Walker={}
+local SHAFT_TILES=table.freeze({0xd0,0xd0,0xd1,0xd2,0xd4,0xd4,0xd4,0xd4,0xd4,0xd4,0xd4,0xd4,0xd4,0xd4,0xd4})
+local BODY={
+    {tile=0xc9,x=-5,y=-32,attributes=2},
+    {tile=0xca,x=-9,y=-24,attributes=2},
+    {tile=0xcb,x=-4,y=-24,attributes=2},
+    {tile=0xcc,x=-9,y=-16,attributes=2},
+    {tile=0xcd,x=-5,y=-16,attributes=2},
+    {tile=0xce,x=-7,y=-8,attributes=2},
+    {tile=0xcf,x=-4,y=-8,attributes=2},
+}
+for _,part in ipairs(BODY)do table.freeze(part)end
+table.freeze(BODY)
+local function sourceValues(values)
+    local set={};for _,value in ipairs(values)do set[value]=true end
+    return table.freeze(set)
+end
+local ATTACK_VALUES=table.freeze({
+    [0x3a]=sourceValues({8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42}),
+    [0x3c]=sourceValues({8,12,14,16,20,24,28,32,36,40}),
+})
+local function integer(value,minimum,maximum)
+    return type(value)=='number'and value==value and value%1==0 and value&gt;=minimum and value&lt;=maximum
+end
+
+local function leg(delta,segments,startY)
+    -- sub_6000_8A4B uses logical shifts plus sign restoration. Its accumulator
+    -- is equivalent to this signed integer step and positive fractional byte.
+    local step=math.floor(delta/segments)
+    local fractionByte=(delta-step*segments)*256/segments
+    local slope=math.abs(step)
+    local tile=SHAFT_TILES[slope+1]
+    if not tile then return nil,'UNKNOWN'end
+    local attributes=step&lt;0 and 2 or 0x42
+    local sprites={}
+    local x,fraction=125,0 -- source screen-safe X_shadow128 minus3.
+    for index=1,segments do
+        sprites[index]={tile=tile,x=x-128,y=startY+(index-1)*8,attributes=attributes}
+        fraction+=fractionByte
+        local carry=math.floor(fraction/256)
+        fraction%=256
+        x+=step+carry
+        -- A source screen-edge return is not a complete model pose.
+        if x&lt;0 or x&gt;255 then return nil,'UNKNOWN'end
+    end
+    sprites[segments].tile=0xd3
+    return {delta=delta,segments=segments,integerStep=step,fractionByte=fractionByte,
+        slopeIndex=slope,start={x=-3,y=startY},attributes=attributes,sprites=sprites}
+end
+
+function Walker.pose(objectType,firstDelta,secondDelta)
+    if not integer(objectType,0,255)or not integer(firstDelta,-128,127)or not integer(secondDelta,-128,127)then
+        return nil,'INVALID_INPUT'
+    end
+    if objectType~=0x11 and objectType~=0x12 then return nil,'UNKNOWN'end
+    local segments=objectType==0x11 and 8 or 4
+    local startY=-(segments-1)*8
+    local first,reason=leg(firstDelta,segments,startY)
+    if not first then return nil,reason end
+    local second;second,reason=leg(secondDelta,segments,startY-2)
+    if not second then return nil,reason end
+    -- tall_walker_sprites restores the body after drawing both shafts. The
+    -- source SBC borrow makes slopes0 and1 share the same normalized height.
+    local head={x=0,y=startY-1+math.max(0,second.slopeIndex-1)}
+    local sprites,bodySprites={},{}
+    for _,shaft in ipairs({first,second})do
+        for _,part in ipairs(shaft.sprites)do sprites[#sprites+1]=part end
+    end
+    for _,source in ipairs(BODY)do
+        local part={tile=source.tile,x=source.x,y=source.y+head.y,attributes=source.attributes}
+        bodySprites[#bodySprites+1]=part;sprites[#sprites+1]=part
+    end
+    return {objectType=objectType,units='sourcePixels',bodyGraphicsFrame=0x19,headAnchor=head,
+        legStarts={{x=-3,y=startY},{x=-3,y=startY-2}},legs={first,second},
+        bodySprites=bodySprites,sprites=sprites}
+end
+
+function Walker.attackOffsets(animationId,streamValue,facingLeft)
+    if not integer(animationId,0,255)or not integer(streamValue,0,255)or type(facingLeft)~='boolean'then
+        return nil,'INVALID_INPUT'
+    end
+    local values=ATTACK_VALUES[animationId]
+    if not values or not values[streamValue]then return nil,'UNKNOWN'end
+    -- sub_0_95BA reflects the source stream delta by direction. The following
+    -- branch holds the other light leg at bodyX, or arithmetic-shifts -delta
+    -- by one for the heavy leg. These values are endpoints, not gfx frames.
+    local delta=streamValue-0x18
+    if facingLeft then delta=-delta end
+    return {firstDelta=delta,secondDelta=animationId==0x3a and math.floor(-delta/2)or 0}
+end
+
+return table.freeze(Walker)
+</ProtectedString>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="BT13">
+          <Properties>
             <string name="Name">CharacterAppearance</string>
-            <ProtectedString name="Source">-- Generated Green art retargeted cosmetically. Never replaces the R6 physical rig.
+            <ProtectedString name="Source">-- Tagged canonical P1/P2 resources and an explicit legacy Green study fallback.
+-- Retargeting still follows existing R6 deltas; source pose/morph binding is separate.
+-- Never replaces the R6 physical rig.
 -- Caller must pin server network ownership AFTER all cosmetic parts are attached.
 local Appearance={}
 local JOINTS={
@@ -730,6 +1151,29 @@ local JOINTS={
 }
 local RIG_NAMES={'Neck','Left Shoulder','Right Shoulder','Left Hip','Right Hip'}
 local HIDDEN={Torso=true,Head=true,['Left Arm']=true,['Right Arm']=true,['Left Leg']=true,['Right Leg']=true,Eye=true}
+local CANONICAL={['Mr. Green']='CanonicalPlayer1',['Mr. Yellow']='CanonicalPlayer2'}
+local function resource(templates,heroTemplate)
+    local name=CANONICAL[heroTemplate]
+    if not name then return nil,'NO_CHARACTER_RESOURCE' end
+    local candidate=templates and templates:FindFirstChild(name)
+    if candidate then
+        if not candidate:IsA('Model') then return nil,'INVALID_CHARACTER_RESOURCE' end
+        local profile=candidate:FindFirstChild('AppearanceProfile')
+        if profile then
+            if not profile:IsA('StringValue') or profile.Value~='CanonicalNESHero' then return nil,'UNKNOWN_APPEARANCE_PROFILE' end
+            return candidate,'CanonicalNESHero',0
+        end
+    end
+    -- Only the historical GreenToad name can opt into the old generated study.
+    -- Untagged canonical resources cannot stand in for either canonical player.
+    if heroTemplate~='Mr. Green' then return nil,'NO_CHARACTER_RESOURCE' end
+    local legacy=templates and templates:FindFirstChild('GreenToad')
+    if not legacy then return nil,'NO_CHARACTER_RESOURCE' end
+    if not legacy:IsA('Model') then return nil,'INVALID_CHARACTER_RESOURCE' end
+    local profile=legacy:FindFirstChild('AppearanceProfile')
+    if profile and (not profile:IsA('StringValue') or profile.Value~='LegacyGeneratedGreen') then return nil,'UNKNOWN_APPEARANCE_PROFILE' end
+    return legacy,'LegacyGeneratedGreen',math.rad(45)
+end
 local function scaled(frame,scale)
     return CFrame.new(frame.Position*scale)*frame.Rotation
 end
@@ -746,6 +1190,10 @@ function Appearance.detach(actor)
     state.model:Destroy()
     for part,transparency in pairs(state.hidden) do
         if part.Parent and part:IsDescendantOf(state.ownerModel) then part.Transparency=transparency end
+    end
+    if state.metadataCaptured and state.ownerModel.Parent then
+        state.ownerModel:SetAttribute('Template',state.previousTemplate)
+        state.ownerModel:SetAttribute('Appearance',state.previousAppearance)
     end
 end
 
@@ -764,10 +1212,10 @@ function Appearance.update(actor)
     for _,definition in ipairs(JOINTS) do
         local name,source=definition[1],definition[4]
         local delta=source and deltas[source] or CFrame.new()
-        -- The generated neutral pose has splayed arms. This is cosmetic fitting,
-        -- not a gameplay shoulder offset or a new attack/active window.
-        if name=='LeftShoulder' then delta=delta*CFrame.Angles(0,0,math.rad(45))
-        elseif name=='RightShoulder' then delta=delta*CFrame.Angles(0,0,math.rad(-45))
+        -- Only the old generated study needs the splayed-arm correction.
+        -- Canonical resources keep their authored shoulder orientation.
+        if name=='LeftShoulder' then delta=delta*CFrame.Angles(0,0,state.shoulderRoll)
+        elseif name=='RightShoulder' then delta=delta*CFrame.Angles(0,0,-state.shoulderRoll)
         elseif name=='LeftElbow' or name=='RightElbow' then
             local shoulder=name=='LeftElbow' and 'Left Shoulder' or 'Right Shoulder'
             delta=CFrame.Angles(math.clamp(.15+math.max(0,pitches[shoulder])*.2,.15,.7),0,0)
@@ -781,15 +1229,12 @@ function Appearance.update(actor)
 end
 
 function Appearance.attach(actor,heroTemplate,templates)
-    -- A single generated Green is not a Yellow/Brown avatar catalogue.
-    if heroTemplate~='Mr. Green' then return false,'NO_CHARACTER_RESOURCE' end
-    if actor.appearance then
-        if actor.appearance.ownerModel==actor.model then return true end
-        Appearance.detach(actor)
-    end
     templates=templates or game:GetService('ServerStorage'):FindFirstChild('BrickToadsCharacterTemplates')
-    local template=templates and templates:FindFirstChild('GreenToad')
-    if not template then return false,'NO_CHARACTER_RESOURCE' end
+    local template,profile,shoulderRoll=resource(templates,heroTemplate)
+    if not template then return false,profile end
+    local previous=actor.appearance
+    if previous and previous.ownerModel==actor.model and previous.sourceTemplate==template
+        and previous.heroTemplate==heroTemplate and previous.profile==profile then return true end
     local rig={}
     for _,part in ipairs(actor.model:GetDescendants()) do
         if part:IsA('Motor6D') then
@@ -800,7 +1245,7 @@ function Appearance.attach(actor,heroTemplate,templates)
         end
     end
     for _,name in ipairs(RIG_NAMES) do if not rig[name] then return false,'NO_R6_POSE_RIG' end end
-    local clone=template:Clone();clone.Name='GreenToadAppearance'
+    local clone=template:Clone();clone.Name=template.Name..'Appearance'
     local ok,state=pcall(function()
         local scale=assert(clone:FindFirstChild('AppearanceScale'),'Missing fit scale').Value
         assert(type(scale)=='number' and scale&gt;0 and scale&lt;=2,'Invalid fit scale')
@@ -828,14 +1273,23 @@ function Appearance.attach(actor,heroTemplate,templates)
         end
         motor('Root',lower,torso,lower,rootOffset,CFrame.new())
         for _,part in ipairs(clone:GetChildren()) do if part:IsA('MeshPart') then part.CFrame=torso.CFrame*part.CFrame end end
-        return {model=clone,ownerModel=actor.model,rig=rig,joints=joints,hidden={}}
+        return {model=clone,ownerModel=actor.model,sourceTemplate=template,heroTemplate=heroTemplate,
+            profile=profile,shoulderRoll=shoulderRoll,rig=rig,joints=joints,hidden={}}
     end)
     if not ok then clone:Destroy();return false,'INVALID_CHARACTER_RESOURCE: '..tostring(state) end
+    -- Preparation touches only the clone. An invalid replacement must leave an
+    -- existing appearance, visibility and presentation metadata intact.
+    if previous then Appearance.detach(actor) end
+    state.previousTemplate=actor.model:GetAttribute('Template')
+    state.previousAppearance=actor.model:GetAttribute('Appearance')
+    state.metadataCaptured=true
     clone.Parent=actor.model
     actor.appearance=state
     for _,part in ipairs(actor.model:GetChildren()) do if part:IsA('BasePart') and HIDDEN[part.Name] then
         state.hidden[part]=part.Transparency;part.Transparency=1
     end end
+    actor.model:SetAttribute('Template',heroTemplate)
+    actor.model:SetAttribute('Appearance',profile)
     Appearance.update(actor)
     return true
 end
@@ -844,7 +1298,7 @@ return Appearance
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT12">
+        <Item class="ModuleScript" referent="BT14">
           <Properties>
             <string name="Name">DragonFlight</string>
             <ProtectedString name="Source">-- Temporary transport over existing actors. Damage/resources remain owned by Session/Director.
@@ -1135,7 +1589,7 @@ return Flight
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT13">
+        <Item class="ModuleScript" referent="BT15">
           <Properties>
             <string name="Name">DragonWorld</string>
             <ProtectedString name="Source">-- Roblox physical boundary for same-body Dragon transport; all coordinates passed in are group-local.
@@ -1362,7 +1816,7 @@ end
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT14">
+        <Item class="ModuleScript" referent="BT16">
           <Properties>
             <string name="Name">EnemyCarry</string>
             <ProtectedString name="Source">-- Existing-body Pig pickup/throw. Reach, timing and ordinary damage are Roblox calibration.
@@ -1586,7 +2040,7 @@ return EnemyCarry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT15">
+        <Item class="ModuleScript" referent="BT17">
           <Properties>
             <string name="Name">GameConfig</string>
             <ProtectedString name="Source">-- Original playable prototype calibration. Resource limits are canonical.
@@ -1664,7 +2118,7 @@ end
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT16">
+        <Item class="ModuleScript" referent="BT18">
           <Properties>
             <string name="Name">GameController</string>
             <ProtectedString name="Source">-- One group's runtime. Player identity comes from the server, never from payload fields.
@@ -2075,7 +2529,7 @@ return Controller
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT17">
+        <Item class="ModuleScript" referent="BT19">
           <Properties>
             <string name="Name">GameWorld</string>
             <ProtectedString name="Source">-- Original first-level presentation. Combat and hero physics stay in BaseWorld.
@@ -3675,7 +4129,7 @@ return World
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT18">
+        <Item class="ModuleScript" referent="BT20">
           <Properties>
             <string name="Name">GuardianPattern</string>
             <ProtectedString name="Source">-- Original 3D tuning around the source's ground-ball pickup/throw guardian chain.
@@ -3953,7 +4407,7 @@ return GuardianPattern
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT19">
+        <Item class="ModuleScript" referent="BT21">
           <Properties>
             <string name="Name">HealingFlies</string>
             <ProtectedString name="Source">-- Source-backed food arithmetic; flight, reach and timing are Roblox calibration.
@@ -4089,7 +4543,7 @@ return HealingFlies
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT20">
+        <Item class="ModuleScript" referent="BT22">
           <Properties>
             <string name="Name">LevelDefinition</string>
             <ProtectedString name="Source">-- Original Brick Toads geography; static actor order is derived from upstream level1_cfg.
@@ -4143,7 +4597,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT21">
+        <Item class="ModuleScript" referent="BT23">
           <Properties>
             <string name="Name">LevelDirector</string>
             <ProtectedString name="Source">-- Original prototype encounters. All decisions run on the server.
@@ -4789,7 +5243,7 @@ return Director
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT22">
+        <Item class="ModuleScript" referent="BT24">
           <Properties>
             <string name="Name">LevelVariation</string>
             <ProtectedString name="Source">-- Original authored sections, not copied NES layouts or player navigation assistance.
@@ -4940,7 +5394,7 @@ return Variation
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT23">
+        <Item class="ModuleScript" referent="BT25">
           <Properties>
             <string name="Name">MatchHub</string>
             <ProtectedString name="Source">-- Current-Player authority and routing for independent local playable groups.
@@ -5311,7 +5765,7 @@ return MatchHub
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT24">
+        <Item class="ModuleScript" referent="BT26">
           <Properties>
             <string name="Name">RunJournal</string>
             <ProtectedString name="Source">-- Bounded private evidence and an allowlisted view of the same server records.
@@ -5421,7 +5875,7 @@ return Journal
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT25">
+        <Item class="ModuleScript" referent="BT27">
           <Properties>
             <string name="Name">SourceCombat</string>
             <ProtectedString name="Source">-- Source-state action choice. Public controls never carry target, Life or profile.
@@ -5474,7 +5928,7 @@ return SourceCombat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT26">
+        <Item class="ModuleScript" referent="BT28">
           <Properties>
             <string name="Name">WalkerClubs</string>
             <ProtectedString name="Source">-- One source-backed Walker leg-club per combat death. Geometry/timing/NPC HP are Roblox calibration.
@@ -5688,11 +6142,11 @@ return WalkerClubs
           </Properties>
         </Item>
       </Item>
-      <Item class="Folder" referent="BT27">
+      <Item class="Folder" referent="BT29">
         <Properties>
           <string name="Name">CombatRuntime</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT28">
+        <Item class="ModuleScript" referent="BT30">
           <Properties>
             <string name="Name">Combat</string>
             <ProtectedString name="Source">-- Source arithmetic is independent from the stand's physical and UI calibration.
@@ -5775,7 +6229,7 @@ return Combat
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT29">
+        <Item class="ModuleScript" referent="BT31">
           <Properties>
             <string name="Name">Session</string>
             <ProtectedString name="Source">-- Synchronous coordinator: World methods must not yield or partially commit a failed spawn.
@@ -6132,7 +6586,7 @@ return Session
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT30">
+        <Item class="ModuleScript" referent="BT32">
           <Properties>
             <string name="Name">Config</string>
             <ProtectedString name="Source">-- All spatial/timing values below are stand calibration, not measured NES units.
@@ -6162,7 +6616,7 @@ return {
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT31">
+        <Item class="ModuleScript" referent="BT33">
           <Properties>
             <string name="Name">ConnectionRegistry</string>
             <ProtectedString name="Source">-- Authority belongs to the current Player object, not merely its UserId.
@@ -6222,7 +6676,7 @@ return Registry
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT32">
+        <Item class="ModuleScript" referent="BT34">
           <Properties>
             <string name="Name">RobloxWorld</string>
             <ProtectedString name="Source">-- Original stand geometry and server-owned physical bodies. No ROM assets or client positions.
@@ -6502,24 +6956,24 @@ return World
           </Properties>
         </Item>
       </Item>
-      <Item class="ModuleScript" referent="BT49">
+      <Item class="ModuleScript" referent="BT51">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='77f80c0a2f23429e4ae8147701ee24e096c083a2de567b2257f845a7a73afe51'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='8f36c327f1e1a6ddb4c901ea034bdad99495f88bf04cccde1232fea41bdffc94'})
 </ProtectedString>
         </Properties>
       </Item>
     </Item>
   </Item>
-  <Item class="ReplicatedStorage" referent="BT33">
+  <Item class="ReplicatedStorage" referent="BT35">
     <Properties>
       <string name="Name">ReplicatedStorage</string>
     </Properties>
-    <Item class="Folder" referent="BT34">
+    <Item class="Folder" referent="BT36">
       <Properties>
         <string name="Name">BrickToads</string>
       </Properties>
-      <Item class="ModuleScript" referent="BT35">
+      <Item class="ModuleScript" referent="BT37">
         <Properties>
           <string name="Name">BrickToadsConfig</string>
           <ProtectedString name="Source">-- BrickToads metadata shared by the server and client entry points.
@@ -6529,7 +6983,7 @@ return table.freeze({
 </ProtectedString>
         </Properties>
       </Item>
-      <Item class="ModuleScript" referent="BT36">
+      <Item class="ModuleScript" referent="BT38">
         <Properties>
           <string name="Name">TextCatalog</string>
           <ProtectedString name="Source">-- English source strings and curated Russian translations. No user display names.
@@ -6904,7 +7358,7 @@ return Catalog
 </ProtectedString>
         </Properties>
       </Item>
-      <Item class="ModuleScript" referent="BT37">
+      <Item class="ModuleScript" referent="BT39">
         <Properties>
           <string name="Name">TextLocalization</string>
           <ProtectedString name="Source">-- Standard Roblox table/translator adapter. Engine services are injected for native contracts.
@@ -7000,25 +7454,25 @@ return Localization
       </Item>
     </Item>
   </Item>
-  <Item class="StarterGui" referent="BT38">
+  <Item class="StarterGui" referent="BT40">
     <Properties>
       <string name="Name">StarterGui</string>
       <token name="ScreenOrientation">4</token>
     </Properties>
   </Item>
-  <Item class="StarterPlayer" referent="BT39">
+  <Item class="StarterPlayer" referent="BT41">
     <Properties>
       <string name="Name">StarterPlayer</string>
     </Properties>
-    <Item class="StarterPlayerScripts" referent="BT40">
+    <Item class="StarterPlayerScripts" referent="BT42">
       <Properties>
         <string name="Name">StarterPlayerScripts</string>
       </Properties>
-      <Item class="Folder" referent="BT41">
+      <Item class="Folder" referent="BT43">
         <Properties>
           <string name="Name">BrickToads</string>
         </Properties>
-        <Item class="ModuleScript" referent="BT42">
+        <Item class="ModuleScript" referent="BT44">
           <Properties>
             <string name="Name">BossQueuePanel</string>
             <ProtectedString name="Source">-- Private queue presentation. Joining never creates a body; the server owns the offer and role.
@@ -7234,7 +7688,7 @@ return BossQueuePanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="LocalScript" referent="BT43">
+        <Item class="LocalScript" referent="BT45">
           <Properties>
             <string name="Name">BrickToadsClient</string>
             <ProtectedString name="Source">-- Presentation and input only. The server owns the run, actors and combat.
@@ -8678,7 +9132,7 @@ sendIntent({kind = "Sync"})
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT44">
+        <Item class="ModuleScript" referent="BT46">
           <Properties>
             <string name="Name">CombatFeedback</string>
             <ProtectedString name="Source">-- Confirmed presentation only. This module never sends input or changes actors.
@@ -8834,7 +9288,7 @@ return Feedback
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT45">
+        <Item class="ModuleScript" referent="BT47">
           <Properties>
             <string name="Name">GroupPanel</string>
             <ProtectedString name="Source">-- Group selection changes the observed world; membership and role eligibility stay server-owned.
@@ -9079,7 +9533,7 @@ return GroupPanel
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT46">
+        <Item class="ModuleScript" referent="BT48">
           <Properties>
             <string name="Name">MovementInput</string>
             <ProtectedString name="Source">-- Native Bool actions own hardware/touch aggregation; this model owns tap timing.
@@ -9127,7 +9581,7 @@ return MovementInput
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT47">
+        <Item class="ModuleScript" referent="BT49">
           <Properties>
             <string name="Name">RobloxInputBindings</string>
             <ProtectedString name="Source">-- Standard IAS Bool actions aggregate keyboard and UIButton presses natively.
@@ -9200,7 +9654,7 @@ return RobloxInputBindings
 </ProtectedString>
           </Properties>
         </Item>
-        <Item class="ModuleScript" referent="BT48">
+        <Item class="ModuleScript" referent="BT50">
           <Properties>
             <string name="Name">SpectatorCamera</string>
             <ProtectedString name="Source">-- Presentation-only camera. It never knows about remotes or combat intents.
@@ -9366,6 +9820,2380 @@ end
 return SpectatorCamera
 </ProtectedString>
           </Properties>
+        </Item>
+      </Item>
+    </Item>
+  </Item>
+  <Item class="ServerStorage" referent="BT52">
+    <Properties>
+      <string name="Name">ServerStorage</string>
+    </Properties>
+    <Item class="Folder" referent="BT53">
+      <Properties>
+        <string name="Name">BrickToadsCharacterTemplates</string>
+      </Properties>
+      <Item class="Model" referent="BT54">
+        <Properties>
+          <string name="Name">CanonicalPlayer1</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT55">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT56">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">38d06981e76e41512a1ee9d364f48bcea14155f22c3b4990b7c3a1f707acc7fd</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT57">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHero</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT58">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">128871683590726</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT59">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT60">
+          <Properties>
+            <string name="Name">Head</string>
+            <Content name="MeshId">
+              <url>rbxassetid://131645910170028</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.65407395362854</X>
+              <Y>1.5070346593856812</Y>
+              <Z>1.4360696077346802</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>2.0435878468560986e-05</X>
+              <Y>2.283517360687256</Y>
+              <Z>-0.25463104248046875</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT61">
+            <Properties>
+              <string name="Name">NeckRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>1.9813292965409346e-05</X>
+                <Y>-0.40351736545562744</Y>
+                <Z>-0.22463104128837585</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT62">
+          <Properties>
+            <string name="Name">LeftFoot</string>
+            <Content name="MeshId">
+              <url>rbxassetid://102246934206143</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.0317468643188477</X>
+              <Y>0.6196971535682678</Y>
+              <Z>1.7709153890609741</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-0.8773258924484253</X>
+              <Y>-2.6898488998413086</Y>
+              <Z>-0.525910496711731</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT63">
+            <Properties>
+              <string name="Name">LeftAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.1273277997970581</X>
+                <Y>0.08984899520874023</Y>
+                <Z>-0.6659101247787476</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT64">
+          <Properties>
+            <string name="Name">LeftHand</string>
+            <Content name="MeshId">
+              <url>rbxassetid://92120494933526</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.8998836874961853</X>
+              <Y>0.9796020984649658</Y>
+              <Z>0.6299983263015747</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-1.680053949356079</X>
+              <Y>-0.42980122566223145</Y>
+              <Z>-0.2050127238035202</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT65">
+            <Properties>
+              <string name="Name">LeftWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.07994592189788818</X>
+                <Y>0.24980121850967407</Y>
+                <Z>-0.07501295208930969</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT66">
+          <Properties>
+            <string name="Name">LeftLowerArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://123481559381186</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.7274525165557861</X>
+              <Y>1.154697299003601</Y>
+              <Z>0.6591212749481201</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-1.758718490600586</X>
+              <Y>0.3026511073112488</Y>
+              <Z>-0.014577592723071575</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT67">
+            <Properties>
+              <string name="Name">LeftElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.07871878147125244</X>
+                <Y>0.2773488759994507</Y>
+                <Z>-0.044577375054359436</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT68">
+            <Properties>
+              <string name="Name">LeftWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.0012818574905395508</X>
+                <Y>-0.48265111446380615</Y>
+                <Z>0.11542240530252457</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT69">
+          <Properties>
+            <string name="Name">LeftLowerLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://96842460378664</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.6796808838844299</X>
+              <Y>1.5057052373886108</Y>
+              <Z>0.7928961515426636</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-0.7299832105636597</X>
+              <Y>-1.922852635383606</Y>
+              <Z>-0.01354217529296875</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT70">
+            <Properties>
+              <string name="Name">LeftAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.02001631259918213</X>
+                <Y>-0.6771472692489624</Y>
+                <Z>-0.15354222059249878</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT71">
+            <Properties>
+              <string name="Name">LeftKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.009982883930206299</X>
+                <Y>0.4628525972366333</Y>
+                <Z>0.11645784974098206</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT72">
+          <Properties>
+            <string name="Name">LeftUpperArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://127847833295371</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.309777021408081</X>
+              <Y>1.4328362941741943</Y>
+              <Z>0.8633320927619934</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-1.2648718357086182</X>
+              <Y>1.1835817098617554</Y>
+              <Z>0.0377655029296875</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT73">
+            <Properties>
+              <string name="Name">LeftElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.41512811183929443</X>
+                <Y>-0.6035817265510559</Y>
+                <Z>0.007764352485537529</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT74">
+            <Properties>
+              <string name="Name">LeftShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.23487186431884766</X>
+                <Y>0.2864183187484741</Y>
+                <Z>0.03776615485548973</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT75">
+          <Properties>
+            <string name="Name">LeftUpperLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://129814698200342</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.9449843764305115</X>
+              <Y>1.564688801765442</Y>
+              <Z>0.8574238419532776</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-0.6224768161773682</X>
+              <Y>-0.7223443984985352</Y>
+              <Z>0.0190462376922369</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT76">
+            <Properties>
+              <string name="Name">LeftHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.12247687578201294</X>
+                <Y>0.4223443865776062</Y>
+                <Z>-0.020953422412276268</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT77">
+            <Properties>
+              <string name="Name">LeftKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.09752368927001953</X>
+                <Y>-0.7376556396484375</Y>
+                <Z>0.14904595911502838</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT78">
+          <Properties>
+            <string name="Name">LowerTorso</string>
+            <Content name="MeshId">
+              <url>rbxassetid://108074611621128</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.3029628992080688</X>
+              <Y>0.9529001712799072</Y>
+              <Z>0.8663848042488098</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>1.3623918675875757e-05</X>
+              <Y>-0.09645010530948639</Y>
+              <Z>0.06580352783203125</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT79">
+            <Properties>
+              <string name="Name">LeftHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.5000138282775879</X>
+                <Y>-0.20354990661144257</Y>
+                <Z>0.025802142918109894</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT80">
+            <Properties>
+              <string name="Name">RightHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.4999864399433136</X>
+                <Y>-0.20354990661144257</Y>
+                <Z>0.02580491453409195</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT81">
+            <Properties>
+              <string name="Name">WaistRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>1.3695439520233776e-05</X>
+                <Y>0.23645010590553284</Y>
+                <Z>0.02580352872610092</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT82">
+          <Properties>
+            <string name="Name">RightFoot</string>
+            <Content name="MeshId">
+              <url>rbxassetid://97495564292839</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.0317466259002686</X>
+              <Y>0.6196971535682678</Y>
+              <Z>1.7709153890609741</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.8773462772369385</X>
+              <Y>-2.6898488998413086</Y>
+              <Z>-0.525910496711731</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT83">
+            <Properties>
+              <string name="Name">RightAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.12734448909759521</X>
+                <Y>0.08984899520874023</Y>
+                <Z>-0.6659108400344849</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT84">
+          <Properties>
+            <string name="Name">RightHand</string>
+            <Content name="MeshId">
+              <url>rbxassetid://127102422408736</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.8998836874961853</X>
+              <Y>0.9796020984649658</Y>
+              <Z>0.6299983263015747</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>1.6800812482833862</X>
+              <Y>-0.42980122566223145</Y>
+              <Z>-0.20498548448085785</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT85">
+            <Properties>
+              <string name="Name">RightWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.07991909980773926</X>
+                <Y>0.24980121850967407</Y>
+                <Z>-0.07498526573181152</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT86">
+          <Properties>
+            <string name="Name">RightLowerArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://76679497778578</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.7274525165557861</X>
+              <Y>1.154697299003601</Y>
+              <Z>0.6591212749481201</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>1.7587388753890991</X>
+              <Y>0.3026511073112488</Y>
+              <Z>-0.01455034501850605</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT87">
+            <Properties>
+              <string name="Name">RightElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.07873892784118652</X>
+                <Y>0.2773488759994507</Y>
+                <Z>-0.04455056041479111</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT88">
+            <Properties>
+              <string name="Name">RightWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.0012607574462890625</X>
+                <Y>-0.48265111446380615</Y>
+                <Z>0.11544965207576752</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT89">
+          <Properties>
+            <string name="Name">RightLowerLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://112638236341237</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.6796808838844299</X>
+              <Y>1.5057052373886108</Y>
+              <Z>0.7928961515426636</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.730010449886322</X>
+              <Y>-1.922852635383606</Y>
+              <Z>-0.01354217529296875</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT90">
+            <Properties>
+              <string name="Name">RightAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.01999002695083618</X>
+                <Y>-0.6771472692489624</Y>
+                <Z>-0.15354213118553162</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT91">
+            <Properties>
+              <string name="Name">RightKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.010010719299316406</X>
+                <Y>0.4628525972366333</Y>
+                <Z>0.11645779013633728</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT92">
+          <Properties>
+            <string name="Name">RightUpperArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://95296422581310</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.309777021408081</X>
+              <Y>1.4328362941741943</Y>
+              <Z>0.8633320927619934</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>1.264912724494934</X>
+              <Y>1.1835817098617554</Y>
+              <Z>0.03779274970293045</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT93">
+            <Properties>
+              <string name="Name">RightElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.4150872230529785</X>
+                <Y>-0.6035817265510559</Y>
+                <Z>0.007793901488184929</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT94">
+            <Properties>
+              <string name="Name">RightShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.23491299152374268</X>
+                <Y>0.2864183187484741</Y>
+                <Z>0.03779209777712822</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT95">
+          <Properties>
+            <string name="Name">RightUpperLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://103107939944917</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.9449843764305115</X>
+              <Y>1.564688801765442</Y>
+              <Z>0.8574239015579224</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.6225177049636841</X>
+              <Y>-0.7223443984985352</Y>
+              <Z>0.019073486328125</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT96">
+            <Properties>
+              <string name="Name">RightHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.1225176453590393</X>
+                <Y>0.4223443865776062</Y>
+                <Z>-0.02092685177922249</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT97">
+            <Properties>
+              <string name="Name">RightKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.09748196601867676</X>
+                <Y>-0.7376556396484375</Y>
+                <Z>0.1490737497806549</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT98">
+          <Properties>
+            <string name="Name">UpperTorso</string>
+            <Content name="MeshId">
+              <url>rbxassetid://114366519923114</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>2.294074058532715</X>
+              <Y>1.8329064846038818</Y>
+              <Z>1.2147575616836548</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>2.7247837351751514e-05</X>
+              <Y>0.9944043159484863</Y>
+              <Z>-0.0583103708922863</Z>
+              <R00>-1.000000238418579</R00>
+              <R01>0</R01>
+              <R02>2.771615982055664e-06</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>-2.771615982055664e-06</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT99">
+            <Properties>
+              <string name="Name">LeftShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>1.0300272703170776</X>
+                <Y>0.47559571266174316</Y>
+                <Z>-0.05831322446465492</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT100">
+            <Properties>
+              <string name="Name">NeckRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>2.716937888180837e-05</X>
+                <Y>0.8855956792831421</Y>
+                <Z>-0.028310371562838554</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT101">
+            <Properties>
+              <string name="Name">RightShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-1.0299731492996216</X>
+                <Y>0.47559571266174316</Y>
+                <Z>-0.05830751731991768</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT102">
+            <Properties>
+              <string name="Name">WaistRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>2.6975367291015573e-05</X>
+                <Y>-0.8544043302536011</Y>
+                <Z>-0.09831036627292633</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-2.7716152999346377e-06</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>2.7716152999346377e-06</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT103">
+        <Properties>
+          <string name="Name">CanonicalPlayer2</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT104">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT105">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">9d7eb06b4cad92d3a101a22824d18a9168c2f8d3b43f0e34de5c0f4ceab84985</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT106">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHero</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT107">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">110833474840144</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT108">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT109">
+          <Properties>
+            <string name="Name">Head</string>
+            <Content name="MeshId">
+              <url>rbxassetid://140282741867383</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.6540937423706055</X>
+              <Y>1.5070526599884033</Y>
+              <Z>1.4360867738723755</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-3.4060203688568436e-06</X>
+              <Y>2.283546209335327</Y>
+              <Z>-0.2546466886997223</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT110">
+            <Properties>
+              <string name="Name">NeckRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-3.414389539102558e-06</X>
+                <Y>-0.40354621410369873</Y>
+                <Z>-0.22464671730995178</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT111">
+          <Properties>
+            <string name="Name">LeftFoot</string>
+            <Content name="MeshId">
+              <url>rbxassetid://120415846901881</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.0317591428756714</X>
+              <Y>0.61970454454422</Y>
+              <Z>1.7709366083145142</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-0.8773533701896667</X>
+              <Y>-2.689880609512329</Y>
+              <Z>-0.5259463787078857</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT112">
+            <Properties>
+              <string name="Name">LeftAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.12735337018966675</X>
+                <Y>0.08988070487976074</Y>
+                <Z>-0.6659464240074158</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT113">
+          <Properties>
+            <string name="Name">LeftHand</string>
+            <Content name="MeshId">
+              <url>rbxassetid://115861588389227</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.8998944163322449</X>
+              <Y>0.9796138405799866</Y>
+              <Z>0.6300058364868164</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-1.6800808906555176</X>
+              <Y>-0.4298054277896881</Y>
+              <Z>-0.20500051975250244</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT114">
+            <Properties>
+              <string name="Name">LeftWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.07991909980773926</X>
+                <Y>0.24980546534061432</Y>
+                <Z>-0.07500053942203522</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT115">
+          <Properties>
+            <string name="Name">LeftLowerArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://123042748500490</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.7274612188339233</X>
+              <Y>1.154711127281189</Y>
+              <Z>0.6591291427612305</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-1.7587497234344482</X>
+              <Y>0.30265605449676514</Y>
+              <Z>-0.014559708535671234</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT116">
+            <Properties>
+              <string name="Name">LeftElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.07874977588653564</X>
+                <Y>0.2773439884185791</Y>
+                <Z>-0.04455970972776413</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT117">
+            <Properties>
+              <string name="Name">LeftWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.0012502670288085938</X>
+                <Y>-0.48265618085861206</Y>
+                <Z>0.11544030904769897</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT118">
+          <Properties>
+            <string name="Name">LeftLowerLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://86304058119847</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.6796890497207642</X>
+              <Y>1.505723237991333</Y>
+              <Z>0.7929056286811829</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-0.7300123572349548</X>
+              <Y>-1.922874927520752</Y>
+              <Z>-0.01355152577161789</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT119">
+            <Properties>
+              <string name="Name">LeftAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.01998770236968994</X>
+                <Y>-0.6771252155303955</Y>
+                <Z>-0.15355154871940613</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT120">
+            <Properties>
+              <string name="Name">LeftKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.010012328624725342</X>
+                <Y>0.46287500858306885</Y>
+                <Z>0.11644847691059113</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT121">
+          <Properties>
+            <string name="Name">LeftUpperArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://102841437001193</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.3097926378250122</X>
+              <Y>1.4328533411026</Y>
+              <Z>0.8633424043655396</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-1.2649073600769043</X>
+              <Y>1.183597445487976</Y>
+              <Z>0.03774314373731613</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT122">
+            <Properties>
+              <string name="Name">LeftElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.41509270668029785</X>
+                <Y>-0.6035975813865662</Y>
+                <Z>0.0077431295067071915</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT123">
+            <Properties>
+              <string name="Name">LeftShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.2349073886871338</X>
+                <Y>0.28640270233154297</Y>
+                <Z>0.037743158638477325</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT124">
+          <Properties>
+            <string name="Name">LeftUpperLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://107281997878544</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.944995641708374</X>
+              <Y>1.5647073984146118</Y>
+              <Z>0.857434093952179</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-0.6225013136863708</X>
+              <Y>-0.7223520874977112</Y>
+              <Z>0.01903728023171425</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT125">
+            <Properties>
+              <string name="Name">LeftHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.12250131368637085</X>
+                <Y>0.4223521947860718</Y>
+                <Z>-0.02096271701157093</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT126">
+            <Properties>
+              <string name="Name">LeftKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.09749871492385864</X>
+                <Y>-0.7376481294631958</Y>
+                <Z>0.14903728663921356</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT127">
+          <Properties>
+            <string name="Name">LowerTorso</string>
+            <Content name="MeshId">
+              <url>rbxassetid://125830049066134</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.302978515625</X>
+              <Y>0.9529115557670593</Y>
+              <Z>0.8663951754570007</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0</X>
+              <Y>-0.09645011276006699</Y>
+              <Z>0.0658053457736969</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT128">
+            <Properties>
+              <string name="Name">LeftHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.5000000596046448</X>
+                <Y>-0.20354993641376495</Y>
+                <Z>0.025805331766605377</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT129">
+            <Properties>
+              <string name="Name">RightHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.5000000596046448</X>
+                <Y>-0.20354993641376495</Y>
+                <Z>0.025805369019508362</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT130">
+            <Properties>
+              <string name="Name">WaistRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>9.613241314099241e-10</X>
+                <Y>0.2364501655101776</Y>
+                <Z>0.02580535039305687</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT131">
+          <Properties>
+            <string name="Name">RightFoot</string>
+            <Content name="MeshId">
+              <url>rbxassetid://109341756913995</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.0317589044570923</X>
+              <Y>0.61970454454422</Y>
+              <Z>1.7709366083145142</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.8773499727249146</X>
+              <Y>-2.689880609512329</Y>
+              <Z>-0.525944709777832</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT132">
+            <Properties>
+              <string name="Name">RightAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.12734997272491455</X>
+                <Y>0.08988070487976074</Y>
+                <Z>-0.6659448146820068</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT133">
+          <Properties>
+            <string name="Name">RightHand</string>
+            <Content name="MeshId">
+              <url>rbxassetid://126196593787082</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.8998944163322449</X>
+              <Y>0.9796138405799866</Y>
+              <Z>0.6300058364868164</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>1.6800774335861206</X>
+              <Y>-0.4298054277896881</Y>
+              <Z>-0.20500051975250244</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT134">
+            <Properties>
+              <string name="Name">RightWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.07992255687713623</X>
+                <Y>0.24980546534061432</Y>
+                <Z>-0.07500053942203522</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT135">
+          <Properties>
+            <string name="Name">RightLowerArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://118935216895462</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.7274612188339233</X>
+              <Y>1.154711127281189</Y>
+              <Z>0.6591291427612305</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>1.7587462663650513</X>
+              <Y>0.30265605449676514</Y>
+              <Z>-0.014561407268047333</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT136">
+            <Properties>
+              <string name="Name">RightElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.07874631881713867</X>
+                <Y>0.2773439884185791</Y>
+                <Z>-0.044561415910720825</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT137">
+            <Properties>
+              <string name="Name">RightWristRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.0012537240982055664</X>
+                <Y>-0.48265618085861206</Y>
+                <Z>0.11543859541416168</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT138">
+          <Properties>
+            <string name="Name">RightLowerLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://80448675471520</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.6796890497207642</X>
+              <Y>1.505723237991333</Y>
+              <Z>0.7929056286811829</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.7300089597702026</X>
+              <Y>-1.922874927520752</Y>
+              <Z>-0.01355152577161789</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT139">
+            <Properties>
+              <string name="Name">RightAnkleRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.01999109983444214</X>
+                <Y>-0.6771252155303955</Y>
+                <Z>-0.15355153381824493</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT140">
+            <Properties>
+              <string name="Name">RightKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.010008931159973145</X>
+                <Y>0.46287500858306885</Y>
+                <Z>0.11644848436117172</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT141">
+          <Properties>
+            <string name="Name">RightUpperArm</string>
+            <Content name="MeshId">
+              <url>rbxassetid://84597938029771</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>1.3097926378250122</X>
+              <Y>1.4328533411026</Y>
+              <Z>0.8633424043655396</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>1.2649040222167969</X>
+              <Y>1.183597445487976</Y>
+              <Z>0.03774314373731613</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT142">
+            <Properties>
+              <string name="Name">RightElbowRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.4150960445404053</X>
+                <Y>-0.6035975813865662</Y>
+                <Z>0.007743159309029579</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT143">
+            <Properties>
+              <string name="Name">RightShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.23490405082702637</X>
+                <Y>0.28640270233154297</Y>
+                <Z>0.037743136286735535</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT144">
+          <Properties>
+            <string name="Name">RightUpperLeg</string>
+            <Content name="MeshId">
+              <url>rbxassetid://73776060504280</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>0.944995641708374</X>
+              <Y>1.5647073984146118</Y>
+              <Z>0.857434093952179</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0.6224979162216187</X>
+              <Y>-0.7223520874977112</Y>
+              <Z>0.019040685147047043</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT145">
+            <Properties>
+              <string name="Name">RightHipRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0.12249791622161865</X>
+                <Y>0.4223521947860718</Y>
+                <Z>-0.020959319546818733</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT146">
+            <Properties>
+              <string name="Name">RightKneeRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-0.09750211238861084</X>
+                <Y>-0.7376481294631958</Y>
+                <Z>0.14904069900512695</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="MeshPart" referent="BT147">
+          <Properties>
+            <string name="Name">UpperTorso</string>
+            <Content name="MeshId">
+              <url>rbxassetid://89106751120451</url>
+            </Content>
+            <Content name="TextureID">
+              <null />
+            </Content>
+            <Vector3 name="size">
+              <X>2.2941014766693115</X>
+              <Y>1.8329284191131592</Y>
+              <Z>1.21477210521698</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-3.4060203688568436e-06</X>
+              <Y>0.9944177865982056</Y>
+              <Z>-0.058333881199359894</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>3.725290298461914e-08</R02>
+              <R10>0</R10>
+              <R11>1.000000238418579</R11>
+              <R12>0</R12>
+              <R20>-3.725290298461914e-08</R20>
+              <R21>0</R21>
+              <R22>-1.0000001192092896</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT148">
+            <Properties>
+              <string name="Name">LeftShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>1.029996633529663</X>
+                <Y>0.4755823612213135</Y>
+                <Z>-0.058333925902843475</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT149">
+            <Properties>
+              <string name="Name">NeckRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-3.407076292205602e-06</X>
+                <Y>0.885582447052002</Y>
+                <Z>-0.028333885595202446</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT150">
+            <Properties>
+              <string name="Name">RightShoulderRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-1.030003547668457</X>
+                <Y>0.4755823612213135</Y>
+                <Z>-0.058333851397037506</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+          <Item class="Attachment" referent="BT151">
+            <Properties>
+              <string name="Name">WaistRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-3.4096840408892604e-06</X>
+                <Y>-0.8544179797172546</Y>
+                <Z>-0.09833389520645142</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>-3.725289943190546e-08</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
         </Item>
       </Item>
     </Item>

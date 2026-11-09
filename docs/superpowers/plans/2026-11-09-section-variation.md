@@ -34,7 +34,7 @@
 - [x] Close the queue eligibility reentry review finding; preserve fault isolation and visible owner action feedback already in the pending hardening slice.
 - [x] Build the reproducible playable artifact and verify all relevant contracts, compilation and packaging. Sync exact source paths to Studio.
 - [x] Exercise real generated geometry, cover ray support, run rebuild and group isolation in Studio. Save bounded evidence with explicit fixture limitations.
-- [ ] Review final changes, commit and push; update Jira with implementation and remaining acceptance gaps. Do not mark the full game or production release complete.
+- [x] Review final changes, commit and push; update Jira with implementation and remaining acceptance gaps. Commit dbd60da and both Actions passed. Full game and production release remain incomplete.
 
 ## Review ledger
 

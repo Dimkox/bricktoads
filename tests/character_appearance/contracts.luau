@@ -81,6 +81,15 @@ local function actor(id)
 end
 local passed=0
 local function test(name,fn)fn();passed+=1;print('PASS '..name)end
+local function canonicalTemplates()
+    local folder=node('Folder','CanonicalTemplates')
+    for i,name in ipairs({'CanonicalPlayer1','CanonicalPlayer2'})do
+        local model=template:Clone();model.Name=name;model.AppearanceScale.Value=1;model.Parent=folder
+        local profile=node('StringValue','AppearanceProfile',model);profile.Value='CanonicalNESHero'
+        model.Head.SurfaceAppearance.ColorMap='canonical-player-'..i
+    end
+    return folder
+end
 test('Green attaches the actual fifteen mesh template with PBR and no additional humanoid',function()
     local a=actor('first');assert(Appearance.attach(a,'Mr. Green'))
     local n,h,motors=0,0,0
@@ -126,5 +135,111 @@ end)
 test('malformed source attachment rejects atomically before changing rig visibility',function()
     local bad=templates:Clone();bad.GreenToad.LeftHand.LeftWristRigAttachment:Destroy()
     local a=actor('bad');assert(not Appearance.attach(a,'Mr. Green',bad));assert(not a.appearance and a.model.Torso.Transparency==0)
+end)
+
+test('tagged canonical P1 and P2 select separate resources on the same R6 physical actor',function()
+    local source=canonicalTemplates()
+    for i,name in ipairs({'Mr. Green','Mr. Yellow'})do
+        local a=actor('canonical-'..i)
+        local model,root,humanoid=a.model,a.root,a.humanoid
+        assert(Appearance.attach(a,name,source))
+        assert(a.appearance.model.Head.SurfaceAppearance.ColorMap=='canonical-player-'..i)
+        assert(a.model==model and a.root==root and a.humanoid==humanoid and humanoid.Health==100)
+        assert(a.model.Torso.CanCollide and a.model.Head.CanCollide and not a.root.Anchored)
+        assert(a.model:GetAttribute('ActorId')=='canonical-'..i)
+        assert(a.model:GetAttribute('Template')==name and a.model:GetAttribute('Appearance')=='CanonicalNESHero')
+        assert(a.appearance.model.Head.Size.X==source['CanonicalPlayer'..i].Head.Size.X,'Canonical template scale1 must retain its authored proportions')
+        assert(source['CanonicalPlayer'..i].Head.Anchored,'Cloning cannot modify the stored source resource')
+    end
+end)
+
+test('canonical shoulders retain their authored neutral rotations without explorer45degree correction',function()
+    local source=canonicalTemplates();local a=actor('canonical-neutral')
+    assert(Appearance.attach(a,'Mr. Green',source))
+    for _,name in ipairs({'LeftShoulder','RightShoulder'})do
+        local joint=a.appearance.joints[name]
+        assert(joint.motor.C0.rz==joint.base.rz,'Canonical neutral shoulders cannot inherit the explorer arm roll')
+    end
+    a.poseMotors['Right Shoulder'].joint.C0=cf.Angles(1.2,0,.2)
+    Appearance.update(a)
+    assert(math.abs(a.appearance.joints.RightShoulder.motor.C0.rz-.2)<1e-6)
+    local legacy=actor('legacy-neutral');assert(Appearance.attach(legacy,'Mr. Green'))
+    assert(math.abs(legacy.appearance.joints.LeftShoulder.motor.C0.rz-math.rad(45))<1e-6)
+    assert(math.abs(legacy.appearance.joints.RightShoulder.motor.C0.rz+math.rad(45))<1e-6)
+end)
+
+test('untagged canonical P2 is unavailable and never borrows a Green resource or invents Brown',function()
+    local source=canonicalTemplates()
+    source.CanonicalPlayer2.AppearanceProfile:Destroy()
+    local legacy=template:Clone();legacy.Parent=source
+    for _,name in ipairs({'Mr. Yellow','Mr. Brown'})do
+        local a=actor(name);a.model:SetAttribute('Template','original');a.model:SetAttribute('Appearance','original-art')
+        local ok=Appearance.attach(a,name,source)
+        assert(not ok and not a.appearance and a.model.Torso.Transparency==0)
+        assert(a.model:GetAttribute('Template')=='original'and a.model:GetAttribute('Appearance')=='original-art')
+    end
+    source.CanonicalPlayer1.AppearanceProfile:Destroy()
+    local a=actor('explicit-legacy');assert(Appearance.attach(a,'Mr. Green',source))
+    assert(a.appearance.model.Head.SurfaceAppearance.ColorMap==template.Head.SurfaceAppearance.ColorMap)
+    assert(a.model:GetAttribute('Appearance')=='LegacyGeneratedGreen','Untagged GreenToad must remain identifiable as the legacy study')
+end)
+
+test('unknown explicit profiles reject before detaching a valid canonical appearance',function()
+    local source=canonicalTemplates();local a=actor('profile-switch')
+    assert(Appearance.attach(a,'Mr. Green',source));local previous=a.appearance
+    source.CanonicalPlayer2.AppearanceProfile.Value='UnverifiedAvatar'
+    local ok,reason=Appearance.attach(a,'Mr. Yellow',source)
+    assert(not ok and reason=='UNKNOWN_APPEARANCE_PROFILE')
+    assert(a.appearance==previous and not previous.model.destroyed and a.model.Torso.Transparency==1)
+    assert(a.model:GetAttribute('Template')=='Mr. Green'and a.model:GetAttribute('Appearance')=='CanonicalNESHero')
+    source.CanonicalPlayer1.AppearanceProfile.Value='UnverifiedAvatar'
+    ok,reason=Appearance.attach(a,'Mr. Green',source)
+    assert(not ok and reason=='UNKNOWN_APPEARANCE_PROFILE'and a.appearance==previous)
+end)
+
+test('invalid profile value class and legacy explicit unknown profiles fail without hiding a body',function()
+    local source=canonicalTemplates();source.CanonicalPlayer2.AppearanceProfile:Destroy()
+    local wrong=node('NumberValue','AppearanceProfile',source.CanonicalPlayer2);wrong.Value=1
+    local a=actor('invalid-tag');assert(not Appearance.attach(a,'Mr. Yellow',source))
+    assert(not a.appearance and a.model.Torso.Transparency==0)
+    local legacy=templates:Clone();local tag=node('StringValue','AppearanceProfile',legacy.GreenToad);tag.Value='UnknownLegacy'
+    local b=actor('invalid-legacy');local ok,reason=Appearance.attach(b,'Mr. Green',legacy)
+    assert(not ok and reason=='UNKNOWN_APPEARANCE_PROFILE'and not b.appearance and b.model.Torso.Transparency==0)
+end)
+
+test('malformed canonical replacement preserves the existing resource visibility and metadata atomically',function()
+    local source=canonicalTemplates();local a=actor('malformed-swap')
+    assert(Appearance.attach(a,'Mr. Green',source));local previous=a.appearance
+    source.CanonicalPlayer2.LeftHand.LeftWristRigAttachment:Destroy()
+    local ok=Appearance.attach(a,'Mr. Yellow',source)
+    assert(not ok and a.appearance==previous and not previous.model.destroyed)
+    assert(a.model.Torso.Transparency==1 and a.humanoid.Health==100)
+    assert(a.model:GetAttribute('Template')=='Mr. Green'and a.model:GetAttribute('Appearance')=='CanonicalNESHero')
+end)
+
+test('canonical selection changes resource once and cleanup restores saved owner metadata',function()
+    local source=canonicalTemplates();local a=actor('canonical-change')
+    a.model:SetAttribute('Template','prior-template');a.model:SetAttribute('Appearance','prior-art')
+    assert(Appearance.attach(a,'Mr. Green',source));local first=a.appearance.model
+    assert(Appearance.attach(a,'Mr. Green',source)and a.appearance.model==first)
+    assert(Appearance.attach(a,'Mr. Yellow',source));local second=a.appearance.model
+    assert(second~=first and first.destroyed and second.Head.SurfaceAppearance.ColorMap=='canonical-player-2')
+    assert(Appearance.attach(a,'Mr. Yellow',source)and a.appearance.model==second)
+    Appearance.detach(a)
+    assert(not a.appearance and second.destroyed and a.model.Torso.Transparency==0)
+    assert(a.model:GetAttribute('Template')=='prior-template'and a.model:GetAttribute('Appearance')=='prior-art')
+    assert(a.model:GetAttribute('ActorId')=='canonical-change'and a.humanoid.Health==100)
+end)
+
+test('canonical replacement cleanup never restores attributes on a newer actor model',function()
+    local source=canonicalTemplates();local a=actor('canonical-old')
+    a.model:SetAttribute('Template','old-template');a.model:SetAttribute('Appearance','old-art')
+    assert(Appearance.attach(a,'Mr. Yellow',source));local original=a.model;local appearance=a.appearance.model
+    local replacement=actor('canonical-new');replacement.model:SetAttribute('Template','new-template');replacement.model:SetAttribute('Appearance','new-art')
+    a.model=replacement.model;Appearance.update(a)
+    assert(not a.appearance and appearance.destroyed and original:GetAttribute('Template')=='old-template')
+    assert(original:GetAttribute('Appearance')=='old-art'and original.Torso.Transparency==0)
+    assert(replacement.model:GetAttribute('Template')=='new-template'and replacement.model:GetAttribute('Appearance')=='new-art')
+    assert(replacement.model.Torso.Transparency==0 and replacement.humanoid.Health==100)
 end)
 print('CharacterAppearance: '..passed..' passed')

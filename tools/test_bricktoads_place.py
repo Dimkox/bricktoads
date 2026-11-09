@@ -1,5 +1,7 @@
 """Test the development place build boundary; Studio import is checked separately."""
 import importlib.util
+import copy
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -117,12 +119,17 @@ class BrickToadsPlaceTests(unittest.TestCase):
                 self.assertAlmostEqual(float(node.findtext("Properties/CoordinateFrame[@name='CFrame']/X")), attachment["cframe"][0])
         self.assertFalse({p.attrib["class"] for p in template.iter("Item")} & {"Humanoid", "AnimationConstraint", "BallSocketConstraint", "Script", "Motor6D"})
         self.assertEqual(named(template, "AppearanceScale").findtext("Properties/double[@name='Value']"), "0.8")
-        self.assertEqual([p.findtext("Properties/string[@name='Name']") for p in folder.findall("Item")], ["GreenToad"])
+        self.assertEqual([p.findtext("Properties/string[@name='Name']") for p in folder.findall("Item")],
+                         ["CanonicalPlayer1", "CanonicalPlayer2", "GreenToad"])
+        self.assertEqual(sum(p.attrib['class']=='ServerStorage' for p in root.findall('Item')),1)
+        self.assertEqual(sum(p.findtext("Properties/string[@name='Name']")=='BrickToadsCharacterTemplates'
+                             for p in named(root,'ServerStorage').findall('Item')),1)
 
     def test_missing_character_resource_fails_instead_of_silently_replacing_mesh_art(self):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory)
             shutil.copytree(ROOT / "src", source / "src")
+            shutil.copytree(ROOT / "assets/characters/canonical-hero", source / "assets/characters/canonical-hero")
             with self.assertRaises(FileNotFoundError):
                 self.builder.build(source, include_character_study=True)
 
@@ -132,7 +139,98 @@ class BrickToadsPlaceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory)
             shutil.copytree(ROOT / "src", source / "src")
+            shutil.copytree(ROOT / "assets/characters/canonical-hero", source / "assets/characters/canonical-hero")
             self.builder.build(source)
+
+    def test_canonical_player_templates_are_default_private_exact_uploaded_resources(self):
+        root=ET.fromstring(self.builder.build(ROOT))
+        storage=next((p for p in root.findall('Item') if p.attrib['class']=='ServerStorage'),None)
+        self.assertIsNotNone(storage,'Default playable must package both canonical player resources')
+        folder=named(storage,'BrickToadsCharacterTemplates')
+        self.assertEqual([p.findtext("Properties/string[@name='Name']") for p in folder.findall('Item')],
+                         ['CanonicalPlayer1','CanonicalPlayer2'])
+        source_asset_ids=[]
+        mesh_sets=[]
+        for player in (1,2):
+            path=ROOT/f'assets/characters/canonical-hero/roblox-player{player}.json'
+            manifest=json.loads(path.read_text(encoding='utf-8'))
+            template=named(folder,f'CanonicalPlayer{player}')
+            self.assertEqual(template.attrib['class'],'Model')
+            for name,value in [('AppearanceProfile','CanonicalNESHero'),('SourceAssetId',manifest['sourceAssetId']),
+                               ('SourceGlbSha256',manifest['sourceGlbSha256']),
+                               ('AssetManifestSha256',hashlib.sha256(path.read_bytes()).hexdigest())]:
+                self.assertEqual(named(template,name).findtext("Properties/string[@name='Value']"),value)
+            self.assertEqual(float(named(template,'AppearanceScale').findtext("Properties/double[@name='Value']")),1)
+            meshes=[p for p in template.findall('Item') if p.attrib['class']=='MeshPart']
+            self.assertEqual(len(meshes),15)
+            self.assertEqual(sum(p.attrib['class']=='Attachment' for p in template.iter('Item')),28)
+            for row in manifest['parts']:
+                mesh=named(template,row['name'])
+                self.assertEqual(mesh.findtext("Properties/Content[@name='MeshId']/url"),row['meshId'])
+                self.assertIsNotNone(mesh.find("Properties/Content[@name='TextureID']/null"))
+                for axis,value in zip('XYZ',row['size']):
+                    self.assertEqual(float(mesh.findtext(f"Properties/Vector3[@name='size']/{axis}")),value)
+                fields=('X','Y','Z','R00','R01','R02','R10','R11','R12','R20','R21','R22')
+                for field,value in zip(fields,row['cframe']):
+                    self.assertEqual(float(mesh.findtext(f"Properties/CoordinateFrame[@name='CFrame']/{field}")),value)
+                color=[round(v*255) for v in row['color']]
+                self.assertEqual(int(mesh.findtext("Properties/Color3uint8[@name='Color3uint8']")),
+                                 0xFF000000 | color[0]<<16 | color[1]<<8 | color[2])
+                for flag,value in [('Anchored','true'),('Massless','true'),('CanCollide','false'),
+                                   ('CanTouch','false'),('CanQuery','false')]:
+                    self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"),value)
+                for attachment in row['attachments']:
+                    target=named(mesh,attachment['name'])
+                    for field,value in zip(fields,attachment['cframe']):
+                        self.assertEqual(float(target.findtext(f"Properties/CoordinateFrame[@name='CFrame']/{field}")),value)
+            self.assertFalse({p.attrib['class'] for p in template.iter('Item')} &
+                             {'Script','LocalScript','Humanoid','Motor6D','Bone','AnimationConstraint'})
+            source_asset_ids.append(manifest['sourceAssetId'])
+            mesh_sets.append({p['meshId'] for p in manifest['parts']})
+        self.assertNotEqual(source_asset_ids[0],source_asset_ids[1])
+        self.assertNotEqual(mesh_sets[0],mesh_sets[1],'P2 uses the actual separate uploaded palette mesh assets')
+        entry=named(named(named(root,'ServerScriptService'),'BrickToads'),'BrickToadsServer')
+        self.assertIn('characterAppearance=require(gameplay.CharacterAppearance)',
+                      entry.findtext("Properties/ProtectedString[@name='Source']"))
+
+    def test_missing_either_canonical_manifest_fails_closed(self):
+        for player in (1,2):
+            with self.subTest(player=player),tempfile.TemporaryDirectory() as directory:
+                source=Path(directory)
+                shutil.copytree(ROOT/'src',source/'src')
+                shutil.copytree(ROOT/'assets',source/'assets')
+                (source/f'assets/characters/canonical-hero/roblox-player{player}.json').unlink()
+                with self.assertRaises(FileNotFoundError):self.builder.build(source)
+
+    def test_invalid_canonical_geometry_content_profile_or_provenance_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source=Path(directory)
+            shutil.copytree(ROOT/'src',source/'src')
+            shutil.copytree(ROOT/'assets',source/'assets')
+            path=source/'assets/characters/canonical-hero/roblox-player1.json'
+            original=path.read_bytes();base=json.loads(original)
+            def altered(name,change):
+                row=copy.deepcopy(base);change(row)
+                with self.subTest(case=name):
+                    path.write_text(json.dumps(row),encoding='utf-8')
+                    with self.assertRaises(ValueError):self.builder.build(source)
+            altered('unknown-profile',lambda r:r.update(appearanceProfile='UnverifiedAvatar'))
+            altered('wrong-template-name',lambda r:r.update(templateName='CanonicalPlayer2'))
+            altered('wrong-scale',lambda r:r.update(appearanceScale=.8))
+            altered('invalid-asset-id',lambda r:r.update(sourceAssetId='not-an-uploaded-id'))
+            altered('invalid-glb-sha',lambda r:r.update(sourceGlbSha256='bad'))
+            altered('mismatched-glb-sha',lambda r:r.update(sourceGlbSha256='0'*64))
+            altered('missing-part',lambda r:r['parts'].pop())
+            altered('duplicate-part',lambda r:r['parts'][-1].update(name=r['parts'][0]['name']))
+            altered('missing-mesh-id',lambda r:r['parts'][0].update(meshId=''))
+            altered('foreign-content-url',lambda r:r['parts'][0].update(meshId='https://example.invalid/mesh'))
+            altered('negative-size',lambda r:r['parts'][0]['size'].__setitem__(0,-1))
+            altered('nan-position',lambda r:r['parts'][0]['cframe'].__setitem__(0,float('nan')))
+            altered('invalid-rotation',lambda r:r['parts'][0]['cframe'].__setitem__(3,8))
+            altered('color-out-of-range',lambda r:r['parts'][0]['color'].__setitem__(1,1.5))
+            altered('missing-source-joint',lambda r:r['parts'][0]['attachments'].pop())
+            altered('duplicate-source-joint',lambda r:r['parts'][0]['attachments'].append(copy.deepcopy(r['parts'][0]['attachments'][0])))
+            path.write_bytes(original)
 
     def test_missing_sources_fail_without_emitting_an_empty_place(self):
         with tempfile.TemporaryDirectory() as directory:

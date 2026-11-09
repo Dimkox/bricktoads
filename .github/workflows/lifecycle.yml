@@ -55,12 +55,16 @@ jobs:
           /tmp/bricktoads-luau/luau tests/run_journal.luau
           /tmp/bricktoads-luau/luau tests/run_feedback.luau
           /tmp/bricktoads-luau/luau tests/run_localization.luau
+          /tmp/bricktoads-luau/luau tests/run_canonical_animation.luau
+          /tmp/bricktoads-luau/luau tests/run_canonical_walker.luau
           python3 tests/group_world/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/character_appearance/run.py --luau /tmp/bricktoads-luau/luau
       - name: Structural build tests
         run: python3 tools/test_build.py
       - name: English source and localization coverage
         run: python3 tools/test_localization.py
+      - name: Canonical animation data matches the pinned catalog
+        run: python3 research/generate_canonical_animation_data.py --check
       - name: Development place build tests
         run: python3 tools/test_bricktoads_place.py
       - name: Isolated Walker acceptance package tests

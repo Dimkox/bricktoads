@@ -1,0 +1,138 @@
+{
+  "status": "PASS",
+  "meshes": {
+    "UpperBody": {
+      "vertices": 9396,
+      "triangles": 18792,
+      "boundsStuds": [
+        [
+          -1.7378470601939726,
+          8.341738708634347,
+          -0.38
+        ],
+        [
+          0.6402594432293583,
+          13.280882984975111,
+          0.38
+        ]
+      ],
+      "closedManifoldEdges": true,
+      "connectedComponents": 1,
+      "eulerCharacteristic": 0
+    },
+    "LeftStrut": {
+      "vertices": 242,
+      "triangles": 480,
+      "boundsStuds": [
+        [
+          -0.2378106503423331,
+          -2.085343652529488,
+          -0.32999999999999996
+        ],
+        [
+          0.4207419198364355,
+          8.524669978128452,
+          -0.03
+        ]
+      ],
+      "closedManifoldEdges": true,
+      "connectedComponents": 1,
+      "eulerCharacteristic": 2
+    },
+    "LeftFoot": {
+      "vertices": 1804,
+      "triangles": 3604,
+      "boundsStuds": [
+        [
+          -0.6402594432293583,
+          -3.0,
+          -0.63
+        ],
+        [
+          0.8231907127234607,
+          -2.085343652529488,
+          0.27
+        ]
+      ],
+      "closedManifoldEdges": true,
+      "connectedComponents": 1,
+      "eulerCharacteristic": 2
+    },
+    "RightStrut": {
+      "vertices": 242,
+      "triangles": 480,
+      "boundsStuds": [
+        [
+          -0.2378106503423331,
+          -2.085343652529488,
+          0.03
+        ],
+        [
+          0.4207419198364355,
+          8.524669978128452,
+          0.32999999999999996
+        ]
+      ],
+      "closedManifoldEdges": true,
+      "connectedComponents": 1,
+      "eulerCharacteristic": 2
+    },
+    "RightFoot": {
+      "vertices": 1804,
+      "triangles": 3604,
+      "boundsStuds": [
+        [
+          -0.6402594432293583,
+          -3.0,
+          -0.27
+        ],
+        [
+          0.8231907127234607,
+          -2.085343652529488,
+          0.63
+        ]
+      ],
+      "closedManifoldEdges": true,
+      "connectedComponents": 1,
+      "eulerCharacteristic": 2
+    }
+  },
+  "nodeCount": 5,
+  "bytes": 706108,
+  "sha256": "b7d062c6f8cd5143dae882595e80b1a9daf42db42f439a1a6f01372827e28637",
+  "boundsStuds": [
+    [
+      -1.7378470601939726,
+      -3.0,
+      -0.63
+    ],
+    [
+      0.8231907127234607,
+      13.280882984975111,
+      0.63
+    ]
+  ],
+  "heightStuds": 16.28088298497511,
+  "heightMetres": 4.558647235793032,
+  "decodedGlbBoundsMetres": [
+    [
+      -0.4865971803665161,
+      -0.8400000065541582,
+      -0.17640000202655792
+    ],
+    [
+      0.2304934018256633,
+      3.7186472271374176,
+      0.17640000202655792
+    ]
+  ],
+  "metreConversionMaximumError": 8.655614003316714e-09,
+  "sourceUpperOpeningProbe": {
+    "sourceImageXY": [
+      6,
+      1
+    ],
+    "meshRayHits": 0
+  },
+  "spreadStraightCenterlineErrorStuds": 0.0
+}

@@ -114,62 +114,141 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
                                              ensure_ascii=False).encode("utf-8")).hexdigest()
     receipt = item(project, "ModuleScript", "BuildInfo")
     prop(receipt, "ProtectedString", "Source", f"return table.freeze({{format=1,sourceSha256='{fingerprint}'}})\n")
-    # The explorer study is excluded from playable builds after the canonical-art decision.
-    if include_character_study:
-        # MeshId is read-only in gameplay. Persist the actual generated mesh/PBR
-        # template in ServerStorage so runtime only clones existing MeshParts.
-        manifest_bytes = (root_path / "assets/characters/green-toad.json").read_bytes()
+    # MeshId is read-only during gameplay. Package the actual uploaded resources;
+    # both canonical players are mandatory in every default playable build.
+    expected = {"Head", "UpperTorso", "LowerTorso"} | {
+        side + limb for side in ("Left", "Right")
+        for limb in ("UpperArm", "LowerArm", "Hand", "UpperLeg", "LowerLeg", "Foot")
+    }
+    connections = [("Waist", "LowerTorso", "UpperTorso"), ("Neck", "UpperTorso", "Head")]
+    for side in ("Left", "Right"):
+        connections.extend([(side + "Shoulder", "UpperTorso", side + "UpperArm"),
+                            (side + "Elbow", side + "UpperArm", side + "LowerArm"),
+                            (side + "Wrist", side + "LowerArm", side + "Hand"),
+                            (side + "Hip", "LowerTorso", side + "UpperLeg"),
+                            (side + "Knee", side + "UpperLeg", side + "LowerLeg"),
+                            (side + "Ankle", side + "LowerLeg", side + "Foot")])
+
+    def number(value, name, minimum=None, maximum=None):
+        if type(value) not in (int, float) or not math.isfinite(value) \
+                or (minimum is not None and value < minimum) or (maximum is not None and value > maximum):
+            raise ValueError(f"Invalid character value: {name}")
+        return value
+
+    def numbers(values, length, name, minimum=None, maximum=None):
+        if not isinstance(values, list) or len(values) != length:
+            raise ValueError(f"Invalid character geometry: {name}")
+        for value in values:
+            number(value, name, minimum, maximum)
+        return values
+
+    def compound(target, kind, name, values, fields):
+        numbers(values, len(fields), name)
+        result = prop(target, kind, name, "")
+        for field, value in zip(fields, values):
+            ET.SubElement(result, field).text = str(value)
+
+    def content(target, name, url, *, allow_empty=True):
+        if not isinstance(url, str) or (not url and not allow_empty) or (url and (
+                not url.startswith("rbxassetid://") or not url[13:].isdigit() or int(url[13:]) <= 0)):
+            raise ValueError(f"Invalid character content: {name}")
+        result = prop(target, "Content", name, "")
+        if url:
+            ET.SubElement(result, "url").text = url
+        else:
+            ET.SubElement(result, "null")
+
+    def frame(target, values):
+        numbers(values, 12, "CFrame")
+        rotation = [values[3:6], values[6:9], values[9:12]]
+        for i in range(3):
+            for j in range(3):
+                dot = sum(a * b for a, b in zip(rotation[i], rotation[j]))
+                if abs(dot - (1 if i == j else 0)) > .001:
+                    raise ValueError("Invalid character CFrame rotation")
+        a, b, c = rotation
+        determinant = a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0]) + a[2] * (b[0] * c[1] - b[1] * c[0])
+        if abs(determinant - 1) > .001:
+            raise ValueError("Invalid character CFrame orientation")
+        compound(target, "CoordinateFrame", "CFrame", values,
+                 ("X", "Y", "Z", "R00", "R01", "R02", "R10", "R11", "R12", "R20", "R21", "R22"))
+
+    def enum_value(mapping, value, name):
+        if value not in mapping:
+            raise ValueError(f"Unsupported character enum: {name}")
+        return mapping[value]
+
+    storage = item(root, "ServerStorage", "ServerStorage")
+    templates = item(storage, "Folder", "BrickToadsCharacterTemplates")
+
+    def character(manifest_bytes, template_name, *, canonical=False):
         manifest = json.loads(manifest_bytes)
-        expected = {"Head", "UpperTorso", "LowerTorso"} | {
-            side + limb for side in ("Left", "Right")
-            for limb in ("UpperArm", "LowerArm", "Hand", "UpperLeg", "LowerLeg", "Foot")
-        }
-        rows = manifest["parts"]
-        if manifest["schema"] != 1 or len(rows) != 15 or {r["name"] for r in rows} != expected:
-            raise ValueError("GreenToad must contain the15 named source MeshParts")
-
-        def compound(target, kind, name, values, fields):
-            if len(values) != len(fields) or not all(isinstance(v, (int, float)) and math.isfinite(v) for v in values):
-                raise ValueError(f"Invalid character geometry: {name}")
-            result = prop(target, kind, name, "")
-            for field, value in zip(fields, values):
-                ET.SubElement(result, field).text = str(value)
-
-        def content(target, name, url):
-            result = prop(target, "Content", name, "")
-            if url:
-                if not isinstance(url, str) or not url.startswith("rbxassetid://") or not url[13:].isdigit():
-                    raise ValueError(f"Invalid generated character content: {name}")
-                ET.SubElement(result, "url").text = url
-            else:
-                ET.SubElement(result, "null")
-
-        def frame(target, values):
-            compound(target, "CoordinateFrame", "CFrame", values,
-                     ("X", "Y", "Z", "R00", "R01", "R02", "R10", "R11", "R12", "R20", "R21", "R22"))
-
-        storage = item(root, "ServerStorage", "ServerStorage")
-        templates = item(storage, "Folder", "BrickToadsCharacterTemplates")
-        template = item(templates, "Model", "GreenToad")
+        rows = manifest.get("parts")
+        if type(manifest.get("schema")) is not int or manifest["schema"] != 1 or not isinstance(rows, list) \
+                or len(rows) != 15 or any(not isinstance(r, dict) for r in rows) or {r.get("name") for r in rows} != expected:
+            raise ValueError(f"{template_name} must contain the15 named source MeshParts")
+        metadata = {"AssetManifestSha256": hashlib.sha256(manifest_bytes).hexdigest()}
+        if canonical:
+            if manifest.get("appearanceProfile") != "CanonicalNESHero" or manifest.get("templateName") != template_name:
+                raise ValueError("Invalid canonical appearance profile or template name")
+            scale_value = number(manifest.get("appearanceScale"), "AppearanceScale", 1, 1)
+            asset_id, source_sha = manifest.get("sourceAssetId"), manifest.get("sourceGlbSha256")
+            if not isinstance(asset_id, str) or not asset_id.isdigit() or int(asset_id) <= 0:
+                raise ValueError("Invalid canonical SourceAssetId")
+            if not isinstance(source_sha, str) or len(source_sha) != 64 or any(c not in "0123456789abcdef" for c in source_sha):
+                raise ValueError("Invalid canonical SourceGlbSha256")
+            player = template_name[-1]
+            glb = root_path / f"assets/characters/canonical-hero/canonical-hero-player{player}.glb"
+            if hashlib.sha256(glb.read_bytes()).hexdigest() != source_sha:
+                raise ValueError("Canonical source GLB SHA256 mismatch")
+            metadata.update(AppearanceProfile="CanonicalNESHero", SourceAssetId=asset_id, SourceGlbSha256=source_sha)
+        else:
+            scale_value = number(manifest["fit"]["scale"], "AppearanceScale", 0, 2)
+            if scale_value == 0:
+                raise ValueError("Invalid character fit scale")
+            metadata["AppearanceProfile"] = "LegacyGeneratedGreen"
+        parts = {r["name"]: r for r in rows}
+        attachment_count = 0
+        for row in rows:
+            attachments = row.get("attachments")
+            if not isinstance(attachments, list) or any(not isinstance(a, dict) or not isinstance(a.get("name"), str) for a in attachments) \
+                    or len({a["name"] for a in attachments}) != len(attachments):
+                raise ValueError("Invalid or duplicate character attachment")
+            attachment_count += len(attachments)
+        if canonical:
+            for joint, first, second in connections:
+                for name in (first, second):
+                    if joint + "RigAttachment" not in {a["name"] for a in parts[name]["attachments"]}:
+                        raise ValueError(f"Missing canonical source joint: {name}/{joint}")
+            if attachment_count != 28:
+                raise ValueError("Canonical resources require28 RigAttachments")
+        template = item(templates, "Model", template_name)
         scale = item(template, "NumberValue", "AppearanceScale")
-        prop(scale, "double", "Value", manifest["fit"]["scale"])
-        provenance = item(template, "StringValue", "AssetManifestSha256")
-        prop(provenance, "string", "Value", hashlib.sha256(manifest_bytes).hexdigest())
+        prop(scale, "double", "Value", scale_value)
+        for name, value in metadata.items():
+            prop(item(template, "StringValue", name), "string", "Value", value)
         for row in sorted(rows, key=lambda r: r["name"]):
             mesh = item(template, "MeshPart", row["name"])
-            content(mesh, "MeshId", row["meshId"])
+            content(mesh, "MeshId", row["meshId"], allow_empty=False)
             content(mesh, "TextureID", row["textureId"])
+            if any(v <= 0 for v in numbers(row["size"], 3, "size")):
+                raise ValueError("Character mesh size must be positive")
             compound(mesh, "Vector3", "size", row["size"], ("X", "Y", "Z"))
             frame(mesh, row["cframe"])
+            numbers(row["color"], 3, "Color", 0, 1)
+            # Preserve actual exported mesh tint. Player palettes are in separate
+            # uploaded mesh content, never fabricated through a P2 Color override.
             color = [round(v * 255) for v in row["color"]]
             prop(mesh, "Color3uint8", "Color3uint8", 0xFF000000 | color[0] << 16 | color[1] << 8 | color[2])
-            prop(mesh, "token", "Material", {"Plastic": 256}[row["material"]])
-            prop(mesh, "token", "RenderFidelity", {"Automatic": 0, "Precise": 1, "Performance": 2}[row["renderFidelity"]])
+            prop(mesh, "token", "Material", enum_value({"Plastic": 256}, row["material"], "Material"))
+            prop(mesh, "token", "RenderFidelity", enum_value({"Automatic": 0, "Precise": 1, "Performance": 2}, row["renderFidelity"], "RenderFidelity"))
+            if type(row["doubleSided"]) is not bool:
+                raise ValueError("Invalid character DoubleSided flag")
             for flag, value in (("Anchored", True), ("CanCollide", False), ("CanTouch", False),
                                 ("CanQuery", False), ("Massless", True), ("DoubleSided", row["doubleSided"])):
                 prop(mesh, "bool", flag, str(value).lower())
-            prop(mesh, "float", "Transparency", row["transparency"])
-            prop(mesh, "float", "Reflectance", row["reflectance"])
+            prop(mesh, "float", "Transparency", number(row["transparency"], "Transparency", 0, 1))
+            prop(mesh, "float", "Reflectance", number(row["reflectance"], "Reflectance", 0, 1))
             for attachment in row["attachments"]:
                 frame(item(mesh, "Attachment", attachment["name"]), attachment["cframe"])
             for appearance in row["surfaceAppearances"]:
@@ -177,8 +256,16 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
                 for key, name in (("colorMap", "ColorMap"), ("normalMap", "NormalMap"),
                                   ("roughnessMap", "RoughnessMap"), ("metalnessMap", "MetalnessMap")):
                     content(surface, name, appearance[key])
+                numbers(appearance["color"], 3, "SurfaceColor", 0, 1)
                 compound(surface, "Color3", "Color", appearance["color"], ("R", "G", "B"))
-                prop(surface, "token", "AlphaMode", {"Overlay": 0, "Transparency": 1}[appearance["alphaMode"]])
+                prop(surface, "token", "AlphaMode", enum_value({"Overlay": 0, "Transparency": 1}, appearance["alphaMode"], "AlphaMode"))
+
+    for player in (1, 2):
+        manifest = (root_path / f"assets/characters/canonical-hero/roblox-player{player}.json").read_bytes()
+        character(manifest, f"CanonicalPlayer{player}", canonical=True)
+    # Explicit research switch; this rejected study is absent from default builds.
+    if include_character_study:
+        character((root_path / "assets/characters/green-toad.json").read_bytes(), "GreenToad")
     ET.indent(root, space="  ")
     return ET.tostring(root, encoding="utf-8", xml_declaration=True)
 

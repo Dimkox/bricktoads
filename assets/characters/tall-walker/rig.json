@@ -1,0 +1,428 @@
+{
+  "schema": 1,
+  "status": "source-profile3d-study-not-release-approved",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReferences": [
+    "research/canonical-visuals/tall-walker-procedural-leg-reference.png",
+    "research/canonical-visuals/tall-walker-procedural-leg-catalog.json",
+    "research/canonical-visuals/tall-walker-source-verification.json"
+  ],
+  "sourceFacts": {
+    "type": 17,
+    "upperBodyGraphicsId": 25,
+    "upperBodyVisiblePixels": [
+      13,
+      27
+    ],
+    "neutralFullPixels": [
+      14,
+      89
+    ],
+    "heroIdlePixels": [
+      24,
+      33
+    ],
+    "sourceLegSegments": 8,
+    "shaftSpritesPerLeg": 7,
+    "terminalFootSpritesPerLeg": 1,
+    "palettes": [
+      "0F",
+      "18",
+      "28",
+      "20"
+    ],
+    "paletteRgbApproximation": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCaseCount": 35,
+    "sourceNeutral": {
+      "frameId": 0,
+      "objectType": 17,
+      "mode": "prepared gait counters",
+      "counter": 0,
+      "footDeltas": [
+        0,
+        0
+      ],
+      "bodyGraphicsFrame": 25,
+      "width": 14,
+      "height": 89,
+      "parts": [
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -56,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -48,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -40,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -32,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -24,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -16,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -8,
+          "attributes": 66
+        },
+        {
+          "tile": 211,
+          "x": -3,
+          "y": 0,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -58,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -50,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -42,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -34,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -26,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -18,
+          "attributes": 66
+        },
+        {
+          "tile": 208,
+          "x": -3,
+          "y": -10,
+          "attributes": 66
+        },
+        {
+          "tile": 211,
+          "x": -3,
+          "y": -2,
+          "attributes": 66
+        },
+        {
+          "tile": 201,
+          "x": -5,
+          "y": -89,
+          "attributes": 2
+        },
+        {
+          "tile": 202,
+          "x": -9,
+          "y": -81,
+          "attributes": 2
+        },
+        {
+          "tile": 203,
+          "x": -4,
+          "y": -81,
+          "attributes": 2
+        },
+        {
+          "tile": 204,
+          "x": -9,
+          "y": -73,
+          "attributes": 2
+        },
+        {
+          "tile": 205,
+          "x": -5,
+          "y": -73,
+          "attributes": 2
+        },
+        {
+          "tile": 206,
+          "x": -7,
+          "y": -65,
+          "attributes": 2
+        },
+        {
+          "tile": 207,
+          "x": -4,
+          "y": -65,
+          "attributes": 2
+        }
+      ],
+      "visibleBounds": {
+        "minX": -9,
+        "minY": -84,
+        "maxX": 4,
+        "maxY": 4
+      },
+      "headAnchor": {
+        "x": 0,
+        "y": -57
+      },
+      "legStarts": [
+        {
+          "x": -3,
+          "y": -56
+        },
+        {
+          "x": -3,
+          "y": -58
+        }
+      ],
+      "sourceLegs": [
+        {
+          "delta": 0,
+          "segments": 8,
+          "integerStep": 0,
+          "fractionByte": 0,
+          "slopeIndex": 0,
+          "attributes": 66,
+          "firstTile": 208,
+          "lastTile": 211,
+          "theoreticalEndX": 125
+        },
+        {
+          "delta": 0,
+          "segments": 8,
+          "integerStep": 0,
+          "fractionByte": 0,
+          "slopeIndex": 0,
+          "attributes": 66,
+          "firstTile": 208,
+          "lastTile": 211,
+          "theoreticalEndX": 125
+        }
+      ]
+    }
+  },
+  "units": {
+    "authoring": "Roblox studs",
+    "glb": "metres",
+    "metresPerStud": 0.28,
+    "studsPerSourcePixel": 0.18293126949410238,
+    "referenceHeroHeightStuds": 6.036731893305379,
+    "sourceTargetHeightStuds": 16.28088298497511,
+    "actualHeightStuds": 16.28088298497511,
+    "rootReference": "existing R6 Torso origin, ground at localY\u22123",
+    "up": [
+      0,
+      1,
+      0
+    ],
+    "profileHorizontal": [
+      1,
+      0,
+      0
+    ],
+    "profileVertical": [
+      0,
+      1,
+      0
+    ],
+    "depthAxis": [
+      0,
+      0,
+      1
+    ],
+    "facing": "source renderer prepared facing-right; source horizontal mapped+X. Rotate visual for gameplay forward as required."
+  },
+  "adaptations": {
+    "depth": "Upper-body.76stud and foot.90stud shallow extrusion; unseen cockpit/back machinery is not invented",
+    "rounding": "quarter-pixel edge bevel with.10pixel diagonal metal bridge, constrained to original outerprofilebox",
+    "bodyMaterial": "metallic.25/roughness.62 is artistic3D calibration, not source material data",
+    "feet": "both rest on one3D plane; source2pixel backleg vertical layer offset is preserved in sourceNeutral but not treated as a physical floating foot",
+    "attachments": "common tops overlap the source lower-body tail to keep3D rods connected; source rawstartpoints remain recorded",
+    "poses": "source24/-24pixel spread and2pixel body bob are prepared illustration, not complete source gait/attack timing"
+  },
+  "nodes": [
+    {
+      "name": "UpperBody",
+      "pivotStuds": [
+        0,
+        8.250273073887296,
+        0
+      ],
+      "triangles": 18792,
+      "vertices": 9396
+    },
+    {
+      "name": "LeftStrut",
+      "pivotStuds": [
+        0.09146563474705119,
+        3.219663162799481,
+        -0.18
+      ],
+      "triangles": 480,
+      "vertices": 242
+    },
+    {
+      "name": "LeftFoot",
+      "pivotStuds": [
+        0.09146563474705119,
+        -2.085343652529488,
+        -0.18
+      ],
+      "triangles": 3604,
+      "vertices": 1804
+    },
+    {
+      "name": "RightStrut",
+      "pivotStuds": [
+        0.09146563474705119,
+        3.219663162799481,
+        0.18
+      ],
+      "triangles": 480,
+      "vertices": 242
+    },
+    {
+      "name": "RightFoot",
+      "pivotStuds": [
+        0.09146563474705119,
+        -2.085343652529488,
+        0.18
+      ],
+      "triangles": 3604,
+      "vertices": 1804
+    }
+  ],
+  "legs": [
+    {
+      "name": "Left",
+      "strut": "LeftStrut",
+      "foot": "LeftFoot",
+      "bodyAttachment": [
+        0.09146563474705119,
+        8.52466997812845,
+        -0.18
+      ],
+      "bodyAttachmentRelativeToUpperBodyPivot": [
+        0.09146563474705119,
+        0.27439690424115426,
+        -0.18
+      ],
+      "footAttachment": [
+        0.09146563474705119,
+        -2.085343652529488,
+        -0.18
+      ],
+      "rodLength": 10.610013630657939,
+      "rodAxis": [
+        0,
+        1,
+        0
+      ],
+      "spriteSegments": 8,
+      "shaftSprites": 7,
+      "terminalFootSprites": 1,
+      "sourceTilePeriodPixels": 8,
+      "depthLayerStuds": -0.18,
+      "physicalKnee": false
+    },
+    {
+      "name": "Right",
+      "strut": "RightStrut",
+      "foot": "RightFoot",
+      "bodyAttachment": [
+        0.09146563474705119,
+        8.52466997812845,
+        0.18
+      ],
+      "bodyAttachmentRelativeToUpperBodyPivot": [
+        0.09146563474705119,
+        0.27439690424115426,
+        0.18
+      ],
+      "footAttachment": [
+        0.09146563474705119,
+        -2.085343652529488,
+        0.18
+      ],
+      "rodLength": 10.610013630657939,
+      "rodAxis": [
+        0,
+        1,
+        0
+      ],
+      "spriteSegments": 8,
+      "shaftSprites": 7,
+      "terminalFootSprites": 1,
+      "sourceTilePeriodPixels": 8,
+      "depthLayerStuds": 0.18,
+      "physicalKnee": false
+    }
+  ],
+  "runtimeContract": {
+    "noKnees": true,
+    "rodMotion": "one continuous straight strut between bodyAttachment and independent footAttachment",
+    "rodFrame": "CFrame with local+Y along(normalized top\u2212bottom), centred at(top+bottom)/2; Ysize=distance",
+    "footMotion": "translate independent foot to endpoint without rotating a fictional shin/knee",
+    "physics": "all5nodes cosmetic/massless/noCollide/noTouch/noQuery; no Humanoid or health state",
+    "ownership": "pin completed existing physical body to server after attaching visual parts"
+  },
+  "preservedHeroGlbs": {
+    "canonical-hero-player1.glb": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+    "canonical-hero-player2.glb": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+    "canonical-hero.glb": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c"
+  },
+  "validation": "validation.json",
+  "studioImport": "NOT_RUN",
+  "canonicalAnimation": "NOT_IMPLEMENTED"
+}

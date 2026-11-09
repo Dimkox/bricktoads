@@ -1,0 +1,82 @@
+{
+  "status": "PASS",
+  "meshCount": 15,
+  "triangles": 18212,
+  "vertices": 9214,
+  "allFinite": true,
+  "indicesValid": true,
+  "unitNormals": true,
+  "minimumDoubledTriangleArea": 4.944271909998878e-06,
+  "glbBytes": 491644,
+  "glbSha256": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c",
+  "decodedGlbBoundsMetres": [
+    [
+      -0.5964000028252603,
+      -0.8399152083992959,
+      -0.3951910813331604
+    ],
+    [
+      0.5964000028252603,
+      0.8503697217941284,
+      0.15373285527229308
+    ]
+  ],
+  "decodedGlbHeightMetres": 1.6902849301934242,
+  "metreConversionMaximumError": 1.3937969167709952e-08,
+  "limitations": [
+    "No Studio upload/import/render or runtime animation test has been performed.",
+    "This is an authored3D study; only source2D bounds and palette indices are measured canon."
+  ],
+  "articulation": {
+    "pose": "noncanonical hinge articulation probe",
+    "maximumJointAttachmentError": 0.0,
+    "localEulerRadians": {
+      "LeftUpperArm": [
+        -0.65,
+        0,
+        -0.2
+      ],
+      "LeftLowerArm": [
+        -1.0,
+        0,
+        0
+      ],
+      "RightUpperArm": [
+        0.75,
+        0,
+        0.15
+      ],
+      "RightLowerArm": [
+        -0.7,
+        0,
+        0
+      ],
+      "LeftUpperLeg": [
+        0.5,
+        0,
+        0
+      ],
+      "LeftLowerLeg": [
+        -0.8,
+        0,
+        0
+      ],
+      "RightUpperLeg": [
+        -0.4,
+        0,
+        0
+      ],
+      "RightLowerLeg": [
+        -0.3,
+        0,
+        0
+      ],
+      "Head": [
+        0,
+        0.25,
+        0
+      ]
+    },
+    "jointCaps": "closed overlapping joint-centred volumes on every articulated limb"
+  }
+}
