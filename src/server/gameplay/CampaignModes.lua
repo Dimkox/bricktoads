@@ -178,6 +178,12 @@ function Modes:move(slot,x,z,run)
     s.input={x=x,z=z,run=run==true,at=self.now}
     return true
 end
+function Modes:_springPose(spring)
+    local support=self.mode=='Tower' and spring.towerPlatform and self.course.towerPlatforms[spring.towerPlatform]
+    if not support then return center(spring),0 end
+    local angle=support.angle+self.rotation
+    return point(math.cos(angle)*support.radius,spring.y,math.sin(angle)*support.radius),-angle
+end
 function Modes:jump(slot)
     local s=self.actors[slot]
     if self.closed or not s or not self:_special(s) then return false end
@@ -196,7 +202,9 @@ function Modes:jump(slot)
         s.airSpeed=(s.input.run and 24 or self.course.maxSpeed) or 16
         s.velocity.y=self.course.jumpSpeed or 51;s.grounded=false;s.support=nil
         if self.mode=='Ascent' or self.mode=='Tower' then for _,spring in ipairs(self.course.springs or {}) do
-            if math.abs(s.position.x-spring.x)<=spring.w/2+1 and math.abs(s.position.y-spring.y)<=4 and math.abs(s.position.z-spring.z)<=spring.d/2 then
+            local p,yaw=self:_springPose(spring);local dx,dz=s.position.x-p.x,s.position.z-p.z
+            dx,dz=dx*math.cos(yaw)-dz*math.sin(yaw),dx*math.sin(yaw)+dz*math.cos(yaw)
+            if math.abs(dx)<=spring.w/2+1 and math.abs(s.position.y-p.y)<=4 and math.abs(dz)<=spring.d/2 then
                 s.velocity.y=spring.power
             end
         end end
@@ -751,7 +759,10 @@ function Modes:_objects(dt)
             role=n<self.bombIndex and 'Defused' or (exploded and 'Exploded' or 'Objective'),alpha=(n<self.bombIndex or exploded) and .65 or 0})
     end
     for n,fan in ipairs(self.course.fans or {}) do self:_object(fan.id,'Fan',center(fan),size(fan),{collidable=false,alpha=.8,role='Updraft'}) end
-    for n,spring in ipairs(self.course.springs or {}) do self:_object('spring-'..n,'Spring',center(spring),size(spring),{collidable=false,role='Spring'}) end
+    for n,spring in ipairs(self.course.springs or {}) do
+        local p,yaw=self:_springPose(spring)
+        self:_object('spring-'..n,'Spring',p,size(spring),{collidable=false,yaw=yaw,role='Spring'})
+    end
     for _,ramp in ipairs(self.course.ramps or {}) do
         for step=1,3 do self:_object(ramp.id..'-'..step,'Ramp',point(ramp.x-6+step*3,step*.5,ramp.z),
             {w=3,h=step,d=ramp.d},{collidable=false,role='Ramp'}) end

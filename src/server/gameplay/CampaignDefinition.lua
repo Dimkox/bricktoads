@@ -191,7 +191,7 @@ function Definition.build(index,seed)
             local x,z=math.cos(angle)*radius,math.sin(angle)*radius
             addFloor(x,y,z,18,18);c.towerPlatforms[#c.towerPlatforms+1]={angle=angle,radius=radius,y=y,w=18,d=18}
             if n==9 then cp(x,y+3,z,y) end
-            if n==7 or n==14 then c.springs[#c.springs+1]={x=x,y=y+3,z=z,w=8,h=3,d=8,power=65} end
+            if n==7 or n==14 then c.springs[#c.springs+1]={x=x,y=y+3,z=z,w=8,h=3,d=8,power=65,towerPlatform=#c.towerPlatforms} end
             if n>0 and n%5==0 then c.hazards[#c.hazards+1]=hazard('spire-spike-'..n,'RotatingSpike',x,y+3,z,4,5,4,
                 {axis='orbit',radius=radius,period=6,phase=angle}) end
         end

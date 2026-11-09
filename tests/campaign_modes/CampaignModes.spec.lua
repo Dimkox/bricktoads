@@ -216,6 +216,70 @@ return function(Definition,Modes)
         assert(math.abs(p.x-math.cos(support.angle+m.rotation)*support.radius)<.001)
         assert(math.abs(p.z-math.sin(support.angle+m.rotation)*support.radius)<.001)
     end)
+    test('both tower springs launch from their rotating supports and reject airborne repeats',function()
+        local d,_,_,m=fixture(12)
+        for _,rotation in ipairs({math.pi/2,.37,math.pi*1.3}) do
+            m.rotation=rotation;m.elapsed=rotation/d.course.rotationSpeed;m:_objects(0)
+            for n,spring in ipairs(d.course.springs) do
+                local index=({8,15})[n];local support=d.course.towerPlatforms[index]
+                local angle=support.angle+rotation;local a=m.actors[101]
+                a.position={x=math.cos(angle)*support.radius,y=spring.y,z=math.sin(angle)*support.radius}
+                a.velocity={x=0,y=-1,z=0}
+                m:_ground(a,{x=a.position.x,y=a.position.y+.1,z=a.position.z},1/60)
+                assert(a.grounded and a.support=='tower-'..index,'spring stance must use its real rotated support')
+                assert(m:jump(101))
+                assert(a.velocity.y==spring.power,'spring '..n..' at rotation '..rotation..' must launch '..spring.power..', got '..a.velocity.y)
+                assert(spring.towerPlatform==index,'spring must explicitly identify its tower support')
+                local vy=a.velocity.y;m:jump(101)
+                assert(a.velocity.y==vy and not a.grounded,'spring cannot grant an airborne repeat')
+            end
+        end
+    end)
+    test('tower spring graphics remain aligned with their rotating support frames',function()
+        local d,_,w,m=fixture(12)
+        for _,rotation in ipairs({.37,math.pi/2,math.pi*1.3}) do
+            m.rotation=rotation;m.elapsed=rotation/d.course.rotationSpeed;m:_objects(0)
+            for n,spring in ipairs(d.course.springs) do
+                local index=({8,15})[n];local platform=w.objects['tower-'..index];local pad=w.objects['spring-'..n]
+                assert(math.abs(pad.position.x-platform.position.x)<1e-7 and math.abs(pad.position.z-platform.position.z)<1e-7,
+                    'spring graphic must travel with support '..index)
+                assert(pad.position.y==spring.y and math.abs(pad.metadata.yaw-platform.metadata.yaw)<1e-7,
+                    'spring graphic must retain its height and support yaw')
+            end
+        end
+    end)
+    test('rotated spring footprints retain pad edges and reject supported off-pad jumps',function()
+        local d,_,_,m=fixture(12)
+        for _,rotation in ipairs({.37,math.pi/2}) do
+            m.rotation=rotation
+            for n,spring in ipairs(d.course.springs) do
+                local index=({8,15})[n];local support=d.course.towerPlatforms[index];local angle=support.angle+rotation
+                local cx,cz=math.cos(angle)*support.radius,math.sin(angle)*support.radius
+                for _,probe in ipairs({{x=3.999,z=3.999,boost=true},{x=-3.999,z=-3.999,boost=true},
+                    {x=4.999,z=0,boost=true},{x=5.01,z=0,boost=false},{x=0,z=4.01,boost=false}}) do
+                    local a=m.actors[101]
+                    a.position={x=cx+math.cos(angle)*probe.x-math.sin(angle)*probe.z,y=spring.y,
+                        z=cz+math.sin(angle)*probe.x+math.cos(angle)*probe.z}
+                    a.velocity={x=0,y=-1,z=0}
+                    m:_ground(a,{x=a.position.x,y=a.position.y+.1,z=a.position.z},1/60)
+                    assert(a.grounded and a.support=='tower-'..index,'off-pad checks must still stand on actual floor')
+                    m:jump(101)
+                    assert(a.velocity.y==(probe.boost and spring.power or d.course.jumpSpeed),
+                        'spring footprint must rotate with the visible pad, including its existing launch allowance')
+                end
+            end
+        end
+    end)
+    test('ascent springs retain their static graphics and launch power',function()
+        local d,_,w,m=fixture(8);local spring=d.course.springs[1];local a=m.actors[101]
+        m.rotation=math.pi/2;m:_objects(0)
+        local pad=w.objects['spring-1']
+        assert(pad.position.x==spring.x and pad.position.y==spring.y and pad.position.z==spring.z)
+        a.position={x=spring.x,y=spring.y,z=spring.z};a.velocity={x=0,y=-1,z=0}
+        m:_ground(a,{x=a.position.x,y=a.position.y+.1,z=a.position.z},1/60)
+        assert(a.grounded);m:jump(101);assert(a.velocity.y==spring.power)
+        local vy=a.velocity.y;m:jump(101);assert(a.velocity.y==vy)
+    end)
     test('first trio finisher releases only that body while remaining riders retain control',function()
         local d,s,w,m,step=fixture(5,41,3)
         d.course.hazards={};d.course.emitters={}
