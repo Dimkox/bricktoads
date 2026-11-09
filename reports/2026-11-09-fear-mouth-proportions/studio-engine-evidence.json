@@ -1,0 +1,1025 @@
+{
+  "build": {
+    "bytes": 777566,
+    "placeSha256": "43657a454e90539db5e3e6d44aae701953fb3c35475d7416a89d9f838028cccf",
+    "sourceSha256": "d6ada582f21045fc2035b5a81bc6ff97ae32be427f8af521df04aaa6c8e03923",
+    "scripts": [
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BrickToadsServer"
+        ],
+        "className": "Script",
+        "characters": 6708,
+        "sha256": "03d295750e1f2f2f037628f4605c0111a44d137c03ba06717f3eb210bec6cd41"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "RunLifecycle"
+        ],
+        "className": "ModuleScript",
+        "characters": 13753,
+        "sha256": "cda5e4089bb04e76b2b075d21d119368db670d17bbfccdf5cb638b5f8375b968"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossIntro"
+        ],
+        "className": "ModuleScript",
+        "characters": 4446,
+        "sha256": "97bcda80277a05a096bdc2636816f52bbd425b1d759466aee3dd6c35e994ba36"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossIntroWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 10020,
+        "sha256": "5331deb2856d8770919cb55a1ef1761ef6f85043722641f28b4149e7a6fd2089"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossQueue"
+        ],
+        "className": "ModuleScript",
+        "characters": 8816,
+        "sha256": "09bd54c98a25daabef3e12c215305eeeae8115091dec202dac069b48ddd6a2b1"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CanonicalAnimation"
+        ],
+        "className": "ModuleScript",
+        "characters": 27424,
+        "sha256": "fa49be0615ae2c302ec7f4d8ebba748037ed6a2e7a9c913469fa8c03b5805793"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CanonicalHeroPresentation"
+        ],
+        "className": "ModuleScript",
+        "characters": 12949,
+        "sha256": "f6eea811ec98e27de45873dd6dded53f809a48a0103e7110c515ef5d26f08ca2"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CanonicalWalker"
+        ],
+        "className": "ModuleScript",
+        "characters": 4468,
+        "sha256": "1b8329646899e193474f5769685cdb65ce652e1a2eead3b20de97edd9d6ac412"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "CharacterAppearance"
+        ],
+        "className": "ModuleScript",
+        "characters": 16472,
+        "sha256": "c52530a9f2ac80a3d4315029cb3230fbe80e287f83805df037f7d8c667a1ab4f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonFlight"
+        ],
+        "className": "ModuleScript",
+        "characters": 14599,
+        "sha256": "dd5a04599865fc60c1fcaf7577c35bd4cd874c98a26e917c104e08517186a270"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 12533,
+        "sha256": "0a72c52677909f7de24aba566c2e7d2a9aeeadb8d8e37388525bc22eb3a2bdf5"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "EnemyCarry"
+        ],
+        "className": "ModuleScript",
+        "characters": 9958,
+        "sha256": "f295b57bca701817cd9a848b77a05703631807847de9e58c28829929490abc21"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 4800,
+        "sha256": "ce9d6db0068ec8074eb67d13d1e5c498ebe68140f080cb90beabdaf7617b6b88"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameController"
+        ],
+        "className": "ModuleScript",
+        "characters": 22732,
+        "sha256": "70a3e23b0199c11e4d2dbb97b61afdc072e007c3fccde9698ab982927e61db71"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 87405,
+        "sha256": "0b8c538e5705090e04e56fcbbde0b09930aff09c743e2533e9e49e9a5d4b12d3"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GuardianAppearance"
+        ],
+        "className": "ModuleScript",
+        "characters": 13200,
+        "sha256": "0204540dd6524a42309fa22880f086dfeef1b0bbf2ceb4b78caf3dd700f627f6"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GuardianPattern"
+        ],
+        "className": "ModuleScript",
+        "characters": 12724,
+        "sha256": "a2bb5d2887aba37de34ee6c7155d9f1345b96af26c165911978301ce9b36ab8b"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "HealingFlies"
+        ],
+        "className": "ModuleScript",
+        "characters": 5447,
+        "sha256": "e188e25a8dc27e0ea33f44be902bc2c7530b28ae728f16eebd22068bbee7832a"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDefinition"
+        ],
+        "className": "ModuleScript",
+        "characters": 3346,
+        "sha256": "d9e37ed8138dd5df83439fc0de370489f7644f5a6b4d078a6558995864414566"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDirector"
+        ],
+        "className": "ModuleScript",
+        "characters": 36946,
+        "sha256": "88f29bae58257d4a0ae1c1129f16d764e76be828a931185a10ad6a15db31d97d"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelVariation"
+        ],
+        "className": "ModuleScript",
+        "characters": 5979,
+        "sha256": "2ebba71d49207d77b5d05234706019f36d5eb850e16f6b472e60d6ec3f5a7a32"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "MatchHub"
+        ],
+        "className": "ModuleScript",
+        "characters": 17073,
+        "sha256": "f0a77737e1b2fdf5eea3d3b5066fd3363350357fc8ce746de67cc5f88f1e67fc"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "RunJournal"
+        ],
+        "className": "ModuleScript",
+        "characters": 5181,
+        "sha256": "c62046c1bde00c75aef8d4a759d56e07d1cd8f85189c46e16257b36fa4b5437f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "SourceCombat"
+        ],
+        "className": "ModuleScript",
+        "characters": 2434,
+        "sha256": "af6b9f57c514f60980bf9a37f32ece85a38784c407898684efe3e64e8586d3c4"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "WalkerClubs"
+        ],
+        "className": "ModuleScript",
+        "characters": 9543,
+        "sha256": "c65a104c6a1779b5c10d5cd214af3e1915f0af0fbf148bd6e6457a854b77aed5"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Combat"
+        ],
+        "className": "ModuleScript",
+        "characters": 3364,
+        "sha256": "9472b0e88151e1d14b55b018618dab3626fd54c671617dbf246695e1b421bfda"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Session"
+        ],
+        "className": "ModuleScript",
+        "characters": 16818,
+        "sha256": "3bc7ae00c87ca343bd53188f4354714e28774fac420798eccd9ead7a0feb467b"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Config"
+        ],
+        "className": "ModuleScript",
+        "characters": 747,
+        "sha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "ConnectionRegistry"
+        ],
+        "className": "ModuleScript",
+        "characters": 1717,
+        "sha256": "7f6cd4b6216cc993a359a55d318c46a819c90ecf0f893f4d34843cb168956c92"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "RobloxWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 14159,
+        "sha256": "487cdb395fcdf61c4ebf0dab41396fa860678d4291bd3d3b8729344af2799672"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BuildInfo"
+        ],
+        "className": "ModuleScript",
+        "characters": 112,
+        "sha256": "a06e3a2824c1b29317db8399087f5a5a47d9a263bf473e11fb82b366d5c96740"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "BrickToadsConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 119,
+        "sha256": "e5183fd2f3eda75057cdf62e5cf2b462fc7e62fcfbc62ddff2bd5fa2a3ab8360"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "HeroPortraits"
+        ],
+        "className": "ModuleScript",
+        "characters": 246,
+        "sha256": "d2c98d99d1a8f0034be706a4ee69a998d12d1bd43871201834a459a682d39d8a"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "TextCatalog"
+        ],
+        "className": "ModuleScript",
+        "characters": 56167,
+        "sha256": "9965d38d89093a984abd1396aa281132c98c476930d9fa6f466feb1bb1c4588c"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "TextLocalization"
+        ],
+        "className": "ModuleScript",
+        "characters": 3326,
+        "sha256": "a39c207952633e8b049bc8cb85ecf77310f37183d8a9df0d71eaf5f748b2a148"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BossQueuePanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 10547,
+        "sha256": "6c9c3b16ec931f79cb389a0681d88790a417793722b7634dd4b73db639ad803b"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BrickToadsClient"
+        ],
+        "className": "LocalScript",
+        "characters": 84258,
+        "sha256": "682a285ed49c0ba8a50bcafd0ee25fba89d5c9220a6a65e77a70727844092469"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "CombatFeedback"
+        ],
+        "className": "ModuleScript",
+        "characters": 8432,
+        "sha256": "4accb5bd6fde2095de335f60ad04cb92ad3a40ad4bc76d344d15ff33f899d8b0"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "GroupPanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 13140,
+        "sha256": "a85a97ef9f6958b1b51850df864ae3701e13781e91c2dbbe51a261f1c64c3642"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "MovementInput"
+        ],
+        "className": "ModuleScript",
+        "characters": 2001,
+        "sha256": "cf225a4334a50dd21fa0fe8437f6bbb240bf860f608d2915d7815912c96743b8"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "RobloxInputBindings"
+        ],
+        "className": "ModuleScript",
+        "characters": 3082,
+        "sha256": "7f85db79b5e2fad1b319b596f35ecfe094b7bab487150d27ff8cfe208669e2da"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "SpectatorCamera"
+        ],
+        "className": "ModuleScript",
+        "characters": 9649,
+        "sha256": "9ce2683a1268b39490e0042082281a5ca484e5c48955bb0332936e1d68346f5d"
+      }
+    ]
+  },
+  "import": {
+    "assetId": "127590624870763",
+    "checks": [
+      {
+        "positionError": 4.76837158203125e-7,
+        "name": "GreenFearBeforeCut",
+        "sizeError": 5.960464477539063e-8,
+        "originError": 4.805480102731963e-7,
+        "texture": "rbxassetid://96845591138258"
+      },
+      {
+        "positionError": 5.960464477539063e-8,
+        "name": "GreenFearAfterCut",
+        "sizeError": 8.429369557916289e-8,
+        "originError": 4.777390927301894e-7,
+        "texture": "rbxassetid://96845591138258"
+      },
+      {
+        "positionError": 5.960464477539063e-8,
+        "name": "PlayerTwoFearBeforeCut",
+        "sizeError": 5.960464477539063e-8,
+        "originError": 7.177349630183016e-7,
+        "texture": "rbxassetid://96845591138258"
+      },
+      {
+        "positionError": 2.4575624024691933e-7,
+        "name": "PlayerTwoFearAfterCut",
+        "sizeError": 1.4600097131278744e-7,
+        "originError": 7.158573680499103e-7,
+        "texture": "rbxassetid://96845591138258"
+      }
+    ]
+  },
+  "poseMetrics": [
+    {
+      "name": "GreenFearBeforeCut",
+      "frame": 50,
+      "minWorldY": 0.28878682110443854,
+      "maxWorldY": 6.581020707408368,
+      "vertices": 49890
+    },
+    {
+      "name": "PlayerTwoFearBeforeCut",
+      "frame": 50,
+      "minWorldY": 0.2814567174742184,
+      "maxWorldY": 6.294657386144454,
+      "vertices": 48624
+    },
+    {
+      "name": "GreenFearAfterCut",
+      "frame": 51,
+      "minWorldY": 0.6074062528041718,
+      "maxWorldY": 6.672115973806633,
+      "vertices": 54198
+    },
+    {
+      "name": "PlayerTwoFearAfterCut",
+      "frame": 51,
+      "minWorldY": 0.5990033711649477,
+      "maxWorldY": 6.474400318339704,
+      "vertices": 52722
+    }
+  ],
+  "engine": {
+    "initial": {
+      "meshes": 3,
+      "normalizedHealth": 1,
+      "rows": [
+        {
+          "jointError": 0,
+          "name": "GuardianChassis",
+          "untinted": true,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianLeftCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianRightCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        }
+      ],
+      "hp": 100,
+      "welds": 2,
+      "profile": "CanonicalBossWalker",
+      "legacyAbsent": true,
+      "assemblyRoot": true,
+      "manualServerOwner": true,
+      "shotSerial": 0,
+      "physicalColliders": 2,
+      "motors": 3
+    },
+    "bossOwner": 999,
+    "fearForms": [
+      {
+        "hero": "Mr. Green",
+        "neckCF": [
+          610.2835083007812,
+          4.8512678146362305,
+          -363.4697265625,
+          0.3887075185775757,
+          0.31898894906044006,
+          -0.8643799424171448,
+          -0.22244670987129211,
+          0.9428934454917908,
+          0.24793022871017456,
+          0.8941051363945007,
+          0.09590610861778259,
+          0.4374678134918213
+        ],
+        "texture": "rbxassetid://96845591138258",
+        "meshId": "rbxassetid://86643500045712",
+        "size": [
+          1.7579636573791504,
+          6.0462260246276855,
+          2.8231165409088135
+        ],
+        "frame": 50,
+        "hp": 37,
+        "morph": "FearBeforeCut"
+      },
+      {
+        "hero": "Mr. Yellow",
+        "neckCF": [
+          610.3154907226562,
+          4.843938827514648,
+          -356.4476318359375,
+          0.38870757818222046,
+          0.31898900866508484,
+          -0.8643800616264343,
+          -0.2224467694759369,
+          0.9428936839103699,
+          0.24793027341365814,
+          0.8941053152084351,
+          0.09590612351894379,
+          0.43746790289878845
+        ],
+        "texture": "rbxassetid://96845591138258",
+        "meshId": "rbxassetid://107340162185697",
+        "size": [
+          1.7579636573791504,
+          5.8855390548706055,
+          2.8231165409088135
+        ],
+        "frame": 50,
+        "hp": 100,
+        "morph": "FearBeforeCut"
+      },
+      {
+        "hero": "Mr. Green",
+        "neckCF": [
+          609.9188842773438,
+          4.888432025909424,
+          -363.5,
+          -4.371139183945161e-8,
+          0.01999867707490921,
+          -0.9998000264167786,
+          0,
+          0.9998000264167786,
+          0.01999867707490921,
+          1,
+          8.741700696646149e-10,
+          -4.370265216380176e-8
+        ],
+        "texture": "rbxassetid://96845591138258",
+        "meshId": "rbxassetid://89515139231451",
+        "size": [
+          2.088353395462036,
+          6.0314459800720215,
+          2.8215267658233643
+        ],
+        "frame": 51,
+        "hp": 37,
+        "morph": "FearAfterCut"
+      },
+      {
+        "hero": "Mr. Yellow",
+        "neckCF": [
+          609.8907470703125,
+          4.880030155181885,
+          -356.5,
+          -4.3711398944878965e-8,
+          0.019998684525489807,
+          -0.9998001456260681,
+          5.551115123125783e-17,
+          0.9998002648353577,
+          0.01999867707490921,
+          1.0000001192092896,
+          8.741705137538247e-10,
+          -4.370265571651544e-8
+        ],
+        "texture": "rbxassetid://96845591138258",
+        "meshId": "rbxassetid://74031947106795",
+        "size": [
+          2.088352918624878,
+          5.850094795227051,
+          2.8215267658233643
+        ],
+        "frame": 51,
+        "hp": 100,
+        "morph": "FearAfterCut"
+      }
+    ],
+    "otherAfter": {
+      "meshes": 3,
+      "normalizedHealth": 1,
+      "rows": [
+        {
+          "jointError": 0,
+          "name": "GuardianChassis",
+          "untinted": true,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianLeftCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianRightCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        }
+      ],
+      "hp": 100,
+      "welds": 2,
+      "profile": "CanonicalBossWalker",
+      "legacyAbsent": true,
+      "assemblyRoot": true,
+      "manualServerOwner": true,
+      "shotSerial": 0,
+      "physicalColliders": 2,
+      "motors": 3
+    },
+    "scope": "Prepared native Session/Director/World fixture with fixture support/positioning and advanced time; accepted fire, ball pickup/throw and actual collision resolution; not a full normal-input route",
+    "otherBefore": {
+      "meshes": 3,
+      "normalizedHealth": 1,
+      "rows": [
+        {
+          "jointError": 0,
+          "name": "GuardianChassis",
+          "untinted": true,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianLeftCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianRightCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        }
+      ],
+      "hp": 100,
+      "welds": 2,
+      "profile": "CanonicalBossWalker",
+      "legacyAbsent": true,
+      "assemblyRoot": true,
+      "manualServerOwner": true,
+      "shotSerial": 0,
+      "physicalColliders": 2,
+      "motors": 3
+    },
+    "passed": true,
+    "heavy": {
+      "meshes": 3,
+      "normalizedHealth": 1,
+      "rows": [
+        {
+          "jointError": 0,
+          "name": "GuardianChassis",
+          "untinted": true,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianLeftCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianRightCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 0,
+          "recoil": 0.25
+        }
+      ],
+      "hp": 100,
+      "welds": 2,
+      "profile": "CanonicalBossWalker",
+      "legacyAbsent": true,
+      "assemblyRoot": true,
+      "manualServerOwner": true,
+      "shotSerial": 2,
+      "physicalColliders": 2,
+      "motors": 3
+    },
+    "otherHeroHP": 100,
+    "bullet": {
+      "meshes": 3,
+      "normalizedHealth": 1,
+      "rows": [
+        {
+          "jointError": 0,
+          "name": "GuardianChassis",
+          "untinted": true,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianLeftCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 0,
+          "recoil": 0.25
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianRightCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        }
+      ],
+      "hp": 100,
+      "welds": 2,
+      "profile": "CanonicalBossWalker",
+      "legacyAbsent": true,
+      "assemblyRoot": true,
+      "manualServerOwner": true,
+      "shotSerial": 1,
+      "physicalColliders": 2,
+      "motors": 3
+    },
+    "intro": {
+      "texture": "rbxassetid://90154814086213",
+      "totalParts": 3,
+      "meshParts": 1,
+      "counter": 225
+    },
+    "blocked": {
+      "meshes": 3,
+      "normalizedHealth": 1,
+      "rows": [
+        {
+          "jointError": 0,
+          "name": "GuardianChassis",
+          "untinted": true,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianLeftCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        },
+        {
+          "jointError": 2.384185791015625e-7,
+          "name": "GuardianRightCannon",
+          "muzzleError": 0,
+          "untinted": true,
+          "flash": 1,
+          "recoil": 0
+        }
+      ],
+      "hp": 100,
+      "welds": 2,
+      "profile": "CanonicalBossWalker",
+      "legacyAbsent": true,
+      "assemblyRoot": true,
+      "manualServerOwner": true,
+      "shotSerial": 1,
+      "physicalColliders": 2,
+      "motors": 3
+    },
+    "fearEnd": [
+      {
+        "id": 1,
+        "hp": 37,
+        "head": 0
+      },
+      {
+        "id": 2,
+        "hp": 100,
+        "head": 0
+      }
+    ],
+    "resources": {
+      "view": "Playing",
+      "connected": true,
+      "template": "Mr. Green",
+      "attempt": 1,
+      "userId": 1,
+      "connectionEpoch": 1,
+      "health": 5,
+      "status": "Alive",
+      "actorId": "GuardianVisualNative:actor:2",
+      "respawns": 3,
+      "retryReady": false
+    },
+    "heroHP": 37,
+    "rounds": [
+      {
+        "presentation": {
+          "meshes": 3,
+          "normalizedHealth": 0.6666666666666666,
+          "rows": [
+            {
+              "jointError": 0,
+              "name": "GuardianChassis",
+              "untinted": false,
+              "recoil": 0
+            },
+            {
+              "jointError": 2.384185791015625e-7,
+              "name": "GuardianLeftCannon",
+              "muzzleError": 0,
+              "untinted": false,
+              "flash": 1,
+              "recoil": 0
+            },
+            {
+              "jointError": 2.384185791015625e-7,
+              "name": "GuardianRightCannon",
+              "muzzleError": 0,
+              "untinted": false,
+              "flash": 1,
+              "recoil": 0
+            }
+          ],
+          "hp": 100,
+          "welds": 2,
+          "profile": "CanonicalBossWalker",
+          "legacyAbsent": true,
+          "assemblyRoot": true,
+          "manualServerOwner": true,
+          "shotSerial": 2,
+          "physicalColliders": 2,
+          "motors": 3
+        },
+        "hits": 1,
+        "stage": "Boss",
+        "rawLife": 31
+      },
+      {
+        "presentation": {
+          "meshes": 3,
+          "normalizedHealth": 0.3333333333333333,
+          "rows": [
+            {
+              "jointError": 0,
+              "name": "GuardianChassis",
+              "untinted": false,
+              "recoil": 0
+            },
+            {
+              "jointError": 2.384185791015625e-7,
+              "name": "GuardianLeftCannon",
+              "muzzleError": 0,
+              "untinted": false,
+              "flash": 1,
+              "recoil": 0
+            },
+            {
+              "jointError": 2.384185791015625e-7,
+              "name": "GuardianRightCannon",
+              "muzzleError": 0,
+              "untinted": false,
+              "flash": 1,
+              "recoil": 0
+            }
+          ],
+          "hp": 100,
+          "welds": 2,
+          "profile": "CanonicalBossWalker",
+          "legacyAbsent": true,
+          "assemblyRoot": true,
+          "manualServerOwner": true,
+          "shotSerial": 3,
+          "physicalColliders": 2,
+          "motors": 3
+        },
+        "hits": 2,
+        "stage": "Boss",
+        "rawLife": 15
+      },
+      {
+        "presentation": {
+          "meshes": 3,
+          "normalizedHealth": 0,
+          "rows": [
+            {
+              "jointError": 0,
+              "name": "GuardianChassis",
+              "untinted": false,
+              "recoil": 0
+            },
+            {
+              "jointError": 2.384185791015625e-7,
+              "name": "GuardianLeftCannon",
+              "muzzleError": 0,
+              "untinted": false,
+              "flash": 1,
+              "recoil": 0
+            },
+            {
+              "jointError": 2.384185791015625e-7,
+              "name": "GuardianRightCannon",
+              "muzzleError": 0,
+              "untinted": false,
+              "flash": 1,
+              "recoil": 0
+            }
+          ],
+          "hp": 0,
+          "welds": 2,
+          "profile": "CanonicalBossWalker",
+          "legacyAbsent": true,
+          "assemblyRoot": true,
+          "manualServerOwner": true,
+          "shotSerial": 4,
+          "physicalColliders": 0,
+          "motors": 3
+        },
+        "hits": 3,
+        "stage": "Exit",
+        "rawLife": 0
+      }
+    ]
+  }
+}

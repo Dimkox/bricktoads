@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "status": "visually-reviewed-frozen-preupload",
+  "artifactSha256": "e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1",
+  "artifactBytes": 8712432,
+  "files": {
+    "hero-fear-wide-mouth.glb": {
+      "sha256": "e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1",
+      "bytes": 8712432
+    },
+    "hero-fear-wide-mouth-rig.json": {
+      "sha256": "5cc01cf800e0f8258f4d2428e29a09ce43620213660d56980576e6f826fe1412",
+      "bytes": 21805
+    },
+    "hero-fear-wide-mouth-validation.json": {
+      "sha256": "3a7d30123e95bc26527bf2f736295476ccfda68ada0ee390885f717e3cc61358",
+      "bytes": 12316
+    },
+    "hero-fear-wide-mouth-khronos.json": {
+      "sha256": "033f6993ffa87c36a02a0f4ae7406ebfd88e43ba0996b2bab0d919245fa662b8",
+      "bytes": 1410
+    },
+    "hero-fear-wide-mouth-preview.png": {
+      "sha256": "7927e70dbfb36ab1aba8f5dad9f74de0223773339ae182c7733fa751a1f544a8",
+      "bytes": 372295
+    },
+    "hero-fear-wide-mouth-README.md": {
+      "sha256": "9c1ec34925a33e1a47dd48357949d8b013347239f715f4478363b140b5267206",
+      "bytes": 4941
+    },
+    "build_hero_fear_wide_mouth.py": {
+      "sha256": "2decd65831d5b7842dce29c4c7c9b2e9f6db54c6949e93a7f6557846c2137976",
+      "bytes": 17101
+    },
+    "render_hero_fear_wide_mouth.py": {
+      "sha256": "c4b285b91ceb67c23b82dbbbe9bb44646af521cb36f8fa57b2e2b1b6dfcb8985",
+      "bytes": 4096
+    },
+    "validate_hero_fear_wide_mouth.cjs": {
+      "sha256": "516db7e624706d0c5f6070f07fa9f2be051fc6a46a669643f158a75097f45f88",
+      "bytes": 802
+    }
+  },
+  "authoringDependencies": {
+    "build_hero_fear_wide_mouth.py": "2decd65831d5b7842dce29c4c7c9b2e9f6db54c6949e93a7f6557846c2137976",
+    "render_hero_fear_wide_mouth.py": "c4b285b91ceb67c23b82dbbbe9bb44646af521cb36f8fa57b2e2b1b6dfcb8985",
+    "build_hero_fear_morphs.py": "8b57d32da01968d8af2062c239928638856caccd3f821b48bf87b3f14b45ef3c",
+    "build_hero_attack_morphs.py": "942c321d4c15e1f10ccec09159a9590d87b54974e0224358268b91c8022c7bfb",
+    "build_green_brawler.py": "c92cf83914732e8682d1595efc3781c4e0b8afee3e5904548f2da0b93ae5b993",
+    "build_canonical_hero.py": "d984ab4131b7f7c4fadf97da8a36e79040754b2336ab02aff175992fe761b221",
+    "bake_green_brawler_surface.py": "592eb1d64be5ffad7827de3435d78ec13ca3969f082254e3495a766c67c13656"
+  },
+  "frozenEarlierGlbs": {
+    "canonical-hero.glb": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c",
+    "canonical-hero-player1.glb": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+    "canonical-hero-player2.glb": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+    "green-brawler.glb": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+    "hero-attack-morphs.glb": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+    "hero-fear-morphs.glb": "ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a",
+    "boss-walker.glb": "4f1d852e369f83da380dd05b37a5d999886aea036eba220852678ed4a47adc08"
+  },
+  "officialKhronos": {
+    "numErrors": 0,
+    "numWarnings": 0,
+    "numInfos": 0,
+    "numHints": 0,
+    "messages": [],
+    "truncated": false
+  },
+  "visualInspection": {
+    "result": "PASS",
+    "source": "serialized GLB positions/normals and baked-albedo UV vertex samples",
+    "views": [
+      "front",
+      "three-quarter",
+      "side"
+    ],
+    "scope": "all four semantic meshes",
+    "bodyAttachmentAcceptance": "root-owned native integration"
+  },
+  "independentPosePrediction": {
+    "method": "independent exact actual fixture waist/neck attachment chain, runtime source32/33 rotations, every serialized float32 vertex",
+    "groundRootY": -3,
+    "nativeAcceptance": "root-owned; these are attachment-chain predictions",
+    "clearanceStuds": {
+      "GreenFearBeforeCut": 0.288786687,
+      "PlayerTwoFearBeforeCut": 0.281456668,
+      "GreenFearAfterCut": 0.607405779,
+      "PlayerTwoFearAfterCut": 0.599003259
+    }
+  },
+  "studioUpload": "NOT_RUN by asset author; root owns integration"
+}

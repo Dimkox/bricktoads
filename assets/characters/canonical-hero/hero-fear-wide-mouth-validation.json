@@ -1,0 +1,480 @@
+{
+  "status": "PASS",
+  "sha256": "e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1",
+  "bytes": 8712432,
+  "meshCount": 4,
+  "materials": 1,
+  "primitivesPerMesh": 1,
+  "totalTriangles": 68478,
+  "parts": [
+    {
+      "name": "GreenFearBeforeCut",
+      "morphKind": "FearBeforeCut",
+      "heroTemplate": "Mr. Green",
+      "attachmentName": "NeckRigAttachment",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -1.6800000000000002,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -6,
+        0,
+        0
+      ],
+      "layoutPurpose": "native import orientation only; subtract before neck binding",
+      "boundsStuds": [
+        [
+          -0.8017610517138093,
+          -4.243141598776,
+          -2.396964285508638
+        ],
+        [
+          0.9562026546639739,
+          1.803084654412088,
+          0.4261520233614544
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.07722080147508231,
+        -1.2200284721819559,
+        -0.9854061310735919
+      ],
+      "boundingBoxSizeStuds": [
+        1.757963706377783,
+        6.046226253188088,
+        2.823116308870093
+      ],
+      "heightStuds": 6.046226253188088,
+      "neckSpaceCenterStuds": [
+        0.07722080147508231,
+        -1.2200284721819559,
+        -0.9854061310735919
+      ],
+      "originAttachmentInIdentityBboxPartStuds": [
+        -0.07722080147508231,
+        1.2200284721819559,
+        0.9854061310735919
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "neckAxes": "identity"
+      },
+      "oldBoundsStuds": [
+        [
+          -0.816534215859359,
+          -0.19997041002392726,
+          -0.9950578377295201
+        ],
+        [
+          0.8613269618557594,
+          2.8815709378258716,
+          0.6387340281779424
+        ]
+      ],
+      "oldHeightStuds": 3.081541347849799,
+      "chinMinimumYChangeStuds": -4.043171188752073,
+      "upperMaximumYChangeStuds": -1.0784862834137836,
+      "closedConnectedOrientableComponents": 1,
+      "triangles": 16630,
+      "authoringVertices": 8311,
+      "exportedVertices": 49890
+    },
+    {
+      "name": "GreenFearAfterCut",
+      "morphKind": "FearAfterCut",
+      "heroTemplate": "Mr. Green",
+      "attachmentName": "NeckRigAttachment",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -0.56,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -2,
+        0,
+        0
+      ],
+      "layoutPurpose": "native import orientation only; subtract before neck binding",
+      "boundsStuds": [
+        [
+          -1.0441784003928634,
+          -4.240071076807042,
+          -2.3953749286097543
+        ],
+        [
+          1.0441748388478447,
+          1.791374991010175,
+          0.4261520233614544
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -1.7807725093410554e-06,
+        -1.2243480428984335,
+        -0.98461145262415
+      ],
+      "boundingBoxSizeStuds": [
+        2.088353239240708,
+        6.0314460678172175,
+        2.821526951971209
+      ],
+      "heightStuds": 6.0314460678172175,
+      "neckSpaceCenterStuds": [
+        -1.7807725093410554e-06,
+        -1.2243480428984335,
+        -0.98461145262415
+      ],
+      "originAttachmentInIdentityBboxPartStuds": [
+        1.7807725093410554e-06,
+        1.2243480428984335,
+        0.98461145262415
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "neckAxes": "identity"
+      },
+      "oldBoundsStuds": [
+        [
+          -0.784073995528619,
+          -0.19997041002392726,
+          -0.9922109608339982
+        ],
+        [
+          0.784073995528619,
+          2.608411897858,
+          0.6399988710715444
+        ]
+      ],
+      "oldHeightStuds": 2.8083823078819274,
+      "chinMinimumYChangeStuds": -4.040100666783115,
+      "upperMaximumYChangeStuds": -0.8170369068478252,
+      "closedConnectedOrientableComponents": 1,
+      "triangles": 18066,
+      "authoringVertices": 9027,
+      "exportedVertices": 54198
+    },
+    {
+      "name": "PlayerTwoFearBeforeCut",
+      "morphKind": "FearBeforeCut",
+      "heroTemplate": "Mr. Yellow",
+      "attachmentName": "NeckRigAttachment",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        0.56,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        2,
+        0,
+        0
+      ],
+      "layoutPurpose": "native import orientation only; subtract before neck binding",
+      "boundsStuds": [
+        [
+          -0.8017610517138093,
+          -4.243141598776,
+          -2.396964285508638
+        ],
+        [
+          0.9562026546639739,
+          1.6423974447745644,
+          0.4261520233614544
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.07722080147508231,
+        -1.3003720770007177,
+        -0.9854061310735919
+      ],
+      "boundingBoxSizeStuds": [
+        1.757963706377783,
+        5.885539043550565,
+        2.823116308870093
+      ],
+      "heightStuds": 5.885539043550565,
+      "neckSpaceCenterStuds": [
+        0.07722080147508231,
+        -1.3003720770007177,
+        -0.9854061310735919
+      ],
+      "originAttachmentInIdentityBboxPartStuds": [
+        -0.07722080147508231,
+        1.3003720770007177,
+        0.9854061310735919
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "neckAxes": "identity"
+      },
+      "oldBoundsStuds": [
+        [
+          -0.7471424531630069,
+          -0.214034794091586,
+          -0.9278884983039493
+        ],
+        [
+          0.7881285643113759,
+          3.0842385244099932,
+          0.5956175970373755
+        ]
+      ],
+      "oldHeightStuds": 3.2982733185015793,
+      "chinMinimumYChangeStuds": -4.029106804684414,
+      "upperMaximumYChangeStuds": -1.4418410796354288,
+      "closedConnectedOrientableComponents": 1,
+      "triangles": 16208,
+      "authoringVertices": 8106,
+      "exportedVertices": 48624
+    },
+    {
+      "name": "PlayerTwoFearAfterCut",
+      "morphKind": "FearAfterCut",
+      "heroTemplate": "Mr. Yellow",
+      "attachmentName": "NeckRigAttachment",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        1.6800000000000002,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        6,
+        0,
+        0
+      ],
+      "layoutPurpose": "native import orientation only; subtract before neck binding",
+      "boundsStuds": [
+        [
+          -1.0441784003928634,
+          -4.240071076807042,
+          -2.3953749286097543
+        ],
+        [
+          1.0441748388478447,
+          1.6100240714326428,
+          0.4261520233614544
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -1.7807725093410554e-06,
+        -1.3150235026871995,
+        -0.98461145262415
+      ],
+      "boundingBoxSizeStuds": [
+        2.088353239240708,
+        5.850095148239685,
+        2.821526951971209
+      ],
+      "heightStuds": 5.850095148239685,
+      "neckSpaceCenterStuds": [
+        -1.7807725093410554e-06,
+        -1.3150235026871995,
+        -0.98461145262415
+      ],
+      "originAttachmentInIdentityBboxPartStuds": [
+        1.7807725093410554e-06,
+        1.3150235026871995,
+        0.98461145262415
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "neckAxes": "identity"
+      },
+      "oldBoundsStuds": [
+        [
+          -0.7174408090958364,
+          -0.214034794091586,
+          -0.9252337939970424
+        ],
+        [
+          0.7174408090958364,
+          2.7477683403729167,
+          0.5967970593044258
+        ]
+      ],
+      "oldHeightStuds": 2.961803134464503,
+      "chinMinimumYChangeStuds": -4.026036282715456,
+      "upperMaximumYChangeStuds": -1.137744268940274,
+      "closedConnectedOrientableComponents": 1,
+      "triangles": 17574,
+      "authoringVertices": 8789,
+      "exportedVertices": 52722
+    }
+  ],
+  "allSevenEarlierGlbsUnchanged": true,
+  "closedConnectedOrientableComponentsPerMesh": 1,
+  "meshTriangleLimitExclusive": 20000,
+  "exportVertexLimitExclusive": 65536,
+  "actualStudioAcceptance": "NOT_RUN",
+  "preview": {
+    "source": "serialized GLB positions/normals and baked-albedo UV vertex samples",
+    "views": [
+      "front",
+      "three-quarter",
+      "side"
+    ],
+    "parts": [
+      "GreenFearBeforeCut",
+      "GreenFearAfterCut",
+      "PlayerTwoFearBeforeCut",
+      "PlayerTwoFearAfterCut"
+    ]
+  },
+  "serializedAssetChecks": "PASS",
+  "decodedParts": {
+    "GreenFearBeforeCut": {
+      "decodedBoundsMetres": [
+        [
+          -0.2244931012392044,
+          -1.188079595565796,
+          -0.6711500287055969
+        ],
+        [
+          0.2677367329597473,
+          0.5048636794090271,
+          0.11932256817817688
+        ]
+      ],
+      "metreConversionMaximumError": 5.209148423723775e-08,
+      "minimumTriangleAreaSquareMetres": 4.983358289348975e-10,
+      "unitNormals": true
+    },
+    "GreenFearAfterCut": {
+      "decodedBoundsMetres": [
+        [
+          -0.2923699617385864,
+          -1.1872198581695557,
+          -0.6707049608230591
+        ],
+        [
+          0.29236894845962524,
+          0.5015850067138672,
+          0.11932256817817688
+        ]
+      ],
+      "metreConversionMaximumError": 4.333641623333051e-08,
+      "minimumTriangleAreaSquareMetres": 4.793471762529477e-10,
+      "unitNormals": true
+    },
+    "PlayerTwoFearBeforeCut": {
+      "decodedBoundsMetres": [
+        [
+          -0.2244931012392044,
+          -1.188079595565796,
+          -0.6711500287055969
+        ],
+        [
+          0.2677367329597473,
+          0.4598712921142578,
+          0.11932256817817688
+        ]
+      ],
+      "metreConversionMaximumError": 5.209148423723775e-08,
+      "minimumTriangleAreaSquareMetres": 4.983358289348975e-10,
+      "unitNormals": true
+    },
+    "PlayerTwoFearAfterCut": {
+      "decodedBoundsMetres": [
+        [
+          -0.2923699617385864,
+          -1.1872198581695557,
+          -0.6707049608230591
+        ],
+        [
+          0.29236894845962524,
+          0.45080673694610596,
+          0.11932256817817688
+        ]
+      ],
+      "metreConversionMaximumError": 4.333641623333051e-08,
+      "minimumTriangleAreaSquareMetres": 4.793471762529477e-10,
+      "unitNormals": true
+    }
+  },
+  "metreConversionMaximumError": 5.209148423723775e-08,
+  "attributesPerPrimitive": [
+    "POSITION",
+    "NORMAL",
+    "TEXCOORD_0"
+  ],
+  "oneEmbeddedAlbedo": true,
+  "noEmissive": true,
+  "noVertexColors": true,
+  "independentPosePrediction": {
+    "method": "independent exact actual fixture waist/neck attachment chain, runtime source32/33 rotations, every serialized float32 vertex",
+    "groundRootY": -3,
+    "nativeAcceptance": "root-owned; these are attachment-chain predictions",
+    "clearanceStuds": {
+      "GreenFearBeforeCut": 0.288786687,
+      "PlayerTwoFearBeforeCut": 0.281456668,
+      "GreenFearAfterCut": 0.607405779,
+      "PlayerTwoFearAfterCut": 0.599003259
+    }
+  },
+  "visualInspection": {
+    "result": "PASS",
+    "source": "serialized GLB positions/normals and baked-albedo UV vertex samples",
+    "views": [
+      "front",
+      "three-quarter",
+      "side"
+    ],
+    "scope": "all four semantic meshes",
+    "bodyAttachmentAcceptance": "root-owned native integration"
+  }
+}
