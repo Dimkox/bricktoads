@@ -1,0 +1,191 @@
+[
+  {
+    "players": 1,
+    "status": "PASS",
+    "checks": 47,
+    "failed": 0,
+    "totalSeconds": 50.41826659999788,
+    "stage3Seconds": 16.88576912879944,
+    "roundTrips": 35,
+    "roundTripSeconds": {
+      "min": 0.01671600341796875,
+      "median": 0.04765796661376953,
+      "p95": 0.6089320182800293,
+      "max": 0.626262903213501
+    },
+    "riders": [
+      {
+        "slot": 1,
+        "actorId": "63348e68-acf4-42b6-bd31-4845659b7295:actor:2",
+        "mounted": true,
+        "maxX": 428.3900821475336,
+        "maxCheckpoint": 3,
+        "acceptedJumpEvents": 4,
+        "steeringObserved": true
+      }
+    ],
+    "final": [
+      {
+        "slot": 1,
+        "actorId": "63348e68-acf4-42b6-bd31-4845659b7295:actor:2",
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      }
+    ],
+    "ready": [
+      {
+        "name": "Player1",
+        "readyElapsedSeconds": 32.06867389997933,
+        "renderFrameCount": 2
+      }
+    ]
+  },
+  {
+    "players": 2,
+    "status": "PASS",
+    "checks": 85,
+    "failed": 0,
+    "totalSeconds": 65.35195090004709,
+    "stage3Seconds": 16.846959829330444,
+    "roundTrips": 69,
+    "roundTripSeconds": {
+      "min": 0.014348030090332031,
+      "median": 0.04843592643737793,
+      "p95": 0.37902307510375977,
+      "max": 1.2279338836669922
+    },
+    "riders": [
+      {
+        "slot": 1,
+        "actorId": "d8c93773-2726-4ce3-822e-7ac63ab6df77:actor:2",
+        "mounted": true,
+        "maxX": 428.36477581757293,
+        "maxCheckpoint": 3,
+        "acceptedJumpEvents": 4,
+        "steeringObserved": true
+      },
+      {
+        "slot": 2,
+        "actorId": "d8c93773-2726-4ce3-822e-7ac63ab6df77:actor:5",
+        "mounted": true,
+        "maxX": 427.67312585312857,
+        "maxCheckpoint": 3,
+        "acceptedJumpEvents": 4,
+        "steeringObserved": true
+      }
+    ],
+    "final": [
+      {
+        "slot": 1,
+        "actorId": "d8c93773-2726-4ce3-822e-7ac63ab6df77:actor:2",
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      },
+      {
+        "slot": 2,
+        "actorId": "d8c93773-2726-4ce3-822e-7ac63ab6df77:actor:5",
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      }
+    ],
+    "ready": [
+      {
+        "name": "Player1",
+        "readyElapsedSeconds": 44.28331009997055,
+        "renderFrameCount": 2
+      },
+      {
+        "name": "Player2",
+        "readyElapsedSeconds": 46.031774100032635,
+        "renderFrameCount": 2
+      }
+    ]
+  },
+  {
+    "players": 3,
+    "status": "PASS",
+    "checks": 114,
+    "failed": 0,
+    "totalSeconds": 80.47260179999284,
+    "stage3Seconds": 19.282697916030884,
+    "roundTrips": 94,
+    "roundTripSeconds": {
+      "min": 0.01732492446899414,
+      "median": 0.07287907600402832,
+      "p95": 1.2148158550262451,
+      "max": 1.7451450824737549
+    },
+    "riders": [
+      {
+        "slot": 1,
+        "actorId": "ddebde29-b3c3-43bc-b332-b20c424e99ba:actor:2",
+        "mounted": true,
+        "maxX": 425.76496347217073,
+        "maxCheckpoint": 3,
+        "acceptedJumpEvents": 4,
+        "steeringObserved": true
+      },
+      {
+        "slot": 2,
+        "actorId": "ddebde29-b3c3-43bc-b332-b20c424e99ba:actor:5",
+        "mounted": true,
+        "maxX": 428.0687090049217,
+        "maxCheckpoint": 3,
+        "acceptedJumpEvents": 4,
+        "steeringObserved": true
+      },
+      {
+        "slot": 3,
+        "actorId": "ddebde29-b3c3-43bc-b332-b20c424e99ba:actor:8",
+        "mounted": true,
+        "maxX": 428.0687090049217,
+        "maxCheckpoint": 3,
+        "acceptedJumpEvents": 4,
+        "steeringObserved": true
+      }
+    ],
+    "final": [
+      {
+        "slot": 1,
+        "actorId": "ddebde29-b3c3-43bc-b332-b20c424e99ba:actor:2",
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      },
+      {
+        "slot": 2,
+        "actorId": "ddebde29-b3c3-43bc-b332-b20c424e99ba:actor:5",
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      },
+      {
+        "slot": 3,
+        "actorId": "ddebde29-b3c3-43bc-b332-b20c424e99ba:actor:8",
+        "attempt": 1,
+        "respawns": 3,
+        "rawLife": 47
+      }
+    ],
+    "ready": [
+      {
+        "name": "Player1",
+        "readyElapsedSeconds": 49.7841541999951,
+        "renderFrameCount": 2
+      },
+      {
+        "name": "Player2",
+        "readyElapsedSeconds": 54.339764400036074,
+        "renderFrameCount": 2
+      },
+      {
+        "name": "Player3",
+        "readyElapsedSeconds": 57.81905479996931,
+        "renderFrameCount": 2
+      }
+    ]
+  }
+]
