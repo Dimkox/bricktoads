@@ -20,6 +20,72 @@ def named(parent, name):
 
 
 class BrickToadsPlaceTests(unittest.TestCase):
+    def morph_fixture(self, source):
+        shutil.copytree(ROOT / 'src', source / 'src')
+        shutil.copytree(ROOT / 'assets', source / 'assets')
+        folder = source / 'assets/characters/canonical-hero'
+        blob = b'explicit packaging fixture, never uploaded as an asset'
+        (folder / 'hero-attack-morphs.glb').write_bytes(blob)
+        row = copy.deepcopy(json.loads((folder / 'roblox-player1.json').read_text())['parts'][0])
+        row.update(name='Morph', cframe=[0, -.5, -.2, 1,0,0, 0,1,0, 0,0,1],
+                   attachments=[{'name':'MorphOriginRigAttachment',
+                                 'cframe':[0,.5,.2, 1,0,0, 0,1,0, 0,0,1]}])
+        manifest = {'schema':1, 'appearanceProfile':'CanonicalNESHeroMorph',
+                    'sourceAssetId':'987654321', 'sourceGlbFile':'hero-attack-morphs.glb',
+                    'sourceGlbSha256':hashlib.sha256(blob).hexdigest(), 'templates':[]}
+        for prefix, hero in [('Green','Mr. Green'), ('PlayerTwo','Mr. Yellow')]:
+            for kind in ('PowerFist','BigBoot'):
+                manifest['templates'].append({'name':prefix+kind, 'heroTemplate':hero,
+                    'morphKind':kind, 'appearanceScale':1, 'part':copy.deepcopy(row)})
+        path = folder / 'roblox-attack-morphs.json'
+        path.write_text(json.dumps(manifest), encoding='utf-8')
+        return path, manifest
+
+    def test_attack_morphs_preserve_private_identity_origin_extents_and_pbr(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source=Path(directory); path, manifest=self.morph_fixture(source)
+            root=ET.fromstring(self.builder.build(source))
+            folder=named(named(root,'ServerStorage'),'BrickToadsCharacterMorphs')
+            self.assertEqual({p.findtext("Properties/string[@name='Name']") for p in folder.findall('Item')},
+                             {p['name'] for p in manifest['templates']})
+            for row in manifest['templates']:
+                model=named(folder,row['name']); mesh=named(model,'Morph')
+                for key,value in [('AppearanceProfile','CanonicalNESHeroMorph'),('HeroTemplate',row['heroTemplate']),
+                                  ('MorphKind',row['morphKind']),('SourceAssetId',manifest['sourceAssetId']),
+                                  ('SourceGlbSha256',manifest['sourceGlbSha256'])]:
+                    self.assertEqual(named(model,key).findtext("Properties/string[@name='Value']"),value)
+                self.assertEqual(named(model,'AppearanceScale').findtext("Properties/double[@name='Value']"),'1')
+                self.assertEqual(mesh.findtext("Properties/Content[@name='MeshId']/url"),row['part']['meshId'])
+                for axis,value in zip('XYZ',row['part']['meshSize']):
+                    self.assertEqual(float(mesh.findtext(f"Properties/Vector3[@name='InitialSize']/{axis}")),value)
+                self.assertEqual(named(mesh,'MorphOriginRigAttachment').attrib['class'],'Attachment')
+                self.assertFalse({p.attrib['class'] for p in model.iter('Item')} & {'Script','LocalScript','Humanoid','Motor6D','Bone'})
+                for flag,value in [('Anchored','true'),('Massless','true'),('CanCollide','false'),('CanTouch','false'),('CanQuery','false')]:
+                    self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"),value)
+                for surface in row['part']['surfaceAppearances']:
+                    self.assertEqual(named(mesh,surface['name']).findtext("Properties/Content[@name='ColorMap']/url"),surface['colorMap'])
+
+    def test_attack_morphs_reject_wrong_palette_origin_and_missing_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source=Path(directory); path, base=self.morph_fixture(source)
+            cases=[('profile',lambda r:r.update(appearanceProfile='Unknown')),
+                   ('duplicate',lambda r:r['templates'][-1].update(name=r['templates'][0]['name'])),
+                   ('missing',lambda r:r['templates'].pop()),
+                   ('palette',lambda r:r['templates'][0].update(heroTemplate='Mr. Yellow')),
+                   ('scale',lambda r:r['templates'][0].update(appearanceScale=.5)),
+                   ('origin',lambda r:r['templates'][0]['part']['attachments'][0]['cframe'].__setitem__(0,2)),
+                   ('runtime-origin-tolerance',lambda r:r['templates'][0]['part']['attachments'][0]['cframe'].__setitem__(0,.0005)),
+                   ('invisible-morph',lambda r:r['templates'][0]['part'].update(transparency=1)),
+                   ('extent',lambda r:r['templates'][0]['part'].update(meshSize=[0,1,1])),
+                   ('wrong-sha',lambda r:r.update(sourceGlbSha256='0'*64)),
+                   ('source-path',lambda r:r.update(sourceGlbFile='../outside.glb'))]
+            for name,change in cases:
+                with self.subTest(case=name):
+                    altered=copy.deepcopy(base);change(altered);path.write_text(json.dumps(altered),encoding='utf-8')
+                    with self.assertRaises(ValueError):self.builder.build(source)
+            path.unlink()
+            with self.assertRaises(FileNotFoundError):self.builder.build(source)
+
     def setUp(self):
         self.assertTrue(BUILDER.exists(), "development place builder is missing")
         spec = importlib.util.spec_from_file_location("build_bricktoads_place", BUILDER)

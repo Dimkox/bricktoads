@@ -182,6 +182,46 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
     storage = item(root, "ServerStorage", "ServerStorage")
     templates = item(storage, "Folder", "BrickToadsCharacterTemplates")
 
+    def mesh_resource(parent, row, *, require_mesh_size=True):
+        mesh = item(parent, "MeshPart", row["name"])
+        content(mesh, "MeshId", row["meshId"], allow_empty=False)
+        content(mesh, "TextureID", row["textureId"])
+        if any(v <= 0 for v in numbers(row["size"], 3, "size")):
+            raise ValueError("Character mesh size must be positive")
+        compound(mesh, "Vector3", "size", row["size"], ("X", "Y", "Z"))
+        # MeshSize is read-only in scripts. The place format persists its
+        # source geometry extent as InitialSize, separately from scaled size.
+        mesh_size = row.get("meshSize") if require_mesh_size else row.get("meshSize", row["size"])
+        if any(v <= 0 for v in numbers(mesh_size, 3, "meshSize")):
+            raise ValueError("Character source mesh size must be positive")
+        compound(mesh, "Vector3", "InitialSize", mesh_size, ("X", "Y", "Z"))
+        frame(mesh, row["cframe"])
+        numbers(row["color"], 3, "Color", 0, 1)
+        # Preserve actual exported mesh tint. Player palettes are in separate
+        # uploaded mesh content, never fabricated through a P2 Color override.
+        color = [round(v * 255) for v in row["color"]]
+        prop(mesh, "Color3uint8", "Color3uint8", 0xFF000000 | color[0] << 16 | color[1] << 8 | color[2])
+        prop(mesh, "token", "Material", enum_value({"Plastic": 256}, row["material"], "Material"))
+        prop(mesh, "token", "RenderFidelity", enum_value({"Automatic": 0, "Precise": 1, "Performance": 2}, row["renderFidelity"], "RenderFidelity"))
+        if type(row["doubleSided"]) is not bool:
+            raise ValueError("Invalid character DoubleSided flag")
+        for flag, value in (("Anchored", True), ("CanCollide", False), ("CanTouch", False),
+                            ("CanQuery", False), ("Massless", True), ("DoubleSided", row["doubleSided"])):
+            prop(mesh, "bool", flag, str(value).lower())
+        prop(mesh, "float", "Transparency", number(row["transparency"], "Transparency", 0, 1))
+        prop(mesh, "float", "Reflectance", number(row["reflectance"], "Reflectance", 0, 1))
+        for attachment in row["attachments"]:
+            frame(item(mesh, "Attachment", attachment["name"]), attachment["cframe"])
+        for appearance in row["surfaceAppearances"]:
+            surface = item(mesh, "SurfaceAppearance", appearance["name"])
+            for key, name in (("colorMap", "ColorMap"), ("normalMap", "NormalMap"),
+                              ("roughnessMap", "RoughnessMap"), ("metalnessMap", "MetalnessMap")):
+                content(surface, name, appearance[key])
+            numbers(appearance["color"], 3, "SurfaceColor", 0, 1)
+            compound(surface, "Color3", "Color", appearance["color"], ("R", "G", "B"))
+            prop(surface, "token", "AlphaMode", enum_value({"Overlay": 0, "Transparency": 1}, appearance["alphaMode"], "AlphaMode"))
+
+
     def character(manifest_bytes, template_name, *, canonical=False):
         manifest = json.loads(manifest_bytes)
         rows = manifest.get("parts")
@@ -236,47 +276,69 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
         for name, value in metadata.items():
             prop(item(template, "StringValue", name), "string", "Value", value)
         for row in sorted(rows, key=lambda r: r["name"]):
-            mesh = item(template, "MeshPart", row["name"])
-            content(mesh, "MeshId", row["meshId"], allow_empty=False)
-            content(mesh, "TextureID", row["textureId"])
-            if any(v <= 0 for v in numbers(row["size"], 3, "size")):
-                raise ValueError("Character mesh size must be positive")
-            compound(mesh, "Vector3", "size", row["size"], ("X", "Y", "Z"))
-            # MeshSize is read-only in scripts. The place format persists its
-            # source geometry extent as InitialSize, separately from scaled size.
-            mesh_size = row.get("meshSize") if canonical else row.get("meshSize", row["size"])
-            if any(v <= 0 for v in numbers(mesh_size, 3, "meshSize")):
-                raise ValueError("Character source mesh size must be positive")
-            compound(mesh, "Vector3", "InitialSize", mesh_size, ("X", "Y", "Z"))
-            frame(mesh, row["cframe"])
-            numbers(row["color"], 3, "Color", 0, 1)
-            # Preserve actual exported mesh tint. Player palettes are in separate
-            # uploaded mesh content, never fabricated through a P2 Color override.
-            color = [round(v * 255) for v in row["color"]]
-            prop(mesh, "Color3uint8", "Color3uint8", 0xFF000000 | color[0] << 16 | color[1] << 8 | color[2])
-            prop(mesh, "token", "Material", enum_value({"Plastic": 256}, row["material"], "Material"))
-            prop(mesh, "token", "RenderFidelity", enum_value({"Automatic": 0, "Precise": 1, "Performance": 2}, row["renderFidelity"], "RenderFidelity"))
-            if type(row["doubleSided"]) is not bool:
-                raise ValueError("Invalid character DoubleSided flag")
-            for flag, value in (("Anchored", True), ("CanCollide", False), ("CanTouch", False),
-                                ("CanQuery", False), ("Massless", True), ("DoubleSided", row["doubleSided"])):
-                prop(mesh, "bool", flag, str(value).lower())
-            prop(mesh, "float", "Transparency", number(row["transparency"], "Transparency", 0, 1))
-            prop(mesh, "float", "Reflectance", number(row["reflectance"], "Reflectance", 0, 1))
-            for attachment in row["attachments"]:
-                frame(item(mesh, "Attachment", attachment["name"]), attachment["cframe"])
-            for appearance in row["surfaceAppearances"]:
-                surface = item(mesh, "SurfaceAppearance", appearance["name"])
-                for key, name in (("colorMap", "ColorMap"), ("normalMap", "NormalMap"),
-                                  ("roughnessMap", "RoughnessMap"), ("metalnessMap", "MetalnessMap")):
-                    content(surface, name, appearance[key])
-                numbers(appearance["color"], 3, "SurfaceColor", 0, 1)
-                compound(surface, "Color3", "Color", appearance["color"], ("R", "G", "B"))
-                prop(surface, "token", "AlphaMode", enum_value({"Overlay": 0, "Transparency": 1}, appearance["alphaMode"], "AlphaMode"))
+            mesh_resource(template, row, require_mesh_size=canonical)
 
     for player in (1, 2):
         manifest = (root_path / f"assets/characters/canonical-hero/roblox-player{player}.json").read_bytes()
         character(manifest, f"CanonicalPlayer{player}", canonical=True)
+
+    morph_bytes = (root_path / 'assets/characters/canonical-hero/roblox-attack-morphs.json').read_bytes()
+    morphs = json.loads(morph_bytes)
+    expected_morphs = {prefix + kind: (hero, kind)
+                       for prefix, hero in (('Green', 'Mr. Green'), ('PlayerTwo', 'Mr. Yellow'))
+                       for kind in ('PowerFist', 'BigBoot')}
+    records = morphs.get('templates')
+    if type(morphs.get('schema')) is not int or morphs['schema'] != 1 \
+            or morphs.get('appearanceProfile') != 'CanonicalNESHeroMorph' \
+            or not isinstance(records, list) or len(records) != 4 \
+            or any(not isinstance(row, dict) for row in records) \
+            or {row.get('name') for row in records} != set(expected_morphs):
+        raise ValueError('Expected four tagged canonical attack morph resources')
+    asset_id, source_sha = morphs.get('sourceAssetId'), morphs.get('sourceGlbSha256')
+    if not isinstance(asset_id, str) or not asset_id.isdigit() or int(asset_id) <= 0 \
+            or not isinstance(source_sha, str) or not re.fullmatch('[0-9a-f]{64}', source_sha):
+        raise ValueError('Invalid morph source provenance')
+    filename = morphs.get('sourceGlbFile')
+    if not isinstance(filename, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*\.glb', filename) \
+            or re.match(r'(?i)(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])\.', filename):
+        raise ValueError('Invalid morph source GLB basename')
+    asset_folder = root_path / 'assets/characters/canonical-hero'
+    source_file = asset_folder / filename
+    if source_file.resolve().parent != asset_folder.resolve() \
+            or hashlib.sha256(source_file.read_bytes()).hexdigest() != source_sha:
+        raise ValueError('Morph source GLB SHA256 mismatch or path escape')
+    morph_folder = item(storage, 'Folder', 'BrickToadsCharacterMorphs')
+    for row in sorted(records, key=lambda r: r['name']):
+        hero, kind = expected_morphs[row['name']]
+        if row.get('heroTemplate') != hero or row.get('morphKind') != kind:
+            raise ValueError('Morph palette or kind does not match its resource name')
+        number(row.get('appearanceScale'), 'Morph AppearanceScale', 1, 1)
+        mesh_row = row.get('part')
+        if not isinstance(mesh_row, dict) or mesh_row.get('name') != 'Morph':
+            raise ValueError('Morph requires exactly one named MeshPart')
+        if number(mesh_row.get('transparency'), 'Morph Transparency', 0, 1) >= 1:
+            raise ValueError('Morph source mesh must be visible')
+        attachments = mesh_row.get('attachments')
+        if not isinstance(attachments, list) or len(attachments) != 1 \
+                or not isinstance(attachments[0], dict) \
+                or attachments[0].get('name') != 'MorphOriginRigAttachment':
+            raise ValueError('Morph requires exactly one origin attachment')
+        a = numbers(mesh_row.get('cframe'), 12, 'Morph rest frame')
+        b = numbers(attachments[0].get('cframe'), 12, 'Morph origin frame')
+        for i in range(3):
+            if abs(a[i] + sum(a[3 + i*3 + j] * b[j] for j in range(3))) > .0001:
+                raise ValueError('Morph origin must resolve to its joint origin')
+            for j in range(3):
+                if abs(sum(a[3 + i*3 + k] * b[3 + k*3 + j] for k in range(3)) - (i == j)) > .0001:
+                    raise ValueError('Morph origin must use authored joint axes')
+        model = item(morph_folder, 'Model', row['name'])
+        prop(item(model, 'NumberValue', 'AppearanceScale'), 'double', 'Value', 1)
+        for name, value in dict(AppearanceProfile='CanonicalNESHeroMorph', HeroTemplate=hero,
+                                MorphKind=kind, SourceAssetId=asset_id, SourceGlbSha256=source_sha,
+                                AssetManifestSha256=hashlib.sha256(morph_bytes).hexdigest()).items():
+            prop(item(model, 'StringValue', name), 'string', 'Value', value)
+        mesh_resource(model, mesh_row)
+
     # Explicit research switch; this rejected study is absent from default builds.
     if include_character_study:
         character((root_path / "assets/characters/green-toad.json").read_bytes(), "GreenToad")

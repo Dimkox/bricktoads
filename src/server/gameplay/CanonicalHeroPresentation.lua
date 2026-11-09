@@ -13,8 +13,10 @@ local function pose(values)
 end
 -- Keyed by graphics frame, NOT the attack opcode or an action's arbitrary phase.
 -- Reference: research/canonical-visuals/frames/hero-{01..08,18..23,26,57}.png.
--- 01 is the authored mesh's neutral stance. Enlarged fist/boot mesh morphs are
--- not implemented here; 1C/1E preserve the corresponding limb silhouette only.
+-- 01 is the authored mesh's neutral stance. Verified gfx1C/1E request one
+-- enlarged fist/boot; selecting the right limb is an explicit 3D adaptation.
+-- 1F is a folded-leg windup, not the extended1E morph. Its silhouette remains
+-- an authored joint-pose approximation. Source uppercut1A is a different move.
 local POSES={
     [0x01]=pose({}),[0x02]=pose({}),
     [0x03]=pose({Waist={-.08,0,0},LeftShoulder={.65,0,-.08},LeftElbow={.75,0,0},
@@ -151,6 +153,7 @@ function Presentation.sample(state,c)
             if not joints then state.sequence=nil;return nil,'UnknownSourcePose' end
             return {kind='Attack',action=sequence.action,animationId=sequence.id,frameId=sample.frameId,
                 sourceCall=calls,sourcePhase=0,sourceCallerMask=1,clockBasis=sequence.basis,
+                morphKind=sample.frameId==0x1C and 'PowerFist' or (sample.frameId==0x1E and 'BigBoot' or nil),
                 adaptation='Authored3DJointAngles',joints=joints,events=table.freeze(events)}
         end
         state.sequence=nil
@@ -162,5 +165,6 @@ Presentation.provenance=table.freeze({sourceCommit=Animation.provenance.commit,s
     firstFrameCounterPhase=0,firstRead='Read',callerMask=1,callsPerSecond=CALLS_PER_SECOND,
     locomotionStudsPerPhase=DISTANCE_PER_PHASE,adaptation='Authored3DJointAngles',
     scope='IdleWalkRunAndSevenAcceptedActions',
-    pending='MorphMeshes;BossFear;AirborneSourceZMapping;Carry;Club;Damage;Death'})
+    morphBindings='Graphics1C=PowerFist;Graphics1E=BigBoot;RightLimb3DAdaptation',
+    pending='RemainingMorphMeshes;Folded1FWindupSilhouette;BossFear;AirborneSourceZMapping;Carry;Club;Damage;Death'})
 return Presentation

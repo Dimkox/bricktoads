@@ -61,6 +61,17 @@ return function(Presentation,Animation)
         local kick=Presentation.sample(Presentation.new(),c)
         eq(kick.frameId,0x20);assert(kick.joints.RightHip[1]>1 and math.abs(kick.joints.RightKnee[1])<.25)
     end)
+    test('only verified graphics1C and1E request morphs while folded1F and uppercut22 keep normal limbs',function()
+        for _,action in ipairs({'HeroPowerPunch','HeroBoot','HeroUppercut','HeroJab','HeroKick','HeroElbow','Dash'})do
+            local state=Presentation.new();local c=context();c.attack=attack(action)
+            for call=0,90 do
+                c.now=call/60;local p=assert(Presentation.sample(state,c))
+                local expected=p.frameId==0x1C and'PowerFist'or(p.frameId==0x1E and'BigBoot'or nil)
+                eq(p.morphKind,expected)
+                if p.frameId==0x1F or p.frameId==0x22 then eq(p.morphKind,nil)end
+            end
+        end
+    end)
     test('source time starts at accepted windup timestamp and late observation does not replay windup',function()
         local c=context(.4);c.attack=attack('HeroUppercut',.1)
         local p=Presentation.sample(Presentation.new(),c)

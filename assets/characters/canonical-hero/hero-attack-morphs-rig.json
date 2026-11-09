@@ -1,0 +1,338 @@
+{
+  "schema": 1,
+  "status": "source-derived-cosmetic-attack-morph-study",
+  "glbSha256": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+  "bytes": 7368376,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceCatalogSha256": "c33bc19b35e25b494af704fd1c8657268216af19096150bce19a3ba1f4a1eb8b",
+  "units": {
+    "metadata": "Robloxstuds",
+    "gltf": "metres",
+    "metresPerStud": 0.28,
+    "up": [
+      0,
+      1,
+      0
+    ],
+    "forward": [
+      0,
+      0,
+      -1
+    ],
+    "restExtension": "down-Y from wrist/ankle"
+  },
+  "parts": [
+    {
+      "name": "GreenPowerFist",
+      "morphKind": "PowerFist",
+      "heroTemplate": "Mr. Green",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -1.6800000000000002,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -6,
+        0,
+        0
+      ],
+      "layoutPurpose": "import orientation only; remove node layout offset before wrist/ankle binding",
+      "jointRootOrientation": "worldidentity",
+      "boundsStuds": [
+        [
+          -0.68,
+          -2.5771030577588445,
+          -1.8407878983991746
+        ],
+        [
+          0.68,
+          0.0,
+          0.7363151593596698
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        -1.2885515288794223,
+        -0.5522363695197523
+      ],
+      "boundingBoxSizeStuds": [
+        1.36,
+        2.5771030577588445,
+        2.5771030577588445
+      ],
+      "triangles": 11390,
+      "authoringVertices": 5697,
+      "exportedVertices": 34170
+    },
+    {
+      "name": "PlayerTwoPowerFist",
+      "morphKind": "PowerFist",
+      "heroTemplate": "Mr. Yellow",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        0.56,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        2,
+        0,
+        0
+      ],
+      "layoutPurpose": "import orientation only; remove node layout offset before wrist/ankle binding",
+      "jointRootOrientation": "worldidentity",
+      "boundsStuds": [
+        [
+          -0.68,
+          -2.5771030577588445,
+          -1.8407878983991746
+        ],
+        [
+          0.68,
+          0.0,
+          0.7363151593596698
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        -1.2885515288794223,
+        -0.5522363695197523
+      ],
+      "boundingBoxSizeStuds": [
+        1.36,
+        2.5771030577588445,
+        2.5771030577588445
+      ],
+      "triangles": 11390,
+      "authoringVertices": 5697,
+      "exportedVertices": 34170
+    },
+    {
+      "name": "GreenBigBoot",
+      "morphKind": "BigBoot",
+      "heroTemplate": "Mr. Green",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -0.56,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -2,
+        0,
+        0
+      ],
+      "layoutPurpose": "import orientation only; remove node layout offset before wrist/ankle binding",
+      "jointRootOrientation": "worldidentity",
+      "boundsStuds": [
+        [
+          -0.53,
+          -3.310532793683495,
+          -3.4946115835234126
+        ],
+        [
+          0.5300000000000001,
+          0.7334297359246507,
+          0.5493509460847332
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        5.551115123125783e-17,
+        -1.2885515288794223,
+        -1.4726303187193397
+      ],
+      "boundingBoxSizeStuds": [
+        1.06,
+        4.043962529608146,
+        4.043962529608146
+      ],
+      "triangles": 15028,
+      "authoringVertices": 7516,
+      "exportedVertices": 45084
+    },
+    {
+      "name": "PlayerTwoBigBoot",
+      "morphKind": "BigBoot",
+      "heroTemplate": "Mr. Yellow",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        1.6800000000000002,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        6,
+        0,
+        0
+      ],
+      "layoutPurpose": "import orientation only; remove node layout offset before wrist/ankle binding",
+      "jointRootOrientation": "worldidentity",
+      "boundsStuds": [
+        [
+          -0.53,
+          -3.310532793683495,
+          -3.4946115835234126
+        ],
+        [
+          0.5300000000000001,
+          0.7334297359246507,
+          0.5493509460847332
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        5.551115123125783e-17,
+        -1.2885515288794223,
+        -1.4726303187193397
+      ],
+      "boundingBoxSizeStuds": [
+        1.06,
+        4.043962529608146,
+        4.043962529608146
+      ],
+      "triangles": 15028,
+      "authoringVertices": 7516,
+      "exportedVertices": 45084
+    }
+  ],
+  "sourceReferences": {
+    "PowerFist": {
+      "frameHex": "1C",
+      "graphicsLabel": "rash_gfx_25",
+      "metaspriteAddress": "CB5D",
+      "fullFrameBoundsPixels": {
+        "minX": -14,
+        "minY": -19,
+        "maxX": 35,
+        "maxY": 11
+      },
+      "semanticRoiInclusivePixels": [
+        22,
+        35,
+        -19,
+        -4
+      ],
+      "attachmentSourcePixelInferred": [
+        22,
+        -9
+      ],
+      "opaqueSelectedPixels": 144,
+      "opaqueSelectedBoundsPixels": [
+        [
+          22,
+          -19
+        ],
+        [
+          35,
+          -6
+        ]
+      ],
+      "semanticMaskCut": "largest4connectedcomponent only",
+      "contourSmoothing": "one Chaikin pass, source pixel boundary corners rounded within0.25pixel",
+      "depthInferredStuds": 1.36,
+      "roundedDepthBevelStuds": 0.39,
+      "sourceToRestAxes": {
+        "source+X": "local-Y",
+        "source+Y": "local+Z",
+        "inferredDepth": "local\u00b1X"
+      },
+      "sourcePixelStuds": 0.18407878983991746,
+      "attachmentWarning": "no skeletal wrist/ankle exists in metasprite; origin and rest orientation are authored adaptations",
+      "projectedMeshPixelCentreIoU": 1.0,
+      "projectedMeshOpaquePixels": 144
+    },
+    "BigBoot": {
+      "frameHex": "1E",
+      "graphicsLabel": "rash_gfx_27",
+      "metaspriteAddress": "CBA1",
+      "fullFrameBoundsPixels": {
+        "minX": -10,
+        "minY": -36,
+        "maxX": 30,
+        "maxY": 9
+      },
+      "semanticRoiInclusivePixels": [
+        8,
+        30,
+        -36,
+        -15
+      ],
+      "attachmentSourcePixelInferred": [
+        13,
+        -17
+      ],
+      "opaqueSelectedPixels": 344,
+      "opaqueSelectedBoundsPixels": [
+        [
+          9,
+          -36
+        ],
+        [
+          30,
+          -15
+        ]
+      ],
+      "semanticMaskCut": "BigBoot excludes x<12 when y>=-23 to remove overlapping body fragment",
+      "contourSmoothing": "one Chaikin pass, source pixel boundary corners rounded within0.25pixel",
+      "depthInferredStuds": 1.06,
+      "roundedDepthBevelStuds": 0.32,
+      "sourceToRestAxes": {
+        "source+X": "local-Y",
+        "source+Y": "local+Z",
+        "inferredDepth": "local\u00b1X"
+      },
+      "sourcePixelStuds": 0.18407878983991746,
+      "attachmentWarning": "no skeletal wrist/ankle exists in metasprite; origin and rest orientation are authored adaptations",
+      "projectedMeshPixelCentreIoU": 1.0,
+      "projectedMeshOpaquePixels": 344
+    }
+  },
+  "sourceBindings": {
+    "PowerFist": "anim0E gfx1C displayadvances11..31",
+    "BigBoot": "anim14 gfx1F windup advances0..11 then gfx1E contact12..36",
+    "notImplemented": "gfx1A uppercut belongsanim10/74, not current narrow-fist anim06/gfx22"
+  },
+  "material": {
+    "oneSharedMaterial": true,
+    "onePrimitivePerNode": true,
+    "albedo": "embedded2048x2048 sRGB unique8x8 UVcell pertriangle",
+    "COLOR_0": "absent",
+    "emissive": "absent",
+    "Green": "owner-style grass/forest colours mapped from source slot0 regions",
+    "PlayerTwo": "source0F/17/27 RGBtableapprox:18,19,20 /155,83,0 /250,160,66"
+  },
+  "runtimeContract": {
+    "cosmeticOnly": true,
+    "newHumanoid": false,
+    "physicsOrDamageChanges": false,
+    "origin": "MeshPart.CFrame*MorphOriginRigAttachment.CFrame equals wrist-spaceidentity after importnormalization",
+    "binding": "actual RightWrist/RightAnkle frame; preserve offset to bboxcenter instead of snapping bboxcenter onto joint"
+  },
+  "limits": [
+    "semanticROI/depth/anchor andrightlimbassignment are3D adaptations, not original skeletal data",
+    "first source-contour morph prototype; actual Studio silhouette/attachment/animation acceptance pending",
+    "fear32/33 wholebody/head forms still pending"
+  ],
+  "frozenEarlierGlbs": {
+    "canonical-hero-player1.glb": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+    "canonical-hero-player2.glb": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+    "canonical-hero.glb": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c",
+    "green-brawler.glb": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543"
+  }
+}

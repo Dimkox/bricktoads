@@ -1047,8 +1047,10 @@ local function pose(values)
 end
 -- Keyed by graphics frame, NOT the attack opcode or an action's arbitrary phase.
 -- Reference: research/canonical-visuals/frames/hero-{01..08,18..23,26,57}.png.
--- 01 is the authored mesh's neutral stance. Enlarged fist/boot mesh morphs are
--- not implemented here; 1C/1E preserve the corresponding limb silhouette only.
+-- 01 is the authored mesh's neutral stance. Verified gfx1C/1E request one
+-- enlarged fist/boot; selecting the right limb is an explicit 3D adaptation.
+-- 1F is a folded-leg windup, not the extended1E morph. Its silhouette remains
+-- an authored joint-pose approximation. Source uppercut1A is a different move.
 local POSES={
     [0x01]=pose({}),[0x02]=pose({}),
     [0x03]=pose({Waist={-.08,0,0},LeftShoulder={.65,0,-.08},LeftElbow={.75,0,0},
@@ -1185,6 +1187,7 @@ function Presentation.sample(state,c)
             if not joints then state.sequence=nil;return nil,'UnknownSourcePose' end
             return {kind='Attack',action=sequence.action,animationId=sequence.id,frameId=sample.frameId,
                 sourceCall=calls,sourcePhase=0,sourceCallerMask=1,clockBasis=sequence.basis,
+                morphKind=sample.frameId==0x1C and 'PowerFist' or (sample.frameId==0x1E and 'BigBoot' or nil),
                 adaptation='Authored3DJointAngles',joints=joints,events=table.freeze(events)}
         end
         state.sequence=nil
@@ -1196,7 +1199,8 @@ Presentation.provenance=table.freeze({sourceCommit=Animation.provenance.commit,s
     firstFrameCounterPhase=0,firstRead='Read',callerMask=1,callsPerSecond=CALLS_PER_SECOND,
     locomotionStudsPerPhase=DISTANCE_PER_PHASE,adaptation='Authored3DJointAngles',
     scope='IdleWalkRunAndSevenAcceptedActions',
-    pending='MorphMeshes;BossFear;AirborneSourceZMapping;Carry;Club;Damage;Death'})
+    morphBindings='Graphics1C=PowerFist;Graphics1E=BigBoot;RightLimb3DAdaptation',
+    pending='RemainingMorphMeshes;Folded1FWindupSilhouette;BossFear;AirborneSourceZMapping;Carry;Club;Damage;Death'})
 return Presentation
 </ProtectedString>
           </Properties>
@@ -1307,7 +1311,8 @@ return table.freeze(Walker)
             <string name="Name">CharacterAppearance</string>
             <ProtectedString name="Source">-- Tagged canonical P1/P2 resources and an explicit legacy Green study fallback.
 -- Canonical idle/walk/run and seven accepted attacks use source-frame 3D poses.
--- Priority/unsupported states retain R6 retargeting. Mesh morphs remain separate.
+-- Priority/unsupported states retain R6 retargeting. Optional approved morphs
+-- are preassembled before the caller pins ownership, then only change visibility.
 -- Never replaces the R6 physical rig.
 -- Caller must pin server network ownership AFTER all cosmetic parts are attached.
 local Appearance={}
@@ -1326,6 +1331,9 @@ local JOINTS={
 local RIG_NAMES={'Neck','Left Shoulder','Right Shoulder','Left Hip','Right Hip'}
 local HIDDEN={Torso=true,Head=true,['Left Arm']=true,['Right Arm']=true,['Left Leg']=true,['Right Leg']=true,Eye=true}
 local CANONICAL={['Mr. Green']='CanonicalPlayer1',['Mr. Yellow']='CanonicalPlayer2'}
+local MORPHS={PowerFist={part='RightHand',attachment='RightWristRigAttachment'},
+    BigBoot={part='RightFoot',attachment='RightAnkleRigAttachment'}}
+local MORPH_PREFIX={['Mr. Green']='Green',['Mr. Yellow']='PlayerTwo'}
 local function resource(templates,heroTemplate)
     local name=CANONICAL[heroTemplate]
     if not name then return nil,'NO_CHARACTER_RESOURCE' end
@@ -1356,11 +1364,100 @@ local function motor(name,parent,part0,part1,c0,c1)
     m.Part0=part0;m.Part1=part1;m.C0=c0;m.C1=c1;m.Parent=parent
     return m
 end
+local function finite(value) return type(value)=='number' and value==value and value&gt;-math.huge and value&lt;math.huge end
+local function tag(model,name,value)
+    local child=model:FindFirstChild(name)
+    return child and child:IsA('StringValue') and child.Value==value
+end
+local function prepareMorph(skin,template,heroTemplate,kind,spec)
+    if not template or not template:IsA('Model') or not tag(template,'AppearanceProfile','CanonicalNESHeroMorph')
+        or not tag(template,'MorphKind',kind) or not tag(template,'HeroTemplate',heroTemplate) then return nil end
+    local scale=template:FindFirstChild('AppearanceScale')
+    if not scale or not scale:IsA('NumberValue') or scale.Value~=1 then return nil end
+    local clone
+    local ok,row=pcall(function()
+        clone=assert(template:Clone(),'Uncloneable morph')
+        local part,count
+        count=0
+        for _,child in ipairs(clone:GetChildren()) do
+            if child:IsA('MeshPart') then part=child;count+=1
+            else assert(child:IsA('StringValue') or child:IsA('NumberValue'),'Unexpected morph object') end
+        end
+        assert(count==1 and part.Name=='Morph','Expected one Morph MeshPart')
+        assert(type(part.MeshId)=='string' and part.MeshId:match('^rbxassetid://%d+$'),'Missing uploaded morph mesh')
+        for _,value in ipairs({part.Size.X,part.Size.Y,part.Size.Z}) do assert(finite(value) and value&gt;0,'Invalid morph size') end
+        assert(finite(part.Transparency) and part.Transparency&gt;=0 and part.Transparency&lt;1,'Invisible morph resource')
+        local origin,origins
+        origins=0
+        for _,child in ipairs(part:GetChildren()) do
+            if child:IsA('Attachment') then
+                assert(child.Name=='MorphOriginRigAttachment','Unexpected morph attachment');origin=child;origins+=1
+            else assert(child:IsA('SurfaceAppearance'),'Unexpected morph content') end
+        end
+        assert(origins==1,'Missing morph origin')
+        local identity=part.CFrame*origin.CFrame
+        local x,y,z=identity:ToEulerAnglesXYZ()
+        for _,value in ipairs({identity.Position.X,identity.Position.Y,identity.Position.Z,x,y,z}) do
+            assert(finite(value) and math.abs(value)&lt;=1e-4,'Morph origin must be identity in joint space')
+        end
+        local original=assert(skin:FindFirstChild(spec.part),'Missing original morph limb')
+        local attachment=assert(original:FindFirstChild(spec.attachment),'Missing original morph joint')
+        assert(original:IsA('MeshPart') and attachment:IsA('Attachment'),'Invalid original morph joint')
+        local c0=attachment.CFrame*part.CFrame
+        local visible=part.Transparency
+        part.CFrame=original.CFrame*c0
+        part.Anchored=false;part.CanCollide=false;part.CanTouch=false;part.CanQuery=false;part.Massless=true;part.Transparency=1
+        local joint=motor('Morph'..kind,part,original,part,c0,CFrame.new())
+        clone.PrimaryPart=part
+        return {part=part,model=clone,template=template,joint=joint,originalPart=original,
+            visibleTransparency=visible,spec=spec}
+    end)
+    if not ok then if clone then clone:Destroy() end;return nil end
+    return row
+end
+local function prepareMorphs(skin,heroTemplate,templates)
+    local rows,folder={}
+    local prefix=MORPH_PREFIX[heroTemplate]
+    if templates and prefix then for kind,spec in pairs(MORPHS) do
+        local row=prepareMorph(skin,templates:FindFirstChild(prefix..kind),heroTemplate,kind,spec)
+        if row then
+            if not folder then folder=Instance.new('Folder');folder.Name='Morphs';folder.Parent=skin end
+            row.model.Parent=folder;rows[kind]=row
+        end
+    end end
+    return rows,folder
+end
+local function restoreMorph(state,row)
+    if row.originalTransparency~=nil then
+        if row.originalPart.Parent==state.model then row.originalPart.Transparency=row.originalTransparency end
+        row.originalTransparency=nil
+    end
+    if row.part.Parent==row.model then row.part.Transparency=1 end
+end
+local function updateMorphs(state,sourcePose)
+    local requested=sourcePose and sourcePose.morphKind
+    local active=state.morphs and state.morphs[requested]
+    if active and not (state.morphFolder and state.morphFolder.Parent==state.model and active.model.Parent==state.morphFolder
+        and active.part.Parent==active.model and active.originalPart==state.model:FindFirstChild(active.spec.part)
+        and active.joint.Parent==active.part and active.joint.Part0==active.originalPart and active.joint.Part1==active.part
+        and tag(active.model,'AppearanceProfile','CanonicalNESHeroMorph') and tag(active.model,'HeroTemplate',state.heroTemplate)
+        and tag(active.model,'MorphKind',requested)) then active=nil end
+    for _,row in pairs(state.morphs or {}) do
+        if row==active then
+            -- Capture at entry, not every render: an already hidden limb's1
+            -- must never overwrite its exact original (possibly nonzero) value.
+            if row.originalTransparency==nil then row.originalTransparency=row.originalPart.Transparency end
+            row.part.Transparency=row.visibleTransparency;row.originalPart.Transparency=1
+        else restoreMorph(state,row) end
+    end
+    state.activeMorph=active and requested or nil
+end
 
 function Appearance.detach(actor)
     local state=actor.appearance
     if not state then return end
     actor.appearance=nil
+    updateMorphs(state,nil)
     state.presentation=nil;state.sourcePose=nil
     state.model:Destroy()
     for part,transparency in pairs(state.hidden) do
@@ -1388,6 +1485,7 @@ function Appearance.update(actor,context)
         state.presentation=nil
     end
     state.sourcePose,state.sourceFallback=sourcePose,fallback
+    updateMorphs(state,sourcePose)
     local deltas,pitches={},{}
     for _,name in ipairs(RIG_NAMES) do
         local r=state.rig[name]
@@ -1423,8 +1521,9 @@ function Appearance.update(actor,context)
     end
 end
 
-function Appearance.attach(actor,heroTemplate,templates)
+function Appearance.attach(actor,heroTemplate,templates,morphTemplates)
     templates=templates or game:GetService('ServerStorage'):FindFirstChild('BrickToadsCharacterTemplates')
+    morphTemplates=morphTemplates or game:GetService('ServerStorage'):FindFirstChild('BrickToadsCharacterMorphs')
     local template,profile,shoulderRoll=resource(templates,heroTemplate)
     if not template then return false,profile end
     local previous=actor.appearance
@@ -1468,8 +1567,10 @@ function Appearance.attach(actor,heroTemplate,templates)
         end
         motor('Root',lower,torso,lower,rootOffset,CFrame.new())
         for _,part in ipairs(clone:GetChildren()) do if part:IsA('MeshPart') then part.CFrame=torso.CFrame*part.CFrame end end
+        local morphs,morphFolder
+        if profile=='CanonicalNESHero' then morphs,morphFolder=prepareMorphs(clone,heroTemplate,morphTemplates) end
         return {model=clone,ownerModel=actor.model,sourceTemplate=template,heroTemplate=heroTemplate,
-            profile=profile,shoulderRoll=shoulderRoll,rig=rig,joints=joints,hidden={}}
+            profile=profile,shoulderRoll=shoulderRoll,rig=rig,joints=joints,hidden={},morphs=morphs,morphFolder=morphFolder}
     end)
     if not ok then clone:Destroy();return false,'INVALID_CHARACTER_RESOURCE: '..tostring(state) end
     -- Preparation touches only the clone. An invalid replacement must leave an
@@ -7182,7 +7283,7 @@ return World
       <Item class="ModuleScript" referent="BT53">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='a12a84d108eba5bac1ff201d08cf08e20860fd4a24221a622f62acb3a8bbdb9e'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='4492378ddb9f182c5b6f9f2eec637ef9f6251b0a82e6f25bf5c86bc9074e2f31'})
 </ProtectedString>
         </Properties>
       </Item>
@@ -12948,6 +13049,459 @@ return SpectatorCamera
                 <R11>1</R11>
                 <R12>0</R12>
                 <R20>3.725289943190546e-08</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+    </Item>
+    <Item class="Folder" referent="BT169">
+      <Properties>
+        <string name="Name">BrickToadsCharacterMorphs</string>
+      </Properties>
+      <Item class="Model" referent="BT170">
+        <Properties>
+          <string name="Name">GreenBigBoot</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT171">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT172">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT173">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Green</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT174">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">BigBoot</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT175">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">134209153804955</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT176">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT177">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT178">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://79011340733361</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://130642514131659</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.0600003004074097</X>
+              <Y>4.043962001800537</Y>
+              <Z>4.043962001800537</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.29680007696151733</X>
+              <Y>1.1323094367980957</Y>
+              <Z>1.1323094367980957</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>-7.152557373046875e-07</X>
+              <Y>-1.2885514497756958</Y>
+              <Z>-1.4726324081420898</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>0</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>0</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT179">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>-7.152558509915252e-07</X>
+                <Y>1.2885514497756958</Y>
+                <Z>-1.4726324081420898</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>0</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>0</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT180">
+        <Properties>
+          <string name="Name">GreenPowerFist</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT181">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT182">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT183">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Green</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT184">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">PowerFist</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT185">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">134209153804955</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT186">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT187">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT188">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://118669124085090</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://130642514131659</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.3600000143051147</X>
+              <Y>2.5771028995513916</Y>
+              <Z>2.5771028995513916</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.3808000087738037</X>
+              <Y>0.7215888500213623</Y>
+              <Z>0.7215888500213623</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0</X>
+              <Y>-1.2885514497756958</Y>
+              <Z>-0.5522374510765076</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>0</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>0</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT189">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0</X>
+                <Y>1.2885514497756958</Y>
+                <Z>-0.5522374510765076</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>0</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>0</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT190">
+        <Properties>
+          <string name="Name">PlayerTwoBigBoot</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT191">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT192">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT193">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Yellow</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT194">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">BigBoot</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT195">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">134209153804955</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT196">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT197">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT198">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://87239243837847</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://130642514131659</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.0600000619888306</X>
+              <Y>4.043962001800537</Y>
+              <Z>4.043962001800537</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.29680001735687256</X>
+              <Y>1.1323094367980957</Y>
+              <Z>1.1323094367980957</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>0</X>
+              <Y>-1.2885514497756958</Y>
+              <Z>-1.4726314544677734</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>0</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>0</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT199">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>0</X>
+                <Y>1.2885514497756958</Y>
+                <Z>-1.4726314544677734</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>0</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>0</R20>
+                <R21>0</R21>
+                <R22>-1</R22>
+              </CoordinateFrame>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Model" referent="BT200">
+        <Properties>
+          <string name="Name">PlayerTwoPowerFist</string>
+        </Properties>
+        <Item class="NumberValue" referent="BT201">
+          <Properties>
+            <string name="Name">AppearanceScale</string>
+            <double name="Value">1</double>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT202">
+          <Properties>
+            <string name="Name">AppearanceProfile</string>
+            <string name="Value">CanonicalNESHeroMorph</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT203">
+          <Properties>
+            <string name="Name">HeroTemplate</string>
+            <string name="Value">Mr. Yellow</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT204">
+          <Properties>
+            <string name="Name">MorphKind</string>
+            <string name="Value">PowerFist</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT205">
+          <Properties>
+            <string name="Name">SourceAssetId</string>
+            <string name="Value">134209153804955</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT206">
+          <Properties>
+            <string name="Name">SourceGlbSha256</string>
+            <string name="Value">250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e</string>
+          </Properties>
+        </Item>
+        <Item class="StringValue" referent="BT207">
+          <Properties>
+            <string name="Name">AssetManifestSha256</string>
+            <string name="Value">63ee78270497b1f0665968dd658be2b60988f3eb8fb62b2667cc6fe0e3c6eb84</string>
+          </Properties>
+        </Item>
+        <Item class="MeshPart" referent="BT208">
+          <Properties>
+            <string name="Name">Morph</string>
+            <Content name="MeshId">
+              <url>rbxassetid://102061556095065</url>
+            </Content>
+            <Content name="TextureID">
+              <url>rbxassetid://130642514131659</url>
+            </Content>
+            <Vector3 name="size">
+              <X>1.3600001335144043</X>
+              <Y>2.5771028995513916</Y>
+              <Z>2.5771028995513916</Z>
+            </Vector3>
+            <Vector3 name="InitialSize">
+              <X>0.3808000385761261</X>
+              <Y>0.7215888500213623</Y>
+              <Z>0.7215888500213623</Z>
+            </Vector3>
+            <CoordinateFrame name="CFrame">
+              <X>7.152557373046875e-07</X>
+              <Y>-1.2885514497756958</Y>
+              <Z>-0.5522374510765076</Z>
+              <R00>-1.0000001192092896</R00>
+              <R01>0</R01>
+              <R02>0</R02>
+              <R10>0</R10>
+              <R11>1</R11>
+              <R12>0</R12>
+              <R20>0</R20>
+              <R21>0</R21>
+              <R22>-1</R22>
+            </CoordinateFrame>
+            <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+            <token name="Material">256</token>
+            <token name="RenderFidelity">0</token>
+            <bool name="Anchored">true</bool>
+            <bool name="CanCollide">false</bool>
+            <bool name="CanTouch">false</bool>
+            <bool name="CanQuery">false</bool>
+            <bool name="Massless">true</bool>
+            <bool name="DoubleSided">false</bool>
+            <float name="Transparency">0</float>
+            <float name="Reflectance">0</float>
+          </Properties>
+          <Item class="Attachment" referent="BT209">
+            <Properties>
+              <string name="Name">MorphOriginRigAttachment</string>
+              <CoordinateFrame name="CFrame">
+                <X>7.152558509915252e-07</X>
+                <Y>1.2885514497756958</Y>
+                <Z>-0.5522374510765076</Z>
+                <R00>-1</R00>
+                <R01>0</R01>
+                <R02>0</R02>
+                <R10>0</R10>
+                <R11>1</R11>
+                <R12>0</R12>
+                <R20>0</R20>
                 <R21>0</R21>
                 <R22>-1</R22>
               </CoordinateFrame>
