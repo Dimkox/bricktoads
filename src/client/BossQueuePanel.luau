@@ -1,6 +1,11 @@
 -- Private queue presentation. Joining never creates a body; the server owns the offer and role.
 local BossQueuePanel = {}
 BossQueuePanel.__index = BossQueuePanel
+local bosses={
+    {id='CausewayGuardian',name='Causeway Guardian'}, {id='BigBlag',name='Big Blag'},
+    {id='RoboManus',name='Robo-Manus'}, {id='GeneralSlaughter',name='General Slaughter'},
+    {id='Buzzball',name='Buzzball'}, {id='DarkQueen',name='Dark Queen'},
+}
 local function sourceText(source,args)
     return (source:gsub('{([%w_]+):?[%w_]*}',function(key) return tostring(args and args[key] or '') end))
 end
@@ -34,13 +39,22 @@ function BossQueuePanel.new(menuParent, hudParent, sendIntent, colors, translate
     end
     self.heading = text("Heading", 12, colors.yellow, true)
     self.heading.Text = "BOSS QUEUE"
-    self.name = text("Guardian", 19, colors.text, true)
+    self.name = make('TextButton','BossChoice',self.card,{
+        BackgroundTransparency=1,TextColor3=colors.text,TextSize=19,Font=Enum.Font.GothamBold,
+        TextXAlignment=Enum.TextXAlignment.Left,TextWrapped=true,AutoButtonColor=false,
+    })
     self.name.Text = "Causeway Guardian"
+    self.selectedBoss=1
+    self.name.Activated:Connect(function()
+        if not self.pending and self.queue and self.queue.state=='None' then
+            self.selectedBoss=self.selectedBoss%#bosses+1;self:_draw()
+        end
+    end)
     self.status = text("QueueStatus", 13, colors.yellow, true)
     self.status.TextXAlignment = Enum.TextXAlignment.Right
     self.detail = text("Detail", 13, colors.muted, false)
     self.note = text("RoleNote", 12, colors.muted, false)
-    self.note.Text = "Joining the queue does not assign a role immediately or add Guardian health."
+    self.note.Text = "Tap the boss name to choose. Joining the queue does not assign a role immediately."
     local function action(name, callback)
         local item = make("TextButton", name, self.card, {
             BackgroundColor3 = colors.card, BorderSizePixel = 0, Text = "",
@@ -66,7 +80,7 @@ function BossQueuePanel:_activate(primary)
     if state == "Invited" and self.queue.offerId and self:_remaining() > 0 then
         packet = {kind = "ReplyBoss", offerId = self.queue.offerId, accepted = primary}
     elseif primary and state == "None" and self.queue.available == true then
-        packet = {kind = "QueueBoss", bossId = "CausewayGuardian"}
+        packet = {kind = "QueueBoss", bossId = bosses[self.selectedBoss].id}
     elseif primary and (state == "Queued" or state == "Accepted" or state == "Ready") then
         packet = {kind = "CancelBossQueue"}
     end
@@ -104,6 +118,11 @@ function BossQueuePanel:_draw()
     if not queue then return end
     local state, colors = queue.state, self.colors
     local T=self.translate or sourceText
+    local selected=bosses[self.selectedBoss]
+    for _,boss in ipairs(bosses) do if queue.bossId==boss.id then selected=boss end end
+    self.name.Text=T(selected.name)..(state=='None' and '  ›' or '')
+    self.name.Active=state=='None' and not self.pending
+    self.name.Selectable=self.name.Active
     local seconds = self:_remaining()
     local timed = state == "Invited" or state == "Accepted"
     local enabled, primaryText = false, "Unavailable"
@@ -124,18 +143,17 @@ function BossQueuePanel:_draw()
         primaryText, enabled = "Cancel", true
     elseif state == "Ready" then
         self.status.Text = "Ready to fight"
-        self.detail.Text = "The Guardian is yours. Waiting for the encounter."
+        self.detail.Text = "Your boss role is reserved. Waiting for the encounter."
         primaryText, enabled = "Cancel", true
     elseif state == "Active" then
         self.status.Text = "In combat"
-        self.detail.Text = "You control the Causeway Guardian."
+        self.detail.Text = T("You control {boss}.",{boss=T(selected.name)})
         primaryText = "Role assigned"
     else
         self.status.Text = queue.available == true and "Queue available" or "Unavailable"
-        self.detail.Text = queue.available == true and (self.compact and "Wait for an invitation before the Guardian encounter."
-            or "Join the queue and accept an invitation before the heroes reach the Guardian.")
+        self.detail.Text = queue.available == true and "Wait for an invitation before this boss encounter."
             or "The queue is unavailable for your current role."
-        primaryText, enabled = "Queue for Guardian", queue.available == true
+        primaryText, enabled = "Queue for boss", queue.available == true
     end
     if timed and seconds == 0 then
         self.status.Text, self.detail.Text = "Time expired", "Waiting for server confirmation…"

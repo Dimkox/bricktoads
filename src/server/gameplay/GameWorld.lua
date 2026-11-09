@@ -459,6 +459,15 @@ local function buildRoute(self, level)
 end
 
 local function resetOrigins(self)
+    local route=self.config.Level
+    if route and route.campaignIndex and route.campaignIndex>1 then
+        self.origins={}
+        for slot=1,3 do
+            local p=route.spawns and route.spawns[slot] or route.spawn or {x=0,y=3,z=0}
+            self.origins[slot]=Vector3.new(p.x,p.y,p.z+(route.spawns and 0 or (slot-2)*6))+self.offset
+        end
+        return
+    end
     local first = self.config.Level and self.config.Level.zones[1].platforms[1]
     local y, z = first and first.y + first.h / 2 + 3 or 3, first and first.z or 0
     self.origins = {
@@ -480,6 +489,18 @@ local function layoutAttributes(self)
     self.folder:SetAttribute('LayoutVersion', variation and variation.version)
 end
 
+local function buildLevelGeometry(self,route)
+    if self.campaignWorld then self.campaignWorld:close();self.campaignWorld=nil end
+    if route and route.campaignIndex and route.campaignIndex>1 then
+        assert(self.campaignWorldType,'Campaign world adapter is required')
+        self.campaignWorld=self.campaignWorldType.new(self,route)
+    else
+        if self.baseFallY then self.config.FallY=self.baseFallY end
+        if route then buildRoute(self,route) else buildGeometry(self) end
+        translateGeometry(self)
+    end
+end
+
 function World.new(BaseWorld, config, options)
     options = options or {}
     local worldName = options.name or "BrickToadsWorld"
@@ -497,9 +518,11 @@ function World.new(BaseWorld, config, options)
     local worldConfig = table.clone(config)
     worldConfig.FallY = config.FallY + translation.Y
     local self = BaseWorld.new(worldConfig)
+    self.baseFallY=worldConfig.FallY
     self._base = BaseWorld
     self.characterAppearance = options.characterAppearance
     self.guardianAppearance = options.guardianAppearance
+    self.campaignWorldType = options.campaignWorld
     self.offset = translation
     setmetatable(self, {__index = function(_, key) return World[key] or BaseWorld[key] end})
     self.folder.Name = worldName
@@ -519,8 +542,7 @@ function World.new(BaseWorld, config, options)
     self.clubItemFolder.Parent = self.folder
     self.clubItems, self.equippedClubs = {}, {}
     resetOrigins(self)
-    if config.Level then buildRoute(self, config.Level) else buildGeometry(self) end
-    translateGeometry(self)
+    buildLevelGeometry(self,config.Level)
     layoutAttributes(self)
     Lighting.ClockTime = 16.5
     Lighting.Brightness = 2.2
@@ -553,12 +575,219 @@ function World:rebuildLevel(route)
     self.config.Level = route
     self.blocked = false
     self.lastSupport, self.deathReason = {}, {}
-    buildRoute(self, route)
-    translateGeometry(self)
+    buildLevelGeometry(self,route)
     resetOrigins(self)
     layoutAttributes(self)
     self:stage('Approach')
     return true
+end
+
+function World:advanceGeometry(route)
+    assert(type(route)=='table' and route.zones and route.boss and route.bounds,'A complete campaign route is required')
+    if self.campaignModes then self.campaignModes:close('LevelTransition');self.campaignModes=nil end
+    local remove={}
+    for id,actor in pairs(self.actors) do
+        if id<0 then remove[#remove+1]=id
+        else
+            self:campaignRelease(id)
+            if actor.humanoid.Health>0 then self:hold(id,true) end
+            self:resetLocomotion(id)
+        end
+    end
+    for _,id in ipairs(remove) do
+        local actor=self.actors[id]
+        if self.guardianAppearance then self.guardianAppearance.detach(actor) end
+        actor.model:Destroy();self.actors[id]=nil
+    end
+    for id in pairs(self.equippedClubs) do self:unequipClub(id) end
+    self.healingFlyFolder:ClearAllChildren();self.healingEffectFolder:ClearAllChildren()
+    self.clubItemFolder:ClearAllChildren()
+    self.healingFlyVisuals,self.healingEffects,self.clubItems,self.equippedClubs={},{},{},{}
+    self.enemyCarries={};self.enemyKinds={}
+    self.config.Level=route;self.config.Calibration=route.calibration or self.config.Calibration
+    self.blocked=false;self.lastSupport={};self.deathReason={}
+    buildLevelGeometry(self,route);resetOrigins(self);layoutAttributes(self)
+    self.transitionOrigins=table.clone(self.origins)
+    self:stage(route.mode or 'Approach')
+    return true
+end
+
+function World:finishLevelTransition()
+    self.transitionOrigins=nil
+    for id,actor in pairs(self.actors) do
+        if id>0 and actor.humanoid.Health>0 then self:hold(id,false) end
+    end
+end
+
+function World:campaignPose(id,point,mode,velocity)
+    local actor=self.actors[id]
+    if not actor or not actor.root.Parent or actor.humanoid.Health<=0 then return false end
+    actor.campaignControl=true
+    actor.campaignVelocity=velocity and Vector3.new(velocity.x or 0,velocity.y or 0,velocity.z or 0) or Vector3.new()
+    actor.root.Anchored=true
+    actor.humanoid.AutoRotate=false
+    local position=Vector3.new(point.x,point.y,point.z)+self.offset
+    local direction=velocity and Vector3.new(velocity.x or 0,0,velocity.z or 0)
+    if not direction or direction.Magnitude<.001 then direction=actor.root.CFrame.LookVector end
+    actor.model:PivotTo(CFrame.lookAt(position,position+direction))
+    actor.root.AssemblyLinearVelocity=Vector3.new()
+    actor.root.AssemblyAngularVelocity=Vector3.new()
+    actor.model:SetAttribute('CampaignMode',mode)
+    return true
+end
+
+function World:campaignRelease(id)
+    local actor=self.actors[id]
+    if not actor or not actor.campaignControl then return end
+    actor.campaignControl=nil
+    actor.campaignVelocity=nil
+    actor.model:SetAttribute('CampaignMode',nil)
+    actor.root.Anchored=false
+    actor.humanoid.AutoRotate=true
+    actor.humanoid.PlatformStand=false
+    ownCompletedRig(actor)
+end
+
+function World:placeActor(id,point)
+    local actor=self.actors[id]
+    if not actor or not actor.root.Parent or actor.humanoid.Health<=0 then return false end
+    local p=Vector3.new(point.x,point.y,point.z)+self.offset
+    actor.model:PivotTo(CFrame.lookAt(p,p+actor.root.CFrame.LookVector))
+    actor.root.AssemblyLinearVelocity=Vector3.new()
+    actor.root.AssemblyAngularVelocity=Vector3.new()
+    return true
+end
+
+function World:campaignGrounded(id)
+    local actor=self.actors[id]
+    if not actor or not actor.root.Parent then return false end
+    local p=actor.root.Position
+    local hit=Workspace:Raycast(p,Vector3.new(0,-3.7,0),self.ray)
+    return hit~=nil and hit.Normal.Y>.8 and not hit.Instance:GetAttribute('Hazard')
+end
+
+function World:campaignObject(id,kind,point,size,metadata)
+    if self.campaignWorld then return self.campaignWorld:object(id,kind,point,size,metadata) end
+end
+
+function World:campaignRemove(id)
+    if self.campaignWorld then self.campaignWorld:remove(id) end
+end
+
+function World:campaignStage(mode,detail)
+    self.folder:SetAttribute('CampaignMode',mode)
+    self.folder:SetAttribute('CampaignDetail',detail)
+end
+
+function World:campaignImpulse(id,velocity)
+    local actor=self.actors[id]
+    if not actor or actor.root.Anchored or actor.humanoid.Health<=0 then return end
+    actor.root.AssemblyLinearVelocity=Vector3.new(velocity.x or 0,velocity.y or 0,velocity.z or 0)
+end
+
+function World:campaignWalkSpeed(id,speed)
+    if type(speed)~='number' or speed~=speed or speed<0 or speed>40 then return false end
+    local actor=self.actors[id]
+    if not actor then return false end
+    actor.campaignWalkSpeed=speed
+    if actor.locomotion then
+        actor.locomotion.walkSpeed=speed
+        if actor.locomotion.airSpeed~=nil then actor.locomotion.airSpeed=speed end
+        if speed==0 then actor.locomotion.runRequested=false;actor.locomotion.groundRun=false end
+    end
+    if not actor.humanoid.PlatformStand then actor.humanoid.WalkSpeed=speed end
+    return true
+end
+
+function World:courseRival(id,title)
+    local actor=self.actors[id]
+    if not actor then return end
+    actor.model:SetAttribute('ResourceKind','CourseRival')
+    actor.model:SetAttribute('Hearts',nil)
+    local head=actor.model:FindFirstChild('Head')
+    local torso=actor.model:FindFirstChild('Torso')
+    if head then head.CanCollide=false end
+    if torso then torso.Size=Vector3.new(2,2,2) end
+    if actor.healthLabel then actor.healthLabel.Text=title or 'RACING RAT' end
+end
+
+function World:campaignClaw(id,equipped)
+    local actor=self.actors[id]
+    if not actor or not actor.root.Parent then return end
+    local prior=actor.model:FindFirstChild('CampaignRavenClaw')
+    if prior and not equipped then prior:Destroy();ownCompletedRig(actor);return end
+    if prior or not equipped then return end
+    local hand=actor.model:FindFirstChild('Right Arm')
+    if not hand then return end
+    local claw=part(actor.model,'CampaignRavenClaw',Vector3.new(.35,.35,3.8),hand.CFrame,Color3.fromRGB(230,218,176))
+    claw.Anchored=false;claw.Massless=true;claw.CanQuery=false
+    local joint=Instance.new('Motor6D');joint.Name='RavenClawGrip';joint.Part0=hand;joint.Part1=claw
+    joint.C0=CFrame.new(0,-1.1,-1.3)*CFrame.Angles(.2,0,.15);joint.C1=CFrame.new();joint.Parent=claw
+    ownCompletedRig(actor)
+end
+
+function World:campaignProjectileBlocked(from,to,radius)
+    local origin=Vector3.new(from.x,from.y,from.z)+self.offset
+    local destination=Vector3.new(to.x,to.y,to.z)+self.offset
+    local delta=destination-origin
+    if delta.Magnitude<.001 then return false end
+    radius=radius or .6
+    local overlaps=OverlapParams.new()
+    overlaps.FilterType=Enum.RaycastFilterType.Include
+    overlaps.FilterDescendantsInstances={self.geometry}
+    overlaps.RespectCanCollide=true
+    for _,p in ipairs(Workspace:GetPartBoundsInBox(CFrame.new(origin),Vector3.new(radius*2,radius*2,radius*2),overlaps)) do
+        if p.CanCollide then return true end
+    end
+    local hit=Workspace:Spherecast(origin,radius,delta,self.ray)
+    return hit~=nil
+end
+
+function World:impulse(id,attacker,tuning,profile,impulseDirection)
+    local actor=self.actors[id]
+    if self.campaignModes and self.campaignModes.impulse and actor and actor.campaignControl then
+        local direction
+        if type(impulseDirection)=='table' and type(impulseDirection.x)=='number' and type(impulseDirection.z)=='number'
+            and impulseDirection.x==impulseDirection.x and impulseDirection.z==impulseDirection.z
+            and math.abs(impulseDirection.x)<math.huge and math.abs(impulseDirection.z)<math.huge then
+            local scale=math.max(math.abs(impulseDirection.x),math.abs(impulseDirection.z))
+            if scale>0 then direction=Vector3.new(impulseDirection.x/scale,0,impulseDirection.z/scale).Unit end
+        end
+        local source=self.actors[attacker]
+        if not direction and source then
+            local look=source.root.CFrame.LookVector
+            direction=Vector3.new(look.X,0,look.Z)
+            direction=direction.Magnitude>.001 and direction.Unit or Vector3.new(1,0,0)
+        end
+        if direction and self.campaignModes:impulse(id,{x=direction.X*tuning.horizontal,
+            y=tuning.vertical,z=direction.Z*tuning.horizontal}) then return end
+    end
+    return self._base.impulse(self,id,attacker,tuning,profile,impulseDirection)
+end
+
+function World:bossTell(kind,point,radius,untilAt)
+    if self.campaignWorld then
+        local id='tell:'..kind..':'..tostring(untilAt)..':'..tostring(math.floor(point.x*2))..':'..tostring(math.floor(point.z*2))
+        local floor={x=point.x,y=point.y-2.9,z=point.z}
+        self.campaignWorld:object(id,'Telegraph',floor,{x=radius*2,y=.12,z=radius*2},
+            {label='DODGE',alpha=.35,expiresAt=untilAt})
+    end
+end
+
+function World:findSafe(uid)
+    local target=self.transitionOrigins and self.transitionOrigins[uid]
+    if not target and self.campaignModes and self.campaignModes.respawnPosition then
+        local localPoint=self.campaignModes:respawnPosition(uid)
+        if localPoint then target=Vector3.new(localPoint.x,localPoint.y,localPoint.z)+self.offset end
+    end
+    if not target then return self._base.findSafe(self,uid) end
+    -- Only substitute the search origin; collision still excludes the real body.
+    local actual=self.actors[uid]
+    self.actors[uid]={root={Parent=true,Position=target},model=actual and actual.model}
+    local ok,result=pcall(self._base.findSafe,self,uid)
+    self.actors[uid]=actual
+    if not ok then error(result) end
+    return result
 end
 
 function World:spawn(uid, actorId, point, held, template)
@@ -592,11 +821,13 @@ function World:spawnEnemy(id, kind, positionTable)
     if type(id) ~= "number" or id >= 0 or id <= -1000 or not positionTable then return false end
     local x, y, z = positionTable.x, positionTable.y, positionTable.z
     if type(x) ~= "number" or type(y) ~= "number" or type(z) ~= "number" then return false end
-    local isBoss = string.lower(tostring(kind)) == "boss"
+    local campaignBoss=self.campaignWorldType and self.campaignWorldType.bossNames[kind]
+    local isBoss = string.lower(tostring(kind)) == "boss" or campaignBoss~=nil
     local position = Vector3.new(x, y, z) + self.offset
     self.origins[id] = position
     local speciesNames = {Pig = "Armored Boar", Walker = "Walking Guard", Dragon = "Winged Guard"}
-    self.names[id] = isBoss and "Causeway Guardian" or speciesNames[kind] or "Rusty Guard"
+    self.names[id] = campaignBoss or (isBoss and "Causeway Guardian" or speciesNames[kind]
+        or (kind and (kind:gsub('(%l)(%u)','%1 %2'))) or "Rusty Guard")
     local previous=self.actors[id]
     if not self._base.spawn(self, id, id, nil, false, "Mr. Brown") then return false end
     if previous and self.guardianAppearance then self.guardianAppearance.detach(previous) end
@@ -613,7 +844,10 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
     actor.humanoid.WalkSpeed = isBoss and 0 or 8
     self.enemyKinds[id] = isBoss and "Boss" or "Drone"
-    if isBoss then
+    if self.campaignWorld and self.campaignWorldType.decorateActor and (campaignBoss or not speciesNames[kind]) then
+        self.campaignWorldType.decorateActor(actor,kind)
+        actor.model:SetAttribute('BossKind',campaignBoss and kind or nil)
+    elseif isBoss then
         local imported=self.guardianAppearance and self.guardianAppearance.attach(actor)
         if not imported then boss(actor) end
     else drone(actor, kind) end
@@ -633,6 +867,12 @@ function World:position(id)
 end
 
 function World:cameraBounds()
+    if self.campaignWorld then
+        local b=self.config.Level.bounds
+        return {minX=b.minX+self.offset.X,maxX=b.maxX+self.offset.X,
+            minY=(b.minY or -40)+self.offset.Y,maxY=(b.maxY or 180)+self.offset.Y,
+            minZ=b.minZ+self.offset.Z,maxZ=b.maxZ+self.offset.Z}
+    end
     local minX,maxX,minZ,maxZ,top,bottom=math.huge,-math.huge,math.huge,-math.huge,-math.huge,math.huge
     for _,floor in ipairs(self.allFloors or self.floors) do
         minX=math.min(minX,floor.Position.X-floor.Size.X/2)
@@ -714,11 +954,15 @@ local function sampleJumpSupport(world,actor,now)
 end
 
 local function locomotionWalkSpeed(world,id)
+    local actor=world.actors[id]
+    if actor and actor.campaignWalkSpeed~=nil then return actor.campaignWalkSpeed end
     if world.enemyKinds[id]=='Boss' then return 0 end
     return world.enemyKinds[id]=='Drone' and world.config.Enemy.speed or world.config.WalkSpeed
 end
 
 local function locomotionRunSpeed(world,id)
+    local actor=world.actors[id]
+    if actor and actor.campaignWalkSpeed~=nil then return actor.campaignWalkSpeed end
     return world.enemyKinds[id]=='Drone' and world.config.Movement.enemyRunSpeed or world.config.Movement.heroRunSpeed
 end
 
@@ -760,12 +1004,33 @@ function World:resetLocomotion(id,actorReference)
 end
 
 function World:isRunning(id)
+    local modeActor=self.campaignModes and self.campaignModes.actors and self.campaignModes.actors[id]
+    local body=self.actors[id]
+    if body and body.campaignControl and modeActor then
+        if self.campaignModes.isRunning then return self.campaignModes:isRunning(id) end
+        local mode=self.campaignModes.mode
+        if mode=='Rope' or modeActor.mounted or modeActor.medium=='Water' or modeActor.finished
+            or not modeActor.grounded or not modeActor.input.run then return false end
+        local v=modeActor.velocity
+        local cap=self.config.Movement and self.config.Movement.heroRunSpeed or 24
+        return v.x*v.x+v.z*v.z>=(cap*.75)^2
+    end
     if not self.config.Movement then return false end
     local a=self.actors[id]
     return a~=nil and locomotionQualifies(self,id,a,a.locomotion) or false
 end
 
 function World:movementMode(id)
+    local modeActor=self.campaignModes and self.campaignModes.actors and self.campaignModes.actors[id]
+    local controlled=self.actors[id]
+    if controlled and controlled.campaignControl and modeActor then
+        if modeActor.medium=='Water' then return 'Swim' end
+        if self.campaignModes.mode=='Rope' then return 'Rope' end
+        if modeActor.mounted then return 'Ride' end
+        if not modeActor.grounded then return 'Air' end
+        if self:isRunning(id) then return 'Run' end
+        return modeActor.velocity.x^2+modeActor.velocity.z^2>1 and 'Walk' or 'Idle'
+    end
     local a=self.actors[id]
     if not a or not a.root.Parent or a.humanoid.Health<=0 or a.root.Anchored or a.humanoid.PlatformStand then return 'Idle' end
     if not self.config.Movement then return 'Idle' end
@@ -780,10 +1045,12 @@ function World:movementMode(id)
 end
 
 function World:move(id,x,z,runRequested)
+    if self.campaignModes and self.campaignModes:move(id,x,z,runRequested) then return end
     if self.enemyCarries[id] then return end
     local a=self.actors[id]
     if not self.config.Movement then
-        if a and self.enemyKinds[id]=='Drone' and not a.humanoid.PlatformStand then a.humanoid.WalkSpeed=self.config.Enemy.speed end
+        if a and a.campaignWalkSpeed~=nil and not a.humanoid.PlatformStand then a.humanoid.WalkSpeed=a.campaignWalkSpeed
+        elseif a and self.enemyKinds[id]=='Drone' and not a.humanoid.PlatformStand then a.humanoid.WalkSpeed=self.config.Enemy.speed end
         return self._base.move(self,id,x,z)
     end
     if not a or not a.root.Parent or a.humanoid.Health<=0 or a.root.Anchored or a.humanoid.PlatformStand then
@@ -806,6 +1073,12 @@ function World:move(id,x,z,runRequested)
 end
 
 function World:hazard(id)
+    local controlled=self.actors[id]
+    if controlled and controlled.campaignControl and controlled.root.Parent and controlled.humanoid.Health>0 then
+        -- The mode owns rope/vehicle/swim coordinates and its swept hazards.
+        -- The first route's absolute fall plane is unrelated to that space.
+        return nil
+    end
     local reason=self._base.hazard(self,id)
     if not self.config.Level then return reason end
     local actor=self.actors[id]
@@ -833,6 +1106,7 @@ function World:hazard(id)
 end
 
 function World:jump(id)
+    if self.campaignModes and self.campaignModes:jump(id) then return end
     if not self.config.Level then return self._base.jump(self,id) end
     local actor=self.actors[id]
     if not actor or not actor.root.Parent or actor.humanoid.Health<=0 or actor.root.Anchored
@@ -869,12 +1143,14 @@ function World:setReaction(id,active)
         -- Remember the requested eventual state without unfreezing it early.
         carried.platformStand = active
         carried.autoRotate = not active
-        carried.walkSpeed = active and 0 or (self.enemyKinds[id]=='Drone' and self.config.Enemy.speed or self.config.WalkSpeed)
+        carried.walkSpeed = active and 0 or locomotionWalkSpeed(self,id)
         return
     end
     self._base.setReaction(self,id,active)
     local actor=self.actors[id]
-    if actor and self.enemyKinds[id]=='Drone' then actor.humanoid.WalkSpeed=active and 0 or self.config.Enemy.speed end
+    if actor and (self.enemyKinds[id]=='Drone' or actor.campaignWalkSpeed~=nil) then
+        actor.humanoid.WalkSpeed=active and 0 or locomotionWalkSpeed(self,id)
+    end
 end
 
 function World:face(id, targetId)
@@ -944,6 +1220,11 @@ function World:enemyHealth(id, raw, maximum)
         self.guardianAppearance.health(a,raw,maximum,self.presentationTime or 0)
     end
     if a.healthLabel then
+        local campaignBoss=a.model:GetAttribute('BossKind')
+        if campaignBoss then
+            a.healthLabel.Text=(self.names[id] or campaignBoss)..'  '..tostring(math.max(0,raw))..' / '..tostring(maximum)
+            return
+        end
         local symbols = {}
         for n = 1, 3 do symbols[n] = n <= hearts and "♥" or "♡" end
         a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  ·  " or "") .. table.concat(symbols, " ")
@@ -958,6 +1239,10 @@ function World:bossShot(mode)
 end
 
 function World:progress(zoneIndex, complete)
+    if self.campaignWorld then
+        self.folder:SetAttribute('ZoneIndex',zoneIndex)
+        return
+    end
     local level = self.config.Level
     if not level then return end
     zoneIndex = math.clamp(zoneIndex, 1, #level.zones + 1)
@@ -996,6 +1281,7 @@ function World:groundPosition(position)
 end
 
 function World:stage(name)
+    if self.campaignWorld then self.campaignWorld:stage(name);return end
     self.stageName = name
     self.folder:SetAttribute("Stage", name)
     if self.config.Level then
@@ -1067,11 +1353,17 @@ function World:projectile(id, positionTable, reflected, mode)
     elseif mode == "Heavy" then color, size = Color3.fromRGB(255, 151, 55), 2.6
     elseif mode == "Ground" or mode == "Carried" then color, size = Color3.fromRGB(255, 220, 71), 2.4
     elseif mode == "Thrown" then color, size = COLORS.mint, 2.4 end
+    if mode=='StolenLife' or mode=='ReturningLife' then color,size=COLORS.mint,1.2
+    elseif mode=='RavenClaw' then color,size=Color3.fromRGB(230,218,176),1.3
+    elseif mode=='DeadRaven' then color,size=Color3.fromRGB(40,43,68),2 end
     a.root.CFrame = CFrame.new(p)
     a.halo.CFrame = CFrame.new(p)
     a.root.Size = Vector3.new(size, size, size)
+    if mode=='StolenLife' or mode=='ReturningLife' then a.root.Size=Vector3.new(2.1,.55,.55)
+    elseif mode=='RavenClaw' then a.root.Size=Vector3.new(.4,.4,3.6) end
     local haloSize = mode and size * 1.35 or 2.1
     a.halo.Size = Vector3.new(haloSize, haloSize, haloSize)
+    if mode=='RavenClaw' or mode=='DeadRaven' then a.halo.Transparency=1 end
     a.root.Color = color
     a.halo.Color = color
     a.light.Color = color
@@ -1477,6 +1769,7 @@ local heroPoses = {
 }
 
 function World:updatePresentation(session, dt, enemies)
+    if self.campaignWorld then self.campaignWorld:step(session.now) end
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
     for id,equipped in pairs(self.equippedClubs) do
@@ -1501,7 +1794,7 @@ function World:updatePresentation(session, dt, enemies)
             if not actor.poseMotors then
                 actor.poseMotors = {}
                 for _,joint in ipairs(actor.model:GetDescendants()) do
-                    if joint:IsA("Motor6D") and (joint.Name == "Left Shoulder" or joint.Name == "Right Shoulder"
+                    if joint:IsA("Motor6D") and (joint.Name=='RootJoint' or joint.Name == "Left Shoulder" or joint.Name == "Right Shoulder"
                         or joint.Name == "Left Hip" or joint.Name == "Right Hip"
                         or (joint.Name=='Neck' and enemies and enemies[id] and enemies[id].kind=='Dragon')) then
                         actor.poseMotors[joint.Name] = {joint = joint, base = joint.C0}
@@ -1555,7 +1848,7 @@ function World:updatePresentation(session, dt, enemies)
                 actor.primaryPresentationActive = poses~=nil and poses~=false
             end
             local attacking = actor.attackPoseUntil and self.presentationTime < actor.attackPoseUntil
-            local velocity = actor.root.AssemblyLinearVelocity
+            local velocity = actor.campaignVelocity or actor.root.AssemblyLinearVelocity
             local speed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
             local movementMode=self.config.Movement and self:movementMode(id)
             if movementMode then actor.model:SetAttribute('MovementMode',movementMode) end
@@ -1571,7 +1864,9 @@ function World:updatePresentation(session, dt, enemies)
                 local left = string.find(name, "Left", 1, true) ~= nil
                 local angle = stride * (left and 1 or -1) * (shoulder and -1 or 1)
                 local roll = 0
-                if name=='Neck' then
+                if name=='RootJoint' then
+                    angle=movementMode=='Swim' and -.95 or 0
+                elseif name=='Neck' then
                     angle=primaryPose and primaryPose.neck or 0
                 elseif shoulder and carryingEnemy then
                     angle, roll = 2.65, left and -.2 or .2
@@ -1583,6 +1878,17 @@ function World:updatePresentation(session, dt, enemies)
                     angle, roll = shoulder and 1.3 or .45, left and -.3 or .3
                 elseif shoulder and reacting then
                     angle, roll = 0.65, left and -0.25 or 0.25
+                elseif movementMode=='Rope' then
+                    local striking=combat and combat.strikeRecoveryUntil and session.now<combat.strikeRecoveryUntil
+                    local armed=actor.model:FindFirstChild('CampaignRavenClaw')~=nil
+                    angle=shoulder and (striking and armed and not left and 1.8 or 2.8)
+                        or (striking and not left and 1.85 or .25)
+                    roll=shoulder and (left and -.15 or .15) or 0
+                elseif movementMode=='Ride' then
+                    angle=shoulder and .65 or 1.1;roll=left and -.12 or .12
+                elseif movementMode=='Swim' then
+                    angle=shoulder and (1.2+math.sin(self.presentationTime*8+(left and 0 or math.pi))*.7)
+                        or math.sin(self.presentationTime*8+(left and math.pi or 0))*.45
                 elseif shoulder and club and not left then
                     angle,roll=club.swingUntil and 1.95 or .65,club.swingUntil and -.55 or .25
                 elseif running then
@@ -1603,14 +1909,16 @@ function World:updatePresentation(session, dt, enemies)
                 local blocked=(actor.humanoid.Health<=0 or (enemy and enemy.dead) or (combat and combat.deathAt~=nil)) and 'Dead'
                     or (reacting and 'Reaction') or (carryingEnemy and 'Carrying') or (beingCarried and 'Carried')
                     or (dragonLink and 'Dragon') or (club and 'Club')
-                    or ((actor.root.Anchored or actor.humanoid.PlatformStand) and 'Paused')
-                    or (actor.humanoid.FloorMaterial==Enum.Material.Air and 'Airborne') or nil
+                    or ((actor.root.Anchored or actor.humanoid.PlatformStand) and not actor.campaignControl and 'Paused')
+                    or ((actor.campaignControl and movementMode~='Walk' and movementMode~='Run' and movementMode~='Idle'
+                        or not actor.campaignControl and actor.humanoid.FloorMaterial==Enum.Material.Air) and 'Airborne') or nil
                 self.characterAppearance.update(actor,{
                     enabled=combat~=nil and not enemy and session.sourceCombat and true or false,
                     actorId=actor.model:GetAttribute('ActorId'),now=session and session.now,dt=dt,
                     attack=combat and combat.attack,recoveryAction=combat and combat.lastStrikeAction,
                     recoveryUntil=combat and combat.strikeRecoveryUntil,reactionEpoch=combat and combat.reactionEpoch,
-                    blocked=blocked,grounded=actor.humanoid.FloorMaterial~=Enum.Material.Air,
+                    blocked=blocked,grounded=actor.campaignControl and (movementMode=='Walk' or movementMode=='Run' or movementMode=='Idle')
+                        or not actor.campaignControl and actor.humanoid.FloorMaterial~=Enum.Material.Air,
                     mode=movementMode or (walking and 'Walk' or 'Idle'),speed=speed,
                     fearIntro=self.bossIntroState and self.bossIntroState.heroActors
                         and self.bossIntroState.heroActors[id]==actor.model:GetAttribute('ActorId') and {
@@ -1628,6 +1936,8 @@ function World:updatePresentation(session, dt, enemies)
 end
 
 function World:clearActors()
+    if self.campaignModes then self.campaignModes:close('RunClosed');self.campaignModes=nil end
+    self.transitionOrigins=nil
     for id in pairs(self.equippedClubs) do self:unequipClub(id) end
     for id in pairs(self.enemyCarries) do self:releaseEnemy(id) end
     for id,actor in pairs(self.actors) do self:resetLocomotion(id,actor) end

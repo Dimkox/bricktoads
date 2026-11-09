@@ -61,6 +61,18 @@ return function(base,level)
         config.Impulses[3]=table.clone(config.Impulses[21])
         config.Impulses[6]=table.clone(config.Impulses[24])
         config.Impulses[10]=table.clone(config.Impulses[28])
+        -- Source rope animations use ordinary7/13 and hero25/31. Geometry,
+        -- reaction seconds and these physical responses remain Roblox tuning.
+        config.Attacks.RopeStrike=table.clone(config.Attacks.HeroKick)
+        config.Attacks.RopeBoot=table.clone(config.Attacks.HeroKick)
+        -- Armed animation48 selects source collision index3 instead of2. The
+        -- expanded 3D vertical contact budget is explicit physical calibration.
+        config.Attacks.RopeClaw=table.clone(config.Attacks.RopeStrike)
+        config.Attacks.RopeClaw.height=config.Attacks.RopeStrike.height+2
+        config.Impulses[7]=table.clone(config.Impulses[19])
+        config.Impulses[13]=table.clone(config.Impulses[22])
+        config.Impulses[25]=table.clone(config.Impulses[24])
+        config.Impulses[31]=table.clone(config.Impulses[22])
         config.Boss.interval=1.6
         config.Boss.ballInterval=8
         config.Boss.ballLife=20

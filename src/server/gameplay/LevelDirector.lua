@@ -52,7 +52,7 @@ function Director:_finishReaction(id,e)
     if e~=self.enemies[id] or e.dead or not e.reactionUntil or self.now<e.reactionUntil then return false end
     if e.rawLife~=nil then
         local before=e.rawLife
-        e.rawLife=self.Combat.recover(e.rawLife);self:_health(id,e)
+        e.rawLife=(self.Combat.recoverEnemy or self.Combat.recover)(e.rawLife);self:_health(id,e)
         self:_log('EnemyRecovery',id,{actorId=e.actorId,before=before,after=e.rawLife})
     end
     e.reactionUntil=nil;e.heavyReaction=nil;self.world:setReaction(id,false)
@@ -61,14 +61,25 @@ end
 function Director:_wave(stage,roster)
     self.stage=stage; self.world:stage(stage)
     for _,r in ipairs(roster) do
+        local previous=self.enemies[r.id]
+        if previous and previous.ownerUserId then
+            self.retiredOwners=self.retiredOwners or {}
+            self.retiredOwners[previous.ownerUserId]=previous
+        end
         assert(self.world:spawnEnemy(r.id,r.kind or 'Drone',{x=r.x,y=r.y or 3,z=r.z}),'Enemy spawn failed')
         local actorId=self.session.state.runId..':enemy:'..self.session.state.levelEpoch..':'..r.id
+        if r.spawnSerial~=nil then
+            assert(type(r.spawnSerial)=='number' and r.spawnSerial>=1 and r.spawnSerial%1==0,'Invalid enemy spawn serial')
+            actorId=actorId..':spawn:'..r.spawnSerial
+        end
         self.enemies[r.id]={health=self.config.Enemy.hearts,nextAttack=self.now,engaged=false,
             actorId=actorId,zoneIndex=self.zoneIndex,kind=r.kind,
-            name=({Pig="Marsh Raider",Walker="Long-legged Guard",Dragon="Winged Scout"})[r.kind] or "Rusty Guard"}
+            trajectory=r.trajectory,allowedDrop=r.allowedDrop,sourceProfile=r.sourceProfile,
+            name=r.name or ({Pig="Marsh Raider",Walker="Long-legged Guard",Dragon="Winged Scout"})[r.kind]
+                or (r.kind and (r.kind:gsub('(%l)(%u)','%1 %2'))) or "Rusty Guard"}
         local e=self.enemies[r.id]
         if self.config.SourceCombat and r.rawLife~=nil then
-            assert(type(r.rawLife)=='number' and r.rawLife>=0 and r.rawLife<=47 and r.rawLife%1==0,'Invalid source Life')
+            assert(type(r.rawLife)=='number' and r.rawLife>=0 and r.rawLife<=255 and r.rawLife%1==0,'Invalid source Life')
             e.rawLife=r.rawLife;e.maxRawLife=math.floor(r.rawLife/16)*16+15
         end
         self.world:enemyIdentity(r.id,actorId)
@@ -130,6 +141,7 @@ function Director:interact(slot,now,attack)
     return self.carry and self.carry:interact(slot,now,attack) or 'NO_INTERACTION'
 end
 function Director:claim(userId,enemyId)
+    if self.retiredOwners and self.retiredOwners[userId] then return 'ENEMY_LIFE_SPENT' end
     local owned=self.byUserId[userId]
     if owned then
         if self.enemies[owned].dead then return 'ENEMY_LIFE_SPENT' end
@@ -153,6 +165,13 @@ function Director:claim(userId,enemyId)
     return 'OK'
 end
 function Director:connection(userId,connected)
+    local retired=self.retiredOwners and self.retiredOwners[userId]
+    if retired then
+        if type(connected)~='boolean' then return 'INVALID_CONNECTION' end
+        if retired.connected==connected then return 'NO_CHANGE' end
+        retired.connected=connected;retired.connectionEpoch=(retired.connectionEpoch or 0)+1
+        return 'OK'
+    end
     local id=self.byUserId[userId]; local e=id and self.enemies[id]
     if not e then return 'UNKNOWN_ENEMY' end
     if type(connected)~='boolean' then return 'INVALID_CONNECTION' end
@@ -164,12 +183,13 @@ function Director:connection(userId,connected)
     return 'OK'
 end
 function Director:controlled(userId)
-    local id=self.byUserId[userId]; local e=id and self.enemies[id]
+    local id=self.byUserId[userId]; local e=self.retiredOwners and self.retiredOwners[userId] or id and self.enemies[id]
     if not e then return nil end
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
         template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode,
+        movementKind=self.campaignEnemies and self.campaignEnemies:movementKind(id,e) or nil,
         reactionEpoch=e.reactionEpoch or 0,movementMode=self.world.movementMode and self.world:movementMode(id) or nil}
 end
 function Director:available(userId)
@@ -198,6 +218,7 @@ function Director:command(userId,payload,now,validator)
     local id=self.byUserId[userId]; local e=id and self.enemies[id]
     if not e then return 'UNKNOWN_ENEMY' end
     if type(validator)~='function' or not validator(payload) then return 'INVALID_INTENT' end
+    if self.retiredOwners and self.retiredOwners[userId] then return 'STALE_ACTOR' end
     if payload.kind~='Move' and payload.kind~='Jump' and payload.kind~='Attack' then return 'INVALID_INTENT' end
     if payload.kind=='Attack' and payload.attack~='Punch' then return 'INVALID_INTENT' end
     if e.boss and payload.kind=='Jump' then return 'INVALID_INTENT' end
@@ -231,6 +252,9 @@ function Director:command(userId,payload,now,validator)
         return 'OK'
     end
     if e.reactionUntil then return 'REACTION' end
+    if self.campaignEnemies and self.campaignEnemies:owns(id,e) then
+        return self.campaignEnemies:command(id,e,payload,now)
+    end
     if self.dragons and e.kind=='Dragon' then
         local code=self.dragons:enemyCommand(id,e,payload,now)
         if code then return code end
@@ -353,6 +377,7 @@ function Director:_kill(id,cause)
     if not e or e.dead then return end
     if self.carry then self.carry:forgetEnemy(id) end
     if self.dragons then self.dragons:forgetEnemy(id) end
+    if self.campaignEnemies then self.campaignEnemies:forgetEnemy(id) end
     self:_resetLocomotion(id,e)
     e.dead=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil; e.health=0
     if self.clubs and e.kind=='Walker' then self.clubs:walkerDefeated(id,self.world:position(id),cause) end
@@ -390,6 +415,7 @@ function Director:hit(attacker,target,action,tuning)
     if e and e.rawLife~=nil then self:_finishReaction(target,e) end
     if not e or e.dead or (e.rawLife==nil and e.reactionUntil and self.now<e.reactionUntil) then return false end
     if self.carry then self.carry:forgetEnemy(target) end
+    if self.campaignEnemies and self.campaignEnemies:owns(target,e) then self.campaignEnemies:onHit(target) end
     self:_resetLocomotion(target,e)
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     e.engaged=true; e.windup=nil; e.rushing=nil; e.strikeRecoveryUntil=nil
@@ -407,6 +433,7 @@ function Director:hit(attacker,target,action,tuning)
     self:_log('EnemyHit',target,{actorId=e.actorId,attacker=attacker,target=target,action=action,
         before=before,after=e.rawLife or e.health,sourceRaw=source~=false and source~=nil,
         profile=source and source.profile or nil,dying=source and source.dying,position=self.world:position(target)})
+    if self.campaignEnemies and self.campaignEnemies.afterHit and self.campaignEnemies:afterHit(target,e,attacker,action) then return true end
     if (source and source.dying) or (not source and e.health==0) then self:_kill(target,'Combat')
     else
         local policy=tuning and tuning.sourceCombat or self.config.SourceCombat
@@ -465,7 +492,9 @@ function Director:_enemies(dt)
                 if not carried and e.reactionUntil and self.now>=e.reactionUntil then
                     self:_finishReaction(id,e)
                 end
-                if self.dragons and e.kind=='Dragon' then
+                if self.campaignEnemies and self.campaignEnemies:owns(id,e) then
+                    self.campaignEnemies:enemyStep(id,e,dt)
+                elseif self.dragons and e.kind=='Dragon' then
                     self.dragons:enemyStep(id,e,dt)
                 elseif not carried and not e.reactionUntil then
                     if e.windup then

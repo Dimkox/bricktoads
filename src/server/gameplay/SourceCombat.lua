@@ -21,6 +21,10 @@ function SourceCombat.bind(session,director,config)
             local hero=session.state.heroes[target]
             local combat=session.combat[target]
             local raw,heavy,kind
+            if enemy and enemy.boss and director.selectBossAction then
+                local selected=director:selectBossAction(target,input)
+                if selected then return selected end
+            end
             if enemy and not enemy.boss and not enemy.dead and enemy.rawLife~=nil
                 and not (director.carry and director.carry:blocksEnemy(target)) then
                 director:_finishReaction(target,enemy)

@@ -5,7 +5,9 @@ local public={Hit=true,EnemyHit=true,AttackMiss=true,EnemyAttackMiss=true,Commit
     RelocateToSafety=true,EnemyDeath=true,EnemyClaimed=true,FlyCaught=true,ClubEquipped=true,
     ClubDropped=true,ClubSwingHit=true,EnemyGrabbed=true,EnemyThrown=true,EnemyDropped=true,
     DragonMounted=true,DragonCaptured=true,DragonReleased=true,DragonFireHit=true,
-    RunResult=true,GuardianBallPickedUp=true,GuardianBallThrown=true,BossHit=true,BossShielded=true,BossWarning=true}
+    RunResult=true,GuardianBallPickedUp=true,GuardianBallThrown=true,BossHit=true,BossShielded=true,BossWarning=true,
+    LifeStolen=true,StolenLifeRecovered=true,RavenClawPickedUp=true,CampaignGroupStopped=true,
+    CampaignGroupRewound=true,CampaignBombDefused=true}
 local function finite(v) return type(v)=='number' and v==v and v>-math.huge and v<math.huge end
 local function text(v)
     if type(v)~='string' then return nil end

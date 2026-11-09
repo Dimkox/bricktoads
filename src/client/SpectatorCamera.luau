@@ -44,6 +44,10 @@ function SpectatorCamera:sync(snapshot, controlled)
     self.runId, self.levelEpoch = snapshot.runId, snapshot.levelEpoch
     self.worldName, self.groupId = snapshot.worldName, snapshot.groupId
     self.snapshot, self.controlled, self.bounds = snapshot, controlled, snapshot.cameraBounds
+    local mode=snapshot.level and snapshot.level.modeState
+    local serial=mode and mode.camera and mode.camera.rewindSerial
+    if serial~=nil and self.vehicleRewindSerial~=nil and serial~=self.vehicleRewindSerial then self.point=nil end
+    self.vehicleRewindSerial=serial
     if controlled and controlled.status == "Alive" and controlled.connected and not controlled.dying then
         self.mode = "Follow"
         self:resetInput()
@@ -194,7 +198,30 @@ function SpectatorCamera:step(dt, camera)
     if root then
         local target = root.Position + Vector3.new(0, 2, 0)
         self.point = self.point and self.point:Lerp(target, 1 - math.exp(-dt * 7)) or target
-        camera.CFrame = CFrame.lookAt(self.point + Vector3.new(0, 23, 30), self.point)
+        local level=self.snapshot and self.snapshot.level
+        local mode=level and level.modeState
+        local actor
+        for _,candidate in ipairs(mode and mode.actors or {}) do
+            if candidate.actorId==targetModel:GetAttribute('ActorId') then actor=candidate;break end
+        end
+        local offset,focus=Vector3.new(0,23,30),self.point
+        if actor and not actor.finished then
+            if mode.mode=='Tower' then
+                local world=workspace:FindFirstChild(self.worldName)
+                local geometry=world and world:FindFirstChild('Geometry')
+                local core=geometry and geometry:FindFirstChild('SpireCore')
+                if core then
+                    local relative=self.point-core.Position
+                    local angle=math.atan2(relative.Z,relative.X)
+                    offset=Vector3.new(math.cos(angle)*43,19,math.sin(angle)*43)
+                end
+            elseif mode.mode=='Clinger' then offset=Vector3.new(0,46,5)
+            elseif mode.mode=='Rope' then offset=Vector3.new(0,8,43);focus=self.point+Vector3.new(0,-5,0)
+            elseif mode.mode=='Speeder' or mode.mode=='Surf' or mode.mode=='Jet' then
+                offset=Vector3.new(10,16,43);focus=self.point+Vector3.new(12,0,0)
+            elseif mode.mode=='Tubes' or mode.mode=='Race' or mode.mode=='Ascent' then offset=Vector3.new(0,15,40) end
+        end
+        camera.CFrame = CFrame.lookAt(self.point + offset, focus)
     elseif not self.point then
         if self.worldName and self.bounds then
             local bounds = self.bounds

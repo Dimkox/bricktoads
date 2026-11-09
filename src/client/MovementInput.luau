@@ -26,7 +26,8 @@ function MovementInput:reset(held)
     self.down,self.lastPress,self.runDirection={}, {}, nil
     for direction,value in pairs(held or {}) do if directions[direction] and value then self.down[direction]=true end end
 end
-function MovementInput:vector(forward)
+function MovementInput:vector(forward,localAxes)
+    if localAxes then forward=nil end
     local function down(direction) return self.down[direction] and 1 or 0 end
     local x,z=down('Right')-down('Left'),down('Backward')-down('Forward')
     local length=math.sqrt(x*x+z*z)

@@ -3,6 +3,13 @@ local Controller={}
 Controller.__index=Controller
 local templates={['Mr. Green']=true,['Mr. Yellow']=true,['Mr. Brown']=true}
 local roles={Hero=true,Enemy=true,Spectator=true}
+local bossTypes={CausewayGuardian=true,BigBlag=true,RoboManus=true,GeneralSlaughter=true,Buzzball=true,DarkQueen=true}
+local levelHooks={'contextualIntent','beforeHitImpulse','groundRunAllowed','canRunStrike','attackSelector','contextualAttack'}
+local function campaignSeed(runId)
+    local seed=1
+    for index=1,#runId do seed=(seed*131+string.byte(runId,index))%2147483646 end
+    return seed+1
+end
 local actionDenials={NOT_RUNNING=true,REACTION=true,COOLDOWN=true,HELD=true,THROWN=true}
 local function variationMetadata(route)
     local value=route and route.variation
@@ -17,7 +24,7 @@ end
 function Controller.new(deps,world)
     deps=table.clone(deps)
     deps.Config=table.clone(deps.Config)
-    local self=setmetatable({deps=deps,world=world,connections=deps.Registry.new(),choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={},
+    local self=setmetatable({deps=deps,world=world,connections=deps.Registry.new(),players={},choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={},
         baseLevel=deps.Config.Level,actionFeedback=setmetatable({},{__mode='k'}),actionSerial=setmetatable({},{__mode='k'})},Controller)
     if deps.SharedBossQueue then self.bossQueue=deps.SharedBossQueue
     elseif deps.BossQueue then
@@ -59,6 +66,7 @@ end
 function Controller:join(player)
     local joined,previous=self.connections:join(player)
     if not joined then return end
+    self.players[player.UserId]=player
     if previous then self.actionFeedback[previous]=nil;self.actionSerial[previous]=nil end
     self.actionFeedback[player]=nil
     if self.faulted then return end
@@ -79,6 +87,7 @@ function Controller:join(player)
 end
 function Controller:leave(player)
     local changed=self.connections:remove(player)
+    if changed then self.players[player.UserId]=nil end
     if self.faulted then
         self.buckets[player]=nil;self.notices[player]=nil;self.actionFeedback[player]=nil;self.actionSerial[player]=nil
         return
@@ -95,7 +104,68 @@ function Controller:leave(player)
     self.buckets[player]=nil; self.notices[player]=nil;self.actionFeedback[player]=nil;self.actionSerial[player]=nil
 end
 function Controller:_open()
-    return self.faulted or not self.current or self.current.state.status=='Lost' or (self.director and self.director.result~=nil)
+    if self.faulted or not self.current or self.current.state.status=='Lost' then return true end
+    if not self.director or not self.director.result then return false end
+    return self.director.result~='Won' or not self.campaignIndex
+        or self.campaignIndex>=self.deps.CampaignDefinition.count or self.finished==true
+end
+
+function Controller:_closeDirector(reason)
+    local director=self.director
+    if not director then return end
+    if director.close then director:close(reason)
+    else
+        if director.cancelBossIntro then director:cancelBossIntro(reason) end
+        for _,name in ipairs({'flies','carry','clubs','dragons'}) do
+            local component=director[name]
+            if component and component.close then component:close(reason) end
+        end
+    end
+end
+
+function Controller:_createDirector(at)
+    local deps=self.deps
+    for _,key in ipairs(levelHooks) do self.current[key]=self.baseSessionHooks[key] end
+    if self.campaignIndex and self.campaignIndex>1 then
+        self.director=deps.CampaignDirector.new(self.current,self.world,deps.Combat,deps.Config,deps)
+    else
+        self.director=deps.Director.new(self.current,self.world,deps.Combat,deps.Config,deps.GuardianPattern,
+            deps.HealingFlies,deps.EnemyCarry,deps.WalkerClubs,deps.DragonFlight,deps.BossIntro)
+    end
+    self.current.contextualAttack=function(slot,now,action)
+        return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
+    end
+    if deps.SourceCombat then deps.SourceCombat.bind(self.current,self.director,deps.Config) end
+    for _,owner in pairs(self.players) do self:_enemyName(owner) end
+    self.bossSlot=nil
+    local definition=deps.Config.Level
+    local bossId=self.campaignIndex and self.campaignIndex>1
+        and definition.boss and (definition.boss.kind or definition.boss.type)
+        or ((not self.campaignIndex or self.campaignIndex==1) and 'CausewayGuardian' or nil)
+    if self.bossQueue and bossId then
+        self.bossSlot=self.current.state.runId..':'..bossId..':'..self.current.state.levelEpoch
+        assert(self.bossQueue:register(self.bossSlot,bossId,{runId=self.current.state.runId,
+            groupId=self.current.state.groupId,levelEpoch=self.current.state.levelEpoch},at)=='OK')
+        self.director.bossGate=function(now) return self.bossQueue:start(self.bossSlot,now) end
+    end
+end
+
+function Controller:_advanceCampaign(now)
+    local nextIndex=self.campaignIndex+1
+    local definition=self.deps.CampaignDefinition.build(nextIndex,self.campaignSeed)
+    if self.bossQueue and self.bossSlot then self.bossQueue:close(self.bossSlot,now) end
+    self:_closeDirector('LevelAdvanced')
+    local rebuilt,reason=self.world:advanceGeometry(definition)
+    assert(rebuilt==true,'Cannot build the next campaign stage: '..tostring(reason))
+    local code=self.current:advanceLevel(definition.id,now,{prerequisitesMet=true})
+    assert(code=='OK','Cannot advance the campaign: '..tostring(code))
+    self.deps.Config.Level=definition
+    self.deps.Config.Calibration=definition.calibration or self.deps.Config.Calibration
+    self.campaignIndex=nextIndex
+    self.actionFeedback=setmetatable({},{__mode='k'})
+    self.notices={}
+    self:_createDirector(now)
+    self.current:_record('CampaignStageStarted',nil,{index=nextIndex,levelId=definition.id,mode=definition.mode})
 end
 
 function Controller:quarantine()
@@ -154,12 +224,13 @@ function Controller:_begin(player,players)
         route=self.deps.LevelVariation.build(self.baseLevel,self.deps.LevelVariation.seedFromId(runId))
     end
     if self.bossQueue and self.bossSlot then self.bossQueue:close(self.bossSlot,at) end
-    if self.director and self.director.cancelBossIntro then self.director:cancelBossIntro('RunReplaced') end
+    self:_closeDirector('RunReplaced')
     self.world:clearActors(); self.ownerSlots={}; self.owners={}; self.viewChoices={}
     if route then
         local rebuilt,reason=self.world:rebuildLevel(route)
         assert(rebuilt==true,'Cannot rebuild the new run level: '..tostring(reason))
         self.deps.Config.Level=route
+        self.deps.Config.Calibration=route.calibration or self.deps.Config.Calibration
     end
     self.actionFeedback=setmetatable({},{__mode='k'})
     local roster={}
@@ -182,24 +253,16 @@ function Controller:_begin(player,players)
     for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
     self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners,variation=variationMetadata(self.deps.Config.Level)})
     self.current:step(self.deps.clock())
-    self.director=self.deps.Director.new(self.current,self.world,self.deps.Combat,self.deps.Config,self.deps.GuardianPattern,self.deps.HealingFlies,self.deps.EnemyCarry,self.deps.WalkerClubs,self.deps.DragonFlight,self.deps.BossIntro)
-    self.current.contextualAttack=function(slot,now,action)
-        return self.director.interact and self.director:interact(slot,now,action) or 'NO_INTERACTION'
-    end
-    if self.deps.SourceCombat then self.deps.SourceCombat.bind(self.current,self.director,self.deps.Config) end
-    for _,owner in ipairs(self.connections:online(players)) do self:_enemyName(owner) end
-    if self.bossQueue then
-        self.bossSlot=self.current.state.runId..':guardian:'..self.current.state.levelEpoch
-        self.bossQueue:register(self.bossSlot,'CausewayGuardian',{
-            runId=self.current.state.runId,groupId=self.current.state.groupId,levelEpoch=self.current.state.levelEpoch},at)
-        self.director.bossGate=function(now) return self.bossQueue:start(self.bossSlot,now) end
-    end
+    self.campaignIndex=self.deps.CampaignDefinition and self.deps.CampaignDirector and 1 or nil
+    self.campaignSeed=self.deps.LevelVariation and self.deps.LevelVariation.seedFromId(runId) or campaignSeed(runId)
+    self.baseSessionHooks={}
+    for _,key in ipairs(levelHooks) do self.baseSessionHooks[key]=self.current[key] end
     local originalHit=self.current._hit
-    local director=self.director
     self.current._hit=function(session,attacker,target,action,tuning)
-        if type(target)=='number' and target<0 then return director:hit(attacker,target,action,tuning) end
+        if type(target)=='number' and target<0 then return self.director:hit(attacker,target,action,tuning) end
         return originalHit(session,attacker,target,action,tuning)
     end
+    self:_createDirector(at)
     self.finished=false
     self.faulted=false
     return 'OK'
@@ -236,7 +299,7 @@ function Controller:handle(player,payload,players)
             self.preferences[player.UserId]=payload.role; code='OK'
         end
     elseif payload.kind=='QueueBoss' then
-        if not exact(payload,{kind=true,bossId=true}) or payload.bossId~='CausewayGuardian' then return 'INVALID_INTENT' end
+        if not exact(payload,{kind=true,bossId=true}) or not bossTypes[payload.bossId] then return 'INVALID_INTENT' end
         code=self:_bossSelection(player)
         if code=='OK' then
             code=self.bossQueue and self.bossQueue:select(player.UserId,payload.bossId,at) or 'UNAVAILABLE'
@@ -326,6 +389,11 @@ function Controller:step(now,dt)
     if not self.current or self.finished then return end
     self.director.now=now
     self.current:step(now); self.director:step(now,dt)
+    if self.director.result=='Won' and self.campaignIndex and self.campaignIndex<self.deps.CampaignDefinition.count then
+        self.current:_record('CampaignStageCompleted',nil,{index=self.campaignIndex})
+        self:_advanceCampaign(now)
+        return
+    end
     if self.bossQueue and self.bossSlot and (self.director.stage=='Exit' or self.director.result) then
         self.bossQueue:close(self.bossSlot,now)
     end
@@ -356,6 +424,11 @@ function Controller:snapshot(player,players)
     local data=self.current and self.current:snapshot() or {status='Lobby',heroes={},now=self.deps.clock()}
     data.status=self.director and self.director.result or data.status
     data.level=self.director and self.director:snapshot() or {stage='Lobby',objective="Choose a hero and set out"}
+    if self.campaignIndex then
+        data.campaign={index=self.campaignIndex,count=self.deps.CampaignDefinition.count,
+            complete=self.finished==true and self.director.result=='Won'}
+        data.level.campaignIndex=self.campaignIndex;data.level.campaignCount=self.deps.CampaignDefinition.count
+    end
     for _,hero in ipairs(data.heroes) do
         local owner=self.owners[hero.slot]
         for key,value in pairs(owner) do hero[key]=value end

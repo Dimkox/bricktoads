@@ -152,6 +152,59 @@ function Session:connection(uid, connected, now)
     return code
 end
 
+-- The controller has authenticated the completed exit and installed the next
+-- geometry. Moving a living body is not a spawn and cannot spend a reserve.
+function Session:advanceLevel(levelId, now, options)
+    options=options or {}
+    if self.state.status~='Active' then return 'RUN_CLOSED' end
+    if options.prerequisitesMet~=true then return 'EXIT_NOT_READY' end
+    if type(levelId)~='string' or #levelId==0 or #levelId>160 then return 'INVALID_LEVEL' end
+    if levelId==self.state.levelId then return 'SAME_LEVEL' end
+    local code=self:_clock(now);if code~='OK' then return code end
+    local source,points
+    points={}
+    for _,uid in ipairs(self.order) do
+        local hero=self.state.heroes[uid]
+        if hero.status=='Alive' then
+            if not self.combat[uid].deathAt then source=source or uid end
+            local point=self.world:findSafe(uid)
+            if not point or not self.world:isSafe(point,uid) then return 'UNSAFE_DESTINATION' end
+            points[uid]=point
+        end
+    end
+    if not source then return 'NO_SURVIVOR' end
+    local hero=self.state.heroes[source]
+    code=self:_event('AdvanceLevel',source,{actorId=hero.actorId,attempt=hero.attempt,
+        levelEpoch=self.state.levelEpoch,levelId=levelId,destinationSafe=true,prerequisitesMet=true})
+    if code~='OK' then return code end
+    self.lastSeq={};self.lastMove={};self.buckets={};self.nextSpawn={}
+    for _,uid in ipairs(self.order) do
+        local member=self.state.heroes[uid]
+        self.lastSeq[uid]=0
+        if member.status=='Alive' then
+            assert(self.world:relocate(uid,points[uid])==true,'Synchronous level relocation failed')
+            local previous=self.combat[uid]
+            if previous.deathAt then
+                -- A different survivor can finish while this accepted lethal
+                -- reaction is still playing. Preserve its original deadline.
+                previous.attack=nil;previous.nextAttack=now
+                assert(self:_event('SetHealth',uid,{health=self.Combat.hearts(previous.rawLife)})=='OK')
+            else
+                self.combat[uid]={rawLife=47,nextAttack=now}
+                self.world:setReaction(uid,false)
+            end
+        else
+            -- Awaiting respawns retain their pending resource obligation; an
+            -- eliminated owner never receives a body at a level boundary.
+            self.combat[uid]={rawLife=0,nextAttack=now}
+        end
+        self:_resetLocomotion(uid)
+    end
+    if self.world.finishLevelTransition then self.world:finishLevelTransition() end
+    self:_record('LevelAdvanced',source,{levelId=levelId})
+    return 'OK'
+end
+
 function Session:intent(uid, p, now)
     local h=self.state.heroes[uid]
     if not h then return "UNKNOWN_HERO" end
@@ -214,6 +267,41 @@ function Session:intent(uid, p, now)
         self:_record("AttackAccepted",uid,{action=action,inputAction=p.attack,seq=p.seq})
     end
     return "OK"
+end
+
+-- Invader health-bar links are trusted server objects, not public attack inputs.
+-- The source subtracts/adds eight directly; returning at >= $30 consumes the
+-- object without changing Life. Tokens are bound to this exact hero body.
+-- main5713-5715 masks Life with $38; main5635-5648 skips subtraction when
+-- that result is below7. Thus raw0..7 do not enter SBC8 (main5656-5659).
+function Session:_stealLife(attacker,target)
+    local h,c=self.state.heroes[target],self.combat[target]
+    if self.state.status~='Active' or not h or h.status~='Alive' or not c or c.deathAt
+        or not h.actorId or c.rawLife<8 or c.rawLife>47
+        or h.shield and self.now<h.shield.deadline
+        or c.hitProtectedUntil and self.now<c.hitProtectedUntil then return nil end
+    local before=c.rawLife;local after=before-8
+    if self:_event('SetHealth',target,{health=self.Combat.hearts(after)})~='OK' then return nil end
+    c.rawLife=after
+    local token={slot=target,combat=c,actorId=h.actorId,attempt=h.attempt,runId=self.state.runId,levelEpoch=self.state.levelEpoch}
+    self.stolenLifeTokens=self.stolenLifeTokens or {};self.stolenLifeTokens[token]=true
+    self:_record('LifeStolen',target,{attacker=attacker,before=before,after=after})
+    return token
+end
+function Session:_discardStolenLife(token)
+    if self.stolenLifeTokens then self.stolenLifeTokens[token]=nil end
+end
+function Session:_recoverStolenLife(token)
+    if not self.stolenLifeTokens or not self.stolenLifeTokens[token] then return false end
+    self.stolenLifeTokens[token]=nil
+    local h,c=self.state.heroes[token.slot],self.combat[token.slot]
+    if self.state.status~='Active' or self.state.runId~=token.runId or self.state.levelEpoch~=token.levelEpoch
+        or not h or h.status~='Alive' or h.actorId~=token.actorId or h.attempt~=token.attempt
+        or c~=token.combat or c.deathAt or c.rawLife+8>=48 then return false end
+    local before=c.rawLife;local after=before+8
+    if self:_event('SetHealth',token.slot,{health=self.Combat.hearts(after)})~='OK' then return false end
+    c.rawLife=after;self:_record('StolenLifeRecovered',token.slot,{before=before,after=after})
+    return true
 end
 
 function Session:_hit(attacker, target, action, tuning)

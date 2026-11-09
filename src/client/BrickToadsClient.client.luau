@@ -28,6 +28,7 @@ local gameplayBindings
 local windowFocused = true
 local lastReactionEpoch
 local lastHeldContext
+local vehicleRewindSerial
 local sendMovement, syncGameplayContext
 local feedbackUntil = 0
 local feedbackActionId
@@ -518,7 +519,17 @@ end
 sendMovement = function()
     local camera = workspace.CurrentCamera
     local forward = camera and camera.CFrame.LookVector
-    local value = movementInput:vector(forward and {x = forward.X, z = forward.Z})
+    local mode=snapshot and snapshot.level and snapshot.level.modeState
+    local localAxes=false
+    for _,actor in ipairs(mode and mode.actors or {}) do
+        if actor.slot==snapshot.mine and not actor.finished and mode.mode~='Finale' then
+            local vehicle=mode.mode=='Speeder' or mode.mode=='Surf' or mode.mode=='Jet'
+            localAxes=not vehicle or actor.mounted==true
+            break
+        end
+    end
+    if snapshot and snapshot.enemyRole and snapshot.enemyRole.movementKind=='Swim' then localAxes=true end
+    local value = movementInput:vector(forward and {x = forward.X, z = forward.Z},localAxes)
     if (snapshot and snapshot.interaction and snapshot.interaction.carrying) or (controlled and controlled.carryState) then
         value.run = false
     end
@@ -631,8 +642,9 @@ local function renderOffers()
             offerButtons[key] = item
         end
         item.LayoutOrder = i
-        item.Text = T(offer.name or "Guard") .. " · " .. tostring(offer.hearts or 0)
-            .. "/" .. tostring(offer.maxHearts or 3) .. " ♥  ·  " .. T(pendingEnemy == id and "Selecting…" or "Select")
+        local resource=offer.resourceKind=='CourseRival' and T('Rival') or
+            (tostring(offer.hearts or 0)..'/'..tostring(offer.maxHearts or 3)..' ♥')
+        item.Text = T(offer.name or "Guard") .. " · " .. resource .. " · " .. T(pendingEnemy == id and "Selecting…" or "Select")
         item.TextColor3 = pendingEnemy and C.muted or C.text
         item.Selectable = enemyChoiceAllowed() == true and not snapshot.enemyUnavailableReason and not pendingEnemy
     end
@@ -674,14 +686,41 @@ end
 local function remainingEnemies(level)
     return CombatFeedback.remainingEnemies(level)
 end
+local function visualHealth(personal,count)
+    local raw=personal and tonumber(personal.hearts) or 0
+    if personal and personal.bossType then return math.clamp(raw/math.max(1,personal.maxHearts or 1)*count,0,count) end
+    return raw
+end
+local function campaignDetail(level)
+    if level.bossType and level.boss then
+        local boss=level.boss
+        if boss.maxProgress then
+            return T("Phase {phase:int} · progress {count:int}/{maximum:int}",
+                {phase=boss.bossPhase or 1,count=boss.progress or 0,maximum=boss.maxProgress})
+        end
+        return T("Phase {phase:int} · Life {count:int}/{maximum:int}",
+            {phase=boss.bossPhase or 1,count=boss.rawLife or 0,maximum=boss.maxRawLife or 1})
+    end
+    local mode=level.modeState
+    for _,actor in ipairs(mode and mode.actors or {}) do
+        if actor.slot==(snapshot and snapshot.mine) and actor.medium=='Water' and not actor.finished then
+            return T("Air: {seconds:int} s",{seconds=math.max(0,math.ceil(actor.oxygen or 0))})
+        end
+    end
+    if mode and mode.raceTime then return T("Bomb {count:int}/{maximum:int} · rival ~{seconds:int} s",
+        {count=mode.bombIndex or 1,maximum=mode.bombCount or 3,seconds=math.ceil(mode.raceTime)}) end
+    if mode and mode.room and level.mode=='Serpents' then return T("Vault {count:int}/4",{count=mode.room}) end
+    return T("Enemies: {count:int}",{count=remainingEnemies(level)})
+end
 local function renderMobileSummary(level, enemy, isBoss)
     local personal = mine or enemy
-    local maximum = enemy and (tonumber(enemy.maxHearts) or 3) or 5
-    local hp = personal and (tonumber(personal.hearts) or 0) or 0
-    mobileStatusTitle.Visible = personal == nil
-    mobileStatusTitle.Text = T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot and snapshot.heroes)})
+    local rival=enemy and enemy.resourceKind=='CourseRival'
+    local maximum = rival and 0 or (enemy and (enemy.bossType and 5 or tonumber(enemy.maxHearts) or 3) or 5)
+    local hp = visualHealth(personal,maximum)
+    mobileStatusTitle.Visible = personal == nil or rival==true
+    mobileStatusTitle.Text = rival and T('Rival') or T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot and snapshot.heroes)})
     mobileReturns.Visible = personal ~= nil
-    mobileReturns.Text = enemy and T("1 life") or T("{count:int} resp.", {count=personal and personal.respawns or 0})
+    mobileReturns.Text = rival and T('RACE') or enemy and T("1 life") or T("{count:int} resp.", {count=personal and personal.respawns or 0})
     for n, heart in ipairs(mobileHearts) do
         heart.heart.Visible = personal ~= nil and n <= maximum
         heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1)
@@ -701,12 +740,15 @@ local function renderMobileSummary(level, enemy, isBoss)
     mobileStatusArrow.Text = mobileExpanded == "Team" and "-" or "+"
     mobileGoalArrow.Text = mobileExpanded == "Goal" and "-" or "+"
     local shortZones = {"Gate", "Aqueduct", "Courtyard", "Ledges", "Forge", "Bridge"}
-    if level.stage == "Route" then
+    if level.campaignIndex and level.campaignIndex>1 then
+        mobileGoalTitle.Text=tostring(level.campaignIndex)..'/13 · '..T(level.levelName or level.mode)
+    elseif level.stage == "Route" then
         mobileGoalTitle.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6)
             .. " · " .. T(shortZones[level.zoneIndex or 1] or level.zoneName or "Causeway")
     elseif level.stage == "Exit" then mobileGoalTitle.Text = "EXIT OPEN"
     else mobileGoalTitle.Text = isBoss and "CAUSEWAY GUARDIAN" or "FLOODED CAUSEWAY" end
     if enemy then mobileGoalDetail.Text = T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot.heroes)})
+    elseif level.campaignIndex and level.campaignIndex>1 then mobileGoalDetail.Text=campaignDetail(level)
     elseif level.stage == "BossReady" then mobileGoalDetail.Text = "Waiting for Guardian"
     elseif level.stage == "Exit" then mobileGoalDetail.Text = "Reach the exit"
     elseif isBoss then mobileGoalDetail.Text = T("Hits: {count:int}/{maximum:int}", {count=level.bossHits or 0,maximum=level.bossMax or 3})
@@ -826,7 +868,10 @@ render = function()
     roster.Visible, enemyStatus.Visible = enemy == nil, enemy ~= nil
     if enemy then
         enemyOwner.Text = controlledBoss and (T(enemy.name or "Causeway Guardian") .. T(" · you")) or (player.DisplayName .. T(" · enemy"))
-        enemyLife.Text = controlledBoss and (enemy.status == "Dead" and "Guardian defeated"
+        enemyLife.Text = enemy.resourceKind=='CourseRival' and T('Rival · move and jump') or enemy.bossType and (enemy.status=='Dead' and 'Boss defeated' or
+            T("Phase {phase:int} · Life {count:int}/{maximum:int}",
+                {phase=enemy.bossPhase or 1,count=enemy.rawLife or 0,maximum=enemy.maxHearts or 1}))
+            or controlledBoss and (enemy.status == "Dead" and "Guardian defeated"
             or (enemy.connected and (tostring(enemy.hearts or 0) .. " / " .. tostring(enemy.maxHearts or 3) .. " ♥") or "Guardian · disconnected"))
             or (enemy.status == "Dead" and "One life · out" or (enemy.connected and "One life" or "One life · disconnected"))
         enemyLife.TextColor3 = enemy.status == "Dead" and C.red or C.muted
@@ -834,22 +879,29 @@ render = function()
             enemyLife.Text = enemy.carryState == "Carried" and "You are held · wait for release" or "Thrown · recovering control"
         end
         for n, heart in ipairs(enemyHearts) do
-            heart.clip.Size = UDim2.fromScale(math.clamp((tonumber(enemy.hearts) or 0) - n + 1, 0, 1), 1)
+            heart.heart.Visible=enemy.resourceKind~='CourseRival'
+            heart.clip.Size = UDim2.fromScale(math.clamp(visualHealth(enemy,3) - n + 1, 0, 1), 1)
         end
     end
     local interaction = snapshot and snapshot.interaction
     local carrying = interaction and interaction.carrying == true
     local interactionLabel = not enemy and interaction and interaction.available == true and interaction.label
     dash.Visible = not UserInputService.TouchEnabled and enemy == nil and not carrying
-    jump.Visible = not controlledBoss
-    keyboardHint.Text = controlledBoss and "W A S D · aim · F · fire"
+    jump.Visible = not controlledBoss and not (enemy and (enemy.movementKind=='Swim' or enemy.movementKind=='Ride' or enemy.movementKind=='Wall'))
+    punch.Visible=not (enemy and enemy.resourceKind=='CourseRival')
+    keyboardHint.Text = enemy and enemy.resourceKind=='CourseRival' and T('MOVE · JUMP: race to the bomb')
+        or enemy and enemy.movementKind=='Ride' and T('SCRIPTED FLIGHT · ATTACK: drop one obstacle')
+        or enemy and enemy.movementKind=='Wall' and T('AIM · ATTACK: defend the wall')
+        or controlledBoss and (enemy.bossType and 'W A S D · aim · F · attack' or "W A S D · aim · F · fire")
         or (carrying and interactionLabel and ("F · " .. T(interactionLabel)))
         or (not carrying and controlled and controlled.movementMode == "Run" and "RUNNING · F · MEGA")
         or (interactionLabel and ("F · " .. T(interactionLabel)))
         or "WASD · walk · double-tap direction · run · F · attack"
     local isBoss = string.find(string.lower(tostring(level.stage or "")), "boss", 1, true) ~= nil
     stageLabel.Text = isBoss and "CAUSEWAY GUARDIAN" or "FLOODED CAUSEWAY"
-    if modern and level.stage == "Route" then
+    if level.campaignIndex and level.campaignIndex>1 then
+        stageLabel.Text=tostring(level.campaignIndex)..'/13 · '..T(level.levelName or level.mode)
+    elseif modern and level.stage == "Route" then
         stageLabel.Text = tostring(level.zoneIndex or 1) .. "/" .. tostring(level.zoneCount or 6) .. " · " .. T(level.zoneName or "Flooded Causeway")
     elseif modern and level.stage == "Exit" then stageLabel.Text = "EXIT OPEN" end
     objectiveLabel.Text = enemy and "Stop the heroes" or (level.objective or "Cross the causeway and reach the gate.")
@@ -860,6 +912,7 @@ render = function()
     if enemy then
         local aliveHeroes = CombatFeedback.aliveHeroes(snapshot.heroes)
         bossLabel.Text = T("Heroes in combat: {count:int}", {count=aliveHeroes})
+    elseif level.campaignIndex and level.campaignIndex>1 then bossLabel.Text=campaignDetail(level)
     elseif modern and (isBoss or level.stage == "Exit" or hits > 0) then
         bossLabel.Text = T("Ball hits: {count:int} / {maximum:int}", {count=hits,maximum=level.bossMax or 3})
     elseif modern then
@@ -1096,7 +1149,8 @@ layout = function()
     position(dash, half + 8, 0, half, topHeight)
     position(jump, 0, topHeight + 8, controlWidth, short and (isTouch and 44 or 41) or 50)
     punch.TextSize, dash.TextSize, jump.TextSize = short and 13 or 15, short and 13 or 15, short and 12 or 14
-    local primaryLabel = controlledBoss and "FIRE" or "ATTACK"
+    local primaryLabel = controlledBoss and not enemy.bossType and "FIRE" or "ATTACK"
+    if enemy and enemy.movementKind=='Ride' then primaryLabel='DROP OBSTACLE' end
     if not carrying and not controlledBoss and controlled and controlled.movementMode == "Run" then
         primaryLabel = "MEGA STRIKE"
     elseif not enemy and interaction and interaction.available == true and type(interaction.label) == "string" then
@@ -1104,7 +1158,8 @@ layout = function()
     end
     punch.Text = isTouch and T(primaryLabel) or (T(primaryLabel) .. "\nF")
     dash.Text = "MEGA\nR · WHILE RUNNING"
-    jump.Text = isTouch and "JUMP" or "JUMP · SPACE"
+    local flyer=snapshot and snapshot.enemyRole and snapshot.enemyRole.movementKind=='Fly'
+    jump.Text = flyer and (isTouch and T('FLAP') or T('FLAP · SPACE')) or (isTouch and "JUMP" or "JUMP · SPACE")
     local padSize = short and 144 or (width < 360 and 146 or 164)
     pad.Position, pad.Size = UDim2.new(0, inset + 2, 1, -bottom), UDim2.fromOffset(padSize, padSize)
     pad.Visible, keyboardHint.Visible = isTouch, not isTouch
@@ -1355,6 +1410,14 @@ stateRemote.OnClientEvent:Connect(function(data)
     for _, hero in ipairs(data.heroes or {}) do if hero.slot == data.mine then mine = hero; break end end
     controlled = mine or data.enemyRole
     spectatorCamera:sync(data, controlled)
+    local rewind=data.level and data.level.modeState and data.level.modeState.camera
+    local serial=rewind and rewind.rewindSerial
+    if previousGroupId~=data.groupId or previousRunId~=data.runId or previousLevelEpoch~=data.levelEpoch then vehicleRewindSerial=nil end
+    if serial~=nil and vehicleRewindSerial~=nil and serial~=vehicleRewindSerial and controlled then
+        movementInput:reset(gameplayBindings and gameplayBindings:heldDirections() or {})
+        sendMovement()
+    end
+    vehicleRewindSerial=serial
     local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
     local nextHeldContext = tostring(data.interaction ~= nil and data.interaction.carrying == true) .. ":" .. tostring(controlled and controlled.carryState)

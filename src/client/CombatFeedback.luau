@@ -8,7 +8,11 @@ local messages={DragonMounted="DRAGON MOUNTED",DragonCaptured="YOU WERE CAPTURED
     EnemyThrown="ENEMY THROWN",EnemyDropped="ENEMY RELEASED",RelocateToSafety="SAFE SUPPORT",
     GuardianBallPickedUp="BALL PICKED UP",GuardianBallThrown="BALL THROWN",BossHit="GUARDIAN HIT",
     BossShielded="GUARDIAN PROTECTED",BossWarning="HEAVY BALL — DODGE"}
-local global={RunResult=true,EnemyDeath=true,BossHit=true,BossShielded=true,BossWarning=true}
+messages.LifeStolen='LIFE STOLEN';messages.StolenLifeRecovered='LIFE RECOVERED';messages.RavenClawPickedUp='RAVEN CLAW EQUIPPED'
+messages.CampaignGroupStopped='CRASH · GROUP STOPPED';messages.CampaignGroupRewound='CHECKPOINT · READY'
+messages.CampaignBombDefused='BOMB DEFUSED'
+local global={RunResult=true,EnemyDeath=true,BossHit=true,BossShielded=true,BossWarning=true,
+    CampaignGroupStopped=true,CampaignGroupRewound=true,CampaignBombDefused=true}
 local actionMessages={NOT_RUNNING="Run first: double-tap a direction",REACTION="Wait until you recover",
     COOLDOWN="Wait before your next action",HELD="You are held · wait for release",
     THROWN="You are thrown · wait until landing"}
@@ -104,7 +108,10 @@ function Feedback.hint(data,translate)
     local T=translate or function(source) return source end
     data=type(data)=='table' and data or {}
     if data.status=='Faulted' then return "Party stopped · start again" end
-    if type(data.enemyRole)=='table' and data.enemyRole.template=='Boss' then return "FIRE: shoot at the heroes" end
+    if type(data.enemyRole)=='table' and data.enemyRole.template=='Boss' then
+        return data.enemyRole.bossType and 'ATTACK: use your boss moves' or "FIRE: shoot at the heroes"
+    end
+    if data.enemyRole and data.enemyRole.resourceKind=='CourseRival' then return 'RACE: move and jump · punches can stun you' end
     local interaction=type(data.interaction)=='table' and data.interaction or {}
     if interaction.carrying and type(interaction.label)=='string' then
         return T(interaction.label)..(interaction.available and T(" — action button") or '')
@@ -123,7 +130,22 @@ function Feedback.hint(data,translate)
     if type(data.interaction)=='table' and data.interaction.available and type(data.interaction.label)=='string' then
         return T(data.interaction.label)..T(" — action button")
     end
+    if data.mine and data.level and data.level.modeState then
+        local hints={Rope='SWING · JUMP: push off · ATTACK: kick',Speeder='STEER · JUMP: clear barriers',
+            Surf='STEER · JUMP: clear the water hazards',Jet='UP/DOWN: altitude · LEFT/RIGHT: speed',
+            Ice='BRAKE EARLY · run and jump',Serpents='JUMP: ride the moving serpent',
+            Ascent='JUMP: use lifts, fans and springs',Tubes='UP/DOWN: swim · JUMP: kick upward',
+            Race='REACH THE BOMB · ATTACK: defuse',Clinger='HOLD THE ROUTE DIRECTION',Tower='LEFT/RIGHT: circle · JUMP: climb'}
+        local unfinished=true
+        for _,actor in ipairs(data.level.modeState.actors or {}) do
+            if actor.slot==data.mine then unfinished=not actor.finished;break end
+        end
+        if unfinished and hints[data.level.mode] then return hints[data.level.mode] end
+    end
     if data.mine then return "ATTACK: strike or interact nearby" end
+    if data.enemyRole and data.enemyRole.movementKind=='Swim' then return 'LEFT/RIGHT: swim · UP/DOWN: dive or rise' end
+    if data.enemyRole and data.enemyRole.movementKind=='Fly' then return 'MOVE: steer · JUMP: flap upward' end
+    if data.enemyRole and data.enemyRole.movementKind=='Ride' then return 'SCRIPTED FLIGHT · ATTACK: drop one obstacle' end
     if data.enemyRole then return "ATTACK: stop the heroes" end
     return "Choose a role or watch"
 end
@@ -141,6 +163,7 @@ function Feedback.remainingEnemies(level)
     for _,actor in ipairs(level.enemies or {}) do
         local current=actor.zoneIndex==nil or level.zoneIndex==nil or actor.zoneIndex==level.zoneIndex
         local ordinary=actor.boss~=true and actor.template~='Boss' and actor.id~=-99 and actor.enemyId~=-99
+            and actor.courseRival~=true and actor.resourceKind~='CourseRival'
         if current and ordinary and actor.dragonMode~='Mounted' and actor.dead~=true and actor.alive~=false
             and actor.status~='Dead' and actor.status~='Eliminated' then count+=1 end
     end

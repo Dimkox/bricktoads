@@ -21,6 +21,9 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     WalkerClubs=require(gameplay.WalkerClubs),
     SourceCombat=require(gameplay.SourceCombat),DragonFlight=require(gameplay.DragonFlight),
     LevelVariation=require(gameplay.LevelVariation),
+    CampaignDefinition=require(gameplay.CampaignDefinition),CampaignDirector=require(gameplay.CampaignDirector),
+    CampaignModes=require(gameplay.CampaignModes),CampaignBoss=require(gameplay.CampaignBoss),
+    CampaignEnemies=require(gameplay.CampaignEnemies),
     RunJournal=require(gameplay.RunJournal),BuildId=buildId,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
@@ -35,7 +38,8 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
         end
         local world=worldType.new(require(runtime.RobloxWorld),config,{
             name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing},
-            characterAppearance=require(gameplay.CharacterAppearance),guardianAppearance=require(gameplay.GuardianAppearance)})
+            characterAppearance=require(gameplay.CharacterAppearance),guardianAppearance=require(gameplay.GuardianAppearance),
+            campaignWorld=require(gameplay.CampaignWorld)})
         world.folder:SetAttribute('GroupId',groupId)
         return world
     end)
@@ -113,4 +117,4 @@ RunService.Heartbeat:Connect(function(dt)
     for _,player in ipairs(Players:GetPlayers()) do replicationFocus(player) end
     if at-lastBroadcast>=config.SnapshotInterval then lastBroadcast=at; broadcast() end
 end)
-print('[BrickToads] playable causeway ready')
+print('[BrickToads] campaign runtime ready')

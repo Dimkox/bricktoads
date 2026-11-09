@@ -118,7 +118,7 @@ return function(Localization,Catalog,GroupPanel,BossQueuePanel)
     test('boss invitation countdown and target team localize as dynamic content',function()
         local localizer=fixture('ru-ru')
         local panel=setmetatable({queue={state='Invited',groupId='group-3',groupName='Team 3'},colors={},
-            secondary={},primary={},status={},detail={},compact=true,
+            secondary={},primary={},status={},detail={},name={},selectedBoss=1,compact=true,
             translate=function(source,args) return localizer:text(source,args) end,
             groupName=function(name,id) return localizer:groupName(name,id) end},BossQueuePanel)
         function panel:_remaining() return 7 end
