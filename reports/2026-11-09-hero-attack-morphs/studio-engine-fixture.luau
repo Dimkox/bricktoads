@@ -56,7 +56,7 @@ f.OnInvoke=function(cmd)
   s.combat[1]={};tick();begin(1,"HeroBoot");tick(.5);expect(1,"BigBoot")
   A.update(w.actors[1],nil);result.noContext=expect(1,nil);assert(result.noContext.morphs.BigBoot.original==0)
   s.combat[1]={};tick();begin(1,"HeroBoot");tick(.5);expect(1,"BigBoot")
-  
+
   s.combat[1]={deathAt=s.now};tick();result.deathPriority=expect(1,nil);assert(result.deathPriority.fallback=="Dead")
   s.combat[1]={};tick();local hand=w.actors[1].appearance.model.RightHand;hand.Transparency=.25
   begin(1,"HeroPowerPunch");tick(.5);expect(1,"PowerFist");tick(1);result.partialTransparency=expect(1,nil)
