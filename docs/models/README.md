@@ -8,41 +8,43 @@
 
 ## Каталог
 
-| Модель | Назначение | ТЗ |
-| --- | --- | --- |
-| Boss Walker | Босс | [Открыть ТЗ](../superpowers/specs/2026-11-09-boss-walker-full-model-spec-ru.md) |
-| Big Blag | Босс | [Открыть ТЗ](bosses/big-blag.md) |
-| Robo-Manus | Босс | [Открыть ТЗ](bosses/robo-manus.md) |
-| General Slaughter | Босс | [Открыть ТЗ](bosses/general-slaughter.md) |
-| Buzzball | Босс | [Открыть ТЗ](bosses/buzzball.md) |
-| Dark Queen | Босс | [Открыть ТЗ](bosses/dark-queen.md) |
-| Psyko Pig | Противник или визуальное семейство | [Открыть ТЗ](enemies/psyko-pig.md) |
-| Walker и Tall Walker | Противник или визуальное семейство | [Открыть ТЗ](enemies/walker.md) |
-| Dragon | Противник или визуальное семейство | [Открыть ТЗ](enemies/dragon.md) |
-| Raven и большой мутант | Противник или визуальное семейство | [Открыть ТЗ](enemies/raven.md) |
-| Saturn Toadtrap | Противник или визуальное семейство | [Открыть ТЗ](enemies/saturn-toadtrap.md) |
-| Retro Blaster | Противник или визуальное семейство | [Открыть ТЗ](enemies/retro-blaster.md) |
-| Vader | Противник или визуальное семейство | [Открыть ТЗ](enemies/vader.md) |
-| Scuzz | Противник или визуальное семейство | [Открыть ТЗ](enemies/scuzz.md) |
-| Giblet | Противник или визуальное семейство | [Открыть ТЗ](enemies/giblet.md) |
-| Rat Rocket | Противник или визуальное семейство | [Открыть ТЗ](enemies/rat-rocket.md) |
-| Rat Pod | Опора или опасность | [Открыть ТЗ](enemies/rat-pod.md) |
-| Mr Frosty | Противник или визуальное семейство | [Открыть ТЗ](enemies/mr-frosty.md) |
-| Spike Back | Опора или опасность | [Открыть ТЗ](enemies/spike-back.md) |
-| Karnath | Опора или опасность | [Открыть ТЗ](enemies/karnath.md) |
-| Meteorite | Опора или опасность | [Открыть ТЗ](enemies/meteorite.md) |
-| Missile | Опора или опасность | [Открыть ТЗ](enemies/missile.md) |
-| Sentry Drone | Противник или визуальное семейство | [Открыть ТЗ](enemies/sentry-drone.md) |
-| Snotball | Противник или визуальное семейство | [Открыть ТЗ](enemies/snotball.md) |
-| Mechno Droid | Противник или визуальное семейство | [Открыть ТЗ](enemies/mechno-droid.md) |
-| Krazy Kog | Опора или опасность | [Открыть ТЗ](enemies/krazy-kog.md) |
-| Electra Eel | Противник или визуальное семейство | [Открыть ТЗ](enemies/electra-eel.md) |
-| Hammerfish | Противник или визуальное семейство | [Открыть ТЗ](enemies/hammerfish.md) |
-| Jawz | Противник или визуальное семейство | [Открыть ТЗ](enemies/jawz.md) |
-| Steel Beak | Противник или визуальное семейство | [Открыть ТЗ](enemies/steel-beak.md) |
-| Hornhead | Противник или визуальное семейство | [Открыть ТЗ](enemies/hornhead.md) |
-| Swellcheek | Противник или визуальное семейство | [Открыть ТЗ](enemies/swellcheek.md) |
-| Shadow Cloud | Противник или визуальное семейство | [Открыть ТЗ](enemies/shadow-cloud.md) |
+| Модель | Назначение | ТЗ | Jira |
+| --- | --- | --- | --- |
+| Boss Walker | Босс | [Открыть ТЗ](../superpowers/specs/2026-11-09-boss-walker-full-model-spec-ru.md) | [BT-75](https://ii-tonya.atlassian.net/browse/BT-75) |
+| Big Blag | Босс | [Открыть ТЗ](bosses/big-blag.md) | [BT-76](https://ii-tonya.atlassian.net/browse/BT-76) |
+| Robo-Manus | Босс | [Открыть ТЗ](bosses/robo-manus.md) | [BT-77](https://ii-tonya.atlassian.net/browse/BT-77) |
+| General Slaughter | Босс | [Открыть ТЗ](bosses/general-slaughter.md) | [BT-78](https://ii-tonya.atlassian.net/browse/BT-78) |
+| Buzzball | Босс | [Открыть ТЗ](bosses/buzzball.md) | [BT-79](https://ii-tonya.atlassian.net/browse/BT-79) |
+| Dark Queen | Босс | [Открыть ТЗ](bosses/dark-queen.md) | [BT-80](https://ii-tonya.atlassian.net/browse/BT-80) |
+| Psyko Pig | Противник или визуальное семейство | [Открыть ТЗ](enemies/psyko-pig.md) | [BT-81](https://ii-tonya.atlassian.net/browse/BT-81) |
+| Walker и Tall Walker | Противник или визуальное семейство | [Открыть ТЗ](enemies/walker.md) | [BT-82](https://ii-tonya.atlassian.net/browse/BT-82) |
+| Dragon | Противник или визуальное семейство | [Открыть ТЗ](enemies/dragon.md) | [BT-83](https://ii-tonya.atlassian.net/browse/BT-83) |
+| Raven и большой мутант | Противник или визуальное семейство | [Открыть ТЗ](enemies/raven.md) | [BT-84](https://ii-tonya.atlassian.net/browse/BT-84) |
+| Saturn Toadtrap | Противник или визуальное семейство | [Открыть ТЗ](enemies/saturn-toadtrap.md) | [BT-85](https://ii-tonya.atlassian.net/browse/BT-85) |
+| Retro Blaster | Противник или визуальное семейство | [Открыть ТЗ](enemies/retro-blaster.md) | [BT-86](https://ii-tonya.atlassian.net/browse/BT-86) |
+| Vader | Противник или визуальное семейство | [Открыть ТЗ](enemies/vader.md) | [BT-87](https://ii-tonya.atlassian.net/browse/BT-87) |
+| Scuzz | Противник или визуальное семейство | [Открыть ТЗ](enemies/scuzz.md) | [BT-88](https://ii-tonya.atlassian.net/browse/BT-88) |
+| Giblet | Противник или визуальное семейство | [Открыть ТЗ](enemies/giblet.md) | [BT-89](https://ii-tonya.atlassian.net/browse/BT-89) |
+| Rat Rocket | Противник или визуальное семейство | [Открыть ТЗ](enemies/rat-rocket.md) | [BT-90](https://ii-tonya.atlassian.net/browse/BT-90) |
+| Rat Pod | Опора или опасность | [Открыть ТЗ](enemies/rat-pod.md) | [BT-91](https://ii-tonya.atlassian.net/browse/BT-91) |
+| Mr Frosty | Противник или визуальное семейство | [Открыть ТЗ](enemies/mr-frosty.md) | [BT-92](https://ii-tonya.atlassian.net/browse/BT-92) |
+| Spike Back | Опора или опасность | [Открыть ТЗ](enemies/spike-back.md) | [BT-93](https://ii-tonya.atlassian.net/browse/BT-93) |
+| Karnath | Опора или опасность | [Открыть ТЗ](enemies/karnath.md) | [BT-94](https://ii-tonya.atlassian.net/browse/BT-94) |
+| Meteorite | Опора или опасность | [Открыть ТЗ](enemies/meteorite.md) | [BT-95](https://ii-tonya.atlassian.net/browse/BT-95) |
+| Missile | Опора или опасность | [Открыть ТЗ](enemies/missile.md) | [BT-96](https://ii-tonya.atlassian.net/browse/BT-96) |
+| Sentry Drone | Противник или визуальное семейство | [Открыть ТЗ](enemies/sentry-drone.md) | [BT-97](https://ii-tonya.atlassian.net/browse/BT-97) |
+| Snotball | Противник или визуальное семейство | [Открыть ТЗ](enemies/snotball.md) | [BT-98](https://ii-tonya.atlassian.net/browse/BT-98) |
+| Mechno Droid | Противник или визуальное семейство | [Открыть ТЗ](enemies/mechno-droid.md) | [BT-99](https://ii-tonya.atlassian.net/browse/BT-99) |
+| Krazy Kog | Опора или опасность | [Открыть ТЗ](enemies/krazy-kog.md) | [BT-100](https://ii-tonya.atlassian.net/browse/BT-100) |
+| Electra Eel | Противник или визуальное семейство | [Открыть ТЗ](enemies/electra-eel.md) | [BT-101](https://ii-tonya.atlassian.net/browse/BT-101) |
+| Hammerfish | Противник или визуальное семейство | [Открыть ТЗ](enemies/hammerfish.md) | [BT-102](https://ii-tonya.atlassian.net/browse/BT-102) |
+| Jawz | Противник или визуальное семейство | [Открыть ТЗ](enemies/jawz.md) | [BT-103](https://ii-tonya.atlassian.net/browse/BT-103) |
+| Steel Beak | Противник или визуальное семейство | [Открыть ТЗ](enemies/steel-beak.md) | [BT-104](https://ii-tonya.atlassian.net/browse/BT-104) |
+| Hornhead | Противник или визуальное семейство | [Открыть ТЗ](enemies/hornhead.md) | [BT-105](https://ii-tonya.atlassian.net/browse/BT-105) |
+| Swellcheek | Противник или визуальное семейство | [Открыть ТЗ](enemies/swellcheek.md) | [BT-106](https://ii-tonya.atlassian.net/browse/BT-106) |
+| Shadow Cloud | Противник или визуальное семейство | [Открыть ТЗ](enemies/shadow-cloud.md) | [BT-107](https://ii-tonya.atlassian.net/browse/BT-107) |
+
+[Машинный реестр Git и Jira](JIRA_INDEX.json) содержит закреплённые версии всех 33 ТЗ.
 
 ## Художественные референсы
 
