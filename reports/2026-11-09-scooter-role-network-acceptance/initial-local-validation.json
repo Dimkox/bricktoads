@@ -1,0 +1,16 @@
+{
+  "exitCode": 0,
+  "output": "Compiled 0 KLOC into 25 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\r\nCompiled 0 KLOC into 4 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\r\nCompiled 0 KLOC into 23 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\r\nqueued-state: PASS\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=1 kind=Menu\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=1 ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReadySent commandListenerReady=true renderFrameCount=2\r\nready=1 discarded=0 menuReceived=1 replies=1\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=offer kind=Status\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=offer ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=claim kind=Menu\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=claim ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=enemyMove kind=Actor\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=enemyMove ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=enemyAttack kind=Actor\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=enemyAttack ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=enemyJump kind=Actor\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=enemyJump ok=true\r\nenemy control envelope, same-body claim evidence and identity reset: PASS\r\nlater-state: PASS\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=1 kind=Menu\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=1 ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReadySent commandListenerReady=true renderFrameCount=2\r\nready=1 discarded=0 menuReceived=1 replies=1\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=offer kind=Status\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=offer ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=claim kind=Menu\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=claim ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=enemyMove kind=Actor\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=enemyMove ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=enemyAttack kind=Actor\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=enemyAttack ok=true\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=enemyJump kind=Actor\r\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=enemyJump ok=true\r\nenemy control envelope, same-body claim evidence and identity reset: PASS\r\nC:\\Users\\User\\Documents\\bricktoads\\places\\BrickToadsPlayable.rbxlx: 1020211 bytes; sha256=1102ac79b23efc210a1fdd4bad6907bde9d883cbcab0cbb468213b00a70d40df\r\n",
+  "networkBaseline": {
+    "studioVersion": "0.746.0.7461269",
+    "network": {
+      "InboundNetworkJitterMs": 0,
+      "OutboundNetworkJitterMs": 0,
+      "InboundNetworkMinDelayMs": 0,
+      "OutboundNetworkLossPercent": 0,
+      "InboundNetworkLossPercent": 0,
+      "OutboundNetworkMinDelayMs": 0
+    },
+    "edit": true
+  }
+}

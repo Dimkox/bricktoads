@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Run the actual client under deterministic queued/later State delivery doubles.
 
-This checks the test driver's handshake, not Roblox network delivery or gameplay.
+This checks the test driver's handshake and enemy control envelope, not Roblox
+network delivery or gameplay.
 """
 from __future__ import annotations
 
@@ -17,6 +18,7 @@ local testReply = {}
 local menuReceived, discarded, readyCount, replyCount = 0, 0, 0, 0
 local readyMarker, readyRenderCount, heartbeatMessages = nil, nil, 0
 local testNow = 1
+local testResponses, productionPackets, testModels = {}, {}, {}
 function testCommand:IsA(name) return name == 'RemoteEvent' end
 function testReply:IsA(name) return name == 'RemoteEvent' end
 function testCommand.OnClientEvent:Connect(callback) self.callback = callback end
@@ -30,9 +32,12 @@ function testReply:FireServer(message)
             testCommand.OnClientEvent.callback({id='1',kind='Menu',args={kind='SelectRole',role='Hero'}})
         else discarded += 1 end
     elseif message.type == 'Reply' then
-        assert(message.id == '1' and message.ok == true, 'Menu reply failed')
-        assert(message.result.transmission.sent == true, 'Menu did not fire production intent')
-        assert(message.result.transmission.serverAcceptance == 'Unknown', 'Client invented server acceptance')
+        assert(message.ok == true, 'Command failed: ' .. tostring(message.result))
+        testResponses[message.id] = message.result
+        if message.id == '1' then
+            assert(message.result.transmission.sent == true, 'Menu did not fire production intent')
+            assert(message.result.transmission.serverAcceptance == 'Unknown', 'Client invented server acceptance')
+        end
         replyCount += 1
     elseif message.type == 'Heartbeat' then
         assert(message.state.snapshot == nil, 'Heartbeat must not transmit full snapshots')
@@ -49,6 +54,7 @@ local player = {Name='ActualTestClient',UserId=-3}
 function player:WaitForChild() return playerScripts end
 local productionIntent = {}
 function productionIntent:FireServer(message)
+    productionPackets[#productionPackets + 1] = table.clone(message)
     if message.kind == 'SelectRole' then
         assert(message.groupId == 'group-1' and message.role == 'Hero', 'Incorrect production envelope')
         menuReceived += 1
@@ -76,7 +82,11 @@ local runService = {IsStudio=function() return true end,Heartbeat=signal(),Rende
 local services = {Players={LocalPlayer=player},ReplicatedStorage=replicated,
     RunService=runService,StudioTestService={},UserInputService={WindowFocused=signal(),WindowFocusReleased=signal()}}
 local game = {GetService=function(_,name) return services[name] end}
-local workspace = {GetServerTimeNow=function() return testNow end,FindFirstChild=function() return nil end}
+local testActorFolder = {GetChildren=function() return testModels end}
+local testWorld = {GetAttribute=function(_, name) return name == 'GroupId' and 'group-1' or nil end,
+    FindFirstChild=function(_,name) return name == 'Actors' and testActorFolder or nil end}
+local workspace = {GetServerTimeNow=function() return testNow end,
+    FindFirstChild=function(_,name) return name == 'TestWorld' and testWorld or nil end}
 local task = {spawn=function() end}
 local script = {Enabled=true,Parent=true,GetFullName=function() return 'PlayerScripts.ScooterNetworkClient' end}
 '''
@@ -102,6 +112,59 @@ assert(heartbeatMessages == 1, 'Heartbeat diagnostics must be bounded to one per
 testNow += 1.1
 runService.Heartbeat.callback()
 assert(heartbeatMessages == 2, 'Heartbeat diagnostics stopped')
+
+-- The same actual source must use an enemy snapshot's real identity and preserve
+-- pre/post-claim body evidence without inventing a player or acceptance result.
+local enemyModel = {Name='Actor_-1',actorId='run:enemy:3:-1',controlled=false}
+function enemyModel:IsA(name) return name == 'Model' end
+function enemyModel:GetAttribute(name)
+    if name == 'ActorId' then return self.actorId
+    elseif name == 'EnemyKind' then return 'Invader'
+    elseif name == 'ControlledByPlayer' then return self.controlled end
+end
+local enemyRoot = {Parent=enemyModel,Position={X=28,Y=3,Z=-10},AssemblyLinearVelocity={X=0,Y=0,Z=0},
+    IsA=function(_,name) return name == 'BasePart' end}
+function enemyModel:FindFirstChild(name) return name == 'HumanoidRootPart' and enemyRoot or nil end
+testModels[1] = enemyModel
+local function sendCommand(id,kind,args)
+    testCommand.OnClientEvent.callback({id=id,kind=kind,args=args or {}})
+    return assert(testResponses[id], 'Missing test command reply')
+end
+local function roleState(seq,role)
+    return {snapshotSeq=seq,groupId='group-1',worldName='TestWorld',runId='run',levelEpoch=3,
+        status='Active',view=role and 'Playing' or 'Spectating',heroes={},enemyRole=role,
+        enemyOffers=role and {} or {{enemyId=-1,actorId=enemyModel.actorId}}}
+end
+productionState.OnClientEvent.callback(roleState(3))
+local offered = sendCommand('offer','Status')
+assert(offered.enemyBodies[1].offerActorId == enemyModel.actorId)
+assert(offered.enemyBodies[1].bodyActorId == enemyModel.actorId and offered.enemyBodies[1].controlledByPlayer == false)
+sendCommand('claim','Menu',{kind='ClaimEnemy',runId='run',levelEpoch=3,enemyId=-1})
+local claimPacket = productionPackets[#productionPackets]
+assert(claimPacket.kind == 'ClaimEnemy' and claimPacket.groupId == 'group-1' and claimPacket.actorId == nil)
+local firstRole = {enemyId=-1,actorId=enemyModel.actorId,attempt=1,connectionEpoch=1,connected=true,
+    status='Alive',template='Sentry',movementKind='Ground'}
+enemyModel.controlled = true
+productionState.OnClientEvent.callback(roleState(4,firstRole))
+local moved = sendCommand('enemyMove','Actor',{kind='Move',x=0.5,z=-0.25,run=false})
+local movePacket = moved.transmission.packet
+assert(movePacket.groupId == 'group-1' and movePacket.runId == 'run' and movePacket.levelEpoch == 3)
+assert(movePacket.actorId == enemyModel.actorId and movePacket.attempt == 1 and movePacket.connectionEpoch == 1 and movePacket.seq == 1)
+assert(moved.state.body.actorId == offered.enemyBodies[1].bodyActorId and moved.state.body.controlledByPlayer == true)
+local attacked = sendCommand('enemyAttack','Actor',{kind='Attack',attack='Punch'})
+assert(attacked.transmission.packet.seq == 2 and attacked.transmission.serverAcceptance == 'Unknown')
+local nextRole = table.clone(firstRole)
+nextRole.connectionEpoch = 2
+productionState.OnClientEvent.callback(roleState(5,nextRole))
+firstRole.actorId = 'mutated-old-snapshot'
+local reconnected = sendCommand('enemyJump','Actor',{kind='Jump'})
+assert(reconnected.transmission.packet.seq == 1 and reconnected.transmission.packet.connectionEpoch == 2)
+assert(reconnected.state.controlIdentity.role == 'Enemy' and reconnected.state.controlIdentity.enemyId == -1)
+assert(reconnected.state.previousControlIdentity.actorId == enemyModel.actorId,
+    'Later snapshots rewrote the immutable previous identity')
+assert(reconnected.state.previousControlIdentity.connectionEpoch == 1 and reconnected.state.previousIdentitySequence == 2)
+assert(table.isfrozen(reconnected.state.controlIdentity) and table.isfrozen(reconnected.state.previousControlIdentity))
+print('enemy control envelope, same-body claim evidence and identity reset: PASS')
 '''
 
 

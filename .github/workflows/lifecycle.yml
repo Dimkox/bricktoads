@@ -79,6 +79,8 @@ jobs:
         run: |
           /tmp/bricktoads-luau/luau-compile tools/studio_scooter_network_acceptance.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_network.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/studio_scooter_role_network_acceptance.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_role_network.luau > /dev/null
       - name: Structural build tests
         run: python3 tools/test_build.py
       - name: English source and localization coverage

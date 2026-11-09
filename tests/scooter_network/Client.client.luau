@@ -36,6 +36,8 @@ local intent = remotes:WaitForChild("Intent", 60)
 local stateRemote = remotes:WaitForChild("State", 60)
 assert(intent and stateRemote, "Missing production Intent/State")
 local snapshot, mine, controlled, identity, pilot
+local controlIdentity, previousControlIdentity, previousIdentitySequence
+local identityTransitionCount = 0
 local sequence, snapshotCount, receivedCount, rejectedSnapshots = 0, 0, 0, 0
 local sentCount, sentKinds, lastPacket, lastSentAt = 0, {}, nil, nil
 local lastSnapshotAt, readySent = nil, false
@@ -105,6 +107,32 @@ end
 local function controlledRoot()
     if not controlled then return nil end
     return actorRoot(controlled.actorId, mine and mine.slot, snapshot.enemyRole and snapshot.enemyRole.enemyId)
+end
+local function describeIdentity(data, actor, hero)
+    if not actor then return nil end
+    -- Copy primitives now: later snapshots must not rewrite continuity evidence.
+    return table.freeze({groupId = data.groupId, runId = data.runId, levelEpoch = data.levelEpoch,
+        actorId = actor.actorId, attempt = actor.attempt, connectionEpoch = actor.connectionEpoch,
+        role = hero and "Hero" or "Enemy", slot = hero and hero.slot, enemyId = not hero and actor.enemyId or nil,
+        snapshotSeq = data.snapshotSeq, at = workspace:GetServerTimeNow()})
+end
+local function enemyBodies()
+    local rows, seen = {}, {}
+    local function append(enemyId, offerActorId)
+        if enemyId == nil or seen[enemyId] or #rows >= 24 then return end
+        seen[enemyId] = true
+        local root = actorRoot(offerActorId, nil, enemyId)
+        local model = root and root.Parent
+        rows[#rows + 1] = {enemyId = enemyId, offerActorId = offerActorId,
+            bodyActorId = model and model:GetAttribute("ActorId"), bodyName = model and model.Name,
+            enemyKind = model and model:GetAttribute("EnemyKind"),
+            controlledByPlayer = model and model:GetAttribute("ControlledByPlayer"),
+            position = root and point(root.Position)}
+    end
+    for _, offer in ipairs(snapshot and snapshot.enemyOffers or {}) do append(offer.enemyId, offer.actorId) end
+    local enemy = snapshot and snapshot.enemyRole
+    if enemy then append(enemy.enemyId, enemy.actorId) end
+    return rows
 end
 local function playable()
     return snapshot and snapshot.status == "Active" and controlled and controlled.status == "Alive"
@@ -182,8 +210,12 @@ local function status()
         snapshot = compactSnapshot(), snapshotCount = snapshotCount, receivedCount = receivedCount,
         rejectedSnapshots = rejectedSnapshots, lastSnapshotAt = lastSnapshotAt,
         body = root and {name = root.Parent.Name, actorId = root.Parent:GetAttribute("ActorId"),
+            enemyKind = root.Parent:GetAttribute("EnemyKind"), controlledByPlayer = root.Parent:GetAttribute("ControlledByPlayer"),
             position = point(root.Position), velocity = point(root.AssemblyLinearVelocity)} or nil,
         modeActor = mine and modeActor(mine.slot), identity = identity, sequence = sequence,
+        controlIdentity = controlIdentity, previousControlIdentity = previousControlIdentity,
+        previousIdentitySequence = previousIdentitySequence, identityTransitionCount = identityTransitionCount,
+        enemyBodies = enemyBodies(),
         disabledPresentationScripts = disabledCount, presentationDisabled = disabledCount > 0 and allDisabled,
         sentCount = sentCount, sentKinds = table.clone(sentKinds), lastPacket = lastPacket, lastSentAt = lastSentAt,
         commandListenerReady = commandListenerReady, receivedCommands = receivedCommands, repliesSent = repliesSent,
@@ -222,7 +254,13 @@ stateRemote.OnClientEvent:Connect(function(data)
     controlled = mine or data.enemyRole
     local nextIdentity = controlled and table.concat({tostring(data.groupId), tostring(data.runId), tostring(data.levelEpoch),
         tostring(controlled.actorId), tostring(controlled.attempt), tostring(controlled.connectionEpoch)}, ":") or nil
-    if nextIdentity ~= identity then identity, sequence = nextIdentity, 0 end
+    if nextIdentity ~= identity then
+        if controlIdentity then previousControlIdentity = controlIdentity end
+        previousIdentitySequence = sequence
+        controlIdentity = describeIdentity(data, controlled, mine)
+        identityTransitionCount += 1
+        identity, sequence = nextIdentity, 0
+    end
     publishReady()
 end)
 
