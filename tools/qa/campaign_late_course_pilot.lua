@@ -8,10 +8,6 @@ local function clamp(value, minimum, maximum)
     return math.max(minimum, math.min(maximum, value))
 end
 
-local function sign(value)
-    return value > 0 and 1 or value < 0 and -1 or 0
-end
-
 local function input(x, z, jump, primary)
     local length = math.sqrt(x * x + z * z)
     if length > 1 then x, z = x / length, z / length end
@@ -29,11 +25,21 @@ local function stateFor(modes, slot, actor, token)
     return state
 end
 
-local function ascent(actor)
+local function ascent(course, actor)
     local errorZ = -5 - actor.position.z
-    local z = math.abs(errorZ) > .15 and sign(errorZ) or 0
-    local x = actor.position.y > 95 and (actor.position.x > -7.8 and -1 or 0) or 0
-    return input(x, z, actor.grounded and actor.position.y < 98)
+    local z = math.abs(errorZ) > .1 and clamp(errorZ * .25, -1, 1) or 0
+    local final = course.platforms[#course.platforms]
+    local standingY = final.y + final.h / 2 + 3
+    local onFinal = actor.grounded and actor.support == 'floor-' .. #course.platforms
+        and actor.position.y >= standingY - .05
+    -- Every alternating tier overlaps X0. Checkpoint spawns and ordinary
+    -- knockback can leave X-8 outside the next tier, so keep steering inward.
+    -- Enter the finish only after a real landing on the final support: its
+    -- generous finish volume also includes airborne poses below that floor.
+    local targetX = onFinal and course.finishPoint.x or 0
+    local errorX = targetX - actor.position.x
+    local x = math.abs(errorX) > .1 and clamp(errorX * .25, -1, 1) or 0
+    return input(x, z, actor.grounded and actor.position.y < standingY - .1)
 end
 
 local function tubes(modes, course, actor, state)
@@ -123,7 +129,7 @@ function Pilot.plan(ctx)
     if not modes or not actor or actor.finished or modes.closed then return nil end
     local course = definition.course
     local mode = definition.mode
-    if mode == 'Ascent' then return ascent(actor) end
+    if mode == 'Ascent' then return ascent(course, actor) end
     if mode == 'Tower' then return tower(modes, course, actor) end
     if mode == 'Clinger' then
         local segment = course.path[actor.segment]

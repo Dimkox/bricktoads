@@ -1,0 +1,18 @@
+{
+  "cleanup": true,
+  "scenario": "prepared_native_ascent_finish_handoff",
+  "cases": [],
+  "sourceSha256": "c1acc4659a262f4eaf489823bacc8f81169784dd47f033fcf3ec070ca7c6cbaa",
+  "baselineModesSha256": "external-copy-recorded",
+  "limits": [
+    "Synthetic server roster; no actual Players, client/network or full-playthrough claim",
+    "Real Modes/Session fixed-step inputs from authored spawn; no prepared hero poses",
+    "NPC controllers are not constructed; authored geometry and course hazards remain active",
+    "Course simulation advances faster than wall clock; post-release samples use actual physics Heartbeats"
+  ],
+  "seed": 2104255637,
+  "status": "failed",
+  "error": "The current thread cannot read 'Source' (lacking capability PluginOrOpenCloud)\nServerScriptService.AscentFinishHandoffQA_c5a3e9f5-8ff7-4527-adf3-29b240ea5ecb.FixtureRunner:112\nServerScriptService.AscentFinishHandoffQA_c5a3e9f5-8ff7-4527-adf3-29b240ea5ecb.FixtureRunner:111\n",
+  "oldPilotCommit": "da2babf",
+  "oldPilotSha256": "da2babf-exact"
+}

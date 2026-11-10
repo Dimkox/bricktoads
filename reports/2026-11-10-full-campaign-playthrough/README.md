@@ -15,6 +15,8 @@ Production fix50552e8 permits one explicit jump out of a physically supported na
 | 06 | Three standard Studio clients | Same run completed levels1–5, including Guardian and all three Big Blag phases; Lost on Serpents6. Full trace retained. |
 | 07 | Three standard Studio clients | Normal controller reached Jet7, then Lost. Last observed metadata retained; complete trace unavailable after test disconnection. |
 | 08 | Three standard Studio clients | First-level Cliffs blocked by two live Dragons pinned below DistrictSupport. Native positions, upward rays and lift state retained in native-dragon-obstruction-before.json. Test disconnected without a terminal archive; no full completion claimed. |
+| 09 | Three standard Studio clients | Normal run completed levels1–7, including three Guardian returns and all three Big Blag phases. Natural Lost on Ascent8 after all12 cohort appearances were spent. Complete terminal archive retained; QA ascent steering did not recover lateral knockback/checkpoint offset. |
+| 10 | Three standard Studio clients | Fresh run requested with the grounded Ascent exit guard and repaired QA ascent steering; result pending. |
 
 The registered Play client was Archaicus14, user11946162891. Standard multiplayer tests use simulated Player1/2/3 identities(-1/-2/-3), not additional genuine accounts. They are started with StudioTestService:ExecuteMultiplayerTestAsync through MCP. Each hero keeps its own three paid respawns across levels; eliminated cohort members remain eliminated. Automated intents establish neither physical keyboard/touch UX acceptance nor genuine-account reconnect or public-server soak coverage.
 

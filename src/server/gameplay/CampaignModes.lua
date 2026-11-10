@@ -670,6 +670,7 @@ function Modes:_finish(s)
         return false
     elseif self.mode=='Race' then return self.bombIndex>#self.course.bombs and inside(s.position,self.course.finish)
     elseif self.mode=='Clinger' then return s.segment>#self.course.path
+    elseif self.mode=='Ascent' then return s.grounded and inside(s.position,self.course.finish)
     elseif self.mode=='Tower' then
         local last=self.course.towerPlatforms[#self.course.towerPlatforms];local angle=last.angle+self.rotation
         local target=point(math.cos(angle)*last.radius,last.y+3,math.sin(angle)*last.radius)

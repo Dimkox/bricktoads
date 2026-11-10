@@ -1,0 +1,27 @@
+{
+  "scope": "Prepared isolated server native Ascent handoff comparison; no full campaign or client-input claim",
+  "studioId": "97ee37f5-3840-470c-b002-094802085c47",
+  "placeId": 117412694427208,
+  "mainBuild": "c1acc4659a262f4eaf489823bacc8f81169784dd47f033fcf3ec070ca7c6cbaa",
+  "baselineModesSha256": "67A2CF0500C9F3C441F5B267A4CDF361A5507058BF890CC95815BBBE008B52FA",
+  "fixedModesSha256": "8B7778A40BC8DF386F9F184295A173EC59EB2EB26B0CB72D60CEF6EA60538C08",
+  "oldPilotCommit": "da2babf",
+  "oldPilotSha256": "BCC2E30F1E9ABDAC6DCB50FB2FD2AF8BB99B3BF518043093C4EA41B0C30B028A",
+  "seed": 2104255637,
+  "preparation": {
+    "syntheticRoster": true,
+    "actualR6Body": true,
+    "npcControllers": false,
+    "ordinaryMoveJumpFromActualSafeSpawn": true,
+    "entryCenteringMoveBeforeOldPilot": true,
+    "preparedPoses": false,
+    "fastFixedStepCourse": true,
+    "actualPhysicsHeartbeatsAfterRelease": 30
+  },
+  "files": [
+    "ascent-baseline-native.json",
+    "ascent-fixed-native.json",
+    "preparation-source-capability-failure.json",
+    "preparation-spawn-alignment-failure.json"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "cleanup": true,
+  "scenario": "prepared_native_ascent_finish_handoff",
+  "cases": [
+    {
+      "sourceMatchesBaseline": true,
+      "startedAt": 1794310899.322343,
+      "label": "baseline",
+      "initial": {
+        "actorId": "ascent-fixture-630446ff-b82e-4389-bacb-6accbe4d2e1f:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "position": {
+          "y": 3,
+          "x": -6.800000190734863,
+          "z": -4.80078125
+        },
+        "stock": 3
+      },
+      "intentCounts": {
+        "Jump:OK": 59,
+        "Move:OK": 1200
+      },
+      "preparation": {
+        "preparedPoses": false,
+        "authoredSpawn": true,
+        "npcControllers": false
+      },
+      "releaseSamples": []
+    }
+  ],
+  "sourceSha256": "c1acc4659a262f4eaf489823bacc8f81169784dd47f033fcf3ec070ca7c6cbaa",
+  "baselineModesSha256": "67A2CF0500C9F3C441F5B267A4CDF361A5507058BF890CC95815BBBE008B52FA",
+  "limits": [
+    "Synthetic server roster; no actual Players, client/network or full-playthrough claim",
+    "Real Modes/Session fixed-step inputs from authored spawn; no prepared hero poses",
+    "NPC controllers are not constructed; authored geometry and course hazards remain active",
+    "Course simulation advances faster than wall clock; post-release samples use actual physics Heartbeats"
+  ],
+  "seed": 2104255637,
+  "status": "failed",
+  "error": "ServerScriptService.AscentFinishHandoffQA_782d816e-82d3-4d43-b011-0453dffce3aa.FixtureRunner:99: No normal-input course finish within40 simulated seconds\nServerScriptService.AscentFinishHandoffQA_782d816e-82d3-4d43-b011-0453dffce3aa.FixtureRunner:99 function runCase\nServerScriptService.AscentFinishHandoffQA_782d816e-82d3-4d43-b011-0453dffce3aa.FixtureRunner:111\nServerScriptService.AscentFinishHandoffQA_782d816e-82d3-4d43-b011-0453dffce3aa.FixtureRunner:110\n",
+  "oldPilotCommit": "da2babf",
+  "oldPilotSha256": "BCC2E30F1E9ABDAC6DCB50FB2FD2AF8BB99B3BF518043093C4EA41B0C30B028A"
+}

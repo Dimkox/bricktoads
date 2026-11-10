@@ -1,0 +1,67 @@
+{
+  "scope": "QA-only Ascent input repair after actual attempt09; production fixes are separate",
+  "attempt09": {
+    "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+    "seed": 2104255637,
+    "observedFailure": "NPC knockback/checkpoint X-8 left old pilot outside alternating tier overlap; run lost before final ascent handoff."
+  },
+  "policy": "tools/qa/campaign_late_course_pilot.lua",
+  "policySha256": "B786B7A9F9144331089180A28DC0A549C638038EE47C7B91A27E2D695BC800D8",
+  "baseline": "baseline-policy.lua is the exact pre-repair policy read from repository HEAD",
+  "historicalCourseEngine": {
+  "file": "baseline-CampaignModes.lua",
+  "gitCommit": "da2babf15896f9c43a883f365ec863d65eefecf4",
+  "reason": "Pin the real pre-production-guard course engine so QA-only RED/GREEN remains reproducible after the separate production finish fix.",
+  "raceDependency": "CampaignRace.lua forwards the unchanged real production course-rival module."
+},
+  "simulator": "Real CampaignModes, Session, Combat and authored Definition; existing FakeWorld boundary doubles native engine. Physics60Hz; plans/move/jump only on due packets; no repeated Jump between plans.",
+  "seeds": [
+    1,
+    2104255637
+  ],
+  "requestedPacketCadences": [
+    0.08,
+    0.1,
+    0.133,
+    0.167
+  ],
+  "scenarios": {
+    "Clean": "Ordinary fresh course entry; final completion must be grounded on final support floor17 at rootY99.",
+    "Checkpoint": "Explicit initial fixture at authored second checkpoint X-8/rootY51, normal fresh Session resources; no position edits after spawning. This is a checkpoint-entry reachability case, not evidence of a paid native respawn.",
+    "LeftHit": "One real Session:_hit WalkerHeavy with captured -X direction at a grounded tier after4s. World routes accepted profile20 response through production Modes:impulse. Raw Life47→31 normally; planner must recenter and continue."
+  },
+  "results": [
+    {
+      "file": "red-24.txt",
+      "exitCode": 1,
+      "passes": 0,
+      "failures": 24
+    },
+    {
+      "file": "green-24.txt",
+      "exitCode": 0,
+      "passes": 24,
+      "failures": 0
+    },
+    {
+      "file": "green-late-80.txt",
+      "exitCode": 0,
+      "passes": 80,
+      "failures": 0
+    },
+    {
+      "file": "old-green-late-80.txt",
+      "exitCode": 0,
+      "passes": 80,
+      "failures": 0
+    }
+  ],
+  "commands": {
+    "red24": "& .tools/luau-0.745/luau.exe reports/2026-11-10-ascent-qa-regression-1794310636131/probe-baseline.luau",
+    "green24": "& .tools/luau-0.745/luau.exe reports/2026-11-10-ascent-qa-regression-1794310636131/probe-current.luau",
+    "old80": "& .tools/luau-0.745/luau.exe reports/2026-11-10-ascent-qa-regression-1794310636131/probe-baseline-late-80.luau",
+    "green80": "& .tools/luau-0.745/luau.exe reports/2026-11-10-ascent-qa-regression-1794310636131/probe-late-80.luau"
+  },
+  "interpretation": "The old80-case completion-only proof passes but accepts Ascent handoffs at rootY94–97 while airborne. The new24-case checks require actual grounded final-tier stance at Y99. All repaired cases pass without attempt/reserve use; hit cases retain raw Life31.",
+  "limitations": "No new native run or actual native final handoff is claimed. These artifacts test only the QA policy against the historical course engine; the separate production grounded-finish guard and its native verification are not closed by this evidence. Attempt09 never reached final handoff. QA policy source remains frozen."
+}

@@ -280,6 +280,50 @@ return function(Definition,Modes)
         assert(a.grounded);m:jump(101);assert(a.velocity.y==spring.power)
         local vy=a.velocity.y;m:jump(101);assert(a.velocity.y==vy)
     end)
+    test('ordinary ascent inputs hand native control over only after landing the final support',function()
+        local failures={}
+        for _,seed in ipairs({1,41,8125,2104255637}) do
+            for _,cadence in ipairs({1/60,.1,.167}) do
+                local ok,err=pcall(function()
+                    local d,s,w,m,step=fixture(8,seed)
+                    local finalIndex=#d.course.platforms
+                    local final=d.course.platforms[finalIndex]
+                    local standingY=final.y+final.h/2+3
+                    local nextDecision=0
+                    for _=1,6000 do
+                        local a=m.actors[101]
+                        if s.now+1e-8>=nextDecision then
+                            nextDecision=s.now+cadence
+                            -- The established normal-input Ascent pilot: no
+                            -- actor/geometry/health writes or forced completion.
+                            local errorZ=-5-a.position.z
+                            local z=math.abs(errorZ)>.15 and (errorZ>0 and 1 or -1) or 0
+                            local x=a.position.y>95 and (a.position.x>-7.8 and -1 or 0) or 0
+                            m:move(101,x,z,false)
+                            if a.grounded and a.position.y<98 then m:jump(101) end
+                        end
+                        step(1/60)
+                        assert(not s.deaths,'ordinary Ascent route died before its handoff')
+                        if m.complete then
+                            a=m.actors[101]
+                            assert(a.finished and w.released[101],'real completion must release its finisher')
+                            assert(a.grounded and a.support=='floor-'..finalIndex
+                                and math.abs(a.position.y-standingY)<1e-6,
+                                string.format('released without final landing: y=%.6f required=%.6f grounded=%s support=%s',
+                                    a.position.y,standingY,tostring(a.grounded),tostring(a.support)))
+                            local p,box=a.position,d.course.finish
+                            assert(p.x>=box.minX and p.x<=box.maxX and p.y>=box.minY and p.y<=box.maxY
+                                and p.z>=box.minZ and p.z<=box.maxZ,'supported landing must also reach the authored finish')
+                            return
+                        end
+                    end
+                    error('ordinary Ascent inputs never completed')
+                end)
+                if not ok then failures[#failures+1]='seed '..seed..' cadence '..cadence..': '..tostring(err) end
+            end
+        end
+        assert(#failures==0,table.concat(failures,'\n'))
+    end)
     test('first trio finisher releases only that body while remaining riders retain control',function()
         local d,s,w,m,step=fixture(5,41,3)
         d.course.hazards={};d.course.emitters={}
