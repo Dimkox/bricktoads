@@ -244,8 +244,45 @@ local function iceLaneClearance(course,modes,actor,hazard,target,cadence)
     return crossed and clearance or -math.huge
 end
 
-local function ice(definition, modes, actor, state)
+-- One ordinary dodge jump, with a held longitudinal input. Reject landings
+-- that would leave no grounded packet before the next edge.
+local function iceDodgeForward(course,modes,actor,target,threats,cadence,advanceFloor)
+    for _,forward in ipairs(advanceFloor and {1} or {1,0,-.5,-1}) do
+        local x,y,z=actor.position.x,actor.position.y,actor.position.z
+        local vx,vy,vz=actor.velocity.x,course.jumpSpeed,actor.velocity.z
+        local safe=true
+        for frame=1,60 do
+            local oldX,oldY,oldZ=x,y,z
+            local steer=clamp((target-z)*.6-vz*.5,-1,1)
+            local n=math.max(1,math.sqrt(forward*forward+steer*steer))
+            vx=clamp(vx+forward/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
+            vz=clamp(vz+steer/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
+            local friction=math.exp(-course.friction*FIXED*.18)
+            vx*=friction;vz*=friction;vy-=course.gravity*FIXED
+            x+=vx*FIXED;y+=vy*FIXED;z+=vz*FIXED
+            for _,shot in ipairs(threats) do
+                if liveHit(oldX,oldY,oldZ,x,y,z,shot,(frame-1)*FIXED,frame*FIXED) then safe=false;break end
+            end
+            if not safe then break end
+            if vy<=0 then
+                for floorIndex,floor in ipairs(course.platforms) do
+                    local top=floor.y+floor.h/2+3
+                    if oldY>=top-.4 and y<=top+.12 and math.abs(x-floor.x)<=floor.w/2 and math.abs(z-floor.z)<=floor.d/2 then
+                        local margin=math.max(2,math.max(0,vx)*((cadence or .1)+FIXED)+.8)
+                        if (not advanceFloor or floorIndex>advanceFloor) and floor.x+floor.w/2-x>margin then return forward end
+                        safe=false;break
+                    end
+                end
+            end
+            if not safe then break end
+        end
+    end
+    return nil
+end
+
+local function ice(definition, modes, actor, state, threats)
     local course, position, velocity = definition.course, actor.position, actor.velocity
+    if actor.grounded then state.iceDodge=nil end
     local forward=1
     local hazard = course.hazards[state.hazardIndex]
     while hazard and position.x > hazard.x + 7 do
@@ -259,8 +296,8 @@ local function ice(definition, modes, actor, state)
         if hazard.motion and hazard.motion.axis == 'z' then
             z += math.sin(at / hazard.motion.period * math.pi * 2 + hazard.motion.phase) * hazard.motion.amplitude
         end
-        state.targetZ = z < -5 and 0 or -10
-        if hazard.motion and hazard.motion.axis == 'z' and state.hazardIndex==1 then
+        state.targetZ = math.abs(z)>hazard.d/2+2 and 0 or -10
+        if hazard.motion and hazard.motion.axis == 'z' then
             -- Predict the whole contact interval with actual Ice acceleration
             -- and the held input. The old single arrival estimate could select
             -- a Snowball reaction immediately before the next gap jump.
@@ -272,8 +309,8 @@ local function ice(definition, modes, actor, state)
             -- From rest, wait on the authored entry floor for a clear
             -- approach. Once gliding, a reaction can deny the gap Jump while
             -- the retained momentum carries the body off the takeoff edge.
-            state.iceWaiting=position.x<hazard.x-25 and math.abs(velocity.x)<3 and best<.75
-            if state.iceWaiting then forward=0 end
+            state.iceWaiting=position.x<hazard.x-25 and best<.75
+            if state.iceWaiting then forward=clamp(-velocity.x*.3,-1,0) end
         else
             state.iceWaiting=false
         end
@@ -285,7 +322,36 @@ local function ice(definition, modes, actor, state)
         if floorIndex and floorIndex < #course.platforms then
             local floor = course.platforms[floorIndex]
             jump = floor.x + floor.w / 2 - position.x < 4.7
+                and iceDodgeForward(course,modes,actor,state.targetZ,{},state.cadence,floorIndex)~=nil
         end
+    end
+    -- A Snowman's accepted shot is a live obstacle too. Jump while it is
+    -- still approaching; waiting for the ledge lets its reaction deny Jump.
+    if actor.grounded and not jump and #threats>0 then
+        local x,z,vx,vz=position.x,position.z,velocity.x,velocity.z
+        for frame=1,48 do
+            local oldX,oldZ=x,z
+            local steer=clamp((state.targetZ-z)*.6-vz*.5,-1,1)
+            local n=math.max(1,math.sqrt(forward*forward+steer*steer))
+            vx=clamp(vx+forward/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
+            vz=clamp(vz+steer/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
+            local friction=math.exp(-course.friction*FIXED*.18)
+            vx*=friction;vz*=friction;x+=vx*FIXED;z+=vz*FIXED
+            for _,shot in ipairs(threats) do
+                if liveHit(oldX,position.y,oldZ,x,position.y,z,shot,(frame-1)*FIXED,frame*FIXED) then jump=true;break end
+            end
+            if jump then
+                local dodge=iceDodgeForward(course,modes,actor,state.targetZ,threats,state.cadence)
+                jump=dodge~=nil
+                if jump then state.iceDodge=dodge end
+                break
+            end
+        end
+    end
+    if state.iceDodge~=nil then
+        -- Braking during this optional dodge keeps its landing inside the
+        -- present ledge, leaving a fresh grounded input for the gap jump.
+        forward=state.iceDodge
     end
     return input(forward, clamp((state.targetZ - position.z) * .6 - velocity.z * .5, -1, 1), jump)
 end
@@ -513,7 +579,7 @@ local function plan(context)
         local targetX,velocity=12*math.sin(modes.elapsed*1.5),actor.velocity
         return input(clamp((targetX-position.x)*.4-velocity.x*.3,-1,1),
             clamp((14-position.z)*.4-velocity.z*.3,-1,1))
-    elseif definition.mode == 'Ice' then return ice(definition, modes, actor, state)
+    elseif definition.mode == 'Ice' then return ice(definition, modes, actor, state, liveThreats(context))
     elseif definition.mode == 'Serpents' then return serpents(definition, modes, actor, state)
     elseif definition.mode == 'Jet' then
         local threats,signature = liveThreats(context)
