@@ -1,0 +1,11 @@
+Native21 naturally ended Lost1 on a new random seed844260480, before the Ice candidate could be observed. Native22 repeats native20's authored geometry using seed1158731273, with a unique run ID `bricktoads-qa-22-00-5530a024`. This is a bounded reproducible campaign test, not an all-seed acceptance claim or a replay of exact network/NPC timing.
+
+`choose_run_identity.py` finds a short identity with the same ordinary `LevelVariation.seedFromId` result. `verify_seed.luau` checks both IDs through the actual production module; the bootstrap append compiles successfully. An independent source review confirmed that group dependencies are cloned and the first group's `guid` function is isolated from the hub and other groups.
+
+The disposable bootstrap append installs the one-shot dependency synchronously before exposing the hub to the QA bridge. It asserts that no Session or director exists. The original function is restored at entry to the first call. Public Start then follows the unchanged normal `_begin` path, deriving both Causeway and campaign geometry from the new identity. The configuration writes no existing Session, campaign index, phase, actor pose, HP or stock. Production random generation remains unchanged.
+
+Initial native22 identity diagnostics confirmed calls1, restoredtrue, installedBeforeStarttrue, and both derived seeds1158731273. The fixed connected hero11946162891 began with original actor2/Life47/attempt1/stock3. The exact appended source is versioned here; the Edit backup also retains its literal `bootstrapAppend` value for strict restoration after terminal export and MCP Stop.
+
+The other frozen QA sources are Early1D5693, Bridge97C32B, CombatBFB175, TubesE365D2, NavD54 pure13640bytes and observerCB04. Production source7c03 and playable9f9689 remain unchanged. Full local validation finished17:35:58UTC with56/56 commands and196 compiled source/test/tool files; this separate configuration hook was additionally compiled and its seed checked.
+
+Only the single existing Studio window is used through MCP. Native22 is active at this checkpoint; no terminal result or completed13-stage campaign is claimed.

@@ -93,3 +93,20 @@ packets and a full natural13-stage native Won result remain outside this
 acceptance. No Studio test was started or controlled by this audit agent;
 the parent owns a later single-existing-window native run. No public release
 or real-client reconnect result is claimed.
+
+## Native20 follow-up: bounded negative evidence
+
+The next native run, seed1158731273, disproved a deathless interpretation of
+E7: it completed Ice after three paid falls, despite the same-seed corrected
+original-NPC18 matrix being GREEN. Accepted logical rings show approximately
+167–201ms of regular steering delay, absent from the synchronous fixture.
+The first fall followed Icicle292 contact during a late lateral transition;
+the next two followed shield-blocked checkpoint Snowball reactions. See the
+full causal audit in
+`../2026-11-10-full-campaign-playthrough/attempt-20-ice-audit.md`.
+
+The frozen E7 checks above remain valid within their stated logical limits.
+They do not establish native deathless traversal. The later queued-boundary
+RED/GREEN correction, pinned sources and explicit transport-model limits are
+separate in `../2026-11-10-ice20-queued-input/`; no production mechanics were
+changed to obtain that result.

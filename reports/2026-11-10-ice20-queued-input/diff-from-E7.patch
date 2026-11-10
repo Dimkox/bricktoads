@@ -1,0 +1,17 @@
+--- baseline-E7.lua
++++ candidate-1D.lua
+@@ -230 +230 @@
+-            az=clamp((target-z)*.6-vz*.5,-1,1)
++            az=clamp((target-z)*.35-vz*.28,-1,1)
+@@ -256 +256 @@
+-            local steer=clamp((target-z)*.6-vz*.5,-1,1)
++            local steer=clamp((target-z)*.35-vz*.28,-1,1)
+@@ -324 +324 @@
+-            jump = floor.x + floor.w / 2 - position.x < 4.7
++            jump = floor.x + floor.w / 2 - position.x < math.max(4.7,math.max(0,velocity.x)*((state.cadence or .1)+2/60)+.5)
+@@ -334 +334 @@
+-            local steer=clamp((state.targetZ-z)*.6-vz*.5,-1,1)
++            local steer=clamp((state.targetZ-z)*.35-vz*.28,-1,1)
+@@ -356 +356 @@
+-    return input(forward, clamp((state.targetZ - position.z) * .6 - velocity.z * .5, -1, 1), jump)
++    return input(forward, clamp((state.targetZ - position.z) * .35 - velocity.z * .28, -1, 1), jump)

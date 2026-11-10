@@ -1,0 +1,21 @@
+{
+  "status": "negative_control_only_no_candidate_installed",
+  "seed": 1158731273,
+  "nativeRunId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+  "nativeResult": "Lost9_after_earned_1_to_8",
+  "tubesHelperSha256": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013",
+  "lateHelperSha256": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8",
+  "activeQaEdited": false,
+  "productionEdited": false,
+  "studioControlled": false,
+  "queuedNegativeControl": {"cadence": 0.133, "packetDelay": 0.133, "expected": "first_body_gear_then_shark_fatal_not_native_order"},
+  "unqueuedSourceCascade": {"cadence": 0.167, "packetDelay": 0, "expected": "shark26.333_then_gear28.033_after_separate_normal_entry_death"},
+  "baselineSweep": {"cases": 9, "qualifying": 0, "expectedExit": 1},
+  "rejectedSwimJumpExperiment": {"cases": 9, "qualifying": 0, "expectedExit": 1, "installed": false},
+  "limitations": [
+    "Numeric presentation adapter, not native Humanoid/collision/network parity",
+    "Prepared original attempt1/stock3 differs from native attempt4/stock0",
+    "Earlier entry failures and stalls remain separate from Shark/Gear cases",
+    "No deathless, broad latency or full campaign acceptance claim"
+  ]
+}

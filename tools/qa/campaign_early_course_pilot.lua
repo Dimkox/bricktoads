@@ -227,7 +227,7 @@ local function iceLaneClearance(course,modes,actor,hazard,target,cadence)
     local clearance,crossed=math.huge,false
     for frame=1,240 do
         if (frame-1)%hold==0 then
-            az=clamp((target-z)*.6-vz*.5,-1,1)
+            az=clamp((target-z)*.35-vz*.28,-1,1)
             local length=math.sqrt(1+az*az);ax,az=1/length,az/length
         end
         vx=clamp(vx+ax*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
@@ -253,7 +253,7 @@ local function iceDodgeForward(course,modes,actor,target,threats,cadence,advance
         local safe=true
         for frame=1,60 do
             local oldX,oldY,oldZ=x,y,z
-            local steer=clamp((target-z)*.6-vz*.5,-1,1)
+            local steer=clamp((target-z)*.35-vz*.28,-1,1)
             local n=math.max(1,math.sqrt(forward*forward+steer*steer))
             vx=clamp(vx+forward/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
             vz=clamp(vz+steer/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
@@ -321,7 +321,7 @@ local function ice(definition, modes, actor, state, threats)
         local floorIndex = tonumber(string.match(actor.support, '^floor%-(%d+)$'))
         if floorIndex and floorIndex < #course.platforms then
             local floor = course.platforms[floorIndex]
-            jump = floor.x + floor.w / 2 - position.x < 4.7
+            jump = floor.x + floor.w / 2 - position.x < math.max(4.7,math.max(0,velocity.x)*((state.cadence or .1)+2/60)+.5)
                 and iceDodgeForward(course,modes,actor,state.targetZ,{},state.cadence,floorIndex)~=nil
         end
     end
@@ -331,7 +331,7 @@ local function ice(definition, modes, actor, state, threats)
         local x,z,vx,vz=position.x,position.z,velocity.x,velocity.z
         for frame=1,48 do
             local oldX,oldZ=x,z
-            local steer=clamp((state.targetZ-z)*.6-vz*.5,-1,1)
+            local steer=clamp((state.targetZ-z)*.35-vz*.28,-1,1)
             local n=math.max(1,math.sqrt(forward*forward+steer*steer))
             vx=clamp(vx+forward/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
             vz=clamp(vz+steer/n*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
@@ -353,7 +353,7 @@ local function ice(definition, modes, actor, state, threats)
         -- present ledge, leaving a fresh grounded input for the gap jump.
         forward=state.iceDodge
     end
-    return input(forward, clamp((state.targetZ - position.z) * .6 - velocity.z * .5, -1, 1), jump)
+    return input(forward, clamp((state.targetZ - position.z) * .35 - velocity.z * .28, -1, 1), jump)
 end
 
 local function hazardPosition(hazard,at)
