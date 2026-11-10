@@ -1954,9 +1954,25 @@ function World:updatePresentation(session, dt, enemies, director)
                         at=session.now,tuning={windup=0}}
                 end
                 if actor.visualAction and session.now-actor.visualAction.at>2 then actor.visualAction=nil end
+                local rideDeckY
+                if visualState=='Ride' and self.campaignWorld and self.campaignWorld.world==self then
+                    local rider=self.campaignModes and self.campaignModes.actors and self.campaignModes.actors[id]
+                    local objects=self.campaignWorld.objects
+                    local row=objects and (objects['vehicle-'..tostring(id)] or objects['clinger-'..tostring(id)])
+                    local mount=row and row.courseAppearance
+                    if rider and rider.actorId==actor.model:GetAttribute('ActorId') and mount and mount.skin
+                        and mount.model.Parent==self.geometry and mount.skin.Parent==mount.model
+                        and row.part.Parent==self.geometry then
+                        local y=mount.deckWorldY
+                        if type(y)=='number' and y==y and math.abs(y)<math.huge then rideDeckY=y end
+                    end
+                end
                 self.characterAppearance.update(actor,{
                     enabled=combat~=nil and not enemy and session.sourceCombat and true or false,
                     actorId=actor.model:GetAttribute('ActorId'),now=session and session.now,dt=dt,
+                    body=actor.model,levelEpoch=session.state and session.state.levelEpoch,
+                    dashResult=actor.dashPresentationResult,
+                    rideDeckY=rideDeckY,
                     attack=combat and combat.attack,recoveryAction=combat and combat.lastStrikeAction,
                     recoveryUntil=combat and combat.strikeRecoveryUntil,reactionEpoch=combat and combat.reactionEpoch,
                     blocked=blocked,visualState=visualState,verticalSpeed=velocity.Y,holding=carryingEnemy,

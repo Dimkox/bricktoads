@@ -1,0 +1,1231 @@
+{
+  "schema": 1,
+  "glb": "canonical-course-vehicles.glb",
+  "sha256": "637d406e20e3596f56f5f812027aecfb669d02ad5147d7f4db7ab22e022a7d46",
+  "bytes": 303500,
+  "familyCount": 4,
+  "meshCount": 36,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "meshNames": [
+    "Speeder__Body",
+    "Speeder__Nose",
+    "Speeder__RiderDeck",
+    "Speeder__Undercarriage",
+    "Speeder__LeftEngine",
+    "Speeder__LeftTailFin",
+    "Speeder__LeftHandle",
+    "Speeder__RightEngine",
+    "Speeder__RightTailFin",
+    "Speeder__RightHandle",
+    "Surfboard__Body",
+    "Surfboard__UpperShell",
+    "Surfboard__Deck",
+    "Surfboard__CentreStripe",
+    "Surfboard__TailCrest",
+    "Surfboard__BottomKeel",
+    "Surfboard__LeftFin",
+    "Surfboard__RightFin",
+    "Jet__Body",
+    "Jet__Nose",
+    "Jet__RiderDeck",
+    "Jet__CockpitRim",
+    "Jet__LeftWing",
+    "Jet__LeftIntake",
+    "Jet__LeftTailplane",
+    "Jet__RightWing",
+    "Jet__RightIntake",
+    "Jet__RightTailplane",
+    "Jet__TailFin",
+    "Jet__Exhaust",
+    "ClingerVehicle__Body",
+    "ClingerVehicle__Wheel",
+    "ClingerVehicle__Fork",
+    "ClingerVehicle__RiderDeck",
+    "ClingerVehicle__HandleStem",
+    "ClingerVehicle__Handlebar"
+  ],
+  "templates": {
+    "Speeder": {
+      "deckTop": 0,
+      "deckLength": 5.6,
+      "deckWidth": 2.4,
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "parts": [
+        {
+          "importedName": "Speeder__Body",
+          "name": "Body",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -1.04,
+              -0.959975652037693,
+              -2.8029994001799396
+            ],
+            [
+              1.04,
+              -0.0701412435260555,
+              2.6579822812628526
+            ]
+          ],
+          "sizeStuds": [
+            2.08,
+            0.8898344085116374,
+            5.460981681442792
+          ],
+          "centerStuds": [
+            0.0,
+            -0.5150584477818743,
+            -0.07250855945854351
+          ]
+        },
+        {
+          "importedName": "Speeder__Nose",
+          "name": "Nose",
+          "globalPivotStuds": [
+            0,
+            -0.08,
+            -1.5
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.83,
+              -0.31436606305281634,
+              -2.851258292024123
+            ],
+            [
+              0.83,
+              0.3999935722615533,
+              -0.8505309085262731
+            ]
+          ],
+          "sizeStuds": [
+            1.66,
+            0.7143596353143696,
+            2.00072738349785
+          ],
+          "centerStuds": [
+            0.0,
+            0.04281375460436848,
+            -1.8508946002751983
+          ]
+        },
+        {
+          "importedName": "Speeder__RiderDeck",
+          "name": "RiderDeck",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.62,
+              -0.2,
+              -0.68
+            ],
+            [
+              0.62,
+              0.0,
+              1.6
+            ]
+          ],
+          "sizeStuds": [
+            1.24,
+            0.2,
+            2.2800000000000002
+          ],
+          "centerStuds": [
+            0.0,
+            -0.1,
+            0.46
+          ]
+        },
+        {
+          "importedName": "Speeder__Undercarriage",
+          "name": "Undercarriage",
+          "globalPivotStuds": [
+            0,
+            -0.63,
+            0.3
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.68,
+              -0.9099787020054866,
+              -2.0278330518832877
+            ],
+            [
+              0.68,
+              -0.4235795075050759,
+              1.9087042834934584
+            ]
+          ],
+          "sizeStuds": [
+            1.36,
+            0.4863991945004107,
+            3.9365373353767463
+          ],
+          "centerStuds": [
+            0.0,
+            -0.6667791047552812,
+            -0.05956438419491461
+          ]
+        },
+        {
+          "importedName": "Speeder__LeftEngine",
+          "name": "LeftEngine",
+          "globalPivotStuds": [
+            -0.7,
+            -0.55,
+            1.25
+          ],
+          "globalBoundsStuds": [
+            [
+              -1.1196235330324715,
+              -0.8754019263458056,
+              0.7034725598217533
+            ],
+            [
+              -0.4203764669675335,
+              -0.28581335198891245,
+              1.95
+            ]
+          ],
+          "sizeStuds": [
+            0.699247066064938,
+            0.5895885743568932,
+            1.2465274401782467
+          ],
+          "centerStuds": [
+            -0.7700000000000025,
+            -0.580607639167359,
+            1.3267362799108766
+          ]
+        },
+        {
+          "importedName": "Speeder__LeftTailFin",
+          "name": "LeftTailFin",
+          "globalPivotStuds": [
+            -0.65,
+            -0.04,
+            1.45
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.815,
+              -0.15000000000000002,
+              0.44999999999999996
+            ],
+            [
+              -0.625,
+              0.91,
+              2.38
+            ]
+          ],
+          "sizeStuds": [
+            0.18999999999999995,
+            1.06,
+            1.93
+          ],
+          "centerStuds": [
+            -0.72,
+            0.38,
+            1.415
+          ]
+        },
+        {
+          "importedName": "Speeder__LeftHandle",
+          "name": "LeftHandle",
+          "globalPivotStuds": [
+            -0.48,
+            0.34,
+            -1.08
+          ],
+          "globalBoundsStuds": [
+            [
+              -1.08,
+              0.08032730926838663,
+              -1.5881735698767299
+            ],
+            [
+              -0.2506487605731206,
+              1.485,
+              -1.1334002529283735
+            ]
+          ],
+          "sizeStuds": [
+            0.8293512394268795,
+            1.4046726907316134,
+            0.4547733169483563
+          ],
+          "centerStuds": [
+            -0.6653243802865603,
+            0.7826636546341934,
+            -1.3607869114025517
+          ]
+        },
+        {
+          "importedName": "Speeder__RightEngine",
+          "name": "RightEngine",
+          "globalPivotStuds": [
+            0.7,
+            -0.55,
+            1.25
+          ],
+          "globalBoundsStuds": [
+            [
+              0.42037646696753855,
+              -0.8754019263458056,
+              0.7034725598217533
+            ],
+            [
+              1.1196235330324664,
+              -0.28581335198891245,
+              1.95
+            ]
+          ],
+          "sizeStuds": [
+            0.6992470660649279,
+            0.5895885743568932,
+            1.2465274401782467
+          ],
+          "centerStuds": [
+            0.7700000000000025,
+            -0.580607639167359,
+            1.3267362799108766
+          ]
+        },
+        {
+          "importedName": "Speeder__RightTailFin",
+          "name": "RightTailFin",
+          "globalPivotStuds": [
+            0.65,
+            -0.04,
+            1.45
+          ],
+          "globalBoundsStuds": [
+            [
+              0.625,
+              -0.15000000000000002,
+              0.44999999999999996
+            ],
+            [
+              0.815,
+              0.91,
+              2.38
+            ]
+          ],
+          "sizeStuds": [
+            0.18999999999999995,
+            1.06,
+            1.93
+          ],
+          "centerStuds": [
+            0.72,
+            0.38,
+            1.415
+          ]
+        },
+        {
+          "importedName": "Speeder__RightHandle",
+          "name": "RightHandle",
+          "globalPivotStuds": [
+            0.48,
+            0.34,
+            -1.08
+          ],
+          "globalBoundsStuds": [
+            [
+              0.2506487605731206,
+              0.08032730926838663,
+              -1.5881735698767299
+            ],
+            [
+              1.08,
+              1.485,
+              -1.1334002529283735
+            ]
+          ],
+          "sizeStuds": [
+            0.8293512394268795,
+            1.4046726907316134,
+            0.4547733169483563
+          ],
+          "centerStuds": [
+            0.6653243802865603,
+            0.7826636546341934,
+            -1.3607869114025517
+          ]
+        }
+      ]
+    },
+    "Surfboard": {
+      "deckTop": 0,
+      "deckLength": 5.6,
+      "deckWidth": 2.1,
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "parts": [
+        {
+          "importedName": "Surfboard__Body",
+          "name": "Body",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -1.03,
+              -0.465,
+              -2.8
+            ],
+            [
+              1.03,
+              -0.08500000000000002,
+              2.8
+            ]
+          ],
+          "sizeStuds": [
+            2.06,
+            0.38,
+            5.6
+          ],
+          "centerStuds": [
+            0.0,
+            -0.275,
+            0.0
+          ]
+        },
+        {
+          "importedName": "Surfboard__UpperShell",
+          "name": "UpperShell",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.9579000000000001,
+              -0.175,
+              -2.7159999999999997
+            ],
+            [
+              0.9579000000000001,
+              -0.03499999999999999,
+              2.7159999999999997
+            ]
+          ],
+          "sizeStuds": [
+            1.9158000000000002,
+            0.14,
+            5.4319999999999995
+          ],
+          "centerStuds": [
+            0.0,
+            -0.10499999999999998,
+            0.0
+          ]
+        },
+        {
+          "importedName": "Surfboard__Deck",
+          "name": "Deck",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.76,
+              -0.036000000000000004,
+              -2.44
+            ],
+            [
+              0.76,
+              -0.004,
+              2.35
+            ]
+          ],
+          "sizeStuds": [
+            1.52,
+            0.032,
+            4.79
+          ],
+          "centerStuds": [
+            0.0,
+            -0.020000000000000004,
+            -0.04499999999999993
+          ]
+        },
+        {
+          "importedName": "Surfboard__CentreStripe",
+          "name": "CentreStripe",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.12,
+              -0.018,
+              -2.03
+            ],
+            [
+              0.12,
+              0.0,
+              2.3
+            ]
+          ],
+          "sizeStuds": [
+            0.24,
+            0.018,
+            4.33
+          ],
+          "centerStuds": [
+            0.0,
+            -0.009,
+            0.135
+          ]
+        },
+        {
+          "importedName": "Surfboard__TailCrest",
+          "name": "TailCrest",
+          "globalPivotStuds": [
+            0,
+            -0.03,
+            1.85
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.7,
+              -0.0325,
+              1.8
+            ],
+            [
+              0.7,
+              0.0025000000000000022,
+              2.64
+            ]
+          ],
+          "sizeStuds": [
+            1.4,
+            0.035,
+            0.8400000000000001
+          ],
+          "centerStuds": [
+            0.0,
+            -0.015,
+            2.22
+          ]
+        },
+        {
+          "importedName": "Surfboard__BottomKeel",
+          "name": "BottomKeel",
+          "globalPivotStuds": [
+            0,
+            -0.4,
+            0.55
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.22,
+              -0.62,
+              -1.5049937616943891
+            ],
+            [
+              0.22,
+              -0.2502571178309215,
+              1.9675166357650054
+            ]
+          ],
+          "sizeStuds": [
+            0.44,
+            0.36974288216907847,
+            3.4725103974593945
+          ],
+          "centerStuds": [
+            0.0,
+            -0.43512855891546076,
+            0.2312614370353081
+          ]
+        },
+        {
+          "importedName": "Surfboard__LeftFin",
+          "name": "LeftFin",
+          "globalPivotStuds": [
+            -0.55,
+            -0.36,
+            1.73
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.6100000000000001,
+              -0.83,
+              1.1
+            ],
+            [
+              -0.49000000000000005,
+              -0.3,
+              2.24
+            ]
+          ],
+          "sizeStuds": [
+            0.12000000000000005,
+            0.53,
+            1.1400000000000001
+          ],
+          "centerStuds": [
+            -0.55,
+            -0.565,
+            1.6700000000000002
+          ]
+        },
+        {
+          "importedName": "Surfboard__RightFin",
+          "name": "RightFin",
+          "globalPivotStuds": [
+            0.55,
+            -0.36,
+            1.73
+          ],
+          "globalBoundsStuds": [
+            [
+              0.49000000000000005,
+              -0.83,
+              1.1
+            ],
+            [
+              0.6100000000000001,
+              -0.3,
+              2.24
+            ]
+          ],
+          "sizeStuds": [
+            0.12000000000000005,
+            0.53,
+            1.1400000000000001
+          ],
+          "centerStuds": [
+            0.55,
+            -0.565,
+            1.6700000000000002
+          ]
+        }
+      ]
+    },
+    "Jet": {
+      "deckTop": 0,
+      "deckLength": 6.2,
+      "deckWidth": 4.6,
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "parts": [
+        {
+          "importedName": "Jet__Body",
+          "name": "Body",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.73,
+              -1.1199973797124236,
+              -3.1
+            ],
+            [
+              0.73,
+              -0.03023830886127865,
+              3.1037473660589097
+            ]
+          ],
+          "sizeStuds": [
+            1.46,
+            1.0897590708511449,
+            6.203747366058909
+          ],
+          "centerStuds": [
+            0.0,
+            -0.5751178442868512,
+            0.0018736830294547868
+          ]
+        },
+        {
+          "importedName": "Jet__Nose",
+          "name": "Nose",
+          "globalPivotStuds": [
+            0,
+            -0.28,
+            -2.18
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.45,
+              -0.5972594613622453,
+              -3.127313478091512
+            ],
+            [
+              0.45,
+              0.01996775710336765,
+              -1.8602256130421506
+            ]
+          ],
+          "sizeStuds": [
+            0.9,
+            0.6172272184656129,
+            1.2670878650493616
+          ],
+          "centerStuds": [
+            0.0,
+            -0.28864585212943883,
+            -2.493769545566831
+          ]
+        },
+        {
+          "importedName": "Jet__RiderDeck",
+          "name": "RiderDeck",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.48,
+              -0.2399553967812456,
+              -0.9032715108213067
+            ],
+            [
+              0.48,
+              -5.258852406014869e-06,
+              0.951333214830615
+            ]
+          ],
+          "sizeStuds": [
+            0.96,
+            0.2399501379288396,
+            1.8546047256519218
+          ],
+          "centerStuds": [
+            0.0,
+            -0.11998032781682581,
+            0.024030852004654102
+          ]
+        },
+        {
+          "importedName": "Jet__CockpitRim",
+          "name": "CockpitRim",
+          "globalPivotStuds": [
+            0,
+            -0.05,
+            -0.85
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.43,
+              -0.09828683507437046,
+              -1.2211155662128084
+            ],
+            [
+              0.43,
+              0.1091088743921114,
+              -0.7279558715270199
+            ]
+          ],
+          "sizeStuds": [
+            0.86,
+            0.20739570946648184,
+            0.49315969468578846
+          ],
+          "centerStuds": [
+            0.0,
+            0.005411019658870468,
+            -0.9745357188699142
+          ]
+        },
+        {
+          "importedName": "Jet__LeftWing",
+          "name": "LeftWing",
+          "globalPivotStuds": [
+            -0.62,
+            -0.38,
+            0.45
+          ],
+          "globalBoundsStuds": [
+            [
+              -2.46,
+              -0.47,
+              -0.86
+            ],
+            [
+              -0.42999999999999994,
+              -0.275,
+              2.02
+            ]
+          ],
+          "sizeStuds": [
+            2.0300000000000002,
+            0.19499999999999995,
+            2.88
+          ],
+          "centerStuds": [
+            -1.4449999999999998,
+            -0.3725,
+            0.5800000000000001
+          ]
+        },
+        {
+          "importedName": "Jet__LeftIntake",
+          "name": "LeftIntake",
+          "globalPivotStuds": [
+            -0.65,
+            -0.3,
+            -1.17
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.9490225529308776,
+              -0.6397189694933527,
+              -1.5946583041284417
+            ],
+            [
+              -0.4108270705986103,
+              -0.040281030506647275,
+              -0.8506964153418953
+            ]
+          ],
+          "sizeStuds": [
+            0.5381954823322672,
+            0.5994379389867055,
+            0.7439618887865463
+          ],
+          "centerStuds": [
+            -0.679924811764744,
+            -0.33999999999999997,
+            -1.2226773597351686
+          ]
+        },
+        {
+          "importedName": "Jet__LeftTailplane",
+          "name": "LeftTailplane",
+          "globalPivotStuds": [
+            -0.36,
+            -0.22,
+            2.2
+          ],
+          "globalBoundsStuds": [
+            [
+              -1.34,
+              -0.29500000000000004,
+              1.91
+            ],
+            [
+              -0.17999999999999994,
+              -0.165,
+              3.04
+            ]
+          ],
+          "sizeStuds": [
+            1.1600000000000001,
+            0.13000000000000003,
+            1.1300000000000001
+          ],
+          "centerStuds": [
+            -0.76,
+            -0.23000000000000004,
+            2.475
+          ]
+        },
+        {
+          "importedName": "Jet__RightWing",
+          "name": "RightWing",
+          "globalPivotStuds": [
+            0.62,
+            -0.38,
+            0.45
+          ],
+          "globalBoundsStuds": [
+            [
+              0.42999999999999994,
+              -0.47,
+              -0.86
+            ],
+            [
+              2.46,
+              -0.275,
+              2.02
+            ]
+          ],
+          "sizeStuds": [
+            2.0300000000000002,
+            0.19499999999999995,
+            2.88
+          ],
+          "centerStuds": [
+            1.4449999999999998,
+            -0.3725,
+            0.5800000000000001
+          ]
+        },
+        {
+          "importedName": "Jet__RightIntake",
+          "name": "RightIntake",
+          "globalPivotStuds": [
+            0.65,
+            -0.3,
+            -1.17
+          ],
+          "globalBoundsStuds": [
+            [
+              0.4108270705969498,
+              -0.6397189694933527,
+              -1.5946583041284417
+            ],
+            [
+              0.9490225529328702,
+              -0.040281030506647275,
+              -0.8506964153418953
+            ]
+          ],
+          "sizeStuds": [
+            0.5381954823359204,
+            0.5994379389867055,
+            0.7439618887865463
+          ],
+          "centerStuds": [
+            0.6799248117649099,
+            -0.33999999999999997,
+            -1.2226773597351686
+          ]
+        },
+        {
+          "importedName": "Jet__RightTailplane",
+          "name": "RightTailplane",
+          "globalPivotStuds": [
+            0.36,
+            -0.22,
+            2.2
+          ],
+          "globalBoundsStuds": [
+            [
+              0.17999999999999994,
+              -0.29500000000000004,
+              1.91
+            ],
+            [
+              1.34,
+              -0.165,
+              3.04
+            ]
+          ],
+          "sizeStuds": [
+            1.1600000000000001,
+            0.13000000000000003,
+            1.1300000000000001
+          ],
+          "centerStuds": [
+            0.76,
+            -0.23000000000000004,
+            2.475
+          ]
+        },
+        {
+          "importedName": "Jet__TailFin",
+          "name": "TailFin",
+          "globalPivotStuds": [
+            0,
+            -0.16,
+            2.28
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.165,
+              -0.13,
+              1.4
+            ],
+            [
+              0.09,
+              1.4,
+              2.93
+            ]
+          ],
+          "sizeStuds": [
+            0.255,
+            1.5299999999999998,
+            1.5300000000000002
+          ],
+          "centerStuds": [
+            -0.037500000000000006,
+            0.635,
+            2.165
+          ]
+        },
+        {
+          "importedName": "Jet__Exhaust",
+          "name": "Exhaust",
+          "globalPivotStuds": [
+            0,
+            -0.38,
+            2.72
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.28,
+              -0.6599999999999999,
+              2.54
+            ],
+            [
+              0.28,
+              -0.08000000000000002,
+              2.92
+            ]
+          ],
+          "sizeStuds": [
+            0.56,
+            0.5799999999999998,
+            0.3799999999999999
+          ],
+          "centerStuds": [
+            0.0,
+            -0.37,
+            2.73
+          ]
+        }
+      ]
+    },
+    "ClingerVehicle": {
+      "deckTop": 0,
+      "deckLength": 2.6,
+      "deckWidth": 2.0,
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "parts": [
+        {
+          "importedName": "ClingerVehicle__Body",
+          "name": "Body",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.4,
+              -0.7851364601553832,
+              -0.15935871659294948
+            ],
+            [
+              0.4,
+              -0.16802657810572066,
+              0.39935871659294947
+            ]
+          ],
+          "sizeStuds": [
+            0.8,
+            0.6171098820496626,
+            0.558717433185899
+          ],
+          "centerStuds": [
+            0.0,
+            -0.4765815191305519,
+            0.12
+          ]
+        },
+        {
+          "importedName": "ClingerVehicle__Wheel",
+          "name": "Wheel",
+          "globalPivotStuds": [
+            0,
+            -1.0,
+            0.1
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.33699999999999997,
+              -1.89,
+              -0.7899999999999999
+            ],
+            [
+              0.33699999999999997,
+              -0.1100000000000001,
+              0.9899999999999999
+            ]
+          ],
+          "sizeStuds": [
+            0.6739999999999999,
+            1.7799999999999998,
+            1.7799999999999998
+          ],
+          "centerStuds": [
+            0.0,
+            -1.0,
+            0.09999999999999998
+          ]
+        },
+        {
+          "importedName": "ClingerVehicle__Fork",
+          "name": "Fork",
+          "globalPivotStuds": [
+            0,
+            -0.32,
+            -0.1
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.395,
+              -1.0274672275297785,
+              -0.26043973776577956
+            ],
+            [
+              0.395,
+              -0.1525327724702216,
+              0.1804397377657796
+            ]
+          ],
+          "sizeStuds": [
+            0.79,
+            0.8749344550595569,
+            0.44087947553155915
+          ],
+          "centerStuds": [
+            0.0,
+            -0.5900000000000001,
+            -0.03999999999999998
+          ]
+        },
+        {
+          "importedName": "ClingerVehicle__RiderDeck",
+          "name": "RiderDeck",
+          "globalPivotStuds": [
+            0,
+            0,
+            0
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.92,
+              -0.16,
+              -0.76
+            ],
+            [
+              0.92,
+              0.034999999999999996,
+              0.77
+            ]
+          ],
+          "sizeStuds": [
+            1.84,
+            0.195,
+            1.53
+          ],
+          "centerStuds": [
+            0.0,
+            -0.0625,
+            0.0050000000000000044
+          ]
+        },
+        {
+          "importedName": "ClingerVehicle__HandleStem",
+          "name": "HandleStem",
+          "globalPivotStuds": [
+            0,
+            0.25,
+            -0.78
+          ],
+          "globalBoundsStuds": [
+            [
+              -0.105,
+              -0.12259498682150641,
+              -0.9907425509254552
+            ],
+            [
+              0.105,
+              1.26,
+              -0.4623044388968986
+            ]
+          ],
+          "sizeStuds": [
+            0.21,
+            1.3825949868215064,
+            0.5284381120285566
+          ],
+          "centerStuds": [
+            0.0,
+            0.5687025065892468,
+            -0.7265234949111768
+          ]
+        },
+        {
+          "importedName": "ClingerVehicle__Handlebar",
+          "name": "Handlebar",
+          "globalPivotStuds": [
+            0,
+            1.26,
+            -0.89
+          ],
+          "globalBoundsStuds": [
+            [
+              -1.164799830400509,
+              1.0699999999999998,
+              -0.9972420703400007
+            ],
+            [
+              1.164799830400509,
+              1.7252932570028472,
+              -0.7827579296599995
+            ]
+          ],
+          "sizeStuds": [
+            2.329599660801018,
+            0.6552932570028474,
+            0.2144841406800012
+          ],
+          "centerStuds": [
+            0.0,
+            1.3976466285014235,
+            -0.8900000000000001
+          ]
+        }
+      ]
+    }
+  },
+  "contract": {
+    "folder": "ServerStorage.BrickToadsCourseTemplates",
+    "modelMetadata": {
+      "AppearanceProfile": "CanonicalCourseVehicle",
+      "CourseKind": "<kind>",
+      "SourcePin": "f1a43b69577246850d136473700a333b3cdfe93f"
+    },
+    "numberValues": [
+      "DeckTop=0",
+      "DeckLength=<localZ footprint>",
+      "DeckWidth=<localX footprint>"
+    ],
+    "axis": "Y-up, forward -Z. Runtime rotates Y=-pi/2 to +X. Source origin is deck top at XZ centre.",
+    "reconstruction": "Match imported MeshParts by Kind__Segment. Set each flat template part.Size=sizeStuds and CFrame=CFrame.new(centerStuds)*CFrame.Angles(0,math.pi,0), restoring the observed native importer Y180 conversion. Keep actual imported MeshId,TextureID and SurfaceAppearance if present. Preserve raw imported MeshSize as InitialSize independently of resized Size. Source GLB nodes use pivot-relative mesh geometry; globalBoundsStuds accounts for importer recentering.",
+    "physics": "All visual parts anchored,CanCollide=false,CanTouch=false,CanQuery=false,Massless=true. Existing collider unchanged.",
+    "fit": "Uniform scale=min(collider.Size.X/DeckLength,collider.Size.Z/DeckWidth). Place localDeckTop0 at collider top. Do not fit to collider height."
+  },
+  "nativeImportStatus": "APPROVED model89107256831014; native resources/rest frames in roblox-course-vehicles.json; runtime visual review separate"
+}

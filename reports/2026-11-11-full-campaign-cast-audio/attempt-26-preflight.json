@@ -1,0 +1,317 @@
+{
+  "schema": 1,
+  "task": "Complete continuous13-stage ordinary Studio Play using new cast/animation/audio",
+  "sourceSha256": "8c8daab80dc7c8ec2b825ee4af5ffd923bdbd9380ea47de5676b29e77c080650",
+  "gitCommit": "8b4ca4d83a965fc59f17fab659fdb48433b3fb44",
+  "playableSha256": "9e9692845e5a278d7426f7a4bd657ac3abfda94fa7d00eb899495492868541bd",
+  "starterSha256": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353",
+  "studioId": "4576a7fb-4fd4-4e0c-9610-b673e26d0c74",
+  "placeId": 117412694427208,
+  "requestedRunId": "bricktoads-cast26-00-0b24695d",
+  "seed": 1158731273,
+  "godMode": true,
+  "expectedPlayers": 1,
+  "method": "Disposable input-only QA planner through existing production client sender; no gameplay pose/damage/progress/HP/stock writes. One-shot pre-Start GUID dependency restores on first call. Client/server read-only audiovisual observers.",
+  "sourceChecks": {
+    "method": "58 packaged production paths checked against Studio byte length and Adler32 before QA appends",
+    "manifest": [
+      {
+        "path": "ServerScriptService.BrickToads.BrickToadsServer",
+        "bytes": 7256,
+        "adler": 3000555344
+      },
+      {
+        "path": "ServerScriptService.BrickToads.RunLifecycle",
+        "bytes": 14629,
+        "adler": 330252333
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.BossIntro",
+        "bytes": 4446,
+        "adler": 164610876
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.BossIntroWorld",
+        "bytes": 10020,
+        "adler": 432935360
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.BossQueue",
+        "bytes": 8816,
+        "adler": 688160704
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignBoss",
+        "bytes": 24243,
+        "adler": 3744328834
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignDefinition",
+        "bytes": 16378,
+        "adler": 133412270
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignDirector",
+        "bytes": 16975,
+        "adler": 822274579
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignEnemies",
+        "bytes": 33423,
+        "adler": 4138673812
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignModes",
+        "bytes": 53450,
+        "adler": 3827247307
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignRace",
+        "bytes": 22087,
+        "adler": 2441120140
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignRoster",
+        "bytes": 4515,
+        "adler": 2272242199
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CampaignWorld",
+        "bytes": 19896,
+        "adler": 1803866804
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CanonicalAnimation",
+        "bytes": 27424,
+        "adler": 1383511789
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CanonicalCastAppearance",
+        "bytes": 10656,
+        "adler": 1033289413
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CanonicalCastPresentation",
+        "bytes": 20963,
+        "adler": 716914655
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CanonicalCastProfiles",
+        "bytes": 29391,
+        "adler": 2446930812
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CanonicalHeroPresentation",
+        "bytes": 26863,
+        "adler": 420175992
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CanonicalWalker",
+        "bytes": 4468,
+        "adler": 2215367500
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.CharacterAppearance",
+        "bytes": 21619,
+        "adler": 3204144673
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.DragonFlight",
+        "bytes": 16255,
+        "adler": 1261990262
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.DragonWorld",
+        "bytes": 13210,
+        "adler": 3646213804
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.EnemyCarry",
+        "bytes": 9958,
+        "adler": 3341564057
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.GameConfig",
+        "bytes": 5642,
+        "adler": 3476053577
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.GameController",
+        "bytes": 26753,
+        "adler": 2099610480
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.GameWorld",
+        "bytes": 110434,
+        "adler": 880827516
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.GuardianAppearance",
+        "bytes": 13200,
+        "adler": 431167240
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.GuardianPattern",
+        "bytes": 12724,
+        "adler": 3392037898
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.HealingFlies",
+        "bytes": 5447,
+        "adler": 2637315858
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.LevelDefinition",
+        "bytes": 3346,
+        "adler": 830268261
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.LevelDirector",
+        "bytes": 38885,
+        "adler": 1277543078
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.LevelVariation",
+        "bytes": 5979,
+        "adler": 2924042934
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.MatchHub",
+        "bytes": 17787,
+        "adler": 4230115459
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.RunJournal",
+        "bytes": 5332,
+        "adler": 3038124989
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.SourceCombat",
+        "bytes": 2645,
+        "adler": 3157547500
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.StudioGodMode",
+        "bytes": 938,
+        "adler": 3379642096
+      },
+      {
+        "path": "ServerScriptService.BrickToads.gameplay.WalkerClubs",
+        "bytes": 9543,
+        "adler": 1722146854
+      },
+      {
+        "path": "ServerScriptService.BrickToads.CombatRuntime.Combat",
+        "bytes": 3640,
+        "adler": 979218807
+      },
+      {
+        "path": "ServerScriptService.BrickToads.CombatRuntime.Session",
+        "bytes": 22552,
+        "adler": 1473261682
+      },
+      {
+        "path": "ServerScriptService.BrickToads.CombatRuntime.Config",
+        "bytes": 747,
+        "adler": 954914032
+      },
+      {
+        "path": "ServerScriptService.BrickToads.CombatRuntime.ConnectionRegistry",
+        "bytes": 1717,
+        "adler": 1627602131
+      },
+      {
+        "path": "ServerScriptService.BrickToads.CombatRuntime.RobloxWorld",
+        "bytes": 14159,
+        "adler": 2238396290
+      },
+      {
+        "path": "ServerScriptService.BrickToads.BuildInfo",
+        "bytes": 112,
+        "adler": 2089821002
+      },
+      {
+        "path": "ReplicatedStorage.BrickToads.AudioCatalog",
+        "bytes": 1767,
+        "adler": 26928834
+      },
+      {
+        "path": "ReplicatedStorage.BrickToads.BrickToadsConfig",
+        "bytes": 119,
+        "adler": 3583125591
+      },
+      {
+        "path": "ReplicatedStorage.BrickToads.HeroPortraits",
+        "bytes": 246,
+        "adler": 1671122439
+      },
+      {
+        "path": "ReplicatedStorage.BrickToads.TextCatalog",
+        "bytes": 85062,
+        "adler": 3714340735
+      },
+      {
+        "path": "ReplicatedStorage.BrickToads.TextLocalization",
+        "bytes": 3326,
+        "adler": 420173879
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.BossQueuePanel",
+        "bytes": 11466,
+        "adler": 3528292255
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.BrickToadsClient",
+        "bytes": 93129,
+        "adler": 2211832863
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.CastAssetVisibility",
+        "bytes": 11845,
+        "adler": 59230495
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.CombatEffects",
+        "bytes": 6455,
+        "adler": 410673908
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.CombatFeedback",
+        "bytes": 10324,
+        "adler": 2549641507
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.GameAudio",
+        "bytes": 13447,
+        "adler": 3782244866
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.GroupPanel",
+        "bytes": 13154,
+        "adler": 3336602461
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.MovementInput",
+        "bytes": 2049,
+        "adler": 3944339567
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.RobloxInputBindings",
+        "bytes": 3082,
+        "adler": 149232277
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.BrickToads.SpectatorCamera",
+        "bytes": 11301,
+        "adler": 1606370671
+      }
+    ]
+  },
+  "backup": {
+    "folder": "ServerStorage.BrickToadsQAEditBackup",
+    "bootstrapBytes": 7256,
+    "clientBytes": 93129,
+    "priorGodMode": true
+  },
+  "state": "Prepared in Edit; not started"
+}

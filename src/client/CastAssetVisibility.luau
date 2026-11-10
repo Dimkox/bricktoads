@@ -1,7 +1,14 @@
 -- Client content availability changes only local visibility, never server bodies.
 local Gate={}
 Gate.__index=Gate
-local TAG='BrickToadsCastSkin'
+local CONTRACTS={
+    Cast={tag='BrickToadsCastSkin',skin='CanonicalCastSkin',id='CastSkinId',
+        owner='CastAppearance',profile='CanonicalNESCast',alpha='CastVisibleTransparency',
+        reference='CastFallbackTarget',backlink='CastFallbackOwner',fallbackAlpha='CastFallbackTransparency'},
+    Course={tag='BrickToadsCourseSkin',skin='CanonicalCourseSkin',id='CourseSkinId',
+        owner='CourseAppearance',profile='CanonicalCourseVehicle',alpha='CourseVisibleTransparency',
+        reference='CourseFallbackTarget',backlink='CourseFallbackOwner',fallbackAlpha='CourseFallbackTransparency'},
+}
 local RETRY_DELAYS={1,3,10}
 local function finite(v)return type(v)=='number' and v==v and v>=0 and v<=1 end
 local function identity(v)return type(v)=='string' and #v>0 and #v<=512 end
@@ -21,11 +28,11 @@ local function localAlpha(part,value)
 end
 function Gate:_valid(row)
     return not self.destroyed and self.rows[row.skin]==row and row.skin.Parent==row.owner
-        and row.skin:IsDescendantOf(self.workspace) and row.skin:GetAttribute('CanonicalCastSkin')==true
-        and row.skin:GetAttribute('CastSkinId')==row.id and row.owner:GetAttribute('CastAppearance')=='CanonicalNESCast'
+        and row.skin:IsDescendantOf(self.workspace) and row.skin:GetAttribute(self.contract.skin)==true
+        and row.skin:GetAttribute(self.contract.id)==row.id and row.owner:GetAttribute(self.contract.owner)==self.contract.profile
 end
 function Gate:_restoreFallback(row,part,value)
-    local backlink=part:GetAttribute('CastFallbackOwner')
+    local backlink=part:GetAttribute(self.contract.backlink)
     if part.Parent and (backlink==nil or backlink==row.id)then localAlpha(part,value)end
 end
 function Gate:_rememberFallback(row,part)
@@ -40,7 +47,7 @@ end
 function Gate:_releaseFallback(row,part)
     local baseline=self.baselines[part];if not baseline then return end
     baseline.owners[row]=nil
-    local backlink=part:GetAttribute('CastFallbackOwner')
+    local backlink=part:GetAttribute(self.contract.backlink)
     -- During handoff the server may replace the backlink before publishing the
     -- new skin's reference. Retain the pre-gate value for that incoming owner.
     if next(baseline.owners)==nil and (backlink==nil or backlink==row.id)then self.baselines[part]=nil end
@@ -109,7 +116,7 @@ function Gate:_apply(row,state)
         if part.Parent and part:IsDescendantOf(row.skin)then localAlpha(part,state=='Ready' and value or 1)end
     end
     for part,value in pairs(row.fallbackSaved)do
-        if part.Parent and part:GetAttribute('CastFallbackOwner')==row.id then localAlpha(part,state=='Ready' and 1 or value)end
+        if part.Parent and part:GetAttribute(self.contract.backlink)==row.id then localAlpha(part,state=='Ready' and 1 or value)end
     end
 end
 function Gate:_refresh(row)
@@ -129,11 +136,11 @@ function Gate:_refresh(row)
         if part:IsA('MeshPart')then
             parts[#parts+1]=part
             if row.skinSaved[part]==nil then row.skinSaved[part]=finite(part.LocalTransparencyModifier)and part.LocalTransparencyModifier or 0 end
-            if not finite(part:GetAttribute('CastVisibleTransparency'))then complete=false end
+            if not finite(part:GetAttribute(self.contract.alpha))then complete=false end
             include('M',part.MeshId,true);include('T',part.TextureID,false)
             connect(row.assetConnections,part:GetPropertyChangedSignal('MeshId'),refresh)
             connect(row.assetConnections,part:GetPropertyChangedSignal('TextureID'),refresh)
-            connect(row.assetConnections,part:GetAttributeChangedSignal('CastVisibleTransparency'),refresh)
+            connect(row.assetConnections,part:GetAttributeChangedSignal(self.contract.alpha),refresh)
             for _,surface in ipairs(part:GetChildren())do if surface:IsA('SurfaceAppearance')then
                 include('C',surface.ColorMap,false)
                 connect(row.assetConnections,surface:GetPropertyChangedSignal('ColorMap'),refresh)
@@ -143,14 +150,14 @@ function Gate:_refresh(row)
     -- Explicit references support the serpent's external support collider. A
     -- unique backlink prevents an old skin from controlling a replacement.
     for _,ref in ipairs(row.skin:GetChildren())do
-        if ref:IsA('ObjectValue')and ref.Name=='CastFallbackTarget'then
+        if ref:IsA('ObjectValue')and ref.Name==self.contract.reference then
             connect(row.assetConnections,ref:GetPropertyChangedSignal('Value'),refresh)
             local part=ref.Value
             if part and part:IsA('BasePart')then
-                connect(row.assetConnections,part:GetAttributeChangedSignal('CastFallbackOwner'),refresh)
-                connect(row.assetConnections,part:GetAttributeChangedSignal('CastFallbackTransparency'),refresh)
-                if part.Parent and part:GetAttribute('CastFallbackOwner')==row.id
-                    and finite(part:GetAttribute('CastFallbackTransparency'))then
+                connect(row.assetConnections,part:GetAttributeChangedSignal(self.contract.backlink),refresh)
+                connect(row.assetConnections,part:GetAttributeChangedSignal(self.contract.fallbackAlpha),refresh)
+                if part.Parent and part:GetAttribute(self.contract.backlink)==row.id
+                    and finite(part:GetAttribute(self.contract.fallbackAlpha))then
                     targets[part]=true
                     if row.fallbackSaved[part]==nil then row.fallbackSaved[part]=self:_rememberFallback(row,part)end
                 end
@@ -179,34 +186,35 @@ function Gate:_refresh(row)
     end
 end
 function Gate:_add(skin)
-    if self.destroyed or self.rows[skin]or not skin:IsA('Model')or skin:GetAttribute('CanonicalCastSkin')~=true then return end
-    local owner=skin.Parent;local id=skin:GetAttribute('CastSkinId')
+    if self.destroyed or self.rows[skin]or not skin:IsA('Model')or skin:GetAttribute(self.contract.skin)~=true then return end
+    local owner=skin.Parent;local id=skin:GetAttribute(self.contract.id)
     if not owner or not owner:IsA('Model')or not identity(id)or not skin:IsDescendantOf(self.workspace)
-        or owner:GetAttribute('CastAppearance')~='CanonicalNESCast'then return end
+        or owner:GetAttribute(self.contract.owner)~=self.contract.profile then return end
     local row={skin=skin,owner=owner,id=id,connections={},assetConnections={},skinSaved={},fallbackSaved={}}
     self.rows[skin]=row
     local function refresh()if self.rows[skin]==row then self:_refresh(row)end end
     connect(row.connections,skin.AncestryChanged,refresh)
-    connect(row.connections,skin:GetAttributeChangedSignal('CanonicalCastSkin'),refresh)
-    connect(row.connections,skin:GetAttributeChangedSignal('CastSkinId'),refresh)
-    connect(row.connections,owner:GetAttributeChangedSignal('CastAppearance'),refresh)
+    connect(row.connections,skin:GetAttributeChangedSignal(self.contract.skin),refresh)
+    connect(row.connections,skin:GetAttributeChangedSignal(self.contract.id),refresh)
+    connect(row.connections,owner:GetAttributeChangedSignal(self.contract.owner),refresh)
     connect(row.connections,skin.DescendantAdded,refresh)
     -- DescendantRemoving fires before the child leaves. Defer reconciliation so
     -- it cannot keep a removed fallback reference or obsolete asset signature.
     connect(row.connections,skin.DescendantRemoving,function()self.defer(refresh)end)
     self:_refresh(row)
 end
-function Gate.new(deps)
+function Gate.new(deps,contractName)
     deps=deps or {}
+    local contract=assert(CONTRACTS[contractName or 'Cast'],'Unsupported appearance contract')
     local self=setmetatable({workspace=deps.workspace or game:GetService('Workspace'),
         collection=deps.collectionService or game:GetService('CollectionService'),
         provider=deps.contentProvider or game:GetService('ContentProvider'),
         spawn=deps.spawn or task.spawn,defer=deps.defer or deps.spawn or task.defer,delay=deps.delay or (task and task.delay),
-        success=deps.successStatus or Enum.AssetFetchStatus.Success,rows={},cache={},connections={},
+        success=deps.successStatus or Enum.AssetFetchStatus.Success,contract=contract,rows={},cache={},connections={},
         baselines=setmetatable({},{__mode='k'})},Gate)
-    connect(self.connections,self.collection:GetInstanceAddedSignal(TAG),function(skin)self:_add(skin)end)
-    connect(self.connections,self.collection:GetInstanceRemovedSignal(TAG),function(skin)self:_remove(skin)end)
-    for _,skin in ipairs(self.collection:GetTagged(TAG))do self:_add(skin)end
+    connect(self.connections,self.collection:GetInstanceAddedSignal(contract.tag),function(skin)self:_add(skin)end)
+    connect(self.connections,self.collection:GetInstanceRemovedSignal(contract.tag),function(skin)self:_remove(skin)end)
+    for _,skin in ipairs(self.collection:GetTagged(contract.tag))do self:_add(skin)end
     return self
 end
 function Gate:diagnostics()

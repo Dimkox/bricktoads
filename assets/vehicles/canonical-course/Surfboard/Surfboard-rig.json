@@ -1,0 +1,703 @@
+{
+  "schema": 1,
+  "kind": "Surfboard",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/vehicles/canonical-course/vehicle-source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "Source objectD2: long pointed yellow/olive board with broad white top, central interrupted yellow seam and squared divided tail."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up forward-Z; deck top Y0 at XZ centre; cosmetic hull below deck, handlebars ahead of rider.",
+  "bounds": [
+    [
+      -1.03,
+      -0.83,
+      -2.8
+    ],
+    [
+      1.03,
+      0.0025000000000000022,
+      2.8
+    ]
+  ],
+  "sourceTrace": {
+    "kind": "Surfboard",
+    "level": 12,
+    "bankRecipe": "Surf",
+    "sourceEvidence": "main.asm:9148-9208 object_bike and bike_frame_id; frames_koleso at main.asm:8955",
+    "paletteContext": {
+      "typeId": 24,
+      "actorPaletteXor": 1,
+      "source": "levels_cfgs2.asm:292",
+      "trigger": [
+        0,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        34,
+        32
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:291",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            34,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 8,
+        "decodedCompleteTiles": 8,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/byte_CC32.chr",
+        "firstTile": 41,
+        "tiles": 1,
+        "decodedCompleteTiles": 1,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/surfcity_obj.4",
+        "firstTile": 42,
+        "tiles": 97,
+        "decodedCompleteTiles": 97,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/turbotunnel_obj.4",
+        "firstTile": 139,
+        "tiles": 34,
+        "decodedCompleteTiles": 34,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/levels1_5_obj.4",
+        "firstTile": 173,
+        "tiles": 35,
+        "decodedCompleteTiles": 35,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 14,
+        "decodedCompleteTiles": 14,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "frames": [
+      {
+        "frameId": 210,
+        "frameHex": "D2",
+        "namespace": "object",
+        "metaspriteAddress": "C104",
+        "parts": [
+          {
+            "tile": 42,
+            "x": -12,
+            "y": 4,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 43,
+            "x": -4,
+            "y": 4,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 44,
+            "x": 4,
+            "y": 6,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 45,
+            "x": -12,
+            "y": 12,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 46,
+            "x": -4,
+            "y": 12,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -12,
+          "minY": 4,
+          "maxX": 11,
+          "maxY": 17
+        },
+        "width": 24,
+        "height": 14,
+        "png": "references/surfboard-d2.png"
+      }
+    ],
+    "rgbColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "unknown": []
+  },
+  "sourcePalette": {
+    "colors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "scope": "Representative source vehicle palette; RGB illustrative; recurring palette loops not reproduced."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -1.03,
+          -0.465,
+          -2.8
+        ],
+        [
+          1.03,
+          -0.08500000000000002,
+          2.8
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.03,
+          -0.465,
+          -2.8
+        ],
+        [
+          1.03,
+          -0.08500000000000002,
+          2.8
+        ]
+      ],
+      "vertices": 38,
+      "authoringVertices": 38,
+      "paletteSplitTriangles": 0,
+      "triangles": 72
+    },
+    {
+      "name": "UpperShell",
+      "parent": "Body",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -0.9579000000000001,
+          -0.175,
+          -2.7159999999999997
+        ],
+        [
+          0.9579000000000001,
+          -0.03499999999999999,
+          2.7159999999999997
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.9579000000000001,
+          -0.175,
+          -2.7159999999999997
+        ],
+        [
+          0.9579000000000001,
+          -0.03499999999999999,
+          2.7159999999999997
+        ]
+      ],
+      "vertices": 38,
+      "authoringVertices": 38,
+      "paletteSplitTriangles": 0,
+      "triangles": 72
+    },
+    {
+      "name": "Deck",
+      "parent": "Body",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -0.76,
+          -0.036000000000000004,
+          -2.44
+        ],
+        [
+          0.76,
+          -0.004,
+          2.35
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.76,
+          -0.036000000000000004,
+          -2.44
+        ],
+        [
+          0.76,
+          -0.004,
+          2.35
+        ]
+      ],
+      "vertices": 30,
+      "authoringVertices": 30,
+      "paletteSplitTriangles": 0,
+      "triangles": 56
+    },
+    {
+      "name": "CentreStripe",
+      "parent": "Body",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -0.12,
+          -0.018,
+          -2.03
+        ],
+        [
+          0.12,
+          0.0,
+          2.3
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.12,
+          -0.018,
+          -2.03
+        ],
+        [
+          0.12,
+          0.0,
+          2.3
+        ]
+      ],
+      "vertices": 122,
+      "authoringVertices": 122,
+      "paletteSplitTriangles": 0,
+      "triangles": 240
+    },
+    {
+      "name": "TailCrest",
+      "parent": "Body",
+      "pivot": [
+        0,
+        -0.03,
+        1.85
+      ],
+      "localBounds": [
+        [
+          -0.7,
+          -0.0025000000000000022,
+          -0.050000000000000044
+        ],
+        [
+          0.7,
+          0.0325,
+          0.79
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.7,
+          -0.0325,
+          1.8
+        ],
+        [
+          0.7,
+          0.0025000000000000022,
+          2.64
+        ]
+      ],
+      "vertices": 34,
+      "authoringVertices": 34,
+      "paletteSplitTriangles": 0,
+      "triangles": 64
+    },
+    {
+      "name": "BottomKeel",
+      "parent": "Body",
+      "pivot": [
+        0,
+        -0.4,
+        0.55
+      ],
+      "localBounds": [
+        [
+          -0.22,
+          -0.21999999999999997,
+          -2.054993761694389
+        ],
+        [
+          0.22,
+          0.1497428821690785,
+          1.4175166357650053
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.22,
+          -0.62,
+          -1.5049937616943891
+        ],
+        [
+          0.22,
+          -0.2502571178309215,
+          1.9675166357650054
+        ]
+      ],
+      "vertices": 114,
+      "authoringVertices": 114,
+      "paletteSplitTriangles": 0,
+      "triangles": 224
+    },
+    {
+      "name": "LeftFin",
+      "parent": "Body",
+      "pivot": [
+        -0.55,
+        -0.36,
+        1.73
+      ],
+      "localBounds": [
+        [
+          -0.06000000000000005,
+          -0.47,
+          -0.6299999999999999
+        ],
+        [
+          0.06,
+          0.06,
+          0.5100000000000002
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.6100000000000001,
+          -0.83,
+          1.1
+        ],
+        [
+          -0.49000000000000005,
+          -0.3,
+          2.24
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32
+    },
+    {
+      "name": "RightFin",
+      "parent": "Body",
+      "pivot": [
+        0.55,
+        -0.36,
+        1.73
+      ],
+      "localBounds": [
+        [
+          -0.06,
+          -0.47,
+          -0.6299999999999999
+        ],
+        [
+          0.06000000000000005,
+          0.06,
+          0.5100000000000002
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.49000000000000005,
+          -0.83,
+          1.1
+        ],
+        [
+          0.6100000000000001,
+          -0.3,
+          2.24
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32
+    }
+  ],
+  "joints": [
+    {
+      "name": "UpperShell",
+      "parent": "Body",
+      "child": "UpperShell",
+      "parentAttachment": [
+        0,
+        0,
+        0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Deck",
+      "parent": "Body",
+      "child": "Deck",
+      "parentAttachment": [
+        0,
+        0,
+        0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "CentreStripe",
+      "parent": "Body",
+      "child": "CentreStripe",
+      "parentAttachment": [
+        0,
+        0,
+        0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "TailCrest",
+      "parent": "Body",
+      "child": "TailCrest",
+      "parentAttachment": [
+        0,
+        -0.03,
+        1.85
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "BottomKeel",
+      "parent": "Body",
+      "child": "BottomKeel",
+      "parentAttachment": [
+        0,
+        -0.4,
+        0.55
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftFin",
+      "parent": "Body",
+      "child": "LeftFin",
+      "parentAttachment": [
+        -0.55,
+        -0.36,
+        1.73
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightFin",
+      "parent": "Body",
+      "child": "RightFin",
+      "parentAttachment": [
+        0.55,
+        -0.36,
+        1.73
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 792,
+    "vertices": 412,
+    "closedComponents": true,
+    "components": 8,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 7.13142115840088e-05
+  },
+  "deck": {
+    "top": 0,
+    "length": 5.6,
+    "width": 2.1
+  }
+}

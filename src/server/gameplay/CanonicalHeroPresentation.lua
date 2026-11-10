@@ -249,8 +249,9 @@ end
 function Presentation.sample(state,c)
     if type(c)~='table' or not finite(c.now) then cancel(state);return nil,'InvalidContext' end
     local attack=c.attack or c.visualAction
-    if state.actorId~=c.actorId then
+    if state.actorId~=c.actorId or state.body~=c.body or state.levelEpoch~=c.levelEpoch then
         state.actorId=c.actorId;state.sequence=nil;state.observedAttack=nil;state.observedAction=nil
+        state.body=c.body;state.levelEpoch=c.levelEpoch
         state.invalidAttack=nil;state.lastNow=nil;state.reactionEpoch=nil;state.gaitPhase=0
         state.visualState=nil;state.modeStartedAt=nil
     end
@@ -305,6 +306,7 @@ function Presentation.sample(state,c)
                 start=attack.at-attack.tuning.windup;basis='AcceptedWindupTimestamp'
             end
             state.sequence={attack=attack,action=attack.action,id=id,start=start,basis=basis,lastCall=-1,
+                body=c.body,levelEpoch=c.levelEpoch,
                 baselineRecovery=finite(c.recoveryUntil) and c.recoveryUntil or -math.huge}
         end
     end
@@ -316,8 +318,25 @@ function Presentation.sample(state,c)
         else state.sequence=nil;sequence=nil end
     end
     if sequence then
-        local calls=math.clamp(math.floor(math.max(0,c.now-sequence.start)*CALLS_PER_SECOND+1e-7),0,4096)
-        local clock={elapsedCalls=calls,callerMask=1,firstFrameCounterPhase=0,firstRead='Read'}
+        local result=c.dashResult
+        if sequence.branch==nil and sequence.action=='Dash' and type(result)=='table'
+            and result.branch=='DashLowLifeTail' and result.profile==3
+            and type(sequence.attack.tuning)=='table' and result.tuning==sequence.attack.tuning
+            and c.body~=nil and sequence.body==c.body and result.body==c.body
+            and finite(c.levelEpoch) and c.levelEpoch%1==0 and c.levelEpoch>=1
+            and sequence.levelEpoch==c.levelEpoch and result.levelEpoch==c.levelEpoch
+            and result.actorId==c.actorId and finite(result.at) and result.at<=c.now
+            and finite(sequence.attack.at) and result.at>=sequence.attack.at and result.at>=sequence.start then
+            -- main15829-15840 redirects a confirmed low-Life Dash effect to
+            -- byte36; the same E2 call increments it and reads byte37/graphics31.
+            -- Resume with Read at call0, retaining the original mask1 parity.
+            sequence.branch='DashLowLifeTail';sequence.branchAt=result.at
+            sequence.branchPhase=math.floor((result.at-sequence.start)*CALLS_PER_SECOND+1e-7)%2
+            sequence.lastCall=-1
+        end
+        local calls=math.clamp(math.floor(math.max(0,c.now-(sequence.branchAt or sequence.start))*CALLS_PER_SECOND+1e-7),0,4096)
+        local clock={elapsedCalls=calls,callerMask=1,firstFrameCounterPhase=sequence.branchPhase or 0,
+            firstRead='Read',branch=sequence.branch}
         local sample,code=Animation.sampleClock(sequence.id,clock)
         if not sample then state.sequence=nil;return nil,code end
         local events={}
@@ -333,7 +352,8 @@ function Presentation.sample(state,c)
             local joints=POSES[sample.frameId]
             if not joints then state.sequence=nil;return nil,'UnknownSourcePose' end
             return {kind='Attack',namespace='Hero',frameBasis='SourceClip',action=sequence.action,animationId=sequence.id,frameId=sample.frameId,
-                sourceCall=calls,sourcePhase=0,sourceCallerMask=1,clockBasis=sequence.basis,
+                sourceCall=calls,sourcePhase=clock.firstFrameCounterPhase,sourceCallerMask=1,clockBasis=sequence.basis,
+                sourceBranch=sequence.branch or'Normal',sourceEffectAt=sequence.branchAt,
                 morphKind=sample.frameId==0x1C and 'PowerFist' or (sample.frameId==0x1E and 'BigBoot' or nil),
                 adaptation='Authored3DJointAngles',joints=joints,geometry=GEOMETRY[sample.frameId],events=table.freeze(events)}
         end

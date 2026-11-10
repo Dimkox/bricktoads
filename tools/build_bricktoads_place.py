@@ -449,6 +449,12 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
     cast_spec.loader.exec_module(cast_packager)
     cast_packager.package_cast(root_path, storage, item=item, prop=prop, mesh_resource=mesh_resource)
 
+    # Course vehicles are mandatory uploaded art, separate from physical colliders.
+    course_spec = importlib.util.spec_from_file_location("package_course_assets", Path(__file__).with_name("package_course_assets.py"))
+    course_packager = importlib.util.module_from_spec(course_spec)
+    course_spec.loader.exec_module(course_packager)
+    course_packager.package_course_assets(root_path, storage, item=item, prop=prop, mesh_resource=mesh_resource)
+
     # Explicit research switch; this rejected study is absent from default builds.
     if include_character_study:
         character((root_path / "assets/characters/green-toad.json").read_bytes(), "GreenToad")

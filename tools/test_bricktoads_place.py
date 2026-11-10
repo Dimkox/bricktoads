@@ -20,6 +20,12 @@ def named(parent, name):
 
 
 class BrickToadsPlaceTests(unittest.TestCase):
+    def course_fixture(self, source):
+        spec = importlib.util.spec_from_file_location('course_packaging_fixture', ROOT / 'tools/test_course_asset_packaging.py')
+        helper = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(helper)
+        return helper.course_fixture(source)
+
     def morph_fixture(self, source):
         shutil.copytree(ROOT / 'src', source / 'src')
         shutil.copytree(ROOT / 'assets', source / 'assets')
@@ -50,6 +56,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             path.write_text(json.dumps(manifest), encoding='utf-8')
             manifests[family] = path, manifest
         self.boss_fixture(source)
+        self.course_fixture(source)
         return manifests['attack']
 
     def boss_fixture(self, source):
@@ -418,6 +425,51 @@ class BrickToadsPlaceTests(unittest.TestCase):
         starter = named(root, "StarterGui")
         self.assertEqual(starter.findtext("Properties/token[@name='ScreenOrientation']"), "4")
 
+    def test_course_vehicles_are_mandatory_flat_private_exact_textured_resources(self):
+        path = self.root / 'assets/vehicles/canonical-course/roblox-course-vehicles.json'
+        receipt = json.loads(path.read_bytes())
+        storage = named(ET.fromstring(self.builder.build(self.root)), 'ServerStorage')
+        folder = named(storage, 'BrickToadsCourseTemplates')
+        self.assertEqual(folder.attrib['class'], 'Folder')
+        self.assertEqual({p.findtext("Properties/string[@name='Name']") for p in folder.findall('Item')},
+                         {'Speeder','Surfboard','Jet','ClingerVehicle'})
+        self.assertEqual(sum(p.attrib['class']=='MeshPart' for p in folder.iter('Item')),36)
+        for kind, record in receipt['templates'].items():
+            model=named(folder,kind)
+            self.assertEqual(model.attrib['class'],'Model')
+            self.assertEqual(named(model,'AppearanceProfile').findtext("Properties/string[@name='Value']"),'CanonicalCourseVehicle')
+            self.assertEqual(named(model,'CourseKind').findtext("Properties/string[@name='Value']"),kind)
+            self.assertEqual(named(model,'SourcePin').findtext("Properties/string[@name='Value']"),receipt['sourcePin'])
+            for field in ('deckTop','deckLength','deckWidth'):
+                node=named(model,field[0].upper()+field[1:])
+                self.assertEqual(node.attrib['class'],'NumberValue')
+                self.assertEqual(float(node.findtext("Properties/double[@name='Value']")),record[field])
+            self.assertFalse({n.attrib['class'] for n in model.iter('Item')}
+                             - {'Model','MeshPart','SurfaceAppearance','StringValue','NumberValue'})
+            for row in record['parts']:
+                mesh=named(model,row['name'])
+                self.assertEqual(mesh.findtext("Properties/Content[@name='MeshId']/url"),row['meshId'])
+                self.assertEqual(mesh.findtext("Properties/Content[@name='TextureID']/url"),row['textureId'])
+                for axis,value in zip('XYZ',row['size']):
+                    self.assertEqual(float(mesh.findtext(f"Properties/Vector3[@name='size']/{axis}")),value)
+                for axis,value in zip('XYZ',row['meshSize']):
+                    self.assertEqual(float(mesh.findtext(f"Properties/Vector3[@name='InitialSize']/{axis}")),value)
+                for field,value in zip(('X','Y','Z','R00','R01','R02','R10','R11','R12','R20','R21','R22'),row['cframe']):
+                    self.assertEqual(float(mesh.findtext(f"Properties/CoordinateFrame[@name='CFrame']/{field}")),value)
+                self.assertEqual([n.attrib['class'] for n in mesh.findall('Item')],
+                                 ['SurfaceAppearance']*len(row['surfaceAppearances']))
+                for surface in row['surfaceAppearances']:
+                    appearance=named(mesh,'SurfaceAppearance')
+                    self.assertEqual(appearance.findtext("Properties/Content[@name='ColorMap']/url"),surface['colorMap'])
+                for flag in ('CanCollide','CanTouch','CanQuery'):
+                    self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"),'false')
+                for flag in ('Anchored','Massless'):
+                    self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"),'true')
+
+    def test_missing_course_vehicle_registry_is_not_silently_omitted(self):
+        (self.root / 'assets/vehicles/canonical-course/roblox-course-vehicles.json').unlink()
+        with self.assertRaises(FileNotFoundError):self.builder.build(self.root)
+
     def test_sources_are_current_and_server_code_is_private(self):
         root = ET.fromstring(self.builder.build(self.root))
         server = named(named(root, "ServerScriptService"), "BrickToads")
@@ -522,6 +574,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             shutil.copytree(self.root / "src", source / "src")
             shutil.copytree(self.root / "assets/characters/canonical-hero", source / "assets/characters/canonical-hero")
             shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
+            self.course_fixture(source)
             with self.assertRaises(FileNotFoundError):
                 self.builder.build(source, include_character_study=True)
 
@@ -533,6 +586,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             shutil.copytree(self.root / "src", source / "src")
             shutil.copytree(self.root / "assets/characters/canonical-hero", source / "assets/characters/canonical-hero")
             shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
+            self.course_fixture(source)
             self.builder.build(source)
 
     def test_canonical_player_templates_are_default_private_exact_uploaded_resources(self):
@@ -615,6 +669,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
             shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
+            self.course_fixture(source)
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             default = folder / manifest.get('sourceGlbFile', 'canonical-hero-player1.glb')
@@ -635,6 +690,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
             shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
+            self.course_fixture(source)
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             for filename in ('../outside.glb', '..\\outside.glb', '/outside.glb', 'C:\\outside.glb',
@@ -653,6 +709,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
             shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
+            self.course_fixture(source)
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             manifest['sourceGlbFile'] = 'review-missing-hero.glb'
@@ -671,6 +728,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
             shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
+            self.course_fixture(source)
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             surface = {'name': 'SurfaceAppearance', 'colorMap': 'rbxassetid://101',

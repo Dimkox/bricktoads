@@ -50,7 +50,10 @@ assert(sourceWorld:spawn(2,'source-context-p2',nil,false,'Mr. Yellow'))
 local sourceBody=sourceWorld.actors[1]
 local accepted={action='HeroBoot',actorId='source-context-p1',at=2.1,tuning={windup=.1}}
 local sourceState={attack=accepted,reactionEpoch=3,lastStrikeAction='HeroJab',strikeRecoveryUntil=1.8}
-local sourceSession={now=2,sourceCombat={},combat={[1]=sourceState,[2]={}}}
+local sourceSession={now=2,state={levelEpoch=2},sourceCombat={},combat={[1]=sourceState,[2]={}}}
+local dashResult={branch='DashLowLifeTail',profile=3,tuning=accepted.tuning,body=sourceBody.model,
+    actorId='source-context-p1',levelEpoch=2,at=2}
+sourceBody.dashPresentationResult=dashResult
 sourceBody.root.AssemblyLinearVelocity=vector(8,0,0)
 local function capture()
     sourceWorld:updatePresentation(sourceSession,.1,{})
@@ -59,6 +62,8 @@ end
 local ctx=capture()
 assert(ctx.attack==accepted and ctx.actorId=='source-context-p1' and ctx.now==2 and ctx.enabled==true,
     'Presentation must use the accepted server attack table and current body identity')
+assert(ctx.body==sourceBody.model and ctx.levelEpoch==2 and ctx.dashResult==dashResult,
+    'World must forward the actual body epoch and exact confirmed Dash result without reconstructing it')
 assert(ctx.reactionEpoch==3 and ctx.recoveryAction=='HeroJab' and ctx.recoveryUntil==1.8)
 assert(ctx.speed==8 and ctx.dt==.1 and ctx.grounded==true)
 assert(sourceContexts[sourceWorld.actors[2]].attack==nil,'The second actor must not borrow another hero attack')
@@ -68,6 +73,29 @@ sourceWorld.config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=
 sourceWorld.campaignModes={mode='Ascent',actors={[1]={grounded=false}}}
 assert(capture().visualState=='Air' and capture().grounded==false,'Campaign jumps must reach the source air selector')
 sourceBody.campaignControl=nil;sourceWorld.campaignModes=nil;sourceWorld.config.Movement=nil
+
+-- A mounted cosmetic deck comes only from this body's live course resource.
+sourceBody.campaignControl=true
+sourceWorld.config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75}
+local mountActor={mounted=true,actorId='source-context-p1',grounded=true,velocity={x=0,y=0,z=0}}
+sourceWorld.campaignModes={mode='Speeder',actors={[1]=mountActor}}
+local mountModel=node('Model','MountResource',sourceWorld.geometry)
+local mountSkin=node('Model','MountSkin',mountModel)
+local mountPart=node('Part','MountProxy',sourceWorld.geometry)
+local mountState={model=mountModel,skin=mountSkin,deckWorldY=4.25}
+local mountRow={part=mountPart,courseAppearance=mountState}
+sourceWorld.campaignWorld={world=sourceWorld,objects={['vehicle-1']=mountRow},step=function()end}
+assert(capture().rideDeckY==4.25,'Forward this mounted body live cosmetic deck plane')
+sourceState.reactionEnd=3;assert(capture().rideDeckY==nil,'A reaction cannot inherit mounted alignment');sourceState.reactionEnd=nil
+mountActor.actorId='old-body';assert(capture().rideDeckY==nil,'Reject the previous mounted actor');mountActor.actorId='source-context-p1'
+mountState.deckWorldY=0/0;assert(capture().rideDeckY==nil,'Reject a nonfinite deck plane');mountState.deckWorldY=4.25
+mountModel.Parent=nil;assert(capture().rideDeckY==nil,'Reject removed mounted cosmetics');mountModel.Parent=sourceWorld.geometry
+mountSkin.Parent=nil;assert(capture().rideDeckY==nil,'Reject replaced mounted skin');mountSkin.Parent=mountModel
+mountPart.Parent=nil;assert(capture().rideDeckY==nil,'Reject removed vehicle proxy');mountPart.Parent=sourceWorld.geometry
+sourceWorld.campaignWorld.objects={['clinger-1']=mountRow};assert(capture().rideDeckY==4.25,'Clinger uses the same cosmetic deck contract')
+sourceWorld.campaignWorld=nil;sourceWorld.campaignModes=nil;sourceBody.campaignControl=nil;sourceWorld.config.Movement=nil
+mountModel:Destroy();mountPart:Destroy();assert(capture().rideDeckY==nil,'Leaving a vehicle clears alignment context')
+print('PASS mounted presentation forwards only the current body live deck and clears stale interrupted or removed resources')
 
 local function blocked(reason)
     local context=capture()

@@ -1,3 +1,12 @@
 require('./gameplay/CanonicalHeroPresentation.spec')(
     require('../src/server/gameplay/CanonicalHeroPresentation'),
     require('../src/server/gameplay/CanonicalAnimation'))
+require('./gameplay/DashPresentation.spec')(
+    require('../src/server/gameplay/CanonicalHeroPresentation'),
+    require('../src/server/gameplay/CanonicalAnimation'),
+    require('../src/server/gameplay/LevelDirector'),
+    require('../src/stand/server/Combat'),
+    require('../src/server/gameplay/GameConfig')(
+        require('../src/stand/server/Config'),require('../src/server/gameplay/LevelDefinition')),
+    require('../src/stand/server/Session'),require('../src/server/RunLifecycle'),
+    require('./stand/FakeWorld'),require('../src/server/gameplay/SourceCombat'))

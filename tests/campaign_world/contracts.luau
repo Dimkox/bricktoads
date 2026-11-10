@@ -1,4 +1,22 @@
 -- Real adapter functions, deliberately fake engine geometry. Native checks are separate.
+local rawCFrameNew=env.CFrame.new
+env.CFrame.new=function(...)
+    local n=select('#',...);local first=...
+    assert(n==0 or n==1 and type(first)=='table'and type(first.X)=='number'and type(first.Y)=='number'and type(first.Z)=='number'
+        or n==3 or n==12,'CFrame.new requires zero, Vector3, three or twelve arguments')
+    if n==3 or n==12 then for _,v in ipairs({...})do assert(type(v)=='number','CFrame.new coordinates must be numbers')end end
+    return rawCFrameNew(...)
+end
+local ActualCourseAppearance=source(CourseAppearanceSource)
+env.script={Parent={CourseAppearance='CourseAppearance'}}
+env.require=function(name)assert(name=='CourseAppearance');return ActualCourseAppearance end
+function Frame:GetComponents()
+    local c,s=math.cos(self.rotationY or 0),math.sin(self.rotationY or 0)
+    return self.Position.X,self.Position.Y,self.Position.Z,c,0,s,0,1,0,-s,0,c
+end
+function Frame.__add(a,b)
+    local r=frame(a.Position+b);r.rotationX,r.rotationY,r.rotationZ=a.rotationX,a.rotationY,a.rotationZ;return r
+end
 local campaignWorld=World.new(Base,{FallY=-35,WalkSpeed=16,JumpPower=50},
     {name='CampaignAdapterContract',offset={x=90,y=20,z=1024}})
 Base.spawn(campaignWorld,1,'same-actor',nil,false,'Mr. Green')
@@ -183,3 +201,58 @@ assert(fallback.Transparency~=1 and fallback.CanCollide and fallback.CanQuery,
     'Rejected imported art must retain the visible original support')
 rendered.castAppearance.attach=attach;rendered:campaignRemove('rejected-art')
 print('PASS serpent resize rebuilds cached geometry and failed imports preserve visible physical support')
+
+-- The new presentation adapter must leave the actual hazard/support registry alone.
+local courseTemplates=node('Folder','BrickToadsCourseTemplates',castStorage)
+local vehicleTemplate=node('Model','Speeder',courseTemplates)
+for name,text in pairs({AppearanceProfile='CanonicalCourseVehicle',CourseKind='Speeder',
+    SourcePin='f1a43b69577246850d136473700a333b3cdfe93f'})do
+    local n=node('StringValue',name,vehicleTemplate);n.Value=text
+end
+for name,value in pairs({DeckTop=0,DeckLength=6,DeckWidth=3})do
+    local n=node('NumberValue',name,vehicleTemplate);n.Value=value
+end
+local deck=node('MeshPart','Deck',vehicleTemplate);deck.Size=vector(3,.4,6);deck.CFrame=frame(0,-.2,0)
+deck.MeshId='rbxassetid://1234';deck.Transparency=0
+env.game.GetService=function(self,name)
+    if name=='ServerStorage'then return castStorage end
+    if name=='CollectionService'then return {AddTag=function(_,model,tag)model:SetAttribute('TestTag',tag)end}end
+    return oldGetService(self,name)
+end
+local floorCount=#rendered.floors
+local vehicle=rendered:campaignObject('actual-vehicle','Speeder',{x=10,y=.4,z=4},{w=6,h=.9,d=3},{collidable=false})
+local vehicleRow=rendered.campaignWorld.objects['actual-vehicle'];local ownedVehicle=assert(vehicleRow.courseAppearance).model
+assert(#rendered.floors==floorCount and #rendered.allFloors==floorCount,'Vehicle art became a respawn surface')
+assert(not vehicle.CanCollide and not vehicle.CanQuery and vehicle.Size.X==6 and vehicle.Size.Y==.9 and vehicle.Size.Z==3)
+rendered:campaignObject('actual-vehicle','Wall',{x=10,y=3,z=4},{w=3,h=18,d=12},{alpha=.1,collidable=false})
+assert(ownedVehicle.destroyed and vehicle.destroyed,'Vehicle kind replacement leaked its cosmetic model')
+local wallRow=rendered.campaignWorld.objects['actual-vehicle'];local wall=wallRow.part
+assert(wallRow.courseAppearance and not wall.CanCollide and not wall.CanQuery and #rendered.floors==floorCount)
+local moving=rendered:campaignObject('actual-moving-wall','MovingWall',{x=0,y=6,z=10},{w=4,h=14,d=5},{collidable=true})
+local movingRow=rendered.campaignWorld.objects['actual-moving-wall'];local oldModel=movingRow.courseAppearance.model
+assert(moving.CanCollide and moving.CanQuery and moving:GetAttribute('SurfaceId')=='rope-test:dynamic:actual-moving-wall')
+assert(rendered.floors[#rendered.floors]==moving and #rendered.floors==floorCount+1)
+rendered:campaignObject('actual-moving-wall','MovingWall',{x=20,y=8,z=12},{w=4,h=14,d=5},{collidable=true,yaw=.7})
+assert(movingRow.courseAppearance.model==oldModel and movingRow.part==moving,'Motion must reuse the original collider and cosmetic model')
+local pose=movingRow.courseAppearance.rows[1].part.CFrame
+eq(pose.Position,90,18,524,'Wall cosmetic lost group offset or dynamic movement')
+assert(math.abs(pose.rotationY-.7)<1e-6,'Moving wall cosmetic lost yaw')
+rendered:campaignObject('actual-moving-wall','MovingWall',{x=20,y=8,z=12},{w=6,h=16,d=7},{collidable=true})
+assert(oldModel.destroyed and movingRow.part==moving and #rendered.floors==floorCount+1,'Resize replaced or duplicated a physical support')
+ownedVehicle=wallRow.courseAppearance.model;oldModel=movingRow.courseAppearance.model
+rendered.campaignWorld:close()
+assert(ownedVehicle.destroyed and oldModel.destroyed and moving.destroyed and #rendered.floors==floorCount,
+    'Course close leaked appearance or retained an obsolete physical floor')
+print('PASS vehicle and volumetric structure lifecycle preserve exact colliders, floor membership and group coordinates')
+
+local surfTemplate=vehicleTemplate:Clone();surfTemplate.Name='Surfboard';surfTemplate.CourseKind.Value='Surfboard';surfTemplate.Parent=courseTemplates
+rendered.campaignWorld.route.course.media={{kind='Water',minX=0,maxX=20,minZ=-5,maxZ=5,minY=-3,maxY=4}}
+local surf=rendered:campaignObject('water-fit','Surfboard',{x=10,y=.4,z=0},{w=6,h=.9,d=3},{collidable=false})
+local surfRow=rendered.campaignWorld.objects['water-fit'];local surfSkin=assert(surfRow.courseAppearance)
+assert(math.abs(surfSkin.deckWorldY-14.1)<1e-6,'Surf deck must clear the covering water top plus group elevation')
+assert(not surf.CanCollide and not surf.CanQuery and #rendered.floors==floorCount,'Water fit changed physical support membership')
+rendered:campaignObject('water-fit','Surfboard',{x=30,y=.4,z=0},{w=6,h=.9,d=3},{collidable=false})
+assert(surfRow.courseAppearance==surfSkin and math.abs(surfSkin.deckWorldY-10.43)<1e-6,
+    'Leaving water must recompute placement from the anchor plane without rebuilding the skin')
+rendered:campaignRemove('water-fit')
+print('PASS surf placement uses only covering actual route water and retains scoped collider physics')

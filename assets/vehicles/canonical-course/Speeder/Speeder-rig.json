@@ -1,0 +1,824 @@
+{
+  "schema": 1,
+  "kind": "Speeder",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/vehicles/canonical-course/vehicle-source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "Source object2A: cyan/teal elongated hover-scooter; raised rear shoulders, forward cowling, dark rider recess and two raised handle shapes.",
+    "No road wheels added: source does not show a conventional two-wheel motorcycle."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up forward-Z; deck top Y0 at XZ centre; cosmetic hull below deck, handlebars ahead of rider.",
+  "bounds": [
+    [
+      -1.1196235330324715,
+      -0.959975652037693,
+      -2.851258292024123
+    ],
+    [
+      1.1196235330324664,
+      1.485,
+      2.6579822812628526
+    ]
+  ],
+  "sourceTrace": {
+    "kind": "Speeder",
+    "level": 3,
+    "bankRecipe": "Tunnel",
+    "sourceEvidence": "main.asm:9148-9208 object_bike and bike_frame_id; frames_koleso at main.asm:8955",
+    "paletteContext": {
+      "typeId": 24,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:136",
+      "trigger": [
+        5,
+        192
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        28,
+        44
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:123",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            39,
+            55
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs1.asm:135",
+          "trigger": [
+            5,
+            184
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            28,
+            44
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/turbotunnel_obj.4",
+        "firstTile": 42,
+        "tiles": 195,
+        "decodedCompleteTiles": 195,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "frames": [
+      {
+        "frameId": 42,
+        "frameHex": "2A",
+        "namespace": "object",
+        "metaspriteAddress": "B118",
+        "parts": [
+          {
+            "tile": 42,
+            "x": -11,
+            "y": -9,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 43,
+            "x": -3,
+            "y": -9,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 44,
+            "x": -7,
+            "y": -1,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 45,
+            "x": 1,
+            "y": -1,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 46,
+            "x": 5,
+            "y": -9,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 47,
+            "x": 11,
+            "y": -9,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 48,
+            "x": -15,
+            "y": -1,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 49,
+            "x": 9,
+            "y": -1,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 50,
+            "x": 15,
+            "y": -1,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 51,
+            "x": -13,
+            "y": 7,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 52,
+            "x": -5,
+            "y": 7,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 53,
+            "x": 3,
+            "y": 7,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -15,
+          "minY": -9,
+          "maxX": 22,
+          "maxY": 10
+        },
+        "width": 38,
+        "height": 20,
+        "png": "references/speeder-2a.png"
+      }
+    ],
+    "rgbColors": [
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        56,
+        180,
+        204
+      ]
+    ],
+    "unknown": []
+  },
+  "sourcePalette": {
+    "colors": [
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        56,
+        180,
+        204
+      ]
+    ],
+    "scope": "Representative source vehicle palette; RGB illustrative; recurring palette loops not reproduced."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -1.04,
+          -0.959975652037693,
+          -2.8029994001799396
+        ],
+        [
+          1.04,
+          -0.0701412435260555,
+          2.6579822812628526
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.04,
+          -0.959975652037693,
+          -2.8029994001799396
+        ],
+        [
+          1.04,
+          -0.0701412435260555,
+          2.6579822812628526
+        ]
+      ],
+      "vertices": 506,
+      "authoringVertices": 506,
+      "paletteSplitTriangles": 0,
+      "triangles": 1008
+    },
+    {
+      "name": "Nose",
+      "parent": "Body",
+      "pivot": [
+        0,
+        -0.08,
+        -1.5
+      ],
+      "localBounds": [
+        [
+          -0.83,
+          -0.23436606305281632,
+          -1.3512582920241232
+        ],
+        [
+          0.83,
+          0.4799935722615533,
+          0.6494690914737269
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.83,
+          -0.31436606305281634,
+          -2.851258292024123
+        ],
+        [
+          0.83,
+          0.3999935722615533,
+          -0.8505309085262731
+        ]
+      ],
+      "vertices": 242,
+      "authoringVertices": 242,
+      "paletteSplitTriangles": 0,
+      "triangles": 480
+    },
+    {
+      "name": "RiderDeck",
+      "parent": "Body",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -0.62,
+          -0.2,
+          -0.68
+        ],
+        [
+          0.62,
+          0.0,
+          1.6
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.62,
+          -0.2,
+          -0.68
+        ],
+        [
+          0.62,
+          0.0,
+          1.6
+        ]
+      ],
+      "vertices": 142,
+      "authoringVertices": 142,
+      "paletteSplitTriangles": 0,
+      "triangles": 280
+    },
+    {
+      "name": "Undercarriage",
+      "parent": "Body",
+      "pivot": [
+        0,
+        -0.63,
+        0.3
+      ],
+      "localBounds": [
+        [
+          -0.68,
+          -0.2799787020054866,
+          -2.3278330518832875
+        ],
+        [
+          0.68,
+          0.2064204924949241,
+          1.6087042834934584
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.68,
+          -0.9099787020054866,
+          -2.0278330518832877
+        ],
+        [
+          0.68,
+          -0.4235795075050759,
+          1.9087042834934584
+        ]
+      ],
+      "vertices": 202,
+      "authoringVertices": 202,
+      "paletteSplitTriangles": 0,
+      "triangles": 400
+    },
+    {
+      "name": "LeftEngine",
+      "parent": "Body",
+      "pivot": [
+        -0.7,
+        -0.55,
+        1.25
+      ],
+      "localBounds": [
+        [
+          -0.4196235330324716,
+          -0.32540192634580556,
+          -0.5465274401782467
+        ],
+        [
+          0.27962353303246645,
+          0.2641866480110876,
+          0.7
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.1196235330324715,
+          -0.8754019263458056,
+          0.7034725598217533
+        ],
+        [
+          -0.4203764669675335,
+          -0.28581335198891245,
+          1.95
+        ]
+      ],
+      "vertices": 162,
+      "authoringVertices": 162,
+      "paletteSplitTriangles": 0,
+      "triangles": 316
+    },
+    {
+      "name": "LeftTailFin",
+      "parent": "Body",
+      "pivot": [
+        -0.65,
+        -0.04,
+        1.45
+      ],
+      "localBounds": [
+        [
+          -0.16499999999999992,
+          -0.11000000000000001,
+          -1.0
+        ],
+        [
+          0.025000000000000022,
+          0.9500000000000001,
+          0.9299999999999999
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.815,
+          -0.15000000000000002,
+          0.44999999999999996
+        ],
+        [
+          -0.625,
+          0.91,
+          2.38
+        ]
+      ],
+      "vertices": 22,
+      "authoringVertices": 22,
+      "paletteSplitTriangles": 0,
+      "triangles": 40
+    },
+    {
+      "name": "LeftHandle",
+      "parent": "Body",
+      "pivot": [
+        -0.48,
+        0.34,
+        -1.08
+      ],
+      "localBounds": [
+        [
+          -0.6000000000000001,
+          -0.25967269073161336,
+          -0.5081735698767298
+        ],
+        [
+          0.2293512394268794,
+          1.145,
+          -0.05340025292837347
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.08,
+          0.08032730926838663,
+          -1.5881735698767299
+        ],
+        [
+          -0.2506487605731206,
+          1.485,
+          -1.1334002529283735
+        ]
+      ],
+      "vertices": 180,
+      "authoringVertices": 180,
+      "paletteSplitTriangles": 0,
+      "triangles": 352
+    },
+    {
+      "name": "RightEngine",
+      "parent": "Body",
+      "pivot": [
+        0.7,
+        -0.55,
+        1.25
+      ],
+      "localBounds": [
+        [
+          -0.2796235330324614,
+          -0.32540192634580556,
+          -0.5465274401782467
+        ],
+        [
+          0.41962353303246647,
+          0.2641866480110876,
+          0.7
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.42037646696753855,
+          -0.8754019263458056,
+          0.7034725598217533
+        ],
+        [
+          1.1196235330324664,
+          -0.28581335198891245,
+          1.95
+        ]
+      ],
+      "vertices": 162,
+      "authoringVertices": 162,
+      "paletteSplitTriangles": 0,
+      "triangles": 316
+    },
+    {
+      "name": "RightTailFin",
+      "parent": "Body",
+      "pivot": [
+        0.65,
+        -0.04,
+        1.45
+      ],
+      "localBounds": [
+        [
+          -0.025000000000000022,
+          -0.11000000000000001,
+          -1.0
+        ],
+        [
+          0.16499999999999992,
+          0.9500000000000001,
+          0.9299999999999999
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.625,
+          -0.15000000000000002,
+          0.44999999999999996
+        ],
+        [
+          0.815,
+          0.91,
+          2.38
+        ]
+      ],
+      "vertices": 22,
+      "authoringVertices": 22,
+      "paletteSplitTriangles": 0,
+      "triangles": 40
+    },
+    {
+      "name": "RightHandle",
+      "parent": "Body",
+      "pivot": [
+        0.48,
+        0.34,
+        -1.08
+      ],
+      "localBounds": [
+        [
+          -0.2293512394268794,
+          -0.25967269073161336,
+          -0.5081735698767298
+        ],
+        [
+          0.6000000000000001,
+          1.145,
+          -0.05340025292837347
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.2506487605731206,
+          0.08032730926838663,
+          -1.5881735698767299
+        ],
+        [
+          1.08,
+          1.485,
+          -1.1334002529283735
+        ]
+      ],
+      "vertices": 180,
+      "authoringVertices": 180,
+      "paletteSplitTriangles": 0,
+      "triangles": 352
+    }
+  ],
+  "joints": [
+    {
+      "name": "Nose",
+      "parent": "Body",
+      "child": "Nose",
+      "parentAttachment": [
+        0,
+        -0.08,
+        -1.5
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RiderDeck",
+      "parent": "Body",
+      "child": "RiderDeck",
+      "parentAttachment": [
+        0,
+        0,
+        0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Undercarriage",
+      "parent": "Body",
+      "child": "Undercarriage",
+      "parentAttachment": [
+        0,
+        -0.63,
+        0.3
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftEngine",
+      "parent": "Body",
+      "child": "LeftEngine",
+      "parentAttachment": [
+        -0.7,
+        -0.55,
+        1.25
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftTailFin",
+      "parent": "Body",
+      "child": "LeftTailFin",
+      "parentAttachment": [
+        -0.65,
+        -0.04,
+        1.45
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftHandle",
+      "parent": "Body",
+      "child": "LeftHandle",
+      "parentAttachment": [
+        -0.48,
+        0.34,
+        -1.08
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightEngine",
+      "parent": "Body",
+      "child": "RightEngine",
+      "parentAttachment": [
+        0.7,
+        -0.55,
+        1.25
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightTailFin",
+      "parent": "Body",
+      "child": "RightTailFin",
+      "parentAttachment": [
+        0.65,
+        -0.04,
+        1.45
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightHandle",
+      "parent": "Body",
+      "child": "RightHandle",
+      "parentAttachment": [
+        0.48,
+        0.34,
+        -1.08
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        56,
+        180,
+        204
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 3584,
+    "vertices": 1820,
+    "closedComponents": true,
+    "components": 14,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0011442778708983083
+  },
+  "deck": {
+    "top": 0,
+    "length": 5.6,
+    "width": 2.4
+  }
+}

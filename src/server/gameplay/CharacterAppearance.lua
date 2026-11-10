@@ -211,6 +211,37 @@ local function applyGeometry(state,geometry)
     for _,joint in pairs(state.joints)do joint.motor.C1=joint.attachment1.CFrame end
     if geometry.rootOffset then state.rootJoint.motor.C0=state.rootJoint.base*CFrame.new(table.unpack(geometry.rootOffset))end
 end
+local function alignRideDeck(state,sourcePose,deckY)
+    if not sourcePose or sourcePose.kind~='Ride' or not finite(deckY)then return end
+    local root=state.rootJoint and state.rootJoint.motor
+    if not root or not root.Part0 or not root.Part1 then return end
+    -- Native cosmetic Part.CFrames may still describe the previous heartbeat.
+    -- Solve this frame's exact authored Motor6D equations from the physical
+    -- torso, without moving any physical or cosmetic part directly.
+    local frames={[root.Part1]=root.Part0.CFrame*root.C0*root.C1:Inverse()}
+    for _,definition in ipairs(JOINTS)do
+        local joint=state.joints[definition[1]].motor
+        local parent=joint.Part0 and frames[joint.Part0]
+        if not parent or not joint.Part1 then return end
+        frames[joint.Part1]=parent*joint.C0*joint.C1:Inverse()
+    end
+    local lowest=math.huge
+    for _,name in ipairs({'LeftFoot','RightFoot'})do
+        local row=state.geometryParts[name];local p=row and row.part
+        local frame=p and p.Parent==state.model and frames[p]
+        if not frame then return end
+        for _,x in ipairs({-1,1})do for _,y in ipairs({-1,1})do for _,z in ipairs({-1,1})do
+            local corner=frame*CFrame.new(p.Size.X*x/2,p.Size.Y*y/2,p.Size.Z*z/2)
+            lowest=math.min(lowest,corner.Position.Y)
+        end end end
+    end
+    local delta=deckY-lowest
+    if not finite(delta)then return end
+    -- Convert a WORLD vertical shift into the torso's current local axes.
+    -- restoreGeometry resets Root.C0 before every update, so this never stacks.
+    local localShift=(root.Part0.CFrame.Rotation:Inverse()*CFrame.new(0,delta,0)).Position
+    root.C0=CFrame.new(localShift)*root.C0
+end
 
 function Appearance.detach(actor)
     local state=actor.appearance
@@ -288,6 +319,7 @@ function Appearance.update(actor,context)
             joint.motor.C0=CFrame.new(joint.base.Position)*delta*joint.base.Rotation
         end
     end
+    alignRideDeck(state,sourcePose,context and context.rideDeckY)
 end
 
 function Appearance.attach(actor,heroTemplate,templates,morphTemplates)

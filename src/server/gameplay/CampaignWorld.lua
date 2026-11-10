@@ -3,6 +3,7 @@
 local CampaignWorld={}
 CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
+local CourseAppearance=require(script.Parent.CourseAppearance)
 local palettes={
     Rope={45,63,78},Speeder={106,75,47},Ice={133,185,206},Surf={42,124,141},
     Serpents={71,111,69},Jet={125,65,44},Ascent={76,88,107},Tubes={61,105,114},
@@ -314,12 +315,23 @@ function CampaignWorld:object(id,kind,point,size,metadata)
     if row.label and metadata.label then row.label.Text=metadata.label end
     row.expiresAt=metadata.expiresAt
     if kind=='Serpent'then self:_serpent(row,self.now or 0)end
+    local waterSurfaceY
+    if kind=='Surfboard'or kind=='Board'then
+        for _,water in ipairs(self.route.course.media or{})do
+            if water.kind=='Water'and point.x>=water.minX and point.x<=water.maxX
+                and point.z>=water.minZ and point.z<=water.maxZ then
+                waterSurfaceY=math.max(waterSurfaceY or-math.huge,water.maxY+self.world.offset.Y)
+            end
+        end
+    end
+    CourseAppearance.update(row,self.world.geometry,metadata,waterSurfaceY)
     return row.part
 end
 function CampaignWorld:remove(id)
     local row=self.objects[id]
     if not row then return end
     removeSerpent(row)
+    CourseAppearance.remove(row)
     for _,floors in ipairs({self.world.allFloors,self.world.floors}) do
         for i=#floors,1,-1 do if floors[i]==row.part then table.remove(floors,i) end end
     end

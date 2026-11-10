@@ -30,7 +30,7 @@ function N:remove()
     if self.Parent then local old=self.Parent;for i,n in ipairs(old.children)do if n==self then table.remove(old.children,i);break end end;self.props.Parent=nil end
     self.AncestryChanged:Fire(self,nil)
 end
-local function setup(mode,initial)
+local function setup(mode,initial,contract)
     local world=node('Workspace','Workspace');local jobs,timers={},{};local added,removed=signal(),signal();local tagged={}
     local collection={GetTagged=function()return table.clone(tagged)end,GetInstanceAddedSignal=function()return added end,GetInstanceRemovedSignal=function()return removed end}
     local provider={calls=0,mode=mode or 'Success'}
@@ -45,24 +45,41 @@ local function setup(mode,initial)
         end
     end
     local function actor(id,mesh)
-        local owner=node('Model','Actor_'..id,world);owner:setAttr('CastAppearance','CanonicalNESCast')
-        local skin=node('Model','PigAppearance',owner);skin:setAttr('CanonicalCastSkin',true);skin:setAttr('CastSkinId',id)
-        local p=node('MeshPart','Body',skin);p.props.MeshId=mesh or 'rbxassetid://101';p.props.TextureID='rbxassetid://102';p.props.LocalTransparencyModifier=.25;p:setAttr('CastVisibleTransparency',.2)
+        local course=contract=='Course'
+        local owner=node('Model','Actor_'..id,world);owner:setAttr(course and 'CourseAppearance' or 'CastAppearance',course and 'CanonicalCourseVehicle' or 'CanonicalNESCast')
+        local skin=node('Model','PigAppearance',owner);skin:setAttr(course and 'CanonicalCourseSkin' or 'CanonicalCastSkin',true);skin:setAttr(course and 'CourseSkinId' or 'CastSkinId',id)
+        local p=node('MeshPart','Body',skin);p.props.MeshId=mesh or 'rbxassetid://101';p.props.TextureID='rbxassetid://102';p.props.LocalTransparencyModifier=.25;p:setAttr(course and 'CourseVisibleTransparency' or 'CastVisibleTransparency',.2)
         local surface=node('SurfaceAppearance','Surface',p);surface.props.ColorMap='rbxassetid://103'
-        local fallback=node('Part','Torso',owner);fallback.props.LocalTransparencyModifier=.1;fallback:setAttr('CastFallbackOwner',id);fallback:setAttr('CastFallbackTransparency',.2)
-        local ref=node('ObjectValue','CastFallbackTarget',skin);ref.props.Value=fallback
+        local fallback=node('Part','Torso',owner);fallback.props.LocalTransparencyModifier=.1;fallback:setAttr(course and 'CourseFallbackOwner' or 'CastFallbackOwner',id);fallback:setAttr(course and 'CourseFallbackTransparency' or 'CastFallbackTransparency',.2)
+        local ref=node('ObjectValue',course and 'CourseFallbackTarget' or 'CastFallbackTarget',skin);ref.props.Value=fallback
         tagged[#tagged+1]=skin;added:Fire(skin)
         return {owner=owner,skin=skin,part=p,surface=surface,fallback=fallback,ref=ref}
     end
     local existing=initial and actor('existing')or nil
     local gate=Gate.new({workspace=world,collectionService=collection,contentProvider=provider,successStatus='Success',
-        spawn=function(fn)jobs[#jobs+1]=fn end,delay=function(seconds,fn)timers[#timers+1]={seconds=seconds,fn=fn}end})
+        spawn=function(fn)jobs[#jobs+1]=fn end,delay=function(seconds,fn)timers[#timers+1]={seconds=seconds,fn=fn}end},contract)
     local function run()while #jobs>0 do table.remove(jobs,1)()end end
     local function retry()assert(#timers>0,'No retry scheduled');local timer=table.remove(timers,1);timer.fn();run();return timer.seconds end
     return gate,actor,run,provider,removed,world,jobs,existing,timers,retry
 end
 local passed=0
 local function test(name,fn)fn();passed+=1;print('PASS cast visibility '..name)end
+test('course vehicles use their own typed-resource and fallback contract',function()
+    local g,actor,run,provider=setup('Success',nil,'Course');local a=actor('vehicle')
+    assert(a.part.LocalTransparencyModifier==1 and a.fallback.LocalTransparencyModifier==.1,
+        'Loading vehicle must retain its source placeholder')
+    run();assert(provider.calls==1 and a.part.LocalTransparencyModifier==.25 and a.fallback.LocalTransparencyModifier==1)
+    assert(a.part.Transparency==.2 and a.fallback.CanCollide)
+    g:destroy();assert(a.fallback.LocalTransparencyModifier==.1)
+end)
+test('course contract rejects wrong owner metadata and protects a replacement fallback',function()
+    local g,actor,run=setup('Success',nil,'Course');local a=actor('vehicle');run()
+    a.fallback:setAttr('CourseFallbackOwner','new-vehicle');a.fallback.props.LocalTransparencyModifier=.7
+    a.owner:setAttr('CourseAppearance',nil)
+    assert(g:diagnostics().tracked==0 and a.fallback.LocalTransparencyModifier==.7)
+    local b=actor('other');b.owner:setAttr('CourseAppearance','CanonicalNESCast');run()
+    assert(g:diagnostics().tracked==0 and b.fallback.LocalTransparencyModifier==.1)
+end)
 test('Pending keeps fallback visible and Ready switches only local modifiers',function()
     local g,actor,run,provider=setup();local a=actor('a')
     assert(a.part.LocalTransparencyModifier==1 and a.fallback.LocalTransparencyModifier==.1)

@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "families": {
+    "Speeder": {
+      "status": "PASS",
+      "triangles": 3584,
+      "vertices": 1820,
+      "closedComponents": true,
+      "components": 14,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0011442778708983083
+    },
+    "Surfboard": {
+      "status": "PASS",
+      "triangles": 792,
+      "vertices": 412,
+      "closedComponents": true,
+      "components": 8,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 7.13142115840088e-05
+    },
+    "Jet": {
+      "status": "PASS",
+      "triangles": 2876,
+      "vertices": 1480,
+      "closedComponents": true,
+      "components": 21,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0006842326048891822
+    },
+    "ClingerVehicle": {
+      "status": "PASS",
+      "triangles": 4648,
+      "vertices": 2372,
+      "closedComponents": true,
+      "components": 26,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0005165604762118883
+    }
+  },
+  "combined": {
+    "sha256": "637d406e20e3596f56f5f812027aecfb669d02ad5147d7f4db7ab22e022a7d46",
+    "bytes": 303500,
+    "familyCount": 4,
+    "meshCount": 36
+  },
+  "softwarePreview": "vehicle-model-contact-sheet.png",
+  "nativeImport": "PENDING"
+}

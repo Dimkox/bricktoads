@@ -87,6 +87,10 @@ jobs:
           python3 tests/guardian_appearance/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/boss_intro_asset/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/campaign_world/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/course_appearance/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tools/test_course_asset_packaging.py
+          python3 tests/test_analyze_campaign_run.py
+          python3 tools/qa/check_full_campaign_av_observer.py --luau /tmp/bricktoads-luau/luau
           python3 tests/campaign_input/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/scooter_network/test_client_ready_order.py --luau /tmp/bricktoads-luau/luau
       - name: Compile Studio multiplayer acceptance tools
@@ -95,6 +99,10 @@ jobs:
           /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_network.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/studio_scooter_role_network_acceptance.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_role_network.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/course_elements_acceptance.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_catalog_acceptance.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_av_observer.client.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_presentation_observer.server.luau > /dev/null
       - name: Structural build tests
         run: python3 tools/test_build.py
       - name: English source and localization coverage
