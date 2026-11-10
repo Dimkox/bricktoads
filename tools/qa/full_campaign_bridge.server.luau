@@ -179,6 +179,30 @@ local function foot(ctx,desired,combatPlan)
     local actualSpeed=math.sqrt(v.X*v.X+v.Z*v.Z)
     local canLaunch=a.humanoid.FloorMaterial~=Enum.Material.Air and not a.humanoid.PlatformStand
         and not combat.reactionEnd and not combat.deathAt and requested and actualSpeed>=18
+    local material=a.humanoid.FloorMaterial
+    local standing=support and not state.jump and hero.status=='Alive' and hero.connected and not hero.held
+        and a.model:GetAttribute('ActorId')==hero.actorId and a.root.Parent and not a.root.Anchored
+        and a.humanoid.Health>0 and not a.humanoid.PlatformStand and material and material~=Enum.Material.Air
+        and not combat.reactionEnd and not combat.deathAt and math.abs(v.Y)<2
+        and p.x>=support.minX and p.x<=support.maxX and p.z>=support.minZ and p.z<=support.maxZ
+        and math.abs(p.y-(support.top+3))<.75 and support.maxX-support.minX>6 and support.maxZ-support.minZ>6
+    if standing and combatPlan then
+        if combatPlan.hold and combat.attack then
+            qa.navigation={phase='Hold accepted strike on authored support',target=p}
+            return {x=0,z=0,run=false,primary=false,jump=false,hold=true}
+        elseif combatPlan.evasion then
+            local goal=point(math.clamp(p.x+(combatPlan.x or 0)*6,support.minX+3,support.maxX-3),support.top+3,
+                math.clamp(p.z+(combatPlan.z or 0)*6,support.minZ+3,support.maxZ-3))
+            local dx,dz=goal.x-p.x,goal.z-p.z;local n=math.max(1,math.sqrt(dx*dx+dz*dz))
+            qa.navigation={phase='Evade on authored support',target=goal}
+            return {x=dx/n,z=dz/n,run=false,primary=false,jump=false,evasion=true}
+        elseif combatPlan.primary==true and combatPlan.run==true and canLaunch and not combat.attack then
+            -- Preserve the already validated public running primary, including
+            -- facing/run axes. Session still selects and validates its Dash.
+            qa.navigation={phase='Running strike on authored support',target=desired}
+            return combatPlan
+        end
+    end
     local nav=Nav.plan(p,desired,floors,state,ctx.now,{grounded=canLaunch,
         vy=v.Y,allowCrossing=true,jumpLead=3.2})
     if nav.phase=='No support' then

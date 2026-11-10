@@ -1,0 +1,1143 @@
+{
+  "scope": "Read-only source-composition audit; no Studio or tracked source mutation",
+  "runId": "6eaab629-5a80-4786-8025-4c3502d449f7",
+  "seed": 503914550,
+  "hitCount": 7,
+  "hits": [
+    {
+      "at": 1794327022.2242,
+      "attempt": 1,
+      "attacker": -9,
+      "blocked": false,
+      "position": [
+        284.7751159667969,
+        2.999028205871582,
+        5.169754505157471
+      ],
+      "lastPreHitPhase": "Stage gap run-up",
+      "motionWindow": [
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Approach gap",
+          "velocity": {
+            "y": 1.3073696209175978e-05,
+            "x": 23.97743034362793,
+            "z": 1.0404202938079834
+          },
+          "decisionDt": 0.11432600021362305,
+          "at": 1794327021.696622,
+          "position": {
+            "y": 2.999999523162842,
+            "x": 277.3473815917969,
+            "z": 1.9794731140136719
+          },
+          "stock": 3,
+          "attempt": 1,
+          "plan": {
+            "aimX": 0.9995604706273372,
+            "x": 0.9992838121696123,
+            "z": 0.03783996215335304,
+            "aimZ": 0.029645666787173484,
+            "primary": false,
+            "run": true,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Approach gap",
+          "velocity": {
+            "y": 1.3004733773414046e-05,
+            "x": 23.977529525756836,
+            "z": 1.0382977724075317
+          },
+          "decisionDt": 0.14087700843811035,
+          "at": 1794327021.837499,
+          "position": {
+            "y": 2.999999523162842,
+            "x": 280.7444763183594,
+            "z": 2.126589775085449
+          },
+          "stock": 3,
+          "attempt": 1,
+          "plan": {
+            "aimX": 0.9997645218226584,
+            "x": 0.9996764597150903,
+            "z": 0.02543572077813715,
+            "aimZ": 0.02170025125917349,
+            "primary": false,
+            "run": true,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 1.3134746041032486e-05,
+            "x": 23.992156982421875,
+            "z": 0.6135050058364868
+          },
+          "decisionDt": 0.1452012062072754,
+          "at": 1794327021.9827,
+          "position": {
+            "y": 2.999999523162842,
+            "x": 284.0418701171875,
+            "z": 2.249180555343628
+          },
+          "stock": 3,
+          "attempt": 1,
+          "plan": {
+            "aimX": 0.999949612503744,
+            "x": -0.0875886439351671,
+            "z": 0.9961567293622016,
+            "aimZ": -0.010038548381717626,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Stage gap run-up",
+          "velocity": {
+            "y": 0.7461084127426147,
+            "x": -2.029468536376953,
+            "z": 15.711499214172363
+          },
+          "decisionDt": 0.14762187004089355,
+          "at": 1794327022.130322,
+          "position": {
+            "y": 2.9717209339141846,
+            "x": 285.0016784667969,
+            "z": 3.399744749069214
+          },
+          "stock": 3,
+          "attempt": 1,
+          "plan": {
+            "aimX": 0.8146787775344166,
+            "x": -0.9897066789085948,
+            "z": -0.1431107603352023,
+            "aimZ": -0.5799124842896802,
+            "primary": false,
+            "run": true,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        }
+      ]
+    },
+    {
+      "at": 1794327025.817176,
+      "attempt": 2,
+      "attacker": -9,
+      "blocked": false,
+      "position": [
+        271.0704040527344,
+        2.9992380142211914,
+        -3.89601731300354
+      ],
+      "lastPreHitPhase": "Walk",
+      "motionWindow": [
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 6.609188403672306e-06,
+            "x": -5.561007022857666,
+            "z": -15.0025053024292
+          },
+          "decisionDt": 0.13194894790649414,
+          "at": 1794327025.246032,
+          "position": {
+            "y": 2.999999761581421,
+            "x": 271.74176025390625,
+            "z": -5.982463359832764
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.349252445233595,
+            "x": -0.3474433251327483,
+            "z": -0.9377009842272213,
+            "aimZ": 0.9370286705850331,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -1.1026591195673063e-08,
+            "x": -5.559093475341797,
+            "z": -15.003215789794922
+          },
+          "decisionDt": 0.1349198818206787,
+          "at": 1794327025.380952,
+          "position": {
+            "y": 3,
+            "x": 271.0003662109375,
+            "z": -7.982855319976807
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.34866988730929477,
+            "x": 0.34866988730929477,
+            "z": 0.9372455973135984,
+            "aimZ": 0.9372455973135984,
+            "primary": false,
+            "run": true,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -0.8124843835830688,
+            "x": 7.8630290031433105,
+            "z": 21.405107498168945
+          },
+          "decisionDt": 0.11495804786682129,
+          "at": 1794327025.49591,
+          "position": {
+            "y": 2.9966018199920654,
+            "x": 271.21453857421875,
+            "z": -7.405722618103027
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.34880001194545684,
+            "x": -0.9372883508675828,
+            "z": 0.3485549416202948,
+            "aimZ": 0.9371971786485751,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.053701408207416534,
+            "x": 7.325529098510742,
+            "z": 20.272903442382812
+          },
+          "decisionDt": 0.13427209854125977,
+          "at": 1794327025.630182,
+          "position": {
+            "y": 2.9926674365997314,
+            "x": 272.2895202636719,
+            "z": -4.58176326751709
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.3001680652365513,
+            "x": 0.8655358541472808,
+            "z": -0.5008469678310301,
+            "aimZ": 0.9538863310752207,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.4762745201587677,
+            "x": -15.053787231445312,
+            "z": 5.536874294281006
+          },
+          "decisionDt": 0.1162710189819336,
+          "at": 1794327025.746453,
+          "position": {
+            "y": 2.9983317852020264,
+            "x": 270.8664245605469,
+            "z": -3.7281270027160645
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.9368688841788153,
+            "x": -0.8588731756291194,
+            "z": 0.5121883132059456,
+            "aimZ": 0.3496808457115453,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        }
+      ]
+    },
+    {
+      "at": 1794327027.765314,
+      "attempt": 2,
+      "attacker": -9,
+      "blocked": false,
+      "position": [
+        264.5849609375,
+        1.2626779079437256,
+        -9.18303108215332
+      ],
+      "lastPreHitPhase": "Walk",
+      "motionWindow": [
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -47.41858673095703,
+            "x": 4.173863410949707,
+            "z": 1.7358229160308838
+          },
+          "decisionDt": 0.13446402549743652,
+          "at": 1794327027.183682,
+          "position": {
+            "y": 7.871121883392334,
+            "x": 260.9193420410156,
+            "z": -11.073779106140137
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.820689662707269,
+            "x": 0.8206896627072687,
+            "z": 0.5713742009624072,
+            "aimZ": 0.5713742009624073,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        },
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 16.992700576782227,
+            "x": 7.153336524963379,
+            "z": 2.844265937805176
+          },
+          "decisionDt": 0.14656305313110352,
+          "at": 1794327027.330245,
+          "position": {
+            "y": 2.999990463256836,
+            "x": 261.40618896484375,
+            "z": -10.73494815826416
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.8210498507851335,
+            "x": 0.8210498507851335,
+            "z": 0.5708564990658423,
+            "aimZ": 0.5708564990658423,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        },
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -7.53237247467041,
+            "x": 7.1533379554748535,
+            "z": 2.8442814350128174
+          },
+          "decisionDt": 0.1250629425048828,
+          "at": 1794327027.455308,
+          "position": {
+            "y": 3.724665403366089,
+            "x": 262.16455078125,
+            "z": -10.253092765808105
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.8162517241655466,
+            "x": 0.8244905333478774,
+            "z": -0.5658757464494591,
+            "aimZ": 0.5776963932696589,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        },
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 7.450353145599365,
+            "x": 7.718133926391602,
+            "z": 2.0682501792907715
+          },
+          "decisionDt": 0.12694692611694336,
+          "at": 1794327027.582255,
+          "position": {
+            "y": 2.5655341148376465,
+            "x": 263.1265869140625,
+            "z": -9.92482852935791
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.7673212801413017,
+            "x": 0.7929602703370314,
+            "z": -0.6092733456068976,
+            "aimZ": 0.6412628579937513,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        },
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -10.193293571472168,
+            "x": 7.209721088409424,
+            "z": 3.9155635833740234
+          },
+          "decisionDt": 0.1313021183013916,
+          "at": 1794327027.713557,
+          "position": {
+            "y": 2.191606044769287,
+            "x": 264.1663818359375,
+            "z": -9.507589340209961
+          },
+          "stock": 2,
+          "attempt": 2,
+          "plan": {
+            "aimX": 0.6729961823203516,
+            "x": 0.7534710302665903,
+            "z": -0.6574811073703966,
+            "aimZ": 0.7396459548880342,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        }
+      ]
+    },
+    {
+      "at": 1794327030.886245,
+      "attempt": 3,
+      "attacker": -10,
+      "blocked": true,
+      "position": [
+        253.28907775878906,
+        2.9993858337402344,
+        -10.357616424560547
+      ],
+      "lastPreHitPhase": "Walk",
+      "motionWindow": [
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -2.5948447728296742e-05,
+            "x": -0.0030876377131789923,
+            "z": 24.00002098083496
+          },
+          "decisionDt": 0.13381695747375488,
+          "at": 1794327030.280801,
+          "position": {
+            "y": 3.0000009536743164,
+            "x": 243.79986572265625,
+            "z": -9.224719047546387
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.8864106531032497,
+            "x": 0.9321068127963561,
+            "z": -0.36218350257655113,
+            "aimZ": -0.4628997235525966,
+            "primary": false,
+            "run": true,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.03316247835755348,
+            "x": 23.538097381591797,
+            "z": -0.8591033220291138
+          },
+          "decisionDt": 0.11515402793884277,
+          "at": 1794327030.395955,
+          "position": {
+            "y": 2.9992096424102783,
+            "x": 245.36346435546875,
+            "z": -8.071638107299805
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.7879801808212996,
+            "x": 0.8240675111204288,
+            "z": -0.5664916037469416,
+            "aimZ": -0.6157006047039679,
+            "primary": false,
+            "run": true,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.12117908149957657,
+            "x": 22.37352752685547,
+            "z": -8.877511024475098
+          },
+          "decisionDt": 0.13310599327087402,
+          "at": 1794327030.529061,
+          "position": {
+            "y": 2.9959683418273926,
+            "x": 248.37857055664062,
+            "z": -9.082159042358398
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.651434195739606,
+            "x": 0.651434195739606,
+            "z": -0.7587051394455507,
+            "aimZ": -0.7587051394455507,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.002293682424351573,
+            "x": 19.828773498535156,
+            "z": -13.466395378112793
+          },
+          "decisionDt": 0.11738395690917969,
+          "at": 1794327030.646445,
+          "position": {
+            "y": 2.999943256378174,
+            "x": 250.69265747070312,
+            "z": -10.6548433303833
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.35135597898371806,
+            "x": 0.7758338434417494,
+            "z": 0.6309372768908197,
+            "aimZ": -0.9362419431067981,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.2379744052886963,
+            "x": 10.120170593261719,
+            "z": -11.670506477355957
+          },
+          "decisionDt": 0.11687588691711426,
+          "at": 1794327030.763321,
+          "position": {
+            "y": 2.987560987472534,
+            "x": 251.749267578125,
+            "z": -11.815877914428711
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": -0.026423178235414162,
+            "x": 0.7672900854691164,
+            "z": 0.6413001830194623,
+            "aimZ": -0.9996508468720163,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.0682179406285286,
+            "x": 12.375629425048828,
+            "z": 10.119014739990234
+          },
+          "decisionDt": 0.1176910400390625,
+          "at": 1794327030.881012,
+          "position": {
+            "y": 2.9984378814697266,
+            "x": 252.9819793701172,
+            "z": -10.613956451416016
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": -0.3587260806143904,
+            "x": 0.7883882993759789,
+            "z": 0.6151779331275236,
+            "aimZ": -0.9334428740351698,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        }
+      ]
+    },
+    {
+      "at": 1794327033.032591,
+      "attempt": 3,
+      "attacker": -10,
+      "blocked": false,
+      "position": [
+        250.15538024902344,
+        2.1274333000183105,
+        2.262230157852173
+      ],
+      "lastPreHitPhase": "Walk",
+      "motionWindow": [
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -5.41682243347168,
+            "x": 0.3753723204135895,
+            "z": 1.5232433080673218
+          },
+          "decisionDt": 0.1188039779663086,
+          "at": 1794327032.514839,
+          "position": {
+            "y": 2.6433587074279785,
+            "x": 249.85044860839844,
+            "z": 0.81293785572052
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.19803096669165848,
+            "x": 0.19803096669165848,
+            "z": -0.9801957642385358,
+            "aimZ": -0.9801957642385358,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        },
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -0.14577269554138184,
+            "x": -0.10751241445541382,
+            "z": 2.5691893100738525
+          },
+          "decisionDt": 0.16241717338562012,
+          "at": 1794327032.677256,
+          "position": {
+            "y": 2.234285593032837,
+            "x": 249.9367218017578,
+            "z": 1.1093509197235107
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.17026609114311908,
+            "x": 0.17026609114311908,
+            "z": -0.9853981216781587,
+            "aimZ": -0.9853981216781587,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        },
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -0.6485745310783386,
+            "x": 0.5591877698898315,
+            "z": 3.83427095413208
+          },
+          "decisionDt": 0.11965298652648926,
+          "at": 1794327032.796909,
+          "position": {
+            "y": 2.185622453689575,
+            "x": 249.9855499267578,
+            "z": 1.4315263032913208
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.1483748063807739,
+            "x": 0.9855266058039276,
+            "z": 0.16952082247496902,
+            "aimZ": -0.9889311992406085,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        },
+        {
+          "floor": "Enum.Material.Air",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.20814312994480133,
+            "x": 1.1155487298965454,
+            "z": 4.824979305267334
+          },
+          "decisionDt": 0.13337302207946777,
+          "at": 1794327032.930282,
+          "position": {
+            "y": 2.055527448654175,
+            "x": 250.114013671875,
+            "z": 2.057554244995117
+          },
+          "stock": 1,
+          "attempt": 3,
+          "plan": {
+            "aimX": 0.10680736389282651,
+            "x": 0.9855266058039276,
+            "z": 0.16952082247496902,
+            "aimZ": -0.994279732780602,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.FallingDown"
+        }
+      ]
+    },
+    {
+      "at": 1794327040.731663,
+      "attempt": 4,
+      "attacker": -10,
+      "blocked": false,
+      "position": [
+        243.6995086669922,
+        8.417167663574219,
+        6.561105251312256
+      ],
+      "lastPreHitPhase": "Walk",
+      "motionWindow": [
+        {
+          "floor": "Enum.Material.SmoothPlastic",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.035847727209329605,
+            "x": -1.073632836341858,
+            "z": 1.5621254444122314
+          },
+          "decisionDt": 0.13280582427978516,
+          "at": 1794327040.195793,
+          "position": {
+            "y": 3.9971845149993896,
+            "x": 243.73016357421875,
+            "z": 4.41306734085083
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.9995129387935353,
+            "x": 0.06983642578126137,
+            "z": -0.020992279052734375,
+            "aimZ": -0.031207133548446682,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.SmoothPlastic",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -0.0005123720620758832,
+            "x": -1.153783917427063,
+            "z": 1.4116170406341553
+          },
+          "decisionDt": 0.13351917266845703,
+          "at": 1794327040.329312,
+          "position": {
+            "y": 3.9979939460754395,
+            "x": 243.57603454589844,
+            "z": 4.601208209991455
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.9694445742892717,
+            "x": 0.22396545410157387,
+            "z": -0.20913362503051758,
+            "aimZ": -0.24531045102296972,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 9.675381660461426,
+            "x": 1.1276302337646484,
+            "z": -0.05336563289165497
+          },
+          "decisionDt": 0.11682581901550293,
+          "at": 1794327040.446138,
+          "position": {
+            "y": 4.555231094360352,
+            "x": 243.599609375,
+            "z": 4.645232677459717
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.9405124235461154,
+            "x": 0.03010398814797986,
+            "z": 0.9995467722410925,
+            "aimZ": -0.3397592988505429,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.SmoothPlastic",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 13.605820655822754,
+            "x": 0.007905866950750351,
+            "z": -0.0032179325353354216
+          },
+          "decisionDt": 0.1348731517791748,
+          "at": 1794327040.581011,
+          "position": {
+            "y": 6.304422855377197,
+            "x": 243.64822387695312,
+            "z": 4.610414981842041
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.9352165979513513,
+            "x": 0.022780590110948348,
+            "z": 0.999740488684037,
+            "aimZ": -0.35407614282284067,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Climbing"
+        },
+        {
+          "floor": "Enum.Material.SmoothPlastic",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 7.335671424865723,
+            "x": 0.3662678599357605,
+            "z": 15.973603248596191
+          },
+          "decisionDt": 0.11544203758239746,
+          "at": 1794327040.696453,
+          "position": {
+            "y": 8.255370140075684,
+            "x": 243.68125915527344,
+            "z": 5.761748790740967
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.4926662201426788,
+            "x": -0.4926662201426788,
+            "z": 0.8702183608326851,
+            "aimZ": -0.8702183608326852,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        }
+      ]
+    },
+    {
+      "at": 1794327044.060564,
+      "attempt": 4,
+      "attacker": -10,
+      "blocked": false,
+      "position": [
+        240.07415771484375,
+        2.9998066425323486,
+        17.941509246826172
+      ],
+      "lastPreHitPhase": "Walk",
+      "motionWindow": [
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 1.280822016269667e-05,
+            "x": 4.143561363220215,
+            "z": -12.209477424621582
+          },
+          "decisionDt": 0.12905287742614746,
+          "at": 1794327043.445709,
+          "position": {
+            "y": 2.999999523162842,
+            "x": 239.65240478515625,
+            "z": 23.328519821166992
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.11040676720109253,
+            "x": 0.2347021113161506,
+            "z": -0.9720673428028231,
+            "aimZ": -0.9938864853473981,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 1.280822016269667e-05,
+            "x": 3.7552342414855957,
+            "z": -15.553077697753906
+          },
+          "decisionDt": 0.1232759952545166,
+          "at": 1794327043.568985,
+          "position": {
+            "y": 2.999999523162842,
+            "x": 240.12733459472656,
+            "z": 21.547588348388672
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.0595170685973873,
+            "x": 0.0595170685973873,
+            "z": -0.9982272880189029,
+            "aimZ": -0.9982272880189029,
+            "primary": false,
+            "run": true,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -0.10433565825223923,
+            "x": 4.568470478057861,
+            "z": -7.1459479331970215
+          },
+          "decisionDt": 0.14494705200195312,
+          "at": 1794327043.713932,
+          "position": {
+            "y": 2.9892914295196533,
+            "x": 240.7455291748047,
+            "z": 19.380542755126953
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": -0.2453272001262597,
+            "x": -0.9694403351352419,
+            "z": 0.24532720316522208,
+            "aimZ": -0.9694403359042836,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": -0.2509869635105133,
+            "x": 2.900064468383789,
+            "z": -10.669865608215332
+          },
+          "decisionDt": 0.13144803047180176,
+          "at": 1794327043.84538,
+          "position": {
+            "y": 2.9780259132385254,
+            "x": 241.05548095703125,
+            "z": 17.652856826782227
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": -0.7355409011807081,
+            "x": 0.8712901559853305,
+            "z": -0.49076823866572544,
+            "aimZ": -0.677480319042754,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        },
+        {
+          "floor": "Enum.Material.Slate",
+          "slot": 1,
+          "phase": "Walk",
+          "velocity": {
+            "y": 0.17346586287021637,
+            "x": 2.207094669342041,
+            "z": -1.8102431297302246
+          },
+          "decisionDt": 0.12291884422302246,
+          "at": 1794327043.968299,
+          "position": {
+            "y": 2.995082378387451,
+            "x": 239.685302734375,
+            "z": 18.214147567749023
+          },
+          "stock": 0,
+          "attempt": 4,
+          "plan": {
+            "aimX": 0.23077349344039844,
+            "x": -0.9158741992151559,
+            "z": 0.401465379842393,
+            "aimZ": -0.973007499829942,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "state": "Enum.HumanoidStateType.Running"
+        }
+      ]
+    }
+  ],
+  "deaths": [
+    {
+      "at": 1794327022.949285,
+      "attempt": 1,
+      "position": [
+        260.61358642578125,
+        -35.78333282470703,
+        14.328662872314453
+      ],
+      "lastHitAt": 1794327022.2242,
+      "lastHitPhase": "Stage gap run-up"
+    },
+    {
+      "at": 1794327029.333274,
+      "attempt": 2,
+      "position": [
+        251.50643920898438,
+        -36.52170181274414,
+        -23.51844596862793
+      ],
+      "lastHitAt": 1794327027.765314,
+      "lastHitPhase": "Walk"
+    },
+    {
+      "at": 1794327033.749495,
+      "attempt": 3,
+      "position": [
+        246.2517547607422,
+        -35.677024841308594,
+        24.78424644470215
+      ],
+      "lastHitAt": 1794327033.032591,
+      "lastHitPhase": "Walk"
+    },
+    {
+      "at": 1794327045.016062,
+      "attempt": 4,
+      "position": [
+        237.95587158203125,
+        -36.603981018066406,
+        40.48464584350586
+      ],
+      "lastHitAt": 1794327044.060564,
+      "lastHitPhase": "Walk"
+    }
+  ],
+  "limits": [
+    "The archive does not retain current enemy position/windup or raw Combat.plan result per decision; numeric desired points in the RED are controlled test data, not reconstructed native snapshots.",
+    "Motion has planner outputs/native velocity, not every accepted movement packet; first route takeover is observed at the planning layer, but its causal share of impact is unproven.",
+    "Most strikes occur under Walk; no blanket Flight-evasion override is justified by attempt18."
+  ]
+}

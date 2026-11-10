@@ -1,0 +1,170 @@
+{
+  "source": "../2026-11-10-full-campaign-playthrough/attempt-17-detail.json",
+  "runId": "61b88756-56a7-4816-b6e8-0cc552bec553",
+  "seed": 1006313601,
+  "events": [
+    {
+      "levelEpoch": 2,
+      "revision": 112,
+      "now": 1794325266.003223,
+      "late": false,
+      "kind": "CampaignStageStarted",
+      "data": {
+        "mode": "Rope",
+        "index": 2,
+        "levelId": "campaign-2"
+      },
+      "seq": 450
+    },
+    {
+      "view": "Playing",
+      "revision": 113,
+      "rawLife": 31,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "action": "DragonHeadbutt",
+        "attacker": -3,
+        "profile": 22,
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": true,
+          "position": [
+            16,
+            182.3345947265625,
+            16
+          ]
+        },
+        "blocked": false,
+        "after": 31,
+        "impulse": true,
+        "before": 47,
+        "dying": false
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+      "levelEpoch": 2,
+      "respawns": 0,
+      "now": 1794325271.769382,
+      "late": false,
+      "status": "Alive",
+      "kind": "Hit",
+      "seq": 458,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 114,
+      "rawLife": 15,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "action": "DragonHeadbutt",
+        "attacker": -10,
+        "profile": 22,
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": true,
+          "position": [
+            16.000019073486328,
+            153.6551055908203,
+            16
+          ]
+        },
+        "blocked": false,
+        "after": 15,
+        "impulse": true,
+        "before": 31,
+        "dying": false
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+      "levelEpoch": 2,
+      "respawns": 0,
+      "now": 1794325274.63777,
+      "late": false,
+      "status": "Alive",
+      "kind": "Hit",
+      "seq": 468,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 115,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "action": "DragonHeadbutt",
+        "attacker": -5,
+        "profile": 22,
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": true,
+          "position": [
+            15.999959945678711,
+            122.17635345458984,
+            16
+          ]
+        },
+        "blocked": false,
+        "after": 0,
+        "impulse": true,
+        "before": 15,
+        "dying": true
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+      "levelEpoch": 2,
+      "respawns": 0,
+      "now": 1794325277.785513,
+      "late": false,
+      "status": "Alive",
+      "kind": "Hit",
+      "seq": 474,
+      "connected": true
+    },
+    {
+      "view": "Menu",
+      "revision": 116,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": false,
+          "position": [
+            15.999959945678711,
+            122.17635345458984,
+            16
+          ]
+        },
+        "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+        "reason": "CombatUnderflow"
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+      "levelEpoch": 2,
+      "respawns": 0,
+      "now": 1794325278.586104,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "ConfirmedDeath",
+      "seq": 476,
+      "connected": true
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "status": "verified_frozen",
+  "createdAt": "2026-11-10T15:58:40.675925+00:00",
+  "scope": "QA-only threat priority; no production or native test changes",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "baselineSha256": "2e6f86c9bc933d111c9d2668c90f6da88f6ffa3c878a01e26fe8ada6bd60f91f",
+  "candidateSha256": "03bef2ef955b301ee0c0f3bcc030a1808a9712cf115f070d08173ef33ecbac4f",
+  "checks": [
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-guardian-threat-priority\\probe-guardian-baseline.luau"
+      ],
+      "expectedExit": 1,
+      "exit": 1,
+      "log": "guardian-red.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-guardian-threat-priority\\probe-dragon-baseline.luau"
+      ],
+      "expectedExit": 1,
+      "exit": 1,
+      "log": "dragon-red.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-guardian-threat-priority\\probe-current.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports/2026-11-10-qa-dragon-runup/probe-current.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "runup-146.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports/2026-11-10-qa-dragon-runup/public-session-dash.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "session-dash.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_combat_stepoff_boundary.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "stepoff-26.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "tools/qa/campaign_combat_pilot.lua",
+        "reports\\2026-11-10-qa-guardian-threat-priority\\probe-current.luau",
+        "reports\\2026-11-10-qa-guardian-threat-priority\\probe-guardian-baseline.luau",
+        "reports\\2026-11-10-qa-guardian-threat-priority\\probe-dragon-baseline.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "compile.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "tools/qa/campaign_combat_pilot.lua"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "diff-check.txt"
+    }
+  ],
+  "changes": [
+    "Guardian damaging Bullet dodge precedes pickup/chase/carried return; harmless Guardian Heavy is excluded from Bullet threat selection.",
+    "Advertised ordinary Dragon windup perpendicular evasion precedes run-up or observed-run Dash; uses actual enemy native facing when available, fallback target direction otherwise."
+  ],
+  "native17": {
+    "runId": "61b88756-56a7-4816-b6e8-0cc552bec553",
+    "seed": 1006313601,
+    "firstCliffsHit": {
+      "at": 1794325190.189486,
+      "action": "DragonHeadbutt",
+      "attacker": -10,
+      "heroPosition": [
+        297.24176025390625,
+        10.139748573303223,
+        2.8057007789611816
+      ],
+      "before": 47,
+      "after": 31
+    },
+    "firstCliffsFall": 1794325190.898745,
+    "secondCliffsFallHasNoHitAfterRespawn": true,
+    "guardianHits": [
+      1794325242.658978,
+      1794325245.856767,
+      1794325253.756395
+    ],
+    "guardianReturnHits": [
+      1794325239.192602,
+      1794325248.604888,
+      1794325257.140753
+    ],
+    "guardianAttempt3Death": 1794325254.571341,
+    "ordering": "Attempt3 died after two Guardian returns. Third return belonged to attempt4, not before that death."
+  },
+  "limits": [
+    "Native17 does not retain per-plan projectile states or simultaneous enemy-facing snapshots; no claim that a particular recorded Bullet was selected or that all native hits are reproduced.",
+    "Prepared read-only plan probes establish the source-visible priority holes. Calibrated close Dragon volume experiment assumes immediate ordinary movement; it is not a latency or native survival test.",
+    "No actor pose, health, reserve, AI, phase, clock, or production setting was changed by the policy or this agent.",
+    "Nav.crossing currently overrides combat steering; actual17 firstCliffsHit is during Walk, secondFall has no post-respawn Hit and remains separate navigation evidence.",
+    "No new native campaign win or deathless Guardian claim."
+  ],
+  "independentReview": "CLEAR: solo_gap_audit independently checked actual GuardianPattern/Director/native facing contracts and reran14/146/26/public Session Dash on frozen03BEF2EF"
+}

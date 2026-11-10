@@ -1,0 +1,344 @@
+{
+  "attempt": 18,
+  "runId": "6eaab629-5a80-4786-8025-4c3502d449f7",
+  "seed": 503914550,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "result": "Lost",
+  "lastStage": 1,
+  "sampleCount": 149,
+  "policyLoads": 1,
+  "errors": [],
+  "cohort": [
+    {
+      "ownerUserId": 11946162891,
+      "slot": 1,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Archaicus14",
+      "userId": 11946162891
+    }
+  ],
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794326888.81288,
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:2",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:2",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "6eaab629-5a80-4786-8025-4c3502d449f7",
+      "stock": 3
+    }
+  ],
+  "terminalCurrent": {
+    "slot": 1,
+    "index": 1,
+    "rawLife": 15,
+    "attempt": 4,
+    "epoch": 1,
+    "plan": {
+      "aimX": 0.09191274516076876,
+      "x": 0,
+      "z": 0,
+      "aimZ": -0.9957670647681673,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "guardianHits": 0,
+    "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:146",
+    "position": {
+      "y": -34.5908203125,
+      "x": 237.95587158203125,
+      "z": 40.48464584350586
+    },
+    "target": -10,
+    "stock": 0,
+    "stage": "Route",
+    "runId": "6eaab629-5a80-4786-8025-4c3502d449f7"
+  },
+  "eventCounts": {
+    "1": {
+      "EnemySpawned": 10,
+      "FlyCaught": 2,
+      "CommitSpawn": 4,
+      "SetHealth": 80,
+      "InteractionAccepted": 18,
+      "EnemyAttackMiss": 37,
+      "AttackAccepted": 37,
+      "EnemyGrabbed": 7,
+      "EnemyHit": 39,
+      "EnemyRecovery": 32,
+      "RunResult": 1,
+      "ExpireShield": 3,
+      "EnemyAttackAccepted": 99,
+      "BeginAttack": 55,
+      "ConfirmedDeath": 4,
+      "Death": 4,
+      "EnemyDeath": 9,
+      "EnemyGrabAccepted": 10,
+      "EnemyThrowDamage": 6,
+      "ReserveSpawn": 4,
+      "EnemyThrown": 6,
+      "Hit": 44,
+      "AttackMiss": 9,
+      "RunStarted": 1,
+      "EnemyDropped": 1,
+      "WalkerClubCreated": 2
+    }
+  },
+  "deaths": [
+    {
+      "view": "Playing",
+      "revision": 130,
+      "rawLife": 0,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -33.39350891113281,
+            -124.20633697509766,
+            12.516480445861816
+          ],
+          "held": false,
+          "position": [
+            260.61358642578125,
+            -35.78333282470703,
+            14.328662872314453
+          ]
+        },
+        "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:2",
+        "reason": "Fall"
+      },
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794327022.949285,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 466,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 136,
+      "rawLife": 0,
+      "attempt": 2,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -11.304162979125977,
+            -126.49516296386719,
+            -14.178206443786621
+          ],
+          "held": false,
+          "position": [
+            251.50643920898438,
+            -36.52170181274414,
+            -23.51844596862793
+          ]
+        },
+        "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:133",
+        "reason": "Fall"
+      },
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:133",
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794327029.333274,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 481,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 141,
+      "rawLife": 0,
+      "attempt": 3,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -5.448040008544922,
+            -122.64494323730469,
+            31.414297103881836
+          ],
+          "held": false,
+          "position": [
+            246.2517547607422,
+            -35.677024841308594,
+            24.78424644470215
+          ]
+        },
+        "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:140",
+        "reason": "Fall"
+      },
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:140",
+      "levelEpoch": 1,
+      "respawns": 1,
+      "now": 1794327033.749495,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 493,
+      "connected": true
+    },
+    {
+      "view": "Menu",
+      "revision": 150,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -7.678791007492691e-7,
+            -122.01602172851562,
+            0.000006053855031495914
+          ],
+          "held": false,
+          "position": [
+            237.95587158203125,
+            -36.603981018066406,
+            40.48464584350586
+          ]
+        },
+        "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:146",
+        "reason": "Fall"
+      },
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:146",
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794327045.016062,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "ConfirmedDeath",
+      "seq": 523,
+      "connected": true
+    }
+  ],
+  "spawns": [
+    {
+      "view": "Playing",
+      "revision": 2,
+      "rawLife": 47,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "eventId": "s-3",
+        "code": "OK"
+      },
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794326888.510145,
+      "late": false,
+      "status": "Alive",
+      "kind": "CommitSpawn",
+      "seq": 3,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 2,
+      "now": 1794327022.966793,
+      "shieldKind": "Normal",
+      "revision": 132,
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:133",
+      "data": {
+        "eventId": "s-134",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 468,
+      "shieldUntil": 1794327024.966793
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 1,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 3,
+      "now": 1794327029.348579,
+      "shieldKind": "Normal",
+      "revision": 138,
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:140",
+      "data": {
+        "eventId": "s-141",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 483,
+      "shieldUntil": 1794327031.348579
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 0,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 4,
+      "now": 1794327033.765598,
+      "shieldKind": "Normal",
+      "revision": 143,
+      "actorId": "6eaab629-5a80-4786-8025-4c3502d449f7:actor:146",
+      "data": {
+        "eventId": "s-147",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 495,
+      "shieldUntil": 1794327035.765598
+    }
+  ],
+  "limits": [
+    "Single existing Studio ordinary Play, real registered Archaicus14 but localStudio not published multiplayer transport",
+    "Watcher did not alter inputs, source, actors, resources, AI, phases or play state",
+    "Cached qa.current.rawLife is not authoritative after death; terminal cohort and ConfirmedDeath establish elimination",
+    "No complete13-stage victory claimed; ordinary Lost1",
+    "Owned diagnostic export folders removed; original Editor QA/backups remain for root restoration after stop"
+  ],
+  "files": {
+    "terminal": "test18-terminal-archive.json",
+    "progress": "test18-archive-001.json",
+    "initialCheckpoint": "test18-checkpoint-001-20261110T161011Z.json",
+    "console": "test18-console-initial-20261110T161011Z.json"
+  },
+  "mainRemainsPlay": true
+}

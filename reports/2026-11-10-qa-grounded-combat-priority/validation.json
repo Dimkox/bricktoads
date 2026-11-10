@@ -1,0 +1,160 @@
+{
+  "status": "focused_verified_frozen",
+  "scope": "QA-only bridge grounded tactical priority; no native/production changes or full completion claim",
+  "bridgeSha256": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add",
+  "combatSha256": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38",
+  "baselineCommit": "331e705d837e8d92cd7c4cdafd905be150adaff6",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "checks": [
+    {
+      "label": "prepare",
+      "command": [
+        "C:\\Users\\User\\Documents\\bricktoads\\.tools\\python-3.13.9\\python.exe",
+        "C:\\Users\\User\\Documents\\bricktoads\\reports\\2026-11-10-qa-grounded-combat-priority\\prepare_probe.py"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "Extracted baseline/current actual foot and pure current Nav\n"
+    },
+    {
+      "label": "baseline-composition-red",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_base_probe.luau"
+      ],
+      "exit": 1,
+      "expectedExit": 1,
+      "matched": true,
+      "output": "./build/ground_priority_base_probe.luau:76: Grounded combat composition failures: 5/26\nstacktrace:\n[C] function assert\n./build/ground_priority_base_probe.luau:76\nFAIL\tValidated running primary crosses range to enemy without being replaced by a navigation Jump\nFAIL\tPrioritized ready Dash never invents a new navigation flight\nFAIL\tNear-edge evasion moves inward toward current support inset without run/attack/jump\nFAIL\tEvasion precedes navigation mutation or run-up staging\nFAIL\tFollow-up accepted attack hold is not replaced by movement or Jump\n"
+    },
+    {
+      "label": "composition-green",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_current_probe.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "Grounded combat composition GREEN\t26\n"
+    },
+    {
+      "label": "baseline-public-red",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_base_public.luau"
+      ],
+      "exit": 1,
+      "expectedExit": 1,
+      "matched": true,
+      "output": "./build/ground_priority_base_public.luau:116: Actual bridge preserves public ready Dash before across-gap navigation\nstacktrace:\n[C] function assert\n./build/ground_priority_base_public.luau:116\n"
+    },
+    {
+      "label": "public-session-green",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_current_public.luau",
+        "build/ground_priority_current_hold_public.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "PASS public Session ordinary Run -> Punch -> Dash at dy1.658; enemy47to31, hero47/attempt1/stock3\nPASS public Session ordinary Run -> Punch -> Dash at dy1.658; enemy47to31, hero47/attempt1/stock3\n"
+    },
+    {
+      "label": "hold-baseline-red",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_hold_base_hold_public.luau"
+      ],
+      "exit": 1,
+      "expectedExit": 1,
+      "matched": true,
+      "output": "./build/ground_priority_hold_base_hold_public.luau:135: Follow-up bridge plan must keep accepted strike facing and stopped movement\nstacktrace:\n[C] function assert\n./build/ground_priority_hold_base_hold_public.luau:135\n"
+    },
+    {
+      "label": "hold-public-green",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_current_hold_public.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "PASS public Session ordinary Run -> Punch -> Dash at dy1.658; enemy47to31, hero47/attempt1/stock3\n"
+    },
+    {
+      "label": "hold-old-outcome",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_hold_base_hold_outcome.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "FOLLOWUP\t-1\t0\ttrue\tfalse\nDAMAGE\t47\tnil\nPASS prepared follow-up facing outcome; original hero47/attempt1/stock3\n"
+    },
+    {
+      "label": "hold-current-outcome",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/ground_priority_current_hold_outcome.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "FOLLOWUP\t0\t0\tfalse\tfalse\nDAMAGE\t31\ttrue\nPASS prepared follow-up facing outcome; original hero47/attempt1/stock3\n"
+    },
+    {
+      "label": "navigation88-green",
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "tests/run_route_driver_navigation.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "PASS route driver navigation: 88 checks\n"
+    },
+    {
+      "label": "compile",
+      "command": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "tools/qa/full_campaign_bridge.server.luau",
+        "build/ground_priority_current_probe.luau",
+        "build/ground_priority_current_public.luau",
+        "build/ground_priority_current_hold_public.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": "Compiled 0 KLOC into 55 KB bytecode (read 0.00s, parse 0.00s, compile 0.01s)\n"
+    },
+    {
+      "label": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "tools/qa/full_campaign_bridge.server.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "matched": true,
+      "output": ""
+    }
+  ],
+  "cases": 26,
+  "holdBaselineSha256": "12dd1713fb1300c8e615b1d4b29f8f2349ba0a7e460cd6f28268e15d2247e705",
+  "independentReview": "CLEAR by /root/solo_dragon_audit on frozen bridge97: independently reran 26 composition checks, public first Dash and followup hold, expected baseline hold RED, paired 47/31 outcomes; inspected actual GameWorld stop/reset/facing-zero semantics. No blocker.",
+  "limits": [
+    "Numeric context uses exact seed503914550 authored support and recorded native p/velocity. Enemy desired points in composition are controlled test data; current enemy position/windup was not retained.",
+    "The public Session fixture reuses the pinned Dragon run-up contract, arranged across a legitimate authored gap with no ray obstruction; it supplies numeric run/target geometry, not native engine collisions or network latency.",
+    "Only grounded/no-existing-flight plans receive priority; no midair evasion override, physical landing declaration, actor/health/stock/AI/phase writes or new network target/auth fields.",
+    "Attempt18 has seven actual Headbutt Hits. Only the first last-preHit phase is Stage gap run-up; six are Walk. No claim that bridge priority explains all four Falls.",
+    "Native attempt19 is required to verify physical survival and complete campaign acceptance."
+  ]
+}

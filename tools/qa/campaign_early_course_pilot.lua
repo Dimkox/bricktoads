@@ -507,7 +507,12 @@ local function plan(context)
         return input()
     end
     if definition.mode == 'Rope' then
-        return input(position.x < 15 and 1 or 0, position.z < 15 and 1 or 0)
+        -- Standing at the swing limit lets every committed Raven swoop meet
+        -- the same descending body. Patrol inside the shaft's safe side lane
+        -- with ordinary, damped swing input while all authored AI stays live.
+        local targetX,velocity=12*math.sin(modes.elapsed*1.5),actor.velocity
+        return input(clamp((targetX-position.x)*.4-velocity.x*.3,-1,1),
+            clamp((14-position.z)*.4-velocity.z*.3,-1,1))
     elseif definition.mode == 'Ice' then return ice(definition, modes, actor, state)
     elseif definition.mode == 'Serpents' then return serpents(definition, modes, actor, state)
     elseif definition.mode == 'Jet' then

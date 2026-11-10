@@ -475,6 +475,10 @@ local function guardianPlan(c, q)
     local intent, d, p = neutral(), c.director, c.position
     intent.aimX, intent.aimZ = unit(q.x-p.x, q.z-p.z)
     local guardian = d.guardian
+    local bullets={}
+    for id,shot in pairs(d.projectiles or {}) do if shot.mode=='Bullet' then bullets[id]=shot end end
+    local danger=projectileThreat(c,bullets)
+    if danger then intent.evasion=true;return steering(c,danger,intent) end
     local id = guardian.carriers and guardian.carriers[c.slot]
     local ball = id and d.projectiles and d.projectiles[id]
     if ball and ball.mode == 'Carried' then
@@ -490,12 +494,10 @@ local function guardianPlan(c, q)
             if not range or n < range then ground, range = candidate.position, n end
         end
     end
-    local danger = projectileThreat(c, d.projectiles)
     if ground then
         if range <= ((c.config.Boss or {}).pickupRange or 5.5) and math.abs(p.y-ground.y) <= 3.5 then
             intent.primary = ready(c)
         else steering(c, ground, intent) end
-    elseif danger then intent.evasion=true;steering(c, danger, intent)
     else
         -- Stay within the Guardian's normal aggro range on supported arena
         -- ground. Its own nextBall/nextShot clocks remain entirely untouched.
