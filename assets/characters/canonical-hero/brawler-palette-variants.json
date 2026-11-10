@@ -1,0 +1,243 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "sourceCommit": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourcePaletteLocation": "main.asm:36743 palette_chars; P2=0F/0F/17/27",
+  "rgbBoundary": "NES palette codes authoritative; extractor RGB approximates display; 3D tonal interpolation authored",
+  "sourceGlbSha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+  "allPriorGlbsPreserved": {
+    "boss-walker.glb": "4f1d852e369f83da380dd05b37a5d999886aea036eba220852678ed4a47adc08",
+    "canonical-hero-player1.glb": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+    "canonical-hero-player2.glb": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+    "canonical-hero.glb": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c",
+    "green-brawler.glb": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+    "hero-attack-morphs.glb": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+    "hero-fear-morphs.glb": "ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a",
+    "hero-fear-wide-mouth.glb": "e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1"
+  },
+  "variants": [
+    {
+      "file": "brawler-player2.glb",
+      "variant": "player2",
+      "bytes": 15661152,
+      "sha256": "dc20fceef651efd190d3116d77c2d0075e4790c95abd9071812818c247351cac",
+      "sourceFile": "green-brawler.glb",
+      "sourceSha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+      "sourceRig": "green-brawler-rig.json",
+      "sourceReference": {
+        "shadow": [
+          155,
+          83,
+          0
+        ],
+        "highlight": [
+          250,
+          160,
+          66
+        ],
+        "sourcePaletteCodes": [
+          "0F",
+          "0F",
+          "17",
+          "27"
+        ],
+        "sourcePlayerSlot": 1,
+        "meaning": "Pinned NES P2 swatches with authored 3D shading; Mr. Yellow is the legacy runtime name"
+      },
+      "pixels": {
+        "changedPixels": 3911424,
+        "preservedPixels": 282880,
+        "totalPixels": 4194304,
+        "method": "Selective green-hue linear tonal remap through source17/27 or approved Brown anchors",
+        "sourceGreenAnchors": [
+          110,
+          199
+        ],
+        "nonGreenTexelsByteIdentical": true,
+        "alphaByteIdentical": true
+      },
+      "trianglePositionsAndNormalsSha256": "5929985f8336955a57428c699616cfab18574bf3df51c6cb3686cd104d843eca",
+      "nonColorBinarySha256": "0f954ccf52305460caf48b0d41ae16bdb896a34229c4325bb6b160efe4b57a7a",
+      "embeddedImages": [
+        {
+          "image": 0,
+          "sha256": "9514b3e1da2749d39bbbfdfe36b0257e08c0b39cb484324307eab17c9437fe9b",
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "image": 1,
+          "sha256": "08effa51b915135833dd1a46ca350043176e20e607e5d98a13978df1dcd85df8",
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "image": 2,
+          "sha256": "714e6287259ed9725fff70fc34dd263c6eb87bf5aa642a9498e6fff977ac5e5b",
+          "size": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "validation": {
+        "status": "PASS",
+        "onlyBaseColorTextureChanged": true,
+        "geometryNodesUVsAndMaterialsUnchanged": true,
+        "ormAndNormalByteIdentical": true,
+        "allPngCRCsValid": true,
+        "nodes": 15,
+        "materials": 1,
+        "textures": 3,
+        "sourcePreserved": true,
+        "actualStudioImport": "PENDING"
+      }
+    },
+    {
+      "file": "brawler-brown.glb",
+      "variant": "brown",
+      "bytes": 15636648,
+      "sha256": "0be712c48d4796e52eda54d3cd86ce03ed374c5b3b1a7300fe9bad86f539ecf4",
+      "sourceFile": "green-brawler.glb",
+      "sourceSha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+      "sourceRig": "green-brawler-rig.json",
+      "sourceReference": {
+        "shadow": [
+          160,
+          112,
+          86
+        ],
+        "highlight": [
+          224,
+          186,
+          129
+        ],
+        "sourcePaletteCodes": null,
+        "sourcePlayerSlot": null,
+        "meaning": "Owner-approved third-player Brown palette; not an original third NES playable slot"
+      },
+      "pixels": {
+        "changedPixels": 3911424,
+        "preservedPixels": 282880,
+        "totalPixels": 4194304,
+        "method": "Selective green-hue linear tonal remap through source17/27 or approved Brown anchors",
+        "sourceGreenAnchors": [
+          110,
+          199
+        ],
+        "nonGreenTexelsByteIdentical": true,
+        "alphaByteIdentical": true
+      },
+      "trianglePositionsAndNormalsSha256": "5929985f8336955a57428c699616cfab18574bf3df51c6cb3686cd104d843eca",
+      "nonColorBinarySha256": "0f954ccf52305460caf48b0d41ae16bdb896a34229c4325bb6b160efe4b57a7a",
+      "embeddedImages": [
+        {
+          "image": 0,
+          "sha256": "2a2a97dc175e12aab42df46540730eaebfd0f23c617294fd5ca4ef614545de9d",
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "image": 1,
+          "sha256": "08effa51b915135833dd1a46ca350043176e20e607e5d98a13978df1dcd85df8",
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "image": 2,
+          "sha256": "714e6287259ed9725fff70fc34dd263c6eb87bf5aa642a9498e6fff977ac5e5b",
+          "size": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "validation": {
+        "status": "PASS",
+        "onlyBaseColorTextureChanged": true,
+        "geometryNodesUVsAndMaterialsUnchanged": true,
+        "ormAndNormalByteIdentical": true,
+        "allPngCRCsValid": true,
+        "nodes": 15,
+        "materials": 1,
+        "textures": 3,
+        "sourcePreserved": true,
+        "actualStudioImport": "PENDING"
+      }
+    }
+  ],
+  "portraits": [
+    {
+      "file": "brawler-player1-portrait.png",
+      "source": "green-brawler.glb",
+      "sourceSha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+      "sha256": "793f8b9306dce619f0faa548cd99cc5c7cf4c35972c6d8efd48e5b72f8906f22",
+      "size": [
+        512,
+        512
+      ],
+      "camera": {
+        "azimuthDegrees": 18,
+        "elevationDegrees": 3,
+        "forward": "front is-Z"
+      },
+      "sourceMeshNames": [
+        "Head",
+        "LeftUpperArm",
+        "RightUpperArm",
+        "UpperTorso"
+      ]
+    },
+    {
+      "file": "brawler-player2-portrait.png",
+      "source": "brawler-player2.glb",
+      "sourceSha256": "dc20fceef651efd190d3116d77c2d0075e4790c95abd9071812818c247351cac",
+      "sha256": "b13c59a8b6d62aa5ac443f8eb225ce652a727a50f195c0de42dec3734499d241",
+      "size": [
+        512,
+        512
+      ],
+      "camera": {
+        "azimuthDegrees": 18,
+        "elevationDegrees": 3,
+        "forward": "front is-Z"
+      },
+      "sourceMeshNames": [
+        "Head",
+        "LeftUpperArm",
+        "RightUpperArm",
+        "UpperTorso"
+      ]
+    },
+    {
+      "file": "brawler-brown-portrait.png",
+      "source": "brawler-brown.glb",
+      "sourceSha256": "0be712c48d4796e52eda54d3cd86ce03ed374c5b3b1a7300fe9bad86f539ecf4",
+      "sha256": "e3a6995348742e2568c4fe5dda0767b4739ee5ab9aba31829a0e446c6dcbf396",
+      "size": [
+        512,
+        512
+      ],
+      "camera": {
+        "azimuthDegrees": 18,
+        "elevationDegrees": 3,
+        "forward": "front is-Z"
+      },
+      "sourceMeshNames": [
+        "Head",
+        "LeftUpperArm",
+        "RightUpperArm",
+        "UpperTorso"
+      ]
+    }
+  ],
+  "actualStudioImport": "PENDING; no Roblox manifests modified by this builder"
+}

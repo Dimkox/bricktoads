@@ -522,6 +522,7 @@ function World.new(BaseWorld, config, options)
     self._base = BaseWorld
     self.characterAppearance = options.characterAppearance
     self.guardianAppearance = options.guardianAppearance
+    self.castAppearance = options.castAppearance
     self.campaignWorldType = options.campaignWorld
     self.offset = translation
     setmetatable(self, {__index = function(_, key) return World[key] or BaseWorld[key] end})
@@ -844,7 +845,11 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
     actor.humanoid.WalkSpeed = isBoss and 0 or 8
     self.enemyKinds[id] = isBoss and "Boss" or "Drone"
-    if self.campaignWorld and self.campaignWorldType.decorateActor and (campaignBoss or not speciesNames[kind]) then
+    actor.castRequestedKind=kind~='Boss' and kind or nil
+    local importedCast=self.castAppearance and actor.castRequestedKind and self.castAppearance.attach(actor,kind)
+    if importedCast then
+        actor.model:SetAttribute('BossKind',campaignBoss and kind or nil)
+    elseif self.campaignWorld and self.campaignWorldType.decorateActor and (campaignBoss or not speciesNames[kind]) then
         self.campaignWorldType.decorateActor(actor,kind)
         actor.model:SetAttribute('BossKind',campaignBoss and kind or nil)
     elseif isBoss then
@@ -1447,6 +1452,7 @@ function World:carryEnemy(enemyId, heroId)
             if p:IsA('BasePart') then carried.collisions[p] = p.CanCollide; p.CanCollide = false end
         end
         self.enemyCarries[enemyId] = carried
+        hero.cosmeticActionEvent={action='PickupEnemy'}
         enemy.humanoid:Move(Vector3.new(),false)
     end
     enemy.humanoid.EvaluateStateMachine = false
@@ -1494,6 +1500,7 @@ function World:releaseEnemy(enemyId, throwerId, tuning)
     end
     if throwerId ~= nil then
         carried.mode = 'Thrown'
+        carried.holder.cosmeticActionEvent={action='Throw'}
         enemy.model:SetAttribute('CarryMode','Thrown')
         enemy.root.AssemblyLinearVelocity = Vector3.new(x*tuning.horizontal,tuning.vertical,z*tuning.horizontal)
         enemy.root.AssemblyAngularVelocity = Vector3.new()
@@ -1625,6 +1632,7 @@ function World:clubSwing(id, heroId)
     equipped.swingUntil=(self.presentationTime or 0)+.28
     equipped.model:SetAttribute('Swinging',true)
     hero.model:SetAttribute('ClubSwing',true)
+    hero.cosmeticActionEvent={action='Club'}
     return true
 end
 
@@ -1672,6 +1680,15 @@ function World:healingFly(id, position)
         text.TextColor3 = COLORS.mint
         text.Parent.MaxDistance = 38
         model.PrimaryPart = fly.root
+        if self.castAppearance then
+            local mount=piece('Torso',Vector3.new(.1,.1,.1),CFrame.new(),COLORS.mint)
+            mount.Transparency=1
+            local cosmeticActor={model=model,root=fly.root}
+            fly.castActor=cosmeticActor
+            if self.castAppearance.attach(cosmeticActor,'HealingFly') and self.castAppearance.addFallback then
+                self.castAppearance.addFallback(cosmeticActor,fly.root)
+            end
+        end
         model.Parent = self.healingFlyFolder
         self.healingFlyVisuals[id] = fly
     end
@@ -1698,6 +1715,7 @@ function World:catchFly(heroSlot, flyId)
     local destination = fly.root.Position
     self:healingFly(flyId, nil)
     if not actor or not actor.root.Parent then return true end
+    actor.cosmeticActionEvent={action='Tongue'}
     local head = actor.model:FindFirstChild("Head") or actor.root
     local mouth = (head.CFrame * CFrame.new(0,-.28,-.94)).Position
     local delta = destination - mouth
@@ -1773,7 +1791,7 @@ local heroPoses = {
         Recovery={left=1.6,right=1.6,leftRoll=-.2,rightRoll=.2,hip=.25}},
 }
 
-function World:updatePresentation(session, dt, enemies)
+function World:updatePresentation(session, dt, enemies, director)
     if self.campaignWorld then self.campaignWorld:step(session.now) end
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
     self.presentationTime = (self.presentationTime or 0) + dt
@@ -1791,6 +1809,13 @@ function World:updatePresentation(session, dt, enemies)
         for _,wing in ipairs(fly.wings) do
             wing.part.CFrame = CFrame.new(fly.root.Position) * wing.offset
                 * CFrame.Angles(0,0,math.sin(self.presentationTime*32)*.35*wing.side)
+        end
+        if fly.castActor and self.castAppearance then
+            if not fly.castActor.castAppearance and self.castAppearance.attach(fly.castActor,'HealingFly') then
+                if self.castAppearance.addFallback then self.castAppearance.addFallback(fly.castActor,fly.root) end
+            end
+            self.castAppearance.update(fly.castActor,{kind='HealingFly',actorId='fly:'..tostring(fly.model:GetAttribute('CollectibleId')),
+                levelEpoch=session.state and session.state.levelEpoch,now=session.now,dt=dt,speed=0,mode='Fly'})
         end
     end
     local blend = 1 - math.exp(-dt * 18)
@@ -1911,18 +1936,33 @@ function World:updatePresentation(session, dt, enemies)
             if self.characterAppearance then
                 -- Accepted server state only. Source-stream commands remain
                 -- inert; this context drives cosmetic joints after R6 fallback.
-                local blocked=(actor.humanoid.Health<=0 or (enemy and enemy.dead) or (combat and combat.deathAt~=nil)) and 'Dead'
+                local visualState=(actor.humanoid.Health<=0 or (enemy and enemy.dead) or (combat and combat.deathAt~=nil)) and 'Dead'
                     or (reacting and 'Reaction') or (carryingEnemy and 'Carrying') or (beingCarried and 'Carried')
-                    or (dragonLink and 'Dragon') or (club and 'Club')
-                    or ((actor.root.Anchored or actor.humanoid.PlatformStand) and not actor.campaignControl and 'Paused')
-                    or ((actor.campaignControl and movementMode~='Walk' and movementMode~='Run' and movementMode~='Idle'
-                        or not actor.campaignControl and actor.humanoid.FloorMaterial==Enum.Material.Air) and 'Airborne') or nil
+                    or (dragonLink=='Mounted' and 'DragonMounted') or (dragonLink=='Captured' and 'DragonCaptured')
+                    or (movementMode=='Swim' and 'Swim') or (movementMode=='Ride' and 'Ride')
+                    or (movementMode=='Rope' and 'Rope') or (club and 'Club')
+                    or ((movementMode=='Air' or actor.humanoid.FloorMaterial==Enum.Material.Air and not actor.campaignControl) and 'Air')
+                    or (walking and math.abs(velocity.Z)>math.abs(velocity.X)*1.3 and 'DepthWalk') or nil
+                local blocked=((actor.root.Anchored or actor.humanoid.PlatformStand) and not actor.campaignControl
+                    and not visualState and 'Paused') or nil
+                if combat and actor.visualReactionEpoch~=combat.reactionEpoch then
+                    actor.visualReactionEpoch=combat.reactionEpoch;actor.visualReactionAt=session.now
+                end
+                if actor.cosmeticActionEvent and actor.seenCosmeticActionEvent~=actor.cosmeticActionEvent then
+                    actor.seenCosmeticActionEvent=actor.cosmeticActionEvent
+                    actor.visualAction={action=actor.cosmeticActionEvent.action,actorId=actor.model:GetAttribute('ActorId'),
+                        at=session.now,tuning={windup=0}}
+                end
+                if actor.visualAction and session.now-actor.visualAction.at>2 then actor.visualAction=nil end
                 self.characterAppearance.update(actor,{
                     enabled=combat~=nil and not enemy and session.sourceCombat and true or false,
                     actorId=actor.model:GetAttribute('ActorId'),now=session and session.now,dt=dt,
                     attack=combat and combat.attack,recoveryAction=combat and combat.lastStrikeAction,
                     recoveryUntil=combat and combat.strikeRecoveryUntil,reactionEpoch=combat and combat.reactionEpoch,
-                    blocked=blocked,grounded=actor.campaignControl and (movementMode=='Walk' or movementMode=='Run' or movementMode=='Idle')
+                    blocked=blocked,visualState=visualState,verticalSpeed=velocity.Y,holding=carryingEnemy,
+                    visualAction=actor.visualAction,reaction={heavy=combat and combat.heavyReaction==true,
+                        startedAt=actor.visualReactionAt},
+                    grounded=actor.campaignControl and (movementMode=='Walk' or movementMode=='Run' or movementMode=='Idle')
                         or not actor.campaignControl and actor.humanoid.FloorMaterial~=Enum.Material.Air,
                     mode=movementMode or (walking and 'Walk' or 'Idle'),speed=speed,
                     fearIntro=self.bossIntroState and self.bossIntroState.heroActors
@@ -1937,6 +1977,66 @@ function World:updatePresentation(session, dt, enemies)
         for id,actor in pairs(self.actors) do
             if self.enemyKinds[id]=='Boss' then self.guardianAppearance.update(actor,self.presentationTime) end
         end
+    end
+    if self.castAppearance then
+        for _,actor in pairs(self.actors) do
+            if actor.castRequestedKind and not actor.castAppearance and actor.root.Parent then
+                self.castAppearance.attach(actor,actor.castRequestedKind)
+            end
+        end
+        for id,actor in pairs(self.actors) do if actor.castAppearance and actor.root.Parent then
+            local enemy=enemies and enemies[id]
+            local machine=director and director.campaignEnemies
+            local state=machine and machine.states[id]
+            local dragons=director and (director.dragons or director.ordinary and director.ordinary.dragons)
+            local flight=dragons and dragons.states[id]
+            local bossState=director and director.boss
+            local isBoss=bossState and id==-99
+            local rawAttack=isBoss and bossState.attack or state and state.attack or enemy and enemy.windup
+            if rawAttack and actor.castAttackSource~=rawAttack then
+                actor.castAttackSource=rawAttack
+                local tuning=rawAttack.move or rawAttack.tuning or self.config.Attacks[rawAttack.action] or {}
+                actor.castAttack={name=rawAttack.name or rawAttack.action,
+                    actorId=actor.model:GetAttribute('ActorId') or tostring(id),
+                    levelEpoch=session.state and session.state.levelEpoch,
+                    start=(rawAttack.tellAt or rawAttack.at or session.now)-(tuning.tell or tuning.windup or 0)}
+            elseif not rawAttack then actor.castAttackSource=nil end
+            local velocity=actor.campaignVelocity or actor.root.AssemblyLinearVelocity
+            local mode=actor.model:GetAttribute('CampaignMode') or self:movementMode(id) or 'Idle'
+            if type(mode)=='string' then mode=mode:gsub('^Enemy','') end
+            local sourceState
+            if actor.castAppearance.kind=='Dragon' then
+                if flight and flight.mode=='Disabled' then mode='Disabled';sourceState='HeavyDisabled'
+                elseif flight and flight.mode=='Approach' then mode='Fly';sourceState='Approach'
+                elseif actor.model:GetAttribute('DragonFlight') then mode='Fly' end
+            end
+            local phase=isBoss and bossState.state or state and state.mode
+                or enemy and enemy.windup and 'Tell' or enemy and enemy.strikeRecoveryUntil
+                    and session.now<enemy.strikeRecoveryUntil and 'Recovery' or 'Ready'
+            if not rawAttack and phase~='Recovery' then actor.castAttack=nil end
+            local reacting=enemy and enemy.reactionUntil~=nil or isBoss and phase=='Reaction'
+            local reactionProgress
+            if reacting then
+                local epoch=enemy and enemy.reactionEpoch or 0
+                if not actor.castReacting or actor.castReactionEpoch~=epoch then
+                    actor.castReactionAt=session.now;actor.castReactionEpoch=epoch
+                end
+                local untilAt=enemy and enemy.reactionUntil
+                if type(untilAt)=='number' then
+                    reactionProgress=math.clamp((session.now-actor.castReactionAt)/math.max(.001,untilAt-actor.castReactionAt),0,1)
+                end
+            else actor.castReactionAt=nil end
+            actor.castReacting=reacting==true
+            self.castAppearance.update(actor,{kind=actor.castAppearance.kind,
+                actorId=actor.model:GetAttribute('ActorId') or tostring(id),levelEpoch=session.state and session.state.levelEpoch,
+                now=session.now,dt=dt,speed=Vector3.new(velocity.X,0,velocity.Z).Magnitude,
+                mode=mode,sourceState=sourceState,
+                phase=phase,attack=actor.castAttack,dead=actor.humanoid.Health<=0 or enemy and enemy.dead,
+                reacting=reacting,reactionHeavy=enemy and enemy.heavyReaction==true
+                    or isBoss and bossState.heavyReaction==true or flight and flight.mode=='Disabled',
+                reactionProgress=reactionProgress,
+                carried=self.enemyCarries[id] and self.enemyCarries[id].mode=='Carried'})
+        end end
     end
 end
 

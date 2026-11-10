@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "authorship": "Original authored pulse/triangle/noise synthesis; no ROM samples or melodies",
+  "sourceCommit": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "assetIds": {
+    "sfx": null,
+    "music": null
+  },
+  "sfx": {
+    "file": "bricktoads-sfx-atlas.wav",
+    "sampleRate": 22050,
+    "duration": 9.470022675736962,
+    "sha256": "d10d4c9e88176049ac447f6834a977deb48cb7d50ad79fa36f43890ec1a05671",
+    "regions": {
+      "Hit": {
+        "start": 0.18,
+        "finish": 0.4,
+        "startFrame": 3969,
+        "endFrame": 8820,
+        "duration": 0.22,
+        "rms": 0.13500278,
+        "peak": 0.83999145
+      },
+      "Shield": {
+        "start": 0.58,
+        "finish": 0.7550113378684807,
+        "startFrame": 12789,
+        "endFrame": 16648,
+        "duration": 0.17501133786848072,
+        "rms": 0.18277515,
+        "peak": 0.53633229
+      },
+      "Miss": {
+        "start": 0.9350113378684807,
+        "finish": 1.0950113378684807,
+        "startFrame": 20617,
+        "endFrame": 24145,
+        "duration": 0.16,
+        "rms": 0.24601138,
+        "peak": 0.83999145
+      },
+      "Club": {
+        "start": 1.2750113378684806,
+        "finish": 1.5750113378684807,
+        "startFrame": 28114,
+        "endFrame": 34729,
+        "duration": 0.3,
+        "rms": 0.13958528,
+        "peak": 0.83999145
+      },
+      "Throw": {
+        "start": 1.7550113378684806,
+        "finish": 2.0049886621315194,
+        "startFrame": 38698,
+        "endFrame": 44210,
+        "duration": 0.24997732426303854,
+        "rms": 0.24073264,
+        "peak": 0.83999145
+      },
+      "Fly": {
+        "start": 2.184988662131519,
+        "finish": 2.5049886621315194,
+        "startFrame": 48179,
+        "endFrame": 55235,
+        "duration": 0.32,
+        "rms": 0.24665847,
+        "peak": 0.83999145
+      },
+      "Spawn": {
+        "start": 2.684988662131519,
+        "finish": 3.1,
+        "startFrame": 59204,
+        "endFrame": 68355,
+        "duration": 0.4150113378684807,
+        "rms": 0.22890754,
+        "peak": 0.64293344
+      },
+      "BossWarning": {
+        "start": 3.28,
+        "finish": 3.8950113378684805,
+        "startFrame": 72324,
+        "endFrame": 85885,
+        "duration": 0.6150113378684807,
+        "rms": 0.29452459,
+        "peak": 0.83999145
+      },
+      "BossHit": {
+        "start": 4.075011337868481,
+        "finish": 4.495011337868481,
+        "startFrame": 89854,
+        "endFrame": 99115,
+        "duration": 0.42,
+        "rms": 0.13947989,
+        "peak": 0.83999145
+      },
+      "Crash": {
+        "start": 4.67501133786848,
+        "finish": 5.32498866213152,
+        "startFrame": 103084,
+        "endFrame": 117416,
+        "duration": 0.6499773242630386,
+        "rms": 0.13109329,
+        "peak": 0.83999145
+      },
+      "Bomb": {
+        "start": 5.504988662131519,
+        "finish": 5.869977324263038,
+        "startFrame": 121385,
+        "endFrame": 129433,
+        "duration": 0.36498866213151926,
+        "rms": 0.26752432,
+        "peak": 0.83999145
+      },
+      "Victory": {
+        "start": 6.049977324263039,
+        "finish": 6.809977324263039,
+        "startFrame": 133402,
+        "endFrame": 150160,
+        "duration": 0.76,
+        "rms": 0.27934542,
+        "peak": 0.83999145
+      },
+      "Defeat": {
+        "start": 6.989977324263038,
+        "finish": 7.78,
+        "startFrame": 154129,
+        "endFrame": 171549,
+        "duration": 0.7900226757369615,
+        "rms": 0.2442289,
+        "peak": 0.66881314
+      },
+      "Death": {
+        "start": 7.96,
+        "finish": 8.44,
+        "startFrame": 175518,
+        "endFrame": 186102,
+        "duration": 0.48,
+        "rms": 0.19525501,
+        "peak": 0.83999145
+      },
+      "Equip": {
+        "start": 8.62,
+        "finish": 8.790022675736962,
+        "startFrame": 190071,
+        "endFrame": 193820,
+        "duration": 0.17002267573696145,
+        "rms": 0.24921802,
+        "peak": 0.83999145
+      },
+      "EnemyDeath": {
+        "start": 8.970022675736962,
+        "finish": 9.290022675736962,
+        "startFrame": 197789,
+        "endFrame": 204845,
+        "duration": 0.32,
+        "rms": 0.15043722,
+        "peak": 0.83999145
+      }
+    }
+  },
+  "music": {
+    "file": "bricktoads-music-atlas.wav",
+    "sampleRate": 22050,
+    "duration": 42.01746031746032,
+    "sha256": "4a8af1ee0ed3976346ad8e175c2d2135a9c90ad50961e670811021dbbd7eb16e",
+    "regions": {
+      "Level": {
+        "start": 0.18,
+        "finish": 12.98,
+        "startFrame": 3969,
+        "endFrame": 286209,
+        "duration": 12.8,
+        "rms": 0.16343932,
+        "peak": 0.80806909
+      },
+      "Boss": {
+        "start": 13.16,
+        "finish": 24.588571428571427,
+        "startFrame": 290178,
+        "endFrame": 542178,
+        "duration": 11.428571428571429,
+        "rms": 0.14292868,
+        "peak": 0.83999145
+      },
+      "Result": {
+        "start": 24.768571428571427,
+        "finish": 32.76857142857143,
+        "startFrame": 546147,
+        "endFrame": 722547,
+        "duration": 8.0,
+        "rms": 0.1520719,
+        "peak": 0.83999145
+      },
+      "Lobby": {
+        "start": 32.94857142857143,
+        "finish": 41.83746031746032,
+        "startFrame": 726516,
+        "endFrame": 922516,
+        "duration": 8.88888888888889,
+        "rms": 0.153424,
+        "peak": 0.83999145
+      }
+    }
+  }
+}

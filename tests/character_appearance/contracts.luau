@@ -63,7 +63,8 @@ for _,row in ipairs(Manifest.parts)do
     for _,a in ipairs(row.attachments)do local child=node('Attachment',a.name,p);child.CFrame=frame(table.unpack(a.cframe))end
     for _,a in ipairs(row.surfaceAppearances)do local child=node('SurfaceAppearance',a.name,p);child.ColorMap=a.colorMap end
 end
-local env=setmetatable({game={GetService=function()return storage end},Instance={new=function(class)return node(class)end},CFrame=cf},{__index=getfenv()})
+local colors={fromRGB=function(r,g,b)return {R=r/255,G=g/255,B=b/255}end}
+local env=setmetatable({game={GetService=function()return storage end},Instance={new=function(class)return node(class)end},CFrame=cf,Color3=colors},{__index=getfenv()})
 local loader=assert(loadstring(AppearanceSource));setfenv(loader,env);local Appearance=loader()
 local workspace=node('Workspace')
 local function actor(id)
@@ -168,17 +169,26 @@ test('canonical shoulders retain their authored neutral rotations without explor
     assert(math.abs(legacy.appearance.joints.RightShoulder.motor.C0.rz+math.rad(45))<1e-6)
 end)
 
-test('untagged canonical P2 is unavailable and never borrows a Green resource or invents Brown',function()
+test('untagged canonical P2 is unavailable while Brown clones only a validated canonical P1',function()
     local source=canonicalTemplates()
     source.CanonicalPlayer2.AppearanceProfile:Destroy()
     local legacy=template:Clone();legacy.Parent=source
-    for _,name in ipairs({'Mr. Yellow','Mr. Brown'})do
+    for _,name in ipairs({'Mr. Yellow'})do
         local a=actor(name);a.model:SetAttribute('Template','original');a.model:SetAttribute('Appearance','original-art')
         local ok=Appearance.attach(a,name,source)
         assert(not ok and not a.appearance and a.model.Torso.Transparency==0)
         assert(a.model:GetAttribute('Template')=='original'and a.model:GetAttribute('Appearance')=='original-art')
     end
+    local brown=actor('approved-brown');assert(Appearance.attach(brown,'Mr. Brown',source))
+    assert(brown.appearance.model.Head.Size.X==source.CanonicalPlayer1.Head.Size.X)
+    assert(brown.model:GetAttribute('Template')=='Mr. Brown' and brown.appearance.profile=='CanonicalNESHero')
+    assert(brown.appearance.model:GetAttribute('PaletteAdaptation')=='ApprovedThirdHeroBrownPalette')
+    assert(brown.appearance.model.Head.Color.R==160/255 and brown.appearance.model.Head.Color.G==112/255)
+    assert(source.CanonicalPlayer1.Head.Color==nil and source.CanonicalPlayer1.Head.SurfaceAppearance.Color==nil)
+    local clone=brown.appearance.model;assert(Appearance.attach(brown,'Mr. Brown',source)and brown.appearance.model==clone)
     source.CanonicalPlayer1.AppearanceProfile:Destroy()
+    local unavailable=actor('brown-unavailable');assert(not Appearance.attach(unavailable,'Mr. Brown',source))
+    assert(unavailable.model.Torso.Transparency==0)
     local a=actor('explicit-legacy');assert(Appearance.attach(a,'Mr. Green',source))
     assert(a.appearance.model.Head.SurfaceAppearance.ColorMap==template.Head.SurfaceAppearance.ColorMap)
     assert(a.model:GetAttribute('Appearance')=='LegacyGeneratedGreen','Untagged GreenToad must remain identifiable as the legacy study')

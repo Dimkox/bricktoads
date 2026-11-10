@@ -1,0 +1,650 @@
+{
+  "schema": 1,
+  "kind": "Snake",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/snake.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "Snake graphics92-97 show a broad red angular head/jaw and turns;98-9A are yellow/white narrow shaft strips. Full nametable path is not reconstructed; this is a reusable head/body/tail segment cosmetic."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -1.584,
+      -1.1132000000000002,
+      -3.8280000000000003
+    ],
+    [
+      1.584,
+      1.4300000000000002,
+      4.224
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Snake",
+    "sourceEvidence": "main.asm:18916-18940;23307-23970",
+    "frames": [
+      {
+        "frameId": 146,
+        "width": 38,
+        "height": 35,
+        "visibleBounds": {
+          "minX": -10,
+          "minY": -9,
+          "maxX": 27,
+          "maxY": 25
+        },
+        "referencePng": "cast-frames/snake-92.png"
+      },
+      {
+        "frameId": 147,
+        "width": 24,
+        "height": 32,
+        "visibleBounds": {
+          "minX": -15,
+          "minY": -9,
+          "maxX": 8,
+          "maxY": 22
+        },
+        "referencePng": "cast-frames/snake-93.png"
+      },
+      {
+        "frameId": 148,
+        "width": 32,
+        "height": 24,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -15,
+          "maxX": 15,
+          "maxY": 8
+        },
+        "referencePng": "cast-frames/snake-94.png"
+      },
+      {
+        "frameId": 149,
+        "width": 32,
+        "height": 24,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -15,
+          "maxX": 15,
+          "maxY": 8
+        },
+        "referencePng": "cast-frames/snake-95.png"
+      },
+      {
+        "frameId": 150,
+        "width": 32,
+        "height": 40,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -38,
+          "maxX": 15,
+          "maxY": 1
+        },
+        "referencePng": "cast-frames/snake-96.png"
+      },
+      {
+        "frameId": 151,
+        "width": 32,
+        "height": 40,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -10,
+          "maxX": 15,
+          "maxY": 29
+        },
+        "referencePng": "cast-frames/snake-97.png"
+      },
+      {
+        "frameId": 152,
+        "width": 39,
+        "height": 8,
+        "visibleBounds": {
+          "minX": -19,
+          "minY": 5,
+          "maxX": 19,
+          "maxY": 12
+        },
+        "referencePng": "cast-frames/snake-98.png"
+      },
+      {
+        "frameId": 153,
+        "width": 8,
+        "height": 39,
+        "visibleBounds": {
+          "minX": -8,
+          "minY": -14,
+          "maxX": -1,
+          "maxY": 24
+        },
+        "referencePng": "cast-frames/snake-99.png"
+      },
+      {
+        "frameId": 154,
+        "width": 8,
+        "height": 39,
+        "visibleBounds": {
+          "minX": 0,
+          "minY": -14,
+          "maxX": 7,
+          "maxY": 24
+        },
+        "referencePng": "cast-frames/snake-9a.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      22,
+      38
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "typeId": 76,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:72",
+      "trigger": [
+        0,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": []
+    },
+    "sourceSlotPrimary": 3,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 22,
+        "effectiveRgb": [
+          180,
+          0,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 38,
+        "effectiveRgb": [
+          255,
+          100,
+          97
+        ]
+      }
+    ],
+    "variantCount": 1,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.1132000000000002,
+          -1.1132000000000002,
+          -0.77
+        ],
+        [
+          1.1132000000000002,
+          1.1132000000000002,
+          2.4200000000000004
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.1132000000000002,
+          -1.1132000000000002,
+          -0.77
+        ],
+        [
+          1.1132000000000002,
+          1.1132000000000002,
+          2.4200000000000004
+        ]
+      ],
+      "vertices": 392,
+      "authoringVertices": 392,
+      "paletteSplitTriangles": 0,
+      "triangles": 768
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.0,
+        -0.6160000000000001
+      ],
+      "localBounds": [
+        [
+          -1.584,
+          -0.9020000000000001,
+          -3.212
+        ],
+        [
+          1.584,
+          1.4300000000000002,
+          0.8360000000000003
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.584,
+          -0.9020000000000001,
+          -3.8280000000000003
+        ],
+        [
+          1.584,
+          1.4300000000000002,
+          0.22000000000000022
+        ]
+      ],
+      "vertices": 1088,
+      "authoringVertices": 1088,
+      "paletteSplitTriangles": 0,
+      "triangles": 2152
+    },
+    {
+      "name": "Jaw",
+      "parent": "Head",
+      "pivot": [
+        0.0,
+        -0.33,
+        -0.9900000000000001
+      ],
+      "localBounds": [
+        [
+          -1.4080000000000001,
+          -0.77,
+          -2.789692973433973
+        ],
+        [
+          1.4080000000000001,
+          0.41800000000000004,
+          0.374
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.4080000000000001,
+          -1.1,
+          -3.7796929734339733
+        ],
+        [
+          1.4080000000000001,
+          0.08800000000000001,
+          -0.6160000000000001
+        ]
+      ],
+      "vertices": 434,
+      "authoringVertices": 434,
+      "paletteSplitTriangles": 0,
+      "triangles": 852
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.0,
+        2.0460000000000003
+      ],
+      "localBounds": [
+        [
+          -0.9680000000000001,
+          -0.9680000000000001,
+          0.0
+        ],
+        [
+          0.9680000000000001,
+          0.9680000000000001,
+          2.178
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.9680000000000001,
+          -0.9680000000000001,
+          2.0460000000000003
+        ],
+        [
+          0.9680000000000001,
+          0.9680000000000001,
+          4.224
+        ]
+      ],
+      "vertices": 142,
+      "authoringVertices": 142,
+      "paletteSplitTriangles": 0,
+      "triangles": 280
+    }
+  ],
+  "joints": [
+    {
+      "name": "Head",
+      "parent": "Body",
+      "child": "Head",
+      "parentAttachment": [
+        0.0,
+        0.0,
+        -0.6160000000000001
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Jaw",
+      "parent": "Head",
+      "child": "Jaw",
+      "parentAttachment": [
+        0.0,
+        -0.33,
+        -0.374
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "child": "Tail",
+      "parentAttachment": [
+        0.0,
+        0.0,
+        2.0460000000000003
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "atlasResolution": [
+      48,
+      48
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 4052,
+    "vertices": 2056,
+    "closedComponents": true,
+    "components": 15,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0003519002952778651
+  }
+}

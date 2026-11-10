@@ -30,17 +30,22 @@ class BrickToadsPlaceTests(unittest.TestCase):
                                  'cframe':[0,.5,.2, 1,0,0, 0,1,0, 0,0,1]}])
         manifests = {}
         for family, kinds, asset_id in [('attack', ('PowerFist','BigBoot'), '987654321'),
-                                        ('fear', ('FearBeforeCut','FearAfterCut'), '987654322')]:
+                                        ('fear', ('FearBeforeCut','FearAfterCut'), '987654322'),
+                                        ('brown', ('PowerFist','BigBoot','FearBeforeCut','FearAfterCut'), '987654324')]:
             blob = f'explicit {family} packaging fixture, never uploaded as an asset'.encode()
-            filename = f'hero-{family}-morphs.glb'
+            filename = 'brown-hero-morphs.glb' if family=='brown' else f'hero-{family}-morphs.glb'
             (folder / filename).write_bytes(blob)
             manifest = {'schema':1, 'appearanceProfile':'CanonicalNESHeroMorph',
                         'sourceAssetId':asset_id, 'sourceGlbFile':filename,
                         'sourceGlbSha256':hashlib.sha256(blob).hexdigest(), 'templates':[]}
-            for prefix, hero in [('Green','Mr. Green'), ('PlayerTwo','Mr. Yellow')]:
-                for kind in kinds:
+            palettes=[('Brown','Mr. Brown')] if family=='brown' else [('Green','Mr. Green'), ('PlayerTwo','Mr. Yellow')]
+            for prefix, hero in palettes:
+                for index,kind in enumerate(kinds):
+                    part=copy.deepcopy(row)
+                    if family=='brown':part.update(meshId='rbxassetid://'+str(987650000+index),
+                                                  textureId='rbxassetid://987654999',surfaceAppearances=[])
                     manifest['templates'].append({'name':prefix+kind, 'heroTemplate':hero,
-                        'morphKind':kind, 'appearanceScale':1, 'part':copy.deepcopy(row)})
+                        'morphKind':kind, 'appearanceScale':1, 'part':part})
             path = folder / f'roblox-{family}-morphs.json'
             path.write_text(json.dumps(manifest), encoding='utf-8')
             manifests[family] = path, manifest
@@ -217,7 +222,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             folder=named(named(root,'ServerStorage'),'BrickToadsCharacterMorphs')
             self.assertEqual({p.findtext("Properties/string[@name='Name']") for p in folder.findall('Item')
                               if not p.findtext("Properties/string[@name='Name']").endswith(('FearBeforeCut','FearAfterCut'))},
-                             {p['name'] for p in manifest['templates']})
+                             {p['name'] for p in manifest['templates']}|{'BrownPowerFist','BrownBigBoot'})
             for row in manifest['templates']:
                 model=named(folder,row['name']); mesh=named(model,'Morph')
                 for key,value in [('AppearanceProfile','CanonicalNESHeroMorph'),('HeroTemplate',row['heroTemplate']),
@@ -265,7 +270,8 @@ class BrickToadsPlaceTests(unittest.TestCase):
         folder = folders[0]
         self.assertEqual({node.findtext("Properties/string[@name='Name']") for node in folder.findall('Item')},
                          {'GreenPowerFist','GreenBigBoot','PlayerTwoPowerFist','PlayerTwoBigBoot',
-                          'GreenFearBeforeCut','GreenFearAfterCut','PlayerTwoFearBeforeCut','PlayerTwoFearAfterCut'})
+                          'GreenFearBeforeCut','GreenFearAfterCut','PlayerTwoFearBeforeCut','PlayerTwoFearAfterCut',
+                          'BrownPowerFist','BrownBigBoot','BrownFearBeforeCut','BrownFearAfterCut'})
         path = self.root / 'assets/characters/canonical-hero/roblox-fear-morphs.json'
         manifest = json.loads(path.read_bytes())
         for row in manifest['templates']:
@@ -293,7 +299,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
                          .findtext("Properties/string[@name='Value']"), '987654321')
 
     def test_missing_either_morph_family_fails_closed(self):
-        for family in ('attack', 'fear'):
+        for family in ('attack', 'fear', 'brown'):
             with self.subTest(family=family), tempfile.TemporaryDirectory() as directory:
                 source = Path(directory)
                 self.morph_fixture(source)
@@ -343,6 +349,59 @@ class BrickToadsPlaceTests(unittest.TestCase):
         path.write_bytes((folder / 'roblox-fear-morphs.json').read_bytes())
         with self.assertRaises(ValueError):
             self.builder.build(self.root)
+
+    def test_brown_has_a_dedicated_canonical_skin_in_the_playable(self):
+        manifest=json.loads((self.root/'assets/characters/canonical-hero/roblox-brown.json').read_text())
+        root=ET.fromstring(self.builder.build(self.root))
+        skin=named(named(named(root,'ServerStorage'),'BrickToadsCharacterTemplates'),'CanonicalPlayerBrown')
+        self.assertEqual(len([p for p in skin.findall('Item') if p.attrib['class']=='MeshPart']),15)
+        self.assertEqual(named(skin,'SourceGlbSha256').findtext("Properties/string[@name='Value']"),manifest['sourceGlbSha256'])
+
+    def test_brown_morphs_preserve_dedicated_uploaded_texture_and_all_four_identities(self):
+        path=self.root/'assets/characters/canonical-hero/roblox-brown-morphs.json'
+        manifest=json.loads(path.read_bytes())
+        root=ET.fromstring(self.builder.build(self.root));folder=named(named(root,'ServerStorage'),'BrickToadsCharacterMorphs')
+        expected={'BrownPowerFist','BrownBigBoot','BrownFearBeforeCut','BrownFearAfterCut'}
+        models={p.findtext("Properties/string[@name='Name']"):p for p in folder.findall('Item')}
+        self.assertEqual(set(models)&expected,expected)
+        self.assertEqual(len(models),12,'The existing eight Green/P2 resources must remain present')
+        for row in manifest['templates']:
+            model=models[row['name']];mesh=named(model,'Morph')
+            for key,value in [('AppearanceProfile','CanonicalNESHeroMorph'),('HeroTemplate','Mr. Brown'),
+                              ('MorphKind',row['morphKind']),('SourceAssetId',manifest['sourceAssetId']),
+                              ('SourceGlbSha256',manifest['sourceGlbSha256']),
+                              ('AssetManifestSha256',hashlib.sha256(path.read_bytes()).hexdigest())]:
+                self.assertEqual(named(model,key).findtext("Properties/string[@name='Value']"),value)
+            self.assertEqual(mesh.findtext("Properties/Content[@name='MeshId']/url"),row['part']['meshId'])
+            self.assertEqual(mesh.findtext("Properties/Content[@name='TextureID']/url"),row['part']['textureId'])
+            self.assertEqual(row['part']['textureId'],'rbxassetid://987654999')
+            self.assertEqual(named(mesh,'MorphOriginRigAttachment').attrib['class'],'Attachment')
+
+    def test_brown_morphs_reject_green_substitution_missing_identity_and_bad_origin(self):
+        path=self.root/'assets/characters/canonical-hero/roblox-brown-morphs.json'
+        original=path.read_bytes();base=json.loads(original)
+        changes=[('green-hero',lambda d:d['templates'][0].update(heroTemplate='Mr. Green')),
+                 ('green-name',lambda d:d['templates'][0].update(name='GreenPowerFist')),
+                 ('missing-kind',lambda d:d['templates'].pop()),
+                 ('duplicate-kind',lambda d:d['templates'][1].update(name='BrownPowerFist')),
+                 ('wrong-kind',lambda d:d['templates'][0].update(morphKind='FearAfterCut')),
+                 ('wrong-scale',lambda d:d['templates'][0].update(appearanceScale=.8)),
+                 ('invalid-origin',lambda d:d['templates'][0]['part']['attachments'][0]['cframe'].__setitem__(0,.005)),
+                 ('invalid-hash',lambda d:d.update(sourceGlbSha256='0'*64)),
+                 ('source-escape',lambda d:d.update(sourceGlbFile='../brown-hero-morphs.glb'))]
+        for name,change in changes:
+            with self.subTest(case=name):
+                receipt=copy.deepcopy(base);change(receipt);path.write_text(json.dumps(receipt))
+                with self.assertRaises(ValueError):self.builder.build(self.root)
+        path.write_bytes(original)
+
+    def test_brown_morph_receipt_and_its_selected_source_are_mandatory(self):
+        path=self.root/'assets/characters/canonical-hero/roblox-brown-morphs.json'
+        original=path.read_bytes();receipt=json.loads(original);path.unlink()
+        with self.assertRaises(FileNotFoundError):self.builder.build(self.root)
+        path.write_bytes(original)
+        (path.parent/receipt['sourceGlbFile']).unlink()
+        with self.assertRaises(FileNotFoundError):self.builder.build(self.root)
 
     def setUp(self):
         self.assertTrue(BUILDER.exists(), "development place builder is missing")
@@ -452,7 +511,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
         self.assertFalse({p.attrib["class"] for p in template.iter("Item")} & {"Humanoid", "AnimationConstraint", "BallSocketConstraint", "Script", "Motor6D"})
         self.assertEqual(named(template, "AppearanceScale").findtext("Properties/double[@name='Value']"), "0.8")
         self.assertEqual([p.findtext("Properties/string[@name='Name']") for p in folder.findall("Item")],
-                         ["CanonicalPlayer1", "CanonicalPlayer2", "GreenToad"])
+                         ["CanonicalPlayer1", "CanonicalPlayer2", "CanonicalPlayerBrown", "GreenToad"])
         self.assertEqual(sum(p.attrib['class']=='ServerStorage' for p in root.findall('Item')),1)
         self.assertEqual(sum(p.findtext("Properties/string[@name='Name']")=='BrickToadsCharacterTemplates'
                              for p in named(root,'ServerStorage').findall('Item')),1)
@@ -462,6 +521,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             source = Path(directory)
             shutil.copytree(self.root / "src", source / "src")
             shutil.copytree(self.root / "assets/characters/canonical-hero", source / "assets/characters/canonical-hero")
+            shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
             with self.assertRaises(FileNotFoundError):
                 self.builder.build(source, include_character_study=True)
 
@@ -472,6 +532,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             source = Path(directory)
             shutil.copytree(self.root / "src", source / "src")
             shutil.copytree(self.root / "assets/characters/canonical-hero", source / "assets/characters/canonical-hero")
+            shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
             self.builder.build(source)
 
     def test_canonical_player_templates_are_default_private_exact_uploaded_resources(self):
@@ -480,7 +541,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
         self.assertIsNotNone(storage,'Default playable must package both canonical player resources')
         folder=named(storage,'BrickToadsCharacterTemplates')
         self.assertEqual([p.findtext("Properties/string[@name='Name']") for p in folder.findall('Item')],
-                         ['CanonicalPlayer1','CanonicalPlayer2'])
+                         ['CanonicalPlayer1','CanonicalPlayer2','CanonicalPlayerBrown'])
         source_asset_ids=[]
         mesh_sets=[]
         for player in (1,2):
@@ -526,7 +587,14 @@ class BrickToadsPlaceTests(unittest.TestCase):
             source_asset_ids.append(manifest['sourceAssetId'])
             mesh_sets.append({p['meshId'] for p in manifest['parts']})
         self.assertNotEqual(source_asset_ids[0],source_asset_ids[1])
-        self.assertNotEqual(mesh_sets[0],mesh_sets[1],'P2 uses the actual separate uploaded palette mesh assets')
+        # Roblox deduplicates identical brawler geometry across palette uploads.
+        # Distinct uploaded albedo, rather than duplicate MeshIds, owns the colour.
+        albedos=[]
+        for player in (1,2):
+            manifest=json.loads((self.root/f'assets/characters/canonical-hero/roblox-player{player}.json').read_text())
+            albedos.append({s['colorMap'] for p in manifest['parts'] for s in p['surfaceAppearances']})
+        self.assertTrue(albedos[0] and albedos[1])
+        self.assertNotEqual(albedos[0],albedos[1],'P2 retains its actual uploaded source-palette albedo')
         entry=named(named(named(root,'ServerScriptService'),'BrickToads'),'BrickToadsServer')
         self.assertIn('characterAppearance=require(gameplay.CharacterAppearance)',
                       entry.findtext("Properties/ProtectedString[@name='Source']"))
@@ -546,6 +614,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             shutil.copytree(self.root / 'src', source / 'src')
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
+            shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             default = folder / manifest.get('sourceGlbFile', 'canonical-hero-player1.glb')
@@ -565,6 +634,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             shutil.copytree(self.root / 'src', source / 'src')
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
+            shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             for filename in ('../outside.glb', '..\\outside.glb', '/outside.glb', 'C:\\outside.glb',
@@ -582,6 +652,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             shutil.copytree(self.root / 'src', source / 'src')
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
+            shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             manifest['sourceGlbFile'] = 'review-missing-hero.glb'
@@ -599,6 +670,7 @@ class BrickToadsPlaceTests(unittest.TestCase):
             shutil.copytree(self.root / 'src', source / 'src')
             folder = source / 'assets/characters/canonical-hero'
             shutil.copytree(self.root / 'assets/characters/canonical-hero', folder)
+            shutil.copytree(self.root / 'assets/characters/canonical-cast', source / 'assets/characters/canonical-cast')
             path = folder / 'roblox-player1.json'
             manifest = json.loads(path.read_text(encoding='utf-8'))
             surface = {'name': 'SurfaceAppearance', 'colorMap': 'rbxassetid://101',

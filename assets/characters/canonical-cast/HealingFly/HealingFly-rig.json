@@ -1,0 +1,624 @@
+{
+  "schema": 1,
+  "kind": "HealingFly",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/healingfly.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "HealingFly graphics0D/0E show a tiny yellow/olive insect, two white flapping wings and small dark appendages; this collectible is distinct from hostile Raven/Dragon flight."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -0.9859999999999999,
+      -0.40786872390413237,
+      -0.7140000000000001
+    ],
+    [
+      0.9859999999999999,
+      0.4335,
+      0.7718117793619828
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Canyon",
+    "sourceEvidence": "main.asm:9449-9478; source type0A",
+    "frames": [
+      {
+        "frameId": 13,
+        "width": 8,
+        "height": 6,
+        "visibleBounds": {
+          "minX": -4,
+          "minY": 2,
+          "maxX": 3,
+          "maxY": 7
+        },
+        "referencePng": "cast-frames/healingfly-0d.png"
+      },
+      {
+        "frameId": 14,
+        "width": 7,
+        "height": 8,
+        "visibleBounds": {
+          "minX": -4,
+          "minY": 0,
+          "maxX": 2,
+          "maxY": 7
+        },
+        "referencePng": "cast-frames/healingfly-0e.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      0,
+      16
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "typeId": 10,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:17",
+      "trigger": [
+        1,
+        80
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        0,
+        16
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:15",
+          "trigger": [
+            1,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            0,
+            16
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "sourceSlotPrimary": 2,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 0,
+        "effectiveRgb": [
+          84,
+          84,
+          84
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 16,
+        "effectiveRgb": [
+          152,
+          150,
+          152
+        ]
+      }
+    ],
+    "variantCount": 2,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.33552026683223163,
+          -0.40786872390413237,
+          -0.425
+        ],
+        [
+          0.33552026683223163,
+          0.255,
+          0.595
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.33552026683223163,
+          -0.40786872390413237,
+          -0.425
+        ],
+        [
+          0.33552026683223163,
+          0.255,
+          0.595
+        ]
+      ],
+      "vertices": 286,
+      "authoringVertices": 286,
+      "paletteSplitTriangles": 0,
+      "triangles": 560
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.051,
+        -0.28900000000000003
+      ],
+      "localBounds": [
+        [
+          -0.306,
+          -0.255,
+          -0.42500000000000004
+        ],
+        [
+          0.306,
+          0.28900000000000003,
+          0.15300000000000005
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.306,
+          -0.204,
+          -0.7140000000000001
+        ],
+        [
+          0.306,
+          0.34,
+          -0.13599999999999998
+        ]
+      ],
+      "vertices": 582,
+      "authoringVertices": 582,
+      "paletteSplitTriangles": 0,
+      "triangles": 1144
+    },
+    {
+      "name": "LeftWing",
+      "parent": "Body",
+      "pivot": [
+        -0.136,
+        0.204,
+        0.102
+      ],
+      "localBounds": [
+        [
+          -0.8499999999999999,
+          0.14450000000000005,
+          -0.068
+        ],
+        [
+          0.136,
+          0.2295,
+          0.40800000000000003
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.9859999999999999,
+          0.34850000000000003,
+          0.03399999999999998
+        ],
+        [
+          0.0,
+          0.4335,
+          0.51
+        ]
+      ],
+      "vertices": 182,
+      "authoringVertices": 182,
+      "paletteSplitTriangles": 0,
+      "triangles": 360
+    },
+    {
+      "name": "RightWing",
+      "parent": "Body",
+      "pivot": [
+        0.136,
+        0.204,
+        0.102
+      ],
+      "localBounds": [
+        [
+          -0.136,
+          0.14450000000000005,
+          -0.068
+        ],
+        [
+          0.8499999999999999,
+          0.2295,
+          0.40800000000000003
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.0,
+          0.34850000000000003,
+          0.03399999999999998
+        ],
+        [
+          0.9859999999999999,
+          0.4335,
+          0.51
+        ]
+      ],
+      "vertices": 182,
+      "authoringVertices": 182,
+      "paletteSplitTriangles": 0,
+      "triangles": 360
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.0,
+        0.47600000000000003
+      ],
+      "localBounds": [
+        [
+          -0.17,
+          -0.14713443421882788,
+          -0.04152240570313803
+        ],
+        [
+          0.17,
+          0.14713443421882783,
+          0.2958117793619827
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.17,
+          -0.14713443421882788,
+          0.434477594296862
+        ],
+        [
+          0.17,
+          0.14713443421882783,
+          0.7718117793619828
+        ]
+      ],
+      "vertices": 58,
+      "authoringVertices": 58,
+      "paletteSplitTriangles": 0,
+      "triangles": 112
+    }
+  ],
+  "joints": [
+    {
+      "name": "Head",
+      "parent": "Body",
+      "child": "Head",
+      "parentAttachment": [
+        0.0,
+        0.051,
+        -0.28900000000000003
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftWing",
+      "parent": "Body",
+      "child": "LeftWing",
+      "parentAttachment": [
+        -0.136,
+        0.204,
+        0.102
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightWing",
+      "parent": "Body",
+      "child": "RightWing",
+      "parentAttachment": [
+        0.136,
+        0.204,
+        0.102
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "child": "Tail",
+      "parentAttachment": [
+        0.0,
+        0.0,
+        0.47600000000000003
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 2536,
+    "vertices": 1290,
+    "closedComponents": true,
+    "components": 11,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 2.1070595676104017e-05
+  }
+}

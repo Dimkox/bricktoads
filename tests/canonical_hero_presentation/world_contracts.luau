@@ -63,9 +63,19 @@ assert(ctx.reactionEpoch==3 and ctx.recoveryAction=='HeroJab' and ctx.recoveryUn
 assert(ctx.speed==8 and ctx.dt==.1 and ctx.grounded==true)
 assert(sourceContexts[sourceWorld.actors[2]].attack==nil,'The second actor must not borrow another hero attack')
 print('PASS source presentation hook forwards accepted action identity clock movement and recovery per actor')
+sourceBody.campaignControl=true
+sourceWorld.config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75}
+sourceWorld.campaignModes={mode='Ascent',actors={[1]={grounded=false}}}
+assert(capture().visualState=='Air' and capture().grounded==false,'Campaign jumps must reach the source air selector')
+sourceBody.campaignControl=nil;sourceWorld.campaignModes=nil;sourceWorld.config.Movement=nil
 
 local function blocked(reason)
-    assert(capture().blocked==reason,'Expected source fallback '..reason)
+    local context=capture()
+    if reason=='Paused' then assert(context.blocked==reason,'Paused collider must retain fallback')
+    else
+        local expected=reason=='Dragon' and 'DragonMounted' or reason=='Airborne' and 'Air' or reason
+        assert(context.blocked==nil and context.visualState==expected,'Expected rendered state '..expected)
+    end
 end
 sourceBody.humanoid.Health=0;blocked('Dead');sourceBody.humanoid.Health=100
 sourceState.reactionEnd=3;blocked('Reaction');sourceState.reactionEnd=nil
@@ -76,6 +86,8 @@ sourceWorld.equippedClubs['source-club']={owner=sourceBody};sourceBody.model:Set
 blocked('Club');sourceWorld.equippedClubs['source-club']=nil;sourceBody.model:SetAttribute('EquippedClub',nil)
 sourceBody.root.Anchored=true;blocked('Paused');sourceBody.root.Anchored=false
 sourceBody.humanoid.FloorMaterial=enum.Material.Air;blocked('Airborne');sourceBody.humanoid.FloorMaterial=enum.Material.Slate
+sourceBody.root.AssemblyLinearVelocity=vector(8,12,0);assert(capture().verticalSpeed==12)
+sourceBody.root.AssemblyLinearVelocity=vector(8,0,0)
 assert(capture().blocked==nil,'Removing priority must provide fresh locomotion context')
 sourceSession.sourceCombat=nil;assert(capture().enabled==false,'Stand/unsupported combat keeps its established retarget')
 assert(sourceState.attack==accepted and sourceBody.humanoid.Health==100 and sourceBody.root:GetNetworkOwner()==nil)
@@ -88,6 +100,68 @@ assert(sourceContexts[sourceWorld.actors[2]].fearIntro==nil,'A replacement canno
 sourceBody.model:SetAttribute('ActorId','replacement');assert(capture().fearIntro==nil)
 sourceBody.model:SetAttribute('ActorId','source-context-p1')
 sourceWorld.bossIntroState=nil;assert(capture().fearIntro==nil,'Ending intro removes its presentation context')
+local castContexts={}
+sourceWorld.castAppearance={attach=function(body,kind) body.castAppearance={kind=kind};return true end,
+    update=function(body,context) castContexts[body]=context end}
+assert(sourceWorld:spawnEnemy(-1,'Raven',{x=-20,y=3,z=0}))
+sourceWorld:enemyIdentity(-1,'real-raven')
+local raven=sourceWorld.actors[-1];raven.model:SetAttribute('CampaignMode','EnemyFly')
+raven.campaignVelocity=vector(9,0,0)
+sourceSession.state={levelEpoch=4}
+local enemies={[-1]={kind='Raven'}}
+local attack={name='Swoop',at=2.4,move={tell=.4}}
+local director={campaignEnemies={states={[-1]={mode='Tell',attack=attack}}}}
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+local rc=assert(castContexts[raven])
+assert(rc.mode=='Fly' and rc.actorId=='real-raven' and rc.levelEpoch==4,'Normalize the real campaign movement channel')
+assert(rc.attack.actorId==rc.actorId and rc.attack.levelEpoch==4 and rc.attack.start==2)
+assert(sourceWorld:spawnEnemy(-2,'Dragon',{x=-20,y=3,z=8}))
+sourceWorld:enemyIdentity(-2,'real-dragon');local dragon=sourceWorld.actors[-2]
+dragon.root.AssemblyLinearVelocity=vector(0,0,0);dragon.model:SetAttribute('DragonFlight',true)
+enemies[-2]={kind='Dragon'};director.dragons={states={[-2]={mode='Turn'}}}
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+assert(castContexts[dragon].mode=='Fly','Dragon flight must reach the verified object graphics cycle')
+director.dragons.states[-2].mode='Disabled'
+enemies[-2].reactionUntil=3;enemies[-2].heavyReaction=true
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+assert(castContexts[dragon].sourceState=='HeavyDisabled','Disabled Dragon has a distinct source selector')
+assert(castContexts[dragon].reactionHeavy==true and castContexts[dragon].reactionProgress==0,
+    'Forward the real heavy flag and clearly separate authored phase from a source timer byte')
+print('PASS actual campaign cast channels normalize modes and preserve accepted body/epoch identity')
+sourceWorld:healingFly('imported-fly',{x=-30,y=5,z=0})
+local fly=sourceWorld.healingFlyVisuals['imported-fly']
+assert(fly.castActor and fly.castActor.castAppearance.kind=='HealingFly','The collectible must use its imported family')
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+assert(castContexts[fly.castActor].kind=='HealingFly' and castContexts[fly.castActor].mode=='Fly')
+assert(sourceWorld:catchFly(1,'imported-fly'))
+assert(not sourceWorld.healingFlyVisuals['imported-fly'] and sourceBody.cosmeticActionEvent.action=='Tongue')
+local actionContext=capture();assert(actionContext.visualAction.action=='Tongue' and actionContext.visualAction.actorId=='source-context-p1')
+assert(capture().visualAction==actionContext.visualAction,'The same accepted effect must keep one immutable animation identity')
+print('PASS imported healing fly stays cosmetic and follows the collectible lifecycle')
+local pendingReady=false
+local pendingAdapter={attach=function(body,kind)
+    if not pendingReady then return false,'CAST_ASSETS_LOADING' end
+    body.castAppearance={kind=kind};return true
+end,update=function()end}
+local pendingWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50},
+    {name='PendingCastFallback',castAppearance=pendingAdapter})
+assert(pendingWorld:spawnEnemy(-1,'Pig',{x=-20,y=3,z=0}))
+local pendingPig=pendingWorld.actors[-1]
+pendingWorld:healingFly('pending-fly',{x=-30,y=5,z=0})
+local pendingFly=pendingWorld.healingFlyVisuals['pending-fly']
+assert(not pendingPig.castAppearance,'A pending Pig cannot have an attached cast')
+local visibleFallback=false
+for _,p in ipairs(pendingPig.model:GetDescendants()) do
+    if p:IsA('BasePart') and (p.Transparency or 0)<1 then visibleFallback=true end
+end
+assert(visibleFallback,'The existing Pig builder must remain visible')
+assert(pendingFly.castActor and not pendingFly.castActor.castAppearance and pendingFly.root.Transparency~=1,
+    'A pending fly keeps its body visible and retains an actor for the retry')
+pendingReady=true;pendingWorld:updatePresentation({now=4,combat={},state={levelEpoch=1}},.1,{[-1]={kind='Pig'}})
+assert(pendingPig.castAppearance.kind=='Pig' and pendingFly.castActor.castAppearance.kind=='HealingFly')
+assert(pendingFly.root.Transparency~=1,'Client resource readiness owns fallback visibility')
+pendingWorld:clearActors()
+print('PASS pending enemy and collectible assets keep a visible fallback and attach after resource readiness')
 sourceWorld:clearActors()
 print('PASS source context gives death reaction carry club Dragon air and paused states priority without altering combat')
 print('PASS fear context uses captured actor identity and never leaks to replaced bodies')

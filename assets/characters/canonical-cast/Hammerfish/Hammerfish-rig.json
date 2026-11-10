@@ -1,0 +1,776 @@
+{
+  "schema": 1,
+  "kind": "Hammerfish",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/hammerfish.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "Hammerfish graphicsD7/D9/DA/DB have a broad puffer-like body and round forward mouth; the gameplay name does not denote a hammerhead silhouette."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -1.554,
+      -0.925,
+      -2.35875
+    ],
+    [
+      1.554,
+      1.7020000000000002,
+      2.701
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Tubes",
+    "sourceEvidence": "main.asm:12243-12340;anims7C/7E highbit caller",
+    "frames": [
+      {
+        "frameId": 215,
+        "width": 27,
+        "height": 15,
+        "visibleBounds": {
+          "minX": -8,
+          "minY": 0,
+          "maxX": 18,
+          "maxY": 14
+        },
+        "referencePng": "cast-frames/hammerfish-d7.png"
+      },
+      {
+        "frameId": 217,
+        "width": 14,
+        "height": 12,
+        "visibleBounds": {
+          "minX": -7,
+          "minY": 1,
+          "maxX": 6,
+          "maxY": 12
+        },
+        "referencePng": "cast-frames/hammerfish-d9.png"
+      },
+      {
+        "frameId": 218,
+        "width": 16,
+        "height": 11,
+        "visibleBounds": {
+          "minX": -9,
+          "minY": 1,
+          "maxX": 6,
+          "maxY": 11
+        },
+        "referencePng": "cast-frames/hammerfish-da.png"
+      },
+      {
+        "frameId": 219,
+        "width": 16,
+        "height": 12,
+        "visibleBounds": {
+          "minX": -9,
+          "minY": 2,
+          "maxX": 6,
+          "maxY": 13
+        },
+        "referencePng": "cast-frames/hammerfish-db.png"
+      },
+      {
+        "frameId": 223,
+        "width": 31,
+        "height": 11,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": 1,
+          "maxX": 14,
+          "maxY": 11
+        },
+        "referencePng": "cast-frames/hammerfish-df.png"
+      },
+      {
+        "frameId": 225,
+        "width": 29,
+        "height": 16,
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -1,
+          "maxX": 17,
+          "maxY": 14
+        },
+        "referencePng": "cast-frames/hammerfish-e1.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      0,
+      16
+    ],
+    "actorPaletteXor": 2,
+    "selectedPaletteContext": {
+      "typeId": 111,
+      "actorPaletteXor": 2,
+      "source": "levels_cfgs2.asm:257",
+      "trigger": [
+        2,
+        128
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        0,
+        16
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:229",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            0,
+            16
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "sourceSlotPrimary": 3,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 0,
+        "effectiveRgb": [
+          84,
+          84,
+          84
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 16,
+        "effectiveRgb": [
+          152,
+          150,
+          152
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      }
+    ],
+    "variantCount": 1,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.8325,
+          -0.925,
+          -1.6464999999999999
+        ],
+        [
+          0.8325,
+          0.925,
+          1.8315000000000001
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.8325,
+          -0.925,
+          -1.6464999999999999
+        ],
+        [
+          0.8325,
+          0.925,
+          1.8315000000000001
+        ]
+      ],
+      "vertices": 314,
+      "authoringVertices": 314,
+      "paletteSplitTriangles": 0,
+      "triangles": 624
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.037000000000000005,
+        -1.147
+      ],
+      "localBounds": [
+        [
+          -0.8694999999999999,
+          -0.7770000000000001,
+          -1.21175
+        ],
+        [
+          0.8694999999999999,
+          0.851,
+          0.546149743715471
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.8694999999999999,
+          -0.7400000000000001,
+          -2.35875
+        ],
+        [
+          0.8694999999999999,
+          0.888,
+          -0.600850256284529
+        ]
+      ],
+      "vertices": 1070,
+      "authoringVertices": 1070,
+      "paletteSplitTriangles": 0,
+      "triangles": 2112
+    },
+    {
+      "name": "Jaw",
+      "parent": "Head",
+      "pivot": [
+        0.0,
+        -0.20350000000000001,
+        -1.1285
+      ],
+      "localBounds": [
+        [
+          -0.5365,
+          -0.49950000000000006,
+          -1.184
+        ],
+        [
+          0.5365,
+          -0.05550000000000005,
+          -0.3700000000000001
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.5365,
+          -0.7030000000000001,
+          -2.3125
+        ],
+        [
+          0.5365,
+          -0.25900000000000006,
+          -1.4985000000000002
+        ]
+      ],
+      "vertices": 142,
+      "authoringVertices": 142,
+      "paletteSplitTriangles": 0,
+      "triangles": 280
+    },
+    {
+      "name": "Fin",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.4625,
+        0.2775
+      ],
+      "localBounds": [
+        [
+          -0.111,
+          0.0,
+          -0.4625
+        ],
+        [
+          0.14800000000000002,
+          1.2395,
+          0.4625000000000001
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.111,
+          0.4625,
+          -0.18500000000000003
+        ],
+        [
+          0.14800000000000002,
+          1.7020000000000002,
+          0.7400000000000001
+        ]
+      ],
+      "vertices": 14,
+      "authoringVertices": 14,
+      "paletteSplitTriangles": 0,
+      "triangles": 24
+    },
+    {
+      "name": "LeftFin",
+      "parent": "Body",
+      "pivot": [
+        -0.444,
+        -0.12950000000000003,
+        0.14800000000000002
+      ],
+      "localBounds": [
+        [
+          -1.11,
+          -0.6845,
+          -0.4070000000000001
+        ],
+        [
+          0.07399999999999995,
+          0.05550000000000006,
+          0.555
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.554,
+          -0.8140000000000001,
+          -0.25900000000000006
+        ],
+        [
+          -0.37000000000000005,
+          -0.07399999999999997,
+          0.7030000000000001
+        ]
+      ],
+      "vertices": 14,
+      "authoringVertices": 14,
+      "paletteSplitTriangles": 0,
+      "triangles": 24
+    },
+    {
+      "name": "RightFin",
+      "parent": "Body",
+      "pivot": [
+        0.444,
+        -0.12950000000000003,
+        0.14800000000000002
+      ],
+      "localBounds": [
+        [
+          -0.07399999999999995,
+          -0.6845,
+          -0.4070000000000001
+        ],
+        [
+          1.11,
+          0.05550000000000006,
+          0.555
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.37000000000000005,
+          -0.8140000000000001,
+          -0.25900000000000006
+        ],
+        [
+          1.554,
+          -0.07399999999999997,
+          0.7030000000000001
+        ]
+      ],
+      "vertices": 14,
+      "authoringVertices": 14,
+      "paletteSplitTriangles": 0,
+      "triangles": 24
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.037000000000000005,
+        1.443
+      ],
+      "localBounds": [
+        [
+          -0.29600000000000004,
+          -0.9249999999999999,
+          0.0
+        ],
+        [
+          0.29600000000000004,
+          0.9620000000000001,
+          1.258
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.29600000000000004,
+          -0.8879999999999999,
+          1.443
+        ],
+        [
+          0.29600000000000004,
+          0.9990000000000001,
+          2.701
+        ]
+      ],
+      "vertices": 68,
+      "authoringVertices": 68,
+      "paletteSplitTriangles": 0,
+      "triangles": 128
+    }
+  ],
+  "joints": [
+    {
+      "name": "Head",
+      "parent": "Body",
+      "child": "Head",
+      "parentAttachment": [
+        0.0,
+        0.037000000000000005,
+        -1.147
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Jaw",
+      "parent": "Head",
+      "child": "Jaw",
+      "parentAttachment": [
+        0.0,
+        -0.24050000000000002,
+        0.01849999999999996
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Fin",
+      "parent": "Body",
+      "child": "Fin",
+      "parentAttachment": [
+        0.0,
+        0.4625,
+        0.2775
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftFin",
+      "parent": "Body",
+      "child": "LeftFin",
+      "parentAttachment": [
+        -0.444,
+        -0.12950000000000003,
+        0.14800000000000002
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightFin",
+      "parent": "Body",
+      "child": "RightFin",
+      "parentAttachment": [
+        0.444,
+        -0.12950000000000003,
+        0.14800000000000002
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "child": "Tail",
+      "parentAttachment": [
+        0.0,
+        0.037000000000000005,
+        1.443
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        250,
+        160,
+        66
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 3216,
+    "vertices": 1636,
+    "closedComponents": true,
+    "components": 14,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 7.300993261429435e-05
+  }
+}

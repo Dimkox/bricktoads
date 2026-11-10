@@ -19,10 +19,18 @@ local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
 local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
 local CombatFeedback = require(script.Parent:WaitForChild("CombatFeedback"))
+local GameAudio = require(script.Parent:WaitForChild("GameAudio"))
+local CastAssetVisibility = require(script.Parent:WaitForChild("CastAssetVisibility"))
 local MovementInput = require(script.Parent:WaitForChild("MovementInput"))
 local RobloxInputBindings = require(script.Parent:WaitForChild("RobloxInputBindings"))
 local spectatorCamera = SpectatorCamera.new()
 local combatFeedback = CombatFeedback.new()
+local gameAudio = GameAudio.new()
+local castAssetVisibility = CastAssetVisibility.new()
+local soundMuted, musicMuted = false, false
+local audioOpen = false
+gameAudio:setReducedFlash(true)
+script.Destroying:Connect(function() gameAudio:destroy(); castAssetVisibility:destroy() end)
 local movementInput = MovementInput.new()
 local gameplayBindings
 local windowFocused = true
@@ -266,6 +274,14 @@ local function addPartyRow(i)
 end
 for i = 1, 3 do addPartyRow(i) end
 local partyNote = label(party, "PartyNote", "", 13, C.muted)
+local audioSettings = frame(scroll, "AudioSettings")
+audioSettings.BackgroundTransparency, audioSettings.LayoutOrder = 1, 8
+local soundToggle = button(audioSettings, "SoundToggle", "Sound: On", C.card, function()
+    soundMuted = not soundMuted; gameAudio:setMuted(soundMuted); render()
+end)
+local musicToggle = button(audioSettings, "MusicToggle", "Music: On", C.card, function()
+    musicMuted = not musicMuted; gameAudio:setMusicMuted(musicMuted); render()
+end)
 -- The primary action stays visible while the hero choices scroll on phones.
 local footer = frame(shell, "StartArea", C.ink)
 footer.AnchorPoint, footer.Position = Vector2.new(0, 1), UDim2.fromScale(0, 1)
@@ -383,6 +399,49 @@ local mobileDetailsScroll = make("ScrollingFrame", "Details", mobileDetails, {
     ScrollBarImageColor3 = C.muted, ScrollingDirection = Enum.ScrollingDirection.Y,
     CanvasSize = UDim2.new(), ClipsDescendants = true,
 })
+-- Audio controls: begin
+local audioButton = button(hud, "AudioButton", "Audio", C.card, function()
+    audioOpen = not audioOpen
+    if audioOpen then mobileExpanded = nil end
+    if render then render(); layout() end
+end)
+audioButton.TextSize, audioButton.ZIndex = 11, 20
+local audioPopup = frame(hud, "AudioPopup", C.ink)
+audioPopup.Visible, audioPopup.ZIndex = false, 30
+corner(audioPopup, 12)
+local audioTitle = label(audioPopup, "Heading", "Audio settings", 14, C.text, true)
+local audioClose = button(audioPopup, "Close", "Close", C.card, function()
+    audioOpen = false
+    if render then render(); layout() end
+end)
+audioClose.TextSize = 10
+local function syncAudioSettings(inGame)
+    if not inGame then audioOpen = false end
+    audioButton.Visible, audioPopup.Visible = inGame, inGame and audioOpen
+    audioButton.Text, audioTitle.Text, audioClose.Text = T("Audio"), T("Audio settings"), T("Close")
+    audioSettings.Parent = inGame and audioPopup or scroll
+    audioSettings.Visible = not inGame or audioOpen
+end
+local function layoutAudioSettings(viewWidth,viewHeight,touch,hudBottom,inset,objectiveHeight,contentWidth)
+    local edge = touch and (viewWidth < 500 and 8 or 12) or inset
+    local buttonY = touch and edge or inset + objectiveHeight + 8
+    position(audioButton, viewWidth-edge-44, buttonY, 44, 44)
+    local popupWidth = math.min(286,viewWidth-edge*2)
+    local popupY = math.min((touch and (hudBottom or edge+44) or buttonY+44)+8,viewHeight-edge-112)
+    position(audioPopup,viewWidth-edge-popupWidth,math.max(edge,popupY),popupWidth,112)
+    position(audioTitle,12,8,popupWidth-76,36)
+    position(audioClose,popupWidth-52,4,44,44)
+    if audioSettings.Parent == audioPopup then
+        position(audioSettings,8,60,popupWidth-16,44)
+        position(soundToggle,0,0,(popupWidth-24)/2,44)
+        position(musicToggle,(popupWidth-24)/2+8,0,(popupWidth-24)/2,44)
+    else
+        audioSettings.Position, audioSettings.Size = UDim2.new(), UDim2.new(1,0,0,44)
+        position(soundToggle,0,0,(contentWidth-10)/2,44)
+        position(musicToggle,(contentWidth+10)/2,0,(contentWidth-10)/2,44)
+    end
+end
+-- Audio controls: end
 local spectator = frame(hud, "Spectator", C.ink)
 spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5, 1)
 corner(spectator, 14)
@@ -768,6 +827,7 @@ render = function()
     local level = snapshot and snapshot.level or {}
     local modern = level.bossMechanic == "PickupThrow"
     overlay.Visible, hud.Visible, controls.Visible = not active or personalMenu == true, active == true and not personalMenu, playable() == true
+    syncAudioSettings(active == true and not personalMenu)
     fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false and not stopped
     resultBanner.Visible = completed == true or stopped == true
     if stopped then
@@ -845,6 +905,8 @@ render = function()
             or T("Waiting for {host} to start a new party.", {host=hostName()})
     end
     menuNotice.Text = snapshot and (noticeMessages[snapshot.notice] or "") or ""
+    soundToggle.Text = T(soundMuted and "Sound: Off" or "Sound: On")
+    musicToggle.Text = T(musicMuted and "Music: Off" or "Music: On")
     for i, row in ipairs(heroRows) do
         local hero = snapshot and snapshot.heroes and snapshot.heroes[i]
         row.row.Visible = hero ~= nil
@@ -1189,10 +1251,10 @@ layout = function()
     if isTouch then
         local mobileInset, cardGap = width < 500 and 8 or 12, 8
         local statusWidth, goalWidth = math.min(172, width - mobileInset * 2), math.min(260, width - mobileInset * 2)
-        local twoRows = statusWidth + goalWidth + cardGap > width - mobileInset * 2
+        local twoRows = statusWidth + goalWidth + cardGap + 52 > width - mobileInset * 2
         local goalY = mobileInset + (twoRows and 52 or 0)
         position(mobileStatus, mobileInset, mobileInset, statusWidth, 44)
-        position(mobileGoal, width - mobileInset - goalWidth, goalY, goalWidth, 44)
+        position(mobileGoal, width - mobileInset - goalWidth - (twoRows and 0 or 52), goalY, goalWidth, 44)
         mobileHudBottom = goalY + 44
         position(mobileStatusTitle, 8, 1, statusWidth - 32, 21)
         position(mobileStatusDetail, 8, 23, statusWidth - 32, 17)
@@ -1349,6 +1411,7 @@ layout = function()
             if spectatorHeight < 200 then enemyChoiceNote.Size = UDim2.fromOffset(spectatorWidth - 140, 25) end
         end
     end
+    layoutAudioSettings(width,height,isTouch,mobileHudBottom,inset,short and 112 or 126,contentWidth)
     groupPanel:layout(contentWidth, width, height, spectatorWidth)
 end
 
@@ -1416,6 +1479,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
     local confirmed, accepted = combatFeedback:sync(data, workspace:GetServerTimeNow())
     if accepted == false then return end
+    gameAudio:sync(data)
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
     local previousGroupId = snapshot and snapshot.groupId

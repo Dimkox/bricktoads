@@ -90,3 +90,96 @@ assert(selectorSession.attackSelector(1,'Punch')=='HeroPowerPunch',
     'accepted source boss finishers must route to the actual boss profile')
 print('PASS boss action selection uses encounter profile')
 print('Campaign world: 9 groups passed; engine physics is not emulated')
+
+-- The serpent renderer owns only a cosmetic assembly, never a support collider.
+local priorIsA=Node.IsA
+function Node:IsA(class) return class=='BasePart' and self.ClassName=='MeshPart' or priorIsA(self,class) end
+local priorFrameIndex=Frame.__index
+Frame.__index=function(self,key)
+    if key=='Rotation' then local r=frame();r.rotationX,r.rotationY,r.rotationZ=self.rotationX,self.rotationY,self.rotationZ;return r end
+    return priorFrameIndex[key]
+end
+function Frame:PointToWorldSpace(p)
+    local a=self.rotationY or 0
+    return self.Position+vector(p.X*math.cos(a)+p.Z*math.sin(a),p.Y,-p.X*math.sin(a)+p.Z*math.cos(a))
+end
+local function cloneNode(original)
+    local c=node(original.ClassName,original.Name)
+    for k,v in pairs(original) do if k~='children' and k~='_parent' and k~='attributes' then c[k]=v end end
+    c.attributes=table.clone(original.attributes)
+    for _,child in ipairs(original:GetChildren()) do cloneNode(child).Parent=c end
+    return c
+end
+function Node:Clone() return cloneNode(self) end
+local castStorage=node('ServerStorage');local sourceTemplates=node('Folder','BrickToadsCastTemplates',castStorage)
+local sourceSnake=node('Model','Snake',sourceTemplates)
+local sourceBody=node('MeshPart','Body',sourceSnake);sourceBody.Size=vector(2,2,8);sourceBody.CFrame=frame();sourceBody.Transparency=0
+local sourcePivot=node('Attachment','CastRigAttachment',sourceBody);sourcePivot.CFrame=frame(0,1,0)
+local oldGetService=env.game.GetService
+env.game.GetService=function(self,name) if name=='ServerStorage' then return castStorage end;return oldGetService(self,name) end
+local overlayCalls={attach=0,detach=0,updates={}}
+local expectedSerpentScale=1.75
+rendered.castAppearance={
+    attach=function(actor,kind,templates)
+        overlayCalls.attach+=1;assert(kind=='Snake' and templates.Parent==nil,'Scaled templates must stay outside DataModel')
+        local t=assert(templates:FindFirstChild('Snake'));local p=t:FindFirstChild('Body')
+        assert(p.Size.X==2*expectedSerpentScale and p.Size.Y==2*expectedSerpentScale and p.Size.Z==8*expectedSerpentScale,'Uniform scale must precede attachment')
+        assert(p.CastRigAttachment.CFrame.Position.Y==expectedSerpentScale,'Source pivot positions must scale with geometry')
+        assert(p.Massless and not p.CanCollide and not p.CanTouch and not p.CanQuery)
+        actor.castAppearance={model=t:Clone()};actor.castAppearance.model.Parent=actor.model
+        overlayCalls.temporary=templates;overlayCalls.actor=actor
+        return true
+    end,
+    detach=function(actor) overlayCalls.detach+=1;actor.castAppearance.model:Destroy();actor.castAppearance=nil end,
+    update=function(actor,context) overlayCalls.updates[#overlayCalls.updates+1]={actor=actor,context=context} end,
+}
+local previousFloorCount=#rendered.allFloors
+local snakeCollider=rendered:campaignObject('snake-art','Serpent',{x=4,y=30,z=8},{x=14,y=1,z=12})
+local snakeRow=rendered.campaignWorld.objects['snake-art']
+assert(overlayCalls.attach==1 and snakeRow.serpent,'Serpent support never acquired the imported skin')
+assert(snakeCollider.Size.X==14 and snakeCollider.Size.Y==1 and snakeCollider.Size.Z==12 and snakeCollider.CanCollide and snakeCollider.CanQuery)
+assert(snakeCollider:GetAttribute('SurfaceId')=='rope-test:dynamic:snake-art','Cosmetics changed support identity')
+assert(#rendered.allFloors==previousFloorCount+1 and rendered.allFloors[#rendered.allFloors]==snakeCollider,'Cosmetic proxy became a playable floor')
+local proxy=overlayCalls.actor;assert(proxy.root.Anchored and not proxy.root.CanCollide and not proxy.root.CanQuery and proxy.root.Transparency==1)
+eq(proxy.root.CFrame.Position,74,38.75,520,'Snake back top must meet the original support top')
+assert(math.abs((proxy.root.CFrame.rotationY or 0)-math.pi/2)<1e-6,'Snake head and tail must lie along support X')
+assert(sourceBody.Size.X==2 and sourceBody.CastRigAttachment.CFrame.Position.Y==1,'Shared uploaded template was resized')
+rendered.campaignWorld:step(25)
+assert(overlayCalls.updates[#overlayCalls.updates].context.now==25,'Snake pose must use actual world time')
+rendered:campaignObject('snake-art','Serpent',{x=14,y=32,z=9},{x=14,y=1,z=12})
+assert(overlayCalls.attach==1,'Position changes must retain the same cached cosmetic assembly')
+eq(proxy.root.CFrame.Position,84,40.75,521,'Moving support failed to carry its cosmetic proxy')
+local temporary=overlayCalls.temporary;local model=proxy.model
+rendered:campaignRemove('snake-art')
+assert(model.destroyed and temporary.destroyed and overlayCalls.detach==1 and snakeCollider.destroyed,'Removed support leaked owned serpent art')
+for _,p in ipairs(rendered.allFloors) do assert(p~=snakeCollider) end
+print('PASS serpent imported overlay scales before attachment, preserves support and cleans up movement')
+
+rendered:campaignObject('replacement-art','Serpent',{x=0,y=20,z=0},{x=14,y=1,z=12})
+local owned=overlayCalls.actor.model;local ownedTemporary=overlayCalls.temporary
+rendered:campaignObject('replacement-art','Lift',{x=0,y=20,z=0},{x=14,y=1,z=12})
+assert(owned.destroyed and ownedTemporary.destroyed,'Kind replacement leaked serpent assembly')
+rendered:campaignObject('close-art','Serpent',{x=0,y=20,z=0},{x=14,y=1,z=12})
+owned=overlayCalls.actor.model;ownedTemporary=overlayCalls.temporary
+rendered.campaignWorld:close()
+assert(owned.destroyed and ownedTemporary.destroyed and not next(rendered.campaignWorld.objects),'Course close leaked serpent art')
+print('PASS serpent kind replacement and course close destroy only owned visuals')
+
+rendered:campaignObject('resize-art','Serpent',{x=0,y=20,z=0},{x=14,y=1,z=12})
+owned=overlayCalls.actor.model;ownedTemporary=overlayCalls.temporary
+expectedSerpentScale=3.5
+rendered:campaignObject('resize-art','Serpent',{x=0,y=20,z=0},{x=28,y=1,z=12})
+assert(owned.destroyed and ownedTemporary.destroyed and overlayCalls.actor.model~=owned,
+    'Size changes must rebuild a pre-scaled skin rather than rescale cached joint bases')
+rendered:campaignRemove('resize-art');expectedSerpentScale=1.75
+local attach=rendered.castAppearance.attach;local rejectedProxy,rejectedTemporary
+rendered.castAppearance.attach=function(actor,_,templates)
+    rejectedProxy,rejectedTemporary=actor.model,templates;return false
+end
+local fallback=rendered:campaignObject('rejected-art','Serpent',{x=0,y=20,z=0},{x=14,y=1,z=12})
+assert(not rendered.campaignWorld.objects['rejected-art'].serpent and rejectedProxy.destroyed and rejectedTemporary.destroyed,
+    'Rejected imported art leaked a temporary model or proxy')
+assert(fallback.Transparency~=1 and fallback.CanCollide and fallback.CanQuery,
+    'Rejected imported art must retain the visible original support')
+rendered.castAppearance.attach=attach;rendered:campaignRemove('rejected-art')
+print('PASS serpent resize rebuilds cached geometry and failed imports preserve visible physical support')

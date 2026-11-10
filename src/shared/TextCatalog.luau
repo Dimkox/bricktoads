@@ -1,6 +1,12 @@
 -- English source strings and curated Russian translations. No user display names.
 -- Roblox LocalizationTable entries; add supported languages to Values here.
 local Catalog={entries={
+    {Key="Audio",Source="Audio",Values={["en-us"]="Audio",["ru"]="Звук"}},
+    {Key="Audio settings",Source="Audio settings",Values={["en-us"]="Audio settings",["ru"]="Настройки звука"}},
+    {Key="Sound: On",Source="Sound: On",Values={["en-us"]="Sound: On",["ru"]="Звук: вкл."}},
+    {Key="Sound: Off",Source="Sound: Off",Values={["en-us"]="Sound: Off",["ru"]="Звук: выкл."}},
+    {Key="Music: On",Source="Music: On",Values={["en-us"]="Music: On",["ru"]="Музыка: вкл."}},
+    {Key="Music: Off",Source="Music: Off",Values={["en-us"]="Music: Off",["ru"]="Музыка: выкл."}},
     {Key="∞ resp.",Source="∞ resp.",Values={["en-us"]="∞ resp.",["ru"]="∞ возр."}},
     {Key=" · God Mode",Source=" · God Mode",Values={["en-us"]=" · God Mode",["ru"]=" · Режим бога"}},
     {Key="The Guardian approaches",Source="The Guardian approaches",Values={["en-us"]="The Guardian approaches",["ru"]="Страж приближается"}},

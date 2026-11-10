@@ -1,0 +1,495 @@
+{
+  "schema": 1,
+  "kind": "GasTurret",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/gasturret.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "GraphicsA5 turret is a short red triangular/conical fixture with a small horizontal nozzle. A6-AA are emitted gas bursts, not anatomy."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -1.12757761011326,
+      -1.2628869233268514,
+      -1.8305075414272327
+    ],
+    [
+      1.12757761011326,
+      1.5371130766731484,
+      1.4769253311112065
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Race",
+    "sourceEvidence": "main.asm:19173-19270; A6-AA are emitted gas",
+    "frames": [
+      {
+        "frameId": 165,
+        "width": 13,
+        "height": 16,
+        "visibleBounds": {
+          "minX": -12,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 15
+        },
+        "referencePng": "cast-frames/gasturret-a5.png"
+      },
+      {
+        "frameId": 166,
+        "width": 12,
+        "height": 8,
+        "visibleBounds": {
+          "minX": -6,
+          "minY": 4,
+          "maxX": 5,
+          "maxY": 11
+        },
+        "referencePng": "cast-frames/gasturret-a6.png"
+      },
+      {
+        "frameId": 167,
+        "width": 18,
+        "height": 11,
+        "visibleBounds": {
+          "minX": -10,
+          "minY": 2,
+          "maxX": 7,
+          "maxY": 12
+        },
+        "referencePng": "cast-frames/gasturret-a7.png"
+      },
+      {
+        "frameId": 168,
+        "width": 24,
+        "height": 15,
+        "visibleBounds": {
+          "minX": -14,
+          "minY": 0,
+          "maxX": 9,
+          "maxY": 14
+        },
+        "referencePng": "cast-frames/gasturret-a8.png"
+      },
+      {
+        "frameId": 169,
+        "width": 21,
+        "height": 16,
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -1,
+          "maxX": 9,
+          "maxY": 14
+        },
+        "referencePng": "cast-frames/gasturret-a9.png"
+      },
+      {
+        "frameId": 170,
+        "width": 24,
+        "height": 22,
+        "visibleBounds": {
+          "minX": -12,
+          "minY": -2,
+          "maxX": 11,
+          "maxY": 19
+        },
+        "referencePng": "cast-frames/gasturret-aa.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      22,
+      38
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "typeId": 82,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:185",
+      "trigger": [
+        8,
+        12
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": []
+    },
+    "sourceSlotPrimary": 3,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 22,
+        "effectiveRgb": [
+          180,
+          0,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 38,
+        "effectiveRgb": [
+          255,
+          100,
+          97
+        ]
+      }
+    ],
+    "variantCount": 2,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.12757761011326,
+          -1.2628869233268514,
+          -0.75527566063872
+        ],
+        [
+          1.12757761011326,
+          1.5371130766731484,
+          1.4769253311112065
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.12757761011326,
+          -1.2628869233268514,
+          -0.75527566063872
+        ],
+        [
+          1.12757761011326,
+          1.5371130766731484,
+          1.4769253311112065
+        ]
+      ],
+      "vertices": 298,
+      "authoringVertices": 298,
+      "paletteSplitTriangles": 0,
+      "triangles": 588
+    },
+    {
+      "name": "Weapon",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.1353093132135912,
+        -0.5412372528543647
+      ],
+      "localBounds": [
+        [
+          -0.40592793964077356,
+          -0.3833763874385083,
+          -1.289270288572868
+        ],
+        [
+          0.40592793964077356,
+          0.4284794918430388,
+          -0.022551552202265235
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.40592793964077356,
+          -0.24806707422491717,
+          -1.8305075414272327
+        ],
+        [
+          0.40592793964077356,
+          0.56378880505663,
+          -0.56378880505663
+        ]
+      ],
+      "vertices": 202,
+      "authoringVertices": 202,
+      "paletteSplitTriangles": 0,
+      "triangles": 396
+    }
+  ],
+  "joints": [
+    {
+      "name": "Weapon",
+      "parent": "Body",
+      "child": "Weapon",
+      "parentAttachment": [
+        0.0,
+        0.1353093132135912,
+        -0.5412372528543647
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        180,
+        0,
+        0
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 984,
+    "vertices": 500,
+    "closedComponents": true,
+    "components": 4,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.00028594893125452505
+  }
+}

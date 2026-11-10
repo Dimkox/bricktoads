@@ -1,0 +1,63 @@
+{
+  "status": "Passed",
+  "createdAt": 1794347206,
+  "visualSample": {
+    "folder": "Workspace.BrickToadsSerpentAcceptance.VisualSample",
+    "meshes": 4,
+    "retainedForCapture": true,
+    "position": {
+      "y": 14,
+      "x": 9600,
+      "z": 150
+    }
+  },
+  "errors": [],
+  "scope": "Prepared native CampaignWorld Serpent cosmetic/support acceptance",
+  "placeId": 117412694427208,
+  "cases": [
+    {
+      "result": {
+        "meshes": 4,
+        "realMeshesFollowed": true,
+        "colliderPreserved": true
+      },
+      "name": "MovementAndYaw",
+      "passed": true
+    },
+    {
+      "result": {
+        "sameCollider": true,
+        "uniformScale": 2,
+        "newOwnedRig": true
+      },
+      "name": "ResizeRebuild",
+      "passed": true
+    },
+    {
+      "result": {
+        "ownedInstancesDestroyed": true,
+        "supportArraysRestored": true
+      },
+      "name": "Removal",
+      "passed": true
+    },
+    {
+      "result": {
+        "priorOwnedArtDestroyed": true,
+        "replacementVisible": true
+      },
+      "name": "KindReplacement",
+      "passed": true
+    },
+    {
+      "result": {
+        "allDynamicSupportsRemoved": true,
+        "allOwnedSerpentsDestroyed": true
+      },
+      "name": "CourseClose",
+      "passed": true
+    }
+  ],
+  "limitations": "Owned synthetic support fixtures; explicitly solved cosmetic Motor6Ds; no campaign completion, player input, or physics integration claim.",
+  "sourceSha256": "8c8daab80dc7c8ec2b825ee4af5ffd923bdbd9380ea47de5676b29e77c080650"
+}

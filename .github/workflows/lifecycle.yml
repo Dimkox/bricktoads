@@ -58,6 +58,11 @@ jobs:
           /tmp/bricktoads-luau/luau tests/run_canonical_animation.luau
           /tmp/bricktoads-luau/luau tests/run_canonical_walker.luau
           /tmp/bricktoads-luau/luau tests/run_canonical_hero_presentation.luau
+          /tmp/bricktoads-luau/luau tests/run_canonical_cast.luau
+          /tmp/bricktoads-luau/luau tests/run_cast_asset_visibility.luau
+          /tmp/bricktoads-luau/luau tests/canonical_cast_source/profiles.luau
+          /tmp/bricktoads-luau/luau tests/run_studio_god_mode.luau
+          /tmp/bricktoads-luau/luau tests/run_audio_fx.luau
           /tmp/bricktoads-luau/luau tests/run_boss_intro.luau
           /tmp/bricktoads-luau/luau tests/run_campaign_modes.luau
           /tmp/bricktoads-luau/luau tests/run_campaign_bosses.luau
@@ -70,6 +75,11 @@ jobs:
           python3 tests/group_world/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/character_appearance/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/canonical_hero_presentation/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/canonical_cast_appearance/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/canonical_cast_geometry/test_cast_geometry.py
+          python3 tests/canonical_cast_packaging/run.py
+          python3 tests/audio_fx/test_audio_assets.py
+          python3 tests/audio_fx/test_client_audio_controls.py --luau /tmp/bricktoads-luau/luau
           python3 tests/guardian_appearance/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/boss_intro_asset/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/campaign_world/run.py --luau /tmp/bricktoads-luau/luau

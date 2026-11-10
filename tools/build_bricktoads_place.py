@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import math
 import re
@@ -220,6 +221,7 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
             numbers(appearance["color"], 3, "SurfaceColor", 0, 1)
             compound(surface, "Color3", "Color", appearance["color"], ("R", "G", "B"))
             prop(surface, "token", "AlphaMode", enum_value({"Overlay": 0, "Transparency": 1}, appearance["alphaMode"], "AlphaMode"))
+        return mesh
 
 
     def character(manifest_bytes, template_name, *, canonical=False):
@@ -281,14 +283,16 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
     for player in (1, 2):
         manifest = (root_path / f"assets/characters/canonical-hero/roblox-player{player}.json").read_bytes()
         character(manifest, f"CanonicalPlayer{player}", canonical=True)
+    character((root_path/'assets/characters/canonical-hero/roblox-brown.json').read_bytes(),
+              'CanonicalPlayerBrown',canonical=True)
 
     morph_folder = item(storage, 'Folder', 'BrickToadsCharacterMorphs')
 
-    def morph_family(family, kinds):
+    def morph_family(family, kinds, *, palettes=(('Green', 'Mr. Green'), ('PlayerTwo', 'Mr. Yellow'))):
         morph_bytes = (root_path / f'assets/characters/canonical-hero/roblox-{family}-morphs.json').read_bytes()
         morphs = json.loads(morph_bytes)
         expected_morphs = {prefix + kind: (hero, kind)
-                           for prefix, hero in (('Green', 'Mr. Green'), ('PlayerTwo', 'Mr. Yellow'))
+                           for prefix, hero in palettes
                            for kind in kinds}
         records = morphs.get('templates')
         if type(morphs.get('schema')) is not int or morphs['schema'] != 1 \
@@ -343,6 +347,8 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
 
     morph_family('attack', ('PowerFist', 'BigBoot'))
     morph_family('fear', ('FearBeforeCut', 'FearAfterCut'))
+    morph_family('brown', ('PowerFist', 'BigBoot', 'FearBeforeCut', 'FearAfterCut'),
+                 palettes=(('Brown', 'Mr. Brown'),))
 
     # Boss art is mandatory private content, including its separately mounted
     # intro leg. Never replace an absent import receipt with a generated proxy.
@@ -436,6 +442,12 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
                            or a.get('name') != 'SurfaceAppearance' for a in appearances):
                 raise ValueError('Boss Walker may contain only one named SurfaceAppearance')
             mesh_resource(model, row)
+
+    # All gameplay cast imports are mandatory, private, validated resources.
+    cast_spec = importlib.util.spec_from_file_location("package_canonical_cast", Path(__file__).with_name("package_canonical_cast.py"))
+    cast_packager = importlib.util.module_from_spec(cast_spec)
+    cast_spec.loader.exec_module(cast_packager)
+    cast_packager.package_cast(root_path, storage, item=item, prop=prop, mesh_resource=mesh_resource)
 
     # Explicit research switch; this rejected study is absent from default builds.
     if include_character_study:

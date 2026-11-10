@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "uploadedThrough": "Roblox Studio MCP",
+  "recordedAtUtc": "2026-11-10T21:06:06Z",
+  "nativePlaybackVerified": true,
+  "assets": {
+    "sfx": {
+      "file": "bricktoads-sfx-atlas.wav",
+      "assetId": 75042258524153,
+      "sha256": "d10d4c9e88176049ac447f6834a977deb48cb7d50ad79fa36f43890ec1a05671",
+      "assetStateAtUpload": "Active",
+      "moderationStateAtUpload": "Reviewing",
+      "uploadObservedAtUtc": "2026-11-10T21:03:50Z",
+      "moderationStateObserved": "Approved",
+      "moderationObservedAtUtc": "2026-11-10T21:47:23Z"
+    },
+    "music": {
+      "file": "bricktoads-music-atlas.wav",
+      "assetId": 100771181568063,
+      "assetStateAtUpload": "Active",
+      "moderationStateAtUpload": "Reviewing",
+      "uploadObservedAtUtc": "2026-11-10T21:03:51Z",
+      "sha256": "4a8af1ee0ed3976346ad8e175c2d2135a9c90ad50961e670811021dbbd7eb16e",
+      "moderationStateObserved": "Approved",
+      "moderationObservedAtUtc": "2026-11-10T21:47:23Z"
+    }
+  },
+  "runtimeApiReference": "https://create.roblox.com/docs/reference/engine/classes/Sound",
+  "runtimePolicy": "PlaybackRegionsEnabled true; PlaybackRegion and LoopRegion use the exact atlas bounds; loaded TimeLength must contain the cue before playing; effects are independent of sound mute.",
+  "nativePlaybackObservedAtUtc": "2026-11-10T21:47:23Z",
+  "nativeEvidence": "../../reports/2026-11-11-canonical-cast-audio/native-client-acceptance.json",
+  "nativePlaybackScope": "One actual ordinary Studio Play client, God Mode; both atlases IsLoaded, bounded playback regions, nonzero PlaybackLoudness, music/all mute and independent particles. Physical device and human listening acceptance remain separate."
+}
