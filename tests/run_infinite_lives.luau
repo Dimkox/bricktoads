@@ -1,0 +1,6 @@
+local Core=require("../src/server/RunLifecycle")
+local Combat=require("../src/stand/server/Combat")
+local Session=require("../src/stand/server/Session")
+local Config=require("../src/stand/server/Config")
+local World=require("./stand/FakeWorld")
+require("./InfiniteLives.spec")(Core,Combat,Session,Config,World)

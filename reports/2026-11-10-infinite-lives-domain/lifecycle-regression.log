@@ -1,0 +1,47 @@
+PASS 1/2/3 heroes share templates, not resources
+PASS invalid roster rejected
+PASS late hero is never added
+PASS initial failure does not spend a respawn
+PASS unsafe initial spawn is not an invented free emergency life
+PASS failed respawn consumes nothing
+PASS three successful respawns then actual death at zero
+PASS normal shield is exactly two seconds
+PASS accepted attack cancels protection even without a hit
+PASS zero normalized health alone is not a death event
+PASS emergency appearance costs one and expires at ten seconds
+PASS emergency cycles consume appearances without deaths
+PASS safe relocation does not heal or spend again
+PASS emergency attack cancels hold and the later retry
+PASS failed emergency replacement leaves existing living attempt
+PASS offline emergency expiry never spawns or kills
+PASS offline dead hero waits for owner without spending
+PASS rejoin living actor preserves health, resources and deadline
+PASS offline actor still accepts damage and death
+PASS offline owner cannot start attacks
+PASS stale connection cannot command after rejoin
+PASS disconnect invalidates an uncommitted spawn
+PASS duplicate commit replays the established acknowledgement
+PASS same event id with different payload rejected
+PASS concurrent requests cannot reserve twice
+PASS old actor death cannot kill its replacement
+PASS actor ids cannot be reused within a run
+PASS aborted token cannot confirm a later reservation
+PASS level transition heals once without resetting resources
+PASS one living hero completes an eligible exit
+PASS exit prerequisites cannot be skipped
+PASS eliminated member stays eliminated on next level
+PASS pending offline respawn prevents false defeat
+PASS old level reservations are invalidated; owner uses current level
+PASS old level death is rejected even for the same actor
+PASS transition preserves ordinary deadline and clears emergency hold
+PASS spectator menu choice does not dissolve remaining party
+PASS new game gives a new independent roster and resources
+PASS wrong run events cannot affect another game
+PASS input snapshots remain immutable
+PASS malformed times, revisions and numeric health are rejected
+PASS server clock cannot move backwards
+PASS safe relocation wins a serialized race without double spending
+PASS death cancels a prepared emergency replacement
+PASS attack cancels a prepared emergency replacement
+PASS 120 deterministic life-cycle sequences preserve invariants
+RESULT: 46 passed; 0 failed

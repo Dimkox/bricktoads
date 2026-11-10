@@ -61,11 +61,16 @@ class StandBuildTests(unittest.TestCase):
             names = [i.findtext("Properties/string[@name='Name']") for i in parent.findall("Item")]
             self.assertEqual(len(names), len(set(names)))
 
-    def test_verified_core_unchanged(self):
+    def test_verified_infinite_lives_core_revision(self):
+        # Approved trusted infinite-respawn revision: InfiniteLives.spec (24) and
+        # the existing finite Lifecycle.spec (46), with RED/GREEN evidence in
+        # reports/2026-11-10-infinite-lives-domain. Keep this explicit revision
+        # pin alongside test_server_layout_and_exact_sources' packaging check.
+        approved_infinite_lives_core_blob = "b22773c676dc13f114f6cfb7e1fad0aa23c5dacc"
         raw = (ROOT / "src/server/RunLifecycle.lua").read_bytes()
         canonical = raw.replace(b"\r\n", b"\n")
         self.assertEqual(hashlib.sha1(f"blob {len(canonical)}\0".encode()+canonical).hexdigest(),
-                         "274e59f2bfe347e4496fdad7c9f617b2c32aa271")
+                         approved_infinite_lives_core_blob)
 
     def test_runtime_sources_exist(self):
         for rel in ["src/stand/server/RobloxWorld.lua", "src/stand/server/Stand.server.lua",

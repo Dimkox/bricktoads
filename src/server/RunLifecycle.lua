@@ -8,6 +8,7 @@ local EMERGENCY_SHIELD_SECONDS = 10
 local TEMPLATES = { ["Mr. Green"] = true, ["Mr. Yellow"] = true, ["Mr. Brown"] = true }
 local BASE_FIELDS = { id=true, runId=true, expectedRevision=true, kind=true, now=true }
 local FIELDS = {
+    SetInfiniteLives={userId=true,enabled=true},
     ReserveSpawn = {userId=true,connectionEpoch=true},
     CommitSpawn = {userId=true,token=true,actorId=true,safe=true},
     AbortSpawn = {userId=true,token=true},
@@ -74,7 +75,7 @@ function Core.new(runId, groupId, roster, levelId)
         assert(state.heroes[member.userId] == nil, "Duplicate hero owner")
         state.heroes[member.userId] = {
             userId=member.userId, template=member.template, connected=true, connectionEpoch=1,
-            status="AwaitingInitial", health=MAX_HEALTH, respawns=INITIAL_RESPAWNS,
+            status="AwaitingInitial", health=MAX_HEALTH, respawns=INITIAL_RESPAWNS, infiniteLives=false,
             attempt=0, retryReady=false, view="Playing",
         }
     end
@@ -101,6 +102,7 @@ local function validateEvent(event)
     if allowed.safe and type(event.safe) ~= "boolean" then return "INVALID_EVENT" end
     if event.kind == "CommitSpawn" and not identifier(event.actorId) then return "INVALID_EVENT" end
     if event.kind == "Connection" and type(event.connected) ~= "boolean" then return "INVALID_EVENT" end
+    if event.kind == "SetInfiniteLives" and type(event.enabled) ~= "boolean" then return "INVALID_EVENT" end
     if event.kind == "AdvanceLevel" and (not identifier(event.levelId)
         or type(event.destinationSafe) ~= "boolean" or type(event.prerequisitesMet) ~= "boolean") then return "INVALID_EVENT" end
     return nil
@@ -139,20 +141,36 @@ local function closeIfDefeated(state)
     state.partyDissolved = true
     for _, hero in pairs(state.heroes) do hero.view = "Menu" end
 end
+local function hasRespawn(hero)
+    return hero.infiniteLives == true or hero.respawns > 0
+end
 
 -- Mutations are applied only to a private candidate snapshot and discarded on rejection.
 local function execute(state, event)
     local hero = state.heroes[event.userId]
     if not hero then return "UNKNOWN_HERO" end
     local kind = event.kind
-    if kind == "ReserveSpawn" then
+    if kind == "SetInfiniteLives" then
+        if hero.status == "Eliminated" then return "ELIMINATED" end
+        if hero.infiniteLives == event.enabled then return "NO_CHANGE" end
+        hero.infiniteLives = event.enabled
+        if not hasRespawn(hero) then
+            hero.retryReady = false
+            hero.pending = nil
+            if hero.status == "AwaitingRespawn" then
+                hero.status = "Eliminated"
+                hero.view = "Choice"
+                closeIfDefeated(state)
+            end
+        end
+    elseif kind == "ReserveSpawn" then
         local problem = checkConnection(hero, event, true)
         if problem then return problem end
         if hero.pending then return "SPAWN_PENDING" end
         local spawnKind
         if hero.status == "AwaitingInitial" then spawnKind = "Initial"
-        elseif hero.status == "AwaitingRespawn" and hero.respawns > 0 then spawnKind = "Respawn"
-        elseif hero.status == "Alive" and hero.retryReady and hero.respawns > 0 then spawnKind = "Emergency"
+        elseif hero.status == "AwaitingRespawn" and hasRespawn(hero) then spawnKind = "Respawn"
+        elseif hero.status == "Alive" and hero.retryReady and hasRespawn(hero) then spawnKind = "Emergency"
         else return "SPAWN_NOT_ALLOWED" end
         hero.pending = {
             token = tostring(state.revision+1) .. ":" .. tostring(event.userId),
@@ -166,8 +184,8 @@ local function execute(state, event)
         local spawnKind = hero.pending.kind
         if spawnKind == "Initial" and not event.safe then return "UNSAFE_INITIAL_SPAWN" end
         if spawnKind ~= "Initial" then
-            if hero.respawns <= 0 then return "NO_RESPAWNS" end
-            hero.respawns = hero.respawns - 1
+            if not hasRespawn(hero) then return "NO_RESPAWNS" end
+            if not hero.infiniteLives then hero.respawns = hero.respawns - 1 end
         end
         hero.health = MAX_HEALTH
         hero.attempt = hero.attempt + 1
@@ -211,7 +229,7 @@ local function execute(state, event)
             hero.pending = nil
             hero.shield = nil
             hero.retryReady = false
-            hero.status = hero.respawns > 0 and "AwaitingRespawn" or "Eliminated"
+            hero.status = hasRespawn(hero) and "AwaitingRespawn" or "Eliminated"
             if hero.status == "Eliminated" then hero.view = "Choice" end
             closeIfDefeated(state)
         elseif kind == "SetHealth" then
@@ -225,7 +243,7 @@ local function execute(state, event)
         elseif kind == "ExpireShield" then
             if not hero.shield then return "NO_SHIELD" end
             if event.now < hero.shield.deadline then return "NOT_DUE" end
-            hero.retryReady = hero.shield.kind == "Emergency" and hero.connected and hero.respawns > 0
+            hero.retryReady = hero.shield.kind == "Emergency" and hero.connected and hasRespawn(hero)
             hero.shield = nil
         elseif kind == "RelocateToSafety" then
             local emergency = (hero.shield and hero.shield.kind == "Emergency") or hero.retryReady
@@ -274,7 +292,7 @@ function Core.apply(state, event)
     local ack = {
         eventId=event.id, kind=event.kind, revision=nextState.revision,
         runId=nextState.runId, levelEpoch=nextState.levelEpoch,
-        actorId=hero.actorId, attempt=hero.attempt, respawns=hero.respawns,
+        actorId=hero.actorId, attempt=hero.attempt, respawns=hero.respawns, infiniteLives=hero.infiniteLives,
         token=hero.pending and hero.pending.token or nil,
     }
     nextState.receipts[event.id] = {fingerprint=signature, ack=copy(ack)}

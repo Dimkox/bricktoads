@@ -55,6 +55,7 @@ function Session:_record(kind, uid, data, at)
     local row={kind=kind,userId=uid,now=at or self.now,runId=self.state.runId,groupId=self.state.groupId,
         levelEpoch=self.state.levelEpoch,revision=self.state.revision,
         actorId=h and h.actorId,attempt=h and h.attempt,respawns=h and h.respawns,
+        infiniteLives=h and h.infiniteLives==true,
         rawLife=self.combat[uid] and self.combat[uid].rawLife,status=h and h.status,view=h and h.view,
         connected=h and h.connected,shieldKind=h and h.shield and h.shield.kind,
         shieldUntil=h and h.shield and h.shield.deadline,data=data}
@@ -80,6 +81,22 @@ function Session:_event(kind, uid, fields)
     self.state=state
     self:_record(kind,uid,{code=code,eventId=e.id})
     return code,ack
+end
+
+-- Server-only development control; client intents cannot name this event or option.
+function Session:setInfiniteLives(enabled)
+    if type(enabled)~="boolean" then return "INVALID_OPTION" end
+    if type(self.config.Development)~="table" or self.config.Development.allowInfiniteLives~=true then
+        return "DEVELOPMENT_ONLY"
+    end
+    if self.state.status~="Active" then return "RUN_CLOSED" end
+    for _,uid in ipairs(self.order) do
+        local h=self.state.heroes[uid]
+        if h.status~="Eliminated" and h.infiniteLives~=enabled then
+            assert(self:_event("SetInfiniteLives",uid,{enabled=enabled})=="OK")
+        end
+    end
+    return "OK"
 end
 
 function Session:_spawn(uid)
@@ -422,18 +439,21 @@ end
 
 function Session:snapshot()
     local heroes={}
+    local infiniteLives=false
     for _,uid in ipairs(self.order) do
         local h=self.state.heroes[uid]
         local c=self.combat[uid]
+        if h.infiniteLives==true and h.status~="Eliminated" then infiniteLives=true end
         heroes[#heroes+1]={slot=uid,actorId=h.actorId,attempt=h.attempt,
             connectionEpoch=h.connectionEpoch,connected=h.connected,status=h.status,view=h.view,
             hearts=self.Combat.hearts(c.rawLife),rawLife=c.rawLife,respawns=h.respawns,
+            infiniteLives=h.infiniteLives==true,
             shield=h.shield and h.shield.kind,shieldUntil=h.shield and h.shield.deadline,
             dying=c.deathAt~=nil,reactionEpoch=c.reactionEpoch or 0,
             movementMode=self.world.movementMode and self.world:movementMode(uid) or nil}
     end
     return {runId=self.state.runId,levelEpoch=self.state.levelEpoch,status=self.state.status,
-        now=self.now,heroes=heroes,calibration=self.config.Calibration}
+        now=self.now,heroes=heroes,infiniteLives=infiniteLives,calibration=self.config.Calibration}
 end
 
 return Session

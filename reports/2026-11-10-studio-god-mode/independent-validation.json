@@ -1,0 +1,143 @@
+{
+  "at": "2026-11-10T20:06:19.964600+00:00",
+  "status": "PASS_independent_adapter_and_native_infinite_respawn_control_review",
+  "nativeSource": {
+    "file": "native-result.json",
+    "bytes": 37441,
+    "sha256": "cad12daf2704df97a8116b48d974f336a3184f12011210f049b54bbecb89497a",
+    "runId": "92bf00d4-ea83-42a1-8598-f2b4cdd9a150",
+    "build": "ac63cddc20693176ff29a7a1e4e3c5e76b6769b10641f7bb47188fcfa500cceb",
+    "placeId": 117412694427208
+  },
+  "checks": {
+    "run_identity": true,
+    "expected_build": true,
+    "one_owner": true,
+    "complete_expected_finite_control": true,
+    "no_errors_or_dropped_events": true,
+    "ten_appearances_and_unique_bodies": true,
+    "attempts_sequential": true,
+    "first_seven_god_stock3": true,
+    "finite_stock2_1_0": true,
+    "normal_spawn_life47": true,
+    "normal_respawn_shields": true,
+    "ten_confirmed_falls": true,
+    "one_death_per_appearance": true,
+    "six_god_falls_before_disable": true,
+    "four_finite_falls_after_disable": true,
+    "disable_keeps_stock3_body7": true,
+    "two_trusted_toggle_events": true,
+    "enable_before_initial_spawn": true,
+    "terminal_eliminated_no_infinite": true,
+    "terminal_lost_event": true,
+    "native_fall_geometry": true
+  },
+  "nativeCounts": {
+    "RunStarted": 1,
+    "SetInfiniteLives": 2,
+    "ReserveSpawn": 10,
+    "CommitSpawn": 10,
+    "EnemySpawned": 3,
+    "Death": 10,
+    "ConfirmedDeath": 10,
+    "EnemyAttackAccepted": 6,
+    "EnemyHit": 3,
+    "EnemyRecovery": 3,
+    "EnemyAttackMiss": 3,
+    "EnemyDeath": 1,
+    "RunResult": 1
+  },
+  "resourceSequence": {
+    "attempts": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "stocks": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      2,
+      1,
+      0
+    ],
+    "infiniteLives": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false
+    ],
+    "godDeaths": 6,
+    "finiteDeathsAfterDisable": 4,
+    "terminal": "Lost/Eliminated/attempt10/stock0"
+  },
+  "independentRunners": [
+    {
+      "file": "tests/run_studio_god_mode.luau",
+      "exit": 0,
+      "contracts": 6
+    },
+    {
+      "file": "tests/run_groups.luau",
+      "exit": 0,
+      "contracts": 24
+    },
+    {
+      "file": "tests/run_gameplay.luau",
+      "exit": 0,
+      "controllerContracts": 45
+    },
+    {
+      "file": "tests/run_localization.luau",
+      "exit": 0,
+      "contracts": 8
+    },
+    {
+      "file": "tests/run_infinite_lives.luau",
+      "exit": 0,
+      "contracts": 24
+    }
+  ],
+  "sourceHashes": {
+    "src/server/gameplay/StudioGodMode.lua": "504c5686f09ff6bdb68849344e451a7b943fd3b37ffcdc87a7d3c2c4909ee03c",
+    "src/server/gameplay/MatchHub.lua": "e90afb7768e28bdd980ee6c2f0bd51e6a2c1e0e2d86a948dd09254e4151d6cfe",
+    "src/server/gameplay/GameController.lua": "a84c3dca8bc1199d8eacff60fa5785a6ec4e1620edccec7fe0bdde5bb24b8e7c",
+    "src/server/BrickToadsServer.server.luau": "b28ec1a579260262d492b9ad756e9df5fc16200d58d1c295ae8e8829b07b7bb4",
+    "src/stand/server/Session.lua": "843590c10c45326c2a575ea9d45ea33e5485f9528012eef8a02e83849059b869",
+    "src/server/RunLifecycle.lua": "94b7c0486448726f3611cf0e380ee4fcab502910b787858a770d1cb4d57317be",
+    "src/client/BrickToadsClient.client.luau": "e6555ee028fc7e128e7c8793d1d3962c4907d637b23a3e0aef01693be64ff9a1",
+    "src/shared/TextCatalog.luau": "56da3305bec23658ff406debb27790d2929f7a4116d73dcb1bc2eda2f93cced5"
+  },
+  "reviewFindings": [],
+  "reviewScope": [
+    "Real bootstrap RunService:IsStudio gate overrides saved/public privilege; strict boolean attribute; no public input route",
+    "Per-group development config cloned; defaults applied before first spawn; live hub updates active groups and future config",
+    "Post-Won active guard changes only future config, not a completed Session or eliminated hero",
+    "Compact mobile returns shows localized infinity instead of finite count; desktop infinity and English/Russian God label follow snapshot flag",
+    "Native observer/pilot inspected: only normal client Start/Move and trusted server attribute disable; no HP/pose/stock/phase injection"
+  ],
+  "limits": [
+    "Native God fixture validates ten ordinary falls and toggle resource accounting, not an all13 God-mode campaign",
+    "Native25 all13 finite Won is separate earlier evidence; God was not enabled in that run",
+    "HUD logic/localization reviewed; independent pixel/device layout approval is not claimed",
+    "Journal does not record every accepted Move; the inspected disposable client pilot provides control provenance",
+    "This reviewer made no Source or Studio changes"
+  ]
+}

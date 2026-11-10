@@ -24,6 +24,7 @@ end
 function Controller.new(deps,world)
     deps=table.clone(deps)
     deps.Config=table.clone(deps.Config)
+    if deps.Config.Development then deps.Config.Development=table.clone(deps.Config.Development) end
     local self=setmetatable({deps=deps,world=world,connections=deps.Registry.new(),players={},choices={},preferences={},viewChoices={},owners={},ownerSlots={},buckets={},notices={},
         baseLevel=deps.Config.Level,actionFeedback=setmetatable({},{__mode='k'}),actionSerial=setmetatable({},{__mode='k'})},Controller)
     if deps.SharedBossQueue then self.bossQueue=deps.SharedBossQueue
@@ -252,6 +253,10 @@ function Controller:_begin(player,players)
     local actorOwners={}
     for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
     self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners,variation=variationMetadata(self.deps.Config.Level)})
+    local development=self.deps.Config.Development
+    if development and development.allowInfiniteLives==true and development.infiniteLives==true then
+        assert(self.current:setInfiniteLives(true)=='OK','Cannot enable trusted Studio infinite lives')
+    end
     self.current:step(self.deps.clock())
     self.campaignIndex=self.deps.CampaignDefinition and self.deps.CampaignDirector and 1 or nil
     self.campaignSeed=self.deps.LevelVariation and self.deps.LevelVariation.seedFromId(runId) or campaignSeed(runId)

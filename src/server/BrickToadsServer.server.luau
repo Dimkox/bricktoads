@@ -10,6 +10,7 @@ local worldType=require(gameplay.GameWorld)
 require(gameplay.DragonWorld)(worldType)
 require(gameplay.BossIntroWorld)(worldType)
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
+local godMode=require(gameplay.StudioGodMode).attach(config,RunService:IsStudio(),game:GetService('ServerStorage'))
 local buildInfo=script.Parent:FindFirstChild('BuildInfo')
 local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
 local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
@@ -43,6 +44,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
         world.folder:SetAttribute('GroupId',groupId)
         return world
     end)
+godMode:bind(controller)
 if RunService:IsStudio() then
     -- Read-only server-side export. No remote, gameplay mutation or test control.
     local diagnostics=Instance.new('BindableFunction')

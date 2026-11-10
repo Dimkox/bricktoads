@@ -720,7 +720,8 @@ local function renderMobileSummary(level, enemy, isBoss)
     mobileStatusTitle.Visible = personal == nil or rival==true
     mobileStatusTitle.Text = rival and T('Rival') or T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot and snapshot.heroes)})
     mobileReturns.Visible = personal ~= nil
-    mobileReturns.Text = rival and T('RACE') or enemy and T("1 life") or T("{count:int} resp.", {count=personal and personal.respawns or 0})
+    mobileReturns.Text = rival and T('RACE') or enemy and T("1 life")
+        or personal and personal.infiniteLives and T("∞ resp.") or T("{count:int} resp.", {count=personal and personal.respawns or 0})
     for n, heart in ipairs(mobileHearts) do
         heart.heart.Visible = personal ~= nil and n <= maximum
         heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1)
@@ -851,13 +852,14 @@ render = function()
             row.owner.Text = heroName(hero) .. (hero.slot == snapshot.mine and T(" · you") or "")
             row.owner.TextColor3 = hero.slot == snapshot.mine and C.lime or C.text
             row.stripe.BackgroundColor3 = heroColors[hero.template] or C.green
-            row.returns.Text = "↻ " .. tostring(hero.respawns or 0)
+            row.returns.Text = "↻ " .. (hero.infiniteLives and "∞" or tostring(hero.respawns or 0))
             local detail = T(hero.template or "Mr. Green")
             if not hero.connected then detail = T("Disconnected")
             elseif hero.status == "Eliminated" then detail = T("Out")
             elseif hero.status ~= "Alive" or hero.dying then detail = T("Returning…")
             elseif hero.shield then detail ..= T(" · protected") end
             if hero.slot==snapshot.mine and snapshot.weapon then detail ..= T(" · club") end
+            if hero.infiniteLives then detail ..= T(" · God Mode") end
             row.status.Text = detail
             local hp = tonumber(hero.hearts) or 0
             for n, heart in ipairs(row.fills) do heart.clip.Size = UDim2.fromScale(math.clamp(hp - n + 1, 0, 1), 1) end

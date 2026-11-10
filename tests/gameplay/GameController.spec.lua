@@ -641,5 +641,21 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
             'Geometry refusal must abort before Session.new or any new body')
     end)
 
+    test('trusted development default applies before initial spawn and never accepts a client toggle',function()
+        local config=table.clone(Config);config.Development={allowInfiniteLives=true,infiniteLives=true}
+        local c,list,add,send=fixture(false,{Config=config});local a=add(10)
+        assert(send(a,{kind='Start'})=='OK')
+        assert(c.current.state.heroes[1].infiniteLives==true and c.current.state.heroes[1].respawns==3)
+        assert(c:snapshot(a,list).heroes[1].infiniteLives==true)
+        assert(send(a,{kind='SetInfiniteLives',enabled=false})=='INVALID_INTENT')
+        assert(c.current.state.heroes[1].infiniteLives==true)
+        c.director.result='Won';assert(send(a,{kind='Start'})=='OK')
+        assert(c.current.state.heroes[1].infiniteLives==true)
+    end)
+    test('an unprivileged config cannot enable infinite lives at run start',function()
+        local config=table.clone(Config);config.Development={allowInfiniteLives=false,infiniteLives=true}
+        local c,_,add,send=fixture(false,{Config=config});local a=add(10)
+        assert(send(a,{kind='Start'})=='OK' and c.current.state.heroes[1].infiniteLives==false)
+    end)
     print('GameController: '..passed..' PASS')
 end

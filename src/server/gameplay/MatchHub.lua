@@ -75,6 +75,23 @@ function MatchHub.new(deps,worldFactory)
     return self
 end
 
+-- Server-only control. No remote intent routes to this method.
+function MatchHub:setInfiniteLives(enabled)
+    if type(enabled)~='boolean' then return 'INVALID_OPTION' end
+    local development=self.deps.Config.Development
+    if not development or development.allowInfiniteLives~=true then return 'DEVELOPMENT_ONLY' end
+    development.infiniteLives=enabled
+    for _,id in ipairs(self.order) do
+        local group=self.groups[id]
+        self:_guard(group,function()
+            local c=group.controller
+            c.deps.Config.Development.infiniteLives=enabled
+            if active(c) then assert(c.current:setInfiniteLives(enabled)=='OK') end
+        end)
+    end
+    return 'OK'
+end
+
 function MatchHub:_flushQuarantines()
     if self.flushingQuarantines then return end
     self.flushingQuarantines=true
