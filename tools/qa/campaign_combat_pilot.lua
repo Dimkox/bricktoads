@@ -546,6 +546,101 @@ local function slaughterEvasion(c, boss, q)
     end
     return intent
 end
+local queenEvasions = setmetatable({}, {__mode='k'})
+local function queenEvasion(c, boss, q)
+    if not boss or boss.kind ~= 'DarkQueen' or c.director.stage ~= 'Boss'
+        or special(c) or c.hero.held or not finite(boss.attackSerial) then return nil end
+    local body = c.world.actors and c.world.actors[c.slot]
+    local root, humanoid = body and body.root, body and body.humanoid
+    if not root or not root.Parent or root.Anchored or not humanoid
+        or humanoid.PlatformStand or (humanoid.Health or 0) <= 0 then return nil end
+    local material = humanoid.FloorMaterial
+    if material == nil or material == 'Air' or tostring(material) == 'Enum.Material.Air' then return nil end
+    local arena, p = boss.arena, c.position
+    if not arena or not finite(arena.minX) or not finite(arena.maxX)
+        or not finite(arena.minZ) or not finite(arena.maxZ)
+        or arena.maxX-arena.minX <= 2 or arena.maxZ-arena.minZ <= 2 then return nil end
+    local preempt = boss.state == 'Ready' and finite(boss.readyAt) and boss.readyAt-c.now <= .35
+    local attack = boss.attack
+    if not preempt and (boss.state ~= 'Tell' and boss.state ~= 'Active'
+        or not attack or not attack.move or not point(attack.origin)
+        or not attack.aim or not finite(attack.aim.x) or not finite(attack.aim.z)) then return nil end
+    local name = preempt and (boss.attackSerial%2 == 0 and 'Sweep' or 'Spin') or attack.name
+    if name ~= 'Sweep' and name ~= 'Spin' then return nil end
+    local origin = preempt and q or attack.origin
+    local serial = preempt and boss.attackSerial+1 or boss.attackSerial
+    local function available(o, x, z)
+        local result = math.huge
+        if x > 0 then result = math.min(result,(arena.maxX-1-o.x)/x)
+        elseif x < 0 then result = math.min(result,(arena.minX+1-o.x)/x) end
+        if z > 0 then result = math.min(result,(arena.maxZ-1-o.z)/z)
+        elseif z < 0 then result = math.min(result,(arena.minZ+1-o.z)/z) end
+        return math.max(0,result)
+    end
+    local slots = queenEvasions[c.session]
+    if not slots then slots = {};queenEvasions[c.session] = slots end
+    local identity = table.concat({tostring(c.session.state.runId),tostring(c.session.state.levelEpoch),
+        tostring(c.hero.actorId),tostring(c.hero.attempt)},':')
+    local state = slots[c.slot]
+    local fresh = not state or state.identity ~= identity or state.boss ~= boss
+        or state.serial ~= serial or state.name ~= name
+    local x, z = 0, 0
+    local speed = (c.config.Movement or {}).heroRunSpeed or 24
+    local budget = speed*(.133+c.dt+.025)
+    if name == 'Sweep' then
+        local ax, az
+        if preempt then ax,az = unit(p.x-q.x,p.z-q.z) else ax,az = unit(attack.aim.x,attack.aim.z) end
+        local sx, sz = -az, ax
+        if fresh then
+            local plus, minus = available(p,sx,sz), available(p,-sx,-sz)
+            local sign = plus >= minus and 1 or -1
+            local v = root.AssemblyLinearVelocity
+            local momentum = v and finite(v.X) and finite(v.Z) and v.X*sx+v.Z*sz or 0
+            if preempt and math.abs(momentum) > 1 and plus > 10 and minus > 10 then
+                sign = momentum > 0 and 1 or -1
+            end
+            state = {identity=identity,boss=boss,serial=serial,name=name,x=sx*sign,z=sz*sign}
+            slots[c.slot] = state
+        else
+            if sx*state.x+sz*state.z < 0 then sx,sz = -sx,-sz end
+            state.x,state.z = sx,sz
+        end
+        local safe = false
+        if not preempt then
+            local front = (p.x-origin.x)*ax+(p.z-origin.z)*az
+            local side = math.abs((p.x-origin.x)*az-(p.z-origin.z)*ax)
+            safe = side > 7 or front < -3 or front > 13
+        end
+        if not safe and available(p,state.x,state.z) >= budget then x,z = state.x,state.z end
+    else
+        if fresh then
+            local ax, az = unit(p.x-origin.x,p.z-origin.z)
+            local best = math.huge
+            for _,axis in ipairs({{ax,az},{1,0},{-1,0},{0,1},{0,-1}}) do
+                if available(origin,axis[1],axis[2]) >= 16 then
+                    local gx,gz = origin.x+axis[1]*16,origin.z+axis[2]*16
+                    local cost = (gx-p.x)^2+(gz-p.z)^2
+                    if cost < best then
+                        best = cost
+                        state = {identity=identity,boss=boss,serial=serial,name=name,x=axis[1],z=axis[2]}
+                        slots[c.slot] = state
+                    end
+                end
+            end
+        end
+        -- Source Spin traces an 8-by-4 ellipse offset four studs in world Z.
+        -- Preserve its origin refuge through the whole Tell/Active interval;
+        -- the generic 8.5-stud fallback can pull an already clear body inward.
+        if flatDistance(p,origin) < 14.2 and state and state.identity == identity
+            and state.boss == boss and state.serial == serial and state.name == name then
+            x,z = unit(origin.x+state.x*16-p.x,origin.z+state.z*16-p.z)
+            if available(p,x,z) < budget then x,z = 0,0 end
+        end
+    end
+    local intent = neutral()
+    intent.x,intent.z,intent.run,intent.evasion = x,z,true,true
+    return intent
+end
 local function guardianPlan(c, q)
     local intent, d, p = neutral(), c.director, c.position
     intent.aimX, intent.aimZ = unit(q.x-p.x, q.z-p.z)
@@ -620,6 +715,8 @@ function Pilot.plan(ctx)
     end
     local slaughter = slaughterEvasion(c,boss,q)
     if slaughter then clearRunUp(c);return slaughter end
+    local queen = queenEvasion(c,boss,q)
+    if queen then clearRunUp(c);return queen end
     local stepOff=stepOffEnemy(c,q,enemy,intent)
     if stepOff then return stepOff end
     local range, height = flatDistance(p,q), math.abs(p.y-q.y)

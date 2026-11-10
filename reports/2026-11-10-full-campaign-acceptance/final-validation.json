@@ -1,5 +1,5 @@
 {
-  "started": "2026-11-10T19:16:26.957847+00:00",
+  "started": "2026-11-10T19:34:23.895089+00:00",
   "scope": "Frozen campaign mechanics native/Python/compiler/build verification; prepared Studio and full playthrough evidence are separate",
   "starter_before": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353",
   "expected_starter_sha256": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353",
@@ -12,7 +12,7 @@
         "tests/run.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.097,
+      "seconds": 0.101,
       "stdout_stderr": "PASS 1/2/3 heroes share templates, not resources\nPASS invalid roster rejected\nPASS late hero is never added\nPASS initial failure does not spend a respawn\nPASS unsafe initial spawn is not an invented free emergency life\nPASS failed respawn consumes nothing\nPASS three successful respawns then actual death at zero\nPASS normal shield is exactly two seconds\nPASS accepted attack cancels protection even without a hit\nPASS zero normalized health alone is not a death event\nPASS emergency appearance costs one and expires at ten seconds\nPASS emergency cycles consume appearances without deaths\nPASS safe relocation does not heal or spend again\nPASS emergency attack cancels hold and the later retry\nPASS failed emergency replacement leaves existing living attempt\nPASS offline emergency expiry never spawns or kills\nPASS offline dead hero waits for owner without spending\nPASS rejoin living actor preserves health, resources and deadline\nPASS offline actor still accepts damage and death\nPASS offline owner cannot start attacks\nPASS stale connection cannot command after rejoin\nPASS disconnect invalidates an uncommitted spawn\nPASS duplicate commit replays the established acknowledgement\nPASS same event id with different payload rejected\nPASS concurrent requests cannot reserve twice\nPASS old actor death cannot kill its replacement\nPASS actor ids cannot be reused within a run\nPASS aborted token cannot confirm a later reservation\nPASS level transition heals once without resetting resources\nPASS one living hero completes an eligible exit\nPASS exit prerequisites cannot be skipped\nPASS eliminated member stays eliminated on next level\nPASS pending offline respawn prevents false defeat\nPASS old level reservations are invalidated; owner uses current level\nPASS old level death is rejected even for the same actor\nPASS transition preserves ordinary deadline and clears emergency hold\nPASS spectator menu choice does not dissolve remaining party\nPASS new game gives a new independent roster and resources\nPASS wrong run events cannot affect another game\nPASS input snapshots remain immutable\nPASS malformed times, revisions and numeric health are rejected\nPASS server clock cannot move backwards\nPASS safe relocation wins a serialized race without double spending\nPASS death cancels a prepared emergency replacement\nPASS attack cancels a prepared emergency replacement\nPASS 120 deterministic life-cycle sequences preserve invariants\nRESULT: 46 passed; 0 failed\n"
     },
     {
@@ -23,7 +23,7 @@
         "tests/run_boss_queue.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.011,
+      "seconds": 0.014,
       "stdout_stderr": "PASS duplicate selection preserves FIFO priority and invitation deadline\nPASS select fills a previously registered slot\nPASS decline rotates once and exhausted slot starts NPC\nPASS invitation accepts strictly before ten seconds and reserves a separate connection deadline\nPASS invitation at exact expiry cannot accept and rotates to the next candidate\nPASS connection strictly before its deadline becomes ready and starts one human\nPASS accepted reserve expires at connection deadline without rejoining the queue\nPASS switching an invited boss invalidates the old token and fills both waiting slots\nPASS cancel invalidates an invitation without changing another candidates offer\nPASS accepted and ready reserves can cancel but cannot switch bosses\nPASS simultaneous slots offer distinct users in registration order\nPASS signed Studio user identities preserve FIFO and exclusive ownership\nPASS eligibility excludes active ordinary roles globally and same group heroes per slot\nPASS eligibility change clears an unresolved reserve before next invitation\nPASS NPC selection cannot be replaced by later queue entries\nPASS close clears the assignment without requeue and keeps later users waiting\nPASS close at assignment expiry removes its owner without consuming the next candidate\nPASS stale server timestamps cannot reopen an expired invitation\nPASS private views cannot mutate queue order or the active assignment\nPASS invalid operations return errors without consuming another players invitation\nBossQueue: 20 passed\n"
     },
     {
@@ -34,7 +34,7 @@
         "tests/run_connections.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.016,
+      "seconds": 0.017,
       "stdout_stderr": "PASS unknown objects have no connection authority\nPASS first join is current and duplicate join is a no-op\nPASS a fresh object replaces the same account's current object\nPASS superseded object's removal cannot disconnect the replacement\nPASS current removal changes authority exactly once\nPASS departing replacement never falls back to old object\nPASS known superseded or removed objects never revive through add replay\nPASS a genuinely new object can return after all old objects leave\nPASS different accounts including Studio negative IDs are independent\nPASS authority uses exact object identity even for equal fake objects\nPASS online filters stale/unknown duplicates and sorts without changing input\nPASS online only returns current objects present in the supplied population\nPASS late new account is online without replacing an existing account\nPASS separate registries do not share object lifecycle\nPASS binding returns a damaged live hero without healing or a new appearance\nPASS binding replacement does not cancel an already accepted attack\nPASS binding preserves current life, actor, reserve and both shield deadlines\nPASS binding reconnects an offline dead hero with exactly one successful respawn\nConnectionRegistry tests: 18 PASS, 0 FAIL\nPASS native Luau connection contracts; actual same-account transport NOT RUN\n"
     },
     {
@@ -45,7 +45,7 @@
         "tests/run_dragon_strikes.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.021,
+      "seconds": 0.022,
       "stdout_stderr": "PASS Dragon fixed22 differs from hero Dash finisher at low Life\nPASS normal AI selects its own headbutt and resolves once through real Session\nPASS accepted action and cloned geometry survive configuration and target changes\nPASS effect-time miss does not directly damage the accepted victim\nPASS human F keeps same body and accepted offline effect without new attack names\nPASS shields retain their damage and impulse policies\nPASS ordinary friendly fire uses explicit2HP and base4\nPASS incoming hit cancels the windup and physical death cannot emit a club\nPASS accepted NPC response survives removed live action and changed impulse tuning\nDragonStrikes: 9 PASS\n"
     },
     {
@@ -56,7 +56,7 @@
         "tests/run_dragon_flight.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.03,
+      "seconds": 0.029,
       "stdout_stderr": "PASS runtime installs finite Dragon control without adding an enemy\nPASS blocked ascent cancels pending strike and lift without damage or a free mount\nPASS blocked ascent logs once and resumes policy only after accepted clear motion\nPASS blocked mounted flight releases the real rider and never grants remount\nPASS blocked captured flight releases without a second hit or paid appearance\nPASS blocked lift cancels a pending capture before it can attach later\nPASS first blocked ascent after strike deadline prevents the due damage commit\nPASS first blocked ascent after capture deadline never commits the capture\nPASS captured clearance queries include capture height exactly once\nPASS due capture checks its intended lift before linking beneath a lower roof\nPASS clear due capture applies intended height once to query and first motion\nPASS missed due capture keeps normal flight height\nPASS legacy worlds without clearance query retain the motion rejection backstop\nPASS surviving heavy hit mounts the same body without healing or spending resources\nPASS mount rejects airborne obstructed or already reserved bodies\nPASS mounted human enemy retains life and rejects a new control command\nPASS disconnect stops rider steering after timeout but keeps the vulnerable body\nPASS mounted fire has fixed profile22 and global two-shot cap\nPASS fire respects shields walls ordinary damage and immutable accepted response\nPASS hero fire impulse uses a cloned accepted direction after the rider turns and tuning changes\nPASS NPC fire impulse survives an actual new rider appearance with captured response and direction\nPASS accepted hero and NPC fire impacts retain direction after the attacker body is removed\nPASS incoming hero hit releases the mount before applying the physical response\nPASS capture rechecks the effect victim and never adds a second damage event\nPASS capture miss and later interruption cannot attach a stale actor\nPASS actor replacement and run close clean temporary links and all projectiles\nPASS public schema rejects internal Dragon actions before any side effect\nPASS both respawn shields retain fire damage and impulse policy\nPASS mount neutralizes a gate only while the same surviving Dragon remains mounted\nPASS mounted motion keeps processing after the ground encounter reaches the boss\nPASS an obstructed accepted shot consumes attack timing without spawning beyond the wall\nDragonFlight: 31 PASS\n"
     },
     {
@@ -67,7 +67,7 @@
         "tests/run_enemy_carry.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.02,
+      "seconds": 0.019,
       "stdout_stderr": "PASS a close grounded Pig is captured as the same living owned body without resources or health changing\nPASS only grounded in-range facing living unlinked Pigs qualify\nPASS an accepted grab closes takeover before a delayed miss without acquiring the moved body\nPASS a grab outside its finite effect window cannot acquire an old target\nPASS two accepted grabs compete in acceptance order for the same body\nPASS capture cancels a current Pig windup but does not replace its owner\nPASS capture normalizes an expired enemy reaction before saving the carry physics\nPASS a historical holder hit cancels a pending grab even after recovery\nPASS enemy interruption history cancels a pending grab after its current reaction expired\nPASS an already accepted capture and carry persist on their same offline holder body\nPASS a new holder appearance cannot inherit the previous pending grab\nPASS manual throw releases the existing body and charges calibrated damage once at release\nPASS failed physical release does not charge throw damage or lose the held body\nPASS a held body that physically died between ticks cannot be thrown or charged release damage\nPASS a lethal release uses the existing death path once without resurrecting its carry state\nPASS occupied hands reject the heavy strike without throwing or ordinary attack fallback\nPASS a holder hit drops the same enemy without damage or new resources\nPASS holder death or a new appearance drops from the old pose without transferring the link\nPASS an accepted flight survives thrower death and ends with restored enemy control after its finite reaction\nPASS physical hazards kill an existing held or thrown enemy through its one death path\nPASS failed BeginAttack creates no pending link or takeover engagement\nPASS an accepted grab clears normal respawn protection before its delayed effect without another reserve\nPASS stale or client-selected target intents cannot enter the grab shortcut\nPASS closing clears held flight and pending states idempotently without spawning or damage\nEnemyCarry: 24 passed\n"
     },
     {
@@ -78,7 +78,7 @@
         "tests/run_feedback.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.015,
+      "seconds": 0.014,
       "stdout_stderr": "PASS first sync and reconnect baseline never replay old combat\nPASS repeated stale and shuffled packets cannot duplicate or reverse confirmed feedback\nPASS group run and level boundaries cannot attach old feedback to another body\nPASS blocked damage and confirmed interactions have distinct finite text\nPASS a gap emits only remaining recent rows with bounded cursor memory\nPASS malformed and foreign actor rows cannot become client effects\nPASS short role hints follow server interaction and control state\nPASS actual controlled running offers mega before an opportunistic pickup\nPASS mandatory held actions and boss controls keep priority over a stale run hint\nPASS zero hearts do not remove a still-living hero or ordinary actor from the HUD count\nPASS monotonic snapshot envelope prevents rollback and replay across groups and runs\nPASS Dragon transport has confirmed feedback and gate-aligned live counts\nPASS owner action refusal is shown even when the public combat feed has not advanced\nPASS first sync reconnect actor and run changes baseline old action refusals\nPASS action feedback validates recipient context actor code kind expiry and monotonic id\nPASS delivery delay consumes action TTL and cannot restart an already expired refusal\nPASS enemy action feedback is private to its controlled body and independent of public feed validity\nPASS faulted party guidance describes a manual new game instead of stale live controls\nCombatFeedback: 18 PASS\nPASS optional pending server transfer keeps the existing request busy beyond local acknowledgement timeout\nPASS failed optional server transfer gives a readable retry through the existing create button\nPASS without a transfer field the original bounded local request still refreshes once\nGroupPanel: 3 PASS\n"
     },
     {
@@ -89,7 +89,7 @@
         "tests/run_gameplay.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.048,
+      "seconds": 0.05,
       "stdout_stderr": "PASS ordinary enemies are weaker and die once without respawning\nPASS encounters unlock in order and never from walking directly to exit\nPASS boss body is protected and only reflected projectiles count\nPASS three reflected balls open exit; one living hero completes exactly once\nPASS NPC attack has a windup and resolves against the actual hero once\nPASS a late reflection has time to return instead of inheriting outbound expiry\nPASS offline living bodies remain targets without an NPC replacing ownership\nPASS lost run closes encounter and cannot be won at exit\nPASS lethal delayed death cannot turn into victory at the exit\nPASS guardian waits for a hero to enter its arena before firing\nPASS claim transfers the existing wounded body once without resetting its combat state\nPASS offers contain only existing living unengaged unowned ordinary enemies\nPASS actual human enemy death spends the one life through disconnect and later waves\nPASS hero attack boundary closes the first living directed target even if the effect misses\nPASS reacting heroes do not hide a claimable enemy from the accepted attack boundary\nPASS reacting enemies do not hide the next eligible enemy from the accepted attack boundary\nPASS already reflected projectiles do not hide an eligible enemy at the accepted attack boundary\nPASS owned enemy commands bind schema identity epoch sequence and ordinary moves\nPASS disconnect retains body and accepted strike while new connection rejects old packets\nPASS human and NPC ordinary strikes share windup front hitbox and cooldown\nPASS ordinary human strike hits another enemy through shared enemy health without striking through it\nPASS reaction death and closed runs reject enemy commands\nPASS an engine-dead or missing body cannot be offered or claimed between server steps\nPASS boss gate waits before spawning and assigns one existing-profile human guardian\nPASS human guardian aims and fires only validated input with NPC projectile calibration\nPASS physical guardian death ends its role and does not permit late commands or respawn\nPASS guardian input cannot fire through an already missing physical body\nPASS guardian death cancels later outbound impacts in the same server tick\nPASS human and NPC strikes use actual Session hero damage and profile\nPASS actual respawn shield blocks human enemy damage through the Session hit path\nLevelDirector: 30 PASS\nPASS selection is owned by the real sender and duplicate trio templates are allowed\nPASS malformed and owner-spoofed choices cannot change selection\nPASS only host starts; solo begins immediately with full initial resources\nPASS active choices cannot heal, add a hero, or change the frozen template\nPASS a fourth owner receives spectator state and cannot gain a hero\nPASS obsolete Player object cannot select or receive private state\nPASS returning current owner retains same actor life reserve and template\nPASS result needs manual new game and creates fresh run only once per accepted start\nPASS Enemy and Spectator preferences leave hero places to selected heroes\nPASS no hero means no game start or consumed appearances\nPASS claim takes the same damaged body without healing a hero slot or spawning\nPASS hero including eliminated hero cannot reenter this run as an enemy\nPASS claims reject wrong run level spoofed owner and malformed enemy id\nPASS a second applicant cannot take or duplicate an occupied body\nPASS accepted directed hero attack locks the enemy before a delayed miss\nPASS successful contextual primary action does not engage an unrelated ordinary enemy\nPASS attack lock uses acceptance time when the first target reaction just expired\nPASS one enemy life survives disconnect and cannot be reset by selecting a different sentry\nPASS current replacement retains enemy body health and rejects stale sender and epoch\nPASS separate new game clears enemy spent life but active role preference cannot reset a run\nPASS eliminated hero can choose menu and watch without changing the continuing duo\nPASS observer menu is personal and survives Player replacement without spawning\nPASS dead enemy menu and watch preserve its spent life through replacement and later waves\nPASS living roles cannot suspend their actors with a personal view choice\nPASS awaiting initial spawn and awaiting respawn heroes stay Playing and cannot choose menu\nPASS new game resets personal choices while the closed group always shows the result menu\nPASS view choice binds current run level and sender while rejecting extra or missing fields\nPASS snapshot publishes world camera bounds and tolerates worlds without them\nPASS group controllers use one shared guardian queue and retain distinct lifecycle identity\nPASS boss selection waits FIFO and removes the applicant from the next hero roster\nPASS boss wait rejects active or eliminated same-run heroes and living ordinary enemies\nPASS successful ordinary claim cancels waiting while failed claims preserve it\nPASS accepted boss reserve excludes ordinary claim and cannot silently enter the hero roster\nPASS boss gateway validates sender and exact invitation payloads\nPASS boss invitation expires into NPC once and a late reply never replaces it\nPASS dead guardian releases its assignment without restoring its body or queue\nPASS ready owner disconnects before guardian spawn without creating a false online controller\nPASS one private journal follows actual lifecycle hit result and restart without leaking diagnostic rows\nPASS action denial feedback survives Move and Sync and is private scoped and finite\nPASS successful actions clear denial feedback but unknown or stale action contexts cannot create it\nPASS only the five supported actual action denials generate results and successful Jump clears one\nPASS only accepted new starts build one private canonical-based route and record its actual layout\nPASS a refused world rebuild cannot start a Session or consume a playable appearance\nGameController: 43 PASS\nPASS spectator targets retain zero-health and offline living heroes; skip eliminated dying absent actors\n"
     },
     {
@@ -100,7 +100,7 @@
         "tests/run_groups.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.04,
+      "seconds": 0.038,
       "stdout_stderr": "PASS independent real controllers keep group B alive when group A loses\nPASS creation is bounded and duplicate request IDs do not create another group\nPASS only initial Sync can omit the strict current group envelope\nPASS observer A to B to A permits return while replacement rejects the obsolete Player\nPASS living and respawning heroes cannot create or join a second group\nPASS eliminated hero can take group B enemy but retains group A hero and spent B history\nPASS shared guardian FIFO targets each group and accepting moves only the invited observer\nPASS waiting survives observer switches and a created lobby stays spectator until Hero selection\nPASS same-run eliminated hero is excluded only from that groups guardian slot\nPASS failed ordinary claims preserve global waiting and success cancels its invitation\nPASS one global token bucket prevents group hopping from resetting intent limits\nPASS snapshot sequence is monotonic across groups and independent for each current Player\nPASS handle step and presentation faults quarantine one group and host Start creates a fresh run\nPASS shared queue failure remains a shared fatal error rather than blaming one party\nPASS a first Start failure still has a valid fault snapshot and can recover without an old session\nPASS action result identifiers stay monotonic through a same-connection group change\nPASS optional capacity transfer preserves old parties and is private to its requester\nPASS a foreign group role-read failure cannot poison healthy snapshots routing or boss eligibility\nPASS Start eligibility and replication focus reads quarantine their owning group only\nPASS boss eligibility quarantine waits for the queue operation and never invites a closed target\nPASS a target eligibility fault invalidates acceptance while a healthy boss slot stays usable\nPASS new run layout is private to its group while invalid starts and neighbouring bodies stay unchanged\nMatchHub: 22 passed\n"
     },
     {
@@ -111,7 +111,7 @@
         "tests/run_guardian.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.03,
+      "seconds": 0.029,
       "stdout_stderr": "PASS cosmetic cannon hook follows successful projectiles and never blocked melee or invalid spawns\nPASS finite Heavy phase gives idle disconnected human a ground ball without replacing ownership\nPASS ordinary shots damage through Session and flying bullets never reflect\nPASS human fire respects cooldown and NPC only fires within aggro range\nPASS pickup is exclusive and preserves shield health reserves and combat resources\nPASS pickup requires server distance height and a living connected non-dying hero\nPASS throw accepts BeginAttack and removes emergency hold before the projectile effect\nPASS failed BeginAttack leaves the ball held and never releases shield hold\nPASS thrown ball clears nearby heroes during normal flight before reaching the guardian\nPASS carried ball follows its owner and lifecycle changes drop it without duplicating\nPASS unsupported dropped balls clear and expired balls cannot be picked up\nPASS three thrown impacts follow raw 47 31 15 0 and defeat the guardian once\nPASS same-tick guardian death clears later impacts and hazards immediately\nPASS direct attacks cannot bypass the thrown-ball rule and IDs remain unique\nGuardianPattern: 14 passed\nPASS actual Session pickup retains normal shield/resources and throw clears it before flight\nPASS stale actor cannot pick up and actual death never transfers held ball to a new appearance\nPASS actual Session throw survives small flight steps without hurting or stunning its owner\nPASS actual controller defeat clears Guardian projectiles and carriers before its final step stops\nGuardianSession: 4 passed\n"
     },
     {
@@ -122,7 +122,7 @@
         "tests/run_healing_flies.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.024,
+      "seconds": 0.023,
       "stdout_stderr": "PASS source static fly inventory is two early and four late food objects\nPASS tongue catches add exactly eight raw Life on impact and preserve identity/resources\nPASS healing caps at47 and a full-health catch still consumes its one fly\nPASS a missed tongue heals nothing and leaves the food available\nPASS two accepted tongues compete for the same item without duplicated healing\nPASS hit reaction interrupts a tongue before the catch\nPASS an interrupted tongue stays cancelled after a long frame clears its reaction\nPASS death and a fresh appearance cannot inherit a pending catch\nPASS already accepted tongue finishes on its offline body without a new appearance\nPASS stale or client-selected item/heal intents cannot enter the contextual shortcut\nPASS catch respects cooldown and consumes a repeated packet at most once\nPASS BeginAttack removes respawn protection before tongue effect without spending another reserve\nPASS failed authoritative health event neither consumes food nor changes raw Life\nPASS later zones activate once and another run has independent food\nPASS closing a run cancels pending tongues and removes its remaining visuals\nHealingFlies: 15 passed\n"
     },
     {
@@ -133,7 +133,7 @@
         "tests/run_journal.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.018,
+      "seconds": 0.019,
       "stdout_stderr": "PASS bounded journal overwrites oldest rows and preserves exact context and event order\nPASS external mutation and duplicate event receipt cannot alter retained evidence\nPASS malformed rows foreign identity and unbounded nested data stay bounded and JSON-safe\nPASS client projection is allowlisted bounded and excludes private diagnostic data\nPASS diagnostic logger failures cannot abort successful spawn damage or later simulation\nPASS late timestamps remain visible while seq orders the observation stream\nPASS actual respawn records retain shield kind deadline resource and connection state\nPASS Dragon confirmations project bounded public feedback without private owner data\nRunJournal: 8 PASS\n"
     },
     {
@@ -144,7 +144,7 @@
         "tests/run_level_route.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.023,
+      "seconds": 0.022,
       "stdout_stderr": "PASS route contains the classified13 actors in unique source order across6 districts\nPASS initial district alone spawns and distant exit cannot skip living encounters\nPASS clearing enemies still requires physically reaching that districts far side\nPASS eliminated or dying bodies cannot advance a district\nPASS every district requires its own exit and raised enemies preserve configured height\nPASS modern flying shots cannot be reflected and final exit needs guardian defeat\nPASS lost run closes the route before later districts spawn\nPASS route activates its two then four flies and clears them on closure\nPASS production grab preserves a human Pig body then throws through its existing health and command guards\nPASS combat Walker death creates one club and actual boss introduction frees weapon hands\nLevelRoute: 10 passed\n"
     },
     {
@@ -155,7 +155,7 @@
         "tests/run_level_traversal.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.011,
+      "seconds": 0.01,
       "stdout_stderr": "PASS all5 route gaps fit the main-game jump envelope with takeoff and landing space\n"
     },
     {
@@ -166,7 +166,7 @@
         "tests/run_pig_strikes.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.029,
+      "seconds": 0.027,
       "stdout_stderr": "PASS a healthy selected hero receives the standing jab instead of the shared heavy attack\nPASS standing selection uses raw low nibble, including the exact3/4 boundary\nPASS a selected heavy action is immutable when healing changes raw Life during windup\nPASS effect-time geometry can miss or hit another body without reselecting the action\nPASS a claimed Pig uses the same basic jab/heavy choice and keeps its body and one-life ledger\nPASS a whiff closes takeover at acceptance and disconnect does not cancel the accepted strike\nPASS normal and emergency protection follow the actual Session reaction path\nPASS incoming hit or actual death cancels the pending Pig strike\nPASS Pig hits another ordinary enemy with explicit prototype damage and source profile\nPASS later aligned NPCs may start a finite running approach, early Pigs cannot\nPASS running decisions are gated by depth, target validity and a bounded random cadence\nPASS claiming an unengaged running Pig stops its approach without changing body or health\nPASS an invalid running target clears rush before the melee action is chosen\nPASS other species retain their existing attack and client schema cannot supply a trusted Pig action\nPASS Pig skips a heavy-reacting nearest hero while light reaction can select the heavy standing branch\nPigStrikes: 15 PASS\n"
     },
     {
@@ -188,7 +188,7 @@
         "tests/run_stand.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.035,
+      "seconds": 0.027,
       "stdout_stderr": "PASS Combat: 1054 assertions\nPASS one two three heroes have independent actors and reserves\nPASS all six ordered trio attack pairs use the same profile\nPASS duplicate and reordered attack cannot replay damage or impulse\nPASS payload cannot supply target health position time or NaN\nPASS stale actor packet does not poison new sequence\nPASS failed physical spawn spends no resource\nPASS safe point race aborts without spending\nPASS unsafe initial spawn is not a free emergency attempt\nPASS normal shield blocks health but not unproven impulse immunity\nPASS missed own attack cancels normal shield before impact\nPASS normal movement retains shield and expires without input\nPASS emergency cycles consume exactly three respawns then release live body\nPASS safe relocation beats simultaneous timeout without new life or healing\nPASS emergency attack releases hold even when it misses\nPASS emergency protection prevents health and impulse\nPASS offline body remains target while new commands are rejected\nPASS already accepted attack resolves after disconnect\nPASS old connection cannot control returned actor\nPASS offline emergency timeout cannot consume another reserve\nPASS lethal dash begins dying state before one confirmed death\nPASS exact arithmetic zero alone is not lethal\nPASS server stall does not deliver an expired hit window\nPASS backward time and wrong run do not mutate state\nPASS one hit chooses one target and does not hit self\nPASS physical response keeps the selected hero profile\nPASS rate limit is bounded and recovers with server time\nPASS failed emergency replacement preserves the current living actor\nPASS safe relocation preserves an intermediate combat state\nPASS acceptance order not slot number decides simultaneous attacks\nPASS missing identity and non-scalar input is rejected\nPASS malformed identity types and non-finite counters cannot mutate the session\nPASS non-table packets and unknown schema are harmless rejections\nPASS non-finite and oversized movement never reaches the world\nPASS forged context and foreign actor cannot poison the owners sequence\nPASS an overtaken attack cannot cancel protection or replay after a newer move\nPASS a new sequence during cooldown cannot replace an accepted attack\nPASS rate-limited attacks cannot cancel normal or emergency protection\nPASS snapshot exposes eliminated view without changing lives or the continuing teammate\nPASS game sessions accept explicit group and level identities without changing stand defaults\nPASS contextual object action runs only after actor authority and cooldown checks\nPASS trusted contextual action may extend cooldown while client Club remains invalid\nPASS heavy reaction history survives recovery while a light hit has no heavy epoch\nSession tests: 42 PASS, 0 FAIL\nPASS native Luau stand contracts; engine physics NOT RUN\n"
     },
     {
@@ -199,7 +199,7 @@
         "tests/run_walker_clubs.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.02,
+      "seconds": 0.022,
       "stdout_stderr": "PASS one combat-defeated Walker emits one unique supported club and repeated death cannot duplicate it\nPASS fall or unsupported combat deaths do not farm a replacement safe pickup\nPASS pickup equips one item exclusively without beginning an attack or changing resources\nPASS pickup respects actual grounded reach height and obstruction without a facing prerequisite\nPASS successful ground pickup turns the hero toward the item only after equipment succeeds\nPASS pickup preserves an actual respawn shield while a swing removes it before its effect\nPASS club swing uses its own hitbox and locks an accepted target before a delayed miss\nPASS accepted club swing damages an ordinary enemy by calibrated two HP exactly once\nPASS real friendly fire uses raw16 hero profile20 and one successful hit stops target traversal\nPASS club below raw16 still uses profile20 rather than running finisher21\nPASS club has no invented use limit and its trusted cooldown outlasts the primary default\nPASS a light hit cancels the pending swing but retains the equipped item after recovery\nPASS historical heavy reaction drops the same item after recovery instead of retaining equipment\nPASS a dropped supported club can be picked up again without replenishing a fabricated durability\nPASS failed equipment creation leaves the ground item available without granting ownership\nPASS a changed appearance drops at the old body position and does not equip its replacement\nPASS unsupported weapon release loses the item instead of relocating it onto safe ground\nPASS accepted swing can finish on its same offline body and equipment remains attached\nPASS old target context or an expired effect window cannot replay a swing\nPASS boss introduction drops current equipment once while a later ball-hand release can drop a repickup\nPASS existing R-heavy action is not converted into a club swing\nPASS schema and sequence validation reject client Club targets damage and repeated swings\nPASS clubs and equipment stay independent between directors and closed runs clear all visuals and effects\nWalkerClubs: 23 passed\n"
     },
     {
@@ -223,7 +223,7 @@
         ".tools/luau-0.745/luau.exe"
       ],
       "exit_code": 0,
-      "seconds": 0.435,
+      "seconds": 0.352,
       "stdout_stderr": "PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls\nPASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped\nPASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup\nPASS camera selects one world, clears cross-group state and never falls back from an explicit missing world\nPASS boss intro camera follows only current party/run and releases after cut completion or free view\nPASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped\nPASS ordinary species and guardian projectile modes have distinct original readable presentation\nPASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership\nPASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements\nPASS narrow support cannot crash safe respawn search\nPASS modern delayed jump uses bounded server ground history and preserves horizontal momentum\nPASS jump consumption survives stale floor reports and midair input, then resets after actual landing\nPASS jump grace rejects expired, deep, dead, held and reacting requests\nPASS jump history belongs to one actual actor in one modern world and preserves legacy behavior\nPASS jump support follows actual rotated rig footprint and corners without extending beyond its box\nPASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards\nPASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing\nPASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards\nPASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata\nPASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds\nPASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle\nPASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion\nPASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release\nPASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups\nPASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority\nPASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry\nPASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing\nPASS carry drops and new-run cleanup retain old body references without crossing group or actor generations\nPASS ground clubs are independent noncolliding original item models with one group translation\nPASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing\nPASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset\nPASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation\nPASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption\nPASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority\nPASS Dragon headbutt has real finite neck poses and clears on reaction/death\nPASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat\nPASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses\nPASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup\nPASS accepted response snapshots stay bound to their own profile without a live config table\nPASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors\nPASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries\nPASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets\nPASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates\nPASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped\nPASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage\nPASS original wing motors move only for authoritative flight and return to rest\nPASS fire orders first contact and detects a thin wall before its projected muzzle\nPASS hero appearance integration restores server authority after cosmetics and updates only presentation\n"
     },
     {
@@ -236,7 +236,7 @@
         ".tools/luau-0.745/luau.exe"
       ],
       "exit_code": 0,
-      "seconds": 0.11,
+      "seconds": 0.089,
       "stdout_stderr": "PASS duplicate PlayerAdded cannot reset connection epoch or sequence\nPASS superseded Player cannot use the replacements current actor and epoch\nPASS superseded Player receives no role State or Sync reply\nPASS current replacement removal never revives old host\nPASS roster contains one owner per UserId during overlap\nPASS late removal and repeated current removal cannot disconnect twice\nPASS delayed join callback for an already removed unknown object is ignored\nPASS departed current object cannot command before its removal callback\nPASS replacement uses current Life without new actor healing or reserve\nPASS both protection deadlines and hold survive replacement without renewal\nPASS already accepted attack survives owner replacement and resolves once\nPASS offline death waits and returns with exactly one successful respawn\nPASS new owner receives new epoch and rejects the prior epoch\nPASS late different user is a spectator without a replacement role\nGateway contracts: 14 PASS, 0 FAIL; fake transport, NOT real reconnect\n"
     },
     {
@@ -247,8 +247,8 @@
         "tools/test_bricktoads_place.py"
       ],
       "exit_code": 0,
-      "seconds": 19.003,
-      "stdout_stderr": "test_attack_manifest_cannot_substitute_the_fear_family (__main__.BrickToadsPlaceTests.test_attack_manifest_cannot_substitute_the_fear_family) ... ok\ntest_attack_morphs_preserve_private_identity_origin_extents_and_pbr (__main__.BrickToadsPlaceTests.test_attack_morphs_preserve_private_identity_origin_extents_and_pbr) ... ok\ntest_attack_morphs_reject_wrong_palette_origin_and_missing_source (__main__.BrickToadsPlaceTests.test_attack_morphs_reject_wrong_palette_origin_and_missing_source) ... ok\ntest_boss_templates_preserve_private_resources_rest_frames_origins_and_pbr (__main__.BrickToadsPlaceTests.test_boss_templates_preserve_private_resources_rest_frames_origins_and_pbr) ... ok\ntest_boss_templates_reject_family_identity_missing_duplicate_and_extra_resources (__main__.BrickToadsPlaceTests.test_boss_templates_reject_family_identity_missing_duplicate_and_extra_resources) ... ok\ntest_boss_templates_reject_invalid_mesh_geometry_visibility_and_content (__main__.BrickToadsPlaceTests.test_boss_templates_reject_invalid_mesh_geometry_visibility_and_content) ... ok\ntest_boss_templates_reject_invalid_provenance_and_source_paths (__main__.BrickToadsPlaceTests.test_boss_templates_reject_invalid_provenance_and_source_paths) ... ok\ntest_boss_templates_reject_missing_extra_or_misaligned_mounts_and_muzzles (__main__.BrickToadsPlaceTests.test_boss_templates_reject_missing_extra_or_misaligned_mounts_and_muzzles) ... ok\ntest_canonical_glb_filename_rejects_paths_extensions_and_empty_values (__main__.BrickToadsPlaceTests.test_canonical_glb_filename_rejects_paths_extensions_and_empty_values) ... ok\ntest_canonical_player_templates_are_default_private_exact_uploaded_resources (__main__.BrickToadsPlaceTests.test_canonical_player_templates_are_default_private_exact_uploaded_resources) ... ok\ntest_canonical_surface_appearance_maps_are_preserved (__main__.BrickToadsPlaceTests.test_canonical_surface_appearance_maps_are_preserved) ... ok\ntest_conflicting_lua_and_luau_names_fail (__main__.BrickToadsPlaceTests.test_conflicting_lua_and_luau_names_fail) ... ok\ntest_explicit_canonical_glb_basename_replaces_only_the_default_source_file (__main__.BrickToadsPlaceTests.test_explicit_canonical_glb_basename_replaces_only_the_default_source_file) ... ok\ntest_explicit_canonical_glb_missing_or_wrong_hash_never_uses_the_default (__main__.BrickToadsPlaceTests.test_explicit_canonical_glb_missing_or_wrong_hash_never_uses_the_default) ... ok\ntest_fear_and_attack_morphs_share_one_private_folder_with_distinct_provenance (__main__.BrickToadsPlaceTests.test_fear_and_attack_morphs_share_one_private_folder_with_distinct_provenance) ... ok\ntest_fear_morphs_reject_family_mixups_identity_geometry_and_provenance (__main__.BrickToadsPlaceTests.test_fear_morphs_reject_family_mixups_identity_geometry_and_provenance) ... ok\ntest_green_mesh_template_is_serialized_privately_with_exact_pbr_and_attachments (__main__.BrickToadsPlaceTests.test_green_mesh_template_is_serialized_privately_with_exact_pbr_and_attachments) ... ok\ntest_invalid_canonical_geometry_content_profile_or_provenance_is_rejected (__main__.BrickToadsPlaceTests.test_invalid_canonical_geometry_content_profile_or_provenance_is_rejected) ... ok\ntest_missing_boss_manifest_and_selected_source_fail_closed (__main__.BrickToadsPlaceTests.test_missing_boss_manifest_and_selected_source_fail_closed) ... ok\ntest_missing_character_resource_fails_instead_of_silently_replacing_mesh_art (__main__.BrickToadsPlaceTests.test_missing_character_resource_fails_instead_of_silently_replacing_mesh_art) ... ok\ntest_missing_either_canonical_manifest_fails_closed (__main__.BrickToadsPlaceTests.test_missing_either_canonical_manifest_fails_closed) ... ok\ntest_missing_either_morph_family_fails_closed (__main__.BrickToadsPlaceTests.test_missing_either_morph_family_fails_closed) ... ok\ntest_missing_sources_fail_without_emitting_an_empty_place (__main__.BrickToadsPlaceTests.test_missing_sources_fail_without_emitting_an_empty_place) ... ok\ntest_playable_preserves_both_supported_screen_orientations (__main__.BrickToadsPlaceTests.test_playable_preserves_both_supported_screen_orientations) ... ok\ntest_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint (__main__.BrickToadsPlaceTests.test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint) ... ok\ntest_private_source_receipt_changes_when_an_embedded_source_changes (__main__.BrickToadsPlaceTests.test_private_source_receipt_changes_when_an_embedded_source_changes) ... ok\ntest_rebuild_is_deterministic (__main__.BrickToadsPlaceTests.test_rebuild_is_deterministic) ... ok\ntest_rejected_explorer_is_excluded_from_the_playable_by_default (__main__.BrickToadsPlaceTests.test_rejected_explorer_is_excluded_from_the_playable_by_default) ... ok\ntest_server_scripts_cannot_be_built_into_public_containers (__main__.BrickToadsPlaceTests.test_server_scripts_cannot_be_built_into_public_containers) ... ok\ntest_sources_are_current_and_server_code_is_private (__main__.BrickToadsPlaceTests.test_sources_are_current_and_server_code_is_private) ... ok\ntest_spawn_is_above_a_collidable_anchored_floor (__main__.BrickToadsPlaceTests.test_spawn_is_above_a_collidable_anchored_floor) ... ok\n\n----------------------------------------------------------------------\nRan 31 tests in 18.865s\n\nOK\n"
+      "seconds": 13.89,
+      "stdout_stderr": "test_attack_manifest_cannot_substitute_the_fear_family (__main__.BrickToadsPlaceTests.test_attack_manifest_cannot_substitute_the_fear_family) ... ok\ntest_attack_morphs_preserve_private_identity_origin_extents_and_pbr (__main__.BrickToadsPlaceTests.test_attack_morphs_preserve_private_identity_origin_extents_and_pbr) ... ok\ntest_attack_morphs_reject_wrong_palette_origin_and_missing_source (__main__.BrickToadsPlaceTests.test_attack_morphs_reject_wrong_palette_origin_and_missing_source) ... ok\ntest_boss_templates_preserve_private_resources_rest_frames_origins_and_pbr (__main__.BrickToadsPlaceTests.test_boss_templates_preserve_private_resources_rest_frames_origins_and_pbr) ... ok\ntest_boss_templates_reject_family_identity_missing_duplicate_and_extra_resources (__main__.BrickToadsPlaceTests.test_boss_templates_reject_family_identity_missing_duplicate_and_extra_resources) ... ok\ntest_boss_templates_reject_invalid_mesh_geometry_visibility_and_content (__main__.BrickToadsPlaceTests.test_boss_templates_reject_invalid_mesh_geometry_visibility_and_content) ... ok\ntest_boss_templates_reject_invalid_provenance_and_source_paths (__main__.BrickToadsPlaceTests.test_boss_templates_reject_invalid_provenance_and_source_paths) ... ok\ntest_boss_templates_reject_missing_extra_or_misaligned_mounts_and_muzzles (__main__.BrickToadsPlaceTests.test_boss_templates_reject_missing_extra_or_misaligned_mounts_and_muzzles) ... ok\ntest_canonical_glb_filename_rejects_paths_extensions_and_empty_values (__main__.BrickToadsPlaceTests.test_canonical_glb_filename_rejects_paths_extensions_and_empty_values) ... ok\ntest_canonical_player_templates_are_default_private_exact_uploaded_resources (__main__.BrickToadsPlaceTests.test_canonical_player_templates_are_default_private_exact_uploaded_resources) ... ok\ntest_canonical_surface_appearance_maps_are_preserved (__main__.BrickToadsPlaceTests.test_canonical_surface_appearance_maps_are_preserved) ... ok\ntest_conflicting_lua_and_luau_names_fail (__main__.BrickToadsPlaceTests.test_conflicting_lua_and_luau_names_fail) ... ok\ntest_explicit_canonical_glb_basename_replaces_only_the_default_source_file (__main__.BrickToadsPlaceTests.test_explicit_canonical_glb_basename_replaces_only_the_default_source_file) ... ok\ntest_explicit_canonical_glb_missing_or_wrong_hash_never_uses_the_default (__main__.BrickToadsPlaceTests.test_explicit_canonical_glb_missing_or_wrong_hash_never_uses_the_default) ... ok\ntest_fear_and_attack_morphs_share_one_private_folder_with_distinct_provenance (__main__.BrickToadsPlaceTests.test_fear_and_attack_morphs_share_one_private_folder_with_distinct_provenance) ... ok\ntest_fear_morphs_reject_family_mixups_identity_geometry_and_provenance (__main__.BrickToadsPlaceTests.test_fear_morphs_reject_family_mixups_identity_geometry_and_provenance) ... ok\ntest_green_mesh_template_is_serialized_privately_with_exact_pbr_and_attachments (__main__.BrickToadsPlaceTests.test_green_mesh_template_is_serialized_privately_with_exact_pbr_and_attachments) ... ok\ntest_invalid_canonical_geometry_content_profile_or_provenance_is_rejected (__main__.BrickToadsPlaceTests.test_invalid_canonical_geometry_content_profile_or_provenance_is_rejected) ... ok\ntest_missing_boss_manifest_and_selected_source_fail_closed (__main__.BrickToadsPlaceTests.test_missing_boss_manifest_and_selected_source_fail_closed) ... ok\ntest_missing_character_resource_fails_instead_of_silently_replacing_mesh_art (__main__.BrickToadsPlaceTests.test_missing_character_resource_fails_instead_of_silently_replacing_mesh_art) ... ok\ntest_missing_either_canonical_manifest_fails_closed (__main__.BrickToadsPlaceTests.test_missing_either_canonical_manifest_fails_closed) ... ok\ntest_missing_either_morph_family_fails_closed (__main__.BrickToadsPlaceTests.test_missing_either_morph_family_fails_closed) ... ok\ntest_missing_sources_fail_without_emitting_an_empty_place (__main__.BrickToadsPlaceTests.test_missing_sources_fail_without_emitting_an_empty_place) ... ok\ntest_playable_preserves_both_supported_screen_orientations (__main__.BrickToadsPlaceTests.test_playable_preserves_both_supported_screen_orientations) ... ok\ntest_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint (__main__.BrickToadsPlaceTests.test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint) ... ok\ntest_private_source_receipt_changes_when_an_embedded_source_changes (__main__.BrickToadsPlaceTests.test_private_source_receipt_changes_when_an_embedded_source_changes) ... ok\ntest_rebuild_is_deterministic (__main__.BrickToadsPlaceTests.test_rebuild_is_deterministic) ... ok\ntest_rejected_explorer_is_excluded_from_the_playable_by_default (__main__.BrickToadsPlaceTests.test_rejected_explorer_is_excluded_from_the_playable_by_default) ... ok\ntest_server_scripts_cannot_be_built_into_public_containers (__main__.BrickToadsPlaceTests.test_server_scripts_cannot_be_built_into_public_containers) ... ok\ntest_sources_are_current_and_server_code_is_private (__main__.BrickToadsPlaceTests.test_sources_are_current_and_server_code_is_private) ... ok\ntest_spawn_is_above_a_collidable_anchored_floor (__main__.BrickToadsPlaceTests.test_spawn_is_above_a_collidable_anchored_floor) ... ok\n\n----------------------------------------------------------------------\nRan 31 tests in 13.777s\n\nOK\n"
     },
     {
       "number": 23,
@@ -258,8 +258,8 @@
         "tools/test_build.py"
       ],
       "exit_code": 0,
-      "seconds": 0.142,
-      "stdout_stderr": "test_build_is_deterministic (__main__.BuildTests.test_build_is_deterministic) ... ok\ntest_missing_source_fails_instead_of_empty_module (__main__.BuildTests.test_missing_source_fails_instead_of_empty_module) ... ok\ntest_sources_are_exact_and_server_only (__main__.BuildTests.test_sources_are_exact_and_server_only) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.015s\n\nOK\n"
+      "seconds": 0.101,
+      "stdout_stderr": "test_build_is_deterministic (__main__.BuildTests.test_build_is_deterministic) ... ok\ntest_missing_source_fails_instead_of_empty_module (__main__.BuildTests.test_missing_source_fails_instead_of_empty_module) ... ok\ntest_sources_are_exact_and_server_only (__main__.BuildTests.test_sources_are_exact_and_server_only) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.011s\n\nOK\n"
     },
     {
       "number": 24,
@@ -269,8 +269,8 @@
         "tools/test_combat_stand.py"
       ],
       "exit_code": 0,
-      "seconds": 0.154,
-      "stdout_stderr": "test_client_is_local_and_core_is_not_replicated (__main__.StandBuildTests.test_client_is_local_and_core_is_not_replicated) ... ok\ntest_deterministic_serialization (__main__.StandBuildTests.test_deterministic_serialization) ... ok\ntest_no_automatic_avatar_or_external_assets (__main__.StandBuildTests.test_no_automatic_avatar_or_external_assets) ... ok\ntest_runtime_sources_exist (__main__.StandBuildTests.test_runtime_sources_exist) ... ok\ntest_server_layout_and_exact_sources (__main__.StandBuildTests.test_server_layout_and_exact_sources) ... ok\ntest_unique_referents_and_names (__main__.StandBuildTests.test_unique_referents_and_names) ... ok\ntest_verified_core_unchanged (__main__.StandBuildTests.test_verified_core_unchanged) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.015s\n\nOK\n"
+      "seconds": 0.097,
+      "stdout_stderr": "test_client_is_local_and_core_is_not_replicated (__main__.StandBuildTests.test_client_is_local_and_core_is_not_replicated) ... ok\ntest_deterministic_serialization (__main__.StandBuildTests.test_deterministic_serialization) ... ok\ntest_no_automatic_avatar_or_external_assets (__main__.StandBuildTests.test_no_automatic_avatar_or_external_assets) ... ok\ntest_runtime_sources_exist (__main__.StandBuildTests.test_runtime_sources_exist) ... ok\ntest_server_layout_and_exact_sources (__main__.StandBuildTests.test_server_layout_and_exact_sources) ... ok\ntest_unique_referents_and_names (__main__.StandBuildTests.test_unique_referents_and_names) ... ok\ntest_verified_core_unchanged (__main__.StandBuildTests.test_verified_core_unchanged) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.012s\n\nOK\n"
     },
     {
       "number": 25,
@@ -282,8 +282,8 @@
         ".tools/luau-0.745/luau.exe"
       ],
       "exit_code": 0,
-      "seconds": 1.129,
-      "stdout_stderr": "test_manifest_identifies_exact_source_bytes_without_fabricated_results (__main__.WalkerAcceptanceBuildTests.test_manifest_identifies_exact_source_bytes_without_fabricated_results) ... ok\ntest_normal_playable_does_not_contain_acceptance_runner (__main__.WalkerAcceptanceBuildTests.test_normal_playable_does_not_contain_acceptance_runner) ... ok\ntest_only_acceptance_entrypoint_runs_and_sources_are_preserved (__main__.WalkerAcceptanceBuildTests.test_only_acceptance_entrypoint_runs_and_sources_are_preserved) ... ok\ntest_runner_returns_before_side_effects_outside_studio_server (__main__.WalkerAcceptanceBuildTests.test_runner_returns_before_side_effects_outside_studio_server) ... ok\ntest_source_edit_changes_receipt_and_build_is_deterministic (__main__.WalkerAcceptanceBuildTests.test_source_edit_changes_receipt_and_build_is_deterministic) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.980s\n\nOK\n"
+      "seconds": 0.853,
+      "stdout_stderr": "test_manifest_identifies_exact_source_bytes_without_fabricated_results (__main__.WalkerAcceptanceBuildTests.test_manifest_identifies_exact_source_bytes_without_fabricated_results) ... ok\ntest_normal_playable_does_not_contain_acceptance_runner (__main__.WalkerAcceptanceBuildTests.test_normal_playable_does_not_contain_acceptance_runner) ... ok\ntest_only_acceptance_entrypoint_runs_and_sources_are_preserved (__main__.WalkerAcceptanceBuildTests.test_only_acceptance_entrypoint_runs_and_sources_are_preserved) ... ok\ntest_runner_returns_before_side_effects_outside_studio_server (__main__.WalkerAcceptanceBuildTests.test_runner_returns_before_side_effects_outside_studio_server) ... ok\ntest_source_edit_changes_receipt_and_build_is_deterministic (__main__.WalkerAcceptanceBuildTests.test_source_edit_changes_receipt_and_build_is_deterministic) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.753s\n\nOK\n"
     },
     {
       "number": 26,
@@ -293,7 +293,7 @@
         "tools/build_bricktoads_place.py"
       ],
       "exit_code": 0,
-      "seconds": 0.176,
+      "seconds": 0.145,
       "stdout_stderr": "C:\\Users\\User\\Documents\\bricktoads\\places\\BrickToadsPlayable.rbxlx: 1026973 bytes; sha256=9f9689b3da56384344209a2743f0eac4eb74e573b3100e0f2a06155e59598a4b\n"
     },
     {
@@ -304,7 +304,7 @@
         "tools/build_combat_stand.py"
       ],
       "exit_code": 0,
-      "seconds": 0.1,
+      "seconds": 0.065,
       "stdout_stderr": "C:\\Users\\User\\Documents\\bricktoads\\build\\CombatStand.rbxlx: 76490 bytes; sha256=91b7bc6dfe9aa55cc479b9a78af13195a00998adfa951529c2c0884255831222\n"
     },
     {
@@ -315,7 +315,7 @@
         "tools/build_test_place.py"
       ],
       "exit_code": 0,
-      "seconds": 0.096,
+      "seconds": 0.065,
       "stdout_stderr": "C:\\Users\\User\\Documents\\bricktoads\\build\\LifecycleTests.rbxlx: 36562 bytes; sha256=495baac5a990f358525ac9ec40b30ccde1cdbbb0ac40d6156898874258db5e4f\n"
     },
     {
@@ -326,7 +326,7 @@
         "tools/build_walker_acceptance.py"
       ],
       "exit_code": 0,
-      "seconds": 0.203,
+      "seconds": 0.161,
       "stdout_stderr": "C:\\Users\\User\\Documents\\bricktoads\\build\\WalkerHeavyAcceptance.rbxlx: 1044091 bytes; sha256=4ec325b8c5d701c23267d1d83ca7153fd28afbe526cc361bd4a64ec0d2f755ae; Studio NOT RUN\n"
     },
     {
@@ -338,7 +338,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.181,
+      "seconds": 0.149,
       "stdout_stderr": "C:\\Users\\User\\Documents\\bricktoads\\places\\BrickToadsPlayable.rbxlx: 1026973 bytes; sha256=9f9689b3da56384344209a2743f0eac4eb74e573b3100e0f2a06155e59598a4b\n"
     },
     {
@@ -350,7 +350,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.089,
+      "seconds": 0.068,
       "stdout_stderr": "C:\\Users\\User\\Documents\\bricktoads\\build\\CombatStand.rbxlx: 76490 bytes; sha256=91b7bc6dfe9aa55cc479b9a78af13195a00998adfa951529c2c0884255831222\n"
     },
     {
@@ -361,7 +361,7 @@
         "tests/run_route_driver_navigation.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.022,
+      "seconds": 0.016,
       "stdout_stderr": "PASS route driver navigation: 88 checks\n"
     },
     {
@@ -372,7 +372,7 @@
         "tests/run_movement_input.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.017,
+      "seconds": 0.01,
       "stdout_stderr": "PASS one held native Bool direction walks and repeated press notifications cannot create a run\nPASS press release press within a quarter second runs only while that direction stays held\nPASS double tap uses an inclusive press-to-press deadline rather than release-to-press time\nPASS independent simultaneous direction actions normalize diagonals and release only their own axis\nPASS opposite directions cancel movement and cannot hide a running latch that resumes later\nPASS a second independent direction keeps diagonal run until the actual running direction is released\nPASS opposition on the other axis does not cancel an independently held running direction\nPASS camera-relative projection follows rotated and vertical cameras without changing run intent\nPASS context reset clears held directions and tap history across focus body and view changes\nPASS interruption can retain native held directions as walking without manufacturing another tap\nPASS different owners never share pressed directions or double tap history\nPASS native binding context is disabled Bool Automatic with independent keyboard and UIButton bindings\nPASS native press release callbacks preserve independent directions and simultaneous jump attack\nMovementInput: 13 PASS\n"
     },
     {
@@ -383,7 +383,7 @@
         "tests/run_running_combat.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.038,
+      "seconds": 0.027,
       "stdout_stderr": "PASS Move permits only an optional boolean run and retains strict action authority\nPASS stale actor connection and sequence cannot start or stop another accepted run\nPASS stationary requested run and knockback alone cannot promote primary or standing R\nPASS actual running primary bypasses opportunistic interactions and freezes Dash before stopping\nPASS running hero still selects Boot against a heavy target and Dash finisher at actual low Life\nPASS mandatory Pig and guardian held actions retain priority even when physical run is reported\nPASS standing ordinary primary retains opportunistic interaction priority\nPASS held guardian movement strips the client run request before it reaches physical control\nPASS legacy stand keeps standing Dash and ignores the main-game running shortcut guard\nPASS incoming impulse timeout disconnect and new appearance clear accepted run state\nPASS actual impact increments the reset signal while an emergency shield does not\nPASS human ground enemy forwards bounded run and accepts one fixed-profile running strike\nPASS enemy running profile never inherits a hero finisher and preserves exact zero arithmetic\nPASS Walker NPC run approach latches until actual running attack and resets on claim or impact\nPASS requested NPC source rush cannot make a wall-pushing mega and qualified Pig keeps its source action\nPASS running Walker approaches through6.25 before committing its6-stud strike against a stationary hero\nPASS enemy disconnect and death clear run and publish reaction reset without a new body\nPASS accepted running strikes finish after disconnect without resuming locomotion or changing their action\nRunningCombat: 18 PASS\n"
     },
     {
@@ -394,7 +394,7 @@
         "tests/run_level_variation.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.341,
+      "seconds": 0.23,
       "stdout_stderr": "PASS run ID seeds are stable bounded integers and distinguish real run IDs\nPASS server-only builder rejects missing invalid or fractional seeds\nPASS same seed is independent of intervening builds and global random draws\nPASS frozen canonical template and arbitrary nested metadata remain unmodified\nPASS six authored choices retain source level zone names objectives and families\nPASS 1000 seeds vary real floor geometry with all three alternatives per zone\nPASS all 1000 routes preserve 13 ordinary actors and six flies on their original floor correspondence\nPASS 1000 routes begin at -82 and safely support the unchanged first hero spawn\nPASS all floor links retain body clearance around z0 and bounded rises offsets and depth\nPASS every mandatory gap in 1000 routes fits walk16 jump50 with unchanged takeoff and landing budget\nPASS zones meet without gaps and their exits remain reachable on the last support\nPASS guardian position court gate exit pad and bounds translate together from the new route end\nPASS peripheral stone cover leaves the central corridor and all actors/items clear\nPASS bounds contain every floor actor fly and cover in group-local coordinates\nLevelVariation: 14 passed, 0 failed\n"
     },
     {
@@ -405,7 +405,7 @@
         "tests/character_appearance/run.py"
       ],
       "exit_code": 0,
-      "seconds": 0.165,
+      "seconds": 0.107,
       "stdout_stderr": "PASS Green attaches the actual fifteen mesh template with PBR and no additional humanoid\nPASS Yellow Brown and missing templates retain their real fallback appearance\nPASS two Green actors have independent cloned parts joints and pose deltas\nPASS repeat attachment does not clone again and detach restores only saved original visibility\nPASS replaced actor model is never hidden restored or driven by stale cosmetic state\nPASS malformed source attachment rejects atomically before changing rig visibility\nPASS tagged canonical P1 and P2 select separate resources on the same R6 physical actor\nPASS canonical shoulders retain their authored neutral rotations without explorer45degree correction\nPASS untagged canonical P2 is unavailable and never borrows a Green resource or invents Brown\nPASS unknown explicit profiles reject before detaching a valid canonical appearance\nPASS invalid profile value class and legacy explicit unknown profiles fail without hiding a body\nPASS malformed canonical replacement preserves the existing resource visibility and metadata atomically\nPASS canonical selection changes resource once and cleanup restores saved owner metadata\nPASS canonical replacement cleanup never restores attributes on a newer actor model\nCharacterAppearance: 14 passed\n"
     },
     {
@@ -416,7 +416,7 @@
         "tests/run_localization.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.026,
+      "seconds": 0.023,
       "stdout_stderr": "PASS all catalog sources are English and translations preserve every named argument\nPASS empty or missing locale uses English and standard native table methods\nPASS selected Russian locale formats counts names and invitation time\nPASS locale changes refresh the native translator without translating player argument values\nPASS missing language or unavailable native translation retains formatted English\nPASS GUI roots use the owned standard table and owner nameplates keep automatic translation off\nPASS group list dynamic title counts and actions use the selected native translator\nPASS boss invitation countdown and target team localize as dynamic content\nLocalization: 8 PASS\n"
     },
     {
@@ -427,8 +427,8 @@
         "tools/test_localization.py"
       ],
       "exit_code": 0,
-      "seconds": 0.23,
-      "stdout_stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.110s\n\nOK\n"
+      "seconds": 0.179,
+      "stdout_stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.075s\n\nOK\n"
     },
     {
       "number": 39,
@@ -449,7 +449,7 @@
         "tests/run_canonical_walker.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.021,
+      "seconds": 0.019,
       "stdout_stderr": "PASS all35 prepared poses match sprites and body anchors emitted by literal source ASM\nPASS source body tiles follow the verified body anchor rather than a humanoid hip\nPASS 58 attack endpoint mappings match independent source instructions in both directions\nPASS unknown source families slopes animations and stream values remain UNKNOWN\nPASS malformed deltas and flags cannot enter byte arithmetic\nPASS caller mutations cannot poison another actor or the private source data\nCanonicalWalker: 6 passed\n"
     },
     {
@@ -461,7 +461,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.078,
+      "seconds": 0.071,
       "stdout_stderr": "Verified69 clips plus Dash continuation; 27424 bytes\n"
     },
     {
@@ -472,8 +472,8 @@
         "tools/test_canonical_animation_data.py"
       ],
       "exit_code": 0,
-      "seconds": 0.286,
-      "stdout_stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.169s\n\nOK\n"
+      "seconds": 0.222,
+      "stdout_stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.133s\n\nOK\n"
     },
     {
       "number": 43,
@@ -483,7 +483,7 @@
         "tests/run_canonical_hero_presentation.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.036,
+      "seconds": 0.017,
       "stdout_stderr": "PASS idle is a complete immutable source01 pose with explicit adaptation provenance\nPASS walk and run use source ordering with an explicit distance phase rather than a sine\nPASS every supported accepted action follows actual source clock frames and drives different joints\nPASS a punch extends a hand and kick extends a leg instead of changing metadata only\nPASS only verified graphics1C and1E request morphs while folded1F and uppercut22 keep normal limbs\nPASS source time starts at accepted windup timestamp and late observation does not replay windup\nPASS a new accepted table replaces the sequence immediately even when the action repeats\nPASS accepted table mutation is canceled and cannot masquerade as a second acceptance\nPASS a resolved attack can finish its source recovery without holding the gameplay attack open\nPASS canceling before resolution clears the extended limb and never restarts the same table\nPASS all priority fallbacks cancel old clips and preserve the existing retarget path\nPASS reactions that begin and end between visual updates still cancel the remembered clip\nPASS stale actor unknown attack and unverified airborne mapping use fallback atomically\nPASS source hit opportunities are inert markers delivered once across skipped render samples\nPASS actors have independent clocks and time rewind does not resurrect an accepted attack\nPASS captured intro selects actual source fear forms without applying source motion\nPASS fear requires the captured living actor and respects higher priority interruption\nPASS intro replaces cosmetic attack state and cannot resume that old accepted action afterward\nCanonical hero presentation: 18 passed, 0 failed\n"
     },
     {
@@ -494,7 +494,7 @@
         "tests/canonical_hero_presentation/run.py"
       ],
       "exit_code": 0,
-      "seconds": 0.777,
+      "seconds": 0.502,
       "stdout_stderr": "PASS Green attaches the actual fifteen mesh template with PBR and no additional humanoid\nPASS Yellow Brown and missing templates retain their real fallback appearance\nPASS two Green actors have independent cloned parts joints and pose deltas\nPASS repeat attachment does not clone again and detach restores only saved original visibility\nPASS replaced actor model is never hidden restored or driven by stale cosmetic state\nPASS malformed source attachment rejects atomically before changing rig visibility\nPASS tagged canonical P1 and P2 select separate resources on the same R6 physical actor\nPASS canonical shoulders retain their authored neutral rotations without explorer45degree correction\nPASS untagged canonical P2 is unavailable and never borrows a Green resource or invents Brown\nPASS unknown explicit profiles reject before detaching a valid canonical appearance\nPASS invalid profile value class and legacy explicit unknown profiles fail without hiding a body\nPASS malformed canonical replacement preserves the existing resource visibility and metadata atomically\nPASS canonical selection changes resource once and cleanup restores saved owner metadata\nPASS canonical replacement cleanup never restores attributes on a newer actor model\nCharacterAppearance: 14 passed\nPASS source punch drives real cosmetic C0 while preserving every physical R6 joint\nPASS source kick really changes thigh and lower-leg targets and finishes at neutral\nPASS priority fallback restores existing R6 pose and cannot resurrect a canceled source attack\nPASS new accepted action replaces actual source arm and leg joints in one presentation update\nPASS source presentation state belongs to each cosmetic attachment and detaches safely\nPASS legacy appearance continues its established retarget even with canonical action context\nSource-presentation appearance wiring: 6 passed\nPASS rigid transform fixture preserves noncommuting rotations and inverse translations\nPASS actual imported Y180 rest frames send the source jab forward along face minusZ\nPASS canonical fallback also uses authored attachment axes with actual imported rest frames\nPASS legacy profile retains the original pre-rest rotation and shoulder correction\nRotated-rest appearance contracts: 4 passed\nPASS two optional morphs are fully preassembled hidden and inert before the appearance attaches\nPASS P1 and P2 morphs clone only their own approved hero resource and preserve its source material\nPASS missing and independently rejected morph resources leave their original skin visible without failing attachment\nMorph resource preparation: 3 passed\nPASS verified graphics frames show exactly one morph and restore nonzero original transparency on recovery\nPASS rerender and repeated attach reuse the preassembled geometry without replacing ownership-sensitive parts\nPASS each priority interruption restores exact skin visibility and cannot resume an old oversized limb\nPASS new action unknown disabled missing context and air clear morphs before restoring fallback\nPASS switching from fist to boot clears the former before the folded-leg windup and preserves independent player materials\nPASS missing or detached morph geometry never hides a normal limb and is never respawned by playback\nPASS detach resource swap and owner replacement restore saved originals without touching a newer body\nMorph source frame and lifetime: 7 passed\nPASS fear heads are preassembled at the native neck without new physical parts during playback\nPASS switching both fear forms on one head restores exactly once regardless of table iteration order\nPASS fear cancels attack morphology and interruptions restore only that actor\nPASS missing or detached fear resources leave the original head visible\nFear appearance contracts: 4 passed\nPASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls\nPASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped\nPASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup\nPASS camera selects one world, clears cross-group state and never falls back from an explicit missing world\nPASS boss intro camera follows only current party/run and releases after cut completion or free view\nPASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped\nPASS ordinary species and guardian projectile modes have distinct original readable presentation\nPASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership\nPASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements\nPASS narrow support cannot crash safe respawn search\nPASS modern delayed jump uses bounded server ground history and preserves horizontal momentum\nPASS jump consumption survives stale floor reports and midair input, then resets after actual landing\nPASS jump grace rejects expired, deep, dead, held and reacting requests\nPASS jump history belongs to one actual actor in one modern world and preserves legacy behavior\nPASS jump support follows actual rotated rig footprint and corners without extending beyond its box\nPASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards\nPASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing\nPASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards\nPASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata\nPASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds\nPASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle\nPASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion\nPASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release\nPASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups\nPASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority\nPASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry\nPASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing\nPASS carry drops and new-run cleanup retain old body references without crossing group or actor generations\nPASS ground clubs are independent noncolliding original item models with one group translation\nPASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing\nPASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset\nPASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation\nPASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption\nPASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority\nPASS Dragon headbutt has real finite neck poses and clears on reaction/death\nPASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat\nPASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses\nPASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup\nPASS accepted response snapshots stay bound to their own profile without a live config table\nPASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors\nPASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries\nPASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets\nPASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates\nPASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped\nPASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage\nPASS original wing motors move only for authoritative flight and return to rest\nPASS fire orders first contact and detects a thin wall before its projected muzzle\nPASS hero appearance integration restores server authority after cosmetics and updates only presentation\nPASS imported Guardian integration preserves authority and uses distinct shot health and update hooks\nPASS missing or rejected Guardian art retains the existing playable fallback\nPASS source presentation hook forwards accepted action identity clock movement and recovery per actor\nPASS source context gives death reaction carry club Dragon air and paused states priority without altering combat\nPASS fear context uses captured actor identity and never leaks to replaced bodies\nPASS canonical club welds every piece to the actual posed hand with palm position and corrected wrist axes\nPASS stale detached malformed and legacy cosmetics retain the established R6 club grip and authority cleanup\n"
     },
     {
@@ -505,7 +505,7 @@
         "tests/run_boss_intro.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.065,
+      "seconds": 0.038,
       "stdout_stderr": "PASS guardian selection waits for controller then defers actual boss and pattern until finite intro ends\nPASS nominal sixty hertz counter keeps fear32 at E0 and fear33 through the FF non-write\nPASS crossed source milestones emit exactly once across skipped visual frames\nPASS large step crossing E0 preserves fear write32 and records cut once\nPASS intro changes no hero resources bodies controls or damage\nPASS body replacement excludes that identity without healing or retargeting fear\nPASS run and level replacement cancel without spawning a stale Guardian\nPASS run end cancels all intro effects and never activates a Guardian\nPASS bounded snapshot and two parties retain independent intro counters and camera cuts\nPASS equipment intro and carried body release happen once without closing future carry\nPASS controller quarantine and run replacement clear existing intro through real director integration\nPASS intro releases an existing carried body through live carry without damage or permanent shutdown\nPASS world intro owns bounded safe cosmetics and translated camera focus without changing actors or another party\nBossIntro: 13 tests passed\n"
     },
     {
@@ -516,7 +516,7 @@
         "tests/guardian_appearance/run.py"
       ],
       "exit_code": 0,
-      "seconds": 0.114,
+      "seconds": 0.089,
       "stdout_stderr": "PASS valid source commits three actual meshes and two nonphysical flashes without replacing the body\nPASS Y180 import rest and attachment equation retain forward muzzles and recoil backward in root axes\nPASS accepted shots alternate prebuilt flashes and expire without assembling anything during presentation\nPASS normalized health changes tint only on a real decrease and restore exact colors and transparency\nPASS two actors keep independent shot health and original visibility through repeat attach and detach\nPASS missing malformed and unsafe resources reject before cloning or changing any actor\nPASS optional metadata and unavailable MeshSize work while uncloneable resources retain the old actor\nPASS invalid replacement preserves a committed appearance and exact state\nPASS owner replacement removed model and detached skin clean up without rebuilding or modifying a newer actor\nGuardianAppearance: 9 passed\n"
     },
     {
@@ -527,7 +527,7 @@
         "tests/boss_intro_asset/run.py"
       ],
       "exit_code": 0,
-      "seconds": 0.11,
+      "seconds": 0.083,
       "stdout_stderr": "PASS valid imported leg preserves the source rest transform and nonphysical party-local lifecycle\nPASS reject nested collider under origin before cloning and retain fallback\nPASS reject nested behavior under appearance before cloning and retain fallback\nPASS reject nested behavior under metadata before cloning and retain fallback\nPASS reject unknown metadata name before cloning and retain fallback\nPASS reject duplicate profile metadata before cloning and retain fallback\nPASS reject duplicate scale metadata before cloning and retain fallback\nPASS reject zero uploaded mesh ID before cloning and retain fallback\nPASS reject invalid imported mesh extent before cloning and retain fallback\nPASS reject duplicate surface appearance before cloning and retain fallback\nPASS reject unexpected direct behavior before cloning and retain fallback\nPASS reject invisible source mesh before cloning and retain fallback\nPASS reject missing intro origin before cloning and retain fallback\nPASS reject misaligned intro origin before cloning and retain fallback\nPASS missing resource uses the scoped fallback\nPASS missing native MeshSize surface preserves a valid imported leg\nBossIntro asset contracts: 16 passed, 0 failed\n"
     },
     {
@@ -538,7 +538,7 @@
         "tests/run_campaign_modes.luau"
       ],
       "exit_code": 0,
-      "seconds": 9.843,
+      "seconds": 7.57,
       "stdout_stderr": "PASS all thirteen ordered modes produce independent deterministic playable layouts\nPASS new run seeds alter real course geometry while keeping every section authored\nPASS boss arenas belong only to the six real encounters and serpent course has four rooms\nPASS invalid campaign index and seed cannot silently build another run\nPASS authored vehicle sections preserve warning and steering distance for every seed\nPASS finale arrival and arena entry retain one continuous supported walking corridor\nPASS new courses retain physical obstacle families and only the entry patrol gates boarding\nPASS speeder has native flat support across the full riding distance and both steering edges\nCampaignDefinition: 8 passed\nPASS rope is attached descent with controllable swing and same-body checkpoint respawn\nPASS vehicle must be mounted and lane input cannot skip a wall during a long frame\nPASS ice accelerates and retains momentum after release while jump requires support\nPASS serpent support carries standing bodies and room exit must be reached in order\nPASS tube environment switches to swimming and returns to dry movement\nPASS race cannot finish without every bomb and a rat win kills rather than grants victory\nPASS clinger follows the current path direction and wrong input lets the chase catch up\nPASS offline roles never reuse held human input and closed modes release all bodies\nPASS walk modes cannot win from elapsed time and finale requires the arena entrance\nPASS boarding waits for the intro patrol and mounted attacks cannot schedule ground strikes\nPASS inactive electrical hazards do no damage while active hits use Session combat\nPASS spawn shield blocks a crash without granting completion or extending its deadline\nPASS kinematic combat knockback moves the actual body and prevents input during reaction\nPASS rope primary kick removes only a nearby breakable hazard\nPASS every race bomb requires a fresh near action and all three unlock the arena\nPASS holding the correct clinger direction traverses every real corner before the boss\nPASS top rotating support unlocks tower exit in its current orientation\nPASS human chase controls the same shared orb and disconnect never enables NPC pursuit\nPASS a physical speeder ramp launches once on crossing and cannot grant air jumps\nPASS nearby shaft blasters fire finite swept projectiles rather than decorative objects\nPASS jet directions separate throttle from altitude and preserve the flight lane\nPASS a pedestrian reaching the vehicle finish cannot bypass boarding\nPASS tower checkpoint respawn follows the actual support rotation\nPASS both tower springs launch from their rotating supports and reject airborne repeats\nPASS tower spring graphics remain aligned with their rotating support frames\nPASS rotated spring footprints retain pad edges and reject supported off-pad jumps\nPASS ascent springs retain their static graphics and launch power\nPASS ordinary ascent inputs hand native control over only after landing the final support\nPASS first trio finisher releases only that body while remaining riders retain control\nPASS solo clinger retry resets chase position while preserving shared boss Life\nPASS jump accepts the takeoff run cap and cannot gain it from a midair toggle\nPASS run qualification requires accepted supported travel and ends in the air\nPASS ice blocks move under a grounded push and keep their physical side boundary\nPASS ice block pushes carry every supported hero once regardless of cohort order\nPASS ice blocks retain both solid depth faces across a long accepted frame\nPASS ice block X pushes stop at authored limits without carrying riders farther\nPASS emergency unsafe-spawn hold is preserved until Session authorizes safe control\nPASS trio boarding and checkpoint replay keep distinct controlled bodies in separate lanes\nPASS shared chase actor starts physically behind the riders with the same measured gap\nPASS trailing clinger riders cannot collide with a phantom pursuer after its battle transition\nPASS rotated tower support accepts visible tips and rejects invisible square corners\nPASS all four serpent rooms can be crossed with ordinary steering and timed jumps\nPASS tower core stops inward motion while outward steering can still leave support\nPASS a vehicle collision stops and rewinds surviving bodies without changing their resources\nPASS shared vehicle checkpoint is used by every survivor and a fully dead cohort never auto retries\nPASS ride encounter fires once after progress and has no entry patrol rat\nPASS tube water currents apply physical velocity without supplying steering input\nPASS moving ice walls physically stop a crossing while shuttle supports carry the actual body\nPASS vehicle stop consumes fresh input and checkpoint replay triggers only eligible scripted encounters\nPASS rope kick delegates actual enemy damage through the director callback\nPASS an emergency-held last rider waits safely and resumes after release without a new life\nPASS Session-owned mounted death starts one group rewind even when a new attempt already exists\nCampaignModes: 52 passed\nPASS real Session clinger retry shield cannot erase endpoint orb contact\nPASS real Session vehicle rewind preserves survivors and spends one collided respawn\nPASS real Session external engine death rewinds once without a second charge or survivor replacement\nPASS stage 3 late foot teammate boards after the last rider is eliminated\nPASS stage 3 genuinely lost Session never restarts or revives a rider\nPASS stage 5 late foot teammate boards after the last rider is eliminated\nPASS stage 5 genuinely lost Session never restarts or revives a rider\nPASS stage 7 late foot teammate boards after the last rider is eliminated\nPASS stage 7 genuinely lost Session never restarts or revives a rider\nPASS normal-input Ascent course seed 1 rawLife 47\nPASS normal-input Ascent course seed 41 rawLife 47\nPASS normal-input Ascent course seed 8125 rawLife 47\nPASS normal-input Tower course seed 1 rawLife 47\nPASS normal-input Tower course seed 41 rawLife 47\nPASS normal-input Tower course seed 8125 rawLife 47\nPASS normal-input Ice course seed 1 rawLife 31\nPASS normal-input Ice course seed 41 rawLife 47\nPASS normal-input Ice course seed 8125 rawLife 47\nPASS normal-input Tubes course seed 1 rawLife 47\nPASS normal-input Tubes course seed 41 rawLife 47\nPASS normal-input Tubes course seed 8125 rawLife 47\nPASS normal-input Race course seed 1 rawLife 47\nPASS normal-input Race course seed 41 rawLife 47\nPASS normal-input Race course seed 8125 rawLife 47\nPASS normal-input Rope course seed 1 rawLife 47\nPASS normal-input Rope course seed 41 rawLife 47\nPASS normal-input Rope course seed 8125 rawLife 47\nPASS normal-input Speeder course seed 1 rawLife 47\nPASS normal-input Speeder course seed 41 rawLife 47\nPASS normal-input Speeder course seed 8125 rawLife 47\nPASS normal-input Surf course seed 1 rawLife 47\nPASS normal-input Surf course seed 41 rawLife 47\nPASS normal-input Surf course seed 8125 rawLife 47\nPASS normal-input Clinger course seed 1 rawLife 47\nPASS normal-input Clinger course seed 41 rawLife 47\nPASS normal-input Clinger course seed 8125 rawLife 47\nPASS normal-input Jet course seed 1 rawLife 47\nPASS normal-input Jet course seed 41 rawLife 47\nPASS normal-input Jet course seed 8125 rawLife 47\n"
     },
     {
@@ -549,7 +549,7 @@
         "tests/run_campaign_bosses.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.083,
+      "seconds": 0.065,
       "stdout_stderr": "PASS byte damage differs by action and recovery does not heal across the source boundary\nPASS unknown attacks self hits far hits and invalid geometry cannot advance boss resources\nPASS Big Blag crosses source C0 and80 thresholds and cannot lose from time alone\nPASS Robo Manus and Queen underflow advances0583 progress instead of killing fifteen HP\nPASS General Slaughter spends initial FF Life before separate progress and preserves exact zero\nPASS Buzzball chase handoff preserves one CF actor and offers no chase damage exploit\nPASS every boss has distinct command attacks finite recovery and real vulnerable windows\nPASS swept Robo projectile hits real Session and misses distant or elevated heroes\nPASS charges use swept contact once per attack and clamp to this arenas bounds\nPASS human and NPC damage progress and action profiles share the same state machine\nPASS disconnect blocks new commands while pending attacks finish without resource refill\nPASS closing one encounter clears only its projectiles and prevents further effects\nPASS trusted command time starts a fresh telegraph instead of inheriting an old frame\nPASS light reaction allows a real combo while a heavy reaction prevents repeated hits\nPASS frontal attack geometry rejects a target behind the attacker or behind a blocker\nPASS equal FF damage rounds to0F without underflow and raw-life bosses require a lethal hit\nPASS each landing attack hits in its area and leaves an elevated hero unharmed\nPASS Queen spin follows a curved sweep rather than hitting the line across its orbit\nPASS ordinary enemy attacks and boss attacks use the same bodies without changing hero stocks\nPASS all five human and NPC bosses preserve the same damage progress and first attack profiles\nPASS authored raised boss platform bounds charges and landing height in campaign coordinates\nPASS knockback cannot strand either controller below the authored boss arena\nPASS boss bolts stop on solid geometry and can still hit a body before the wall\nPASS the ordinary Punch control reaches both boss moves through the same NPC decision cycle\nCampaignBoss: 24 passed\nPASS BigBlag human expired light recovery precedes Session-first hit at the exact deadline\nPASS BigBlag human expired heavy recovery precedes accepted hero action selection\nPASS BigBlag human direct hit normalizes heavy recovery at the exact deadline\nPASS BigBlag human live light combos and heavy reaction rejection keep their windows\nPASS BigBlag human command normalizes light recovery at the exact deadline\nPASS BigBlag human command normalizes heavy recovery at the exact deadline\nPASS BigBlag NPC expired light recovery precedes Session-first hit at the exact deadline\nPASS BigBlag NPC expired heavy recovery precedes accepted hero action selection\nPASS BigBlag NPC direct hit normalizes heavy recovery at the exact deadline\nPASS BigBlag NPC live light combos and heavy reaction rejection keep their windows\nPASS BigBlag NPC command normalizes light recovery at the exact deadline\nPASS BigBlag NPC command normalizes heavy recovery at the exact deadline\nPASS RoboManus human expired light recovery precedes Session-first hit at the exact deadline\nPASS RoboManus human expired heavy recovery precedes accepted hero action selection\nPASS RoboManus human direct hit normalizes heavy recovery at the exact deadline\nPASS RoboManus human live light combos and heavy reaction rejection keep their windows\nPASS RoboManus human command normalizes light recovery at the exact deadline\nPASS RoboManus human command normalizes heavy recovery at the exact deadline\nPASS RoboManus NPC expired light recovery precedes Session-first hit at the exact deadline\nPASS RoboManus NPC expired heavy recovery precedes accepted hero action selection\nPASS RoboManus NPC direct hit normalizes heavy recovery at the exact deadline\nPASS RoboManus NPC live light combos and heavy reaction rejection keep their windows\nPASS RoboManus NPC command normalizes light recovery at the exact deadline\nPASS RoboManus NPC command normalizes heavy recovery at the exact deadline\nPASS GeneralSlaughter human expired light recovery precedes Session-first hit at the exact deadline\nPASS GeneralSlaughter human expired heavy recovery precedes accepted hero action selection\nPASS GeneralSlaughter human direct hit normalizes heavy recovery at the exact deadline\nPASS GeneralSlaughter human live light combos and heavy reaction rejection keep their windows\nPASS GeneralSlaughter human command normalizes light recovery at the exact deadline\nPASS GeneralSlaughter human command normalizes heavy recovery at the exact deadline\nPASS GeneralSlaughter NPC expired light recovery precedes Session-first hit at the exact deadline\nPASS GeneralSlaughter NPC expired heavy recovery precedes accepted hero action selection\nPASS GeneralSlaughter NPC direct hit normalizes heavy recovery at the exact deadline\nPASS GeneralSlaughter NPC live light combos and heavy reaction rejection keep their windows\nPASS GeneralSlaughter NPC command normalizes light recovery at the exact deadline\nPASS GeneralSlaughter NPC command normalizes heavy recovery at the exact deadline\nPASS Buzzball human expired light recovery precedes Session-first hit at the exact deadline\nPASS Buzzball human expired heavy recovery precedes accepted hero action selection\nPASS Buzzball human direct hit normalizes heavy recovery at the exact deadline\nPASS Buzzball human live light combos and heavy reaction rejection keep their windows\nPASS Buzzball human command normalizes light recovery at the exact deadline\nPASS Buzzball human command normalizes heavy recovery at the exact deadline\nPASS Buzzball NPC expired light recovery precedes Session-first hit at the exact deadline\nPASS Buzzball NPC expired heavy recovery precedes accepted hero action selection\nPASS Buzzball NPC direct hit normalizes heavy recovery at the exact deadline\nPASS Buzzball NPC live light combos and heavy reaction rejection keep their windows\nPASS Buzzball NPC command normalizes light recovery at the exact deadline\nPASS Buzzball NPC command normalizes heavy recovery at the exact deadline\nPASS DarkQueen human expired light recovery precedes Session-first hit at the exact deadline\nPASS DarkQueen human expired heavy recovery precedes accepted hero action selection\nPASS DarkQueen human direct hit normalizes heavy recovery at the exact deadline\nPASS DarkQueen human live light combos and heavy reaction rejection keep their windows\nPASS DarkQueen human command normalizes light recovery at the exact deadline\nPASS DarkQueen human command normalizes heavy recovery at the exact deadline\nPASS DarkQueen NPC expired light recovery precedes Session-first hit at the exact deadline\nPASS DarkQueen NPC expired heavy recovery precedes accepted hero action selection\nPASS DarkQueen NPC direct hit normalizes heavy recovery at the exact deadline\nPASS DarkQueen NPC live light combos and heavy reaction rejection keep their windows\nPASS DarkQueen NPC command normalizes light recovery at the exact deadline\nPASS DarkQueen NPC command normalizes heavy recovery at the exact deadline\nCampaignBossReactionExpiry: 60 passed, 0 failed\nPASS all five campaign bosses stop one stale Move without changing body, cap or ownership\nPASS owner Move expiry leaves accepted charge and jump motion running\nPASS all five human campaign bosses initialize a usable Ready-state movement cap\nPASS Robo bolt keeps emission response and +X impulse when the next Jump turns -Z\nPASS spread bolt retains its own direction through owner disconnect and missing actor lookup\nPASS ordinary enemy collision receives the same independent captured projectile response\nCampaignBossProjectile: 3 passed\n"
     },
     {
@@ -560,7 +560,7 @@
         "tests/run_campaign_enemies.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.078,
+      "seconds": 0.056,
       "stdout_stderr": "PASS projectile species shoot across a real range instead of closing to ground melee\nPASS Sentry Drone fires in both horizontal directions and gas does not require a direct center hit\nPASS ranged human and NPC use identical damage while disconnected shots continue\nPASS flying and swimming species use mode positions and recover their physical body after a hit\nPASS leaps and swoops have finite swept collision and do not auto hit an elevated or distant hero\nPASS slug latches temporarily and releases when struck rather than becoming an immortal attachment\nPASS rocket dropped obstacle remains a finite hazard and never adds a playable enemy\nPASS Robot explosion is a telegraphed one life action with no resource refill or new role\nPASS in-flight effects damage other enemies and all components remain isolated\nPASS existing Pig Walker and Dragon keep their established controllers\nPASS swimming lunges stay inside their authored water body instead of pursuing onto dry land\nPASS malformed movement and stale owner commands cannot create attacks or invalid positions\nPASS ordinary projectiles can strike a separately directed boss using its real progress model\nPASS aerial tell and recovery hold altitude but release immediately for a real incoming impulse\nPASS long boss projectile history cannot reuse a live ordinary projectile identity\nPASS ground owners obey the same family speed and stationary turrets only aim\nPASS solid geometry blocks projectiles while a body before the wall still receives its hit\nPASS swimming owners use ordinary up input for altitude and remain in their chamber plane\nPASS flying owners use the existing Jump input for finite flap and descend without held input\nPASS an already fired projectile can hurt the boss after its original shooter dies\nPASS Invader steals one linked raw-eight token and a hit returns it once after the thief dies\nPASS full ordinary byte capacities retain three hearts and source recovery after human claim\nPASS Invader linked theft honors shields and low Life and return tokens reject new bodies and capacity overflow\nPASS stolen Life expires without healing and cannot cross a level epoch\nPASS Invader escape stays finite after its victim dies or respawns while another hero survives\nPASS wall families retain their authored anchor for both controllers even while reacting\nPASS rocket riders follow one finite authored route with no free flight and one allowed drop\nPASS Raven changes into finite dead debris on its first valid hit instead of grinding loader Life\nPASS Large Raven reaction creates one finite claw pickup that equips only the current hero body\nPASS an Invader hit transforms its ordinary one life without treating sentinel Life as linear HP\nPASS a replayed natural spawn uses a new actor identity without restoring an old owners life\nPASS Invader low-Life source guard skips subtraction while exact eight reaches living zero and can return\nPASS explicit course reset removes only the selected rocket-rat effects while ordinary death and offline preserve shots\nPASS authored entry Invader stays offered for one second of real-speed approach before attacking\nCampaignEnemies: 34 passed\nPASS Electrofish reconnect discards held movement until a fresh connection intent\nPASS Swellcheeks reconnect discards held movement until a fresh connection intent\n"
     },
     {
@@ -571,7 +571,7 @@
         "tests/run_campaign_progression.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.191,
+      "seconds": 0.133,
       "stdout_stderr": "PASS campaign transition preserves identity, offline owners, elimination and resource accounting\nPASS incomplete exit, unsafe destination, same level and dying party reject without mutation\nPASS level advance preserves lethal timers and the ordinary later respawn cost\nPASS traversal objectives own completion and nonboss stages never spawn a fallback Guardian\nPASS an authored ordinary enemy remains a real completion gate after traversal\nPASS mode-specific exit, entry-only boarding and real encounter callbacks\nPASS armed rope shape and LargeRaven source branch preserve their real damage profile\nPASS typed boss invitation, fight, stale command and defeat gates run after traversal\nPASS Buzzball invitation precedes chase and the same boss identity and Life enter the fight\nPASS every authored native mode constructs and steps with real Session and family combat\nPASS final mode entrance and real hero attack lifecycle defeat the final boss before campaign victory\nPASS campaign routes the actual rival offer, same-body claim, input and disconnect without fake hearts\nPASS scripted ride replay creates a fresh unclaimed actor and retains the spent prior human life\nPASS campaign advances all 13 modes in one fixed run and finalizes only the final victory\nPASS a defeated campaign remains finished until an explicit new game\nPASS pending victory waits for real paid retries across five boss stages and solo/duo/trio\nPASS offline pending victory remains reconnectable and cannot replace the run, including final stage\nPASS accepted lethal deadlines commit before retry; terminal Session loss prevails after boss defeat\n"
     },
     {
@@ -582,7 +582,7 @@
         "tests/run_campaign_input.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.013,
+      "seconds": 0.009,
       "stdout_stderr": "CampaignInput: mode-local arrows and ordinary camera-relative movement passed\n"
     },
     {
@@ -593,7 +593,7 @@
         "tests/campaign_world/run.py"
       ],
       "exit_code": 0,
-      "seconds": 0.421,
+      "seconds": 0.33,
       "stdout_stderr": "PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls\nPASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped\nPASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup\nPASS camera selects one world, clears cross-group state and never falls back from an explicit missing world\nPASS boss intro camera follows only current party/run and releases after cut completion or free view\nPASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped\nPASS ordinary species and guardian projectile modes have distinct original readable presentation\nPASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership\nPASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements\nPASS narrow support cannot crash safe respawn search\nPASS modern delayed jump uses bounded server ground history and preserves horizontal momentum\nPASS jump consumption survives stale floor reports and midair input, then resets after actual landing\nPASS jump grace rejects expired, deep, dead, held and reacting requests\nPASS jump history belongs to one actual actor in one modern world and preserves legacy behavior\nPASS jump support follows actual rotated rig footprint and corners without extending beyond its box\nPASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards\nPASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing\nPASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards\nPASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata\nPASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds\nPASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle\nPASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion\nPASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release\nPASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups\nPASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority\nPASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry\nPASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing\nPASS carry drops and new-run cleanup retain old body references without crossing group or actor generations\nPASS ground clubs are independent noncolliding original item models with one group translation\nPASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing\nPASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset\nPASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation\nPASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption\nPASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority\nPASS Dragon headbutt has real finite neck poses and clears on reaction/death\nPASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat\nPASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses\nPASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup\nPASS accepted response snapshots stay bound to their own profile without a live config table\nPASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors\nPASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries\nPASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets\nPASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates\nPASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped\nPASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage\nPASS original wing motors move only for authoritative flight and return to rest\nPASS fire orders first contact and detects a thin wall before its projected muzzle\nPASS hero appearance integration restores server authority after cosmetics and updates only presentation\nPASS campaign move/jump routing\nPASS same-body local poses, negative descent and release\nPASS accepted mode knockback preserves horizontal direction and vertical effect\nPASS kinematic grounded run qualification\nPASS ordinary actor placement\nPASS trusted campaign family movement budgets\nPASS vertical geometry, spawn, camera and dynamic support scope\nPASS boss action selection uses encounter profile\nCampaign world: 9 groups passed; engine physics is not emulated\n"
     },
     {
@@ -604,7 +604,7 @@
         "tests/run_campaign_race.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.075,
+      "seconds": 0.054,
       "stdout_stderr": "PASS a real rival actor is claimable before its first movement without spawning or inventing health\nPASS elapsed deadlines cannot decide an obstructed physical race or award victory\nPASS rat body contact explodes the bomb through Session death without spending a respawn early\nPASS fresh nearby actions defuse only the current bomb and cannot finish by waiting\nPASS a nonlethal hit interrupts the real rival motor and recovery retains identity and ownership\nPASS offline ownership never enables NPC steering and stale connection commands cannot move the body\nPASS targeting the rival permanently closes its transfer window even when the attack misses\nPASS an NPC hit can stun the rival without taking its still open human role\nPASS the initial claim window does not suspend an already accepted physical hit\nPASS untrusted racer packets cannot teleport or bypass an old actor and sequence\nPASS an airborne rival above the bomb cannot explode it through a flat distance check\nPASS physical retry waits for a newly committed Session attempt and spends only that attempt\nPASS a bomb loss during an existing death accepts only the later committed hero attempt\nPASS an already pending offline hero cannot restart a failed race or spend a reserve\nPASS an exhausted fixed cohort cannot create another race retry\nPASS a trio retry never spends an offline fallen owners reserve or creates a replacement\nPASS a claimed rival has a supported jump and never gains an airborne double jump\nPASS authored descending courses require support and real rat travel before bomb contact\nPASS close and an old level epoch prevent retained commands, movement and bomb effects\nCampaignRace: 19 passed\n"
     },
     {
@@ -615,7 +615,7 @@
         "tests/run_campaign_roster.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.02,
+      "seconds": 0.019,
       "stdout_stderr": "CampaignRoster: byte arithmetic and source profile contracts passed\n"
     },
     {
@@ -626,7 +626,7 @@
         "tests/run_scooter_acceptance.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.059,
+      "seconds": 0.05,
       "stdout_stderr": "RocketRat drop contact: status=AwaitingRespawn rawLife=0 phase=Stopped serial=1\nPASS real RocketRat drop crash preserves 1 survivors\nRocketRat drop contact: status=AwaitingRespawn rawLife=0 phase=Stopped serial=1\nPASS real RocketRat drop crash preserves 2 survivors and safely clears two active drops\nPASS protected mounted RocketRat contact consumes the drop without ordinary damage, impulse or shield extension\n"
     }
   ],
@@ -638,7 +638,7 @@
       "tools/build_bricktoads_place.py"
     ],
     "exit_code": 0,
-    "seconds": 0.137,
+    "seconds": 0.136,
     "stdout_stderr": "C:\\Users\\User\\Documents\\bricktoads\\places\\BrickToadsPlayable.rbxlx: 1026973 bytes; sha256=9f9689b3da56384344209a2743f0eac4eb74e573b3100e0f2a06155e59598a4b\n"
   },
   "compiler": {
@@ -1047,8 +1047,8 @@
         "tools/studio_tower_spring_acceptance.luau"
       ],
       "exit_code": 0,
-      "seconds": 0.172,
-      "stdout_stderr": "Compiled 39 KLOC into 2676 KB bytecode (read 0.01s, parse 0.04s, compile 0.10s)\n"
+      "seconds": 0.164,
+      "stdout_stderr": "Compiled 39 KLOC into 2680 KB bytecode (read 0.01s, parse 0.04s, compile 0.10s)\n"
     }
   },
   "total": 56,
@@ -1272,7 +1272,7 @@
       "runner": "tools/test_bricktoads_place.py",
       "pass_lines": 0,
       "summaries": [
-        "Ran 31 tests in 18.865s"
+        "Ran 31 tests in 13.777s"
       ]
     },
     {
@@ -1280,7 +1280,7 @@
       "runner": "tools/test_build.py",
       "pass_lines": 0,
       "summaries": [
-        "Ran 3 tests in 0.015s"
+        "Ran 3 tests in 0.011s"
       ]
     },
     {
@@ -1288,7 +1288,7 @@
       "runner": "tools/test_combat_stand.py",
       "pass_lines": 0,
       "summaries": [
-        "Ran 7 tests in 0.015s"
+        "Ran 7 tests in 0.012s"
       ]
     },
     {
@@ -1296,7 +1296,7 @@
       "runner": "tools/test_walker_acceptance.py",
       "pass_lines": 0,
       "summaries": [
-        "Ran 5 tests in 0.980s"
+        "Ran 5 tests in 0.753s"
       ]
     },
     {
@@ -1386,7 +1386,7 @@
       "runner": "tools/test_localization.py",
       "pass_lines": 0,
       "summaries": [
-        "Ran 3 tests in 0.110s"
+        "Ran 3 tests in 0.075s"
       ]
     },
     {
@@ -1416,7 +1416,7 @@
       "runner": "tools/test_canonical_animation_data.py",
       "pass_lines": 0,
       "summaries": [
-        "Ran 1 test in 0.169s"
+        "Ran 1 test in 0.133s"
       ]
     },
     {
@@ -1573,6 +1573,6 @@
     "source_snapshot": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
     "running_combat_cases": 18
   },
-  "finished": "2026-11-10T19:17:03.077853+00:00",
+  "finished": "2026-11-10T19:34:50.974816+00:00",
   "status": "pass"
 }

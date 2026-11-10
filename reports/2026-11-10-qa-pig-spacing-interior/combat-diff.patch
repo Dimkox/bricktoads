@@ -1,0 +1,14 @@
+--- baseline-combat
++++ candidate-combat
+@@ -462,7 +462,10 @@
+         if supported then break end
+     end
+     if not supported then return nil end
+-    if range <= cfg.range+.7 then intent.evasion=true;return steering(c,retreat,intent) end
++    if range <= cfg.range+.7 then
++        intent.evasion=true;intent.pigSpacing=true
++        return steering(c,retreat,intent)
++    end
+     if not facing(c,q,.90) then
+         -- Turn through ordinary native movement without closing the pickup
+         -- margin before AutoRotate has actually faced the selected Pig.

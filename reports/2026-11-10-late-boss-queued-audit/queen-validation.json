@@ -1,0 +1,61 @@
+{
+  "at": "2026-11-10T19:38:02.741345+00:00",
+  "status": "DarkQueen13_historical4F_prepared_source_baseline_zero_queue_Won_133ms_Lost",
+  "seed": 1158731273,
+  "boss": "DarkQueen",
+  "cases": [
+    {
+      "delay": 0.0,
+      "result": "Won",
+      "elapsed": 71.39166666667123,
+      "bossLife": 0,
+      "progress": 240,
+      "phase": 2,
+      "heroLife": 47,
+      "attempt": 1,
+      "stock": 3,
+      "heroHits": 0,
+      "acceptedPrimary": 43,
+      "bossHits": 36,
+      "underflows": 21,
+      "confirmedDeaths": 0
+    },
+    {
+      "delay": 0.133,
+      "result": "Lost",
+      "elapsed": 50.79999999999764,
+      "bossLife": 7,
+      "progress": 84,
+      "phase": 1,
+      "heroLife": 0,
+      "attempt": 4,
+      "stock": 0,
+      "heroHits": 12,
+      "acceptedPrimary": 8,
+      "bossHits": 7,
+      "underflows": 7,
+      "confirmedDeaths": 4
+    }
+  ],
+  "hashes": {
+    "reports/2026-11-10-late-boss-queued-audit/queen-baseline-combat.lua": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38",
+    "reports/2026-11-10-late-boss-queued-audit/pre-queen-combat-4F.lua": "4f1d67ebec451fa545eaea1e9baa58c6d1a071c7fa274845c42c5f7e41462129",
+    "reports/2026-11-10-late-boss-queued-audit/queen-fixture.lua": "1f56bd70ebb269c2b86893159d2f4f48caa3a4e4caddf79a5de21b6772a599cf",
+    "reports/2026-11-10-late-boss-queued-audit/queen-foot.lua": "afc8712a73dd765efde97ce3100b890c81c7d61244b3269a0d5d56accdc0c74d",
+    "reports/2026-11-10-late-boss-queued-audit/queen-probe.luau": "74ffe8f6d3601b8d06618defe49fe5c3c54ce61e9d44c8b667bf4acb6fe0d616",
+    "reports/2026-11-10-late-boss-queued-audit/queen-probe-4F-capsule.luau": "540ddb0f62c6cd4b24aa1a8538dcb8390d17244b9a2169f9e273b9ff5ff94e20",
+    "tools/qa/campaign_combat_pilot.lua": "bebdb12c47f7cefa1b079d8bec236f0a178de5bf5929a86476c769554f8ae85c",
+    "tools/qa/full_campaign_bridge.server.luau": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add"
+  },
+  "pinned4FAndBfbBaselineOutcomesIdentical": true,
+  "compileExit": 0,
+  "limits": [
+    "Prepared completed-Finale observation; course traversal is not earned by this probe.",
+    "Natural Boss.new creates15Life/progress0/Ready; no direct boss phase, health, progress or outcome write.",
+    "Source Session/Boss/SourceCombat resolve all combat, deaths and paid appearances; normal three-respawn budget.",
+    "Actual authored Definition13 arena and actual Modes finished-slot1 retry query are retained.",
+    "Mapped non-engine ground/facing/impulse response and fixed delivery queues are not native Humanoid/transport replay.",
+    "Initial budget assertion incorrectly counted final elimination as a replacement; original error log retained and assertion corrected to CommitSpawn counts.",
+    "No source, Studio, Git or gameplay fix; no native or full13 acceptance."
+  ]
+}

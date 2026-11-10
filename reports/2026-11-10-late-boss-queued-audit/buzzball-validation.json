@@ -1,0 +1,75 @@
+{
+  "at": "2026-11-10T19:18:35.682560+00:00",
+  "status": "bounded_prepared_whole_buzzball_GREEN_no_fix",
+  "definitionIndex": 11,
+  "seed": 1158731273,
+  "maxSeconds": 300,
+  "sourceHashes": {
+    "src/server/gameplay/CampaignBoss.lua": "2fcc6fbf69a75f537077c8a7236613b6f449bf05fd44f1b9b53232ee4ed22741",
+    "src/server/gameplay/CampaignModes.lua": "8b7778a40bc8df386f9f184295a173ec59eb2eb26b0cb72d60cef6ea60538c08",
+    "src/server/gameplay/CampaignDefinition.lua": "13d670762bf0d88115d9504e15c66944e503162ee49111f946e62b597ce07177",
+    "src/server/gameplay/GameConfig.lua": "0ef6a1eb694198555a7d9a4ae191658b7e8489aea537d1ade8caa56cec87778a",
+    "src/server/gameplay/SourceCombat.lua": "487408a4292f70352dd9ca4cb9bc5c8415ee2df0c26bd815eab621b3e677182d",
+    "src/stand/server/Session.lua": "8383d380b9bd7740f3d21f986ea7e86935da57bf0adc57be3745161eb5480a8b",
+    "src/stand/server/Combat.lua": "bec9a5db4df3cb3f8e4107ac335bf803b11275b139d85807b58cdf4a70c5293c",
+    "src/server/RunLifecycle.lua": "18192b02d59cca2140b3e7afa729c45f4eb43b683b4214c4f8230477968aa096",
+    "tools/qa/campaign_combat_pilot.lua": "4f1d67ebec451fa545eaea1e9baa58c6d1a071c7fa274845c42c5f7e41462129",
+    "tools/qa/full_campaign_bridge.server.luau": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add",
+    "tools/qa/campaign_early_course_pilot.lua": "1d5693ed7ed9089a7c645c8bf4f3b8b2578fe169dd758f316c47f9b51a280695",
+    "tools/qa/full_campaign_client_adapter.luau": "b40c4b42d5a44d9f7561be8228204c5bae3f292292d9630eaf0fc21384544c65"
+  },
+  "actualFootExact": true,
+  "cases": [
+    {
+      "delay": 0,
+      "result": "Won",
+      "elapsed": 56.7249999999973,
+      "bossLife": 0,
+      "bossDefeated": true,
+      "phase1Seen": true,
+      "phase2Seen": true,
+      "heroLife": 31,
+      "attempt": 1,
+      "stock": 3,
+      "sameInitialActor": true,
+      "heroHits": 1,
+      "deaths": 0,
+      "bossHits": 23,
+      "underflows": 1,
+      "preparedChaseTransitions": 1
+    },
+    {
+      "delay": 0.133,
+      "result": "Won",
+      "elapsed": 57.783333333330575,
+      "bossLife": 0,
+      "bossDefeated": true,
+      "phase1Seen": true,
+      "phase2Seen": true,
+      "heroLife": 47,
+      "attempt": 1,
+      "stock": 3,
+      "sameInitialActor": true,
+      "heroHits": 0,
+      "deaths": 0,
+      "bossHits": 36,
+      "underflows": 1,
+      "preparedChaseTransitions": 1
+    }
+  ],
+  "preparation": [
+    "Fresh normal Session Life47/attempt1/three paid reserves; clock advances to2.1 before boss construction, no initial spawn shield is granted",
+    "Natural Buzzball constructor raw207/progressnil/Chase on authored finite72x64 arena",
+    "Exactly one explicit normal source finishChase() API transition prepares battle entry; Clinger chase/course is not earned by this fixture",
+    "Finished single-slot respawn position is read from actual CampaignModes.respawnPosition; no reserve or health assignment",
+    "Actual Combat4F plan -> exact actual Bridge97 finished-body branch -> ordinary Session Move/Run/Punch/Jump packets"
+  ],
+  "sourceOrQAImplementationChanged": false,
+  "directBossPhaseOrHitOrResourceWrite": false,
+  "limits": [
+    "Prepared battle subencounter only; no claim of actual Clinger chase, campaign stage entry, or full13 acceptance",
+    "Numerical ground movement, instantaneous facing, gravity and additive impulse presentation boundary; no native Humanoid/rig/decorative collision parity",
+    "One seed, one hero, fresh global three-reserve budget; fixed plan cadence.133 and queues0/.133, not exact native transport/resend replay",
+    "No Studio, computer control, publishing or Git actions by this audit"
+  ]
+}

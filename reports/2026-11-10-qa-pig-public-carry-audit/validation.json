@@ -1,0 +1,82 @@
+{
+  "at": "2026-11-10T19:27:55.102823+00:00",
+  "status": "read_only_public_control_contract_proven_policy_red_retained",
+  "scope": "Prepared actual Session/Director/EnemyCarry/SourceCombat, no production or QA source edit",
+  "checks": [
+    {
+      "probe": "reports\\2026-11-10-qa-pig-public-carry-audit\\probe-public-contract.luau",
+      "log": "public-contract.txt",
+      "exit": 0,
+      "expectedExit": 0
+    },
+    {
+      "probe": "reports\\2026-11-10-qa-pig-public-carry-audit\\probe-policy-red.luau",
+      "log": "policy-red.txt",
+      "exit": 1,
+      "expectedExit": 1
+    },
+    {
+      "probe": "tests\\run_enemy_carry.luau",
+      "log": "carry-24.txt",
+      "exit": 0,
+      "expectedExit": 0
+    }
+  ],
+  "compileExit": 0,
+  "sourceHashes": {
+    "tools/qa/campaign_combat_pilot.lua": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38",
+    "tools/qa/full_campaign_bridge.server.luau": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add",
+    "src/server/gameplay/EnemyCarry.lua": "c4d94752d2d253a1a04caedb5528b8d6b59b8ff6aab0860b596402f19b6be601",
+    "src/server/gameplay/LevelDirector.lua": "bb8f075e5172566c3a1128bbe43e1c47845730eb57e561ed95dc9ee4c47c6786",
+    "src/stand/server/Session.lua": "8383d380b9bd7740f3d21f986ea7e86935da57bf0adc57be3745161eb5480a8b",
+    "src/stand/server/Combat.lua": "bec9a5db4df3cb3f8e4107ac335bf803b11275b139d85807b58cdf4a70c5293c"
+  },
+  "results": {
+    "raw15": {
+      "cycles": 3,
+      "perCycle": [
+        15,
+        11,
+        15
+      ],
+      "enemyDied": false,
+      "netDamage": 0
+    },
+    "raw3": {
+      "publicPunches": 2,
+      "enemyDied": true,
+      "heroLife": 47,
+      "heroAttempt": 1,
+      "heroStock": 3
+    },
+    "originalPilotRaw3": {
+      "grabAvailable": true,
+      "primary": false,
+      "evasion": true
+    }
+  },
+  "limits": [
+    "Static prepared same-floor corner/facing; numeric eligibility/physical carry/release adapter, no native ray/rig/throw flight parity",
+    "Pig physical throw fall is not simulated or used for progress",
+    "No multiplayer/latency/fullfight acceptance",
+    "Earlier rejected7inset closed-loop omitted EnemyCarry dependency; not a carry availability test",
+    "No source edits, Studio calls or Git actions"
+  ],
+  "atFreeze": "2026-11-10T18:31:53.328220+00:00",
+  "atFreezeSourceHashes": {
+    "tools/qa/campaign_combat_pilot.lua": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38",
+    "tools/qa/full_campaign_bridge.server.luau": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add",
+    "src/server/gameplay/EnemyCarry.lua": "c4d94752d2d253a1a04caedb5528b8d6b59b8ff6aab0860b596402f19b6be601",
+    "src/server/gameplay/LevelDirector.lua": "bb8f075e5172566c3a1128bbe43e1c47845730eb57e561ed95dc9ee4c47c6786",
+    "src/stand/server/Session.lua": "8383d380b9bd7740f3d21f986ea7e86935da57bf0adc57be3745161eb5480a8b",
+    "src/stand/server/Combat.lua": "bec9a5db4df3cb3f8e4107ac335bf803b11275b139d85807b58cdf4a70c5293c"
+  },
+  "workingQAHashes": {
+    "tools/qa/campaign_combat_pilot.lua": "4f1d67ebec451fa545eaea1e9baa58c6d1a071c7fa274845c42c5f7e41462129",
+    "tools/qa/full_campaign_bridge.server.luau": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add"
+  },
+  "sourceBindings": {
+    "tools/qa/campaign_combat_pilot.lua": "./baseline-combat-bfb.lua",
+    "tools/qa/full_campaign_bridge.server.luau": "../2026-11-10-qa-pig-spacing-interior/baseline-bridge.lua"
+  }
+}

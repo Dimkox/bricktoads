@@ -1,0 +1,7 @@
+local Fixture=require('./fixture')
+local Pilot=require('./baseline-combat-bfb')
+local f=Fixture.new(3);f.step(.01)
+local interaction=f.director.carry:interaction(1);assert(interaction.available)
+local out=Pilot.plan({slot=1,now=.01,session=f.session,director=f.director,world=f.world,definition=f.definition,position=f.world:position(1),dt=.133})
+print('POLICY ready raw3 corner',out.x,out.z,'evasion',out.evasion,'primary',out.primary,'grabAvailable',interaction.available)
+assert(out.primary,'A legal existing public pickup/throw finisher is available, but Pig spacing suppresses primary')
