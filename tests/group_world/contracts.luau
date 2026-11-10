@@ -151,6 +151,7 @@ local function actor(self,id,position)
         Jump=false,JumpPower=42,UseJumpPower=true,AutoRotate=true,WalkSpeed=12,EvaluateStateMachine=true},cue=0}
     a.humanoid.MoveDirection=vector()
     function a.humanoid:Move(direction) self.lastMove=direction;self.MoveDirection=direction end
+    function a.humanoid:GetState() return self.nativeState or enum.HumanoidStateType.Running end
     self.actors[id]=a; return a
 end
 function Base.spawn(self,id,actorId,point)
@@ -565,6 +566,91 @@ assert(not sloped.humanoid.Jump,'Footprint support must preserve the upward-faci
 workspace.Raycast=normalRaycast
 footprintWorld:clearActors()
 print('PASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards')
+
+-- A natural Walker knockback can leave this real-size body hanging from the
+-- aqueduct edge: the engine reports Climbing/Air, but the rotated footprint
+-- still overlaps the floor. Use the observed pose and the geometric raycast.
+do
+    local climbingWorld=World.new(Base,{FallY=-20,WalkSpeed=16,JumpPower=50,
+        Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75},Level=source(LevelSource)},
+        {name='ClimbingFootprintRoute',offset={x=800,y=30,z=7936}})
+    climbingWorld.geometry:ClearAllChildren()
+    local floor=node('Part','ClimbingEdgeSupport',climbingWorld.geometry)
+    floor.Size=vector(42,2,38);floor.CFrame=frame(vector(25,-1,0)+climbingWorld.offset)
+    floor.CanCollide=true;floor:SetAttribute('SurfaceId','climbing-edge-support')
+    local function hangingActor(x)
+        local previous=climbingWorld.actors[1]
+        if previous then previous.model:Destroy() end
+        local a=actor(climbingWorld,1,vector(x or 46.49994,.2314,-3.5528)+climbingWorld.offset)
+        a.root.CFrame.RightVector=vector(0,0,1);a.root.CFrame.LookVector=vector(1,0,0)
+        a.root.AssemblyLinearVelocity=vector(-3,0,2)
+        a.humanoid.FloorMaterial=enum.Material.Air;a.humanoid.nativeState=enum.HumanoidStateType.Climbing
+        a.humanoid.JumpPower=50
+        a.routeJumpSupport={consumed=false,groundedAt=0,groundedY=3+climbingWorld.offset.Y}
+        serverTime=2 -- Both delayed-input grace and any reaction have expired.
+        return a
+    end
+    local hanging=hangingActor()
+    assert(not workspace:Raycast(hanging.root.Position,vector(0,-3.4,0),climbingWorld.ray),
+        'The hanging root centre must miss the actual floor ending at X46')
+    assert(workspace:Raycast(hanging.root.Position-vector(.5,0,0),vector(0,-3.4,0),climbingWorld.ray),
+        'The hanging actual rotated half-depth must still overlap the floor')
+    climbingWorld:jump(1)
+    assert(hanging.humanoid.Jump,'A supported Climbing/Air edge hang must accept one ordinary Jump after ground grace expires')
+    eq(hanging.root.AssemblyLinearVelocity,-3,50,2,'Edge dismount uses configured jump power and preserves horizontal impulse')
+    assert(hanging.routeJumpSupport.consumed and hanging.routeJumpSupport.groundedAt==0,
+        'Climbing dismount must consume one jump without refreshing ground history')
+    hanging.humanoid.Jump=false;hanging.root.AssemblyLinearVelocity=vector(-3,0,2)
+    hanging.routeJumpSupport.airborne=true
+    serverTime=3;climbingWorld:hazard(1);climbingWorld:jump(1)
+    assert(not hanging.humanoid.Jump and hanging.routeJumpSupport.consumed,
+        'Remaining Climbing/Air cannot rearm a consumed jump, including after observed flight')
+    eq(hanging.root.AssemblyLinearVelocity,-3,0,2)
+    print('PASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing')
+
+    for _,blocked in ipairs({'Freefall','BeyondFootprint','NarrowRoot','Upward','Consumed','Dead','Anchored','Reaction',
+        'Hazard','NoSurface','NoFloor','TooHigh','ForeignSupport','WallOnly','DownwardNormal'}) do
+        local a=hangingActor(blocked=='BeyondFootprint' and 46.5001 or nil)
+        local extra,originalRaycast
+        if blocked=='Freefall' then a.humanoid.nativeState=enum.HumanoidStateType.Freefall
+        elseif blocked=='NarrowRoot' then a.root.Size=vector(2,2,.4)
+        elseif blocked=='Upward' then a.root.AssemblyLinearVelocity=vector(-3,2,2)
+        elseif blocked=='Consumed' then a.routeJumpSupport.consumed=true;a.routeJumpSupport.airborne=true
+        elseif blocked=='Dead' then a.humanoid.Health=0
+        elseif blocked=='Anchored' then a.root.Anchored=true
+        elseif blocked=='Reaction' then a.humanoid.PlatformStand=true
+        elseif blocked=='Hazard' then floor:SetAttribute('Hazard',true)
+        elseif blocked=='NoSurface' then floor:SetAttribute('SurfaceId',nil)
+        elseif blocked=='NoFloor' then floor.CanCollide=false
+        elseif blocked=='TooHigh' then a.root.CFrame.Position=a.root.Position+vector(0,4,0)
+        elseif blocked=='ForeignSupport' then
+            floor.CanCollide=false
+            extra=node('Part','ForeignSupport',workspace);extra.CFrame=floor.CFrame;extra.Size=floor.Size
+            extra.CanCollide=true;extra:SetAttribute('SurfaceId','foreign-floor')
+        elseif blocked=='WallOnly' then
+            floor.CanCollide=false
+            extra=node('Part','WallWithoutUpwardSupport',climbingWorld.geometry)
+            extra.Size=vector(2,20,38);extra.CFrame=frame(vector(45,5,0)+climbingWorld.offset)
+            extra.CanCollide=true;extra:SetAttribute('SurfaceId','wall')
+        elseif blocked=='DownwardNormal' then
+            originalRaycast=workspace.Raycast
+            function workspace:Raycast(origin,direction,params)
+                local hit=originalRaycast(self,origin,direction,params)
+                if hit and hit.Instance==floor then hit.Normal=vector(0,.94,0) end
+                return hit
+            end
+        end
+        local before=a.root.AssemblyLinearVelocity
+        climbingWorld:jump(1)
+        assert(not a.humanoid.Jump,'Climbing edge dismount must preserve '..blocked..' rejection')
+        eq(a.root.AssemblyLinearVelocity,before.X,before.Y,before.Z,'Rejected '..blocked..' input must not alter velocity')
+        if originalRaycast then workspace.Raycast=originalRaycast end
+        if extra then extra:Destroy() end
+        floor.CanCollide=true;floor:SetAttribute('Hazard',nil);floor:SetAttribute('SurfaceId','climbing-edge-support')
+    end
+    climbingWorld:clearActors()
+    print('PASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards')
+end
 
 -- Trusted route fixtures exercise the physical boundary independently of the
 -- pure section/seed generator: the second route moves the actual aqueduct gap.

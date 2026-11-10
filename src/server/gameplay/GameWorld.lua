@@ -1117,7 +1117,12 @@ function World:jump(id)
     if state.consumed then return end
     local grace=state.groundedAt and now-state.groundedAt>=0 and now-state.groundedAt<=.20
         and state.groundedY-actor.root.Position.Y<=3.5
-    if not grounded and not grace then return end
+    -- Native edge hangs can report Climbing/Air while this rig's rotated
+    -- footprint still overlaps its safe floor. Accept one deliberate dismount;
+    -- climbing never refreshes ground history or rearms a consumed jump.
+    local climbingSupport=actor.humanoid:GetState()==Enum.HumanoidStateType.Climbing
+        and actor.root.AssemblyLinearVelocity.Y<=1 and hasJumpSupport(self,actor.root)
+    if not grounded and not grace and not climbingSupport then return end
     local power=actor.humanoid.JumpPower or self.config.JumpPower
     if type(power)~='number' or power<=0 or power~=power or power==math.huge then return end
     if self.config.Movement then

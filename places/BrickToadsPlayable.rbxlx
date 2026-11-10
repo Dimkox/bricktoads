@@ -7589,7 +7589,12 @@ function World:jump(id)
     if state.consumed then return end
     local grace=state.groundedAt and now-state.groundedAt&gt;=0 and now-state.groundedAt&lt;=.20
         and state.groundedY-actor.root.Position.Y&lt;=3.5
-    if not grounded and not grace then return end
+    -- Native edge hangs can report Climbing/Air while this rig's rotated
+    -- footprint still overlaps its safe floor. Accept one deliberate dismount;
+    -- climbing never refreshes ground history or rearms a consumed jump.
+    local climbingSupport=actor.humanoid:GetState()==Enum.HumanoidStateType.Climbing
+        and actor.root.AssemblyLinearVelocity.Y&lt;=1 and hasJumpSupport(self,actor.root)
+    if not grounded and not grace and not climbingSupport then return end
     local power=actor.humanoid.JumpPower or self.config.JumpPower
     if type(power)~='number' or power&lt;=0 or power~=power or power==math.huge then return end
     if self.config.Movement then
@@ -11689,7 +11694,7 @@ return World
       <Item class="ModuleScript" referent="BT64">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='d8bbd170ff44256aa64c8479e89421dcdb507ccfb4cea712941e1264fc0f7534'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='19d30b64738cf3858e2a33ffea07a381fda8b093a4e850b44751c646e1e19bf9'})
 </ProtectedString>
         </Properties>
       </Item>

@@ -1,0 +1,2143 @@
+{
+  "current": {
+    "index": 1,
+    "rawLife": 15,
+    "attempt": 1,
+    "epoch": 1,
+    "plan": {
+      "x": -1,
+      "z": 0,
+      "primary": false,
+      "run": false,
+      "jump": true
+    },
+    "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+    "position": {
+      "y": 0.19238752126693726,
+      "x": 46.5036735534668,
+      "z": -2.3472025394439697
+    },
+    "runId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7",
+    "stock": 3,
+    "stage": "Route",
+    "guardianHits": 0
+  },
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794300578.554971,
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "runId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7",
+      "source": "causeway-1"
+    }
+  ],
+  "navigation": {
+    "phase": "Recover edge with ordinary input",
+    "target": {
+      "y": 3,
+      "x": 43,
+      "z": -2.3472025394439697
+    }
+  },
+  "scope": "Actual registered Play client; normal production intents; AI/hazards active; QA input policies updated during attempt",
+  "samples": [
+    {
+      "p": {
+        "y": 3,
+        "x": -65,
+        "z": -7
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9994449069791543,
+        "x": 0.9994449069791543,
+        "z": -0.03331483023263848,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.03331483023263848,
+        "run": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -1,
+      "at": 1794300578.554971,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": -58.565494537353516,
+        "z": -8.721297264099121
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9759067105572138,
+        "x": -0.9759067105572138,
+        "z": -0.21818820382733473,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.21818820382733484,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300583.770304,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999948501586914,
+        "x": -69.4131088256836,
+        "z": -6.7719831466674805
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9260902051557658,
+        "x": 0.9260902051557658,
+        "z": 0.37730217586776726,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.37730217586776726,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -2,
+      "at": 1794300589.004677,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 1.0685486793518066,
+        "x": -65.0798568725586,
+        "z": 11.263794898986816
+      },
+      "index": 1,
+      "rawLife": 27,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "stock": 3,
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "at": 1794300594.203527,
+      "target": -3,
+      "notice": "REACTION",
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.9659197330474854,
+        "x": -60.3121452331543,
+        "z": 17.630441665649414
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.6852551779976995,
+        "x": 0.6852551779976992,
+        "z": 0.7283030557586188,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.7283030557586184,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300599.353229,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999999761581421,
+        "x": -47.05668258666992,
+        "z": 17.64185333251953
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9801939058466825,
+        "x": -0.9801939058466825,
+        "z": -0.1980401649691923,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.1980401649691923,
+        "run": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300604.537154,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 4.297375202178955,
+        "x": -51.227664947509766,
+        "z": 17.42153549194336
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9515129783486989,
+        "x": 0,
+        "z": 0,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.3076086020155947,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300609.853495,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3.997429132461548,
+        "x": -60.92862319946289,
+        "z": 14.247275352478027
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.8079083671235081,
+        "x": -0.118377685546875,
+        "z": 0.08634757995605469,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.5893081285132821,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300615.053373,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999849557876587,
+        "x": -59.105873107910156,
+        "z": 12.78466510772705
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.89884355973139,
+        "x": -0.89884355973139,
+        "z": 0.43826961465449915,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.43826961465449915,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300620.286584,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3.996901273727417,
+        "x": -65.37882232666016,
+        "z": 15.053791999816895
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9548084694456808,
+        "x": -0.89886474609375,
+        "z": 0.27980709075927734,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.29722178028333723,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300625.818708,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3.8053066730499268,
+        "x": -65.93038177490234,
+        "z": 15.737030982971191
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9746162971034137,
+        "x": 0.9746162971034137,
+        "z": -0.22388182914303356,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.22388182914303356,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300631.219572,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999999761581421,
+        "x": -58.14596176147461,
+        "z": 16.899991989135742
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9399892930836755,
+        "x": -0.9399892930836755,
+        "z": -0.3412039403173005,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.3412039403173005,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300636.436303,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3.9985179901123047,
+        "x": -62.33460235595703,
+        "z": 15.869781494140625
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.7350724757181938,
+        "x": 0.02626800537109375,
+        "z": -0.02422809600830078,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.6779885363643883,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300641.668851,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": -67.4335708618164,
+        "z": 19.08289337158203
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.8161130083503798,
+        "x": -0.8161130083503797,
+        "z": 0.5778923408397909,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.5778923408397908,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300646.969085,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": -65.26840209960938,
+        "z": 18.085296630859375
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9511069644614613,
+        "x": 0.9511069644614613,
+        "z": -0.30886168773887257,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.30886168773887257,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -3,
+      "at": 1794300652.352075,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": -5.195808410644531,
+        "z": 1.4651283025741577
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9624669091672978,
+        "z": -0.2713990581375486,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300657.618233,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.9981472492218018,
+        "x": 2.0102670192718506,
+        "z": 2.996485710144043
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9919369507300101,
+        "x": 0.0793549560584008,
+        "z": -0.0101385871288497,
+        "jump": false,
+        "primary": true,
+        "aimZ": -0.12673233911062123,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300662.851755,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 6.753473281860352,
+        "z": -4.232242584228516
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.992586595903044,
+        "x": 0.9925865959030441,
+        "z": -0.12153949824483869,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.12153949824483866,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -4,
+      "at": 1794300668.05181,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3.9989473819732666,
+        "x": 12.755032539367676,
+        "z": -5.237781047821045
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.958387313000951,
+        "x": 0.07667098504007608,
+        "z": 0.0228376893092193,
+        "jump": false,
+        "primary": true,
+        "aimZ": 0.28547111636524125,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300673.417542,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 7.24668025970459,
+        "x": 16.954145431518555,
+        "z": -5.744426727294922
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9021756633967957,
+        "x": 0.9021756633967956,
+        "z": 0.43136883565523343,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.43136883565523343,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -4,
+      "at": 1794300678.60107,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 20.247751235961914,
+        "z": 7.588388442993164
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.5310654225307684,
+        "x": 0.4735632977109958,
+        "z": 0.755584453289579,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.8473308190973678,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -4,
+      "at": 1794300683.717445,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.999988555908203,
+        "x": 21.460859298706055,
+        "z": 8.972139358520508
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.5708879042968799,
+        "x": 0.5708879042968799,
+        "z": 0.8210280145814249,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.8210280145814249,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300688.967086,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 15.403037071228027,
+        "z": 10.571206092834473
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.7425209494364721,
+        "x": 0.059401675954917764,
+        "z": 0.053585827358985,
+        "jump": false,
+        "primary": true,
+        "aimZ": 0.6698228419873125,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300694.133527,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.343470573425293,
+        "x": 6.983641624450684,
+        "z": 11.111454010009766
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.4952454443326126,
+        "x": 0.4952454443326126,
+        "z": 0.868753100637801,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.868753100637801,
+        "run": false
+      },
+      "stock": 3,
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "at": 1794300699.300143,
+      "target": -5,
+      "notice": "REACTION",
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 8.00681209564209,
+        "x": 10.928719520568848,
+        "z": 19.10921287536621
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.2031224312259673,
+        "x": -0.2031224312259673,
+        "z": -0.9791533475063303,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.9791533475063303,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300704.533382,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 7.853553295135498,
+        "x": 7.235387802124023,
+        "z": 15.689072608947754
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9920526364424203,
+        "x": 0.9920526364424203,
+        "z": 0.1258235531514003,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.1258235531514003,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300709.816037,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.9948768615722656,
+        "x": 6.3362603187561035,
+        "z": 19.051122665405273
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9654665126628877,
+        "x": 0.07723732101303102,
+        "z": -0.020842174616147832,
+        "jump": false,
+        "primary": true,
+        "aimZ": -0.2605271827018479,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300715.082704,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 3.0000007152557373,
+        "x": 12.008600234985352,
+        "z": 19.972930908203125
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.1562749103888043,
+        "x": 0.9998937089378581,
+        "z": 0.014579808863421598,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.9877135983588416,
+        "run": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -5,
+      "at": 1794300716.200081,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 2.9999990463256836,
+        "x": 34.11442184448242,
+        "z": 5.586236476898193
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9001916224820861,
+        "x": 0.7773158080615706,
+        "z": -0.6291105900694944,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.43549402155835526,
+        "run": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -6,
+      "at": 1794300717.333063,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 9.675809860229492,
+        "x": 52.13739776611328,
+        "z": -4.372788906097412
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.6057816009643385,
+        "x": 0.8992369501341044,
+        "z": 0.43746189264153545,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.7956309772332165,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -6,
+      "at": 1794300718.348936,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 5.546599388122559,
+        "x": 51.357261657714844,
+        "z": -3.4257631301879883
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9948942298951511,
+        "x": 0.8427383422851591,
+        "z": -0.12324738502502441,
+        "jump": false,
+        "primary": false,
+        "aimZ": -0.1009230960748545,
+        "run": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "target": -6,
+      "at": 1794300719.382474,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.3222365379333496,
+        "x": 46.484153747558594,
+        "z": -3.615211009979248
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -0.999634570326102,
+        "z": 0.0270319405324408,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300720.399139,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.5554342865943909,
+        "x": 46.492305755615234,
+        "z": -3.5616579055786133
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -0.9998864416103285,
+        "z": 0.015069966285140691,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300721.415754,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300722.465918,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300723.51566,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300724.565462,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300725.632189,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300730.915214,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300736.18187,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300741.481311,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300746.831769,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300752.181238,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300757.463759,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300762.747494,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300768.065441,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300773.381034,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300778.647157,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300783.913564,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300789.17914,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300794.462693,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300799.746141,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300804.979176,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300810.278444,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300815.59569,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300820.912459,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300826.196828,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300831.511469,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300836.811038,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300842.061089,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300847.427683,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300852.710801,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300858.011192,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300863.27715,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300868.576765,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300873.893647,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300879.210219,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300884.476387,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2314123809337616,
+        "x": 46.49993896484375,
+        "z": -3.552816152572632
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300889.775724,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.4825970530509949,
+        "x": 46.499366760253906,
+        "z": -3.5084331035614014
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300895.092214,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2297946810722351,
+        "x": 46.50810241699219,
+        "z": -3.345332622528076
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300900.375852,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.5929272174835205,
+        "x": 46.49477767944336,
+        "z": -3.316300630569458
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300905.675239,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.6005014181137085,
+        "x": 46.49513244628906,
+        "z": -3.241377592086792
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300910.959771,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.2897856533527374,
+        "x": 46.499366760253906,
+        "z": -3.1215200424194336
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300916.241968,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.6225266456604004,
+        "x": 46.49278259277344,
+        "z": -2.9581282138824463
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300921.407558,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.1917969137430191,
+        "x": 46.51091384887695,
+        "z": -2.8525469303131104
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300926.592154,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.44123023748397827,
+        "x": 46.4990348815918,
+        "z": -2.8557188510894775
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300931.858292,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.20326465368270874,
+        "x": 46.498226165771484,
+        "z": -2.788724422454834
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300937.090867,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.6585139632225037,
+        "x": 46.49269485473633,
+        "z": -2.7964541912078857
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300942.340931,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.5322058200836182,
+        "x": 46.49350357055664,
+        "z": -2.670938014984131
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300947.541958,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.21271252632141113,
+        "x": 46.49695587158203,
+        "z": -2.7408015727996826
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300952.774815,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.3735050559043884,
+        "x": 46.49698257446289,
+        "z": -2.6916515827178955
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300958.007017,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.6197412014007568,
+        "x": 46.492042541503906,
+        "z": -2.6122729778289795
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300963.274141,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.5825839042663574,
+        "x": 46.49386215209961,
+        "z": -2.6647047996520996
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300968.456871,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.556033730506897,
+        "x": 46.49677276611328,
+        "z": -2.6101982593536377
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300973.689095,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.21350087225437164,
+        "x": 46.49909973144531,
+        "z": -2.5512373447418213
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300978.889114,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.5682553052902222,
+        "x": 46.49678421020508,
+        "z": -2.298736095428467
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300984.122422,
+      "stage": "Route",
+      "guardianHits": 0
+    },
+    {
+      "p": {
+        "y": 0.26121997833251953,
+        "x": 46.499267578125,
+        "z": -2.260006904602051
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": -1,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": true
+      },
+      "actorId": "008b3782-f0a8-4433-abd1-d2ecc8aca1b7:actor:2",
+      "stock": 3,
+      "at": 1794300989.37301,
+      "stage": "Route",
+      "guardianHits": 0
+    }
+  ],
+  "result": "Stopped for physical edge-jump investigation",
+  "errors": []
+}
