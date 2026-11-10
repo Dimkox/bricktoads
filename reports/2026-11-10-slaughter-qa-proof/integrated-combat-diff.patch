@@ -1,0 +1,93 @@
+--- CombatBFB
++++ working-Combat
+@@ -471,6 +471,81 @@
+     end
+     return nil
+ end
++local slaughterEvasions = setmetatable({}, {__mode='k'})
++local function slaughterEvasion(c, boss, q)
++    if not boss or boss.kind ~= 'GeneralSlaughter' or special(c)
++        or not finite(boss.attackSerial) then return nil end
++    local body = c.world.actors and c.world.actors[c.slot]
++    local root, humanoid = body and body.root, body and body.humanoid
++    if not root or not root.Parent or root.Anchored or not humanoid
++        or humanoid.PlatformStand or (humanoid.Health or 0) <= 0 then return nil end
++    local material = humanoid.FloorMaterial
++    if material == nil or material == 'Air' or tostring(material) == 'Enum.Material.Air' then return nil end
++    local arena, p = boss.arena, c.position
++    if not arena or not finite(arena.minX) or not finite(arena.maxX)
++        or not finite(arena.minZ) or not finite(arena.maxZ)
++        or arena.maxX-arena.minX <= 2 or arena.maxZ-arena.minZ <= 2 then return nil end
++    local preempt = boss.state == 'Ready' and boss.attackSerial%2 == 1
++        and finite(boss.readyAt) and boss.readyAt-c.now <= .35
++    local attack = boss.attack
++    if not preempt and (boss.state ~= 'Tell' and boss.state ~= 'Active'
++        or not attack or not attack.move or not point(attack.origin)
++        or not attack.aim or not finite(attack.aim.x) or not finite(attack.aim.z)) then return nil end
++    -- Ready movement establishes accepted momentum before the short Headbutt
++    -- tell. The source boss still chooses its own aim at the actual Tell.
++    local ax, az, serial
++    if preempt then ax,az = unit(p.x-q.x,p.z-q.z);serial = boss.attackSerial+1
++    else ax,az = unit(attack.aim.x,attack.aim.z);serial = boss.attackSerial end
++    local sx, sz = -az, ax
++    local function clearance(x, z)
++        local result = math.huge
++        if x > 0 then result = math.min(result,(arena.maxX-1-p.x)/x)
++        elseif x < 0 then result = math.min(result,(arena.minX+1-p.x)/x) end
++        if z > 0 then result = math.min(result,(arena.maxZ-1-p.z)/z)
++        elseif z < 0 then result = math.min(result,(arena.minZ+1-p.z)/z) end
++        return math.max(0,result)
++    end
++    local slots = slaughterEvasions[c.session]
++    if not slots then slots = {};slaughterEvasions[c.session] = slots end
++    local identity = table.concat({tostring(c.session.state.runId),tostring(c.session.state.levelEpoch),
++        tostring(c.hero.actorId),tostring(c.hero.attempt)},':')
++    local state = slots[c.slot]
++    if not state or state.identity ~= identity or state.boss ~= boss or state.serial ~= serial then
++        local plus, minus = clearance(sx,sz), clearance(-sx,-sz)
++        local sign = plus >= minus and 1 or -1
++        local v = root.AssemblyLinearVelocity
++        local momentum = v and finite(v.X) and finite(v.Z) and v.X*sx+v.Z*sz or 0
++        if preempt and math.abs(momentum) > 1 and plus > 10 and minus > 10 then
++            sign = momentum > 0 and 1 or -1
++        end
++        state = {identity=identity,boss=boss,serial=serial,x=sx*sign,z=sz*sign}
++        slots[c.slot] = state
++    else
++        -- Keep the selected world-side through Tell and near the arena edge;
++        -- recomputing an escape target each frame can reverse into the strike.
++        if sx*state.x+sz*state.z < 0 then sx,sz = -sx,-sz end
++        state.x,state.z = sx,sz
++    end
++    local safe = false
++    if not preempt then
++        local origin, m = attack.origin, attack.move
++        local front = (p.x-origin.x)*ax+(p.z-origin.z)*az
++        local side = math.abs((p.x-origin.x)*-az+(p.z-origin.z)*ax)
++        local enemy = boss.enemies and boss.enemies[-99]
++        local phaseSpeed = enemy and (enemy.progress or 0) >= 120 and 1.2 or 1
++        local extent = m.reach or (m.speed or 0)*(m.active or 0)*phaseSpeed
++        safe = side > (m.width or m.radius or 3)+3 or front < -3 or front > extent+5
++    end
++    local intent = neutral()
++    intent.run,intent.evasion = true,true
++    -- A bounded one-packet delay budget; this is QA input planning, not a
++    -- modification to support, movement physics, attack state or resources.
++    local speed = (c.config.Movement or {}).heroRunSpeed or 24
++    if not safe and clearance(state.x,state.z) >= speed*(.133+c.dt+.025) then
++        intent.x,intent.z = state.x,state.z
++    end
++    return intent
++end
+ local function guardianPlan(c, q)
+     local intent, d, p = neutral(), c.director, c.position
+     intent.aimX, intent.aimZ = unit(q.x-p.x, q.z-p.z)
+@@ -543,6 +618,8 @@
+         intent.primary = dragon.mode == 'Mounted' and ready(c) and flatDistance(p,q) < 50
+         return intent
+     end
++    local slaughter = slaughterEvasion(c,boss,q)
++    if slaughter then clearRunUp(c);return slaughter end
+     local stepOff=stepOffEnemy(c,q,enemy,intent)
+     if stepOff then return stepOff end
+     local range, height = flatDistance(p,q), math.abs(p.y-q.y)
