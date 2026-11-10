@@ -136,8 +136,35 @@
   "limits": [
     "Native God fixture validates ten ordinary falls and toggle resource accounting, not an all13 God-mode campaign",
     "Native25 all13 finite Won is separate earlier evidence; God was not enabled in that run",
-    "HUD logic/localization reviewed; independent pixel/device layout approval is not claimed",
     "Journal does not record every accepted Move; the inspected disposable client pilot provides control provenance",
-    "This reviewer made no Source or Studio changes"
-  ]
+    "This reviewer made no Source or Studio changes",
+    "Actual native GUI text/visibility receipt checked; real-device pixel layout was not independently inspected"
+  ],
+  "nativeHud": {
+    "file": "native-hud.json",
+    "bytes": 540,
+    "sha256": "f4af50c2fef4920ad7bf7ec54d4800a52a6e94bca7ae3d41ce9701c7fdb87ad6",
+    "expectedVisibleTexts": {
+      "Mr. Green \u00b7 God Mode": true,
+      "\u221e resp.": true,
+      "\u21bb \u221e": true
+    },
+    "result": "PASS actual GUI text/visibility receipt; no independent pixel/device-layout claim"
+  },
+  "rootCleanupReceipt": {
+    "stopped": true,
+    "freshProductionServerBytes": 7186,
+    "freshProductionClientBytes": 89719,
+    "GodBackupRemoved": true,
+    "disposableRuntimeGone": true,
+    "EditGodAttribute": true,
+    "provenance": "Parent MCP cleanup receipt; reviewer did not operate Studio"
+  },
+  "fullValidationReceipt": {
+    "file": "../2026-11-10-full-campaign-acceptance/final-validation.json",
+    "commands": 58,
+    "compiled": 200,
+    "status": "pass",
+    "finished": "2026-11-10T20:05:23.321110+00:00"
+  }
 }

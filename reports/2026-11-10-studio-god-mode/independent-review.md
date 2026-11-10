@@ -43,8 +43,17 @@ hashes are in [independent-validation.json](independent-validation.json).
 The mobile summary replaces the finite respawn count with localized
 `∞ resp.` while enabled. Desktop rows use the neutral infinity symbol and
 the translated God Mode label. Source strings remain English with Russian
-catalog values. This review verifies the logic and catalog, not independent
-pixel/device layout acceptance; the root UI check is separate.
+catalog values. The later root [actual GUI receipt](native-hud.json) was also
+checked: all three labels are visible and read `Mr. Green · God Mode`,
+`↻ ∞` and `∞ resp.`. This verifies text and visibility, rather than independent
+pixel/device layout acceptance.
+
+The final root validation receipt reports58/58 passing commands and200
+compiled files, completed20:05:23UTC. Root's MCP cleanup receipt records Stop,
+restoration of fresh production server/client7,186/89,719bytes, removal of
+the God backup/disposable runtime, and Edit attribute true for a future
+Studio run. These are parent cleanup actions; this reviewer did not operate
+Studio. The published-build gate remains disabled outside Studio.
 
 This native fixture proves ordinary infinite respawn accounting and return
 to finite defeat, rather than an all13 God-mode campaign. Native25's earlier
