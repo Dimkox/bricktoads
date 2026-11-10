@@ -17,6 +17,11 @@ end
 function Frame.__add(a,b)
     local r=frame(a.Position+b);r.rotationX,r.rotationY,r.rotationZ=a.rotationX,a.rotationY,a.rotationZ;return r
 end
+env.CFrame.lookAt=function(p,target)
+    local r=frame(p)
+    if target then local d=(target-p).Unit;r.LookVector=d;r.RightVector=vector(-d.Z,0,d.X)end
+    return r
+end
 local campaignWorld=World.new(Base,{FallY=-35,WalkSpeed=16,JumpPower=50},
     {name='CampaignAdapterContract',offset={x=90,y=20,z=1024}})
 Base.spawn(campaignWorld,1,'same-actor',nil,false,'Mr. Green')
@@ -63,6 +68,32 @@ campaignWorld.campaignModes.actors[1].grounded=false
 assert(not campaignWorld:isRunning(1),'airborne mode movement must not unlock another running strike')
 campaignWorld:campaignRelease(1)
 print('PASS kinematic grounded run qualification')
+
+campaignWorld.campaignModes.mode='Clinger'
+campaignWorld.campaignModes.actors[1]={grounded=false,mounted=false,velocity={x=0,y=0,z=0},
+    input={run=false},finished=false}
+for _,heading in ipairs({{x=1,z=0},{x=0,z=1},{x=-1,z=0},{x=0,z=-1}})do
+    campaignWorld:campaignPose(1,{x=12,y=3,z=4},'Clinger',{x=0,y=0,z=0},heading)
+    local look=originalActor.root.CFrame.LookVector
+    assert(math.abs(look.X-heading.x)<1e-6 and math.abs(look.Z-heading.z)<1e-6,'Clinger actor does not face its presentation heading')
+    assert(originalActor.campaignVelocity.Magnitude==0,'Heading must not invent simulation velocity')
+    assert(campaignWorld:movementMode(1)=='Ride'and not campaignWorld:isRunning(1),
+        'Active Clinger must use Ride art without setting mounted or unlocking running attacks')
+    assert(campaignWorld.campaignModes.actors[1].mounted==false,'Presentation changed gameplay mount state')
+end
+for _,heading in ipairs({false,{x=0,z=0},{x=0/0,z=0},{x=math.huge,z=0},{x=2,z=0}})do
+    campaignWorld:campaignPose(1,{x=12,y=3,z=4},'Clinger',{x=2,y=0,z=0},heading)
+    assert(originalActor.root.CFrame.LookVector.X==1 and originalActor.campaignVelocity.X==2,
+        'Invalid presentation headings must preserve actual velocity-based facing')
+end
+campaignWorld:campaignPose(1,{x=12,y=3,z=4},'Rope',{x=0,y=0,z=2},{x=-1,z=0})
+assert(originalActor.root.CFrame.LookVector.Z==1 and originalActor.campaignVelocity.Z==2,
+    'Clinger heading argument must not alter another mode')
+campaignWorld.campaignModes.actors[1].finished=true
+assert(campaignWorld:movementMode(1)~='Ride','Finished Clinger cannot retain Ride presentation')
+campaignWorld:campaignRelease(1)
+assert(campaignWorld:movementMode(1)=='Idle'and originalActor.campaignVelocity==nil,'Release must restore ordinary presentation')
+print('PASS Clinger cardinal presentation heading preserves zero velocity, gameplay mount state and release')
 
 campaignWorld:placeActor(1,{x=25,y=8,z=-5})
 eq(originalActor.root.Position,115,28,1019,'boss charge placement uses local group coordinates')

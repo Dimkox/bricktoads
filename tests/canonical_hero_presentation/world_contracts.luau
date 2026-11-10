@@ -93,6 +93,14 @@ mountModel.Parent=nil;assert(capture().rideDeckY==nil,'Reject removed mounted co
 mountSkin.Parent=nil;assert(capture().rideDeckY==nil,'Reject replaced mounted skin');mountSkin.Parent=mountModel
 mountPart.Parent=nil;assert(capture().rideDeckY==nil,'Reject removed vehicle proxy');mountPart.Parent=sourceWorld.geometry
 sourceWorld.campaignWorld.objects={['clinger-1']=mountRow};assert(capture().rideDeckY==4.25,'Clinger uses the same cosmetic deck contract')
+sourceWorld.campaignModes.mode='Clinger'
+mountActor.mounted=false;mountActor.grounded=false;mountActor.velocity={x=0,y=0,z=0}
+local clingerContext=capture()
+assert(clingerContext.visualState=='Ride'and clingerContext.rideDeckY==4.25,
+    'Actual active unmounted Clinger must forward Ride and the same live cosmetic deck together')
+assert(mountActor.mounted==false and mountActor.velocity.x==0 and mountActor.velocity.z==0,
+    'Clinger presentation wiring cannot change gameplay mounting or velocity')
+print('PASS actual unmounted airborne Clinger wires Ride pose and live deck together without gameplay writes')
 sourceWorld.campaignWorld=nil;sourceWorld.campaignModes=nil;sourceBody.campaignControl=nil;sourceWorld.config.Movement=nil
 mountModel:Destroy();mountPart:Destroy();assert(capture().rideDeckY==nil,'Leaving a vehicle clears alignment context')
 print('PASS mounted presentation forwards only the current body live deck and clears stale interrupted or removed resources')

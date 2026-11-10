@@ -620,7 +620,7 @@ function World:finishLevelTransition()
     end
 end
 
-function World:campaignPose(id,point,mode,velocity)
+function World:campaignPose(id,point,mode,velocity,heading)
     local actor=self.actors[id]
     if not actor or not actor.root.Parent or actor.humanoid.Health<=0 then return false end
     actor.campaignControl=true
@@ -629,6 +629,13 @@ function World:campaignPose(id,point,mode,velocity)
     actor.humanoid.AutoRotate=false
     local position=Vector3.new(point.x,point.y,point.z)+self.offset
     local direction=velocity and Vector3.new(velocity.x or 0,0,velocity.z or 0)
+    if mode=='Clinger'and type(heading)=='table'then
+        local x,z=heading.x,heading.z
+        if type(x)=='number'and type(z)=='number'and x==x and z==z and math.abs(x)<=1 and math.abs(z)<=1 then
+            local facing=Vector3.new(x,0,z)
+            if facing.Magnitude>.001 then direction=facing end
+        end
+    end
     if not direction or direction.Magnitude<.001 then direction=actor.root.CFrame.LookVector end
     actor.model:PivotTo(CFrame.lookAt(position,position+direction))
     actor.root.AssemblyLinearVelocity=Vector3.new()
@@ -1031,6 +1038,7 @@ function World:movementMode(id)
     if controlled and controlled.campaignControl and modeActor then
         if modeActor.medium=='Water' then return 'Swim' end
         if self.campaignModes.mode=='Rope' then return 'Rope' end
+        if self.campaignModes.mode=='Clinger'and not modeActor.finished then return 'Ride' end
         if modeActor.mounted then return 'Ride' end
         if not modeActor.grounded then return 'Air' end
         if self:isRunning(id) then return 'Run' end

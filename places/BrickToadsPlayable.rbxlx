@@ -3163,12 +3163,16 @@ function Modes:_clinger(s,dt)
     -- held direction never crosses a corner and receives unearned route progress.
     local left=segment.length-s.segmentProgress
     local used=math.min(left,travel);s.segmentProgress+=used;s.progress+=used
+    -- Presentation follows the segment that actually earned this distance.
+    -- Keep simulation velocity, input, corner accounting and chase unchanged.
+    if used&gt;0 then s.presentationHeading=point(segment.direction.x,0,segment.direction.z)end
     s.position=point(segment.from.x+segment.direction.x*s.segmentProgress,segment.from.y,
         segment.from.z+segment.direction.z*s.segmentProgress)
     if s.segmentProgress&gt;=segment.length-1e-7 then s.segment+=1;s.segmentProgress=0 end
     if not self.chaseFinished and math.abs(self.chaseProgress-s.progress)&lt;=3 then self:_die(s,'CampaignChaseCaught') end
     self:_object('clinger-'..s.slot,'ClingerVehicle',point(s.position.x,s.position.y-2.7,s.position.z),
-        {w=4,h=.6,d=4},{collidable=false,role='Vehicle'})
+        {w=4,h=.6,d=4},{collidable=false,role='Vehicle',
+            yaw=s.presentationHeading and math.atan2(-s.presentationHeading.z,s.presentationHeading.x)or 0})
 end
 function Modes:setChaseController(userId,connected)
     self.chaseController={userId=userId,connected=connected~=false,input={x=0,z=0,at=-math.huge}}
@@ -3472,9 +3476,11 @@ function Modes:_slice(dt)
                     or s.position.z&lt;bounds.minZ-8 or s.position.z&gt;bounds.maxZ+8 then self:_die(s,'CampaignFall')
                 elseif self:_finish(s) then
                     self.complete=true;s.finished=true;self:_log('CampaignCourseCleared',slot,{mode=self.mode})
-                    if self.world.campaignPose and self.mode~='Finale' then self.world:campaignPose(slot,s.position,self.mode,s.velocity) end
+                    if self.world.campaignPose and self.mode~='Finale' then self.world:campaignPose(slot,s.position,self.mode,s.velocity,
+                        self.mode=='Clinger'and s.presentationHeading or nil) end
                     if self.world.campaignRelease then self.world:campaignRelease(slot) end
-                elseif self:_special(s) and self.world.campaignPose then self.world:campaignPose(slot,s.position,self.mode,s.velocity) end
+                elseif self:_special(s) and self.world.campaignPose then self.world:campaignPose(slot,s.position,self.mode,s.velocity,
+                    self.mode=='Clinger'and s.presentationHeading or nil) end
             end
         end
     end
@@ -8368,7 +8374,7 @@ function World:finishLevelTransition()
     end
 end
 
-function World:campaignPose(id,point,mode,velocity)
+function World:campaignPose(id,point,mode,velocity,heading)
     local actor=self.actors[id]
     if not actor or not actor.root.Parent or actor.humanoid.Health&lt;=0 then return false end
     actor.campaignControl=true
@@ -8377,6 +8383,13 @@ function World:campaignPose(id,point,mode,velocity)
     actor.humanoid.AutoRotate=false
     local position=Vector3.new(point.x,point.y,point.z)+self.offset
     local direction=velocity and Vector3.new(velocity.x or 0,0,velocity.z or 0)
+    if mode=='Clinger'and type(heading)=='table'then
+        local x,z=heading.x,heading.z
+        if type(x)=='number'and type(z)=='number'and x==x and z==z and math.abs(x)&lt;=1 and math.abs(z)&lt;=1 then
+            local facing=Vector3.new(x,0,z)
+            if facing.Magnitude&gt;.001 then direction=facing end
+        end
+    end
     if not direction or direction.Magnitude&lt;.001 then direction=actor.root.CFrame.LookVector end
     actor.model:PivotTo(CFrame.lookAt(position,position+direction))
     actor.root.AssemblyLinearVelocity=Vector3.new()
@@ -8779,6 +8792,7 @@ function World:movementMode(id)
     if controlled and controlled.campaignControl and modeActor then
         if modeActor.medium=='Water' then return 'Swim' end
         if self.campaignModes.mode=='Rope' then return 'Rope' end
+        if self.campaignModes.mode=='Clinger'and not modeActor.finished then return 'Ride' end
         if modeActor.mounted then return 'Ride' end
         if not modeActor.grounded then return 'Air' end
         if self:isRunning(id) then return 'Run' end
@@ -13162,7 +13176,7 @@ return World
       <Item class="ModuleScript" referent="BT73">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='9737089d751f67a414da05c7bcb1f215ab74c2490badb3fbe1dd0a4b5e60da4e'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='a2440cee9f81d4f6eddbd4425a72f8f4fe74a25a4939f9124df7ab2708bed836'})
 </ProtectedString>
         </Properties>
       </Item>

@@ -554,12 +554,16 @@ function Modes:_clinger(s,dt)
     -- held direction never crosses a corner and receives unearned route progress.
     local left=segment.length-s.segmentProgress
     local used=math.min(left,travel);s.segmentProgress+=used;s.progress+=used
+    -- Presentation follows the segment that actually earned this distance.
+    -- Keep simulation velocity, input, corner accounting and chase unchanged.
+    if used>0 then s.presentationHeading=point(segment.direction.x,0,segment.direction.z)end
     s.position=point(segment.from.x+segment.direction.x*s.segmentProgress,segment.from.y,
         segment.from.z+segment.direction.z*s.segmentProgress)
     if s.segmentProgress>=segment.length-1e-7 then s.segment+=1;s.segmentProgress=0 end
     if not self.chaseFinished and math.abs(self.chaseProgress-s.progress)<=3 then self:_die(s,'CampaignChaseCaught') end
     self:_object('clinger-'..s.slot,'ClingerVehicle',point(s.position.x,s.position.y-2.7,s.position.z),
-        {w=4,h=.6,d=4},{collidable=false,role='Vehicle'})
+        {w=4,h=.6,d=4},{collidable=false,role='Vehicle',
+            yaw=s.presentationHeading and math.atan2(-s.presentationHeading.z,s.presentationHeading.x)or 0})
 end
 function Modes:setChaseController(userId,connected)
     self.chaseController={userId=userId,connected=connected~=false,input={x=0,z=0,at=-math.huge}}
@@ -863,9 +867,11 @@ function Modes:_slice(dt)
                     or s.position.z<bounds.minZ-8 or s.position.z>bounds.maxZ+8 then self:_die(s,'CampaignFall')
                 elseif self:_finish(s) then
                     self.complete=true;s.finished=true;self:_log('CampaignCourseCleared',slot,{mode=self.mode})
-                    if self.world.campaignPose and self.mode~='Finale' then self.world:campaignPose(slot,s.position,self.mode,s.velocity) end
+                    if self.world.campaignPose and self.mode~='Finale' then self.world:campaignPose(slot,s.position,self.mode,s.velocity,
+                        self.mode=='Clinger'and s.presentationHeading or nil) end
                     if self.world.campaignRelease then self.world:campaignRelease(slot) end
-                elseif self:_special(s) and self.world.campaignPose then self.world:campaignPose(slot,s.position,self.mode,s.velocity) end
+                elseif self:_special(s) and self.world.campaignPose then self.world:campaignPose(slot,s.position,self.mode,s.velocity,
+                    self.mode=='Clinger'and s.presentationHeading or nil) end
             end
         end
     end

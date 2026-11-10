@@ -25,7 +25,9 @@
 - [x] Extend the existing visibility gate with a distinct course contract and regression checks, preserving the cast contract.
 - [x] Reproduce and fix the confirmed low-Life Dash visual branch using trusted effect context; verify interruption and identity guards.
 - [x] Upload/import the models through MCP; export real resource receipts and add strict deterministic packaging/build tests.
-- [ ] Complete native catalog checks for all29 cast families, three heroes,12 morphs, Guardian, four vehicles and all40 encountered renderer kinds.
-- [ ] Correct the proven native transport clipping: derive deck clearance from actual mesh bounds and Surf water surface; align only the current mounted cosmetic hero soles to that deck. Preserve physical actor and object transforms/resources; reject stale/interrupted/replaced mount context.
+- [x] Complete native catalog checks for all29 cast families, three heroes,12 morphs, Guardian, four vehicles and all40 encountered renderer kinds.
+- [x] Correct the proven native transport clipping: derive deck clearance from actual mesh bounds and Surf water surface; align only the current mounted cosmetic hero soles to that deck. Preserve physical actor and object transforms/resources; reject stale/interrupted/replaced mount context.
+- [x] Check the remaining first-level scenery, projectiles, items, healing fly, finite effects, club and intro paths in a private native world (27 checks,25 scenery groups).
+- [ ] Correct the live Clinger integration: automatic riding selects Ride and its actual deck, while hero/vehicle facing follows the traveled segment. Preserve input, positions, velocity, progression, chase, collision and resources; repeat the complete campaign on the corrected source.
 - [ ] Export the baseline run, restore exact originals and verify final native vehicles/walls; run all13 stages continuously on final source with audiovisual observers.
 - [ ] Run relevant regression/CI checks, push and update Jira with the actual result and acceptance limits.

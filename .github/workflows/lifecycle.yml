@@ -103,6 +103,8 @@ jobs:
           /tmp/bricktoads-luau/luau-compile tools/qa/full_catalog_acceptance.server.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_av_observer.client.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_presentation_observer.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_heading_observer.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/world_elements_acceptance.luau > /dev/null
       - name: Structural build tests
         run: python3 tools/test_build.py
       - name: English source and localization coverage
