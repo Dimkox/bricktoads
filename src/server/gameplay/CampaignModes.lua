@@ -271,9 +271,6 @@ function Modes:_carry(s)
     for _,support in ipairs(self.supports) do if support.id==s.support then
         s.position.x+=support.position.x-support.previous.x;s.position.y+=support.position.y-support.previous.y;s.position.z+=support.position.z-support.previous.z
     end end
-    for _,block in ipairs(self.blocks) do if block.id==s.support then
-        s.position.x+=block.position.x-block.previous.x;s.position.z+=block.position.z-block.previous.z
-    end end
 end
 function Modes:_blockCollision(s,previous,input)
     for _,block in ipairs(self.blocks) do
@@ -284,9 +281,27 @@ function Modes:_blockCollision(s,previous,input)
             local crossing=(direction==1 and previous.x<=p.x-horizontal+.1 and s.position.x>p.x-horizontal)
                 or (direction==-1 and previous.x>=p.x+horizontal-.1 and s.position.x<p.x+horizontal)
             if crossing then
-                if s.grounded and input.x*direction>.1 then p.x=clamp(p.x+s.position.x-previous.x,def.minX,def.maxX) end
+                if s.grounded and input.x*direction>.1 then
+                    local moved=clamp(p.x+s.position.x-previous.x,def.minX,def.maxX)-p.x;p.x+=moved
+                    -- Pushes happen during one hero's step. Deliver the accepted
+                    -- displacement here so earlier and later riders receive it
+                    -- exactly once, including bodies already posed this slice.
+                    if moved~=0 then for _,slot in ipairs(self.session.order) do local rider=self.actors[slot]
+                        if rider and not rider.finished and rider.grounded and rider.support==block.id and self:_living(slot) then
+                            rider.position.x+=moved
+                            if self.world.campaignPose then self.world:campaignPose(slot,rider.position,self.mode,rider.velocity) end
+                        end
+                    end end
+                end
                 s.position.x=p.x-direction*horizontal;s.velocity.x=0
             end
+        end
+        local depth=def.d/2+BODY.z
+        if math.abs(s.position.x-p.x)<horizontal and s.position.y-3<p.y+def.h/2-.05 and s.position.y+2>p.y-def.h/2 then
+            local direction=s.position.z>previous.z and 1 or -1
+            local crossing=(direction==1 and previous.z<=p.z-depth+.1 and s.position.z>p.z-depth)
+                or (direction==-1 and previous.z>=p.z+depth-.1 and s.position.z<p.z+depth)
+            if crossing then s.position.z=p.z-direction*depth;s.velocity.z=0 end
         end
     end
 end
@@ -568,7 +583,9 @@ function Modes:_chase(dt)
             speed=math.max(0,input.x*segment.direction.x+input.z*segment.direction.z)*c.chaseSpeed
         end
     end
-    self.chaseProgress+=speed*dt
+    local pathLength=0
+    for _,segment in ipairs(c.path) do pathLength+=segment.length end
+    self.chaseProgress=math.min(pathLength,self.chaseProgress+speed*dt)
     local remaining=math.max(0,self.chaseProgress);local q=c.path[1].from
     if self.chaseProgress<0 then local first=c.path[1]
         q=point(first.from.x+first.direction.x*self.chaseProgress,first.from.y,first.from.z+first.direction.z*self.chaseProgress)
@@ -811,7 +828,6 @@ function Modes:_slice(dt)
     self:_vehicleGroupStep(dt)
     self.elapsed+=dt;self.previousRotation=self.rotation;self.rotation=self.elapsed*(self.course.rotationSpeed or 0)
     self:_objects(dt);self:_race(dt);self:_chase(dt)
-    for _,block in ipairs(self.blocks) do block.previous=copy(block.position) end
     for _,slot in ipairs(self.session.order) do
         local s=self.actors[slot]
         if s and not s.finished and self:_living(slot) then

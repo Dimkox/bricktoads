@@ -1,0 +1,54 @@
+PASS ice blocks move under a grounded push and keep their physical side boundary
+FAIL ice block pushes carry every supported hero once regardless of cohort order: ./build/ice_red_spec.lua:352: ./build/ice_red_spec.lua:338: pusher 102 rider 101 must receive accepted block movement once: block=0.005239914250047661, rider=0; ./build/ice_red_spec.lua:338: pusher 102 rider 101 must receive accepted block movement once: block=0.005239914250047661, rider=0
+FAIL ice blocks retain both solid depth faces across a long accepted frame: ./build/ice_red_spec.lua:374: ./build/ice_red_spec.lua:365: depth face -1 must stop the actor: z=-1.8017467844928095, face=9.2; ./build/ice_red_spec.lua:365: depth face 1 must stop the actor: z=11.801746784492812, face=0.7999999999999998
+FAIL ice block X pushes stop at authored limits without carrying riders farther: ./build/ice_red_spec.lua:389: standing hero receives only the displacement accepted before the X limit
+CampaignModes: 1 passed
+
+Focused collector above retains each independent failure; its temporary wrapper continues after assertion failures. Standard suite failure below (native exit code 1):
+./tests/campaign_modes/CampaignModes.spec.lua:3: ice block pushes carry every supported hero once regardless of cohort order: ./tests/campaign_modes/CampaignModes.spec.lua:352: ./tests/campaign_modes/CampaignModes.spec.lua:338: pusher 102 rider 101 must receive accepted block movement once: block=0.005239914250047661, rider=0; ./tests/campaign_modes/CampaignModes.spec.lua:338: pusher 102 rider 101 must receive accepted block movement once: block=0.005239914250047661, rider=0
+stacktrace:
+[C] function assert
+./tests/campaign_modes/CampaignModes.spec.lua:3 function test
+./tests/campaign_modes/CampaignModes.spec.lua:319
+./tests/run_campaign_modes.luau:4
+PASS all thirteen ordered modes produce independent deterministic playable layouts
+PASS new run seeds alter real course geometry while keeping every section authored
+PASS boss arenas belong only to the six real encounters and serpent course has four rooms
+PASS invalid campaign index and seed cannot silently build another run
+PASS authored vehicle sections preserve warning and steering distance for every seed
+PASS finale arrival and arena entry retain one continuous supported walking corridor
+PASS new courses retain physical obstacle families and only the entry patrol gates boarding
+PASS speeder has native flat support across the full riding distance and both steering edges
+CampaignDefinition: 8 passed
+PASS rope is attached descent with controllable swing and same-body checkpoint respawn
+PASS vehicle must be mounted and lane input cannot skip a wall during a long frame
+PASS ice accelerates and retains momentum after release while jump requires support
+PASS serpent support carries standing bodies and room exit must be reached in order
+PASS tube environment switches to swimming and returns to dry movement
+PASS race cannot finish without every bomb and a rat win kills rather than grants victory
+PASS clinger follows the current path direction and wrong input lets the chase catch up
+PASS offline roles never reuse held human input and closed modes release all bodies
+PASS walk modes cannot win from elapsed time and finale requires the arena entrance
+PASS boarding waits for the intro patrol and mounted attacks cannot schedule ground strikes
+PASS inactive electrical hazards do no damage while active hits use Session combat
+PASS spawn shield blocks a crash without granting completion or extending its deadline
+PASS kinematic combat knockback moves the actual body and prevents input during reaction
+PASS rope primary kick removes only a nearby breakable hazard
+PASS every race bomb requires a fresh near action and all three unlock the arena
+PASS holding the correct clinger direction traverses every real corner before the boss
+PASS top rotating support unlocks tower exit in its current orientation
+PASS human chase controls the same shared orb and disconnect never enables NPC pursuit
+PASS a physical speeder ramp launches once on crossing and cannot grant air jumps
+PASS nearby shaft blasters fire finite swept projectiles rather than decorative objects
+PASS jet directions separate throttle from altitude and preserve the flight lane
+PASS a pedestrian reaching the vehicle finish cannot bypass boarding
+PASS tower checkpoint respawn follows the actual support rotation
+PASS both tower springs launch from their rotating supports and reject airborne repeats
+PASS tower spring graphics remain aligned with their rotating support frames
+PASS rotated spring footprints retain pad edges and reject supported off-pad jumps
+PASS ascent springs retain their static graphics and launch power
+PASS first trio finisher releases only that body while remaining riders retain control
+PASS solo clinger retry resets chase position while preserving shared boss Life
+PASS jump accepts the takeoff run cap and cannot gain it from a midair toggle
+PASS run qualification requires accepted supported travel and ends in the air
+PASS ice blocks move under a grounded push and keep their physical side boundary

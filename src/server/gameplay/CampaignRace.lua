@@ -116,8 +116,11 @@ function Race:_lose()
     if self.failed or self.completeBombs or self.closed then return end
     self.failed=true;self.failedAttempts={};self.input={x=0,z=0,at=-math.huge};self.velocity.x=0;self.velocity.z=0
     for _,slot in ipairs(self.session.order) do
+        -- A death already pending in Session still belongs to this failed
+        -- round. Only its later committed attempt can authorize the retry.
+        local hero=self.session.state.heroes[slot]
+        if hero then self.failedAttempts[slot]=hero.attempt end
         if self:_living(slot) then
-            self.failedAttempts[slot]=self.session.state.heroes[slot].attempt
             self.session:_die(slot,'CampaignRatWon')
         end
     end

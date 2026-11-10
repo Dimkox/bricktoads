@@ -151,6 +151,52 @@ return function(Race,Definition,Session,Core,Combat,Config,FakeWorld)
         assert(not race.failed and race.elapsed<.1 and s.state.heroes[1].attempt==2 and s.state.heroes[1].respawns==2)
         assert(race.enemy.actorId==actor and w.enemySpawns==1 and w.points[race.enemyId].x<0)
     end)
+    test('a bomb loss during an existing death accepts only the later committed hero attempt',function()
+        for _,cause in ipairs({'Pending','Dying'}) do
+            local race,s,w,step=fixture(nil,1,point(30,3))
+            for _=1,800 do if race.position.x>26.8 then break end;step(.01) end
+            assert(not race.failed and race.position.x>26.8)
+            local actor=race.enemy.actorId
+            if cause=='Pending' then w.hazards[1]='ActorMissing'
+            else assert(s:_hit(-1,1,'HeroPowerPunch',{reaction=.4,deathDelay=.1})) end
+            step(.05)
+            assert(race.failed and s.state.heroes[1].attempt==1 and s.state.heroes[1].respawns==3)
+            if cause=='Dying' then
+                assert(s.combat[1].deathAt and s.state.heroes[1].status=='Alive')
+                step(.05)
+                assert(race.failed and s.state.heroes[1].status=='AwaitingRespawn','a pending death cannot authorize a retry')
+            end
+            step(.05)
+            local hero=s.state.heroes[1]
+            assert(not race.failed and hero.status=='Alive' and hero.attempt==2 and hero.respawns==2,
+                cause..' death must accept the already authorized committed respawn')
+            assert(s.combat[1].rawLife==47 and race.enemy.actorId==actor and w.enemySpawns==1)
+            assert(race:interact(1,s.now,'Punch')=='OK' and race.completeBombs,
+                'the paid retry must restore the nearby bomb action')
+        end
+    end)
+    test('an already pending offline hero cannot restart a failed race or spend a reserve',function()
+        local race,s,w,step=fixture()
+        for _=1,800 do if race.position.x>26.8 then break end;step(.01) end
+        assert(s:connection(1,false,s.now)=='OK');w.hazards[1]='ActorMissing';step(.05)
+        assert(race.failed and s.state.heroes[1].status=='AwaitingRespawn')
+        for _=1,20 do step(.05) end
+        local hero=s.state.heroes[1]
+        assert(race.failed and hero.attempt==1 and hero.respawns==3 and hero.status=='AwaitingRespawn')
+        assert(w.spawns==1 and w.enemySpawns==1 and race:interact(1,s.now,'Punch')=='NO_INTERACTION')
+    end)
+    test('an exhausted fixed cohort cannot create another race retry',function()
+        local d=flat();d.course.ratIntroSeconds=20
+        local race,s,w,step=fixture(d)
+        for spent=1,3 do
+            w.hazards[1]='ActorMissing';step(.05);step(.05)
+            assert(s.state.heroes[1].attempt==spent+1 and s.state.heroes[1].respawns==3-spent)
+        end
+        w.hazards[1]='ActorMissing';step(.05)
+        assert(s.state.status=='Lost' and s.state.heroes[1].status=='Eliminated' and race.closed)
+        for _=1,10 do step(.1) end
+        assert(s.state.heroes[1].attempt==4 and s.state.heroes[1].respawns==0 and w.spawns==4 and w.enemySpawns==1)
+    end)
     test('a trio retry never spends an offline fallen owners reserve or creates a replacement',function()
         local race,s,w,step=fixture(nil,3)
         assert(s:connection(2,false,0)=='OK')

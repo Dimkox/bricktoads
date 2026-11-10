@@ -316,6 +316,82 @@ return function(Definition,Modes)
         assert(b.position.x>start)
         assert(w.points[101].x<=b.position.x-b.definition.w/2-1.59)
     end)
+    test('ice block pushes carry every supported hero once regardless of cohort order',function()
+        local failures={}
+        for _,setup in ipairs({{pusher=101,cohort=2},{pusher=102,cohort=2},{pusher=102,cohort=3}}) do
+            local ok,err=pcall(function()
+                local _,s,w,m,step=fixture(4,41,setup.cohort)
+                local block=m.blocks[1];local start=block.position.x;local riders={}
+                for _,slot in ipairs(s.order) do
+                    local a=m.actors[slot]
+                    a.position={x=start,y=block.position.y+block.definition.h/2+3,z=block.position.z}
+                    a.velocity={x=0,y=0,z=0};a.grounded=true;a.support=block.id
+                    if slot==setup.pusher then
+                        a.position.x=start-block.definition.w/2-1.6;a.position.y-=block.definition.h;a.support='floor-2'
+                    else riders[#riders+1]=slot end
+                    w.points[slot]=table.clone(a.position)
+                end
+                for _=1,80 do
+                    m:move(setup.pusher,1,0,false);step(1/60)
+                    local delta=block.position.x-start
+                    for _,slot in ipairs(riders) do local a=m.actors[slot]
+                        assert(math.abs(a.position.x-start-delta)<1e-7,
+                            'pusher '..setup.pusher..' rider '..slot..' must receive accepted block movement once: block='..delta..', rider='..(a.position.x-start))
+                        assert(a.grounded and a.support==block.id and a.position.y==block.position.y+block.definition.h/2+3,
+                            'the moving block must retain its standing riders')
+                        assert(math.abs(w.points[slot].x-a.position.x)<1e-7 and w.points[slot].y==a.position.y and w.points[slot].z==a.position.z,
+                            'logical and published native rider poses must agree after every push')
+                    end
+                    assert(w.objects[block.id].position.x==block.position.x,'native block must publish the same accepted displacement')
+                end
+                assert(block.position.x>start,'ordinary grounded input must move the real ice block')
+                assert(not s.deaths)
+            end)
+            if not ok then failures[#failures+1]=tostring(err) end
+        end
+        assert(#failures==0,table.concat(failures,'; '))
+    end)
+    test('ice blocks retain both solid depth faces across a long accepted frame',function()
+        local failures={}
+        for _,direction in ipairs({-1,1}) do
+            local ok,err=pcall(function()
+                local _,s,w,m,step=fixture(4,41)
+                local block=m.blocks[1];local a=m.actors[101];local depth=block.definition.d/2+1.2
+                a.position={x=block.position.x,y=block.position.y-block.definition.h/2+3,z=block.position.z-direction*(depth+.2)}
+                a.velocity={x=0,y=0,z=direction*25};a.grounded=true;a.support='floor-2';w.points[101]=table.clone(a.position)
+                local blockX,blockZ=block.position.x,block.position.z
+                for _=1,4 do
+                    m:move(101,0,direction,false);step(.5)
+                    assert((a.position.z-blockZ)*direction<=-depth+1e-7,
+                        'depth face '..direction..' must stop the actor: z='..a.position.z..', face='..(blockZ-direction*depth))
+                    assert(w.points[101].z==a.position.z,'native pose must remain outside the same depth face')
+                end
+                assert(block.position.x==blockX and block.position.z==blockZ,'depth steering cannot push an authored X-only block')
+                assert(not s.deaths)
+            end)
+            if not ok then failures[#failures+1]=tostring(err) end
+        end
+        assert(#failures==0,table.concat(failures,'; '))
+    end)
+    test('ice block X pushes stop at authored limits without carrying riders farther',function()
+        for _,direction in ipairs({-1,1}) do
+            local _,_,w,m,step=fixture(4,41,2)
+            local block=m.blocks[1];local limit=direction==1 and block.definition.maxX or block.definition.minX
+            block.position.x=limit-direction*.05
+            local start=block.position.x;local rider=m.actors[101];local pusher=m.actors[102]
+            rider.position={x=start,y=block.position.y+block.definition.h/2+3,z=block.position.z}
+            rider.velocity={x=0,y=0,z=0};rider.grounded=true;rider.support=block.id
+            pusher.position={x=start-direction*(block.definition.w/2+1.6),y=block.position.y-block.definition.h/2+3,z=block.position.z}
+            pusher.velocity={x=0,y=0,z=0};pusher.grounded=true;pusher.support='floor-2'
+            w.points[101]=table.clone(rider.position);w.points[102]=table.clone(pusher.position)
+            for _=1,80 do m:move(102,direction,0,false);step(1/60) end
+            assert(math.abs(block.position.x-limit)<1e-7,'X pushing must reach and respect the authored limit')
+            assert(math.abs(rider.position.x-limit)<1e-7 and w.points[101].x==rider.position.x,
+                'standing hero receives only the displacement accepted before the X limit')
+            assert((pusher.position.x-block.position.x)*direction<=-block.definition.w/2-1.6+1e-7,
+                'the limited block retains its physical X side boundary')
+        end
+    end)
     test('emergency unsafe-spawn hold is preserved until Session authorizes safe control',function()
         local _,s,w,m,step=fixture(2)
         local count=w.poses

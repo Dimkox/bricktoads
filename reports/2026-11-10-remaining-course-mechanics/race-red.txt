@@ -1,0 +1,21 @@
+Command: .tools/luau-0.745/luau.exe tests/run_campaign_race.luau
+Exit code before production fix: 1
+
++./tests/campaign_race/CampaignRace.spec.lua:4: a bomb loss during an existing death accepts only the later committed hero attempt: ./tests/campaign_race/CampaignRace.spec.lua:171: Pending death must accept the already authorized committed respawn
+stacktrace:
+[C] function assert
+./tests/campaign_race/CampaignRace.spec.lua:4 function test
+./tests/campaign_race/CampaignRace.spec.lua:154
+./tests/run_campaign_race.luau:8
+PASS a real rival actor is claimable before its first movement without spawning or inventing health
+PASS elapsed deadlines cannot decide an obstructed physical race or award victory
+PASS rat body contact explodes the bomb through Session death without spending a respawn early
+PASS fresh nearby actions defuse only the current bomb and cannot finish by waiting
+PASS a nonlethal hit interrupts the real rival motor and recovery retains identity and ownership
+PASS offline ownership never enables NPC steering and stale connection commands cannot move the body
+PASS targeting the rival permanently closes its transfer window even when the attack misses
+PASS an NPC hit can stun the rival without taking its still open human role
+PASS the initial claim window does not suspend an already accepted physical hit
+PASS untrusted racer packets cannot teleport or bypass an old actor and sequence
+PASS an airborne rival above the bomb cannot explode it through a flat distance check
+PASS physical retry waits for a newly committed Session attempt and spends only that attempt
