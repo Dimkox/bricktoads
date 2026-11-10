@@ -1,0 +1,130 @@
+{
+  "current": {
+    "slot": 1,
+    "index": 1,
+    "rawLife": 47,
+    "attempt": 1,
+    "epoch": 1,
+    "notice": "REACTION",
+    "plan": {
+      "aimX": -0.47186317497553554,
+      "x": -0.47186317497553554,
+      "z": -0.8816717893309318,
+      "aimZ": -0.8816717893309318,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "guardianHits": 0,
+    "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:2",
+    "position": {
+      "y": 0.9974083304405212,
+      "x": 189.47503662109375,
+      "z": -2.0904653072357178
+    },
+    "target": -7,
+    "stock": 3,
+    "stage": "Route",
+    "runId": "e891806a-43db-4ab9-8072-e46276ce79ab"
+  },
+  "errors": [],
+  "expectedPlayers": 3,
+  "seed": 923546832,
+  "navigation": {
+    "phase": "Walk",
+    "target": {
+      "y": 3,
+      "x": 186.88616943359375,
+      "z": -6.927738666534424
+    }
+  },
+  "cohort": [
+    {
+      "ownerUserId": -1,
+      "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:2",
+      "slot": 1,
+      "status": "Alive",
+      "rawLife": 47,
+      "stock": 3,
+      "attempt": 1
+    },
+    {
+      "ownerUserId": -2,
+      "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:5",
+      "slot": 2,
+      "status": "Alive",
+      "rawLife": 47,
+      "stock": 3,
+      "attempt": 1
+    },
+    {
+      "ownerUserId": -3,
+      "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:8",
+      "slot": 3,
+      "status": "Alive",
+      "rawLife": 47,
+      "stock": 3,
+      "attempt": 1
+    }
+  ],
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794306808.834258,
+      "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:2",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:2",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        },
+        {
+          "ownerUserId": -2,
+          "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:5",
+          "slot": 2,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "e891806a-43db-4ab9-8072-e46276ce79ab:actor:8",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "e891806a-43db-4ab9-8072-e46276ce79ab",
+      "stock": 3
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Player1",
+      "userId": -1
+    },
+    {
+      "name": "Player2",
+      "userId": -2
+    },
+    {
+      "name": "Player3",
+      "userId": -3
+    }
+  ],
+  "policyLoads": 1,
+  "sampleCount": 80,
+  "build": "19d30b64738cf3858e2a33ffea07a381fda8b093a4e850b44751c646e1e19bf9"
+}

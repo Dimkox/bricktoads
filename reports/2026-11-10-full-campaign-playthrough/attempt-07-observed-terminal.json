@@ -1,0 +1,21 @@
+{
+  "runId": "dc5da037-9195-42bb-a8fc-d8932390ef51",
+  "seed": 1134337449,
+  "build": "19d30b64738cf3858e2a33ffea07a381fda8b093a4e850b44751c646e1e19bf9",
+  "clients": "Three standard Studio test clients, simulated player IDs -1/-2/-3, normal production intent senders",
+  "observedIndexes": [1, 5, 7],
+  "lastObserved": {
+    "index": 7,
+    "stage": "Jet",
+    "position": {"x": 317.5130920410156, "y": 26.29006576538086, "z": 4},
+    "result": "Lost",
+    "plannerErrors": [],
+    "cohort": [
+      {"slot": 1, "status": "Eliminated", "attempt": 4, "stock": 0, "rawLife": 0},
+      {"slot": 2, "status": "Eliminated", "attempt": 4, "stock": 0, "rawLife": 0},
+      {"slot": 3, "status": "Eliminated", "attempt": 4, "stock": 0, "rawLife": 0}
+    ]
+  },
+  "progressConclusion": "Observed index7 implies normal completion of levels1-6 under the unchanged production controller. No stage/health/stock/pose/completion overrides were used.",
+  "limitation": "The test instances disconnected after the terminal observation. The parent test API returned success with no result payload. Full stage-entry, death and hazard traces were not captured for this attempt, so resource loss cannot be assigned between Serpents and Jet. This is not a thirteen-level pass."
+}

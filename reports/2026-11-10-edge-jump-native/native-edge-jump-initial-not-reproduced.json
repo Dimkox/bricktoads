@@ -1,0 +1,92 @@
+{
+  "reason": "Both prepared native bodies did not naturally retain Climbing/Air with safe footprint; no forced-state substitute was used.",
+  "cleanup": {
+    "fixed": true,
+    "baseline": true
+  },
+  "finishedAt": "2026-11-10T09:26:08Z",
+  "preparation": "Two synthetic R6 bodies explicitly begin at local (46.49994,.2314,-3.5528), beside own floor ending X46/top0. Native Move attempts to establish Climbing; no Humanoid state is forced.",
+  "status": "NotReproduced",
+  "kind": "isolated-native-edge-jump-unit-fixture",
+  "cases": {
+    "fixed": {
+      "before": {
+        "floor": "Air",
+        "velocity": {
+          "y": -487.461669921875,
+          "x": -16,
+          "z": -5.326638188307697e-7
+        },
+        "state": "Dead",
+        "health": 0,
+        "position": {
+          "y": -607.0281982421875,
+          "x": 11.343950271606445,
+          "z": -3.48828125
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      },
+      "safeFootprint": false,
+      "initial": {
+        "floor": "Air",
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "state": "Running",
+        "health": 100,
+        "position": {
+          "y": 0.2313995361328125,
+          "x": 46.49993896484375,
+          "z": -3.552734375
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      }
+    },
+    "baseline": {
+      "before": {
+        "floor": "Air",
+        "velocity": {
+          "y": -487.461669921875,
+          "x": -16,
+          "z": -5.326638188307697e-7
+        },
+        "state": "Dead",
+        "health": 0,
+        "position": {
+          "y": -607.0281982421875,
+          "x": 11.343950271606445,
+          "z": -3.48828125
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      },
+      "safeFootprint": false,
+      "initial": {
+        "floor": "Air",
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "state": "Running",
+        "health": 100,
+        "position": {
+          "y": 0.2313995361328125,
+          "x": 46.49993896484375,
+          "z": -3.552734375
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      }
+    }
+  },
+  "limitations": "Prepared unit fixture only; no campaign clear, actual player input, client/network/device or full-playthrough claim."
+}

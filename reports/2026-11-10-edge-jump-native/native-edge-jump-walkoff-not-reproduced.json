@@ -1,0 +1,1936 @@
+{
+  "reason": "Both prepared native bodies did not naturally retain Climbing/Air with safe footprint; no forced-state substitute was used.",
+  "cleanup": {
+    "fixed": true,
+    "baseline": true
+  },
+  "finishedAt": "2026-11-10T09:27:24Z",
+  "preparation": "Two synthetic R6 bodies begin standing at local (43,3,-3.5528), walk just beyond own floor ending X46/top0, then steer back into its edge while falling. No Humanoid state is forced.",
+  "status": "NotReproduced",
+  "kind": "isolated-native-edge-jump-unit-fixture",
+  "cases": {
+    "fixed": {
+      "before": {
+        "floor": "Air",
+        "velocity": {
+          "y": -486.2515563964844,
+          "x": -16,
+          "z": 2.74961166724097e-7
+        },
+        "state": "Dead",
+        "health": 0,
+        "position": {
+          "y": -600.884765625,
+          "x": 12.805805206298828,
+          "z": -3.5703125
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      },
+      "trace": [
+        {
+          "floor": "Air",
+          "elapsed": 9.5367431640625e-7,
+          "velocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          },
+          "state": "Running",
+          "phase": "WalkOff",
+          "health": 100,
+          "position": {
+            "y": 3,
+            "x": 43,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Slate",
+          "elapsed": 0.10078096389770508,
+          "velocity": {
+            "y": 0,
+            "x": 16,
+            "z": 0
+          },
+          "state": "Running",
+          "phase": "WalkOff",
+          "health": 100,
+          "position": {
+            "y": 3,
+            "x": 45.69290542602539,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.21331214904785156,
+          "velocity": {
+            "y": -9.8100004196167,
+            "x": 16,
+            "z": 0
+          },
+          "state": "Running",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": 2.73431396484375,
+            "x": 47.426239013671875,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.3304619789123535,
+          "velocity": {
+            "y": -32.69998550415039,
+            "x": 6.466660976409912,
+            "z": 0
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": 0.206878662109375,
+            "x": 48.95525360107422,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.44684410095214844,
+          "velocity": {
+            "y": -53.792110443115234,
+            "x": -15.880678176879883,
+            "z": -0.003483436070382595
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -4.811256408691406,
+            "x": 48.072181701660156,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.5472171306610107,
+          "velocity": {
+            "y": -73.41209411621094,
+            "x": -16,
+            "z": -2.133626253453258e-8
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -11.21234130859375,
+            "x": 46.47246170043945,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.6631519794464111,
+          "velocity": {
+            "y": -96.30201721191406,
+            "x": -16,
+            "z": -1.0287607210557326e-7
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -21.160018920898438,
+            "x": 44.6058235168457,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.7635371685028076,
+          "velocity": {
+            "y": -115.92195129394531,
+            "x": -15.999999046325684,
+            "z": 2.096754769809195e-8
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -31.812095642089844,
+            "x": 43.0058479309082,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.8805789947509766,
+          "velocity": {
+            "y": -138.81198120117188,
+            "x": -16,
+            "z": 2.3046204944421333e-9
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -46.719268798828125,
+            "x": 41.13920974731445,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.9967751502990723,
+          "velocity": {
+            "y": -161.70211791992188,
+            "x": -16,
+            "z": -5.533763669518521e-9
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -64.29695129394531,
+            "x": 39.2725715637207,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.1142430305480957,
+          "velocity": {
+            "y": -185.40975952148438,
+            "x": -15.999999046325684,
+            "z": 9.937650702340761e-10
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -85.31768798828125,
+            "x": 37.33926773071289,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.2297029495239258,
+          "velocity": {
+            "y": -207.48239135742188,
+            "x": -16,
+            "z": 1.6753176623751642e-10
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -107.46385955810547,
+            "x": 35.5392951965332,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.330193042755127,
+          "velocity": {
+            "y": -227.10250854492188,
+            "x": -16,
+            "z": -1.8187051864515524e-10
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -129.23397827148438,
+            "x": 33.9393196105957,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.4302599430084229,
+          "velocity": {
+            "y": -247.54013061523438,
+            "x": -15.999999046325684,
+            "z": -2.48121523327427e-11
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -153.99752807617188,
+            "x": 32.27267837524414,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.5469801425933838,
+          "velocity": {
+            "y": -269.6127624511719,
+            "x": -16,
+            "z": 1.978150976356119e-11
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -183.13336181640625,
+            "x": 30.4726619720459,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.648210048675537,
+          "velocity": {
+            "y": -289.2328796386719,
+            "x": -16,
+            "z": -5.215383680479135e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -211.11651611328125,
+            "x": 28.87264060974121,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.764479160308838,
+          "velocity": {
+            "y": -312.9405212402344,
+            "x": -15.999999046325684,
+            "z": 8.242295734817162e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -247.5472412109375,
+            "x": 26.939281463623047,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.879676103591919,
+          "velocity": {
+            "y": -335.0131530761719,
+            "x": -16,
+            "z": -4.703792910731863e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -284.0406494140625,
+            "x": 25.139257431030273,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.9800350666046143,
+          "velocity": {
+            "y": -354.6332702636719,
+            "x": -16,
+            "z": -5.9827698351000436e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -318.5638427734375,
+            "x": 23.539236068725586,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.0809121131896973,
+          "velocity": {
+            "y": -374.2533874511719,
+            "x": -15.999999046325684,
+            "z": 9.777068044058979e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -355.04901123046875,
+            "x": 21.9392147064209,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.1812140941619873,
+          "velocity": {
+            "y": -393.8735046386719,
+            "x": -16,
+            "z": -5.8264504332328215e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -393.4962463378906,
+            "x": 20.33919334411621,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.2963509559631348,
+          "velocity": {
+            "y": -416.7636413574219,
+            "x": -16,
+            "z": -5.8832938520936295e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -440.8310852050781,
+            "x": 18.472501754760742,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.3969030380249023,
+          "velocity": {
+            "y": -436.3837585449219,
+            "x": -15.999999046325684,
+            "z": 9.976020010071807e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -483.5293273925781,
+            "x": 16.872480392456055,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.5134260654449463,
+          "velocity": {
+            "y": -459.2738952636719,
+            "x": -16,
+            "z": -6.73594513500575e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -535.82373046875,
+            "x": 15.005803108215332,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.632282018661499,
+          "velocity": {
+            "y": -482.9815368652344,
+            "x": -16,
+            "z": -6.679101716144942e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -592.801025390625,
+            "x": 13.072471618652344,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.7470080852508545,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.8630881309509277,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.980013132095337,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.0965051651000977,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.1971709728240967,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.2986881732940674,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.4130821228027344,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.5289061069488525,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.6293821334838867,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.7306621074676514,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.846688985824585,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.9658260345458984,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.081074953079224,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.19658899307251,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.314208030700684,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.430159091949463,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.531262159347534,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.647053003311157,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.747152090072632,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.848344087600708,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.96306300163269,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        }
+      ],
+      "safeFootprint": false,
+      "initial": {
+        "floor": "Air",
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "state": "Running",
+        "health": 100,
+        "position": {
+          "y": 3,
+          "x": 43,
+          "z": -3.552734375
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      }
+    },
+    "baseline": {
+      "before": {
+        "floor": "Air",
+        "velocity": {
+          "y": -486.2515563964844,
+          "x": -16,
+          "z": 2.74961166724097e-7
+        },
+        "state": "Dead",
+        "health": 0,
+        "position": {
+          "y": -600.884765625,
+          "x": 12.805805206298828,
+          "z": -3.5703125
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      },
+      "trace": [
+        {
+          "floor": "Air",
+          "elapsed": 9.5367431640625e-7,
+          "velocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          },
+          "state": "Running",
+          "phase": "WalkOff",
+          "health": 100,
+          "position": {
+            "y": 3,
+            "x": 43,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Slate",
+          "elapsed": 0.10078096389770508,
+          "velocity": {
+            "y": 0,
+            "x": 16,
+            "z": 0
+          },
+          "state": "Running",
+          "phase": "WalkOff",
+          "health": 100,
+          "position": {
+            "y": 3,
+            "x": 45.69290542602539,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.21331214904785156,
+          "velocity": {
+            "y": -9.8100004196167,
+            "x": 16,
+            "z": 0
+          },
+          "state": "Running",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": 2.73431396484375,
+            "x": 47.426239013671875,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.3304619789123535,
+          "velocity": {
+            "y": -32.69998550415039,
+            "x": 6.466660976409912,
+            "z": 0
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": 0.206878662109375,
+            "x": 48.95525360107422,
+            "z": -3.552734375
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.44684410095214844,
+          "velocity": {
+            "y": -53.792110443115234,
+            "x": -15.880678176879883,
+            "z": -0.003483436070382595
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -4.811256408691406,
+            "x": 48.072181701660156,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.5472171306610107,
+          "velocity": {
+            "y": -73.41209411621094,
+            "x": -16,
+            "z": -2.133626253453258e-8
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -11.21234130859375,
+            "x": 46.47246170043945,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.6631519794464111,
+          "velocity": {
+            "y": -96.30201721191406,
+            "x": -16,
+            "z": -1.0287607210557326e-7
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -21.160018920898438,
+            "x": 44.6058235168457,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.7635371685028076,
+          "velocity": {
+            "y": -115.92195129394531,
+            "x": -15.999999046325684,
+            "z": 2.096754769809195e-8
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -31.812095642089844,
+            "x": 43.0058479309082,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.8805789947509766,
+          "velocity": {
+            "y": -138.81198120117188,
+            "x": -16,
+            "z": 2.3046204944421333e-9
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -46.719268798828125,
+            "x": 41.13920974731445,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 0.9967751502990723,
+          "velocity": {
+            "y": -161.70211791992188,
+            "x": -16,
+            "z": -5.533763669518521e-9
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -64.29695129394531,
+            "x": 39.2725715637207,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.1142430305480957,
+          "velocity": {
+            "y": -185.40975952148438,
+            "x": -15.999999046325684,
+            "z": 9.937650702340761e-10
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -85.31768798828125,
+            "x": 37.33926773071289,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.2297029495239258,
+          "velocity": {
+            "y": -207.48239135742188,
+            "x": -16,
+            "z": 1.6753176623751642e-10
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -107.46385955810547,
+            "x": 35.5392951965332,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.330193042755127,
+          "velocity": {
+            "y": -227.10250854492188,
+            "x": -16,
+            "z": -1.8187051864515524e-10
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -129.23397827148438,
+            "x": 33.9393196105957,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.4302599430084229,
+          "velocity": {
+            "y": -247.54013061523438,
+            "x": -15.999999046325684,
+            "z": -2.48121523327427e-11
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -153.99752807617188,
+            "x": 32.27267837524414,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.5469801425933838,
+          "velocity": {
+            "y": -269.6127624511719,
+            "x": -16,
+            "z": 1.978150976356119e-11
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -183.13336181640625,
+            "x": 30.4726619720459,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.648210048675537,
+          "velocity": {
+            "y": -289.2328796386719,
+            "x": -16,
+            "z": -5.215383680479135e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -211.11651611328125,
+            "x": 28.87264060974121,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.764479160308838,
+          "velocity": {
+            "y": -312.9405212402344,
+            "x": -15.999999046325684,
+            "z": 8.242295734817162e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -247.5472412109375,
+            "x": 26.939281463623047,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.879676103591919,
+          "velocity": {
+            "y": -335.0131530761719,
+            "x": -16,
+            "z": -4.703792910731863e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -284.0406494140625,
+            "x": 25.139257431030273,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 1.9800350666046143,
+          "velocity": {
+            "y": -354.6332702636719,
+            "x": -16,
+            "z": -5.9827698351000436e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -318.5638427734375,
+            "x": 23.539236068725586,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.0809121131896973,
+          "velocity": {
+            "y": -374.2533874511719,
+            "x": -15.999999046325684,
+            "z": 9.777068044058979e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -355.04901123046875,
+            "x": 21.9392147064209,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.1812140941619873,
+          "velocity": {
+            "y": -393.8735046386719,
+            "x": -16,
+            "z": -5.8264504332328215e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -393.4962463378906,
+            "x": 20.33919334411621,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.2963509559631348,
+          "velocity": {
+            "y": -416.7636413574219,
+            "x": -16,
+            "z": -5.8832938520936295e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -440.8310852050781,
+            "x": 18.472501754760742,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.3969030380249023,
+          "velocity": {
+            "y": -436.3837585449219,
+            "x": -15.999999046325684,
+            "z": 9.976020010071807e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -483.5293273925781,
+            "x": 16.872480392456055,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.5134260654449463,
+          "velocity": {
+            "y": -459.2738952636719,
+            "x": -16,
+            "z": -6.73594513500575e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -535.82373046875,
+            "x": 15.005803108215332,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.632282018661499,
+          "velocity": {
+            "y": -482.9815368652344,
+            "x": -16,
+            "z": -6.679101716144942e-12
+          },
+          "state": "Freefall",
+          "phase": "Backstep",
+          "health": 100,
+          "position": {
+            "y": -592.801025390625,
+            "x": 13.072471618652344,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.7470080852508545,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.8630881309509277,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 2.980013132095337,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.0965051651000977,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.1971709728240967,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.2986881732940674,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.4130821228027344,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.5289061069488525,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.6293821334838867,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.7306621074676514,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.846688985824585,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 3.9658260345458984,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.081074953079224,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.19658899307251,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.314208030700684,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.430159091949463,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.531262159347534,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.647053003311157,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.747152090072632,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.848344087600708,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        },
+        {
+          "floor": "Air",
+          "elapsed": 4.96306300163269,
+          "velocity": {
+            "y": -486.2515563964844,
+            "x": -16,
+            "z": 2.74961166724097e-7
+          },
+          "state": "Dead",
+          "phase": "Backstep",
+          "health": 0,
+          "position": {
+            "y": -600.884765625,
+            "x": 12.805805206298828,
+            "z": -3.5703125
+          },
+          "consumed": false,
+          "platformStand": false,
+          "anchored": false
+        }
+      ],
+      "safeFootprint": false,
+      "initial": {
+        "floor": "Air",
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "state": "Running",
+        "health": 100,
+        "position": {
+          "y": 3,
+          "x": 43,
+          "z": -3.552734375
+        },
+        "consumed": false,
+        "platformStand": false,
+        "anchored": false
+      }
+    }
+  },
+  "limitations": "Prepared unit fixture only; no campaign clear, actual player input, client/network/device or full-playthrough claim."
+}
