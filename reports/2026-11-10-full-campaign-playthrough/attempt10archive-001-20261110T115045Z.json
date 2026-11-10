@@ -1,0 +1,2611 @@
+{
+  "current": {
+    "slot": 2,
+    "index": 1,
+    "rawLife": 47,
+    "attempt": 3,
+    "epoch": 1,
+    "plan": {
+      "aimX": 0.9949424998695008,
+      "x": 0.9949424998695008,
+      "z": -0.10044611467562267,
+      "aimZ": -0.10044611467562267,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "guardianHits": 2,
+    "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:123",
+    "position": {
+      "y": 3,
+      "x": 591.5941772460938,
+      "z": 4.325682640075684
+    },
+    "target": -99,
+    "stock": 1,
+    "stage": "Boss",
+    "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84"
+  },
+  "sampleSelection": "Every fifth one-second observation, all stage/boss-phase/attempt/stock transitions, and final30 observations",
+  "navigation": {
+    "phase": "Walk",
+    "target": {
+      "y": 2.999999761581421,
+      "x": 633.00048828125,
+      "z": 0.14543798565864563
+    }
+  },
+  "expectedPlayers": 3,
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794311258.44304,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        },
+        {
+          "ownerUserId": -2,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+          "slot": 2,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+      "stock": 3
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Player1",
+      "userId": -1
+    },
+    {
+      "name": "Player2",
+      "userId": -2
+    },
+    {
+      "name": "Player3",
+      "userId": -3
+    }
+  ],
+  "sampleCount": 177,
+  "build": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "jumpProbes": [],
+  "samples": [
+    {
+      "p": {
+        "y": 3,
+        "x": -65,
+        "z": -7
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9994449072256786,
+        "x": 0.9994449072256786,
+        "z": -0.033314822836912096,
+        "aimZ": -0.03331482283691209,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311258.44304,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -1,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": -58.857879638671875,
+        "z": -19.25753402709961
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.678679076653315,
+        "x": -0.5764912700772304,
+        "z": -0.8171033077431161,
+        "aimZ": 0.7344349603014578,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311263.742553,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -2,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3.0010640621185303,
+        "x": -34.70466232299805,
+        "z": -11.740702629089355
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9905823173503743,
+        "x": -0.9905823173503743,
+        "z": -0.13691848871778575,
+        "aimZ": -0.13691848871778575,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311269.026665,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -3,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": -65.4323501586914,
+        "z": 6.9264678955078125
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311274.341825,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -1,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.9999895095825195,
+        "x": 8.848134994506836,
+        "z": -3.342297077178955
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9502546323309156,
+        "x": 0.9502546323309157,
+        "z": -0.3114741301193992,
+        "aimZ": -0.3114741301193991,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311279.642678,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -4,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.9999678134918213,
+        "x": 19.492525100708008,
+        "z": -0.012260086834430695
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.764969807929798,
+        "x": 0,
+        "z": 0,
+        "aimZ": 0.6440661402028894,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311284.9424,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -5,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 18.215408325195312,
+        "z": 0.04261915758252144
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.8155455385361002,
+        "x": 0.8155455385361002,
+        "z": 0.5786929017828562,
+        "aimZ": 0.5786929017828562,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311290.375446,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -5,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 33.343284606933594,
+        "z": 0.13023628294467926
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.999458189867027,
+        "x": 0.9985875497646951,
+        "z": -0.053131021587603695,
+        "aimZ": -0.03291392877986141,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311295.708954,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -6,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 31.093198776245117,
+        "z": 1.5778958797454834
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9681414276427903,
+        "x": -0.9681352470971691,
+        "z": 0.2504279204244269,
+        "aimZ": -0.2504040256900433,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311300.941672,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "target": -6,
+      "stage": "Route",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 66.24324035644531,
+        "z": -0.29488644003868103
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9999849546032934,
+        "z": 0.005485486947325013,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311303.124868,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:69",
+      "stage": "Route",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 114.64250183105469,
+        "z": -0.029388820752501488
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9999849547135543,
+        "z": 0.005485466847123611,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311306.158931,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:69",
+      "stage": "Route",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.9999990463256836,
+        "x": 191.62295532226562,
+        "z": 4.8507819175720215
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "x": 0.99286072423835,
+        "z": -0.1192794293451269,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311311.474596,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:69",
+      "stage": "Route",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 4.999917507171631,
+        "x": 281.4048767089844,
+        "z": 2.511657953262329
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9993518077644612,
+        "x": 0.9993518077644612,
+        "z": 0.03599950441191217,
+        "aimZ": 0.03599950441191217,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311316.874703,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:69",
+      "target": -9,
+      "stage": "Route",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 4.9999613761901855,
+        "x": 315.50830078125,
+        "z": -8.036809921264648
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 3,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9653068394755686,
+        "x": -0.18870954302771306,
+        "z": 0.9820329466826822,
+        "aimZ": 0.26111818332258785,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311320.990594,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:82",
+      "target": -10,
+      "stage": "Route",
+      "stock": 1
+    },
+    {
+      "p": {
+        "y": 4.991165637969971,
+        "x": 305.52252197265625,
+        "z": -4.181233882904053
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 3,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.31151234007234907,
+        "x": 0.47747802734375,
+        "z": 0.09538555145263672,
+        "aimZ": 0.9502421070351751,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311322.007482,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:82",
+      "target": -10,
+      "stage": "Route",
+      "stock": 1
+    },
+    {
+      "p": {
+        "y": 4.994991779327393,
+        "x": 315.7818603515625,
+        "z": -9.285062789916992
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "aimX": -0.9343651477320523,
+        "x": -0.2447911942465996,
+        "z": 0.9695758202530236,
+        "aimZ": 0.35631695259089213,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311323.074594,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "target": -10,
+      "stage": "Route",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 4.999475955963135,
+        "x": 308.3244934082031,
+        "z": 1.7076523303985596
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "x": 0.3915685879405471,
+        "z": 0.920148923239193,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311327.224469,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "stage": "Route",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 388.8744812011719,
+        "z": -6.425534248352051
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.8370963459080178,
+        "x": 0.8370963459080187,
+        "z": -0.5470554886548922,
+        "aimZ": -0.5470554886548934,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311332.473925,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "target": -11,
+      "stage": "Route",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 2.941814661026001,
+        "x": 400.0611572265625,
+        "z": -11.57668685913086
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9960929763846371,
+        "x": 0.33591085049869207,
+        "z": 0.029780882018584975,
+        "aimZ": 0.08831071507577537,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311337.674148,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "target": -13,
+      "stage": "Route",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 9.14516830444336,
+        "x": 382.614013671875,
+        "z": 13.451576232910156
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.4624362099259081,
+        "x": 0.4624362099259081,
+        "z": -0.886652554132317,
+        "aimZ": -0.886652554132317,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311343.00704,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "target": -12,
+      "stage": "Route",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 442.7550964355469,
+        "z": 4.004464626312256
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9832976785562824,
+        "z": -0.18200460254022663,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311348.274256,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "stage": "Route",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 2.999070882797241,
+        "x": 537.9633178710938,
+        "z": -2.9972996711730957
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9999999988792859,
+        "z": -0.00004734372202392661,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311353.657991,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "stage": "Route",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 601.9087524414062,
+        "z": -2.433029890060425
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9976050034512567,
+        "z": 0.06916832431841899,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311358.923402,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "stage": "BossIntro",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 621.80517578125,
+        "z": -2.982527494430542
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9631140150419195,
+        "x": -0.9891787925517367,
+        "z": 0.14671508567931343,
+        "aimZ": 0.2690936528977101,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311364.157776,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 1.0258585214614868,
+        "x": 597.4102783203125,
+        "z": -3.0506582260131836
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9959919649941437,
+        "z": 0.0894427507800643,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "at": 1794311369.506325,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "notice": "REACTION",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 609.0032348632812,
+        "z": 5.438263893127441
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9765296462141386,
+        "x": -0.00274658203125,
+        "z": 0.03283617636078695,
+        "aimZ": -0.21538303105140175,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311374.822973,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 4.366900444030762,
+        "x": 603.3939819335938,
+        "z": -2.9223132133483887
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 4,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9946745542185023,
+        "x": -0.05719690554018219,
+        "z": 0.9983629169779031,
+        "aimZ": 0.10306566445826641,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311380.055972,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 0
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": -60.02538299560547,
+        "z": 0.0010365210473537445
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999999782921953,
+        "x": 0.9999999782921953,
+        "z": 0.00020836412561553856,
+        "aimZ": 0.00020836412561553856,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311383.190864,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": -26.425128936767578,
+        "z": 0.008014081977307796
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999999782847797,
+        "x": 0.9999999782847797,
+        "z": 0.00020839971290949238,
+        "aimZ": 0.00020839971290949238,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311385.323192,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 71.82427215576172,
+        "z": 0.1457754224538803
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999999999998195,
+        "x": 0.9999999999998195,
+        "z": -6.009309897454664e-7,
+        "aimZ": -6.009309897454664e-7,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311390.638546,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 158.22296142578125,
+        "z": 0.14572423696517944
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999999999998185,
+        "x": 0.9999999999998185,
+        "z": -6.024145452902359e-7,
+        "aimZ": -6.024145452902359e-7,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311396.039167,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 242.99267578125,
+        "z": 0.14564605057239532
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.999999999999858,
+        "x": 0.9999999999793066,
+        "z": -0.000006433259372401459,
+        "aimZ": -5.329159818606392e-7,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311401.238181,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 11.675803184509277,
+        "x": 350.8561096191406,
+        "z": 0.14527349174022675
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999999999998296,
+        "x": -0.856109619140625,
+        "z": 0.00016470253467559814,
+        "aimZ": 5.838582989995984e-7,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311406.571641,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 422.3438415527344,
+        "z": -0.35577628016471863
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999971694881065,
+        "x": 0.9992501543991102,
+        "z": -0.038718586406974356,
+        "aimZ": 0.00237928892217577,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311411.838171,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 455.1400451660156,
+        "z": -0.4489392340183258
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999944161692763,
+        "x": 0.9999944161692763,
+        "z": 0.003341800453095646,
+        "aimZ": 0.003341800453095646,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311413.888331,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 471.3985900878906,
+        "z": -0.7241873145103455
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.999985521213378,
+        "x": 0.9985883577783055,
+        "z": -0.05311583294674822,
+        "aimZ": 0.0053812046614741356,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311414.904228,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 488.72064208984375,
+        "z": -1.061844825744629
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999649930695435,
+        "x": 0.9999649930695435,
+        "z": 0.008367355342509892,
+        "aimZ": 0.008367355342509892,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311415.987976,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 512.814208984375,
+        "z": -0.3938012421131134
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999899349257614,
+        "x": 0.9994654782004921,
+        "z": 0.03269186267959477,
+        "aimZ": 0.004486652111694817,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311417.087611,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 9.851244926452637,
+        "x": 537.2083129882812,
+        "z": 0.17317187786102295
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999999580892901,
+        "x": 0.9998802206758762,
+        "z": -0.01547721877990902,
+        "aimZ": -0.0002895192883861561,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311418.104818,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 548.8184204101562,
+        "z": 0.10308177024126053
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999998734188573,
+        "x": 0.9999998734188573,
+        "z": 0.0005031523321073252,
+        "aimZ": 0.0005031523321073252,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311419.171613,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 566.9556274414062,
+        "z": 0.11220578849315643
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999998734054417,
+        "x": 0.9999998734054417,
+        "z": 0.0005031789945644996,
+        "aimZ": 0.0005031789945644996,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311420.304536,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 583.2030639648438,
+        "z": -1.9606658220291138
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9991068308266385,
+        "x": 0.9427981864214688,
+        "z": -0.33336403477338267,
+        "aimZ": 0.04225565755672033,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311421.337486,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 599.9383544921875,
+        "z": -3.8235321044921875
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9928714581220283,
+        "x": 0.8787101040579718,
+        "z": 0.4773557929117739,
+        "aimZ": 0.11919004843793668,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311422.437896,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 609.2575073242188,
+        "z": 6.2170329093933105
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9688241677284006,
+        "x": -0.25701904296875,
+        "z": -0.07260334819702585,
+        "aimZ": -0.2477493330472794,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311423.537477,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 608.117431640625,
+        "z": -0.5916890501976013
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.999561507906633,
+        "x": 0.5166964867266153,
+        "z": 0.8561686402831937,
+        "aimZ": 0.02961067225542101,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311424.638358,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 1.8271143436431885,
+        "x": 601.3859252929688,
+        "z": 10.724630355834961
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9483136595336347,
+        "x": 0.4250368893953692,
+        "z": -0.905176028545337,
+        "aimZ": -0.31733452875778484,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311425.671072,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "notice": "REACTION",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 603.0716552734375,
+        "z": 0.5142732858657837
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999240713669986,
+        "x": -0.0716552734375,
+        "z": -0.4159294366836548,
+        "aimZ": -0.012322804098322879,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311426.753606,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 602.7572021484375,
+        "z": -0.8028101325035095
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9995088251589584,
+        "x": 0.2427978515625,
+        "z": 0.9011539816856384,
+        "aimZ": 0.0313386092441659,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311427.854541,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 0.9996005892753601,
+        "x": 591.6472778320312,
+        "z": -5.1229023933410645
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9919822674358659,
+        "z": 0.12637713833126002,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311428.954356,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "notice": "REACTION",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 599.8627319335938,
+        "z": -4.088247299194336
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9919372404986495,
+        "x": 0,
+        "z": 0,
+        "aimZ": 0.12673007106414924,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311429.970445,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 603.552978515625,
+        "z": 0.8361268639564514
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9997250469610437,
+        "x": -0.552978515625,
+        "z": -0.7377830147743225,
+        "aimZ": -0.023448464315152413,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 1,
+      "at": 1794311430.988532,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 604.1682739257812,
+        "z": 1.6583983898162842
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.998626042519935,
+        "x": -0.5994196153691536,
+        "z": -0.8004349597004718,
+        "aimZ": -0.05240254956557739,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311432.020257,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 604.3263549804688,
+        "z": 1.86927330493927
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.99819778902524,
+        "x": -0.5994670213203731,
+        "z": -0.8003994567397452,
+        "aimZ": -0.0600097824118894,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311433.054184,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 3
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 590.4125366210938,
+        "z": 2.168466091156006
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9988736689426109,
+        "x": 0.9988736689426109,
+        "z": -0.047448851336226325,
+        "aimZ": -0.047448851336226325,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311434.140456,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 603.595703125,
+        "z": -0.20957496762275696
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999271255593278,
+        "x": -0.595703125,
+        "z": 0.30791881680488586,
+        "aimZ": 0.012072430188670352,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311435.187032,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 3,
+        "x": 601.6128540039062,
+        "z": 0.30537980794906616
+      },
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9999870172190142,
+        "x": 0.9890444459035975,
+        "z": -0.14761803422091002,
+        "aimZ": -0.00509562492919415,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311436.303834,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.9992282390594482,
+        "x": 600.0490112304688,
+        "z": -3.3316845893859863
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9944785677996112,
+        "x": 0.4854371113829562,
+        "z": 0.8742715887481255,
+        "aimZ": 0.10493987891756938,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311437.437719,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 604.0869140625,
+        "z": -0.35452187061309814
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9998505349878887,
+        "x": -0.4216270794538716,
+        "z": 0.9067693234065644,
+        "aimZ": 0.01728894688616792,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311438.471148,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 604.2933959960938,
+        "z": 3.705381393432617
+      },
+      "index": 1,
+      "rawLife": 31,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9923984230966745,
+        "x": -0.6004876731262793,
+        "z": -0.7996340127979716,
+        "aimZ": -0.12306652605495115,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311439.537481,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 1.845009446144104,
+        "x": 590.0955200195312,
+        "z": -3.8052313327789307
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9957874485879903,
+        "x": 0.9957874485879903,
+        "z": 0.09169164211977347,
+        "aimZ": 0.09169164211977347,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311440.570863,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "notice": "REACTION",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 603.952880859375,
+        "z": 2.2445969581604004
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9973989845822046,
+        "x": -0.952880859375,
+        "z": -0.2615547180175781,
+        "aimZ": -0.072078190559886,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311441.687118,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 603.1018676757812,
+        "z": 2.2571167945861816
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9975151376153293,
+        "x": -0.10186767578125,
+        "z": -0.2740745544433594,
+        "aimZ": -0.07045246786501269,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311442.687166,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.999999523162842,
+        "x": 603.1303100585938,
+        "z": 2.199385404586792
+      },
+      "index": 1,
+      "rawLife": 15,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "aimX": 0.9976442116982887,
+        "x": -0.13031005859375,
+        "z": -0.21634316444396973,
+        "aimZ": -0.06860048735176913,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311443.804074,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "target": -99,
+      "stage": "Boss",
+      "stock": 2
+    },
+    {
+      "p": {
+        "y": 2.1481664180755615,
+        "x": 594.0700073242188,
+        "z": 2.932753562927246
+      },
+      "index": 1,
+      "rawLife": 0,
+      "attempt": 2,
+      "epoch": 1,
+      "plan": {
+        "x": 0.9976746804155922,
+        "z": -0.06815593926904584,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "guardianHits": 2,
+      "at": 1794311444.820627,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "notice": "REACTION",
+      "stage": "Boss",
+      "stock": 2
+    }
+  ],
+  "eventCounts": {
+    "1": {
+      "EnemySpawned": 13,
+      "ConfirmedDeath": 6,
+      "CommitSpawn": 8,
+      "SetHealth": 49,
+      "BossHit": 2,
+      "InteractionAccepted": 12,
+      "EnemyAttackMiss": 13,
+      "GuardianBallThrown": 2,
+      "AttackAccepted": 32,
+      "EnemyGrabbed": 3,
+      "BossShot": 26,
+      "EnemyHit": 31,
+      "DragonMounted": 1,
+      "EnemyRecovery": 20,
+      "DragonReleased": 1,
+      "BossWarning": 10,
+      "BossAssigned": 1,
+      "EnemyAttackAccepted": 56,
+      "BeginAttack": 41,
+      "GuardianBallPickedUp": 3,
+      "ExpireShield": 4,
+      "Death": 6,
+      "WalkerClubCreated": 2,
+      "EnemyThrowDamage": 3,
+      "EnemyDeath": 13,
+      "EnemyThrown": 3,
+      "Hit": 31,
+      "AttackMiss": 4,
+      "ReserveSpawn": 8,
+      "RunStarted": 1,
+      "EnemyGrabAccepted": 3
+    }
+  },
+  "events": [
+    {
+      "view": "Playing",
+      "revision": 2,
+      "rawLife": 47,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "eventId": "s-3",
+        "code": "OK"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311257.898887,
+      "late": false,
+      "status": "Alive",
+      "kind": "CommitSpawn",
+      "seq": 3,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 4,
+      "rawLife": 47,
+      "attempt": 1,
+      "userId": 2,
+      "data": {
+        "eventId": "s-6",
+        "code": "OK"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311257.898887,
+      "late": false,
+      "status": "Alive",
+      "kind": "CommitSpawn",
+      "seq": 5,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 6,
+      "rawLife": 47,
+      "attempt": 1,
+      "userId": 3,
+      "data": {
+        "eventId": "s-9",
+        "code": "OK"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311257.898887,
+      "late": false,
+      "status": "Alive",
+      "kind": "CommitSpawn",
+      "seq": 7,
+      "connected": true
+    },
+    {
+      "revision": 11,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-2",
+        "position": {
+          "y": 2.999999761581421,
+          "x": -56.436317443847656,
+          "z": -16.330900192260742
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-2",
+      "userId": -2,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 38,
+      "now": 1794311264.493435
+    },
+    {
+      "revision": 35,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-3",
+        "position": {
+          "y": 2.99371600151062,
+          "x": -40.25444793701172,
+          "z": 5.522902488708496
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-3",
+      "userId": -3,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 98,
+      "now": 1794311273.06256
+    },
+    {
+      "revision": 39,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-1",
+        "position": {
+          "y": 3,
+          "x": -71.77027130126953,
+          "z": 7.1716532707214355
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 107,
+      "now": 1794311274.445535
+    },
+    {
+      "revision": 42,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-4",
+        "position": {
+          "y": 2.9971799850463867,
+          "x": 22.5866641998291,
+          "z": 1.2850922346115112
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-4",
+      "userId": -4,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 127,
+      "now": 1794311282.110944
+    },
+    {
+      "revision": 58,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-5",
+        "position": {
+          "y": 2.999999523162842,
+          "x": 17.916440963745117,
+          "z": 2.160731554031372
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-5",
+      "userId": -5,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 181,
+      "now": 1794311294.793196
+    },
+    {
+      "revision": 63,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-6",
+        "position": {
+          "y": 3,
+          "x": 38.960689544677734,
+          "z": -0.4583408832550049
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-6",
+      "userId": -6,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 199,
+      "now": 1794311301.592073
+    },
+    {
+      "view": "Playing",
+      "revision": 64,
+      "rawLife": 31,
+      "attempt": 1,
+      "data": {
+        "eventId": "s-67",
+        "code": "OK"
+      },
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311302.592525,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "Death",
+      "seq": 200,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 64,
+      "rawLife": 0,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            23.9996395111084,
+            -133.44775390625,
+            0.13158296048641205
+          ],
+          "held": false,
+          "position": [
+            59.63543701171875,
+            -37.17692565917969,
+            -0.3311328887939453
+          ]
+        },
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+        "reason": "Fall"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311302.592525,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 201,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 2,
+      "now": 1794311302.609466,
+      "shieldKind": "Normal",
+      "revision": 66,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:69",
+      "data": {
+        "eventId": "s-70",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 203,
+      "shieldUntil": 1794311304.609466
+    },
+    {
+      "revision": 69,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-7",
+        "position": {
+          "y": 2.998183488845825,
+          "x": 156.75323486328125,
+          "z": -10.466343879699707
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-7",
+      "userId": -7,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 216,
+      "now": 1794311308.660549
+    },
+    {
+      "revision": 71,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-8",
+        "position": {
+          "y": 2.9188051223754883,
+          "x": 183.38609313964844,
+          "z": 6.588804244995117
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-8",
+      "userId": -8,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 226,
+      "now": 1794311310.794074
+    },
+    {
+      "revision": 73,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-9",
+        "position": {
+          "y": 6.468080520629883,
+          "x": 288.45013427734375,
+          "z": 2.7654571533203125
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-9",
+      "userId": -9,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 240,
+      "now": 1794311317.843449
+    },
+    {
+      "view": "Playing",
+      "revision": 76,
+      "rawLife": 31,
+      "attempt": 2,
+      "data": {
+        "eventId": "s-80",
+        "code": "OK"
+      },
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794311320.577579,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "Death",
+      "seq": 248,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 76,
+      "rawLife": 0,
+      "attempt": 2,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -5.96252965927124,
+            -122.40089416503906,
+            -9.712416648864746
+          ],
+          "held": false,
+          "position": [
+            310.15374755859375,
+            -36.28600311279297,
+            -14.399432182312012
+          ]
+        },
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:69",
+        "reason": "Fall"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:69",
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794311320.577579,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 249,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 1,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 3,
+      "now": 1794311320.59255,
+      "shieldKind": "Normal",
+      "revision": 78,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:82",
+      "data": {
+        "eventId": "s-83",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 251,
+      "shieldUntil": 1794311322.59255
+    },
+    {
+      "view": "Playing",
+      "revision": 80,
+      "rawLife": 47,
+      "attempt": 3,
+      "data": {
+        "eventId": "s-85",
+        "code": "OK"
+      },
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 1,
+      "now": 1794311322.776002,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "Death",
+      "seq": 255,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 80,
+      "rawLife": 0,
+      "attempt": 3,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -3.2851152420043945,
+            -124.36782836914062,
+            -7.981333255767822
+          ],
+          "held": false,
+          "position": [
+            311.465576171875,
+            -35.536006927490234,
+            -10.817514419555664
+          ]
+        },
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:82",
+        "reason": "Fall"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:82",
+      "levelEpoch": 1,
+      "respawns": 1,
+      "now": 1794311322.776002,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 256,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 0,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 4,
+      "now": 1794311322.792789,
+      "shieldKind": "Normal",
+      "revision": 82,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "data": {
+        "eventId": "s-88",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 258,
+      "shieldUntil": 1794311324.792789
+    },
+    {
+      "revision": 84,
+      "data": {
+        "cause": "Fall",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-10",
+        "position": {
+          "y": -35.488059997558594,
+          "x": 305.2986755371094,
+          "z": -12.024552345275879
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-10",
+      "userId": -10,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 267,
+      "now": 1794311326.776477
+    },
+    {
+      "revision": 86,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-11",
+        "position": {
+          "y": 2.944303512573242,
+          "x": 402.52734375,
+          "z": -15.34261703491211
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-11",
+      "userId": -11,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 280,
+      "now": 1794311333.359624
+    },
+    {
+      "revision": 93,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-13",
+        "position": {
+          "y": 2.978243589401245,
+          "x": 401.33990478515625,
+          "z": -11.46362590789795
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-13",
+      "userId": -13,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 305,
+      "now": 1794311338.8817
+    },
+    {
+      "revision": 97,
+      "data": {
+        "cause": "Combat",
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-12",
+        "position": {
+          "y": 3,
+          "x": 390.0234069824219,
+          "z": 13.449767112731934
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:enemy:1:-12",
+      "userId": -12,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 328,
+      "now": 1794311344.908188
+    },
+    {
+      "view": "Playing",
+      "revision": 99,
+      "rawLife": 31,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "target": -99,
+        "projectileId": -1005
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794311373.706006,
+      "late": false,
+      "status": "Alive",
+      "kind": "GuardianBallThrown",
+      "seq": 342,
+      "connected": true
+    },
+    {
+      "revision": 99,
+      "data": {
+        "before": 47,
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:boss:1",
+        "projectileId": -1005,
+        "after": 31,
+        "hits": 1
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:boss:1",
+      "userId": -99,
+      "late": false,
+      "kind": "BossHit",
+      "seq": 345,
+      "now": 1794311374.626311
+    },
+    {
+      "view": "Choice",
+      "revision": 102,
+      "rawLife": 0,
+      "attempt": 4,
+      "data": {
+        "eventId": "s-108",
+        "code": "OK"
+      },
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794311382.793353,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "Death",
+      "seq": 355,
+      "connected": true
+    },
+    {
+      "view": "Choice",
+      "revision": 102,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -0.0000829850323498249,
+            -0.00044423056533560157,
+            0.0000825127717689611
+          ],
+          "held": false,
+          "position": [
+            591.870361328125,
+            0.4989374279975891,
+            -2.875401020050049
+          ]
+        },
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+        "reason": "CombatUnderflow"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794311382.793353,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "ConfirmedDeath",
+      "seq": 356,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 105,
+      "rawLife": 15,
+      "attempt": 1,
+      "userId": 2,
+      "data": {
+        "target": -99,
+        "projectileId": -1023
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311430.404231,
+      "late": false,
+      "status": "Alive",
+      "kind": "GuardianBallThrown",
+      "seq": 376,
+      "connected": true
+    },
+    {
+      "revision": 105,
+      "data": {
+        "before": 31,
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:boss:1",
+        "projectileId": -1023,
+        "after": 15,
+        "hits": 2
+      },
+      "levelEpoch": 1,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:boss:1",
+      "userId": -99,
+      "late": false,
+      "kind": "BossHit",
+      "seq": 379,
+      "now": 1794311431.58954
+    },
+    {
+      "view": "Playing",
+      "revision": 107,
+      "rawLife": 0,
+      "attempt": 1,
+      "data": {
+        "eventId": "s-113",
+        "code": "OK"
+      },
+      "userId": 2,
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311434.0436,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "Death",
+      "seq": 383,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 107,
+      "rawLife": 0,
+      "attempt": 1,
+      "userId": 2,
+      "data": {
+        "observed": {
+          "velocity": [
+            -0.00004799015005119145,
+            -0.000335575983626768,
+            -0.00007064950477797538
+          ],
+          "held": false,
+          "position": [
+            590.2243041992188,
+            0.9983251094818115,
+            1.781725525856018
+          ]
+        },
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+        "reason": "CombatUnderflow"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794311434.0436,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 384,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "userId": 2,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 2,
+      "now": 1794311434.063201,
+      "shieldKind": "Normal",
+      "revision": 109,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "data": {
+        "eventId": "s-116",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 386,
+      "shieldUntil": 1794311436.063201
+    },
+    {
+      "view": "Playing",
+      "revision": 114,
+      "rawLife": 0,
+      "attempt": 2,
+      "data": {
+        "eventId": "s-121",
+        "code": "OK"
+      },
+      "userId": 2,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794311445.321627,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "Death",
+      "seq": 403,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 114,
+      "rawLife": 0,
+      "attempt": 2,
+      "userId": 2,
+      "data": {
+        "observed": {
+          "velocity": [
+            0.0000013498865882866085,
+            -0.00025343900779262185,
+            -0.00003720949462149292
+          ],
+          "held": false,
+          "position": [
+            589.5609741210938,
+            0.9989187717437744,
+            4.292007923126221
+          ]
+        },
+        "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+        "reason": "CombatUnderflow"
+      },
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:115",
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794311445.321627,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 404,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "userId": 2,
+      "levelEpoch": 1,
+      "respawns": 1,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 3,
+      "now": 1794311445.338478,
+      "shieldKind": "Normal",
+      "revision": 116,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:123",
+      "data": {
+        "eventId": "s-124",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 406,
+      "shieldUntil": 1794311447.338478
+    }
+  ],
+  "seed": 820297848,
+  "policyLoads": 1,
+  "cohort": [
+    {
+      "ownerUserId": -1,
+      "slot": 1,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    },
+    {
+      "ownerUserId": -2,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:123",
+      "slot": 2,
+      "status": "Alive",
+      "rawLife": 47,
+      "stock": 1,
+      "attempt": 3
+    },
+    {
+      "ownerUserId": -3,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8",
+      "slot": 3,
+      "status": "Alive",
+      "rawLife": 47,
+      "stock": 3,
+      "attempt": 1
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,313 @@
+{
+  "hero": {
+    "view": "Playing",
+    "connected": true,
+    "template": "Mr. Green",
+    "attempt": 4,
+    "userId": 1,
+    "connectionEpoch": 1,
+    "health": 1.5957446808510638,
+    "status": "Alive",
+    "respawns": 0,
+    "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+    "retryReady": false
+  },
+  "current": {
+    "index": 1,
+    "slot": 1,
+    "attempt": 4,
+    "epoch": 1,
+    "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+    "notice": "REACTION",
+    "plan": {
+      "x": 0,
+      "z": 0,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "stock": 0,
+    "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87",
+    "position": {
+      "y": 3.7170562744140625,
+      "x": 605.0260620117188,
+      "z": -5.356256008148193
+    },
+    "target": -99,
+    "guardianHits": 1,
+    "stage": "Boss",
+    "rawLife": 15
+  },
+  "combat": {
+    "lastStrikeAction": "Dash",
+    "rawLife": 15,
+    "strikeRecoveryUntil": 1794311345.0781882,
+    "recover": false,
+    "heavyReaction": true,
+    "nextAttack": 1794311374.256006,
+    "heavyReactionEpoch": 2,
+    "reactionProtectionSeconds": 0.4666666666666667,
+    "hitProtectedUntil": 1794311370.2584558,
+    "reactionEpoch": 4,
+    "reactionEnd": 1794311379.409439
+  },
+  "navigation": {
+    "phase": "Walk",
+    "target": {
+      "y": 2.999999761581421,
+      "x": 633.00048828125,
+      "z": 0.14543817937374115
+    }
+  },
+  "expectedPlayers": 3,
+  "enemies": {
+    "-9": {
+      "dead": true,
+      "kind": "Dragon",
+      "position": {
+        "y": 4.993180751800537,
+        "x": 288.3493347167969,
+        "z": 2.7697038650512695
+      },
+      "rawLife": 0
+    },
+    "-8": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 0.49103638529777527,
+        "x": 188.067626953125,
+        "z": 7.631046772003174
+      },
+      "rawLife": 0
+    },
+    "-12": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 2.9961116313934326,
+        "x": 390.0234069824219,
+        "z": 13.449755668640137
+      },
+      "rawLife": 0
+    },
+    "-10": {
+      "kind": "Dragon",
+      "dead": true,
+      "rawLife": 0
+    },
+    "-2": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 0.4874778687953949,
+        "x": -58.9761962890625,
+        "z": -17.529254913330078
+      },
+      "rawLife": 0
+    },
+    "-99": {
+      "position": {
+        "y": 2.999999761581421,
+        "x": 633.00048828125,
+        "z": 0.14543820917606354
+      },
+      "rawLife": 31
+    },
+    "-3": {
+      "dead": true,
+      "kind": "Walker",
+      "position": {
+        "y": 0.48783135414123535,
+        "x": -40.12517547607422,
+        "z": 0.1958722174167633
+      },
+      "rawLife": 0
+    },
+    "-11": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 0.47878649830818176,
+        "x": 404.6289367675781,
+        "z": -15.749953269958496
+      },
+      "rawLife": 0
+    },
+    "-1": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 2.991020917892456,
+        "x": -71.77054595947266,
+        "z": 7.171533584594727
+      },
+      "rawLife": 0
+    },
+    "-13": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 0.49366188049316406,
+        "x": 407.38128662109375,
+        "z": -10.2766695022583
+      },
+      "rawLife": 0
+    },
+    "-4": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 2.992581367492676,
+        "x": 27.613723754882812,
+        "z": 3.5173392295837402
+      },
+      "rawLife": 0
+    },
+    "-5": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 0.48968058824539185,
+        "x": 24.980669021606445,
+        "z": 4.967014789581299
+      },
+      "rawLife": 0
+    },
+    "-6": {
+      "dead": true,
+      "kind": "Walker",
+      "position": {
+        "y": 0.4844588339328766,
+        "x": 47.82619094848633,
+        "z": -0.978820264339447
+      },
+      "rawLife": 0
+    },
+    "-7": {
+      "dead": true,
+      "kind": "Pig",
+      "position": {
+        "y": 2.987985134124756,
+        "x": 156.72447204589844,
+        "z": -10.45861530303955
+      },
+      "rawLife": 0
+    }
+  },
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794311258.44304,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "stock": 3,
+      "cohort": [
+        {
+          "attempt": 1,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+        }
+      ],
+      "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+      "source": "causeway-1"
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Player1",
+      "userId": -1
+    },
+    {
+      "name": "Player2",
+      "userId": -2
+    },
+    {
+      "name": "Player3",
+      "userId": -3
+    }
+  ],
+  "sampleCount": 114,
+  "build": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "groupId": "group-1",
+  "notice": "REACTION",
+  "livePlayers": [
+    {
+      "name": "Player1",
+      "userId": -1
+    },
+    {
+      "name": "Player2",
+      "userId": -2
+    },
+    {
+      "name": "Player3",
+      "userId": -3
+    }
+  ],
+  "outerNotice": "REACTION",
+  "seed": 820297848,
+  "errors": [],
+  "cohort": [
+    {
+      "attempt": 4,
+      "ownerUserId": -1,
+      "slot": 1,
+      "status": "Alive",
+      "stock": 0,
+      "rawLife": 15,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:87"
+    },
+    {
+      "attempt": 1,
+      "ownerUserId": -2,
+      "slot": 2,
+      "status": "Alive",
+      "stock": 3,
+      "rawLife": 47,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5"
+    },
+    {
+      "attempt": 1,
+      "ownerUserId": -3,
+      "slot": 3,
+      "status": "Alive",
+      "stock": 3,
+      "rawLife": 47,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+    }
+  ],
+  "policyLoads": 1,
+  "body": {
+    "state": "Enum.HumanoidStateType.PlatformStanding",
+    "floor": "Enum.Material.Air",
+    "platformStand": true,
+    "anchored": false,
+    "velocityY": -14.699953079223633
+  }
+}

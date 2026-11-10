@@ -1,0 +1,356 @@
+{
+  "hero": {
+    "view": "Choice",
+    "connected": true,
+    "template": "Mr. Green",
+    "attempt": 4,
+    "userId": 1,
+    "connectionEpoch": 1,
+    "health": 0,
+    "status": "Eliminated",
+    "respawns": 0,
+    "retryReady": false
+  },
+  "policyLoads": 1,
+  "combat": {
+    "rawLife": 0,
+    "nextAttack": 1794311506.618989
+  },
+  "errors": [],
+  "expectedPlayers": 3,
+  "enemies": {
+    "-1": {
+      "dead": true,
+      "kind": "Invader",
+      "position": {
+        "y": 2.995419502258301,
+        "x": 8.948338508605957,
+        "z": -3.176133394241333
+      },
+      "rawLife": 0
+    },
+    "-99": {
+      "dead": false,
+      "kind": "BigBlag",
+      "position": {
+        "y": 3,
+        "x": 435,
+        "z": 1.531883716583252
+      },
+      "rawLife": 127
+    }
+  },
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794311258.44304,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2",
+      "stock": 3,
+      "cohort": [
+        {
+          "attempt": 1,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:2"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+        }
+      ],
+      "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+      "source": "causeway-1"
+    },
+    {
+      "index": 2,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 2,
+      "at": 1794311452.553321,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8",
+      "stock": 3,
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "attempt": 4,
+          "stock": 0,
+          "rawLife": 0
+        },
+        {
+          "attempt": 3,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:123"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+        }
+      ],
+      "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+      "source": "campaign-2"
+    },
+    {
+      "index": 3,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 3,
+      "at": 1794311475.954011,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:132",
+      "stock": 0,
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "attempt": 4,
+          "stock": 0,
+          "rawLife": 0
+        },
+        {
+          "attempt": 4,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 0,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:132"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+        }
+      ],
+      "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+      "source": "campaign-3"
+    },
+    {
+      "index": 4,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 4,
+      "at": 1794311491.96428,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:132",
+      "stock": 0,
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "attempt": 4,
+          "stock": 0,
+          "rawLife": 0
+        },
+        {
+          "attempt": 4,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 0,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:132"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+        }
+      ],
+      "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+      "source": "campaign-4"
+    },
+    {
+      "index": 5,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 5,
+      "at": 1794311506.639599,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:132",
+      "stock": 0,
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "attempt": 4,
+          "stock": 0,
+          "rawLife": 0
+        },
+        {
+          "attempt": 4,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 0,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:132"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+        }
+      ],
+      "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+      "source": "campaign-5"
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Player1",
+      "userId": -1
+    },
+    {
+      "name": "Player2",
+      "userId": -2
+    },
+    {
+      "name": "Player3",
+      "userId": -3
+    }
+  ],
+  "sampleCount": 310,
+  "build": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "groupId": "group-1",
+  "livePlayers": [
+    {
+      "name": "Player1",
+      "userId": -1
+    },
+    {
+      "name": "Player2",
+      "userId": -2
+    },
+    {
+      "name": "Player3",
+      "userId": -3
+    }
+  ],
+  "outerNotice": "REACTION",
+  "seed": 820297848,
+  "cohort": [
+    {
+      "ownerUserId": -1,
+      "slot": 1,
+      "status": "Eliminated",
+      "attempt": 4,
+      "stock": 0,
+      "rawLife": 0
+    },
+    {
+      "attempt": 4,
+      "ownerUserId": -2,
+      "slot": 2,
+      "status": "Alive",
+      "stock": 0,
+      "rawLife": 15,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:132"
+    },
+    {
+      "attempt": 1,
+      "ownerUserId": -3,
+      "slot": 3,
+      "status": "Alive",
+      "stock": 3,
+      "rawLife": 47,
+      "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8"
+    }
+  ],
+  "navigation": {
+    "phase": "Walk",
+    "target": {
+      "y": 2.999999523162842,
+      "x": 689,
+      "z": 0
+    }
+  },
+  "current": {
+    "index": 5,
+    "slot": 3,
+    "attempt": 1,
+    "epoch": 5,
+    "runId": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+    "plan": {
+      "x": 0,
+      "z": 0,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "boss": {
+      "bossDefeated": false,
+      "bossAttack": "BellyDrop",
+      "bossRawLife": 127,
+      "rawLife": 127,
+      "bossVulnerable": false,
+      "bossPhase": 3,
+      "bossState": "Tell",
+      "bossType": "BigBlag",
+      "maxRawLife": 255,
+      "bossMaxRawLife": 255,
+      "bossName": "Big Blag",
+      "projectiles": 0
+    },
+    "actorId": "01138703-5a92-4ce0-a591-a0e00d8f1b84:actor:8",
+    "position": {
+      "y": 3,
+      "x": 428.50006103515625,
+      "z": 1.5075483322143555
+    },
+    "target": -99,
+    "stock": 3,
+    "stage": "Boss",
+    "rawLife": 47
+  },
+  "body": {
+    "state": "Enum.HumanoidStateType.Dead",
+    "floor": "Enum.Material.Air",
+    "platformStand": false,
+    "anchored": false,
+    "velocityY": -444.7218322753906
+  }
+}
