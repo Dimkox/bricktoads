@@ -220,21 +220,63 @@ local function jetInput(definition, modes, actor, threats,holdSeconds)
     return fallback
 end
 
+local function iceLaneClearance(course,modes,actor,hazard,target,cadence)
+    local x,z,vx,vz=actor.position.x,actor.position.z,actor.velocity.x,actor.velocity.z
+    local hold=math.max(1,math.ceil(math.max(.1,cadence or .1)/FIXED))
+    local ax,az=0,0
+    local clearance,crossed=math.huge,false
+    for frame=1,240 do
+        if (frame-1)%hold==0 then
+            az=clamp((target-z)*.6-vz*.5,-1,1)
+            local length=math.sqrt(1+az*az);ax,az=1/length,az/length
+        end
+        vx=clamp(vx+ax*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
+        vz=clamp(vz+az*course.acceleration*FIXED,-course.maxSpeed,course.maxSpeed)
+        local friction=math.exp(-course.friction*FIXED*.18)
+        vx*=friction;vz*=friction;x+=vx*FIXED;z+=vz*FIXED
+        if math.abs(x-hazard.x)<=hazard.w/2+2.1 then
+            local motion=hazard.motion
+            local hz=hazard.z+math.sin((modes.elapsed+frame*FIXED)/motion.period*math.pi*2+motion.phase)*motion.amplitude
+            clearance=math.min(clearance,math.abs(z-hz)-hazard.d/2-1.5);crossed=true
+        end
+        if x>hazard.x+hazard.w/2+2.1 then break end
+    end
+    return crossed and clearance or -math.huge
+end
+
 local function ice(definition, modes, actor, state)
     local course, position, velocity = definition.course, actor.position, actor.velocity
+    local forward=1
     local hazard = course.hazards[state.hazardIndex]
     while hazard and position.x > hazard.x + 7 do
         state.hazardIndex += 1
         hazard = course.hazards[state.hazardIndex]
     end
     if not hazard then state.targetZ = 0 end
-    if hazard and state.plannedHazard ~= state.hazardIndex and hazard.x - position.x < 58 then
+    if hazard and (state.plannedHazard ~= state.hazardIndex or state.iceWaiting) and hazard.x - position.x < 58 then
         local at = modes.elapsed + (hazard.x - position.x) / math.max(18, velocity.x)
         local z = hazard.z
         if hazard.motion and hazard.motion.axis == 'z' then
             z += math.sin(at / hazard.motion.period * math.pi * 2 + hazard.motion.phase) * hazard.motion.amplitude
         end
         state.targetZ = z < -5 and 0 or -10
+        if hazard.motion and hazard.motion.axis == 'z' and state.hazardIndex==1 then
+            -- Predict the whole contact interval with actual Ice acceleration
+            -- and the held input. The old single arrival estimate could select
+            -- a Snowball reaction immediately before the next gap jump.
+            local best=-math.huge
+            for _,lane in ipairs({0,-10}) do
+                local score=iceLaneClearance(course,modes,actor,hazard,lane,state.cadence)
+                if score>best then best=score;state.targetZ=lane end
+            end
+            -- From rest, wait on the authored entry floor for a clear
+            -- approach. Once gliding, a reaction can deny the gap Jump while
+            -- the retained momentum carries the body off the takeoff edge.
+            state.iceWaiting=position.x<hazard.x-25 and math.abs(velocity.x)<3 and best<.75
+            if state.iceWaiting then forward=0 end
+        else
+            state.iceWaiting=false
+        end
         state.plannedHazard = state.hazardIndex
     end
     local jump = false
@@ -245,7 +287,7 @@ local function ice(definition, modes, actor, state)
             jump = floor.x + floor.w / 2 - position.x < 4.7
         end
     end
-    return input(1, clamp((state.targetZ - position.z) * .6 - velocity.z * .5, -1, 1), jump)
+    return input(forward, clamp((state.targetZ - position.z) * .6 - velocity.z * .5, -1, 1), jump)
 end
 
 local function hazardPosition(hazard,at)
@@ -485,7 +527,11 @@ local function plan(context)
         while state.groups[state.groupIndex] and position.x > state.groups[state.groupIndex].lastX + 4 do state.groupIndex += 1 end
         local target = state.groups[state.groupIndex] and state.groups[state.groupIndex].lane or 0
         local jumpLead=math.min(21,12+futureSpeed(course,modes,0)*math.max(0,(state.cadence or FIXED)-.1))
-        local jump = nearest and (nearest.kind == 'LowBarrier' or nearest.kind == 'Log')
+        -- A rewound Surf cohort can reach the next low Whirlpool before a
+        -- rider on the opposite offset can clear its lane. It has the same
+        -- authored vertical bounds as a Log, so use the ordinary jump there.
+        local jump = nearest and (nearest.kind == 'LowBarrier' or nearest.kind == 'Log'
+            or definition.mode=='Surf' and nearest.kind=='Whirlpool')
             and nearest.x - position.x <= jumpLead and nearest.x - position.x > 3 and actor.grounded
         if position.x > course.finishPoint.x - 30 then target=0 end
         local ordinaryTarget=target

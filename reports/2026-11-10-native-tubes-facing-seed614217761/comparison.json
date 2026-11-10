@@ -1,0 +1,147 @@
+{
+  "status": "verified_frozen",
+  "seed": 614217761,
+  "helperSha256": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "policies": {
+    "CombatPilot": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+    "EarlyPilot": "8c7d521749c78ec921f158633067a35b773c7b4a42933b28d6f9a93ca9a6fa16",
+    "LatePilot": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8",
+    "Nav": "d8c7603544f84ca56b3511c253d2818756ad8ae5c737bd55d8103a9f0bae5959",
+    "Runner": "623effda0dab80713d720b2c4e44e7821c345d58e1f8c938593a30dc0a559362",
+    "TubesArbitration": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013",
+    "campaign_combat_pilot": "8197836117c1bc114b7a236738db1490c047420c113083fc93ecb1b8bd64b3da"
+  },
+  "comparison": {
+    "baseline89BD": {
+      "result": "Won",
+      "elapsed": 31.65419912338257,
+      "initial": {
+        "actorId": "prepared-stage-9-eead36f4-6a32-4a42-b0e4-90dee2e1376c:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "position": {
+          "y": 3,
+          "x": 0,
+          "z": 6
+        },
+        "status": "Alive",
+        "stock": 3
+      },
+      "terminal": {
+        "actorId": "prepared-stage-9-eead36f4-6a32-4a42-b0e4-90dee2e1376c:actor:2",
+        "attempt": 1,
+        "stock": 3,
+        "rawLife": 15,
+        "position": {
+          "y": 3,
+          "x": 331.00384521484375,
+          "z": 0.28125
+        }
+      },
+      "counts": {
+        "ReserveSpawn": 1,
+        "CommitSpawn": 1,
+        "EnemySpawned": 5,
+        "CampaignEnemyAttack": 8,
+        "BeginAttack": 7,
+        "AttackAccepted": 7,
+        "EnemyHit": 7,
+        "EnemyRecovery": 3,
+        "EnemyDeath": 3,
+        "AttackMiss": 2,
+        "SetHealth": 2,
+        "Hit": 2,
+        "CampaignCheckpoint": 1,
+        "CampaignCourseCleared": 1,
+        "CampaignModeClosed": 1
+      },
+      "intentCounts": {
+        "Move:OK": 213,
+        "Move:REACTION": 11,
+        "Attack:OK": 7
+      },
+      "minOxygen": 10.46804675552994,
+      "samples": 122,
+      "events": 51,
+      "cleanup": true
+    },
+    "fixedE365": {
+      "result": "Won",
+      "elapsed": 32.04680609703064,
+      "initial": {
+        "actorId": "prepared-stage-9-bf8abb7a-2927-41db-bca8-cd9910206bcd:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "position": {
+          "y": 3,
+          "x": 0,
+          "z": 6
+        },
+        "status": "Alive",
+        "stock": 3
+      },
+      "terminal": {
+        "actorId": "prepared-stage-9-bf8abb7a-2927-41db-bca8-cd9910206bcd:actor:2",
+        "attempt": 1,
+        "stock": 3,
+        "rawLife": 31,
+        "position": {
+          "y": 3,
+          "x": 331.2449035644531,
+          "z": 0.41796875
+        }
+      },
+      "counts": {
+        "ReserveSpawn": 1,
+        "CommitSpawn": 1,
+        "EnemySpawned": 5,
+        "CampaignEnemyAttack": 8,
+        "BeginAttack": 9,
+        "AttackAccepted": 9,
+        "EnemyHit": 11,
+        "EnemyDeath": 3,
+        "SetHealth": 1,
+        "Hit": 1,
+        "EnemyRecovery": 2,
+        "CampaignCheckpoint": 1,
+        "CampaignCourseCleared": 1,
+        "CampaignModeClosed": 1
+      },
+      "intentCounts": {
+        "Move:OK": 221,
+        "Move:REACTION": 5,
+        "Attack:OK": 9
+      },
+      "minOxygen": 10.417403886156778,
+      "samples": 123,
+      "events": 54,
+      "cleanup": true
+    }
+  },
+  "conclusion": "Fix removes an observed primary facing reversal and the obsolete post-Robot staging detention. Exact-seed numeric .133 replay changes Lost to Won with reserves intact; paired native replay confirms first-life completion with zero misses and less damage.",
+  "limits": [
+    "Prepared native baseline alsoWon, so this pair does not reproduce full12's Lost terminal outcome.",
+    "Full12 first damage precedes the retained reversed-primary sample; individual misses/attackers were not retained. All damage is not attributed to one reversal.",
+    "Native replay is synthetic sole Hero3, original47life/3reserves, active NPC AI, server-dispatched ordinary Session Move/Jump/Punch at .133; not a continuous campaign or client-network proof.",
+    "Broader numeric matrix23/24Won; pre-existing seed1/.08 remains Lost, and some seed1 cases use reserves. No universal survival claim.",
+    "No production, AI, geometry, pose, health, reserve, stage or phase writes by helper/driver; native source7c03 remains unchanged."
+  ],
+  "independentReview": "Late agent clear on E365 source, frozen6+contracts5 and paired seeded numeric replay",
+  "cleanup": {
+    "removed": [
+      "NativeTubesFacingBaseline9",
+      "NativeTubesFacingFixed9"
+    ],
+    "remainingOwnedFolders": [
+      false,
+      false
+    ],
+    "mainSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+    "stillRunning": true,
+    "remainingOwnedWorlds": [
+      false,
+      false
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=4.683333333333322
+FAIL Ice seed=614217761 cadence=0.08 cohort=3 delay=0.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=1 elapsed=4.499999999999989
+ DEATH slot=1 t=4.499999999999989 reason=CampaignFall xyz=71.77596714270145,-61.166666666666664,-9.995054076776901
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=1 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=5.516666666666652
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=1.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=6.016666666666651
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=2 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=6.516666666666649
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=2.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=7.183333333333313
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=4.683333333333322
+FAIL Ice seed=614217761 cadence=0.133 cohort=3 delay=0.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=1 elapsed=4.516666666666656
+ DEATH slot=1 t=4.516666666666656 reason=CampaignFall xyz=71.56463494564296,-61.166666666666664,-9.997721459645126
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=1 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=5.516666666666652
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=1.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=6.016666666666651
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=2 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=6.516666666666649
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=2.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=7.183333333333313
+FAIL Ice seed=614217761 cadence=0.167 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=false deaths=1 elapsed=4.266666666666657
+ DEATH slot=3 t=4.266666666666657 reason=CampaignFall xyz=72.4613905945559,-61.166666666666664,-9.992119081813268
+FAIL Ice seed=614217761 cadence=0.167 cohort=3 delay=0.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=1 elapsed=4.549999999999989
+ DEATH slot=1 t=4.549999999999989 reason=CampaignFall xyz=72.02354995828925,-61.166666666666664,-9.992362645284045
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=1 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=5.549999999999986
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=1.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=6.049999999999984
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=2 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=6.549999999999982
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=2.5 outer=0.016666666666666666 stagger=0.021 complete=false deaths=0 elapsed=7.19999999999998
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=4.999999999999998
+FAIL Ice seed=614217761 cadence=0.08 cohort=3 delay=0.5 outer=0.1 stagger=0.021 complete=false deaths=2 elapsed=4.6
+ DEATH slot=1 t=4.6 reason=CampaignFall xyz=71.8340174662764,-61.166666666666664,-9.9968319284612
+ DEATH slot=2 t=4.6 reason=CampaignFall xyz=71.39460770476217,-61.166666666666664,-1.2260061346497346
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=1 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=5.599999999999996
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=1.5 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=6.099999999999994
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=2 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=6.5999999999999925
+PASS Ice seed=614217761 cadence=0.08 cohort=3 delay=2.5 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=7.29999999999999
+./.tools/ice_first_section_baseline_probe.luau:82: 7 Ice first section failures
+stacktrace:
+[C] function assert
+./.tools/ice_first_section_baseline_probe.luau:82
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=5.099999999999998
+FAIL Ice seed=614217761 cadence=0.133 cohort=3 delay=0.5 outer=0.1 stagger=0.021 complete=false deaths=2 elapsed=4.6
+ DEATH slot=2 t=4.6 reason=CampaignFall xyz=70.91244979098713,-61.166666666666664,-0.7438482208747085
+ DEATH slot=1 t=4.6 reason=CampaignFall xyz=71.18373242736305,-61.166666666666664,-10.01735140589527
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=1 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=5.699999999999996
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=1.5 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=6.199999999999994
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=2 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=6.699999999999992
+PASS Ice seed=614217761 cadence=0.133 cohort=3 delay=2.5 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=7.29999999999999
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=5.099999999999998
+FAIL Ice seed=614217761 cadence=0.167 cohort=3 delay=0.5 outer=0.1 stagger=0.021 complete=false deaths=2 elapsed=4.6
+ DEATH slot=2 t=4.6 reason=CampaignFall xyz=70.91244979098713,-61.166666666666664,-0.7438482208747085
+ DEATH slot=1 t=4.6 reason=CampaignFall xyz=71.18373242736305,-61.166666666666664,-10.01735140589527
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=1 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=5.699999999999996
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=1.5 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=6.199999999999994
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=2 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=6.699999999999992
+PASS Ice seed=614217761 cadence=0.167 cohort=3 delay=2.5 outer=0.1 stagger=0.021 complete=false deaths=0 elapsed=7.29999999999999

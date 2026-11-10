@@ -10,14 +10,20 @@ local function copy(input)
     out.x,out.z=out.x or 0,out.z or 0
     return out
 end
-local function boundEntry(ctx,out)
+local function boundEntry(ctx,out,stageBeforeWater)
     local floor=ctx.definition.course.platforms[1];local p=ctx.position
     local water=ctx.definition.course.media[1]
-    local maxX=math.min(floor.x+floor.w/2-2,water.minX-3)
+    local maxX=math.min(floor.x+floor.w/2-2,water.minX-(stageBeforeWater==false and 0 or 3))
     local horizon=math.max(.1,math.min(.25,(ctx.dt or .1)+1/60))
     local speed=(ctx.definition.course.maxSpeed or 16)*horizon
+    local x,z=out.x,out.z
     out.x=clamp(out.x,clamp((floor.x-floor.w/2+2-p.x)/speed,-1,1),clamp((maxX-p.x)/speed,-1,1))
     out.z=clamp(out.z,clamp((floor.z-floor.d/2+2-p.z)/speed,-1,1),clamp((floor.z+floor.d/2-2-p.z)/speed,-1,1))
+    if out.primary and (out.x~=x or out.z~=z)then
+        -- Contact was selected from the current facing. A boundary correction
+        -- must not turn the real body away during its accepted windup.
+        out.x,out.z,out.aimX,out.aimZ=0,0,nil,nil
+    end
     return out
 end
 local function primaryOpportunity(ctx,route)
@@ -54,14 +60,16 @@ function Pilot.plan(ctx,route)
         if a.medium=='Water' then out.primary=false;return out end
         return{x=0,z=0,jump=false,primary=false,run=false,hold=true}
     end
-    local opportunity=(a.medium~='Water' or (a.oxygen or 18)>5) and primaryOpportunity(ctx,out)
-    if opportunity then
-        if a.medium~='Water' and ctx.position.x<ctx.definition.course.media[1].minX then return boundEntry(ctx,opportunity)end
-        return opportunity
-    end
     local robot
     for id,enemy in pairs(ctx.director.enemies)do
         if enemy.kind=='Robot' and not enemy.dead then robot=id;break end
+    end
+    local opportunity=(a.medium~='Water' or (a.oxygen or 18)>5) and primaryOpportunity(ctx,out)
+    if opportunity then
+        -- Once the Robot is gone, the x32 staging line has no role in a
+        -- nearby fish attack. Keep only the actual dry support boundary.
+        if a.medium~='Water' and ctx.position.x<ctx.definition.course.media[1].minX then return boundEntry(ctx,opportunity,robot~=nil)end
+        return opportunity
     end
     local p=ctx.position
     local waterX=ctx.definition.course.media[1].minX

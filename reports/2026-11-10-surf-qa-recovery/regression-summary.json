@@ -1,0 +1,79 @@
+{
+  "scope": "QA-only normal-input course recovery regression; numeric actor-presentation double and separate native evidence",
+  "seed": 388791054,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "baseline": {
+    "cases": 54,
+    "pass": 29,
+    "fail": 25,
+    "exit": 1
+  },
+  "fixed": {
+    "cases": 54,
+    "pass": 54,
+    "fail": 0,
+    "exit": 0
+  },
+  "dimensions": {
+    "inputCadence": [
+      0.08,
+      0.133,
+      0.167
+    ],
+    "outerHeartbeat": [
+      0.016666666666666666,
+      0.1,
+      0.25
+    ],
+    "cohort": 3,
+    "normalCases": 27,
+    "paidRestartCases": 27,
+    "boardingStagger": [
+      0.021,
+      0.8,
+      1.5
+    ],
+    "entryDelay": [
+      0,
+      0.7,
+      2.4
+    ]
+  },
+  "recoveryPreparation": "Withhold only the lead riders ordinary Jump after X330 until the first natural Log349 collision. No direct kill, pose, health, reserve, checkpoint, phase or geometry writes. Assert exactly one death/reserve spent for that rider and no extra deaths on any rider.",
+  "numericLimitations": [
+    "Actual Session and Modes with public validated Move/Jump/Punch inputs and live authored course projectiles",
+    "Roblox actor presentation is doubled; ordinary NPC and boss controllers are not constructed in the numeric course fixture",
+    "Natural failing cohort cases include real accepted course-projectile reactions; source-less -9001 impulses correctly ignore the anchored Modes body. The fixture is not asserted to reproduce the exact first native Log349 failure.",
+    "Native first-Log349 missed-input cause remains unproven because attempt11 has no per-packet trace"
+  ],
+  "broaderChecks": {
+    "otherCourses": 100,
+    "liveThreatAndRewind": 8
+  },
+  "sha256": {
+    "baseline-policy.lua": "f4cb9f153ea18f7e931906419e6173ce37fdef24fabaced85fdf1d85fb772ab5",
+    "fixed-policy.lua": "8c7d521749c78ec921f158633067a35b773c7b4a42933b28d6f9a93ca9a6fa16",
+    "probe-baseline.luau": "c61a69dc5d1d43ba6501a63b6d9fd4237b2a757e2f243a941929c29e06658d7a",
+    "probe-fixed.luau": "b7531b58d83c6d37d965aa24c449792055896d8861cb58f2af36962ab9aa8026"
+  },
+  "native": {
+    "file": "native-surf-result.json",
+    "status": "passed",
+    "result": "Won",
+    "elapsedSeconds": 96.60839891433716,
+    "heroSlot": 1,
+    "attempt": 1,
+    "stock": 3,
+    "rawLife": 47,
+    "hitEvents": 0,
+    "deathEvents": 0,
+    "activeAI": [
+      "Invader",
+      "authored course launchers",
+      "BigBlag"
+    ],
+    "offsetZ": 49152,
+    "cleanup": true,
+    "limits": "Prepared isolated solo server fixture, not a continuous or registered-client campaign; cohort checkpoint recovery is proved by the separate numeric matrix."
+  }
+}

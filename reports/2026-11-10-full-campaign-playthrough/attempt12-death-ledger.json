@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "source": "attempt-12-full-natural-archive.json",
+  "runId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc",
+  "seed": 614217761,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "policyLoads": 1,
+  "result": "Lost",
+  "coordinateNote": "Observed positions preserved verbatim from runtime journal",
+  "deathsByStage": {
+    "1": 6,
+    "2": 1,
+    "4": 3,
+    "6": 1,
+    "9": 1
+  },
+  "deathsByReason": {
+    "Fall": 4,
+    "CombatUnderflow": 4,
+    "CampaignFall": 4
+  },
+  "confirmedDeaths": [
+    {
+      "stage": 1,
+      "slot": 1,
+      "attempt": 1,
+      "stockBeforeDeath": 3,
+      "reason": "Fall",
+      "observedPosition": [
+        11.83974838256836,
+        -35.44282913208008,
+        -26.603168487548828
+      ],
+      "at": 1794316883.547352,
+      "seq": 203
+    },
+    {
+      "stage": 1,
+      "slot": 1,
+      "attempt": 2,
+      "stockBeforeDeath": 2,
+      "reason": "Fall",
+      "observedPosition": [
+        290.1027526855469,
+        -41.36359786987305,
+        3.253978967666626
+      ],
+      "at": 1794316908.997547,
+      "seq": 260
+    },
+    {
+      "stage": 1,
+      "slot": 1,
+      "attempt": 3,
+      "stockBeforeDeath": 1,
+      "reason": "Fall",
+      "observedPosition": [
+        248.89727783203125,
+        -35.90848922729492,
+        15.299169540405273
+      ],
+      "at": 1794316911.088107,
+      "seq": 267
+    },
+    {
+      "stage": 1,
+      "slot": 1,
+      "attempt": 4,
+      "stockBeforeDeath": 0,
+      "reason": "Fall",
+      "observedPosition": [
+        247.59548950195312,
+        -36.55543518066406,
+        13.140828132629395
+      ],
+      "at": 1794316912.356292,
+      "seq": 271
+    },
+    {
+      "stage": 1,
+      "slot": 2,
+      "attempt": 1,
+      "stockBeforeDeath": 3,
+      "reason": "CombatUnderflow",
+      "observedPosition": [
+        207.36282348632812,
+        0.4996635615825653,
+        -9.09775447845459
+      ],
+      "at": 1794316934.764205,
+      "seq": 313
+    },
+    {
+      "stage": 1,
+      "slot": 2,
+      "attempt": 2,
+      "stockBeforeDeath": 2,
+      "reason": "CombatUnderflow",
+      "observedPosition": [
+        177.6249237060547,
+        0.999229907989502,
+        4.92755126953125
+      ],
+      "at": 1794316943.162391,
+      "seq": 340
+    },
+    {
+      "stage": 2,
+      "slot": 2,
+      "attempt": 3,
+      "stockBeforeDeath": 1,
+      "reason": "CombatUnderflow",
+      "observedPosition": [
+        15.99998950958252,
+        122.340576171875,
+        16
+      ],
+      "at": 1794317054.544842,
+      "seq": 574
+    },
+    {
+      "stage": 4,
+      "slot": 2,
+      "attempt": 4,
+      "stockBeforeDeath": 0,
+      "reason": "CampaignFall",
+      "observedPosition": [
+        71.67154693603516,
+        -57.950321197509766,
+        -9.946327209472656
+      ],
+      "at": 1794317085.890694,
+      "seq": 654
+    },
+    {
+      "stage": 4,
+      "slot": 3,
+      "attempt": 1,
+      "stockBeforeDeath": 3,
+      "reason": "CampaignFall",
+      "observedPosition": [
+        71.15361785888672,
+        -58.9409294128418,
+        -9.986748695373535
+      ],
+      "at": 1794317085.992806,
+      "seq": 657
+    },
+    {
+      "stage": 4,
+      "slot": 3,
+      "attempt": 2,
+      "stockBeforeDeath": 2,
+      "reason": "CampaignFall",
+      "observedPosition": [
+        76.40594482421875,
+        -59.653846740722656,
+        -1.7756192684173584
+      ],
+      "at": 1794317090.30644,
+      "seq": 665
+    },
+    {
+      "stage": 6,
+      "slot": 3,
+      "attempt": 3,
+      "stockBeforeDeath": 1,
+      "reason": "CampaignFall",
+      "observedPosition": [
+        9.017934799194336,
+        -58.824424743652344,
+        0.058952562510967255
+      ],
+      "at": 1794317204.574821,
+      "seq": 925
+    },
+    {
+      "stage": 9,
+      "slot": 3,
+      "attempt": 4,
+      "stockBeforeDeath": 0,
+      "reason": "CombatUnderflow",
+      "observedPosition": [
+        32.52949523925781,
+        3,
+        -0.04692775383591652
+      ],
+      "at": 1794317344.198405,
+      "seq": 1229
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=true deaths=0 elapsed=14.216666666666953
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.8 complete=true deaths=0 elapsed=15.56666666666702
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.016666666666666666 stagger=1.5 complete=true deaths=0 elapsed=16.783333333333662
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=true deaths=0 elapsed=14.16666666666695
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.8 complete=true deaths=1 elapsed=17.41666666666696
+ DEATH slot=3 t=11.433333333333481 reason=CampaignCrash xyz=292.2700416666666,3,-5.18789915725304
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.016666666666666666 stagger=1.5 complete=true deaths=0 elapsed=16.733333333333665
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=true deaths=0 elapsed=14.250000000000288
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.8 complete=true deaths=1 elapsed=17.500000000000288
+ DEATH slot=3 t=11.516666666666818 reason=CampaignCrash xyz=292.2700416666666,3,-6.143650878192003
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.016666666666666666 stagger=1.5 complete=true deaths=0 elapsed=16.816666666666993
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=true deaths=0 elapsed=14.299999999999965
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.1 stagger=0.8 complete=true deaths=0 elapsed=15.59999999999996
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.1 stagger=1.5 complete=true deaths=0 elapsed=16.79999999999997
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=true deaths=0 elapsed=14.399999999999965
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.1 stagger=0.8 complete=true deaths=0 elapsed=15.79999999999996
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.1 stagger=1.5 complete=true deaths=0 elapsed=16.99999999999997
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=true deaths=0 elapsed=14.399999999999965
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.1 stagger=0.8 complete=true deaths=0 elapsed=15.79999999999996
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.1 stagger=1.5 complete=true deaths=0 elapsed=16.99999999999997
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.25 stagger=0.021 complete=true deaths=0 elapsed=14.75
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.25 stagger=0.8 complete=true deaths=0 elapsed=16
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.25 stagger=1.5 complete=true deaths=0 elapsed=17.25
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.25 stagger=0.021 complete=true deaths=0 elapsed=14.75
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.25 stagger=0.8 complete=true deaths=0 elapsed=16
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.25 stagger=1.5 complete=true deaths=0 elapsed=17.25
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.25 stagger=0.021 complete=true deaths=0 elapsed=14.75
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.25 stagger=0.8 complete=true deaths=0 elapsed=16
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.25 stagger=1.5 complete=true deaths=0 elapsed=17.25
+FAIL Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=true deaths=2 elapsed=19.116666666666863
+ DEATH slot=1 t=11.700000000000161 reason=CampaignCrash xyz=346.37379166666665,3,-13.80749485212899
+ DEATH slot=3 t=13.133333333333566 reason=CampaignCrash xyz=291.92299999999966,3,-6.463931456752727
+FAIL Surf seed=388791054 cadence=0.08 cohort=3 delay=0.7 outer=0.016666666666666666 stagger=0.021 complete=true deaths=2 elapsed=19.816666666666823
+ DEATH slot=1 t=12.400000000000196 reason=CampaignCrash xyz=346.37379166666665,3,-13.970255581245583
+ DEATH slot=3 t=13.8333333333336 reason=CampaignCrash xyz=291.92299999999966,3,-7.125177987988886
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=2.4 outer=0.016666666666666666 stagger=0.021 complete=true deaths=1 elapsed=20.083333333333474
+ DEATH slot=1 t=14.10000000000028 reason=CampaignCrash xyz=346.37379166666665,3,-13.900152214016128
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=true deaths=2 elapsed=19.066666666666865
+ DEATH slot=1 t=11.650000000000158 reason=CampaignCrash xyz=346.19091666666674,3,-15.462598726606908
+ DEATH slot=3 t=13.083333333333563 reason=CampaignCrash xyz=291.92299999999966,3,-6.463931456752727
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=0.7 outer=0.016666666666666666 stagger=0.021 complete=true deaths=2 elapsed=19.766666666666826
+ DEATH slot=1 t=12.350000000000193 reason=CampaignCrash xyz=346.19091666666674,3,-15.23947946553628
+ DEATH slot=3 t=13.783333333333598 reason=CampaignCrash xyz=291.92299999999966,3,-7.125177987988886
+PASS Surf seed=388791054 cadence=0.133 cohort=3 delay=2.4 outer=0.016666666666666666 stagger=0.021 complete=true deaths=1 elapsed=20.033333333333477
+ DEATH slot=1 t=14.050000000000278 reason=CampaignCrash xyz=346.19091666666674,3,-13.19046417037794
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.016666666666666666 stagger=0.021 complete=true deaths=2 elapsed=19.150000000000194
+ DEATH slot=1 t=11.733333333333496 reason=CampaignCrash xyz=346.19091666666674,3,-14.286210365551907
+ DEATH slot=3 t=13.1666666666669 reason=CampaignCrash xyz=291.92299999999966,3,-5.803116454880415
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=0.7 outer=0.016666666666666666 stagger=0.021 complete=true deaths=2 elapsed=19.850000000000154
+ DEATH slot=1 t=12.43333333333353 reason=CampaignCrash xyz=346.19091666666674,3,-17.034338100644284
+ DEATH slot=3 t=13.866666666666935 reason=CampaignCrash xyz=291.92299999999966,3,-6.472536324876422
+PASS Surf seed=388791054 cadence=0.167 cohort=3 delay=2.4 outer=0.016666666666666666 stagger=0.021 complete=true deaths=1 elapsed=20.116666666666806
+ DEATH slot=1 t=14.133333333333615 reason=CampaignCrash xyz=346.19091666666674,3,-16.315308287980734
+FAIL Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=19.1
+ DEATH slot=1 t=11.699999999999974 reason=CampaignCrash xyz=346.19091666666674,3,-13.995932059940232
+ DEATH slot=3 t=13.09999999999997 reason=CampaignCrash xyz=291.92299999999966,3,-6.09726479008606
+FAIL Surf seed=388791054 cadence=0.08 cohort=3 delay=0.7 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=19.80000000000001
+ DEATH slot=1 t=12.399999999999972 reason=CampaignCrash xyz=346.19091666666674,3,-14.506146132202948
+ DEATH slot=3 t=13.799999999999967 reason=CampaignCrash xyz=291.92299999999966,3,-6.758511321322219
+PASS Surf seed=388791054 cadence=0.08 cohort=3 delay=2.4 outer=0.1 stagger=0.021 complete=true deaths=1 elapsed=20.100000000000016
+ DEATH slot=1 t=14.099999999999966 reason=CampaignCrash xyz=346.19091666666674,3,-13.923797503711263
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=19.300000000000004
+ DEATH slot=1 t=11.899999999999974 reason=CampaignCrash xyz=346.0117916666666,3,-15.101653847456484
+ DEATH slot=3 t=13.299999999999969 reason=CampaignCrash xyz=291.92299999999966,3,-3.6179461908232486
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=0.7 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=20.000000000000014
+ DEATH slot=1 t=12.599999999999971 reason=CampaignCrash xyz=346.0117916666666,3,-13.723817228499128
+ DEATH slot=3 t=13.999999999999966 reason=CampaignCrash xyz=291.92299999999966,3,-4.288550181241989
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=2.4 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=21.70000000000004
+ DEATH slot=1 t=14.299999999999965 reason=CampaignCrash xyz=346.0117916666666,3,-16.437801991262738
+ DEATH slot=3 t=15.69999999999996 reason=CampaignCrash xyz=291.92299999999966,3,-5.140795548500909
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=19.300000000000004
+ DEATH slot=1 t=11.899999999999974 reason=CampaignCrash xyz=346.0117916666666,3,-15.101653847456484
+ DEATH slot=3 t=13.299999999999969 reason=CampaignCrash xyz=291.92299999999966,3,-3.6179461908232486
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=0.7 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=20.000000000000014
+ DEATH slot=1 t=12.599999999999971 reason=CampaignCrash xyz=346.0117916666666,3,-13.723817228499128
+ DEATH slot=3 t=13.999999999999966 reason=CampaignCrash xyz=291.92299999999966,3,-4.288550181241989
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=2.4 outer=0.1 stagger=0.021 complete=true deaths=2 elapsed=21.70000000000004
+ DEATH slot=1 t=14.299999999999965 reason=CampaignCrash xyz=346.0117916666666,3,-16.437801991262738
+ DEATH slot=3 t=15.69999999999996 reason=CampaignCrash xyz=291.92299999999966,3,-5.140795548500909
+FAIL Surf seed=388791054 cadence=0.08 cohort=3 delay=0 outer=0.25 stagger=0.021 complete=true deaths=4 elapsed=22.25
+ DEATH slot=1 t=12 reason=CampaignCrash xyz=346.19091666666674,3,-17.710407502562827
+ DEATH slot=3 t=13.5 reason=CampaignCrash xyz=291.92299999999966,3,-4.169469098980816
+ DEATH slot=2 t=15 reason=CampaignCrash xyz=291.92299999999966,3,-6.702802432314146
+ DEATH slot=3 t=16.25 reason=CampaignCrash xyz=291.92299999999966,3,-6.73613576564748
+FAIL Surf seed=388791054 cadence=0.08 cohort=3 delay=0.7 outer=0.25 stagger=0.021 complete=true deaths=2 elapsed=18.5
+ DEATH slot=1 t=11 reason=CampaignCrash xyz=291.93958333333325,3,6.7460828683223735
+ DEATH slot=3 t=12.5 reason=CampaignCrash xyz=291.92299999999966,3,-5.755216847908655
+FAIL Surf seed=388791054 cadence=0.08 cohort=3 delay=2.4 outer=0.25 stagger=0.021 complete=true deaths=2 elapsed=22
+ DEATH slot=1 t=14.5 reason=CampaignCrash xyz=346.0138888888885,3,-15.977779858141176
+ DEATH slot=3 t=16 reason=CampaignCrash xyz=291.92299999999966,3,-4.765024161201276
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=0 outer=0.25 stagger=0.021 complete=true deaths=4 elapsed=22.25
+ DEATH slot=1 t=12 reason=CampaignCrash xyz=346.19091666666674,3,-17.710407502562827
+ DEATH slot=3 t=13.5 reason=CampaignCrash xyz=291.92299999999966,3,-4.169469098980816
+ DEATH slot=2 t=15 reason=CampaignCrash xyz=291.92299999999966,3,-6.702802432314146
+ DEATH slot=3 t=16.25 reason=CampaignCrash xyz=291.92299999999966,3,-6.73613576564748
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=0.7 outer=0.25 stagger=0.021 complete=true deaths=2 elapsed=18.5
+ DEATH slot=1 t=11 reason=CampaignCrash xyz=291.93958333333325,3,6.7460828683223735
+ DEATH slot=3 t=12.5 reason=CampaignCrash xyz=291.92299999999966,3,-5.755216847908655
+FAIL Surf seed=388791054 cadence=0.133 cohort=3 delay=2.4 outer=0.25 stagger=0.021 complete=true deaths=2 elapsed=22
+ DEATH slot=1 t=14.5 reason=CampaignCrash xyz=346.0138888888885,3,-15.977779858141176
+ DEATH slot=3 t=16 reason=CampaignCrash xyz=291.92299999999966,3,-4.765024161201276
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=0 outer=0.25 stagger=0.021 complete=true deaths=4 elapsed=22.25
+ DEATH slot=1 t=12 reason=CampaignCrash xyz=346.19091666666674,3,-17.710407502562827
+ DEATH slot=3 t=13.5 reason=CampaignCrash xyz=291.92299999999966,3,-4.169469098980816
+ DEATH slot=2 t=15 reason=CampaignCrash xyz=291.92299999999966,3,-6.702802432314146
+ DEATH slot=3 t=16.25 reason=CampaignCrash xyz=291.92299999999966,3,-6.73613576564748
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=0.7 outer=0.25 stagger=0.021 complete=true deaths=2 elapsed=18.5
+ DEATH slot=1 t=11 reason=CampaignCrash xyz=291.93958333333325,3,6.7460828683223735
+ DEATH slot=3 t=12.5 reason=CampaignCrash xyz=291.92299999999966,3,-5.755216847908655
+./.tools/surf_checkpoint_baseline_probe.luau:91: 25 Surf cohort/cadence failures
+stacktrace:
+[C] function assert
+./.tools/surf_checkpoint_baseline_probe.luau:91
+FAIL Surf seed=388791054 cadence=0.167 cohort=3 delay=2.4 outer=0.25 stagger=0.021 complete=true deaths=2 elapsed=22
+ DEATH slot=1 t=14.5 reason=CampaignCrash xyz=346.0138888888885,3,-15.977779858141176
+ DEATH slot=3 t=16 reason=CampaignCrash xyz=291.92299999999966,3,-4.765024161201276
