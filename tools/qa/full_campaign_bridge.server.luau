@@ -7,6 +7,7 @@ local RunService=game:GetService('RunService')
 local Early=require(script.Parent.campaign_early_course_pilot)
 local Late=require(script.Parent.campaign_late_course_pilot)
 local Combat=require(script.Parent.campaign_combat_pilot)
+local Tubes=require(script.Parent.campaign_tubes_arbitration)
 local Nav=require(script.Parent.route_navigation)
 while not _G.BrickToadsFullCampaignHub do task.wait() end
 local hub=_G.BrickToadsFullCampaignHub
@@ -224,6 +225,7 @@ local function plan(player)
         output=combatPlan or neutral()
     else
         output=(index<=7 and Early.plan(ctx) or Late.plan(ctx)) or neutral()
+        if modes.mode=='Tubes' and slot==leadSlot then output=Tubes.plan(ctx,output) end
         if modes.mode=='Rope' and slot~=leadSlot then
             local x=slot==2 and 0 or -15;local z=slot==2 and -15 or 15
             output={x=math.clamp((x-a.position.x)*.8,-1,1),z=math.clamp((z-a.position.z)*.8,-1,1),run=false}

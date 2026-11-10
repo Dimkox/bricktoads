@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "campaign_traversal_late",
+  "helper": "tools/qa/campaign_tubes_arbitration.lua",
+  "sha256": "89bd80f301deb2d82311bc456b99e7a5ae6b6f322925d7c277f275d301b56e2e",
+  "scope": "Independent read-only source review and existing numerical checks; no production or bridge edits",
+  "resolvedFinding": {
+    "before": "Water primary replaced route input with tiny facing motion and accepted attack returned neutral, interrupting current compensation, altitude, hazard timing and oxygen progress",
+    "after": "Water primary and accepted attack preserve the route x/z/jump exactly; opportunity only adds ordinary primary and does not select target IDs or chase fish"
+  },
+  "checks": {
+    "contract": {
+      "command": ".tools/luau-0.745/luau.exe build/test_tubes_arbitration_contract.luau",
+      "exitCode": 0,
+      "passed": 5
+    },
+    "activeNumericAI": {
+      "command": ".tools/luau-0.745/luau.exe build/test_tubes_arbitration.luau",
+      "exitCode": 0,
+      "seed": 820297848,
+      "cadence": 0.1,
+      "result": "Won",
+      "elapsed": 30.68333333333287,
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 15,
+      "acceptedPrimary": 10,
+      "hits": 2
+    }
+  },
+  "sourceReview": [
+    "Local director/enemy observation views do not change real AI, positions, resources or geometry",
+    "Dry entry Robot combat is bounded at X32, before first water begins at X35",
+    "Dry depth recentering runs before crossing into water, where input Z means altitude",
+    "Water uses existing world targeting for a nearby primary; it preserves course movement rather than chasing or diving",
+    "Accepted ordinary attacks remain subject to real Session identity, cooldown, facing, windup, contact and damage rules"
+  ],
+  "integrationReview": "Verified full_campaign_bridge.server.luau now calls Tubes.plan only when slot==leadSlot. This addresses the follower-primary integration condition; existing ordinary ally-facing filtering remains active for the lead.",
+  "nativeProofReview": {
+    "source": "../2026-11-10-native-tubes-campaign-9/stage9-with-arbitration-native.json",
+    "status": "passed",
+    "result": "Won",
+    "elapsed": 30.55519700050354,
+    "attempt": 1,
+    "stock": 3,
+    "rawLife": 15,
+    "sameActor": true,
+    "ordinaryDeaths": 0,
+    "ordinaryHits": 2,
+    "minimumObservedWaterOxygen": 10.316998630824187,
+    "cleanup": true,
+    "baseline": "Matching route-only native fixture also Won, after two ordinary paid deaths (attempt3/stock1); it is not an absolute-failure RED. Campaign10 remains the separate observed continuous loss."
+  },
+  "limits": [
+    "One seed/cadence numerical GREEN does not establish universal robustness; combat agent reports18/25 broader cases won",
+    "Native NPC-active stage9 proof was independently read and checked; it is a prepared sole-Hero3 scene rather than a continuous campaign or registered-client run",
+    "This report does not claim a full campaign pass"
+  ]
+}

@@ -402,13 +402,22 @@ local function stepOffEnemy(c, q, enemy, intent)
     local material=body.humanoid.FloorMaterial
     if material==nil or material=='Air' or tostring(material)=='Enum.Material.Air' then return nil end
     local candidates=retreatCandidates(c,q,7)
+    -- A near-exact stack has no stable away axis. Include both inward
+    -- diagonals at an edge; the strict support/direction gates still decide.
+    local diagonal=7/math.sqrt(2)
+    for _,axis in ipairs({{1,1},{-1,1},{1,-1},{-1,-1}}) do
+        candidates[#candidates+1]={x=q.x+axis[1]*diagonal,y=p.y,z=q.z+axis[2]*diagonal}
+    end
     for _,zone in ipairs(c.definition.zones or {}) do
         for _,floor in ipairs(zone.platforms or {}) do
             local minX,maxX=floor.x-floor.w/2+3,floor.x+floor.w/2-3
             local minZ,maxZ=floor.z-floor.d/2+3,floor.z+floor.d/2-3
             local base=floor.y+floor.h/2+3
-            if p.x>=minX and p.x<=maxX and p.z>=minZ and p.z<=maxZ and p.y<=base+12
-                and q.x>=minX and q.x<=maxX and q.z>=minZ and q.z<=maxZ and math.abs(q.y-base)<1.5 then
+            -- Actors can stand near the authored edge, including on an NPC.
+            -- Observe the whole support; retreat goals keep the inner margin.
+            local observed=.001
+            if p.x>=minX-3-observed and p.x<=maxX+3+observed and p.z>=minZ-3-observed and p.z<=maxZ+3+observed and p.y<=base+12
+                and q.x>=minX-3-observed and q.x<=maxX+3+observed and q.z>=minZ-3-observed and q.z<=maxZ+3+observed and math.abs(q.y-base)<1.5 then
                 for _,goal in ipairs(candidates) do
                     local dot=(goal.x-p.x)*(q.x-p.x)+(goal.z-p.z)*(q.z-p.z)
                     if goal.x>=minX and goal.x<=maxX and goal.z>=minZ and goal.z<=maxZ and dot<=0 then

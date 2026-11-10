@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "scope": "Prepared native normal-input stage12 and stage13 acceptance only; not a continuous campaign or client/device/network acceptance",
+  "studioId": "97ee37f5-3840-470c-b002-094802085c47",
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "seed": 820297848,
+  "heroSlot": 1,
+  "inputCadence": 0.1,
+  "runnerHash": "b201e2edbb0966a4fecbdf30ca5b5cd0a5a91bfe01d526a12d71f9064678c257",
+  "preparation": {
+    "ownedModuleClones": true,
+    "offsetsZ": {
+      "12": 65536,
+      "13": 69632
+    },
+    "offsetY": 32,
+    "authoredSpawn": true,
+    "preparedHeroPoses": false,
+    "realHeartbeatSessionDirectorAndPresentation": true,
+    "npcAI": true,
+    "bossAI": true,
+    "ordinarySessionIntentsOnly": true,
+    "healthStockAIOrGeometryEdits": false,
+    "lightingRestoredBeforeYield": true
+  },
+  "cases": [
+    {
+      "stage": 12,
+      "mode": "Tower",
+      "result": "Won",
+      "elapsed": 25.596765995025635,
+      "rawLife": 47,
+      "attempt": 2,
+      "stock": 2,
+      "sameActorAsInitial": false,
+      "ordinaryDeathReasons": [
+        "CampaignCrash"
+      ],
+      "finalGrounded": true,
+      "finalSupport": "tower-19",
+      "finalPosition": {
+        "y": 102,
+        "x": 22.729612350463867,
+        "z": -1.546875
+      },
+      "bossHitEvents": 0,
+      "intentCounts": {
+        "Jump:OK": 39,
+        "Move:OK": 225,
+        "Move:REACTION": 7,
+        "Jump:REACTION": 2
+      },
+      "frameStats": {
+        "max": 0.0321052111685276,
+        "total": 25.61720069963485,
+        "count": 1537
+      },
+      "fullEvidence": "stage12-native-result.json",
+      "fixtureCleanup": true,
+      "lightingRestoredBeforeYield": true,
+      "sourcePolicyHashes": {
+        "CombatPilot": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+        "EarlyPilot": "f4cb9f153ea18f7e931906419e6173ce37fdef24fabaced85fdf1d85fb772ab5",
+        "LatePilot": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8",
+        "Nav": "d8c7603544f84ca56b3511c253d2818756ad8ae5c737bd55d8103a9f0bae5959",
+        "Runner": "b201e2edbb0966a4fecbdf30ca5b5cd0a5a91bfe01d526a12d71f9064678c257"
+      }
+    },
+    {
+      "stage": 13,
+      "mode": "Finale",
+      "result": "Won",
+      "elapsed": 79.49319696426392,
+      "rawLife": 47,
+      "attempt": 1,
+      "stock": 3,
+      "sameActorAsInitial": true,
+      "ordinaryDeathReasons": [],
+      "finalGrounded": true,
+      "finalSupport": "floor-1",
+      "finalPosition": {
+        "y": 2.9999923706054688,
+        "x": 98.04403686523438,
+        "z": -13.03125
+      },
+      "boss": {
+        "bossDefeated": true,
+        "bossRawLife": 0,
+        "rawLife": 0,
+        "progress": 240,
+        "bossVulnerable": false,
+        "maxRawLife": 15,
+        "bossState": "Defeated",
+        "bossPhase": 2,
+        "bossType": "DarkQueen",
+        "bossName": "Dark Queen",
+        "bossMaxProgress": 240,
+        "bossMaxRawLife": 15,
+        "maxProgress": 240,
+        "bossProgress": 240,
+        "projectiles": 0
+      },
+      "bossHitEvents": 43,
+      "intentCounts": {
+        "Attack:OK": 46,
+        "Move:OK": 723
+      },
+      "frameStats": {
+        "max": 0.03106921911239624,
+        "total": 79.51304828049615,
+        "count": 4771
+      },
+      "fullEvidence": "stage13-native-result.json",
+      "fixtureCleanup": true,
+      "lightingRestoredBeforeYield": true,
+      "sourcePolicyHashes": {
+        "CombatPilot": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+        "EarlyPilot": "f4cb9f153ea18f7e931906419e6173ce37fdef24fabaced85fdf1d85fb772ab5",
+        "LatePilot": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8",
+        "Nav": "d8c7603544f84ca56b3511c253d2818756ad8ae5c737bd55d8103a9f0bae5959",
+        "Runner": "b201e2edbb0966a4fecbdf30ca5b5cd0a5a91bfe01d526a12d71f9064678c257"
+      }
+    }
+  ],
+  "reporterRegression": {
+    "red": "Original runner full Result.StringValue save exceeded Roblox200000-character limit; partial stage12/13 runs stopped as fixture errors and do not establish gameplay terminal outcomes",
+    "redRunnerHash": "3c6f58bd38010a84ab747203a97b9da4873fa276a5e4ce3eff94c874ada2542f",
+    "fix": "Full JSON retained in closure for stable chunk reads; Result.StringValue stores compact metadata",
+    "green": "Stage13 completed; all448595 JSONcharacters read via18chunks and parsed; complete snapshot saved",
+    "serialization": "Saved JSON is a canonical reserialization of the complete immutable chunk response",
+    "partialEvidence": [
+      "stage12-partial-reporter-limit.json",
+      "stage13-partial-reporter-limit.json"
+    ]
+  },
+  "cleanup": {
+    "ownedStage12WorldAndContainerAbsent": true,
+    "ownedStage13WorldAndContainerAbsent": true,
+    "productionBuildUnchanged": true,
+    "mainPlayNotStopped": true
+  },
+  "limits": [
+    "One synthetic server hero; no actual client input or multiplayer claim",
+    "Stage12 legitimately completed after an ordinary paid retry; not a no-death clear",
+    "The first partial reporting failures emitted fixture errors; no retroactive claim about campaign10 production console cleanliness"
+  ],
+  "evidence": [
+    {
+      "file": "stage12-native-result.json",
+      "bytes": 194493,
+      "sha256": "9beee13877866bfed0dc05de9dfdcb0de3edfb4d1e29fc3035f2a346ecf52c7b"
+    },
+    {
+      "file": "stage13-native-result.json",
+      "bytes": 448596,
+      "sha256": "13bb2ba3609cf9e8c83e843f64cdda11d11d8e592c344ce5a57a4ffe130d1e86"
+    }
+  ]
+}
