@@ -19,6 +19,8 @@ The new audio consists of16 original synthesized SFX and four original chiptune 
 
 The [final validation](final-validation.json) ran71 commands with zero failures and compiled216 Luau files. Focused results include23 cast presentation,15 server appearance,14 client visibility,18 audio,6 source-profile,6 packaging and35 playable-builder contracts. The historical58-command campaign checkpoint stays at its original path and source version.
 
+The first GitHub CI run exposed an undeclared geometry dependency on five ignored source-cache files. The [clean-checkout addendum](ci-clean-checkout.json) reproduces that failure, then verifies the explicit pinned SHA/size bootstrap with five integrity contracts, an actual five-file/2,816-byte download, unchanged geometry tests, offline cache reuse and a byte-identical playable build. This follow-up changes CI/test preparation only; the game source and native-tested playable above remain unchanged.
+
 ## Native Studio evidence
 
 All Studio operations used Roblox MCP and one existing Studio window, place117412694427208. No Team Test or additional client/window was opened.

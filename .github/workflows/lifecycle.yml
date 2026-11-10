@@ -32,6 +32,10 @@ jobs:
           done
       - name: Native Luau contract tests
         run: /tmp/bricktoads-luau/luau tests/run.luau
+      - name: Bootstrap SHA-verified source inputs for cast geometry
+        run: |
+          python3 tests/canonical_cast_geometry/test_source_bootstrap.py
+          python3 research/canonical-visuals/fetch_pinned_source.py --profile cast-geometry
       - name: Playable game contracts
         run: |
           /tmp/bricktoads-luau/luau tests/run_gameplay.luau
