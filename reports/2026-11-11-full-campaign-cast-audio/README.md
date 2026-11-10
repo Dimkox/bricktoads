@@ -2,11 +2,13 @@
 
 Current production source: `a2440cee9f81d4f6eddbd4425a72f8f4fe74a25a4939f9124df7ab2708bed836`. Derived playable:1,938,467bytes, SHA256 `aa097da7ba0825911cbd3efce67f61f5141a397343746d6ea81a9d5d7365ab37`. All59 packaged source paths were compared to Studio by UTF8 length and Adler32 before disposable QA appends. The builder's source fingerprint is SHA256.
 
+**Final native29 completed13/13 with terminal Won and every required phase of all six bosses.** Studio God Mode was explicitly enabled: five respawns, final attempt6/stock3/Life47. This does not establish finite-reserve acceptance. The actual Clinger defect is fixed: all220 recorded moving observations use Ride and face the earned movement direction; all217 sampled sole/deck gaps are below0.000001stud. The complete prepared character/element catalogs and remaining world prop/effect checks also passed within their stated scopes.
+
 Only the existing Studio window was used, through Roblox Studio MCP. The account is Archaicus14, UserId11946162891, place117412694427208. The protected starter remains SHA256 `1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353`.
 
 ## Complete catalog
 
-[Full native catalog](full-catalog-final.json) passed on9737089d. Its resource, hero, cast and course-appearance implementations are unchanged in a2440cee; the later automatic-Clinger integration and final campaign are checked separately:
+[Full native catalog](full-catalog-a244.json) passed on the final a2440cee source. The earlier [9737089d catalog](full-catalog-final.json) is retained. Automatic-Clinger gameplay integration and the continuous campaign are checked separately:
 
 - All29 imported cast families,166 mesh segments,368 sampled cast poses.
 - Three hero palettes,12 attack/fear morph resources, all32 mapped hero action selectors and20 additional pose/context cases:156 hero cases total.
@@ -14,6 +16,8 @@ Only the existing Studio window was used, through Roblox Studio MCP. The account
 - Every vehicle with every hero:12 actual approved-resource mount cases. Both posed foot boxes meet the actual Deck/RiderDeck top within0.000001stud; physical R6 properties and poses remain unchanged by the production cosmetics.
 
 The prepared Edit fixture explicitly disconnects only its own cosmetic joints before placing solved preview meshes. It checks production C0/C1 equations, resources and preserved physical bodies; this is not live solver, multiplayer or gameplay-selection evidence for all enumerated source branches. The real-client campaign below is separate.
+
+[Supplemental actual client visibility](full-catalog-client-analysis.json) closes a bounded-retention gap: the continuous29 trace retained later canonical visibility for27 families, while Walker and Robot appeared only in early fallback rows. A separate pinned, static QA gallery on a2440cee used the unmodified production gate to load all29 families: all166 segments visible, all29 Ready, no visible fallbacks. Only the owned gallery Models were made Persistent because Workspace streaming is enabled; no player/camera/input, production streaming setting or explicit QA preload was changed. This establishes prepared client resource availability, not natural spawn timing or default distance streaming. One initial malformed appended QA reader was corrected and compiled both standalone and with the full client before the successful repeat; production source was restored between runs.
 
 [Course acceptance](course-elements-final.json) passed all11 detailed cases and the complete40-kind renderer inventory. It verifies resources, finite geometry, unchanged physical object identity/size/pose/queries/SurfaceId, same-size movement, resizing, removal, floor membership and unchanged shared templates. Four kinds use imported vehicles, seven use authored industrial structures and Serpent uses its existing imported articulated support. The other28 kinds retain their existing primitive representation. Thus the complete inventory is checked, but fully detailed art for every scene element is not claimed. `GameWorld` projectiles, pickups and clubs are separate paths from this40-kind inventory.
 
@@ -45,12 +49,31 @@ The live run exposed an integration gap that the manually prepared mount cases c
 
 The corrected a2440cee code stores a separate presentation heading from the segment that actually earned movement, uses that heading for hero/vehicle facing and selects Ride during unfinished automatic Clinger control. It does not alter actual mode velocity or mount state. Four differential real-Session traces compare4,110 ticks against the frozen old traversal implementation, including wrong input, coarse cadence, damage/reaction and ordinary paid retries. Positions, inputs, progression, chase, collisions, resources, spawns, kills and impulses remain identical. Actual world/context tests cover cardinal directions, zero velocity, invalid headings, other modes, leaving Ride and unmounted Clinger forwarding its live deck.
 
-Final attempt29, `bricktoads-course2900-752f7404`, seed1158731273, is running on a2440cee with the same ordinary input policy and explicit God Mode. [Preflight](attempt29-preflight.json) binds the final source. Its read-only heading observer must establish Ride, deck contact and correct hero/vehicle facing during actual traversal; terminal completion is pending.
+Final attempt29, `bricktoads-course2900-752f7404`, seed1158731273, completed all13 continuously on a2440cee with933 one-second observations and the same ordinary input policy. [Preflight](attempt29-preflight.json), [terminal archive](attempt29-terminal-archive.json), unthinned samples, motion, journal, client AV, source presentation and heading evidence were exported before Stop. [Verified God Mode analysis](attempt29-god-mode-summary.json) passes stage order/epochs, fixed registered owner/cohort, earned completion events, positive terminal survivor and every required boss phase. Its original finite-policy failures remain retained.
+
+| Boss | Actual completion evidence |
+| --- | --- |
+| Causeway Guardian | Three returned balls |
+| Big Blag | Phases1/2/3, defeat event |
+| Robo-Manus | Phases1/2, progress240 and21 underflows, defeat event |
+| General Slaughter | Phases1/2, progress240 and21 underflows, defeat event |
+| Buzzball | Chase and phases1/2, defeat event |
+| Dark Queen | Phases1/2, progress240 and21 underflows, defeat event |
+
+[Actual heading observations](attempt29-terminal-heading.json) establish220/220 Ride/Ride states, all four cardinal directions and hero/vehicle direction dot products1. Simulation velocity stays zero and `mounted=false` stays unchanged for automatic Clinger; facing has its own presentation channel. The native presentation observer records217 actual Clinger sole/deck samples with maximum absolute gap0.0000000564stud. All four vehicle kinds reach client Ready with visible canonical meshes and hidden fallbacks; pending frames preserve their fallback.
+
+The [final audiovisual analysis](attempt29-av-analysis.json) records all13 stages with loaded music, positive sampled music loudness and all nine voices loaded on every sample, zero invalid SoundRegions,660 SFX Played events, particle peak12/24 and no recorded Lua/observer errors or presentation anomalies. Its30 console entries are asset-content representation warnings. Twenty-two stage1 graphics31 observations support the corrected Dash branch; a matched actual producer receipt was retained in28, not29, and these are kept distinct. Prepared selectors do not imply that gameplay selected every possible source branch.
+
+After export, ordinary Play was stopped and [all59 production paths were verified restored exactly](attempt29-restored-edit.json). They were [verified again after the supplemental client gallery](final-restored-edit.json), with no owned QA scripts/galleries remaining. The user's original Editor God Mode=true setting remains. No extra Studio window or native computer control was used.
 
 [Attempt28 audiovisual analysis](attempt28-av-analysis.json) records all13 stages with loaded music and positive loudness, all9 voices loaded on every complete voice sample,631 Played SFX events and particle peak14/24. Stages4/6 had no sampled cues; stage12's two Played cues had no positive sampled SFX loudness, which does not establish inaudibility of short cues. All45 console warnings were asset-content representation warnings, with zero Lua/observer error records. All four vehicles reached client Ready with canonical meshes visible and fallbacks hidden; pending frames retain visible fallbacks. Actual source graphics31 was observed on the same actor as the ordinary-NPC profile3 receipt. Same-actor articulation evidence is separated from aggregates across different actors. Overall presentation acceptance remains false for28 because of Clinger.
 
 ## Automated verification and limits
 
 [Final Clinger regression](validation-clinger-final.json):77/77 commands,227 Luau compilations and66 Python compilations pass on a2440cee. The earlier [9737089d receipt](validation-final.json) is retained. These include source combat, confirmed Dash, Ride alignment,16 visibility contracts,10 course groups, seven strict packaging tests,37 builder tests and13 recorded/adversarial analyzer tests. The observer additionally passed with its portable explicit Luau argument after CI wiring. Required new checks are included in the GitHub workflow.
+
+The later supplemental visibility-only reader also compiled standalone and concatenated with the actual client, then passed its native29-family/166-segment check. It does not change the production source fingerprint.
+
+Code commit `b4f0332127000017d87d42e78805ee000ac0c1bf` passed both [BrickToads checks](https://github.com/Dimkox/bricktoads/actions/runs/42924456430) and [Combat stand checks](https://github.com/Dimkox/bricktoads/actions/runs/42924456321). Later evidence-only commits retain the same production source fingerprint; exact-head CI is also checked in PR4 before delivery.
 
 Native prepared catalogs do not prove physical phone/tablet operation, genuine-account reconnect, public-server load, complete NES interpreter/timing parity or every possible gameplay branch. Real same-account reconnect remains unverified because no second genuine account is available to keep the target server alive. No public experience is published by this change.
