@@ -1,0 +1,136 @@
+{
+  "status": "bounded_transport_green_pending_native_verification",
+  "at": "2026-11-10T17:55:36.581928+00:00",
+  "baselineSha256": "69829b89eb61699cdd1a3864faeeaf0e20dcbdee11a71c6b95b45e55ced5b3c5",
+  "candidateSha256": "b40c4b42d5a44d9f7561be8228204c5bae3f292292d9630eaf0fc21384544c65",
+  "workingSha256": "b40c4b42d5a44d9f7561be8228204c5bae3f292292d9630eaf0fc21384544c65",
+  "productionClientSha256": "cc3dc908559407962a305bcd3b73dff682a6d250567ac95e1567dad6a77a3351",
+  "productionSenderExtractSha256": "bffba8611d31fb776d09409d10ac0a23633ba39429a10adac978fa7a293eb9a7",
+  "productionConfigSha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624",
+  "onlyReviewedAdapterDelta": true,
+  "compileExit": 0,
+  "checks": [
+    {
+      "scope": "baseline",
+      "exit": 1,
+      "passed": 10,
+      "failed": 2,
+      "rates": [
+        {
+          "packets": 1013,
+          "move": 449,
+          "jump": 376,
+          "attack": 188,
+          "worstOneSecond": 37,
+          "rejected": 0
+        },
+        {
+          "packets": 878,
+          "move": 428,
+          "jump": 300,
+          "attack": 150,
+          "worstOneSecond": 34,
+          "rejected": 0
+        },
+        {
+          "packets": 755,
+          "move": 372,
+          "jump": 231,
+          "attack": 152,
+          "worstOneSecond": 30,
+          "rejected": 0
+        },
+        {
+          "packets": 1057,
+          "move": 493,
+          "jump": 376,
+          "attack": 188,
+          "worstOneSecond": 39,
+          "rejected": 0
+        },
+        {
+          "packets": 1050,
+          "move": 600,
+          "jump": 300,
+          "attack": 150,
+          "worstOneSecond": 38,
+          "rejected": 0
+        },
+        {
+          "packets": 775,
+          "move": 404,
+          "jump": 231,
+          "attack": 140,
+          "worstOneSecond": 30,
+          "rejected": 0
+        }
+      ]
+    },
+    {
+      "scope": "candidate",
+      "exit": 0,
+      "passed": 12,
+      "failed": 0,
+      "rates": [
+        {
+          "packets": 1013,
+          "move": 449,
+          "jump": 376,
+          "attack": 188,
+          "worstOneSecond": 37,
+          "rejected": 0
+        },
+        {
+          "packets": 878,
+          "move": 428,
+          "jump": 300,
+          "attack": 150,
+          "worstOneSecond": 34,
+          "rejected": 0
+        },
+        {
+          "packets": 755,
+          "move": 372,
+          "jump": 231,
+          "attack": 152,
+          "worstOneSecond": 30,
+          "rejected": 0
+        },
+        {
+          "packets": 1057,
+          "move": 493,
+          "jump": 376,
+          "attack": 188,
+          "worstOneSecond": 39,
+          "rejected": 0
+        },
+        {
+          "packets": 1050,
+          "move": 600,
+          "jump": 300,
+          "attack": 150,
+          "worstOneSecond": 38,
+          "rejected": 0
+        },
+        {
+          "packets": 775,
+          "move": 404,
+          "jump": 231,
+          "attack": 140,
+          "worstOneSecond": 30,
+          "rejected": 0
+        }
+      ]
+    }
+  ],
+  "independentReview": "client_delivery_review independently reran RED/GREEN and all six rate clocks; bounded CLEAR",
+  "limits": [
+    "RPC/render clocks and RemoteEvent capture are adapted; no Roblox engine, actors or gameplay simulation is supplied.",
+    "The 95ms counterexample is an extracted-code clock case, not a captured Native22 client reply timestamp.",
+    "Fixed active sender context does not establish context-transition or unplayable-send recovery behavior.",
+    "Six30s rate clocks bound the tested30/60fps and RTT0/.02/.05 alignments, not arbitrary RTT/FPS/manual-input patterns.",
+    "Rate saturation uses the existing urgent-force path to bound every-plan Move plus Jump and guarded primary.",
+    "No production source, server rate limit, gameplay pilot or resources are modified.",
+    "No native Studio, Guardian, zero-death Ice or full13 acceptance claim."
+  ]
+}

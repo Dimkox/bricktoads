@@ -1,10 +1,11 @@
 """Choose a short, unique QA run ID with the ordinary production seed hash."""
 import json
+import sys
 from itertools import product
 
 MODULUS = 2147483647
 TARGET_SEED = 1158731273
-PREFIX = 'bricktoads-qa-22-'
+PREFIX = sys.argv[1] if len(sys.argv) > 1 else 'bricktoads-qa-22-'
 HEX = '0123456789abcdef'
 
 

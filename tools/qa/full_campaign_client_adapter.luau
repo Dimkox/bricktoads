@@ -22,7 +22,11 @@ if RunService:IsStudio() then
             if r.sync then sendIntent({kind='Sync'})
             elseif r.start and now>=startAt and snapshot then startAt=now+2;sendIntent({kind='Start'})
             elseif r.plan then
-                qa.move=r.plan;sendMovement(r.plan.jump or r.plan.primary)
+                local previous=qa.move
+                local changed=(r.plan.x or 0)~=(previous.x or 0) or (r.plan.z or 0)~=(previous.z or 0)
+                    or (r.plan.run==true)~=(previous.run==true)
+                -- Changed steering is immediate; unchanged keepalives retain their gate.
+                qa.move=r.plan;sendMovement(changed or r.plan.jump or r.plan.primary)
                 if r.plan.jump then send('Jump') end
                 if r.plan.primary and now-lastPrimary>=.13 then lastPrimary=now;send('Attack',{attack='Punch'}) end
             end

@@ -1,0 +1,209 @@
+{
+  "schema": "bricktoads-bounded-causal-audit-v1",
+  "runId": "bricktoads-qa-22-00-5530a024",
+  "seed": 1158731273,
+  "stageStart": 1794332595.979177,
+  "status": "read_only_audit_complete_with_first_death_retention_gap",
+  "edits": {
+    "studio": false,
+    "source": false,
+    "policy": false,
+    "git": false
+  },
+  "times": "seconds relative to stageStart",
+  "retention": {
+    "journalEvents": 256,
+    "journalFirst": 117.9274160861969,
+    "motionFirst": 108.60649108886719,
+    "firstDeathAt": 35.826404094696045
+  },
+  "geometry": {
+    "source": "CampaignDefinition.build(1,1158731273)",
+    "aqueduct1": {
+      "minX": 4,
+      "maxX": 54,
+      "minZ": -23,
+      "maxZ": 17
+    },
+    "courtyard": {
+      "minX": 128,
+      "maxX": 228,
+      "minZ": -30,
+      "maxZ": 22
+    },
+    "cliff1": {
+      "minX": 228,
+      "maxX": 260,
+      "minZ": -6,
+      "maxZ": 14
+    },
+    "cliff2": {
+      "minX": 265,
+      "maxX": 297,
+      "minZ": -15,
+      "maxZ": 7
+    },
+    "guardian": {
+      "minX": 594,
+      "maxX": 696,
+      "minZ": -35,
+      "maxZ": 35
+    }
+  },
+  "deaths": [
+    {
+      "attempt": 1,
+      "at": 35.826404094696045,
+      "actor": 2,
+      "cause": "Fall confirmed; initiating NPC hit versus own-input failure unknown",
+      "confidence": "unknown initiating cause",
+      "observedPosition": [
+        8.151789665222168,
+        -36.09673309326172,
+        -51.12934112548828
+      ],
+      "observedVelocity": [
+        3.824134349822998,
+        -135.03305053710938,
+        -29.523807525634766
+      ],
+      "limits": "Motion and Hit journal surrounding35s overwritten; sparse archive last predeath sample31.825932 cannot establish initiating input or Hit"
+    },
+    {
+      "attempt": 2,
+      "at": 137.41319799423218,
+      "actor": 43,
+      "cause": "Ordinary NPC Dragon-10 DragonHeadbutt impulse and reaction, then cliff fall",
+      "hitAt": 136.49224305152893,
+      "hitPosition": [
+        268.8052062988281,
+        2.9987270832061768,
+        3.5660781860351562
+      ],
+      "profile": 22,
+      "lifeBefore": 47,
+      "lifeAfter": 31,
+      "shieldBlocked": false,
+      "lateRecoveryJumpPlannedAt": 136.873,
+      "fallPosition": [
+        262.52032470703125,
+        -36.28871154785156,
+        12.431121826171875
+      ]
+    },
+    {
+      "attempt": 3,
+      "at": 141.1924090385437,
+      "actor": 150,
+      "cause": "Shield-blocked ordinary NPC Dragon-10 DragonHeadbutt still applies impulse/reaction; later edge recovery is too late",
+      "hitAt": 139.01943802833557,
+      "hitPosition": [
+        256.3370361328125,
+        2.999636173248291,
+        6.757907390594482
+      ],
+      "profile": 22,
+      "lifeBefore": 47,
+      "lifeAfter": 47,
+      "shieldBlocked": true,
+      "postHitVelocityAt1390471": [
+        -45.767,
+        14.744,
+        10.189
+      ],
+      "lateRecoveryJumpPlans": [
+        140.5834,
+        140.7218
+      ],
+      "fallPosition": [
+        230.90640258789062,
+        -35.1328010559082,
+        22.018749237060547
+      ]
+    },
+    {
+      "attempt": 4,
+      "at": 225.9908890724182,
+      "actor": 155,
+      "cause": "Guardian Bullet already lethal before final knockback fall; no QA Jump plan after200s",
+      "earlierBulletHitAt": 222.63878107070923,
+      "earlierHitPosition": [
+        611.4913940429688,
+        3,
+        -5.9193830490112305
+      ],
+      "lifeBefore": 31,
+      "lifeAfterEarlierHit": 15,
+      "lethalBulletHitAt": 225.22089195251465,
+      "lethalHitPosition": [
+        601.96533203125,
+        1.997259497642517,
+        -11.220279693603516
+      ],
+      "lethalProfile": 21,
+      "lifeAfterLethal": 0,
+      "dying": true,
+      "knockbackVelocity": [
+        -32.00218200683594,
+        -123.42018127441406,
+        -11.482867240905762
+      ],
+      "fallPosition": [
+        577.4267578125,
+        -35.27736282348633,
+        -20.023820877075195
+      ],
+      "guardianReturns": 2
+    }
+  ],
+  "policyCounterexamples": [
+    {
+      "scope": "Native22 Guardian evasion",
+      "facts": "PlannedZ=-.973892 at222.453/222.587 while nativeVZ=+14.444 at222.587; BulletHit222.6388. Planned movement reversals do not imply current movement clearance."
+    },
+    {
+      "scope": "Native22 postreaction recovery",
+      "facts": "224.719..225.102 FallingDown at stationary601.965/1.997/-11.220 despite Move(-.387604,+.921826); Bullet225.2209 lethal. Upward motion223.519 is not linked to a QA Jump and must not be attributed to one."
+    },
+    {
+      "scope": "Native21 own edge Jump comparison",
+      "facts": "Seed844260480 Aqueduct1Z[-14,22]. At41.8418 p36.815/3/-14.580 plansJump+inwardZ1; flight halts nearZ-16.448 under neutral plans42.1089..42.3584; fall42.8473. Last damage wasWalker-6 EnemyRunStrike36.4778, not a new hit at jump. This is an additional input-policy counterexample, not proof of Native22 first cause."
+    }
+  ],
+  "neededObservations": [
+    "On next first stock drop, freeze/export current motion and detail before900/256 retention trims first death",
+    "For a bounded Guardian reproduction, retain live Bullet id/position/destination/speed with acceptedMove timestamp and Humanoid recovery state around contact; current ordinary motion contains plans, not accepted native Move inputs"
+  ],
+  "limitations": [
+    "No code changes or new Studio run",
+    "Ordinary Causeway has no modeFrameRing accepted axes; action plans are not assumed accepted",
+    "No exact initiating cause for first22death",
+    "Not full13-stage or production-readiness evidence"
+  ],
+  "sources": {
+    "attempt-22-motion.json": {
+      "bytes": 418636,
+      "sha256": "4fed061ed66fc5ed497847c9280ed1e9491d37c728a12dc0fed44d98d27e32a1"
+    },
+    "attempt-22-detail.json": {
+      "bytes": 83024,
+      "sha256": "2055f298cb619c5584f4990797e935b24cda2b27d941e8633b9cb2a582c1c3dc"
+    },
+    "attempt-22-full-natural-archive.json": {
+      "bytes": 37619,
+      "sha256": "0b9628048f76e7f40c263e2d8d5abd79d7cada7d6ef3fac3ff9faa8d0d4e20e8"
+    },
+    "attempt-21-motion.json": {
+      "bytes": 266328,
+      "sha256": "a9f73c5e4fb5a96607f8e674ffa7d3755f743f4cf0bb6b1c22ad8f5f7a8dc772"
+    },
+    "attempt-21-detail.json": {
+      "bytes": 76111,
+      "sha256": "92b01a152e0f19918367cb5e6bc57e16961087fa0058fa370770d149acee5d0e"
+    },
+    "attempt-21-full-natural-archive.json": {
+      "bytes": 23265,
+      "sha256": "78d9f59ba5f3be7e6ec4eab37f16c3c62b60e193fce946ef24623d4a8c374b4d"
+    }
+  }
+}
