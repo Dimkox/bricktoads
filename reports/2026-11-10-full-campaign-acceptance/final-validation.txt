@@ -1,10 +1,10 @@
 [PREFLIGHT] .tools/python-3.13.9/python.exe tools/build_bricktoads_place.py
 C:\Users\User\Documents\bricktoads\places\BrickToadsPlayable.rbxlx: 1026973 bytes; sha256=9f9689b3da56384344209a2743f0eac4eb74e573b3100e0f2a06155e59598a4b
-EXIT 0; 0.287 seconds
+EXIT 0; 0.614 seconds
 
 [COMPILATION] .tools/luau-0.745/luau-compile.exe --null src/client/BossQueuePanel.luau src/client/BrickToadsClient.client.luau src/client/CombatFeedback.luau src/client/GroupPanel.luau src/client/MovementInput.luau src/client/RobloxInputBindings.luau src/client/SpectatorCamera.luau src/server/BrickToadsServer.server.luau src/server/RunLifecycle.lua src/server/gameplay/BossIntro.lua src/server/gameplay/BossIntroWorld.lua src/server/gameplay/BossQueue.lua src/server/gameplay/CampaignBoss.lua src/server/gameplay/CampaignDefinition.lua src/server/gameplay/CampaignDirector.lua src/server/gameplay/CampaignEnemies.lua src/server/gameplay/CampaignModes.lua src/server/gameplay/CampaignRace.lua src/server/gameplay/CampaignRoster.lua src/server/gameplay/CampaignWorld.lua src/server/gameplay/CanonicalAnimation.lua src/server/gameplay/CanonicalHeroPresentation.lua src/server/gameplay/CanonicalWalker.lua src/server/gameplay/CharacterAppearance.lua src/server/gameplay/DragonFlight.lua src/server/gameplay/DragonWorld.lua src/server/gameplay/EnemyCarry.lua src/server/gameplay/GameConfig.lua src/server/gameplay/GameController.lua src/server/gameplay/GameWorld.lua src/server/gameplay/GuardianAppearance.lua src/server/gameplay/GuardianPattern.lua src/server/gameplay/HealingFlies.lua src/server/gameplay/LevelDefinition.lua src/server/gameplay/LevelDirector.lua src/server/gameplay/LevelVariation.lua src/server/gameplay/MatchHub.lua src/server/gameplay/RunJournal.lua src/server/gameplay/SourceCombat.lua src/server/gameplay/WalkerClubs.lua src/shared/BrickToadsConfig.luau src/shared/HeroPortraits.luau src/shared/TextCatalog.luau src/shared/TextLocalization.luau src/stand/client/Stand.client.lua src/stand/server/Combat.lua src/stand/server/Config.lua src/stand/server/ConnectionRegistry.lua src/stand/server/RobloxWorld.lua src/stand/server/Session.lua src/stand/server/Stand.server.lua tests/CombatFeedback.spec.luau tests/GroupPanel.spec.luau tests/Lifecycle.spec.lua tests/Localization.spec.luau tests/SpectatorCamera.spec.luau tests/boss_intro_asset/contracts.luau tests/campaign_bosses/BossMoveTimeout.spec.lua tests/campaign_bosses/CampaignBoss.spec.lua tests/campaign_bosses/CampaignBossMovement.spec.lua tests/campaign_bosses/CampaignBossProjectile.spec.lua tests/campaign_bosses/ReactionExpiry.spec.lua tests/campaign_enemies/CampaignEnemies.spec.lua tests/campaign_enemies/ConnectionMovement.spec.lua tests/campaign_input/contracts.luau tests/campaign_modes/CampaignDefinition.spec.lua tests/campaign_modes/CampaignModes.spec.lua tests/campaign_modes/ClingerEndpoint.spec.lua tests/campaign_modes/CourseDrivers.lua tests/campaign_modes/JetPlanner.lua tests/campaign_modes/PlatformDrivers.lua tests/campaign_modes/RunCourseDrivers.luau tests/campaign_modes/RunPlatformDrivers.luau tests/campaign_modes/VehicleLateBoarder.spec.lua tests/campaign_modes/VehicleLifecycle.lua tests/campaign_progression/Controller.spec.lua tests/campaign_progression/Director.spec.lua tests/campaign_progression/Runtime.spec.lua tests/campaign_progression/Session.spec.lua tests/campaign_progression/VehicleEnemy.spec.lua tests/campaign_progression/VictorySurvivor.spec.lua tests/campaign_race/CampaignRace.spec.lua tests/campaign_world/contracts.luau tests/canonical_hero_presentation/appearance_contracts.luau tests/canonical_hero_presentation/fear_contracts.luau tests/canonical_hero_presentation/morph_contracts.luau tests/canonical_hero_presentation/rotated_rest_contracts.luau tests/canonical_hero_presentation/world_contracts.luau tests/character_appearance/contracts.luau tests/gameplay/BossIntro.spec.lua tests/gameplay/BossQueue.spec.lua tests/gameplay/CanonicalAnimation.spec.lua tests/gameplay/CanonicalHeroPresentation.spec.lua tests/gameplay/CanonicalWalker.spec.lua tests/gameplay/DragonFlight.spec.lua tests/gameplay/DragonStrikes.spec.lua tests/gameplay/DragonTransportStudioAcceptance.server.luau tests/gameplay/EnemyCarry.spec.lua tests/gameplay/GameController.spec.lua tests/gameplay/GuardianPattern.spec.lua tests/gameplay/GuardianSession.spec.lua tests/gameplay/HealingFlies.spec.lua tests/gameplay/LevelDirector.spec.lua tests/gameplay/LevelRoute.spec.lua tests/gameplay/LevelVariation.spec.lua tests/gameplay/MatchHub.spec.lua tests/gameplay/MovementInput.spec.lua tests/gameplay/PigStrikes.spec.lua tests/gameplay/RunJournal.spec.lua tests/gameplay/RunningCombat.spec.lua tests/gameplay/SourceCombat.spec.lua tests/gameplay/WalkerClubs.spec.lua tests/gameplay/WalkerHeavyStudioAcceptance.server.luau tests/gameplay/WalkerStrikes.spec.lua tests/gameplay/fixtures/canonical_walker_pose_goldens.lua tests/group_world/contracts.luau tests/guardian_appearance/contracts.luau tests/reconnect/TeamTestTransport.server.luau tests/run.luau tests/run_boss_intro.luau tests/run_boss_queue.luau tests/run_campaign_bosses.luau tests/run_campaign_enemies.luau tests/run_campaign_input.luau tests/run_campaign_modes.luau tests/run_campaign_progression.luau tests/run_campaign_race.luau tests/run_campaign_roster.luau tests/run_canonical_animation.luau tests/run_canonical_hero_presentation.luau tests/run_canonical_walker.luau tests/run_connections.luau tests/run_dragon_flight.luau tests/run_dragon_strikes.luau tests/run_enemy_carry.luau tests/run_feedback.luau tests/run_gameplay.luau tests/run_groups.luau tests/run_guardian.luau tests/run_healing_flies.luau tests/run_journal.luau tests/run_level_route.luau tests/run_level_traversal.luau tests/run_level_variation.luau tests/run_localization.luau tests/run_movement_input.luau tests/run_pig_strikes.luau tests/run_route_driver_navigation.luau tests/run_running_combat.luau tests/run_scooter_acceptance.luau tests/run_source_combat.luau tests/run_stand.luau tests/run_walker_clubs.luau tests/run_walker_strikes.luau tests/scooter_network/Client.client.luau tests/stand/Combat.spec.lua tests/stand/CombatStandSecurityScenarios.lua tests/stand/CombatStandStudioAcceptance.server.lua tests/stand/CombatStandStudioClient.client.lua tests/stand/ConnectionRegistry.spec.lua tests/stand/FakeWorld.lua tests/stand/Session.spec.lua tests/stand/StandGateway.spec.lua tests/stand/StandGatewayFixture.lua tests/stand/StudioReconnectTransportProbe.server.lua tests/stand/observe_actual_reconnect.luau tools/qa/campaign_combat_pilot.lua tools/qa/campaign_early_course_pilot.lua tools/qa/campaign_late_course_pilot.lua tools/qa/campaign_tubes_arbitration.lua tools/qa/full_campaign_bridge.server.luau tools/qa/full_campaign_client_adapter.luau tools/qa/full_campaign_mode_observer.server.luau tools/qa/studio_dragon_ascent_validation.server.luau tools/qa/studio_dragon_ceiling_physics.server.luau tools/qa/studio_edge_jump_acceptance.luau tools/studio_boss_deadline_acceptance.luau tools/studio_boss_victory_acceptance.luau tools/studio_campaign_boss_attack_acceptance.luau tools/studio_campaign_boss_phase_acceptance.luau tools/studio_guardian_phase_acceptance.luau tools/studio_late_enemy_connection_acceptance.luau tools/studio_launch_combat_acceptance.luau tools/studio_launch_scooter_network.luau tools/studio_launch_scooter_role_network.luau tools/studio_level_route_driver.luau tools/studio_remaining_course_acceptance.luau tools/studio_riding_native_acceptance.luau tools/studio_rope_native_acceptance.luau tools/studio_scooter_acceptance.luau tools/studio_scooter_network_acceptance.luau tools/studio_scooter_role_network_acceptance.luau tools/studio_section_jump_acceptance.luau tools/studio_section_variation_acceptance.luau tools/studio_serpents_native_acceptance.luau tools/studio_tower_spring_acceptance.luau
-Compiled 38 KLOC into 2654 KB bytecode (read 0.04s, parse 0.10s, compile 0.25s)
-EXIT 0; 0.428 seconds
+Compiled 38 KLOC into 2655 KB bytecode (read 0.05s, parse 0.16s, compile 0.44s)
+EXIT 0; 0.719 seconds
 
 [1] .tools/luau-0.745/luau.exe tests/run.luau
 PASS 1/2/3 heroes share templates, not resources
@@ -54,7 +54,7 @@ PASS death cancels a prepared emergency replacement
 PASS attack cancels a prepared emergency replacement
 PASS 120 deterministic life-cycle sequences preserve invariants
 RESULT: 46 passed; 0 failed
-EXIT 0; 0.303 seconds
+EXIT 0; 0.488 seconds
 
 [2] .tools/luau-0.745/luau.exe tests/run_boss_queue.luau
 PASS duplicate selection preserves FIFO priority and invitation deadline
@@ -78,7 +78,7 @@ PASS stale server timestamps cannot reopen an expired invitation
 PASS private views cannot mutate queue order or the active assignment
 PASS invalid operations return errors without consuming another players invitation
 BossQueue: 20 passed
-EXIT 0; 0.032 seconds
+EXIT 0; 0.041 seconds
 
 [3] .tools/luau-0.745/luau.exe tests/run_connections.luau
 PASS unknown objects have no connection authority
@@ -101,7 +101,7 @@ PASS binding preserves current life, actor, reserve and both shield deadlines
 PASS binding reconnects an offline dead hero with exactly one successful respawn
 ConnectionRegistry tests: 18 PASS, 0 FAIL
 PASS native Luau connection contracts; actual same-account transport NOT RUN
-EXIT 0; 0.058 seconds
+EXIT 0; 0.081 seconds
 
 [4] .tools/luau-0.745/luau.exe tests/run_dragon_strikes.luau
 PASS Dragon fixed22 differs from hero Dash finisher at low Life
@@ -114,7 +114,7 @@ PASS ordinary friendly fire uses explicit2HP and base4
 PASS incoming hit cancels the windup and physical death cannot emit a club
 PASS accepted NPC response survives removed live action and changed impulse tuning
 DragonStrikes: 9 PASS
-EXIT 0; 0.076 seconds
+EXIT 0; 0.093 seconds
 
 [5] .tools/luau-0.745/luau.exe tests/run_dragon_flight.luau
 PASS runtime installs finite Dragon control without adding an enemy
@@ -149,7 +149,7 @@ PASS mount neutralizes a gate only while the same surviving Dragon remains mount
 PASS mounted motion keeps processing after the ground encounter reaches the boss
 PASS an obstructed accepted shot consumes attack timing without spawning beyond the wall
 DragonFlight: 31 PASS
-EXIT 0; 0.103 seconds
+EXIT 0; 0.166 seconds
 
 [6] .tools/luau-0.745/luau.exe tests/run_enemy_carry.luau
 PASS a close grounded Pig is captured as the same living owned body without resources or health changing
@@ -177,7 +177,7 @@ PASS an accepted grab clears normal respawn protection before its delayed effect
 PASS stale or client-selected target intents cannot enter the grab shortcut
 PASS closing clears held flight and pending states idempotently without spawning or damage
 EnemyCarry: 24 passed
-EXIT 0; 0.081 seconds
+EXIT 0; 0.111 seconds
 
 [7] .tools/luau-0.745/luau.exe tests/run_feedback.luau
 PASS first sync and reconnect baseline never replay old combat
@@ -203,7 +203,7 @@ PASS optional pending server transfer keeps the existing request busy beyond loc
 PASS failed optional server transfer gives a readable retry through the existing create button
 PASS without a transfer field the original bounded local request still refreshes once
 GroupPanel: 3 PASS
-EXIT 0; 0.047 seconds
+EXIT 0; 0.081 seconds
 
 [8] .tools/luau-0.745/luau.exe tests/run_gameplay.luau
 PASS ordinary enemies are weaker and die once without respawning
@@ -282,7 +282,7 @@ PASS only accepted new starts build one private canonical-based route and record
 PASS a refused world rebuild cannot start a Session or consume a playable appearance
 GameController: 43 PASS
 PASS spectator targets retain zero-health and offline living heroes; skip eliminated dying absent actors
-EXIT 0; 0.161 seconds
+EXIT 0; 0.133 seconds
 
 [9] .tools/luau-0.745/luau.exe tests/run_groups.luau
 PASS independent real controllers keep group B alive when group A loses
@@ -308,7 +308,7 @@ PASS boss eligibility quarantine waits for the queue operation and never invites
 PASS a target eligibility fault invalidates acceptance while a healthy boss slot stays usable
 PASS new run layout is private to its group while invalid starts and neighbouring bodies stay unchanged
 MatchHub: 22 passed
-EXIT 0; 0.128 seconds
+EXIT 0; 0.101 seconds
 
 [10] .tools/luau-0.745/luau.exe tests/run_guardian.luau
 PASS cosmetic cannon hook follows successful projectiles and never blocked melee or invalid spawns
@@ -331,7 +331,7 @@ PASS stale actor cannot pick up and actual death never transfers held ball to a 
 PASS actual Session throw survives small flight steps without hurting or stunning its owner
 PASS actual controller defeat clears Guardian projectiles and carriers before its final step stops
 GuardianSession: 4 passed
-EXIT 0; 0.096 seconds
+EXIT 0; 0.088 seconds
 
 [11] .tools/luau-0.745/luau.exe tests/run_healing_flies.luau
 PASS source static fly inventory is two early and four late food objects
@@ -350,7 +350,7 @@ PASS failed authoritative health event neither consumes food nor changes raw Lif
 PASS later zones activate once and another run has independent food
 PASS closing a run cancels pending tongues and removes its remaining visuals
 HealingFlies: 15 passed
-EXIT 0; 0.08 seconds
+EXIT 0; 0.073 seconds
 
 [12] .tools/luau-0.745/luau.exe tests/run_journal.luau
 PASS bounded journal overwrites oldest rows and preserves exact context and event order
@@ -362,7 +362,7 @@ PASS late timestamps remain visible while seq orders the observation stream
 PASS actual respawn records retain shield kind deadline resource and connection state
 PASS Dragon confirmations project bounded public feedback without private owner data
 RunJournal: 8 PASS
-EXIT 0; 0.082 seconds
+EXIT 0; 0.056 seconds
 
 [13] .tools/luau-0.745/luau.exe tests/run_level_route.luau
 PASS route contains the classified13 actors in unique source order across6 districts
@@ -376,11 +376,11 @@ PASS route activates its two then four flies and clears them on closure
 PASS production grab preserves a human Pig body then throws through its existing health and command guards
 PASS combat Walker death creates one club and actual boss introduction frees weapon hands
 LevelRoute: 10 passed
-EXIT 0; 0.113 seconds
+EXIT 0; 0.073 seconds
 
 [14] .tools/luau-0.745/luau.exe tests/run_level_traversal.luau
 PASS all5 route gaps fit the main-game jump envelope with takeoff and landing space
-EXIT 0; 0.053 seconds
+EXIT 0; 0.043 seconds
 
 [15] .tools/luau-0.745/luau.exe tests/run_pig_strikes.luau
 PASS a healthy selected hero receives the standing jab instead of the shared heavy attack
@@ -399,7 +399,7 @@ PASS an invalid running target clears rush before the melee action is chosen
 PASS other species retain their existing attack and client schema cannot supply a trusted Pig action
 PASS Pig skips a heavy-reacting nearest hero while light reaction can select the heavy standing branch
 PigStrikes: 15 PASS
-EXIT 0; 0.128 seconds
+EXIT 0; 0.075 seconds
 
 [16] .tools/luau-0.745/luau.exe tests/run_source_combat.luau
 PASS all13 original actor Life records are explicit and three displayed hearts stay the same maximum
@@ -417,7 +417,7 @@ PASS blocked light hits stay light and never grant postheavy protection
 PASS a source target becoming carried or thrown before effect cannot be damaged or released
 PASS accepted heavy protection duration cannot change during windup or recovery
 SourceCombat: 14 PASS
-EXIT 0; 0.153 seconds
+EXIT 0; 0.09 seconds
 
 [17] .tools/luau-0.745/luau.exe tests/run_stand.luau
 PASS Combat: 1054 assertions
@@ -465,7 +465,7 @@ PASS trusted contextual action may extend cooldown while client Club remains inv
 PASS heavy reaction history survives recovery while a light hit has no heavy epoch
 Session tests: 42 PASS, 0 FAIL
 PASS native Luau stand contracts; engine physics NOT RUN
-EXIT 0; 0.146 seconds
+EXIT 0; 0.091 seconds
 
 [18] .tools/luau-0.745/luau.exe tests/run_walker_clubs.luau
 PASS one combat-defeated Walker emits one unique supported club and repeated death cannot duplicate it
@@ -492,7 +492,7 @@ PASS existing R-heavy action is not converted into a club swing
 PASS schema and sequence validation reject client Club targets damage and repeated swings
 PASS clubs and equipment stay independent between directors and closed runs clear all visuals and effects
 WalkerClubs: 23 passed
-EXIT 0; 0.146 seconds
+EXIT 0; 0.073 seconds
 
 [19] .tools/luau-0.745/luau.exe tests/run_walker_strikes.luau
 PASS Walker begins its own light strike beyond the old generic5-stud start distance
@@ -512,7 +512,7 @@ PASS physical death during a windup cancels the effect without granting a safe c
 PASS a retreating unengaged Walker can be claimed without healing or replacing its body
 PASS Pig standing/running and legacy ordinary profiles remain independent of Walker configuration
 WalkerStrikes: 16 PASS
-EXIT 0; 0.135 seconds
+EXIT 0; 0.094 seconds
 
 [20] .tools/python-3.13.9/python.exe tests/group_world/run.py --luau .tools/luau-0.745/luau.exe
 PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls
@@ -563,7 +563,7 @@ PASS Dragon fire volume checks initial obstruction and sphere radius before cand
 PASS original wing motors move only for authoritative flight and return to rest
 PASS fire orders first contact and detects a thin wall before its projected muzzle
 PASS hero appearance integration restores server authority after cosmetics and updates only presentation
-EXIT 0; 1.166 seconds
+EXIT 0; 1.003 seconds
 
 [21] .tools/python-3.13.9/python.exe tools/test_stand_gateway.py --luau .tools/luau-0.745/luau.exe
 PASS duplicate PlayerAdded cannot reset connection epoch or sequence
@@ -581,7 +581,7 @@ PASS offline death waits and returns with exactly one successful respawn
 PASS new owner receives new epoch and rejects the prior epoch
 PASS late different user is a spectator without a replacement role
 Gateway contracts: 14 PASS, 0 FAIL; fake transport, NOT real reconnect
-EXIT 0; 0.215 seconds
+EXIT 0; 0.148 seconds
 
 [22] .tools/python-3.13.9/python.exe tools/test_bricktoads_place.py
 test_attack_manifest_cannot_substitute_the_fear_family (__main__.BrickToadsPlaceTests.test_attack_manifest_cannot_substitute_the_fear_family) ... ok
@@ -617,10 +617,10 @@ test_sources_are_current_and_server_code_is_private (__main__.BrickToadsPlaceTes
 test_spawn_is_above_a_collidable_anchored_floor (__main__.BrickToadsPlaceTests.test_spawn_is_above_a_collidable_anchored_floor) ... ok
 
 ----------------------------------------------------------------------
-Ran 31 tests in 24.512s
+Ran 31 tests in 53.544s
 
 OK
-EXIT 0; 24.78 seconds
+EXIT 0; 53.83 seconds
 
 [23] .tools/python-3.13.9/python.exe tools/test_build.py
 test_build_is_deterministic (__main__.BuildTests.test_build_is_deterministic) ... ok
@@ -628,10 +628,10 @@ test_missing_source_fails_instead_of_empty_module (__main__.BuildTests.test_miss
 test_sources_are_exact_and_server_only (__main__.BuildTests.test_sources_are_exact_and_server_only) ... ok
 
 ----------------------------------------------------------------------
-Ran 3 tests in 0.017s
+Ran 3 tests in 0.020s
 
 OK
-EXIT 0; 0.187 seconds
+EXIT 0; 0.218 seconds
 
 [24] .tools/python-3.13.9/python.exe tools/test_combat_stand.py
 test_client_is_local_and_core_is_not_replicated (__main__.StandBuildTests.test_client_is_local_and_core_is_not_replicated) ... ok
@@ -643,10 +643,10 @@ test_unique_referents_and_names (__main__.StandBuildTests.test_unique_referents_
 test_verified_core_unchanged (__main__.StandBuildTests.test_verified_core_unchanged) ... ok
 
 ----------------------------------------------------------------------
-Ran 7 tests in 0.017s
+Ran 7 tests in 0.025s
 
 OK
-EXIT 0; 0.168 seconds
+EXIT 0; 0.297 seconds
 
 [25] .tools/python-3.13.9/python.exe tools/test_walker_acceptance.py --luau .tools/luau-0.745/luau.exe
 test_manifest_identifies_exact_source_bytes_without_fabricated_results (__main__.WalkerAcceptanceBuildTests.test_manifest_identifies_exact_source_bytes_without_fabricated_results) ... ok
@@ -656,38 +656,38 @@ test_runner_returns_before_side_effects_outside_studio_server (__main__.WalkerAc
 test_source_edit_changes_receipt_and_build_is_deterministic (__main__.WalkerAcceptanceBuildTests.test_source_edit_changes_receipt_and_build_is_deterministic) ... ok
 
 ----------------------------------------------------------------------
-Ran 5 tests in 1.345s
+Ran 5 tests in 2.595s
 
 OK
-EXIT 0; 1.529 seconds
+EXIT 0; 2.814 seconds
 
 [26] .tools/python-3.13.9/python.exe tools/build_bricktoads_place.py
 C:\Users\User\Documents\bricktoads\places\BrickToadsPlayable.rbxlx: 1026973 bytes; sha256=9f9689b3da56384344209a2743f0eac4eb74e573b3100e0f2a06155e59598a4b
-EXIT 0; 0.334 seconds
+EXIT 0; 0.991 seconds
 
 [27] .tools/python-3.13.9/python.exe tools/build_combat_stand.py
 C:\Users\User\Documents\bricktoads\build\CombatStand.rbxlx: 76490 bytes; sha256=91b7bc6dfe9aa55cc479b9a78af13195a00998adfa951529c2c0884255831222
-EXIT 0; 0.186 seconds
+EXIT 0; 0.662 seconds
 
 [28] .tools/python-3.13.9/python.exe tools/build_test_place.py
 C:\Users\User\Documents\bricktoads\build\LifecycleTests.rbxlx: 36562 bytes; sha256=495baac5a990f358525ac9ec40b30ccde1cdbbb0ac40d6156898874258db5e4f
-EXIT 0; 0.14 seconds
+EXIT 0; 0.505 seconds
 
 [29] .tools/python-3.13.9/python.exe tools/build_walker_acceptance.py
 C:\Users\User\Documents\bricktoads\build\WalkerHeavyAcceptance.rbxlx: 1044091 bytes; sha256=4ec325b8c5d701c23267d1d83ca7153fd28afbe526cc361bd4a64ec0d2f755ae; Studio NOT RUN
-EXIT 0; 0.291 seconds
+EXIT 0; 0.762 seconds
 
 [30] .tools/python-3.13.9/python.exe tools/build_bricktoads_place.py --check
 C:\Users\User\Documents\bricktoads\places\BrickToadsPlayable.rbxlx: 1026973 bytes; sha256=9f9689b3da56384344209a2743f0eac4eb74e573b3100e0f2a06155e59598a4b
-EXIT 0; 0.282 seconds
+EXIT 0; 0.606 seconds
 
 [31] .tools/python-3.13.9/python.exe tools/build_combat_stand.py --check
 C:\Users\User\Documents\bricktoads\build\CombatStand.rbxlx: 76490 bytes; sha256=91b7bc6dfe9aa55cc479b9a78af13195a00998adfa951529c2c0884255831222
-EXIT 0; 0.147 seconds
+EXIT 0; 0.327 seconds
 
 [32] .tools/luau-0.745/luau.exe tests/run_route_driver_navigation.luau
 PASS route driver navigation: 53 checks
-EXIT 0; 0.036 seconds
+EXIT 0; 0.09 seconds
 
 [33] .tools/luau-0.745/luau.exe tests/run_movement_input.luau
 PASS one held native Bool direction walks and repeated press notifications cannot create a run
@@ -704,7 +704,7 @@ PASS different owners never share pressed directions or double tap history
 PASS native binding context is disabled Bool Automatic with independent keyboard and UIButton bindings
 PASS native press release callbacks preserve independent directions and simultaneous jump attack
 MovementInput: 13 PASS
-EXIT 0; 0.033 seconds
+EXIT 0; 0.065 seconds
 
 [34] .tools/luau-0.745/luau.exe tests/run_running_combat.luau
 PASS Move permits only an optional boolean run and retains strict action authority
@@ -726,7 +726,7 @@ PASS running Walker approaches through6.25 before committing its6-stud strike ag
 PASS enemy disconnect and death clear run and publish reaction reset without a new body
 PASS accepted running strikes finish after disconnect without resuming locomotion or changing their action
 RunningCombat: 18 PASS
-EXIT 0; 0.086 seconds
+EXIT 0; 0.151 seconds
 
 [35] .tools/luau-0.745/luau.exe tests/run_level_variation.luau
 PASS run ID seeds are stable bounded integers and distinguish real run IDs
@@ -744,7 +744,7 @@ PASS guardian position court gate exit pad and bounds translate together from th
 PASS peripheral stone cover leaves the central corridor and all actors/items clear
 PASS bounds contain every floor actor fly and cover in group-local coordinates
 LevelVariation: 14 passed, 0 failed
-EXIT 0; 0.532 seconds
+EXIT 0; 0.865 seconds
 
 [36] .tools/python-3.13.9/python.exe tests/character_appearance/run.py
 PASS Green attaches the actual fifteen mesh template with PBR and no additional humanoid
@@ -762,7 +762,7 @@ PASS malformed canonical replacement preserves the existing resource visibility 
 PASS canonical selection changes resource once and cleanup restores saved owner metadata
 PASS canonical replacement cleanup never restores attributes on a newer actor model
 CharacterAppearance: 14 passed
-EXIT 0; 0.18 seconds
+EXIT 0; 0.257 seconds
 
 [37] .tools/luau-0.745/luau.exe tests/run_localization.luau
 PASS all catalog sources are English and translations preserve every named argument
@@ -774,15 +774,15 @@ PASS GUI roots use the owned standard table and owner nameplates keep automatic 
 PASS group list dynamic title counts and actions use the selected native translator
 PASS boss invitation countdown and target team localize as dynamic content
 Localization: 8 PASS
-EXIT 0; 0.04 seconds
+EXIT 0; 0.076 seconds
 
 [38] .tools/python-3.13.9/python.exe tools/test_localization.py
 ...
 ----------------------------------------------------------------------
-Ran 3 tests in 0.174s
+Ran 3 tests in 0.426s
 
 OK
-EXIT 0; 0.323 seconds
+EXIT 0; 0.766 seconds
 
 [39] .tools/luau-0.745/luau.exe tests/run_canonical_animation.luau
 PASS catalog exposes69 finite source clips with frozen provenance and explicit bounds
@@ -802,7 +802,7 @@ PASS counter range events survive large visual steps without replaying old miles
 PASS unknown states and malformed clock inputs fail explicitly without guessing poses
 PASS public metadata and event params cannot mutate later query results
 CanonicalAnimation: 16 passed, 0 failed
-EXIT 0; 0.087 seconds
+EXIT 0; 0.154 seconds
 
 [40] .tools/luau-0.745/luau.exe tests/run_canonical_walker.luau
 PASS all35 prepared poses match sprites and body anchors emitted by literal source ASM
@@ -812,19 +812,19 @@ PASS unknown source families slopes animations and stream values remain UNKNOWN
 PASS malformed deltas and flags cannot enter byte arithmetic
 PASS caller mutations cannot poison another actor or the private source data
 CanonicalWalker: 6 passed
-EXIT 0; 0.044 seconds
+EXIT 0; 0.083 seconds
 
 [41] .tools/python-3.13.9/python.exe research/generate_canonical_animation_data.py --check
 Verified69 clips plus Dash continuation; 27424 bytes
-EXIT 0; 0.144 seconds
+EXIT 0; 0.259 seconds
 
 [42] .tools/python-3.13.9/python.exe tools/test_canonical_animation_data.py
 .
 ----------------------------------------------------------------------
-Ran 1 test in 0.334s
+Ran 1 test in 0.833s
 
 OK
-EXIT 0; 0.538 seconds
+EXIT 0; 1.278 seconds
 
 [43] .tools/luau-0.745/luau.exe tests/run_canonical_hero_presentation.luau
 PASS idle is a complete immutable source01 pose with explicit adaptation provenance
@@ -846,7 +846,7 @@ PASS captured intro selects actual source fear forms without applying source mot
 PASS fear requires the captured living actor and respects higher priority interruption
 PASS intro replaces cosmetic attack state and cannot resume that old accepted action afterward
 Canonical hero presentation: 18 passed, 0 failed
-EXIT 0; 0.063 seconds
+EXIT 0; 0.15 seconds
 
 [44] .tools/python-3.13.9/python.exe tests/canonical_hero_presentation/run.py
 PASS Green attaches the actual fifteen mesh template with PBR and no additional humanoid
@@ -948,7 +948,7 @@ PASS source context gives death reaction carry club Dragon air and paused states
 PASS fear context uses captured actor identity and never leaks to replaced bodies
 PASS canonical club welds every piece to the actual posed hand with palm position and corrected wrist axes
 PASS stale detached malformed and legacy cosmetics retain the established R6 club grip and authority cleanup
-EXIT 0; 1.078 seconds
+EXIT 0; 1.475 seconds
 
 [45] .tools/luau-0.745/luau.exe tests/run_boss_intro.luau
 PASS guardian selection waits for controller then defers actual boss and pattern until finite intro ends
@@ -965,7 +965,7 @@ PASS controller quarantine and run replacement clear existing intro through real
 PASS intro releases an existing carried body through live carry without damage or permanent shutdown
 PASS world intro owns bounded safe cosmetics and translated camera focus without changing actors or another party
 BossIntro: 13 tests passed
-EXIT 0; 0.123 seconds
+EXIT 0; 0.092 seconds
 
 [46] .tools/python-3.13.9/python.exe tests/guardian_appearance/run.py
 PASS valid source commits three actual meshes and two nonphysical flashes without replacing the body
@@ -978,7 +978,7 @@ PASS optional metadata and unavailable MeshSize work while uncloneable resources
 PASS invalid replacement preserves a committed appearance and exact state
 PASS owner replacement removed model and detached skin clean up without rebuilding or modifying a newer actor
 GuardianAppearance: 9 passed
-EXIT 0; 0.231 seconds
+EXIT 0; 0.24 seconds
 
 [47] .tools/python-3.13.9/python.exe tests/boss_intro_asset/run.py
 PASS valid imported leg preserves the source rest transform and nonphysical party-local lifecycle
@@ -998,7 +998,7 @@ PASS reject misaligned intro origin before cloning and retain fallback
 PASS missing resource uses the scoped fallback
 PASS missing native MeshSize surface preserves a valid imported leg
 BossIntro asset contracts: 16 passed, 0 failed
-EXIT 0; 0.201 seconds
+EXIT 0; 0.243 seconds
 
 [48] .tools/luau-0.745/luau.exe tests/run_campaign_modes.luau
 PASS all thirteen ordered modes produce independent deterministic playable layouts
@@ -1102,7 +1102,7 @@ PASS normal-input Clinger course seed 8125 rawLife 47
 PASS normal-input Jet course seed 1 rawLife 47
 PASS normal-input Jet course seed 41 rawLife 47
 PASS normal-input Jet course seed 8125 rawLife 47
-EXIT 0; 12.828 seconds
+EXIT 0; 68.104 seconds
 
 [49] .tools/luau-0.745/luau.exe tests/run_campaign_bosses.luau
 PASS byte damage differs by action and recovery does not heal across the source boundary
@@ -1198,7 +1198,7 @@ PASS Robo bolt keeps emission response and +X impulse when the next Jump turns -
 PASS spread bolt retains its own direction through owner disconnect and missing actor lookup
 PASS ordinary enemy collision receives the same independent captured projectile response
 CampaignBossProjectile: 3 passed
-EXIT 0; 0.117 seconds
+EXIT 0; 0.989 seconds
 
 [50] .tools/luau-0.745/luau.exe tests/run_campaign_enemies.luau
 PASS projectile species shoot across a real range instead of closing to ground melee
@@ -1238,7 +1238,7 @@ PASS authored entry Invader stays offered for one second of real-speed approach 
 CampaignEnemies: 34 passed
 PASS Electrofish reconnect discards held movement until a fresh connection intent
 PASS Swellcheeks reconnect discards held movement until a fresh connection intent
-EXIT 0; 0.099 seconds
+EXIT 0; 1.096 seconds
 
 [51] .tools/luau-0.745/luau.exe tests/run_campaign_progression.luau
 PASS campaign transition preserves identity, offline owners, elimination and resource accounting
@@ -1259,11 +1259,11 @@ PASS a defeated campaign remains finished until an explicit new game
 PASS pending victory waits for real paid retries across five boss stages and solo/duo/trio
 PASS offline pending victory remains reconnectable and cannot replace the run, including final stage
 PASS accepted lethal deadlines commit before retry; terminal Session loss prevails after boss defeat
-EXIT 0; 0.222 seconds
+EXIT 0; 3.87 seconds
 
 [52] .tools/luau-0.745/luau.exe tests/run_campaign_input.luau
 CampaignInput: mode-local arrows and ordinary camera-relative movement passed
-EXIT 0; 0.018 seconds
+EXIT 0; 0.194 seconds
 
 [53] .tools/python-3.13.9/python.exe tests/campaign_world/run.py
 PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls
@@ -1323,7 +1323,7 @@ PASS trusted campaign family movement budgets
 PASS vertical geometry, spawn, camera and dynamic support scope
 PASS boss action selection uses encounter profile
 Campaign world: 9 groups passed; engine physics is not emulated
-EXIT 0; 0.556 seconds
+EXIT 0; 4.765 seconds
 
 [54] .tools/luau-0.745/luau.exe tests/run_campaign_race.luau
 PASS a real rival actor is claimable before its first movement without spawning or inventing health
@@ -1346,11 +1346,11 @@ PASS a claimed rival has a supported jump and never gains an airborne double jum
 PASS authored descending courses require support and real rat travel before bomb contact
 PASS close and an old level epoch prevent retained commands, movement and bomb effects
 CampaignRace: 19 passed
-EXIT 0; 0.263 seconds
+EXIT 0; 0.868 seconds
 
 [55] .tools/luau-0.745/luau.exe tests/run_campaign_roster.luau
 CampaignRoster: byte arithmetic and source profile contracts passed
-EXIT 0; 0.102 seconds
+EXIT 0; 0.702 seconds
 
 [56] .tools/luau-0.745/luau.exe tests/run_scooter_acceptance.luau
 RocketRat drop contact: status=AwaitingRespawn rawLife=0 phase=Stopped serial=1
@@ -1358,7 +1358,7 @@ PASS real RocketRat drop crash preserves 1 survivors
 RocketRat drop contact: status=AwaitingRespawn rawLife=0 phase=Stopped serial=1
 PASS real RocketRat drop crash preserves 2 survivors and safely clears two active drops
 PASS protected mounted RocketRat contact consumes the drop without ordinary damage, impulse or shield extension
-EXIT 0; 0.166 seconds
+EXIT 0; 1.119 seconds
 
 SUMMARY
 {

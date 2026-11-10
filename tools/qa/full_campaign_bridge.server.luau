@@ -114,6 +114,24 @@ end
 local function foot(ctx,desired,combatPlan)
     local p=ctx.position;local a=ctx.world.actors[ctx.slot]
     if not p or not a then return neutral() end
+    local link=a.model and a.model:GetAttribute('DragonLink')
+    if link=='Captured' then return neutral() end
+    if link=='Mounted' then
+        local floor=Nav.currentFloor(p,floorRows(ctx.world))
+        if not floor or p.x<floor.minX or p.x>floor.maxX or p.z<floor.minZ or p.z>floor.maxZ
+            or p.y<floor.top+3 or p.y>floor.top+12 then
+            qa.navigation={phase='Mounted; no safe dismount support',target=p};return neutral()
+        end
+        if p.x>=floor.minX+3 and p.x<=floor.maxX-3 and p.z>=floor.minZ+3 and p.z<=floor.maxZ-3 then
+            qa.navigation={phase='Dismount on authored support',target=p}
+            return {x=0,z=0,jump=true,primary=false,run=false}
+        end
+        local target=point(math.clamp(p.x,floor.minX+3.2,floor.maxX-3.2),floor.top+3,
+            math.clamp(p.z,floor.minZ+3.2,floor.maxZ-3.2))
+        local dx,dz=target.x-p.x,target.z-p.z;local n=math.max(1,math.sqrt(dx*dx+dz*dz))
+        qa.navigation={phase='Move mount onto safe support',target=target}
+        return {x=dx/n,z=dz/n,jump=false,primary=false,run=false}
+    end
     if ctx.modes and ctx.actor and ctx.actor.finished then
         local dx,dz=desired.x-p.x,desired.z-p.z;local n=math.sqrt(dx*dx+dz*dz)
         local out=combatPlan or neutral()

@@ -1,0 +1,90 @@
+{
+  "status": "verified_frozen",
+  "scope": "QA-only bridge mounted handling, no production or live changes",
+  "baselineCommit": "df98106",
+  "bridgeSha256": "eb7415a21ae96f984127e0c30b6ddbd65431399b402201da9ec8b5638a64ae07",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "seed": 303307263,
+  "recordedPose": {
+    "x": 271.300048828125,
+    "y": 7.699996948242188,
+    "z": 4.000001430511475
+  },
+  "realSupport": {
+    "minX": 232,
+    "maxX": 272,
+    "minZ": -15,
+    "maxZ": 7,
+    "top": 0
+  },
+  "behavior": [
+    "Read actual DragonLink attribute before Nav",
+    "Captured returns neutral",
+    "Mounted roots over current authored support move normally toward3.2stud inset",
+    "Normal Jump dismount only inside strict3stud XZ margin and height3..12 above support",
+    "Unsupported/high mounted observations remain neutral; no new flight routing"
+  ],
+  "checks": [
+    {
+      "command": [
+        ".tools/python-3.13.9/python.exe",
+        "build/prepare_mounted_bridge_probe.py"
+      ],
+      "exit": 0,
+      "output": "Extracted actual QA bridge foot function\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_mounted_bridge_baseline.luau"
+      ],
+      "exit": 1,
+      "output": "./build/test_mounted_bridge_baseline.luau:15: Actual mounted edge pose must walk/fly inward through normal Move before safe dismount\nstacktrace:\n[C] function assert\n./build/test_mounted_bridge_baseline.luau:15\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_mounted_bridge.luau"
+      ],
+      "exit": 0,
+      "output": "Actual bridge mounted/support contract GREEN6\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_mounted_bridge_session.luau"
+      ],
+      "exit": 0,
+      "output": "Actual bridge -> public Session Move/Jump contract GREEN; same actor/resources, one dismount\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "tools/qa/full_campaign_bridge.server.luau",
+        "build/test_mounted_bridge.luau",
+        "build/test_mounted_bridge_session.luau"
+      ],
+      "exit": 0,
+      "output": "Compiled 0 KLOC into 32 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "tools/qa/full_campaign_bridge.server.luau"
+      ],
+      "exit": 0,
+      "output": ""
+    }
+  ],
+  "independentReview": "CLEAR: early agent independently reran GREEN6 and public Session contract, confirmed extracted foot exact equality, compile and diff-check GREEN on frozen EB7415A2",
+  "limits": [
+    "Pure read-only pose probes use real seed geometry and extracted actual bridge foot function.",
+    "Session contract reuses existing DragonFlight.spec prepared canonical heavy-hit mount fixture; the tested bridge action uses ordinary public Move/Jump.",
+    "No new native rescue claim: full13 child disconnected before any policy change. Nil parent result has no established timeout cause.",
+    "Safe dismount restores normal physics; later route/combat success is not proven by these focused contracts."
+  ]
+}

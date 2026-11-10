@@ -1,0 +1,44 @@
+{
+  "status": "pass",
+  "bridgeSha256": "eb7415a21ae96f984127e0c30b6ddbd65431399b402201da9ec8b5638a64ae07",
+  "generator": "reports/2026-11-10-qa-mounted-dismount/prepare_mounted_bridge_probe.py",
+  "probeInput": "reports/2026-11-10-qa-mounted-dismount/mounted_bridge_probe_input.luau",
+  "cleanRegeneration": {
+    "removedExactlyFiveOwnedBuildOutputs": true,
+    "command": ".tools/python-3.13.9/python.exe reports/2026-11-10-qa-mounted-dismount/prepare_mounted_bridge_probe.py",
+    "exit": 0,
+    "output": "Extracted actual QA bridge foot function"
+  },
+  "baselineCommit": "df98106",
+  "checks": [
+    {
+      "command": ".tools/luau-0.745/luau.exe build/test_mounted_bridge_baseline.luau",
+      "expectedExit": 1,
+      "actualExit": 1,
+      "matched": true,
+      "output": "./build/test_mounted_bridge_baseline.luau:15: Actual mounted edge pose must walk/fly inward through normal Move before safe dismount\r\nstacktrace:\r\n[C] function assert\r\n./build/test_mounted_bridge_baseline.luau:15\r\n"
+    },
+    {
+      "command": ".tools/luau-0.745/luau.exe build/test_mounted_bridge.luau",
+      "expectedExit": 0,
+      "actualExit": 0,
+      "matched": true,
+      "output": "Actual bridge mounted/support contract GREEN6\r\n"
+    },
+    {
+      "command": ".tools/luau-0.745/luau.exe build/test_mounted_bridge_session.luau",
+      "expectedExit": 0,
+      "actualExit": 0,
+      "matched": true,
+      "output": "Actual bridge -> public Session Move/Jump contract GREEN; same actor/resources, one dismount\r\n"
+    },
+    {
+      "command": ".tools/luau-0.745/luau-compile.exe --null tools/qa/full_campaign_bridge.server.luau build/mounted_bridge_foot.lua build/mounted_bridge_baseline_foot.lua build/test_mounted_bridge.luau build/test_mounted_bridge_baseline.luau build/test_mounted_bridge_session.luau",
+      "expectedExit": 0,
+      "actualExit": 0,
+      "matched": true,
+      "output": "Compiled 0 KLOC into 43 KB bytecode (read 0.01s, parse 0.01s, compile 0.06s)\r\n"
+    }
+  ],
+  "scope": "Report-only reproduction assets and regenerated ignored build outputs; no bridge/src/tests/tools changes; no Studio calls"
+}

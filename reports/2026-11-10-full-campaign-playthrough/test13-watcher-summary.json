@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "attempt": 13,
+  "runId": "d8beabe0-2200-433d-a573-44af889dd074",
+  "seed": 303307263,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "serverStudioId": "9e88a550-a642-48eb-a22b-60bd1567aa61",
+  "status": "ended_without_terminal_gameplay_archive",
+  "terminalResult": null,
+  "causeOfTermination": "Not established",
+  "noTimeoutInferred": true,
+  "completeCampaignAccepted": false,
+  "parentReceipt": {
+    "file": "attempt-13-parent-receipt.json",
+    "complete": true,
+    "bytes": 11,
+    "receipt": "{\"ok\":true}",
+    "interpretation": "The parent receipt contains no Won/Lost or terminal gameplay archive",
+    "observedAt": "2026-11-10T14:24:10Z",
+    "mainEditRestored": {
+      "serverBytes": 7045,
+      "clientBytes": 89547,
+      "qaFolder": false,
+      "qaBackup": false
+    }
+  },
+  "qaPolicy": {
+    "policyLoads": 1,
+    "inputRevisionsObserved": 0,
+    "earlySha256": "461abaa9803a2e2211d0f3ed696d3100f01c587c6d7d811fafce781d7de8703e",
+    "combatSha256": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+    "tubesSha256": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013",
+    "observerSha256": "cb04b24e48bcc885fb7635643b2a6355373641fec5c5ea54267ffe8af49885a7"
+  },
+  "lastRetainedState": {
+    "index": 1,
+    "stage": "Route",
+    "leadSlot": 2,
+    "rootVerifiedClassification": "Mounted-Dragon QA input deadlock; direct diagnosis by root/combat agent",
+    "current": {
+      "slot": 2,
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": true,
+        "jump": false
+      },
+      "guardianHits": 0,
+      "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:5",
+      "position": {
+        "y": 7.6999969482421875,
+        "x": 271.300048828125,
+        "z": 4.000001430511475
+      },
+      "stock": 3,
+      "stage": "Route",
+      "runId": "d8beabe0-2200-433d-a573-44af889dd074"
+    },
+    "cohort": [
+      {
+        "ownerUserId": -1,
+        "slot": 1,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      },
+      {
+        "ownerUserId": -2,
+        "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:5",
+        "slot": 2,
+        "status": "Alive",
+        "rawLife": 47,
+        "stock": 3,
+        "attempt": 1
+      },
+      {
+        "ownerUserId": -3,
+        "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:8",
+        "slot": 3,
+        "status": "Alive",
+        "rawLife": 47,
+        "stock": 3,
+        "attempt": 1
+      }
+    ],
+    "sampleCount": 351,
+    "selectedSamples": 98,
+    "retainedEvents": 25,
+    "plannerErrors": [],
+    "observedStall": {
+      "firstDirectAt": "2026-11-10T14:17:35.105Z",
+      "archiveSavedAt": "2026-11-10T14:19:40Z",
+      "minimumDirectNoProgressSeconds": 124,
+      "comparison": "Both captures have the same hero2 actor/attempt/stock/rawLife and X/Y/Z, zero X/Z plan, run=true, jump=false",
+      "navigation": {
+        "phase": "Approach gap",
+        "target": {
+          "y": 3,
+          "x": 271.3,
+          "z": 4
+        }
+      }
+    }
+  },
+  "deathsRetained": [
+    {
+      "view": "Playing",
+      "revision": 32,
+      "rawLife": 0,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -2.6716406864579767e-12,
+            -120.80733489990234,
+            8.526512829121202e-13
+          ],
+          "held": false,
+          "position": [
+            -0.2360484004020691,
+            -36.62171173095703,
+            -16.640233993530273
+          ]
+        },
+        "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:2",
+        "reason": "Fall"
+      },
+      "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794320024.412969,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 101,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 40,
+      "rawLife": 0,
+      "attempt": 2,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -0.0686187744140625,
+            -120.02253723144531,
+            -3.500290870666504
+          ],
+          "held": false,
+          "position": [
+            -0.10371075570583344,
+            -36.49592971801758,
+            -17.368358612060547
+          ]
+        },
+        "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:37",
+        "reason": "Fall"
+      },
+      "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:37",
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794320027.460013,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 125,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 190,
+      "rawLife": 0,
+      "attempt": 3,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -27.623891830444336,
+            -127.51301574707031,
+            37.97719955444336
+          ],
+          "held": false,
+          "position": [
+            262.5092468261719,
+            -35.91401290893555,
+            33.39470672607422
+          ]
+        },
+        "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:46",
+        "reason": "Fall"
+      },
+      "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:46",
+      "levelEpoch": 1,
+      "respawns": 1,
+      "now": 1794320174.156283,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 667,
+      "connected": true
+    },
+    {
+      "view": "Choice",
+      "revision": 196,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            3.836930773104541e-13,
+            -128.0733642578125,
+            2.4158453015843406e-13
+          ],
+          "held": false,
+          "position": [
+            270.17333984375,
+            -35.901248931884766,
+            8.808890342712402
+          ]
+        },
+        "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:197",
+        "reason": "Fall"
+      },
+      "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:197",
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794320179.291838,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "ConfirmedDeath",
+      "seq": 681,
+      "connected": true
+    }
+  ],
+  "coverage": {
+    "checkpointCount": 1,
+    "completeImmutableArchives": 1,
+    "checkpointFiles": [
+      "test13-checkpoint-001-20261110T141939Z.json"
+    ],
+    "archiveFiles": [
+      "test13-archive-001-20261110T141940Z.json"
+    ],
+    "archiveBytes": 43996,
+    "retainedStages": [
+      1
+    ],
+    "statement": "Retained observations show only stage1; no stages2–13 or terminal Won/Lost are established",
+    "modeFrameRing": "Preinstalled observer watches Ice/Serpents/Tubes/Surf/Jet; none of those modes appears in the retained stage1 evidence"
+  },
+  "console": {
+    "files": [
+      "test13-console-001-20261110T141939Z.json",
+      "test13-client1-console-initial-20261110T142150Z.json",
+      "test13-client2-console-initial-20261110T142150Z.json",
+      "test13-client3-console-initial-20261110T142150Z.json"
+    ],
+    "serverCapture": "Initial server capture: the same two asset-representation warnings, no Lua stack trace",
+    "assetWarningIds": [
+      "130642514131659",
+      "96845591138258"
+    ],
+    "clientCapturesAt": "2026-11-10T14:21:50Z",
+    "clientCount": 3,
+    "possibleLuaExceptionsInClientCaptures": false,
+    "limitation": "Console observations are limited to the saved captures; qa.errors[] alone is not runtime-console proof"
+  },
+  "observerStop": {
+    "error": "Error: The requested `studio_id` is not connected — that Roblox Studio instance may have been closed or its place unloaded. Call `list_roblox_studios` for the current instances, then continue on the one the user confirms (or the one whose `name` matches).",
+    "pendingOwnedExport": null,
+    "action": "No calls to the disconnected child after the connection rejection"
+  },
+  "cleanup": {
+    "completedOwnedExportFoldersRemoved": true,
+    "pendingOwnedExports": null,
+    "gameStateWrites": false,
+    "inputPolicyPatches": false,
+    "poseHealthStockGeometryWrites": false,
+    "sessionStartStopEndCommands": false
+  },
+  "notes": [
+    "The first checkpoint filename records file-save time; observerCapturedAt inside metadata records the original direct-read time",
+    "The only Studio writes by the watcher created/deleted the explicitly authorized owned immutable diagnostic export copies",
+    "Termination remains unknown: neither engine crash, timeout nor gameplay loss is inferred"
+  ]
+}

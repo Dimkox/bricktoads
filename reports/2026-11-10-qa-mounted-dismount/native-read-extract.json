@@ -1,0 +1,118 @@
+{
+  "scope": "Read-only scalar extract preserved from successful MCP responses in this agent transcript; no new native rescue or complete terminal archive claim",
+  "studioId": "9e88a550-a642-48eb-a22b-60bd1567aa61",
+  "runId": "d8beabe0-2200-433d-a573-44af889dd074",
+  "seed": 303307263,
+  "gameSource": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "hero2": {
+    "actorId": "d8beabe0-2200-433d-a573-44af889dd074:actor:5",
+    "status": "Alive",
+    "attempt": 1,
+    "stock": 3,
+    "rawLife": 47,
+    "position": {
+      "x": 271.300048828125,
+      "y": 7.699996948242188,
+      "z": 4.000001430511475
+    },
+    "attributes": {
+      "DragonLink": "Mounted",
+      "DragonId": -10,
+      "MovementMode": "Idle"
+    },
+    "root": {
+      "anchored": true,
+      "canCollide": false,
+      "velocity": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    "humanoid": {
+      "health": 100,
+      "platformStand": true,
+      "state": "FallingDown",
+      "floor": "Slate"
+    },
+    "rayIncludingActors": {
+      "part": "Workspace.BrickToadsWorld_group-1.Actors.Actor_-10.Head",
+      "distance": 1.1999998092651367,
+      "normalY": 1
+    },
+    "plan": {
+      "x": 0,
+      "z": 0,
+      "run": true,
+      "jump": false,
+      "primary": false
+    },
+    "navigation": {
+      "phase": "Approach gap",
+      "target": {
+        "x": 271.3,
+        "y": 3,
+        "z": 4
+      }
+    }
+  },
+  "mountEvent": {
+    "now": 1794320192.125315,
+    "kind": "DragonMounted",
+    "userId": 2,
+    "enemyId": -10,
+    "precedingAcceptedAction": "Dash",
+    "dragonRawLifeBefore": 47,
+    "dragonRawLifeAfter": 31
+  },
+  "stationaryMotionTail": {
+    "rows": 11,
+    "firstAt": 1794320317.320839,
+    "lastAt": 1794320318.785231,
+    "allSamePosition": true,
+    "allSamePlan": true,
+    "allZeroVelocity": true
+  },
+  "cohortAtRead": [
+    {
+      "slot": 1,
+      "status": "Eliminated",
+      "attempt": 4,
+      "stock": 0,
+      "rawLife": 0
+    },
+    {
+      "slot": 2,
+      "status": "Alive",
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 47
+    },
+    {
+      "slot": 3,
+      "status": "Alive",
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 47
+    }
+  ],
+  "identityClarification": "detail.hero/body referred to the first viewer's eliminated hero1; qa.current referred to latest active hero2. The journal47→31 DragonHeadbutt at1794320177.000716 belonged to hero1 actor:197, not current hero2 actor:5. This is not evidence of a free heal.",
+  "deathsSeen": [
+    {
+      "slot": 1,
+      "attempt": 3,
+      "reason": "Fall",
+      "now": 1794320174.156283,
+      "priorAttack": "DragonHeadbutt from -10",
+      "rawLifeBeforeFall": 15
+    },
+    {
+      "slot": 1,
+      "attempt": 4,
+      "reason": "Fall",
+      "now": 1794320179.291838,
+      "rawLifeBeforeFall": 31
+    }
+  ],
+  "followup": "Attempted ray excluding actors was rejected before execution because child had disconnected; underlying authored support here is computed independently from exact CampaignDefinition seed, not claimed as a successful native ray."
+}
