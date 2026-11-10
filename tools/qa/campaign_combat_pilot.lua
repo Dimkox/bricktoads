@@ -340,9 +340,13 @@ local function runUp(c, id, q, enemy, intent)
     local identity = table.concat({tostring(c.session.state.runId),tostring(c.session.state.levelEpoch),
         tostring(c.hero.actorId),tostring(c.hero.attempt),tostring(id),tostring(enemy and enemy.actorId)},':')
     if state and (state.identity ~= identity or c.now < state.started) then clearRunUp(c);state=nil end
+    -- Ordinary Dragons hover above the same support. Their reachable Dash
+    -- height does not make the grounded hero's run-up an airborne action.
+    local runHeight=enemy and enemy.kind=='Dragon' and c.config.Attacks and c.config.Attacks.Dash
+        and (c.config.Attacks.Dash.height or 4)-.15 or .8
     if special(c) or not c.config.Movement or not enemy or enemy.boss or (enemy.rawLife or 0) < 8
         or enemy.reactionUntil and enemy.reactionUntil > c.now
-        or math.abs(c.position.y-q.y) > .8 or not ready(c) then clearRunUp(c);return nil end
+        or math.abs(c.position.y-q.y) > runHeight or not ready(c) then clearRunUp(c);return nil end
     local body = c.world.actors and c.world.actors[c.slot]
     local root, humanoid = body and body.root, body and body.humanoid
     if not root or not root.Parent or root.Anchored or not humanoid or humanoid.PlatformStand

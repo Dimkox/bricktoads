@@ -1,0 +1,108 @@
+{
+  "status": "verified_frozen",
+  "scope": "QA-only Dragon run-up height selection; no production or live changes",
+  "createdAt": "2026-11-10T15:35:20.820942+00:00",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "seed": 338231076,
+  "baselineSha256": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+  "candidateSha256": "2e6f86c9bc933d111c9d2668c90f6da88f6ffa3c878a01e26fe8ada6bd60f91f",
+  "change": "Only grounded ordinary Dragon run-up height eligibility uses existing Dash.height-.15 rather than generic.8. Standing/same-floor/strict3stud endpoint/nativeRun/identity guards and all nonDragon behavior unchanged.",
+  "checks": [
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-dragon-runup\\probe-baseline.luau"
+      ],
+      "exit": 1,
+      "expected": 1,
+      "log": "baseline-red.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-dragon-runup\\probe-current.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "probe-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-dragon-runup\\public-session-dash.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "public-session-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_combat_stepoff_boundary.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "stepoff-26-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "tools/qa/campaign_combat_pilot.lua",
+        "reports\\2026-11-10-qa-dragon-runup\\probe-current.luau",
+        "reports\\2026-11-10-qa-dragon-runup\\probe-baseline.luau",
+        "reports\\2026-11-10-qa-dragon-runup\\public-session-dash.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "compile.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "tools/qa/campaign_combat_pilot.lua"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "diff-check.txt"
+    }
+  ],
+  "nativeEvidence": {
+    "runId": "73937d7b-557f-4b5f-b78c-52545a2e833b",
+    "heroPoseAt": 1794323829.275158,
+    "heroPose": {
+      "x": 271.6141052246094,
+      "y": 4.974132537841797,
+      "z": 0.5977640748023987
+    },
+    "enemyHitPoseAt": 1794323829.412485,
+    "enemyHitPose": {
+      "x": 272.2443542480469,
+      "y": 6.632584571838379,
+      "z": 0.7214843034744263
+    },
+    "heroInputAtPose": {
+      "primary": true,
+      "run": false,
+      "jump": false
+    },
+    "repeatedJabRecovery": "EnemyRecovery45to47 is normal source nibble recovery, not a production heal bug",
+    "headbuttHits": [
+      1794323830.830827,
+      1794323832.830383,
+      1794323834.644088
+    ],
+    "remainingFalls": "No Hit after attempt3 Dash; separate recorded landing/NPC-head Flight reversal is assigned to Nav reviewer."
+  },
+  "limits": [
+    "Recorded hero and enemy positions are near-time observations137ms apart, not a simultaneous native enemy-state snapshot.",
+    "The focused fixture uses exact seed-authored geometry and recorded values; it establishes the excluded hover height and safe eligible run-up, not a replay of full native physics.",
+    "Public Session proof uses canonical prepared DragonFlight fixture and a numeric physical-run/collision adapter; no native AI survival or full campaign victory claim.",
+    "The unit driver submits public Move(run=true) and Attack(Punch); Session chooses Dash, captures4stud vertical bound and applies original enemy47to31. Hero47/attempt1/stock3 unchanged.",
+    "No live retry or policy hotload was made by this agent."
+  ],
+  "independentReview": "CLEAR: solo_qa_review independently reran current146/baselineRED/public Session Dash/stepoff26/compilation; vertical bound and preserved guards confirmed on frozen2E6F86C9"
+}

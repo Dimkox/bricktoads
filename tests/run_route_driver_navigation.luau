@@ -219,4 +219,69 @@ for _, width in ipairs({0, .2}) do
     check(hold.phase == 'No shared crossing' and hold.target.x == 7.8 and hold.target.z == 1.99 and not hold.jump,
         'An unaligned corridor too narrow for an interior target beyond the deadzone must hold conservatively')
 end
+local slowReverse = {x=55.302,y=3,z=-3.923}
+local slowState = {}
+local stagedRunUp = Nav.plan(slowReverse,{x=45,y=3,z=-4.14},floors,slowState,1,
+    {grounded=false,vy=0,jumpLead=3.2})
+check(stagedRunUp.phase=='Stage gap run-up' and stagedRunUp.target.x>=61 and not stagedRunUp.jump
+    and stagedRunUp.crossing and not stagedRunUp.attackAllowed,
+    'Observed unqualified walking approach at55.302 must first move inward, not toward edge53.7')
+local continueRunUp = Nav.plan({x=58,y=3,z=-4.14},{x=45,y=3,z=-4.14},floors,slowState,1.2,
+    {grounded=true,vy=0,jumpLead=3.2})
+check(continueRunUp.phase=='Stage gap run-up' and continueRunUp.target.x>=61 and not continueRunUp.jump,
+    'Run-up staging persists until its supported reversal point even after speed qualifies')
+local finishRunUp = Nav.plan({x=61,y=3,z=-4.14},{x=45,y=3,z=-4.14},floors,slowState,1.4,
+    {grounded=true,vy=0,jumpLead=3.2})
+check(finishRunUp.phase=='Approach gap' and finishRunUp.target.x<61 and not finishRunUp.jump,
+    'Reached run-up point releases ordinary approach toward the same gap')
+local readyReverse = Nav.plan({x=55.8,y=3,z=-4.14},{x=45,y=3,z=-4.14},floors,slowState,1.6,
+    {grounded=true,vy=0,jumpLead=3.2})
+check(readyReverse.jump and readyReverse.direction==-1,
+    'Actual run-qualified return still requests the ordinary reverse Jump')
+local mirrorFloors={{minX=-124,maxX=-53,minZ=-19,maxZ=19,top=0},
+    {minX=-48,maxX=-4,minZ=-19,maxZ=19,top=0}}
+local slowForward=Nav.plan({x=-55.302,y=3,z=-3.923},{x=-45,y=3,z=-4.14},mirrorFloors,{},1,
+    {grounded=false,vy=0,jumpLead=3.2})
+check(slowForward.phase=='Stage gap run-up' and slowForward.target.x<=-61 and not slowForward.jump,
+    'Mirrored unqualified approach stages inward on the same current support')
+local switched={}
+Nav.plan(slowReverse,{x=45,y=3,z=-4.14},floors,switched,1,{grounded=false,vy=0,jumpLead=3.2})
+check(Nav.plan(slowReverse,{x=70,y=3,z=0},floors,switched,1.1,{grounded=true,vy=0}).phase=='Walk'
+    and switched.gapRunUp==nil,'A target on the current support cancels obsolete gap run-up staging')
+check(Nav.plan({x=55.302,y=5,z=-3.923},{x=45,y=3,z=-4.14},floors,{},1,
+    {grounded=false,vy=0,jumpLead=3.2}).phase~='Stage gap run-up',
+    'An airborne-height observation cannot create a standing run-up claim')
+check(Nav.plan({x=55.302,y=3,z=-3.923},{x=45,y=3,z=-4.14},floors,{},1,
+    {grounded=false,vy=-3,jumpLead=3.2}).phase~='Stage gap run-up',
+    'A descending observation cannot create a standing run-up claim')
+for _,sign in ipairs({1,-1})do
+    local pads=sign==1 and {{minX=224,maxX=258,minZ=-9,maxZ=9,top=0},
+        {minX=262,maxX=289,minZ=-3,maxZ=15,top=2}} or
+        {{minX=-289,maxX=-262,minZ=-3,maxZ=15,top=2},{minX=-258,maxX=-224,minZ=-9,maxZ=9,top=0}}
+    for _,observed in ipairs({{x=267.798,y=5.897,z=.601},{x=267.951,y=9.328,z=.567}})do
+        local jumpState={}
+        Nav.plan({x=sign*255,y=3,z=.6},{x=sign*280,y=5,z=.6},pads,jumpState,1,{grounded=true,jumpLead=3.2})
+        local retainedJump=jumpState.jump
+        local p={x=sign*observed.x,y=observed.y,z=observed.z}
+        local hold=Nav.plan(p,{x=sign*280,y=5,z=.6},pads,jumpState,1.6,{grounded=false,vy=25})
+        check(hold.phase=='Flight' and hold.target.x==p.x and not hold.jump and not hold.attackAllowed
+            and jumpState.jump==retainedJump,
+            'Observed high landing-side body must hold X after passing target, never reverse across the gap or falsely clear flight')
+    end
+end
+local landingPads={{minX=224,maxX=258,minZ=-9,maxZ=9,top=0},
+    {minX=262,maxX=289,minZ=-3,maxZ=15,top=2}}
+local function nativeLandingState()
+    local s={};Nav.plan({x=255,y=3,z=.6},{x=280,y=5,z=.6},landingPads,s,1,{grounded=true,jumpLead=3.2});return s
+end
+local lowFlight=Nav.plan({x=268,y=3,z=.6},{x=280,y=5,z=.6},landingPads,nativeLandingState(),1.6,{grounded=false,vy=-30})
+check(lowFlight.target.x==266,'A body below the destination cannot claim the landing-side hold')
+local outsideFlight=Nav.plan({x=268,y=9,z=20},{x=280,y=5,z=.6},landingPads,nativeLandingState(),1.6,{grounded=false,vy=0})
+check(outsideFlight.target.x==266,'A body outside the authored destination Z footprint cannot claim the landing-side hold')
+local expired=nativeLandingState()
+local afterExpiry=Nav.plan({x=268,y=9,z=.6},{x=280,y=5,z=.6},landingPads,expired,3.1,{grounded=false,vy=0})
+check(expired.jump==nil and afterExpiry.phase~='Flight','Landing-side hold does not extend the existing two-second flight window')
+local pending=nativeLandingState();pending.jump.awaitingInput=true
+check(Nav.plan({x=268,y=9,z=.6},{x=280,y=5,z=.6},landingPads,pending,1.6,{grounded=false,vy=0}).target.x==266,
+    'A jump still awaiting its input keeps its existing confirmation behavior')
 print('PASS route driver navigation: ' .. count .. ' checks')

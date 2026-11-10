@@ -1,0 +1,298 @@
+{
+  "attempt": 17,
+  "scope": "Read-only single existing Studio ordinaryPlay watcher; terminal game-state result",
+  "studioId": "97ee37f5-3840-470c-b002-094802085c47",
+  "runId": "61b88756-56a7-4816-b6e8-0cc552bec553",
+  "seed": 1006313601,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "terminalResult": "Lost",
+  "terminalStage": 2,
+  "policyLoads": 1,
+  "sampleCount": 175,
+  "terminalCohort": [
+    {
+      "ownerUserId": 11946162891,
+      "slot": 1,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    }
+  ],
+  "stageCompletionEvents": [
+    {
+      "levelEpoch": 1,
+      "revision": 111,
+      "now": 1794325266.003223,
+      "late": false,
+      "kind": "CampaignStageCompleted",
+      "data": {
+        "index": 1
+      },
+      "seq": 437
+    }
+  ],
+  "deaths": [
+    {
+      "view": "Playing",
+      "revision": 82,
+      "rawLife": 0,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -43.1327018737793,
+            -135.6845245361328,
+            20.96613121032715
+          ],
+          "held": false,
+          "position": [
+            266.5059814453125,
+            -37.02570724487305,
+            17.737369537353516
+          ]
+        },
+        "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:2",
+        "reason": "Fall"
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794325190.898745,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 322,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 85,
+      "rawLife": 0,
+      "attempt": 2,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            16.84932518005371,
+            -122.60836791992188,
+            0.15249335765838623
+          ],
+          "held": false,
+          "position": [
+            297.2566833496094,
+            -36.32008743286133,
+            4.180141925811768
+          ]
+        },
+        "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:85",
+        "reason": "Fall"
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:85",
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794325192.625663,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 328,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 103,
+      "rawLife": 0,
+      "attempt": 3,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            -7.63819261919707e-05,
+            -0.00031191189191304147,
+            -9.9378503364278e-06
+          ],
+          "held": false,
+          "position": [
+            616.5536499023438,
+            0.9992328882217407,
+            3.2251014709472656
+          ]
+        },
+        "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:89",
+        "reason": "CombatUnderflow"
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:89",
+      "levelEpoch": 1,
+      "respawns": 1,
+      "now": 1794325254.571341,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 415,
+      "connected": true
+    },
+    {
+      "view": "Menu",
+      "revision": 116,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": false,
+          "position": [
+            15.999959945678711,
+            122.17635345458984,
+            16
+          ]
+        },
+        "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+        "reason": "CombatUnderflow"
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+      "levelEpoch": 2,
+      "respawns": 0,
+      "now": 1794325278.586104,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "ConfirmedDeath",
+      "seq": 476,
+      "connected": true
+    }
+  ],
+  "normalHealingEvents": [
+    {
+      "view": "Playing",
+      "revision": 49,
+      "rawLife": 47,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "before": 39,
+        "flyId": "courtyard-fly-1",
+        "after": 47
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794325151.857817,
+      "late": false,
+      "status": "Alive",
+      "kind": "FlyCaught",
+      "seq": 195,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 109,
+      "rawLife": 39,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "before": 31,
+        "flyId": "bridge-fly-4",
+        "after": 39
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794325258.256759,
+      "late": false,
+      "status": "Alive",
+      "kind": "FlyCaught",
+      "seq": 432,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 111,
+      "rawLife": 47,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "before": 39,
+        "flyId": "bridge-fly-3",
+        "after": 47
+      },
+      "actorId": "61b88756-56a7-4816-b6e8-0cc552bec553:actor:108",
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794325259.323601,
+      "late": false,
+      "status": "Alive",
+      "kind": "FlyCaught",
+      "seq": 436,
+      "connected": true
+    }
+  ],
+  "stageEventCounts": {
+    "1": {
+      "EnemySpawned": 13,
+      "FlyCaught": 3,
+      "CommitSpawn": 4,
+      "SetHealth": 51,
+      "BossHit": 3,
+      "InteractionAccepted": 17,
+      "RunStarted": 1,
+      "DragonFlightBlocked": 1,
+      "AttackAccepted": 35,
+      "EnemyGrabbed": 3,
+      "BossShot": 17,
+      "EnemyHit": 34,
+      "GuardianBallThrown": 3,
+      "EnemyRecovery": 24,
+      "CampaignStageCompleted": 1,
+      "BossWarning": 3,
+      "BossAssigned": 1,
+      "EnemyAttackAccepted": 78,
+      "BeginAttack": 49,
+      "GuardianBallPickedUp": 3,
+      "ConfirmedDeath": 3,
+      "Death": 3,
+      "EnemyAttackMiss": 23,
+      "EnemyThrowDamage": 3,
+      "ReserveSpawn": 4,
+      "EnemyThrown": 3,
+      "EnemyDeath": 14,
+      "AttackMiss": 7,
+      "EnemyGrabAccepted": 5,
+      "Hit": 27,
+      "WalkerClubCreated": 1
+    },
+    "2": {
+      "LevelAdvanced": 1,
+      "EnemySpawned": 10,
+      "ConfirmedDeath": 1,
+      "SetHealth": 3,
+      "RunResult": 1,
+      "CampaignModeClosed": 1,
+      "CampaignCheckpoint": 1,
+      "CampaignStageStarted": 1,
+      "Death": 1,
+      "Hit": 3,
+      "EnemyHit": 1,
+      "EnemyDeath": 1,
+      "CampaignEnemyAttack": 15,
+      "AdvanceLevel": 1
+    }
+  },
+  "terminalArchive": "test17-terminal-archive.json",
+  "terminalArchiveBytes": 37366,
+  "terminalArchiveSha256": "2c21cafe208a3831af81bef9e7be4c0eced8e9bb0799969f39616623a227bc8e",
+  "completeCampaignAccepted": false,
+  "observations": [
+    "Level1 completed with three Guardian returns; Rope2 then lost the final appearance.",
+    "Two first-stage Falls occurred nearCliffs, followed by first-stage CombatUnderflow and RopeCombatUnderflow. This watcher does not establish a cause beyond recorded death reasons.",
+    "Ordinary FlyCaught event39to47 on originalactor:2 explains early same-body healing.",
+    "All owned diagnostic export folders were removed after complete export.",
+    "No source/policy/actor/pose/health/resource/phase changes or stop calls by watcher.",
+    "Root owns terminal motion/detail export, stop and exact Edit backup restoration.",
+    "Only the initial console was captured: known cosmetic representation warnings, no initial Lua exception; no later console claim."
+  ]
+}

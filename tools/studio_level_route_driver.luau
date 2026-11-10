@@ -42,7 +42,16 @@ function Nav.plan(position, desired, floors, state, now, options)
         end
         if not jump.awaitingInput and Nav.landed(position, jump, options.grounded, options.vy) then state.jump = nil
         elseif jump.awaitingInput or now - jump.at < 2 then
-            return {target = jump.target, crossing = true, attackAllowed = false, direction = jump.direction, phase = 'Flight'}
+            local target=jump.target
+            local passedTarget=jump.direction==1 and position.x>=target.x or jump.direction==-1 and position.x<=target.x
+            if not jump.awaitingInput and passedTarget and inside(position,jump.floor,-2)
+                and position.y>=jump.landingY-.75 then
+                -- A native body can still be above the authored landing height
+                -- on an NPC. Hold over the destination instead of reversing
+                -- toward the gap; strict landing and timeout remain unchanged.
+                target=point(position.x,target.y,target.z)
+            end
+            return {target = target, crossing = true, attackAllowed = false, direction = jump.direction, phase = 'Flight'}
         else state.jump = nil end
     end
     local current, index = Nav.currentFloor(position, floors, state.previousFloor)
@@ -70,6 +79,9 @@ function Nav.plan(position, desired, floors, state, now, options)
     local beyond = direction == 1 and desired.x > current.maxX or direction == -1 and desired.x < current.minX
     local gap = neighbor and (direction == 1 and neighbor.minX > current.maxX + .2
         or direction == -1 and neighbor.maxX < current.minX - .2)
+    local runUp = state.gapRunUp
+    if runUp and (options.allowCrossing == false or not beyond or not gap or runUp.direction ~= direction
+        or runUp.minX ~= current.minX or runUp.maxX ~= current.maxX) then state.gapRunUp=nil;runUp=nil end
     if options.allowCrossing ~= false and beyond and neighbor and not gap then
         local low, high = math.max(current.minZ, neighbor.minZ) + 2, math.min(current.maxZ, neighbor.maxZ) - 2
         if low > high then return {target = position, crossing = true, attackAllowed = false, phase = 'No shared crossing'} end
@@ -96,6 +108,21 @@ function Nav.plan(position, desired, floors, state, now, options)
         local target = point(edge - direction * .7, current.top + 3, z)
         local close = direction == 1 and position.x >= edge - (options.jumpLead or 2.5)
             or direction == -1 and position.x <= edge + (options.jumpLead or 2.5)
+        if not runUp and close and options.grounded == false and math.abs(options.vy or 0)<1
+            and math.abs(position.y-(current.top+3))<.75 then
+            -- The caller's launch flag also requires real running speed. A
+            -- nearby walking body first stages inward instead of running off
+            -- the edge while the previous movement packet is still held.
+            runUp={direction=direction,minX=current.minX,maxX=current.maxX,
+                target=point(clamp(edge-direction*8,current.minX+2.2,current.maxX-2.2),current.top+3,z)}
+            state.gapRunUp=runUp
+        end
+        if runUp then
+            if math.abs(position.x-runUp.target.x)>.6 or math.abs(position.z-runUp.target.z)>1.5 then
+                return {target=runUp.target,crossing=true,attackAllowed=false,direction=direction,phase='Stage gap run-up'}
+            end
+            state.gapRunUp=nil
+        end
         if close and options.grounded and math.abs(position.z - z) < 1.5 and now - (state.lastJump or -100) > .7 then
             local landingX = direction == 1 and neighbor.minX or neighbor.maxX
             target = point(landingX + direction * 4, neighbor.top + 3, z)
