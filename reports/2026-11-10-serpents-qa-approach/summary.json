@@ -1,0 +1,73 @@
+{
+  "status": "QA Approach steering fix frozen; no production or live changes",
+  "baselineSha256": "461abaa9803a2e2211d0f3ed696d3100f01c587c6d7d811fafce781d7de8703e",
+  "candidateSha256": "2b9f6e47e6128bb0482a52bdfc2f4ee7b898be51c5baa2b5451c3c17a03a573c",
+  "change": "Serpents Approach X proportional gain .3 to .1 only, plus explanatory comment. The target, support rules, jumps and other modes are unchanged.",
+  "nativeEvidence": "../2026-11-10-full-campaign-playthrough/test14-serpents-final-room-extract.json",
+  "nativeCause": "Room4 entry ledge center240 width20 maxX250, target249.1. Accepted x1 remained through249.246 while reduced plan waited; x.598 accepted at249.958, actor crossed250 before reversal and fell below support. No impossible geometry demonstrated.",
+  "targetedRegression": {
+    "type": "CLI numeric actual Session intents and actual Modes physics; fake presentation only. Normal initial spawn; no pose/health/reserve/geometry writes.",
+    "seed": 1259618153,
+    "physicsDt": 0.016666666666666666,
+    "decisionIntervals": [
+      0.133,
+      0.15
+    ],
+    "acceptedInputDelay": "one decision interval",
+    "initialPhase": [
+      0,
+      0.05
+    ],
+    "cases": "4 from initial rest;4 add delay only from physical x226, after naturally crossing room3 exit floor6 toward entry floor7 at vx16.",
+    "acceptance": "Grounded on actual target entry support within.15 of249.1 (or9.1), with accepted x0, rawLife47, attempt1, stock3 and zero ConfirmedDeath. Stops before boarding.",
+    "baseline": {
+      "pass": 0,
+      "fail": 8,
+      "exitCode": 1
+    },
+    "fixed": {
+      "pass": 8,
+      "fail": 0,
+      "exitCode": 0
+    },
+    "movingArrivalFinalX": [
+      249.00229185388247,
+      248.99633298220039,
+      249.01155085632885,
+      249.04073128148553
+    ]
+  },
+  "existingWholeCourseRegressions": {
+    "scope": "Existing probes call the real Modes move/jump through fake-world boundary and step the real Session; they do not add transport delay.",
+    "solo30": {
+      "pass": 30,
+      "fail": 0,
+      "exitCode": 0
+    },
+    "trio12": {
+      "pass": 12,
+      "fail": 0,
+      "exitCode": 0
+    },
+    "compileExitCode": 0
+  },
+  "knownLimitation": {
+    "type": "Same8 cases run to course completion with delay also applied to Jump predictions, beyond bounded Approach acceptance.",
+    "pass": 5,
+    "fail": 3,
+    "exitCode": 1,
+    "failures": [
+      ".15 initialdelay phase0: fallx301.4 room4",
+      ".15 initialdelay phase.05: fallx218.57 room3",
+      ".15 delayfrom226 phase0: fallx301.37 room4"
+    ],
+    "interpretation": "All targeted Approach cases settle safely, but fully delayed boarding forecasts are not solved. The native client forces Move before Jump, while Approach Move can wait the movement throttle. No speculative Jump patch was made; no new native proof or full campaign success is claimed."
+  },
+  "reproduceFromRepositoryRoot": [
+    ".tools/luau-0.745/luau.exe reports/2026-11-10-serpents-qa-approach/approach-lag-baseline.luau",
+    ".tools/luau-0.745/luau.exe reports/2026-11-10-serpents-qa-approach/approach-lag-fixed.luau",
+    ".tools/luau-0.745/luau.exe reports/2026-11-10-serpents-qa-approach/solo30.luau",
+    ".tools/luau-0.745/luau.exe reports/2026-11-10-serpents-qa-approach/trio12.luau",
+    ".tools/luau-0.745/luau.exe reports/2026-11-10-serpents-qa-approach/full-plan-delay-limitation.luau"
+  ]
+}

@@ -70,6 +70,24 @@ function Nav.plan(position, desired, floors, state, now, options)
     local beyond = direction == 1 and desired.x > current.maxX or direction == -1 and desired.x < current.minX
     local gap = neighbor and (direction == 1 and neighbor.minX > current.maxX + .2
         or direction == -1 and neighbor.maxX < current.minX - .2)
+    if options.allowCrossing ~= false and beyond and neighbor and not gap then
+        local low, high = math.max(current.minZ, neighbor.minZ) + 2, math.min(current.maxZ, neighbor.maxZ) - 2
+        if low > high then return {target = position, crossing = true, attackAllowed = false, phase = 'No shared crossing'} end
+        local z = clamp(desired.z, low, high)
+        -- Adjoining floors can narrow sideways even without an X gap. Align
+        -- on the current support before ordinary walking crosses that seam.
+        if position.z < low or position.z > high then
+            local inset = math.min(.25, (high-low)/2)
+            if inset <= .15 then return {target = position, crossing = true, attackAllowed = false, phase = 'No shared crossing'} end
+            -- Target beyond the bridge's .15-stud movement deadzone while
+            -- retaining the full two-stud corridor on either support.
+            z = clamp(z, low+inset, high-inset)
+            return {target = point(clamp(position.x, current.minX + 2.2, current.maxX - 2.2), current.top + 3, z),
+                crossing = true, attackAllowed = false, direction = direction, phase = 'Align adjoining support'}
+        end
+        return {target = point(desired.x, desired.y, z), crossing = false, attackAllowed = true,
+            direction = direction, phase = 'Walk'}
+    end
     if options.allowCrossing ~= false and beyond and gap then
         local low, high = math.max(current.minZ, neighbor.minZ) + 2, math.min(current.maxZ, neighbor.maxZ) - 2
         if low > high then return {target = position, crossing = true, attackAllowed = false, phase = 'No shared crossing'} end

@@ -1,0 +1,21 @@
+{
+  "status": "verified_frozen_independent_review_clear",
+  "navSha256": "864b09976d0c926fb20132744c0ddff6dd6afcff572b34f470f46fdcd6a33d33",
+  "testSha256": "0b8ba46b4bd3e4093bfee0310f1da1a0d66d355a3689941af4e4e5efe8a805e5",
+  "bridgeSha256": "3888c4f37264707855d1a9475224fa989d642e4858eaa01f096e503ae287bdc3",
+  "seed": 303307263,
+  "originalChecks": 53,
+  "initialSeamChecks": 66,
+  "finalChecks": 72,
+  "composition": {"baselineFail": 4, "fixedPass": 4, "baselineExit": 1, "fixedExit": 0},
+  "compileExit": 0,
+  "diffCheckExit": 0,
+  "productionChanges": false,
+  "liveInstallation": false,
+  "nativeAcceptance": false,
+  "limits": [
+    "Recorded fall lanes and actual authored geometry support the planner regression; native individual fall causality is unproven.",
+    "No new native physics or full-campaign success is claimed.",
+    "Unaligned shared corridors too narrow for an interior target beyond the bridge deadzone deliberately hold."
+  ]
+}

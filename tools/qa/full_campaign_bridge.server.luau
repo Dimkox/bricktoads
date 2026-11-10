@@ -111,6 +111,33 @@ local function floorRows(world)
     end
     table.sort(rows,function(a,b) return a.minX<b.minX end);return rows
 end
+local function standby(ctx)
+    local out=neutral();local p=ctx.position;local w=ctx.world;local a=w.actors[ctx.slot]
+    local h=ctx.session.state.heroes[ctx.slot];local combat=ctx.session.combat[ctx.slot]
+    if not p or not a or not h or h.status~='Alive' or not h.connected or not combat
+        or combat.reactionEnd or combat.deathAt or not a.model or a.model:GetAttribute('ActorId')~=h.actorId then return out end
+    local link=a.model:GetAttribute('DragonLink')
+    local root,humanoid=a.root,a.humanoid
+    if link=='Mounted' or link=='Captured' or not root or not root.Parent or root.Anchored or not humanoid
+        or humanoid.PlatformStand or humanoid.Health<=0 or humanoid.FloorMaterial==Enum.Material.Air
+        or not root.AssemblyLinearVelocity or math.abs(root.AssemblyLinearVelocity.Y)>2 then return out end
+    local support=w.lastSupport and w.lastSupport[ctx.slot]
+    if not support then return out end
+    for _,f in ipairs(floorRows(w)) do
+        if f.part:GetAttribute('SurfaceId')==support and p.x>=f.minX and p.x<=f.maxX
+            and p.z>=f.minZ and p.z<=f.maxZ and math.abs(p.y-(f.top+3))<.75 then
+            if f.maxX-f.minX<=12 or f.maxZ-f.minZ<=12
+                or p.x>=f.minX+5 and p.x<=f.maxX-5 and p.z>=f.minZ+5 and p.z<=f.maxZ-5 then return out end
+            -- A waiting body can still be displaced by ordinary AI/physics.
+            -- Recover only toward an interior point on its observed support.
+            local dx=math.clamp(p.x,f.minX+6,f.maxX-6)-p.x
+            local dz=math.clamp(p.z,f.minZ+6,f.maxZ-6)-p.z
+            local n=math.max(1,math.sqrt(dx*dx+dz*dz));out.x,out.z=dx/n,dz/n
+            return out
+        end
+    end
+    return out
+end
 local function foot(ctx,desired,combatPlan)
     local p=ctx.position;local a=ctx.world.actors[ctx.slot]
     if not p or not a then return neutral() end
@@ -228,7 +255,7 @@ local function plan(player)
     local ctx={controller=c,session=s,director=d,world=world,modes=modes,definition=c.deps.Config.Level,
         slot=slot,now=at,dt=decisionDt,stageToken=key,actor=a,position=world:position(slot)}
     if not ctx.position then return {plan=neutral(),status='Missing body'} end
-    if index==1 and slot~=leadSlot then return {plan=neutral(),index=index,status='QA teammate waiting behind fighter'} end
+    if index==1 and slot~=leadSlot then return {plan=standby(ctx),index=index,status='QA teammate waiting behind fighter'} end
     local targetId,targetPosition=Combat.target(ctx);local combatPlan=targetId and slot==leadSlot and Combat.plan(ctx) or nil
     local output
     if index==1 then

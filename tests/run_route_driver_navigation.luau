@@ -141,4 +141,82 @@ local delayedFlight = {jump = table.clone(j)}
 delayedFlight.jump.at = 0
 check(Nav.plan({x = 50, y = 7, z = 0}, enemy, floors, delayedFlight, 1.8,
     {grounded = false}).phase == 'Flight', 'Navigation preserves the accepted flight throughout its2s observation window')
+local definition = require('../src/server/gameplay/CampaignDefinition').build(1, 303307263)
+local seamFloors = {}
+for zi = 1, 2 do
+    local f = definition.zones[zi].platforms[1]
+    seamFloors[zi] = {minX=f.x-f.w/2, maxX=f.x+f.w/2, minZ=f.z-f.d/2, maxZ=f.z+f.d/2, top=f.y+f.h/2}
+end
+check(seamFloors[1].maxX == -2 and seamFloors[2].minX == -2 and seamFloors[2].minZ == -14,
+    'Attempt13 seed has an adjoining seam with a narrower destination, not an X gap')
+local patrol = definition.zones[2].enemies[1]
+local function crossingZ(from, target, edge)
+    return from.z + (target.z-from.z)*(edge-from.x)/(target.x-from.x)
+end
+-- The terminal poses are real retained observations. Replaying their Z values
+-- from the safe takeoff-side inset is a planner contract, not a native cause claim.
+for _, observed in ipairs({
+    {x=-.2360484004020691, y=-36.62171173095703, z=-16.640233993530273},
+    {x=-.10371075570583344, y=-36.49592971801758, z=-17.368358612060547},
+}) do
+    check(Nav.plan(observed, patrol, seamFloors, {}, 1, {grounded=false}).phase == 'No support',
+        'A recorded fallen body must not be treated as supported at the adjoining seam')
+    local p = {x=seamFloors[1].maxX-2.2, y=3, z=observed.z}
+    check(crossingZ(p, patrol, -2) < seamFloors[2].minZ,
+        'Direct approach from the retained fall lane crosses outside the next floor')
+    local aligned = Nav.plan(p, patrol, seamFloors, {}, 1, {})
+    check(aligned.target.x <= p.x and aligned.target.z >= -12 and aligned.target.z <= 20
+        and aligned.crossing and not aligned.attackAllowed and not aligned.jump,
+        'Narrow adjoining support requires lateral alignment on the current floor before advancing')
+    p.z = -11
+    local walk = Nav.plan(p, {x=patrol.x,y=3,z=observed.z}, seamFloors, {}, 1, {})
+    check(walk.target.x > -2 and crossingZ(p, walk.target, -2) >= -12
+        and not walk.crossing and not walk.jump,
+        'Once aligned, ordinary walking keeps the segment through the shared corridor without jumping')
+end
+local mirrored = {}
+for i, f in ipairs(seamFloors) do
+    mirrored[i] = {minX=f.minX,maxX=f.maxX,minZ=-f.maxZ,maxZ=-f.minZ,top=f.top}
+end
+local mirror = Nav.plan({x=-4.2,y=3,z=16.640233993530273}, {x=patrol.x,y=3,z=-patrol.z}, mirrored, {}, 1, {})
+check(mirror.target.x <= -4.2 and mirror.target.z <= 12 and mirror.crossing and not mirror.jump,
+    'Mirrored narrowing aligns away from the positive Z edge before forward walking')
+local reversed = {}
+for i = #seamFloors, 1, -1 do
+    local f = seamFloors[i]
+    reversed[#reversed+1] = {minX=-f.maxX,maxX=-f.minX,minZ=f.minZ,maxZ=f.maxZ,top=f.top}
+end
+local backward = Nav.plan({x=4.2,y=3,z=-16.640233993530273}, {x=-patrol.x,y=3,z=patrol.z}, reversed, {}, 1, {})
+check(backward.target.x >= 4.2 and backward.target.z >= -12 and backward.crossing and not backward.jump,
+    'Backward adjoining traversal also aligns on the current side of a narrowing seam')
+local disjoint = {{minX=0,maxX=10,minZ=-5,maxZ=5,top=0}, {minX=10,maxX=20,minZ=10,maxZ=20,top=0}}
+local blockedSeam = Nav.plan({x=8,y=3,z=0}, {x=15,y=3,z=15}, disjoint, {}, 1, {})
+check(blockedSeam.phase == 'No shared crossing' and blockedSeam.target.x == 8
+    and blockedSeam.target.z == 0 and not blockedSeam.attackAllowed and not blockedSeam.jump,
+    'Touching X bounds do not authorize crossing when the Z corridors do not overlap')
+local restricted = Nav.plan({x=-4.2,y=3,z=-16.64}, patrol, seamFloors, {}, 1, {allowCrossing=false})
+check(not restricted.crossing and restricted.target.x < -2 and not restricted.jump,
+    'Disabled route crossing still confines an adjoining approach to its current support')
+for _, reverseX in ipairs({false, true}) do for _, mirrorZ in ipairs({false, true}) do
+    local observed = reverseX and reversed or seamFloors
+    local low, high = -12, 20
+    if mirrorZ then
+        local rows = {}
+        for i, f in ipairs(observed) do rows[i]={minX=f.minX,maxX=f.maxX,minZ=-f.maxZ,maxZ=-f.minZ,top=f.top} end
+        observed, low, high = rows, -20, 12
+    end
+    local p = {x=reverseX and 4.2 or -4.2,y=3,z=mirrorZ and high+.01 or low-.01}
+    local desired = {x=reverseX and -20 or 20,y=3,z=mirrorZ and high or low}
+    local align = Nav.plan(p, desired, observed, {}, 1, {})
+    local delta = math.sqrt((align.target.x-p.x)^2+(align.target.z-p.z)^2)
+    check(align.phase == 'Align adjoining support' and delta > .15
+        and align.target.z > low and align.target.z < high and not align.jump,
+        'Each mirrored/reverse seam target must clear the real bridge .15 movement deadzone')
+end end
+for _, width in ipairs({0, .2}) do
+    local narrow = {{minX=0,maxX=10,minZ=-10,maxZ=10,top=0}, {minX=10,maxX=20,minZ=0,maxZ=4+width,top=0}}
+    local hold = Nav.plan({x=7.8,y=3,z=1.99}, {x=15,y=3,z=2}, narrow, {}, 1, {})
+    check(hold.phase == 'No shared crossing' and hold.target.x == 7.8 and hold.target.z == 1.99 and not hold.jump,
+        'An unaligned corridor too narrow for an interior target beyond the deadzone must hold conservatively')
+end
 print('PASS route driver navigation: ' .. count .. ' checks')
