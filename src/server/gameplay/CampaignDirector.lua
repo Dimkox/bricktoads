@@ -247,11 +247,12 @@ function CampaignDirector:command(userId,payload,now,validator)
         return 'CHASE_ONLY'
     end
     if payload.kind=='Attack' then return self.boss:command(payload.attack,self.bossAim,now) end
-    if not self.boss:canMove() then return 'REACTION' end
+    if not self.boss:canMove(now) then return 'REACTION' end
     if payload.kind=='Jump' then self.world:jump(-99)
     else
         local length=math.sqrt(payload.x^2+payload.z^2)
         if length>0 then self.bossAim={x=payload.x/length,z=payload.z/length} end
+        self.boss.lastMove=length>0 and now or nil
         self.world:move(-99,payload.x,payload.z,false)
     end
     return 'OK'

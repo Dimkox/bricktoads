@@ -1,0 +1,68 @@
+FAIL BigBlag human expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 253, got 251
+FAIL BigBlag human expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroKick
+FAIL BigBlag human direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS BigBlag human live light combos and heavy reaction rejection keep their windows
+FAIL BigBlag human command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL BigBlag human command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL BigBlag NPC expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 253, got 251
+FAIL BigBlag NPC expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroKick
+FAIL BigBlag NPC direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS BigBlag NPC live light combos and heavy reaction rejection keep their windows
+FAIL BigBlag NPC command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL BigBlag NPC command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL RoboManus human expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 13, got 11
+FAIL RoboManus human expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroBoot
+FAIL RoboManus human direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS RoboManus human live light combos and heavy reaction rejection keep their windows
+FAIL RoboManus human command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL RoboManus human command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL RoboManus NPC expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 13, got 11
+FAIL RoboManus NPC expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroBoot
+FAIL RoboManus NPC direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS RoboManus NPC live light combos and heavy reaction rejection keep their windows
+FAIL RoboManus NPC command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL RoboManus NPC command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL GeneralSlaughter human expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 253, got 251
+FAIL GeneralSlaughter human expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroKick
+FAIL GeneralSlaughter human direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS GeneralSlaughter human live light combos and heavy reaction rejection keep their windows
+FAIL GeneralSlaughter human command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL GeneralSlaughter human command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL GeneralSlaughter NPC expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 253, got 251
+FAIL GeneralSlaughter NPC expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroKick
+FAIL GeneralSlaughter NPC direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS GeneralSlaughter NPC live light combos and heavy reaction rejection keep their windows
+FAIL GeneralSlaughter NPC command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL GeneralSlaughter NPC command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL Buzzball human expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 205, got 203
+FAIL Buzzball human expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroKick
+FAIL Buzzball human direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS Buzzball human live light combos and heavy reaction rejection keep their windows
+FAIL Buzzball human command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL Buzzball human command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL Buzzball NPC expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 205, got 203
+FAIL Buzzball NPC expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroKick
+FAIL Buzzball NPC direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS Buzzball NPC live light combos and heavy reaction rejection keep their windows
+FAIL Buzzball NPC command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL Buzzball NPC command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL DarkQueen human expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 13, got 11
+./tests/campaign_bosses/ReactionExpiry.spec.lua:102: BigBlag human expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 253, got 251
+BigBlag human expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroKick
+BigBlag human direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_boss
+stacktrace:
+[C] function assert
+./tests/campaign_bosses/ReactionExpiry.spec.lua:102
+./build/run_boss_reaction_expiry.luau:1
+FAIL DarkQueen human expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroBoot
+FAIL DarkQueen human direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS DarkQueen human live light combos and heavy reaction rejection keep their windows
+FAIL DarkQueen human command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL DarkQueen human command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL DarkQueen NPC expired light recovery precedes Session-first hit at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: OR7 recovery must precede the new two-byte hit expected 13, got 11
+FAIL DarkQueen NPC expired heavy recovery precedes accepted hero action selection: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13: expired heavy state cannot select kick or boot expected HeroJab, got HeroBoot
+FAIL DarkQueen NPC direct hit normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected true, got false
+PASS DarkQueen NPC live light combos and heavy reaction rejection keep their windows
+FAIL DarkQueen NPC command normalizes light recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+FAIL DarkQueen NPC command normalizes heavy recovery at the exact deadline: ./tests/campaign_bosses/ReactionExpiry.spec.lua:13:  expected OK, got COOLDOWN
+CampaignBossReactionExpiry: 10 passed, 50 failed

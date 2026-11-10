@@ -130,7 +130,22 @@ function Boss:_nearest()
     end
     return selected,best
 end
-function Boss:canMove() return self:_active() and self.state=='Ready' end
+function Boss:_finishReaction()
+    if finite(self.session.now) then self.now=math.max(self.now,self.session.now) end
+    if not self:_active() or self.state~='Reaction' or self.now<self.reactionUntil then return false end
+    local e=self.enemies[-99];e.rawLife=math.floor(e.rawLife/8)*8+7
+    self.state='Ready';self.reactionUntil=nil;self.lightReaction=nil;self.heavyReaction=nil;self.readyAt=self.now+.25
+    if self.world.setReaction then self.world:setReaction(-99,false) end;self:_health()
+    return true
+end
+function Boss:canMove(now)
+    if now~=nil then
+        if not finite(now) or now<self.now then return false end
+        self.now=now
+    end
+    self:_finishReaction()
+    return self:_active() and self.state=='Ready'
+end
 function Boss:_damage(target,action,hitSet,tuning)
     if hitSet[target] then return end
     hitSet[target]=true
@@ -219,7 +234,7 @@ function Boss:_begin(name,aim,target)
     self.attack={name=name,move=m,aim=direction,target=target,origin=copy(origin),destination=destination,
         tellAt=self.now+m.tell,activeUntil=self.now+m.tell+m.active,
         recoveryUntil=self.now+m.tell+m.active+m.recovery,hits={},shots=0,serial=self.attackSerial,lastAt=self.now+m.tell}
-    self.state='Tell';self.enemies[-99].engaged=true
+    self.state='Tell';self.enemies[-99].engaged=true;self.lastMove=nil
     if self.world.move then self.world:move(-99,0,0) end
     if self.world.aim then self.world:aim(-99,direction.x,direction.z) end
     if target and self.world.face then self.world:face(-99,target) end
@@ -238,6 +253,7 @@ function Boss:command(action,aim,now)
     local e=self.enemies[-99]
     if e.ownerUserId and not e.connected then return 'OFFLINE' end
     if action~='Punch' and action~='Dash' then return 'INVALID_ACTION' end
+    self:_finishReaction()
     return self:_begin(self:_chooseAttack(action),aim)
 end
 function Boss:_chooseAttack(action)
@@ -298,13 +314,13 @@ function Boss:_attackStep(now)
 end
 function Boss:_defeat()
     if self.defeated then return end
-    self.defeated=true;self.state='Defeated';self.attack=nil
+    self.defeated=true;self.state='Defeated';self.attack=nil;self.lastMove=nil
     local e=self.enemies[-99];e.dead=true;e.rawLife=0;self:_health();self:_clearProjectiles()
     self.world:cue(-99,false);if self.world.kill then self.world:kill(-99) end
     self:_log('CampaignBossDefeated',{bossType=self.kind,progress=e.progress})
 end
 function Boss:hit(attacker,target,action,tuning)
-    if finite(self.session.now) then self.now=math.max(self.now,self.session.now) end
+    self:_finishReaction()
     if target~=-99 or attacker==-99 or not self:_active()
         or self.state~='Ready' and self.state~='Recovery' and not (self.state=='Reaction' and self.lightReaction) then return false end
     local origin=self.world:position(attacker);local destination=self.world:position(-99)
@@ -344,6 +360,7 @@ function Boss:hit(attacker,target,action,tuning)
     self:_health();return true
 end
 function Boss:selectAction(input)
+    self:_finishReaction()
     local raw=self.enemies[-99].rawLife
     local heavy=self.state=='Reaction' and self.heavyReaction==true
     if input=='Dash' then return heavy and 'HeroBoot' or 'Dash' end
@@ -365,10 +382,10 @@ function Boss:step(now,dt)
     self.now=now
     if not self:_active() then self:_clearProjectiles();return 'OK' end
     self:_contain()
-    if self.state=='Reaction' and now>=self.reactionUntil then
-        local e=self.enemies[-99];e.rawLife=math.floor(e.rawLife/8)*8+7
-        self.state='Ready';self.reactionUntil=nil;self.lightReaction=nil;self.heavyReaction=nil;self.readyAt=now+.25
-        if self.world.setReaction then self.world:setReaction(-99,false) end;self:_health()
+    self:_finishReaction()
+    if self.lastMove and now-self.lastMove>=(self.config.MoveTimeout or .35) then
+        self.lastMove=nil
+        if self.world.move then self.world:move(-99,0,0,false) end
     end
     self:_attackStep(now);self:_projectiles(now)
     local e=self.enemies[-99]
@@ -388,7 +405,7 @@ function Boss:connection(userId,connected)
     if userId~=e.ownerUserId then return 'UNKNOWN_ENEMY' end
     if type(connected)~='boolean' then return 'INVALID_CONNECTION' end
     if e.connected==connected then return 'NO_CHANGE' end
-    e.connected=connected;e.connectionEpoch+=1;e.lastSeq=0
+    e.connected=connected;e.connectionEpoch+=1;e.lastSeq=0;self.lastMove=nil
     if self.world.move then self.world:move(-99,0,0) end
     return 'OK'
 end
@@ -410,7 +427,7 @@ function Boss:snapshot()
 end
 function Boss:close(reason)
     if self.closed then return end
-    self.closed=reason or 'Closed';self.state='Closed';self.attack=nil;self:_clearProjectiles()
+    self.closed=reason or 'Closed';self.state='Closed';self.attack=nil;self.lastMove=nil;self:_clearProjectiles()
     self.world:cue(-99,false);if self.world.move then self.world:move(-99,0,0) end
     if self.world.setReaction then self.world:setReaction(-99,false) end
 end
