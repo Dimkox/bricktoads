@@ -58,6 +58,18 @@ function Flight:_release(row,reason,jump)
     self:_log('DragonReleased',row,{reason=reason})
     row.slot=nil;row.mode='Turn';row.turnUntil=self.now+self.config.turnSeconds;row.move=nil
 end
+function Flight:_blockedFlight(row)
+    local previousMode=row.mode
+    self:_release(row,'AscentBlocked')
+    row.capture=nil;row.releaseAt=nil;row.liftUntil=nil;row.move=nil
+    row.enemy.windup=nil;row.enemy.dragonMove=nil;row.enemy.lastMove=nil
+    self.world:stopDragon(row.id)
+    row.mode='Turn';row.turnUntil=self.now+self.config.turnSeconds
+    if not row.ascentBlocked then
+        row.ascentBlocked=true
+        self:_log('DragonFlightBlocked',row,{reason='ASCENT_BLOCKED',previousMode=previousMode})
+    end
+end
 function Flight:isMounted(id) local r=self.states[id];return r~=nil and r.mode=='Mounted' end
 function Flight:heroHit(slot)
     self.now=math.max(self.now,self.session.now)
@@ -209,14 +221,34 @@ function Flight:enemyStep(id,e,dt)
     local floor=self.world:dragonFloor(id);if floor then row.homeY=floor end
     local height=row.homeY+self.config.altitude
     if row.liftUntil and self.now<row.liftUntil then height+=self.config.liftHeight end
+    if row.mode=='Captured' then height+=self.config.captureHeight end
+    if row.ascentBlocked then
+        -- Clearance must succeed before attacks, captures or voluntary steering
+        -- resume. The world adapter keeps rejected attempts free of lift.
+        local accepted,reason=self.world:dragonMotion(id,0,0,height,self.config.speed)
+        if accepted==true then row.ascentBlocked=nil
+        elseif reason=='ASCENT_BLOCKED' then self:_blockedFlight(row) end
+        return
+    end
+    local intendedHeight=height
+    if row.mode~='Captured' and row.capture and self.now>=row.capture.at
+        and self.now<=row.capture.expires then intendedHeight+=self.config.captureHeight end
+    if self.world.dragonAscentBlocked and self.world:dragonAscentBlocked(id,intendedHeight) then
+        -- Reject the physical ascent before a due capture or strike can commit.
+        self:_blockedFlight(row)
+        return
+    end
     local x,z=0,0
     if row.mode=='Mounted' then
         local move=row.move
         if row.slot and self.session.state.heroes[row.slot].connected and move and self.now-move.at<self.director.config.MoveTimeout then x,z=move.x,move.z end
     elseif row.mode=='Captured' then
-        height+=self.config.captureHeight
+        x,z=0,0
     elseif row.capture then
-        if self.now>=row.capture.at then self:_capture(row) end
+        if self.now>=row.capture.at then
+            self:_capture(row)
+            if row.mode=='Captured' then height=intendedHeight end
+        end
     elseif e.windup then
         if self.now>=e.windup.at then
             self.director:_resolveStrike(id,e);row.mode='Turn';row.turnUntil=self.now+self.config.turnSeconds
@@ -237,7 +269,9 @@ function Flight:enemyStep(id,e,dt)
             elseif length>.5 then x,z=dx/length,dz/length end
         end
     end
-    self.world:dragonMotion(id,x,z,height,self.config.speed)
+    local accepted,reason=self.world:dragonMotion(id,x,z,height,self.config.speed)
+    if accepted==true then row.ascentBlocked=nil
+    elseif reason=='ASCENT_BLOCKED' then self:_blockedFlight(row) end
 end
 function Flight:_shotStep(id,shot,dt)
     if self.now>=shot.expires then return true end

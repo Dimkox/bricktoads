@@ -42,10 +42,23 @@ return function(World)
         if delta.Magnitude>range or math.abs(delta.Y)>height or not self:dragonGrounded(slot) then return false end
         return Workspace:Raycast(hero.root.Position,delta,self.ray)==nil
     end
+    function World:dragonAscentBlocked(id,height)
+        local a=living(self,id);if not a then return false end
+        local rise=height+self.offset.Y-a.root.Position.Y
+        if rise<=0 then return false end
+        local ceiling=Workspace:Raycast(a.root.Position,Vector3.new(0,rise,0),self.ray)
+        return ceiling~=nil and ceiling.Instance.CanCollide and ceiling.Normal.Y<-.9
+    end
     function World:dragonMotion(id,x,z,height,speed)
         local a=living(self,id);if not a or a.root.Anchored then return false end
         local row=self.dragonFlights[id]
         if row and row.actor~=a then self:stopDragon(id);row=nil end
+        if self:dragonAscentBlocked(id,height) then
+            -- Restore ordinary gravity once. A blocked retry must not
+            -- recreate lift or erase the body's subsequent falling speed.
+            self:stopDragon(id)
+            return false,'ASCENT_BLOCKED'
+        end
         if not row then
             if a.humanoid.PlatformStand then return false end
             self:resetLocomotion(id,a)

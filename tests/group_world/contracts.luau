@@ -93,6 +93,21 @@ local workspace=node('Workspace','Workspace')
 local serverTime=0
 function workspace:GetServerTimeNow() return serverTime end
 function workspace:Raycast(origin,direction,params)
+    if direction.Y>0 then
+        local lowest,partHit
+        for _,p in ipairs(params.geometry:GetDescendants()) do
+            if p:IsA('BasePart') and p.CanCollide then
+                local bottom=p.Position.Y-p.Size.Y/2
+                if origin.X>=p.Position.X-p.Size.X/2 and origin.X<=p.Position.X+p.Size.X/2
+                    and origin.Z>=p.Position.Z-p.Size.Z/2 and origin.Z<=p.Position.Z+p.Size.Z/2
+                    and bottom>=origin.Y and bottom<=origin.Y+direction.Y and (not lowest or bottom<lowest) then
+                    lowest,partHit=bottom,p
+                end
+            end
+        end
+        if partHit then return {Instance=partHit,Position=vector(origin.X,lowest,origin.Z),Normal=vector(0,-1,0)} end
+        return nil
+    end
     local highest,partHit
     for _,p in ipairs(params.geometry:GetDescendants()) do
         if p:IsA('BasePart') and p.CanCollide then
@@ -1397,6 +1412,89 @@ local force=flightWorld.dragonFlights[-1].force
 assert(math.abs(force.Force.Y-2354.4)<1e-6 and dragon.humanoid.PlatformStand)
 flightWorld:stopDragon(-1)
 assert(force.Parent==nil and not dragon.humanoid.PlatformStand and dragon.humanoid.EvaluateStateMachine==true)
+do
+    local blockedWorld=World.new(Base,{FallY=-35,Enemy={speed=9},WalkSpeed=12,JumpPower=42},
+        {name='DragonBlockedAscent',offset={x=1200,y=100,z=24576}})
+    blockedWorld.geometry:ClearAllChildren()
+    local function blockedActor(id,x,y)
+        local a=actor(blockedWorld,id,vector(x or 0,y or -4.04,0)+blockedWorld.offset)
+        a.root.AssemblyMass=12;a.model.Torso.CanCollide=true;a.model:SetAttribute('EnemyKind','Dragon')
+        return a
+    end
+    local trapped=blockedActor(-1)
+    local before=trapped.root.Position
+    assert(blockedWorld:dragonMotion(-1,0,0,4.5,10),'Fixture must begin with ordinary active lift')
+    local lift=blockedWorld.dragonFlights[-1]
+    local roof=node('Part','OwnSolidUnderside',blockedWorld.geometry)
+    roof.CFrame=frame(vector(0,-1,0)+blockedWorld.offset);roof.Size=vector(20,2,20);roof.CanCollide=true
+    local hit=workspace:Raycast(trapped.root.Position,vector(0,4.5+blockedWorld.offset.Y-trapped.root.Position.Y,0),blockedWorld.ray)
+    assert(hit and hit.Instance==roof and hit.Normal.Y==-1,'Actual group-local ascent must cross this own floor underside')
+    assert(type(blockedWorld.dragonAscentBlocked)=='function','Flight policy needs a read-only ascent obstruction query before resolving actions')
+    local velocityBefore=trapped.root.AssemblyLinearVelocity
+    local forceBefore=lift.force.Force
+    local ownershipBefore=trapped.root.networkOwnershipPins
+    local childrenBefore=#trapped.root:GetChildren()
+    assert(blockedWorld:dragonAscentBlocked(-1,4.5)==true)
+    assert(blockedWorld.dragonFlights[-1]==lift and lift.force.Parent==trapped.root and lift.attachment.Parent==trapped.root
+        and lift.force.Force==forceBefore and #trapped.root:GetChildren()==childrenBefore,
+        'Read-only obstruction query must not stop, create or alter lift objects')
+    eq(trapped.root.AssemblyLinearVelocity,velocityBefore.X,velocityBefore.Y,velocityBefore.Z,
+        'Read-only obstruction query must preserve physical velocity')
+    eq(trapped.root.Position,before.X,before.Y,before.Z,'Read-only obstruction query must preserve the actual pose')
+    assert(trapped.humanoid.PlatformStand and not trapped.humanoid.EvaluateStateMachine and not trapped.humanoid.AutoRotate
+        and trapped.humanoid.WalkSpeed==0 and trapped.model:GetAttribute('DragonFlight')==true
+        and trapped.root.networkOwnershipPins==ownershipBefore and trapped.humanoid.Health==100 and trapped.model.Torso.CanCollide,
+        'Read-only obstruction query must preserve flags, authority, health and collisions')
+    local accepted,reason=blockedWorld:dragonMotion(-1,0,0,4.5,10)
+    assert(accepted==false and reason=='ASCENT_BLOCKED','Solid own underside must abort an impossible native ascent')
+    assert(blockedWorld.dragonFlights[-1]==nil and lift.force.Parent==nil and lift.attachment.Parent==nil,
+        'Aborting lift must remove gravity cancellation and its attachment')
+    assert(not trapped.humanoid.PlatformStand and trapped.humanoid.EvaluateStateMachine and trapped.humanoid.AutoRotate
+        and trapped.humanoid.WalkSpeed==12 and trapped.model:GetAttribute('DragonFlight')==nil,
+        'Blocked ascent restores the body flags saved by ordinary flight')
+    eq(trapped.root.Position,before.X,before.Y,before.Z,'Blocked ascent must never reposition the actual body')
+    assert(trapped.humanoid.Health==100 and trapped.model.Torso.CanCollide,'Blocked ascent preserves health and collision flags')
+    trapped.root.AssemblyLinearVelocity=vector(2,-9,3)
+    for _=1,3 do
+        local okay,why=blockedWorld:dragonMotion(-1,0,0,4.5,10)
+        assert(okay==false and why=='ASCENT_BLOCKED' and blockedWorld.dragonFlights[-1]==nil)
+        eq(trapped.root.AssemblyLinearVelocity,2,-9,3,'Repeated blocked calls must preserve native falling velocity')
+        assert(not trapped.root:FindFirstChild('DragonLift') and not trapped.root:FindFirstChild('DragonGravity'),
+            'Blocked retries must not recreate lift objects')
+    end
+    local cold=blockedActor(-2);cold.root.AssemblyLinearVelocity=vector(1,-3,-1)
+    local okay,why=blockedWorld:dragonMotion(-2,0,0,4.5,10)
+    assert(okay==false and why=='ASCENT_BLOCKED' and blockedWorld.dragonFlights[-2]==nil)
+    eq(cold.root.AssemblyLinearVelocity,1,-3,-1,'Cold blocked requests must not reset existing physical velocity')
+    assert(not cold.humanoid.PlatformStand and cold.humanoid.EvaluateStateMachine and cold.humanoid.Health==100)
+    print('PASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries')
+
+    roof.CanCollide=false
+    local clear=blockedActor(-3)
+    assert(blockedWorld:dragonAscentBlocked(-3,4.5)==false)
+    assert(blockedWorld:dragonMotion(-3,1,0,4.5,10),'Noncolliding own art must not block physical lift')
+    eq(clear.root.AssemblyLinearVelocity,10,14,0)
+    roof.CanCollide=true
+    assert(blockedWorld:dragonAscentBlocked(-3,-5)==false)
+    assert(blockedWorld:dragonMotion(-3,0,1,-5,10),'A downward goal must not be blocked by the floor overhead')
+    assert(math.abs(clear.root.AssemblyLinearVelocity.Y+5.76)<1e-7 and clear.root.AssemblyLinearVelocity.Z==10)
+    blockedWorld:stopDragon(-3)
+    roof.CanCollide=false
+    local foreign=node('Folder','ForeignDragonRoof',workspace)
+    local foreignRoof=node('Part','SolidForeignUnderside',foreign)
+    foreignRoof.CFrame=roof.CFrame;foreignRoof.Size=roof.Size;foreignRoof.CanCollide=true
+    assert(blockedWorld:dragonAscentBlocked(-3,4.5)==false)
+    assert(blockedWorld:dragonMotion(-3,0,0,4.5,10),'Another group geometry must not enter the ascent query')
+    blockedWorld:stopDragon(-3);foreign:Destroy()
+    local high=node('Part','CeilingBeyondGoal',blockedWorld.geometry)
+    high.CFrame=frame(vector(30,7,0)+blockedWorld.offset);high.Size=vector(20,2,20);high.CanCollide=true
+    local lowGoal=blockedActor(-4,30,3)
+    assert(blockedWorld:dragonAscentBlocked(-4,4.5)==false)
+    assert(blockedWorld:dragonMotion(-4,1,0,4.5,10),'A ceiling beyond the actual requested goal must not block ascent')
+    eq(lowGoal.root.AssemblyLinearVelocity,10,9,0,'Nonzero group translation must be applied exactly once to the ascent goal')
+    blockedWorld:clearActors()
+    print('PASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets')
+end
 assert(flightWorld:dragonCanMount(1,-1,5,4))
 assert(flightWorld:dragonLink(-1,1,'Mounted'))
 assert(rider.root.Anchored and not rider.humanoid.EvaluateStateMachine and not rider.model.Torso.CanCollide)

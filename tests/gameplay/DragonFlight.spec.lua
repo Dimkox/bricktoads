@@ -15,7 +15,15 @@ return function(Flight,Director,Session,Core,Combat,Config,FakeWorld,SourceComba
         function w:enemyMove() end
         function w:dragonGrounded(id) return self.grounded[id]~=false end
         function w:dragonFloor() return 3 end
-        function w:dragonMotion(id,x,z,y,speed) self.motion={id=id,x=x,z=z,y=y,speed=speed};return true end
+        function w:dragonAscentBlocked(id,height)
+            self.ascentHeight=height
+            return self.motionFailure=='ASCENT_BLOCKED'
+        end
+        function w:dragonMotion(id,x,z,y,speed)
+            self.motion={id=id,x=x,z=z,y=y,speed=speed}
+            if self.motionFailure then return false,self.motionFailure end
+            return true
+        end
         function w:stopDragon(id) self.stopped=id end
         function w:dragonLink(id,slot,mode) if self.linkFails then return false end;self.links[slot]={id=id,mode=mode};return true end
         function w:dragonUnlink(slot) self.links[slot]=nil;return true end
@@ -55,6 +63,132 @@ return function(Flight,Director,Session,Core,Combat,Config,FakeWorld,SourceComba
         assert(d.dragons~=nil,'Dragon flight is not wired into the real Director')
         local body=w.actors[-1];d.dragons:step(0,.05);d.dragons:enemyStep(-1,d.enemies[-1],.05)
         assert(w.motion and w.motion.speed>0 and w.actors[-1]==body)
+    end)
+    test('blocked ascent cancels pending strike and lift without damage or a free mount',function()
+        local d,s,w,tick=fixture();local e=d.enemies[-1];local body=w.actors[-1];local actor=e.actorId
+        assert(d:claim(71,-1)=='OK');d:_beginStrike(-1,e,1)
+        local row=d.dragons.states[-1];row.liftUntil=10;row.move={x=1,z=0,at=0};e.dragonMove={x=1,z=0,at=0}
+        assert(e.windup,'Fixture must contain a real pending Dragon strike')
+        w.motionFailure='ASCENT_BLOCKED';tick(.1)
+        assert(not e.windup and not row.capture and not row.liftUntil and not row.move and not e.dragonMove,
+            'Blocked lift must cancel the pending attack and all accepted steering/lift')
+        assert(w.stopped==-1 and row.mode=='Turn' and row.ascentBlocked and not row.disabledUntil,
+            'Physical obstruction must stop flight without granting heavy-hit Disabled')
+        assert(w.actors[-1]==body and e.actorId==actor and e.rawLife==31 and not e.dead and not e.reactionUntil)
+        assert(s.combat[1].rawLife==47 and s.state.heroes[1].respawns==3 and s.state.heroes[1].attempt==1)
+        assert(d.dragons:interaction(1).available==false,'Blocked ascent alone cannot grant a mount')
+    end)
+    test('blocked ascent logs once and resumes policy only after accepted clear motion',function()
+        local d,s,w,tick=fixture();w.motionFailure='ASCENT_BLOCKED';tick(.1)
+        local row=d.dragons.states[-1]
+        tick(.2);tick(.5)
+        assert(row.ascentBlocked and not d.enemies[-1].windup and w.motion.x==0 and w.motion.z==0,
+            'Repeated blocked frames may only retry the physical clearance, never attacks or pursuit')
+        local function count(kind)
+            local total=0;for _,event in ipairs(s.logs) do if event.kind==kind then total+=1 end end;return total
+        end
+        assert(count('DragonFlightBlocked')==1,'One continuous obstruction needs one event')
+        local attacks=count('EnemyAttackAccepted')
+        w.motionFailure='UNAVAILABLE';tick(.6)
+        assert(row.ascentBlocked and count('DragonFlightBlocked')==1,'Unrelated refusal cannot clear the blocked episode')
+        w.motionFailure=nil;tick(.7)
+        assert(not row.ascentBlocked and count('EnemyAttackAccepted')==attacks and w.motion.x==0,
+            'The successful clearance probe must precede resuming enemy policy')
+        tick(1.1);assert(count('EnemyAttackAccepted')>attacks,'Ordinary attacks must resume after clearance')
+        w.motionFailure='ASCENT_BLOCKED';tick(1.15)
+        assert(count('DragonFlightBlocked')==2,'A later obstruction after accepted motion is a new episode')
+    end)
+    test('blocked mounted flight releases the real rider and never grants remount',function()
+        local d,s,w,tick,intent,mount=fixture();mount();assert(intent(1.1,'Move')=='OK')
+        local e=d.enemies[-1];local hero=s.state.heroes[1];local heroId,enemyId=hero.actorId,e.actorId
+        local raw,stock=s.combat[1].rawLife,hero.respawns;local enemyRaw=e.rawLife
+        w.motionFailure='ASCENT_BLOCKED';tick(1.2)
+        local row=d.dragons.states[-1]
+        assert(not w.links[1] and not d.dragons.heroes[1] and not row.slot and row.mode=='Turn')
+        assert(not row.move and not e.dragonMove and not row.liftUntil and w.stopped==-1)
+        assert(hero.actorId==heroId and e.actorId==enemyId and s.combat[1].rawLife==raw
+            and hero.respawns==stock and e.rawLife==enemyRaw and not e.dead)
+        assert(d.dragons:interact(1,1.2,'Punch')=='NO_INTERACTION','Only a new canonical heavy hit can make a mount available')
+    end)
+    test('blocked captured flight releases without a second hit or paid appearance',function()
+        local d,s,w,tick=fixture();assert(s:_hit(2,1,'HeroUppercut'))
+        w.targetsFor[-1]={1};assert(d.dragons:beginCapture(-1,d.enemies[-1],1));tick(.3)
+        assert(w.links[1] and w.links[1].mode=='Captured','Fixture must complete the real capture path')
+        local hero=s.state.heroes[1];local raw,stock,actor=s.combat[1].rawLife,hero.respawns,hero.actorId
+        w.motionFailure='ASCENT_BLOCKED';tick(.35)
+        local row=d.dragons.states[-1]
+        assert(not w.links[1] and not d.dragons.heroes[1] and not row.slot and not row.releaseAt and row.mode=='Turn')
+        assert(s.combat[1].rawLife==raw and hero.respawns==stock and hero.actorId==actor and hero.attempt==1)
+        assert(d.enemies[-1].rawLife==31 and not d.enemies[-1].reactionUntil and not d.enemies[-1].dead)
+    end)
+    test('blocked lift cancels a pending capture before it can attach later',function()
+        local d,s,w,tick=fixture();assert(s:_hit(2,1,'HeroUppercut'))
+        w.targetsFor[-1]={1};assert(d.dragons:beginCapture(-1,d.enemies[-1],1))
+        local raw=s.combat[1].rawLife;w.motionFailure='ASCENT_BLOCKED';tick(.1)
+        assert(not d.dragons.states[-1].capture,'A rejected lift must cancel the real capture windup')
+        tick(.3);w.motionFailure=nil;tick(.4)
+        assert(not w.links[1] and not d.dragons.heroes[1] and s.combat[1].rawLife==raw)
+        for _,event in ipairs(s.logs) do assert(event.kind~='DragonCaptured','Cleared motion cannot resurrect a canceled capture') end
+    end)
+    test('first blocked ascent after strike deadline prevents the due damage commit',function()
+        local d,s,w,tick=fixture();local e=d.enemies[-1]
+        assert(d:claim(71,-1)=='OK');w.targetsFor[-1]={1};d:_beginStrike(-1,e,1)
+        local deadline=e.windup.at;local before=s.combat[1].rawLife
+        w.motionFailure='ASCENT_BLOCKED';tick(deadline+.01)
+        assert(s.combat[1].rawLife==before and not s.combat[1].reactionEnd,
+            'Clearance must reject a due strike before real Session damage is committed')
+        assert(not e.windup and d.dragons.states[-1].ascentBlocked and not e.dead and e.rawLife==31)
+        assert(s.state.heroes[1].attempt==1 and s.state.heroes[1].respawns==3)
+    end)
+    test('first blocked ascent after capture deadline never commits the capture',function()
+        local d,s,w,tick=fixture();assert(s:_hit(2,1,'HeroUppercut'));w.targetsFor[-1]={1}
+        assert(d.dragons:beginCapture(-1,d.enemies[-1],1))
+        local deadline=d.dragons.states[-1].capture.at;local raw=s.combat[1].rawLife
+        w.motionFailure='ASCENT_BLOCKED';tick(deadline+.01)
+        assert(not w.links[1] and not d.dragons.heroes[1] and not d.dragons.states[-1].capture)
+        for _,event in ipairs(s.logs) do
+            assert(event.kind~='DragonCaptured','A blocked due capture must never link and then release as a substitute for rejection')
+        end
+        assert(s.combat[1].rawLife==raw and s.state.heroes[1].respawns==3 and s.state.heroes[1].attempt==1)
+    end)
+    test('captured clearance queries include capture height exactly once',function()
+        local d,s,w,tick=fixture();assert(s:_hit(2,1,'HeroUppercut'));w.targetsFor[-1]={1}
+        assert(d.dragons:beginCapture(-1,d.enemies[-1],1));tick(.3)
+        assert(d.dragons.states[-1].mode=='Captured')
+        w.motionFailure='ASCENT_BLOCKED';tick(.35)
+        assert(w.ascentHeight==3+d.config.DragonFlight.altitude+d.config.DragonFlight.captureHeight)
+        assert(not w.links[1] and not d.dragons.states[-1].slot and d.dragons.states[-1].ascentBlocked)
+    end)
+    test('due capture checks its intended lift before linking beneath a lower roof',function()
+        local d,s,w,tick=fixture();assert(s:_hit(2,1,'HeroUppercut'));w.targetsFor[-1]={1}
+        assert(d.dragons:beginCapture(-1,d.enemies[-1],1))
+        function w:dragonAscentBlocked(id,height) self.ascentHeight=height;return height>6 end
+        local raw,stock,actor=s.combat[1].rawLife,s.state.heroes[1].respawns,s.state.heroes[1].actorId
+        tick(.3)
+        assert(not w.links[1] and not d.dragons.heroes[1],
+            'The normal4.5 lift may be clear while the intended7.5 capture lift is blocked')
+        assert(w.ascentHeight==3+d.config.DragonFlight.altitude+d.config.DragonFlight.captureHeight)
+        for _,event in ipairs(s.logs) do assert(event.kind~='DragonCaptured','Blocked intended lift must precede the capture commit') end
+        assert(s.combat[1].rawLife==raw and s.state.heroes[1].respawns==stock and s.state.heroes[1].actorId==actor)
+    end)
+    test('clear due capture applies intended height once to query and first motion',function()
+        local d,s,w,tick=fixture();assert(s:_hit(2,1,'HeroUppercut'));w.targetsFor[-1]={1}
+        assert(d.dragons:beginCapture(-1,d.enemies[-1],1));tick(.3)
+        local height=3+d.config.DragonFlight.altitude+d.config.DragonFlight.captureHeight
+        assert(d.dragons.states[-1].mode=='Captured' and w.links[1])
+        assert(w.ascentHeight==height and w.motion.y==height,'The transition must use the checked capture height immediately')
+        tick(.35);assert(w.ascentHeight==height and w.motion.y==height,'An already captured frame must not add its height twice')
+    end)
+    test('missed due capture keeps normal flight height',function()
+        local d,s,w,tick=fixture();assert(s:_hit(2,1,'HeroUppercut'));w.targetsFor[-1]={1}
+        assert(d.dragons:beginCapture(-1,d.enemies[-1],1));w.targetsFor[-1]={};tick(.3)
+        assert(not w.links[1] and d.dragons.states[-1].mode~='Captured')
+        assert(w.motion.y==3+d.config.DragonFlight.altitude,'A failed effect-time capture cannot apply the prospective capture lift')
+    end)
+    test('legacy worlds without clearance query retain the motion rejection backstop',function()
+        local d,s,w,tick=fixture();w.dragonAscentBlocked=nil;w.motionFailure='ASCENT_BLOCKED';tick(.1)
+        assert(d.dragons.states[-1].ascentBlocked and not d.enemies[-1].windup and w.stopped==-1)
+        assert(s.combat[1].rawLife==47 and s.state.heroes[1].respawns==3)
     end)
     test('surviving heavy hit mounts the same body without healing or spending resources',function()
         local d,s,w,tick,intent,mount=fixture();local body=w.actors[-1];local actor=d.enemies[-1].actorId

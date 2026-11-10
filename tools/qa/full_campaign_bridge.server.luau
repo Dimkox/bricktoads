@@ -26,7 +26,7 @@ local observerAt=0
 local retained={CampaignStageStarted=true,CampaignStageCompleted=true,RunResult=true,CommitSpawn=true,
     Death=true,ConfirmedDeath=true,Eliminate=true,EnemyDeath=true,BossHit=true,GuardianBallThrown=true,FlyCaught=true,
     CampaignGroupStopped=true,CampaignGroupRewound=true,CampaignBombDefused=true,
-    CampaignBossHit=true,CampaignBossAttack=true,CampaignBossDefeated=true}
+    CampaignBossHit=true,CampaignBossAttack=true,CampaignBossDefeated=true,DragonFlightBlocked=true}
 RunService.Heartbeat:Connect(function()
     local at=workspace:GetServerTimeNow();if at-observerAt<.25 then return end;observerAt=at
     local p=Players:GetPlayers()[1];local g=p and hub:selected(p);local c=g and g.controller
