@@ -1,0 +1,61 @@
+{
+  "runId": "bricktoads-qa-23-01-384fb79f",
+  "result": null,
+  "classification": "interrupted_unknown_gameplay_result",
+  "engineCause": "Team Create server shutdown288 caused automatic StopPlaySolo and place reload",
+  "userConfirmedNoManualStop": true,
+  "sourceLog": "0.746.0.7461269_20261109T180245Z_Studio_84367_last.log",
+  "events": [
+    {
+      "sourceLine": 48280,
+      "text": "2026-11-10T18:00:55.453Z,86289.453125,3fd4,7 [FLog::Network] Client has been disconnected with reason: The server has shut down"
+    },
+    {
+      "sourceLine": 48281,
+      "text": "2026-11-10T18:00:55.453Z,86289.453125,3fd4,6,Warning [FLog::TeamCreateManager] Disconnected due to The server has shut down (288). LostConnection = false "
+    },
+    {
+      "sourceLine": 48284,
+      "text": "2026-11-10T18:00:55.453Z,86289.453125,3fd4,7 [FLog::Network] Client has been disconnected with reason: The server has shut down"
+    },
+    {
+      "sourceLine": 48302,
+      "text": "2026-11-10T18:00:55.687Z,86289.687500,3530,6,Info [FLog::PlaceSessionTaskRegister] initiatePlaceClose: PlaceStateTransitionStatus becomes StoppingPlayTest while in playtest"
+    },
+    {
+      "sourceLine": 48698,
+      "text": "2026-11-10T18:00:56.585Z,86290.585938,3530,6,Info [FLog::WaypointTelemetry] StopPlaySoloEnd (waypoint #4, session #35): 7.596199997351505 ms since last waypoint, 899.9411999975564 ms since start"
+    },
+    {
+      "sourceLine": 49275,
+      "text": "2026-11-10T18:01:15.195Z,86309.195312,2470,6,Info [FLog::TeamCreateManager] onConnectionAccepted"
+    },
+    {
+      "sourceLine": 49322,
+      "text": "2026-11-10T18:01:16.132Z,86310.132812,32dc,6,Info [FLog::CreatorOutput] Info: Archaicus14 joined live editing session."
+    }
+  ],
+  "oldStudioId": "97ee37f5-3840-470c-b002-094802085c47",
+  "reconnectedStudioId": "e9bedaa4-e32e-48c4-b9c9-5d0e23d8678d",
+  "placeId": 117412694427208,
+  "lastRetained": {
+    "sampleCount": 211,
+    "index": 1,
+    "guardianHits": 2,
+    "attempt": 3,
+    "stock": 1,
+    "rawLife": 15
+  },
+  "cleanup": {
+    "samePlaceConfirmed": true,
+    "originalServerBytes": 7045,
+    "originalClientBytes": 89547,
+    "qaRemoved": true,
+    "backupRemoved": true
+  },
+  "limits": [
+    "No terminal Won/Lost archive survived the automatic place reload.",
+    "The engine shutdown message does not establish why Roblox shut the Team Create server down.",
+    "Levels after the latest retained observation are unknown."
+  ]
+}

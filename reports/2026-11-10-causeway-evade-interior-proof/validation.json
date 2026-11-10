@@ -1,0 +1,146 @@
+{
+  "status": "conditional_contact_envelope_proven_not_native_AI_acceptance",
+  "nativeRunId": "bricktoads-qa-23-01-384fb79f",
+  "seed": 1158731273,
+  "firstTell": 80.93664,
+  "scheduledEffect": 81.23664,
+  "acceptedHit": 81.251055,
+  "preTellBracket": {
+    "before": {
+      "t": 80.932066,
+      "position": [
+        49.765106201171875,
+        2.9999990463256836,
+        14.001291275024414
+      ]
+    },
+    "after": {
+      "t": 81.047461,
+      "position": [
+        50.31069564819336,
+        3,
+        14.125494003295898
+      ]
+    }
+  },
+  "firstPostTellPlan": {
+    "t": 81.047461,
+    "position": [
+      50.31069564819336,
+      3,
+      14.125494003295898
+    ],
+    "axes": [
+      -0.04921405503466143,
+      -0.06307120410334113
+    ],
+    "kind": "tiny facing, not Evade"
+  },
+  "firstPostTellEvade": {
+    "t": 81.165668,
+    "position": [
+      50.22199630737305,
+      3,
+      14.005505561828613
+    ],
+    "millisecondsBeforeHit": 85.387
+  },
+  "earlierGroundedEvades": [
+    {
+      "t": 80.514638,
+      "position": [
+        47.37826156616211,
+        2.9995784759521484,
+        11.006926536560059
+      ]
+    },
+    {
+      "t": 80.786564,
+      "position": [
+        48.52956008911133,
+        2.9999992847442627,
+        13.650452613830566
+      ]
+    }
+  ],
+  "sourceFinding": "pigSpacing may return the tiny facing input before the later ordinary enemy windup-threat branch; held/attack early returns were not modified",
+  "proof": {
+    "realComponents": [
+      "Session",
+      "Combat.captureAttack(PigJab)",
+      "profile18 horizontal9/vertical0",
+      "28/60 reaction and ordinary input reset",
+      "canonical Life/recovery/death FSM"
+    ],
+    "adapter": "KnownAqueductXZ support; groundedvelocity=16*ordinaryMove after chosen0/33/80msdelivery; reactionpreservesphysicalvelocity; outward9diagonalimpulse; gravity196.2 afterofffloor; sameacceptedcontactimposed",
+    "baseline": {
+      "green": 1,
+      "red": 2,
+      "redDelivery": [
+        0,
+        0.03333333333333333
+      ],
+      "greenDelivery": [
+        0.08
+      ]
+    },
+    "replaceEarlierEvade": {
+      "green": 3,
+      "red": 0
+    },
+    "replaceFirstPostTell": {
+      "green": 3,
+      "red": 0
+    },
+    "replaceOnlyLastEvade": {
+      "green": 3,
+      "red": 0
+    },
+    "compileExit": 0
+  },
+  "limitations": [
+    "Npcorigin/look/contactpredicate notretained; replayimposesacceptedhit evenifcounterfactualwouldmoveaway",
+    "MappedgroundmodelisnotRobloxHumanoidphysics; nofriction/collisionexactreplay",
+    "Baseline80msisGREENandmodelcontactpositionsdifferfromnative byup to.8stud",
+    "Onlyoneactualfloorcase; norecommendationtoblindlyinsetnarrowCliffsby10",
+    "Nopolicyorproductionsourceedit"
+  ],
+  "sourceHashes": {
+    "src/stand/server/Session.lua": {
+      "bytes": 21637,
+      "sha256": "8383d380b9bd7740f3d21f986ea7e86935da57bf0adc57be3745161eb5480a8b"
+    },
+    "src/stand/server/Combat.lua": {
+      "bytes": 3640,
+      "sha256": "bec9a5db4df3cb3f8e4107ac335bf803b11275b139d85807b58cdf4a70c5293c"
+    },
+    "src/stand/server/Config.lua": {
+      "bytes": 747,
+      "sha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624"
+    },
+    "src/server/gameplay/GameConfig.lua": {
+      "bytes": 5642,
+      "sha256": "0ef6a1eb694198555a7d9a4ae191658b7e8489aea537d1ade8caa56cec87778a"
+    },
+    "src/server/gameplay/CampaignDefinition.lua": {
+      "bytes": 16378,
+      "sha256": "13d670762bf0d88115d9504e15c66944e503162ee49111f946e62b597ce07177"
+    },
+    "src/server/gameplay/LevelVariation.lua": {
+      "bytes": 5979,
+      "sha256": "2ebba71d49207d77b5d05234706019f36d5eb850e16f6b472e60d6ec3f5a7a32"
+    },
+    "tests/stand/FakeWorld.lua": {
+      "bytes": 2295,
+      "sha256": "266a0b4cd98edb0a2e39b038cd29d4304d16630793566c46e0574af752924adf"
+    },
+    "tools/qa/campaign_combat_pilot.lua": {
+      "bytes": 33566,
+      "sha256": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38"
+    },
+    "tools/qa/full_campaign_bridge.server.luau": {
+      "bytes": 23058,
+      "sha256": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add"
+    }
+  }
+}
