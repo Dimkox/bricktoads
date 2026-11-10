@@ -98,6 +98,14 @@ function CampaignDirector:_ropeKick(slot,now)
     return 'OK'
 end
 
+function CampaignDirector:_hasSurvivor()
+    for _,id in ipairs(self.session.order) do
+        local hero,combat=self.session.state.heroes[id],self.session.combat[id]
+        if hero and hero.status=='Alive' and combat and not combat.deathAt then return true end
+    end
+    return false
+end
+
 function CampaignDirector:_ordinaryCleared()
     for id,enemy in pairs(self.ordinary.enemies) do
         if id~=-99 and not enemy.dead and not (self.dragons and self.dragons:isMounted(id)) then return false end
@@ -150,11 +158,14 @@ function CampaignDirector:step(now,dt)
             self.boss:finishChase();self.stage='Boss';self.world:stage('Boss')
         end
         self.boss:step(now,dt)
-        if self.boss.defeated and self.modes.complete then self.result='Won';self.stage='Won';self.world:stage('Won') end
+        -- Session may still owe the last hero's accepted death and paid retry.
+        -- Keep this stage stepping until the same eligibility as advanceLevel
+        -- holds; never replace its geometry or cancel that lethal deadline.
+        if self.boss.defeated and self.modes.complete and self:_hasSurvivor() then self.result='Won';self.stage='Won';self.world:stage('Won') end
     elseif self.modes.complete and (self.definition.requiresClearAtExit==false or self:_ordinaryCleared()) then
         local boss=self.definition.boss
         if boss and (boss.kind or boss.type) then self:_startBoss(now)
-        else self.result='Won';self.stage='Won';self.world:stage('Won') end
+        elseif self:_hasSurvivor() then self.result='Won';self.stage='Won';self.world:stage('Won') end
     end
 end
 

@@ -503,7 +503,7 @@ function Enemies:enemyStep(id,e,dt)
     end
     local duration=finite(dt) and math.clamp(dt,0,.25) or 0
     if e.ownerUserId then
-        if e.lastMove and self.now-e.lastMove>(self.config.MoveTimeout or .35) then
+        if not e.lastMove or self.now-e.lastMove>(self.config.MoveTimeout or .35) then
             e.lastMove=nil;s.move=nil;self.world:move(id,0,0)
         end
         if family.mode~='Ground' and family.mode~='Wall' then

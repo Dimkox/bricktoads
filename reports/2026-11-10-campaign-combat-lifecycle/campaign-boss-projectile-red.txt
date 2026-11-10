@@ -1,0 +1,11 @@
+./tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: Robo bolt keeps emission response and +X impulse when the next Jump turns -Z: ./tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: old +X bolt must not inherit the later -Z facing
+spread bolt retains its own direction through owner disconnect and missing actor lookup: ./tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: spread direction is captured per bolt
+ordinary enemy collision receives the same independent captured projectile response: ./tests/campaign_bosses/CampaignBossProjectile.spec.lu
+stacktrace:
+[C] function assert
+./tests/campaign_bosses/CampaignBossProjectile.spec.lua:5 function check
+./tests/campaign_bosses/CampaignBossProjectile.spec.lua:100
+./build/campaign_boss_projectile_red.luau:1
+FAIL Robo bolt keeps emission response and +X impulse when the next Jump turns -Z: ./tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: old +X bolt must not inherit the later -Z facing
+FAIL spread bolt retains its own direction through owner disconnect and missing actor lookup: ./tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: spread direction is captured per bolt
+FAIL ordinary enemy collision receives the same independent captured projectile response: ./tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: ordinary enemy receives its spread direction

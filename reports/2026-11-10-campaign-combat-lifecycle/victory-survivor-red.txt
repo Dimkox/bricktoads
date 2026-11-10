@@ -1,0 +1,7 @@
+Baseline CampaignDirector from c29a662, isolated ignored copy; current fixture/dependencies.
+./build/victory-red/VictorySurvivor.spec.lua:126: victory must wait for Session survivor eligibility before closing a director or replacing geometry: ./src/server/gameplay/GameController.lua:161: Cannot advance the campaign: NO_SURVIVOR
+stacktrace:
+[C] function assert
+./build/victory-red/VictorySurvivor.spec.lua:126 function tick
+./build/victory-red/VictorySurvivor.spec.lua:175
+./build/victory-red/run.luau:1

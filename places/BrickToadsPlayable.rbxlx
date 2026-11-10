@@ -1073,6 +1073,9 @@ function Boss.new(session,world,config,definition)
         origin=copy(origin),arena=arena or {},defeated=false,ownerName=gate.ownerName},Boss)
     if gate.ownerUserId then self.byUserId[gate.ownerUserId]=-99 end
     assert(world:spawnEnemy(-99,authored.type,origin),'Campaign boss spawn failed')
+    -- Campaign bosses accept ordinary human movement between attacks. The
+    -- stationary first guardian uses a different constructor and keeps its cap.
+    if world.campaignWalkSpeed then world:campaignWalkSpeed(-99,config.Enemy.speed) end
     if world.enemyIdentity then world:enemyIdentity(-99,actorId,gate.ownerName) end
     self:_health();self:_log('CampaignBossSpawned',{bossType=self.kind,rawLife=enemy.rawLife,progress=enemy.progress})
     return self
@@ -1125,10 +1128,10 @@ function Boss:_nearest()
     return selected,best
 end
 function Boss:canMove() return self:_active() and self.state=='Ready' end
-function Boss:_damage(target,action,hitSet)
+function Boss:_damage(target,action,hitSet,tuning)
     if hitSet[target] then return end
     hitSet[target]=true
-    local tuning=self.config.Attacks[action] or self.config.Attacks.Dash
+    tuning=tuning or self.config.Attacks[action] or self.config.Attacks.Dash
     if self.session.state.heroes[target] then self.session:_hit(-99,target,action,tuning)
     elseif self.enemyHit then self.enemyHit(-99,target,action,tuning) end
 end
@@ -1167,7 +1170,12 @@ function Boss:_projectile(attack,at,index)
     self.serial+=1;local id=-4001-self.serial*2;local origin=copy(self.world:position(-99))
     local angle=(index-2)*.10;local c,s=math.cos(angle),math.sin(angle)
     local aim={x=attack.aim.x*c-attack.aim.z*s,z=attack.aim.x*s+attack.aim.z*c}
-    local p={position=origin,direction=aim,created=at,lastAt=at,expiresAt=at+2.5,action=attack.move.damage,hits={},attackSerial=attack.serial}
+    -- The accepted bolt keeps its own response and spread direction even if
+    -- its controller turns, disconnects or starts another attack before impact.
+    local tuning=table.clone(self.config.Attacks[attack.move.damage] or self.config.Attacks.Dash)
+    tuning.impulseDirection={x=aim.x,z=aim.z}
+    local p={position=origin,direction=aim,created=at,lastAt=at,expiresAt=at+2.5,action=attack.move.damage,
+        tuning=tuning,hits={},attackSerial=attack.serial}
     self.projectiles[id]=p;self.world:projectile(id,p.position,false,'RoboBolt')
 end
 function Boss:_projectiles(now)
@@ -1184,7 +1192,7 @@ function Boss:_projectiles(now)
                 local d=distance(before,q);if d&lt;bestDistance then best,bestDistance=target,d end
             end
         end
-        if best then self:_damage(best,p.action,p.hits);self:_removeProjectile(id)
+        if best then self:_damage(best,p.action,p.hits,p.tuning);self:_removeProjectile(id)
         elseif now&gt;=p.expiresAt or self.world.campaignProjectileBlocked and self.world:campaignProjectileBlocked(before,after) then self:_removeProjectile(id)
         else p.position=after;p.lastAt=now;self.world:projectile(id,after,false,'RoboBolt') end
     end
@@ -1738,6 +1746,14 @@ function CampaignDirector:_ropeKick(slot,now)
     return 'OK'
 end
 
+function CampaignDirector:_hasSurvivor()
+    for _,id in ipairs(self.session.order) do
+        local hero,combat=self.session.state.heroes[id],self.session.combat[id]
+        if hero and hero.status=='Alive' and combat and not combat.deathAt then return true end
+    end
+    return false
+end
+
 function CampaignDirector:_ordinaryCleared()
     for id,enemy in pairs(self.ordinary.enemies) do
         if id~=-99 and not enemy.dead and not (self.dragons and self.dragons:isMounted(id)) then return false end
@@ -1790,11 +1806,14 @@ function CampaignDirector:step(now,dt)
             self.boss:finishChase();self.stage='Boss';self.world:stage('Boss')
         end
         self.boss:step(now,dt)
-        if self.boss.defeated and self.modes.complete then self.result='Won';self.stage='Won';self.world:stage('Won') end
+        -- Session may still owe the last hero's accepted death and paid retry.
+        -- Keep this stage stepping until the same eligibility as advanceLevel
+        -- holds; never replace its geometry or cancel that lethal deadline.
+        if self.boss.defeated and self.modes.complete and self:_hasSurvivor() then self.result='Won';self.stage='Won';self.world:stage('Won') end
     elseif self.modes.complete and (self.definition.requiresClearAtExit==false or self:_ordinaryCleared()) then
         local boss=self.definition.boss
         if boss and (boss.kind or boss.type) then self:_startBoss(now)
-        else self.result='Won';self.stage='Won';self.world:stage('Won') end
+        elseif self:_hasSurvivor() then self.result='Won';self.stage='Won';self.world:stage('Won') end
     end
 end
 
@@ -2451,7 +2470,7 @@ function Enemies:enemyStep(id,e,dt)
     end
     local duration=finite(dt) and math.clamp(dt,0,.25) or 0
     if e.ownerUserId then
-        if e.lastMove and self.now-e.lastMove&gt;(self.config.MoveTimeout or .35) then
+        if not e.lastMove or self.now-e.lastMove&gt;(self.config.MoveTimeout or .35) then
             e.lastMove=nil;s.move=nil;self.world:move(id,0,0)
         end
         if family.mode~='Ground' and family.mode~='Wall' then
@@ -11652,7 +11671,7 @@ return World
       <Item class="ModuleScript" referent="BT64">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='88597bef8c796dcbfc233312f075571891a41f32dee9d1a8dbb7b5de4fad342b'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='006fe6609a197b9e288ea9a982cd79ca5ca0095853b2489b2f03628b0ae0f2de'})
 </ProtectedString>
         </Properties>
       </Item>

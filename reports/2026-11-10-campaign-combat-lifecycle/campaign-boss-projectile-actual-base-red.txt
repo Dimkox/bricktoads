@@ -1,0 +1,58 @@
+PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls
+PASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped
+PASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup
+PASS camera selects one world, clears cross-group state and never falls back from an explicit missing world
+PASS boss intro camera follows only current party/run and releases after cut completion or free view
+PASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped
+PASS ordinary species and guardian projectile modes have distinct original readable presentation
+PASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership
+PASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements
+PASS narrow support cannot crash safe respawn search
+PASS modern delayed jump uses bounded server ground history and preserves horizontal momentum
+PASS jump consumption survives stale floor reports and midair input, then resets after actual landing
+PASS jump grace rejects expired, deep, dead, held and reacting requests
+PASS jump history belongs to one actual actor in one modern world and preserves legacy behavior
+PASS jump support follows actual rotated rig footprint and corners without extending beyond its box
+PASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards
+PASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata
+PASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds
+PASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle
+PASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion
+PASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release
+PASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups
+PASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority
+PASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry
+PASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing
+PASS carry drops and new-run cleanup retain old body references without crossing group or actor generations
+PASS ground clubs are independent noncolliding original item models with one group translation
+PASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing
+PASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset
+PASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation
+PASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption
+PASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority
+PASS Dragon headbutt has real finite neck poses and clears on reaction/death
+PASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat
+PASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses
+PASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup
+PASS accepted response snapshots stay bound to their own profile without a live config table
+PASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors
+PASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates
+PASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped
+PASS DragonC:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: Robo bolt keeps emission response and +X impulse when the next Jump turns -Z: C:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: old +X bolt must not inherit the later -Z facing
+spread bolt retains its own direction through owner disconnect and missing actor lookup: C:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: spread direction is captured per bolt
+ordinary enemy collision receives the same independent captured projectil
+stacktrace:
+[C] function assert
+C:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:5 function check
+C:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:100
+C:/Users/User/Documents/bricktoads/build/campaign_boss_projectile_actual_base.luau:4189
+ fire volume checks initial obstruction and sphere radius before candidate damage
+PASS original wing motors move only for authoritative flight and return to rest
+PASS fire orders first contact and detects a thin wall before its projected muzzle
+PASS hero appearance integration restores server authority after cosmetics and updates only presentation
+AUDIT human Boss Ready move x=1: WalkSpeed=0, requested x=1
+AUDIT campaignWalkSpeed(-99,9) and same move: WalkSpeed=9, requested x=1
+PASS real World movement cap survives reaction and move lifecycle
+FAIL Robo bolt keeps emission response and +X impulse when the next Jump turns -Z: C:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: old +X bolt must not inherit the later -Z facing
+FAIL spread bolt retains its own direction through owner disconnect and missing actor lookup: C:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: spread direction is captured per bolt
+FAIL ordinary enemy collision receives the same independent captured projectile response: C:/Users/User/Documents/bricktoads/tests/campaign_bosses/CampaignBossProjectile.spec.lua:5: ordinary enemy receives its spread direction

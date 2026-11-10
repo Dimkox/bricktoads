@@ -76,6 +76,9 @@ function Boss.new(session,world,config,definition)
         origin=copy(origin),arena=arena or {},defeated=false,ownerName=gate.ownerName},Boss)
     if gate.ownerUserId then self.byUserId[gate.ownerUserId]=-99 end
     assert(world:spawnEnemy(-99,authored.type,origin),'Campaign boss spawn failed')
+    -- Campaign bosses accept ordinary human movement between attacks. The
+    -- stationary first guardian uses a different constructor and keeps its cap.
+    if world.campaignWalkSpeed then world:campaignWalkSpeed(-99,config.Enemy.speed) end
     if world.enemyIdentity then world:enemyIdentity(-99,actorId,gate.ownerName) end
     self:_health();self:_log('CampaignBossSpawned',{bossType=self.kind,rawLife=enemy.rawLife,progress=enemy.progress})
     return self
@@ -128,10 +131,10 @@ function Boss:_nearest()
     return selected,best
 end
 function Boss:canMove() return self:_active() and self.state=='Ready' end
-function Boss:_damage(target,action,hitSet)
+function Boss:_damage(target,action,hitSet,tuning)
     if hitSet[target] then return end
     hitSet[target]=true
-    local tuning=self.config.Attacks[action] or self.config.Attacks.Dash
+    tuning=tuning or self.config.Attacks[action] or self.config.Attacks.Dash
     if self.session.state.heroes[target] then self.session:_hit(-99,target,action,tuning)
     elseif self.enemyHit then self.enemyHit(-99,target,action,tuning) end
 end
@@ -170,7 +173,12 @@ function Boss:_projectile(attack,at,index)
     self.serial+=1;local id=-4001-self.serial*2;local origin=copy(self.world:position(-99))
     local angle=(index-2)*.10;local c,s=math.cos(angle),math.sin(angle)
     local aim={x=attack.aim.x*c-attack.aim.z*s,z=attack.aim.x*s+attack.aim.z*c}
-    local p={position=origin,direction=aim,created=at,lastAt=at,expiresAt=at+2.5,action=attack.move.damage,hits={},attackSerial=attack.serial}
+    -- The accepted bolt keeps its own response and spread direction even if
+    -- its controller turns, disconnects or starts another attack before impact.
+    local tuning=table.clone(self.config.Attacks[attack.move.damage] or self.config.Attacks.Dash)
+    tuning.impulseDirection={x=aim.x,z=aim.z}
+    local p={position=origin,direction=aim,created=at,lastAt=at,expiresAt=at+2.5,action=attack.move.damage,
+        tuning=tuning,hits={},attackSerial=attack.serial}
     self.projectiles[id]=p;self.world:projectile(id,p.position,false,'RoboBolt')
 end
 function Boss:_projectiles(now)
@@ -187,7 +195,7 @@ function Boss:_projectiles(now)
                 local d=distance(before,q);if d<bestDistance then best,bestDistance=target,d end
             end
         end
-        if best then self:_damage(best,p.action,p.hits);self:_removeProjectile(id)
+        if best then self:_damage(best,p.action,p.hits,p.tuning);self:_removeProjectile(id)
         elseif now>=p.expiresAt or self.world.campaignProjectileBlocked and self.world:campaignProjectileBlocked(before,after) then self:_removeProjectile(id)
         else p.position=after;p.lastAt=now;self.world:projectile(id,after,false,'RoboBolt') end
     end
