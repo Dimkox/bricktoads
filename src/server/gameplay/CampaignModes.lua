@@ -431,10 +431,12 @@ end
 function Modes:_vehicleHasRetry()
     if self.session.state.status~='Active' then return false end
     for _,slot in ipairs(self.session.order) do local actor=self.actors[slot];local hero=self.session.state.heroes[slot]
+        -- A teammate still on foot may board after the final rider dies. Keep
+        -- the cohort pending until that valid boarding or a Session-owned loss.
         -- Alive includes an emergency-held body, a dying animation, or a paid
         -- spawn not yet synchronized by this mode. Each still belongs to the
         -- active Session; waiting does not grant a respawn or release its hold.
-        if actor and actor.mounted and not actor.finished and hero
+        if actor and not actor.finished and hero
             and (hero.status=='AwaitingRespawn' or hero.status=='Alive') then return true end
     end
     return false

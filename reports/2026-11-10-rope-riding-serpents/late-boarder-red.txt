@@ -1,0 +1,13 @@
+./tests/campaign_modes/VehicleLateBoarder.spec.lua:92: stage 3 late foot teammate boards after the last rider is eliminated: ./tests/campaign_modes/VehicleLateBoarder.spec.lua:75: living late boarder is frozen: phase=Lost x=24 speed=0 Session=Active actor=vehicle-late-boarder-3-2:actor:5 attempt=1 stock=3
+stage 5 late foot teammate boards after the last rider is eliminated: ./tests/campaign_modes/VehicleLateBoarder.spec.lua:75: living late boarder is frozen: phase=Lost x=24 speed=0 Session=Active actor=vehicle-late-boarder-5-2:actor:5 attempt=1 stock=3
+stage 7
+stacktrace:
+[C] function assert
+./tests/campaign_modes/VehicleLateBoarder.spec.lua:92
+./build/vehicle-late-boarder-red.luau:1
+FAIL stage 3 late foot teammate boards after the last rider is eliminated: ./tests/campaign_modes/VehicleLateBoarder.spec.lua:75: living late boarder is frozen: phase=Lost x=24 speed=0 Session=Active actor=vehicle-late-boarder-3-2:actor:5 attempt=1 stock=3
+PASS stage 3 genuinely lost Session never restarts or revives a rider
+FAIL stage 5 late foot teammate boards after the last rider is eliminated: ./tests/campaign_modes/VehicleLateBoarder.spec.lua:75: living late boarder is frozen: phase=Lost x=24 speed=0 Session=Active actor=vehicle-late-boarder-5-2:actor:5 attempt=1 stock=3
+PASS stage 5 genuinely lost Session never restarts or revives a rider
+FAIL stage 7 late foot teammate boards after the last rider is eliminated: ./tests/campaign_modes/VehicleLateBoarder.spec.lua:75: living late boarder is frozen: phase=Lost x=24 speed=0 Session=Active actor=vehicle-late-boarder-7-2:actor:5 attempt=1 stock=3
+PASS stage 7 genuinely lost Session never restarts or revives a rider
