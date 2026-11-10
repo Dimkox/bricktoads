@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "scenario": "grounded_edge_after_helper_replacement",
+  "observed": {
+    "status": "Grounded edge recovery pending",
+    "physical": {
+      "floor": "Slate",
+      "anchored": false,
+      "platformStand": false,
+      "y": 3.0000457763671875,
+      "x": -26.62394142150879,
+      "state": "Running",
+      "z": -26.65030860900879,
+      "vz": 0,
+      "snapshotAge": 0.06917190551757812,
+      "vx": 0,
+      "vy": 0
+    },
+    "groundedSupportBounds": {
+      "top": 0,
+      "minZ": -26,
+      "maxX": 4,
+      "maxZ": 26,
+      "minX": -82
+    }
+  },
+  "preparation": {
+    "healthOrPositionOrKillWrites": false,
+    "studioPausedForInspection": true
+  },
+  "result": "Helper No support despite actual Slate support and upright grounded body; no production physics lock shown"
+}

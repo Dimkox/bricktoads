@@ -1,0 +1,4092 @@
+{
+  "scenario": "prepared_native_dragon_ceiling_physics",
+  "fixedBeforeGuard": {
+    "forcePresent": true,
+    "attachmentPresent": true,
+    "autoRotate": false,
+    "nativeState": "Enum.HumanoidStateType.FallingDown",
+    "velocity": {
+      "y": 14,
+      "x": 0,
+      "z": 0
+    },
+    "evaluateStateMachine": false,
+    "force": {
+      "y": 2472.1201171875,
+      "x": 0,
+      "z": 0
+    },
+    "ray": {
+      "normal": {
+        "y": -1,
+        "x": 0,
+        "z": 0
+      },
+      "ownRoof": true,
+      "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+      "distance": 2.0400009155273438,
+      "position": {
+        "y": -2,
+        "x": 0,
+        "z": 0
+      }
+    },
+    "platformStand": true,
+    "health": 100,
+    "position": {
+      "y": -4.040000915527344,
+      "x": 0,
+      "z": 0
+    },
+    "flightAttribute": true,
+    "flightRow": true,
+    "walkSpeed": 0,
+    "anchored": false
+  },
+  "placeId": 117412694427208,
+  "schemaVersion": 1,
+  "fixedFirstHazard": {
+    "elapsed": 0.4975268840789795,
+    "observation": {
+      "forcePresent": false,
+      "attachmentPresent": false,
+      "autoRotate": true,
+      "hazard": "Fall",
+      "nativeState": "Enum.HumanoidStateType.Freefall",
+      "velocity": {
+        "y": -111.17987060546875,
+        "x": 0,
+        "z": 0
+      },
+      "evaluateStateMachine": true,
+      "ray": {
+        "normal": {
+          "y": -1,
+          "x": 0,
+          "z": 0
+        },
+        "ownRoof": true,
+        "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+        "distance": 33.772605895996094,
+        "position": {
+          "y": -2,
+          "x": 0,
+          "z": 0
+        }
+      },
+      "platformStand": false,
+      "health": 100,
+      "position": {
+        "y": -35.772605895996094,
+        "x": 0,
+        "z": 0
+      },
+      "flightAttribute": false,
+      "flightRow": false,
+      "walkSpeed": 8,
+      "anchored": false
+    }
+  },
+  "startedAt": "2026-11-10T11:18:21Z",
+  "calls": [
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0,
+      "beforeVelocity": {
+        "y": 0,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 0,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0,
+      "beforeVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.003139972686767578,
+      "beforeVelocity": {
+        "y": -7.023038387298584,
+        "x": 0.09613653272390366,
+        "z": 0.08169262111186981
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -13.080000877380371,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.003139972686767578,
+      "beforeVelocity": {
+        "y": -13.080000877380371,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.008111000061035156,
+      "beforeVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -15.532501220703125,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.008111000061035156,
+      "beforeVelocity": {
+        "y": -15.532501220703125,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.013913869857788086,
+      "beforeVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -16.350000381469727,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.013913869857788086,
+      "beforeVelocity": {
+        "y": -16.350000381469727,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.031951904296875,
+      "beforeVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -20.437496185302734,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.031951904296875,
+      "beforeVelocity": {
+        "y": -20.437496185302734,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.046835899353027344,
+      "beforeVelocity": {
+        "y": -7.022880554199219,
+        "x": 0.0961771085858345,
+        "z": 0.08180572837591171
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -22.88999366760254,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.046835899353027344,
+      "beforeVelocity": {
+        "y": -22.88999366760254,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.06426382064819336,
+      "beforeVelocity": {
+        "y": -7.021895408630371,
+        "x": 0.09231821447610855,
+        "z": 0.07929007709026337
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -26.159990310668945,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.06426382064819336,
+      "beforeVelocity": {
+        "y": -26.159990310668945,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.08000802993774414,
+      "beforeVelocity": {
+        "y": -7.021883010864258,
+        "x": 0.09242613613605499,
+        "z": 0.07932943105697632
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -29.42998695373535,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.08000802993774414,
+      "beforeVelocity": {
+        "y": -29.42998695373535,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.09720396995544434,
+      "beforeVelocity": {
+        "y": -7.022879600524902,
+        "x": 0.09645083546638489,
+        "z": 0.08194179832935333
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -32.69998550415039,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.09720396995544434,
+      "beforeVelocity": {
+        "y": -32.69998550415039,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.11388182640075684,
+      "beforeVelocity": {
+        "y": -7.021815299987793,
+        "x": 0.09246601164340973,
+        "z": 0.07927615940570831
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -35.96998977661133,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.11388182640075684,
+      "beforeVelocity": {
+        "y": -35.96998977661133,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.13007903099060059,
+      "beforeVelocity": {
+        "y": -7.021789073944092,
+        "x": 0.09246212244033813,
+        "z": 0.07926724851131439
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -39.239994049072266,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.13007903099060059,
+      "beforeVelocity": {
+        "y": -39.239994049072266,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.14673900604248047,
+      "beforeVelocity": {
+        "y": -7.022821426391602,
+        "x": 0.09663983434438705,
+        "z": 0.08197512477636337
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -42.5099983215332,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.14673900604248047,
+      "beforeVelocity": {
+        "y": -42.5099983215332,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.16346001625061035,
+      "beforeVelocity": {
+        "y": -7.021746635437012,
+        "x": 0.09260243922472,
+        "z": 0.07916563004255295
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -45.78000259399414,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.16346001625061035,
+      "beforeVelocity": {
+        "y": -45.78000259399414,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.18219399452209473,
+      "beforeVelocity": {
+        "y": -7.021727085113525,
+        "x": 0.09266837686300278,
+        "z": 0.07919783145189285
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -49.05000686645508,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.18219399452209473,
+      "beforeVelocity": {
+        "y": -49.05000686645508,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.19714689254760742,
+      "beforeVelocity": {
+        "y": -7.0227251052856445,
+        "x": 0.09673090279102325,
+        "z": 0.08181630074977875
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -52.320011138916016,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.19714689254760742,
+      "beforeVelocity": {
+        "y": -52.320011138916016,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.21494293212890625,
+      "beforeVelocity": {
+        "y": -7.021731853485107,
+        "x": 0.0928749367594719,
+        "z": 0.07929422706365585
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -55.59001541137695,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.21494293212890625,
+      "beforeVelocity": {
+        "y": -55.59001541137695,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.23096895217895508,
+      "beforeVelocity": {
+        "y": -7.021707057952881,
+        "x": 0.09287387132644653,
+        "z": 0.07928794622421265
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -58.86001968383789,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.23096895217895508,
+      "beforeVelocity": {
+        "y": -58.86001968383789,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.2479100227355957,
+      "beforeVelocity": {
+        "y": -7.022700786590576,
+        "x": 0.09694193303585052,
+        "z": 0.08190976828336716
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -62.13002395629883,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.2479100227355957,
+      "beforeVelocity": {
+        "y": -62.13002395629883,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.2633359432220459,
+      "beforeVelocity": {
+        "y": -7.021676540374756,
+        "x": 0.0927782729268074,
+        "z": 0.07943170517683029
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -65.4000244140625,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.2633359432220459,
+      "beforeVelocity": {
+        "y": -65.4000244140625,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.28076982498168945,
+      "beforeVelocity": {
+        "y": -7.022672653198242,
+        "x": 0.09698590636253357,
+        "z": 0.08202840387821198
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -68.67001342773438,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.28076982498168945,
+      "beforeVelocity": {
+        "y": -68.67001342773438,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.2969799041748047,
+      "beforeVelocity": {
+        "y": -7.022552490234375,
+        "x": 0.09680132567882538,
+        "z": 0.08184418827295303
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -71.94000244140625,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.2969799041748047,
+      "beforeVelocity": {
+        "y": -71.94000244140625,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.31340503692626953,
+      "beforeVelocity": {
+        "y": -7.021536350250244,
+        "x": 0.09276111423969269,
+        "z": 0.07917309552431107
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -75.20999145507812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.31340503692626953,
+      "beforeVelocity": {
+        "y": -75.20999145507812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.3316829204559326,
+      "beforeVelocity": {
+        "y": -7.021457672119141,
+        "x": 0.09256622940301895,
+        "z": 0.07911951839923859
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -78.47998046875,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.3316829204559326,
+      "beforeVelocity": {
+        "y": -78.47998046875,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.3477790355682373,
+      "beforeVelocity": {
+        "y": -7.022450923919678,
+        "x": 0.0965949147939682,
+        "z": 0.08173958957195282
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -81.74996948242188,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.3477790355682373,
+      "beforeVelocity": {
+        "y": -81.74996948242188,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.36392784118652344,
+      "beforeVelocity": {
+        "y": -7.0214314460754395,
+        "x": 0.09269010275602341,
+        "z": 0.07914867997169495
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -85.01995849609375,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.36392784118652344,
+      "beforeVelocity": {
+        "y": -85.01995849609375,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.38185596466064453,
+      "beforeVelocity": {
+        "y": -7.021425247192383,
+        "x": 0.09277987480163574,
+        "z": 0.07915597409009933
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -88.28994750976562,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.38185596466064453,
+      "beforeVelocity": {
+        "y": -88.28994750976562,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.398190975189209,
+      "beforeVelocity": {
+        "y": -7.022378444671631,
+        "x": 0.09668406844139099,
+        "z": 0.08173737674951553
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -91.5599365234375,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.398190975189209,
+      "beforeVelocity": {
+        "y": -91.5599365234375,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.4142649173736572,
+      "beforeVelocity": {
+        "y": -7.021337032318115,
+        "x": 0.0927514135837555,
+        "z": 0.07904551178216934
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -94.82992553710938,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.4142649173736572,
+      "beforeVelocity": {
+        "y": -94.82992553710938,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.43140101432800293,
+      "beforeVelocity": {
+        "y": -7.021311283111572,
+        "x": 0.09267391264438629,
+        "z": 0.07900819927453995
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -98.09991455078125,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.43140101432800293,
+      "beforeVelocity": {
+        "y": -98.09991455078125,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.44741082191467285,
+      "beforeVelocity": {
+        "y": -7.022177696228027,
+        "x": 0.0965125635266304,
+        "z": 0.08143159002065659
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -101.36990356445312,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.44741082191467285,
+      "beforeVelocity": {
+        "y": -101.36990356445312,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.46504783630371094,
+      "beforeVelocity": {
+        "y": -7.02117395401001,
+        "x": 0.09261444211006165,
+        "z": 0.0788077861070633
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -104.639892578125,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.46504783630371094,
+      "beforeVelocity": {
+        "y": -104.639892578125,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.4813089370727539,
+      "beforeVelocity": {
+        "y": -7.0211181640625,
+        "x": 0.09248752146959305,
+        "z": 0.07873596996068954
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -107.90988159179688,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.4813089370727539,
+      "beforeVelocity": {
+        "y": -107.90988159179688,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.4975268840789795,
+      "beforeVelocity": {
+        "y": -7.00968074798584,
+        "x": 0.09536422789096832,
+        "z": 0.016087815165519714
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -111.17987060546875,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.4975268840789795,
+      "beforeVelocity": {
+        "y": -111.17987060546875,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.5149679183959961,
+      "beforeVelocity": {
+        "y": -7.021094799041748,
+        "x": 0.09260167926549911,
+        "z": 0.07876164466142654
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -114.44985961914062,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.5149679183959961,
+      "beforeVelocity": {
+        "y": -114.44985961914062,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.5330560207366943,
+      "beforeVelocity": {
+        "y": -7.021106719970703,
+        "x": 0.09261991083621979,
+        "z": 0.07877551019191742
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -117.7198486328125,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.5330560207366943,
+      "beforeVelocity": {
+        "y": -117.7198486328125,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.5488400459289551,
+      "beforeVelocity": {
+        "y": -7.021017074584961,
+        "x": 0.09259527921676636,
+        "z": 0.07869796454906464
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -120.98983764648438,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.5488400459289551,
+      "beforeVelocity": {
+        "y": -120.98983764648438,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.5645978450775146,
+      "beforeVelocity": {
+        "y": -6.974303722381592,
+        "x": -0.03669468313455582,
+        "z": -0.06106362119317055
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -124.25982666015625,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.5645978450775146,
+      "beforeVelocity": {
+        "y": -124.25982666015625,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.5815079212188721,
+      "beforeVelocity": {
+        "y": -7.0107741355896,
+        "x": 0.10060383379459381,
+        "z": 0.01805834285914898
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -127.52981567382812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.5815079212188721,
+      "beforeVelocity": {
+        "y": -127.52981567382812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.5975158214569092,
+      "beforeVelocity": {
+        "y": -7.010894775390625,
+        "x": 0.10124477744102478,
+        "z": 0.018285030499100685
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -130.79983520507812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.5975158214569092,
+      "beforeVelocity": {
+        "y": -130.79983520507812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.6139979362487793,
+      "beforeVelocity": {
+        "y": -7.021003723144531,
+        "x": 0.09264291822910309,
+        "z": 0.07867627590894699
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -134.06985473632812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.6139979362487793,
+      "beforeVelocity": {
+        "y": -134.06985473632812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.6308410167694092,
+      "beforeVelocity": {
+        "y": -7.020962715148926,
+        "x": 0.092519611120224,
+        "z": 0.07861633598804474
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -137.33987426757812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.6308410167694092,
+      "beforeVelocity": {
+        "y": -137.33987426757812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.6466488838195801,
+      "beforeVelocity": {
+        "y": -7.011813640594482,
+        "x": 0.10570251196622849,
+        "z": 0.01996924914419651
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -140.60989379882812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.6466488838195801,
+      "beforeVelocity": {
+        "y": -140.60989379882812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.6638069152832031,
+      "beforeVelocity": {
+        "y": -7.0209197998046875,
+        "x": 0.09263027459383011,
+        "z": 0.07862012088298798
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -143.87991333007812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.6638069152832031,
+      "beforeVelocity": {
+        "y": -143.87991333007812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.6804318428039551,
+      "beforeVelocity": {
+        "y": -7.020913124084473,
+        "x": 0.09248892962932587,
+        "z": 0.07876557856798172
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -147.14993286132812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.6804318428039551,
+      "beforeVelocity": {
+        "y": -147.14993286132812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.6978139877319336,
+      "beforeVelocity": {
+        "y": -7.012979507446289,
+        "x": 0.11118796467781067,
+        "z": 0.022130141034722328
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -150.41995239257812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.6978139877319336,
+      "beforeVelocity": {
+        "y": -150.41995239257812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.714094877243042,
+      "beforeVelocity": {
+        "y": -7.02085018157959,
+        "x": 0.0925266370177269,
+        "z": 0.07874687016010284
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -153.68997192382812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.714094877243042,
+      "beforeVelocity": {
+        "y": -153.68997192382812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.732234001159668,
+      "beforeVelocity": {
+        "y": -7.020846366882324,
+        "x": 0.09261848777532578,
+        "z": 0.07875167578458786
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -156.95999145507812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.732234001159668,
+      "beforeVelocity": {
+        "y": -156.95999145507812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.7483148574829102,
+      "beforeVelocity": {
+        "y": -7.014370441436768,
+        "x": 0.11806108057498932,
+        "z": 0.024690408259630203
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -160.23001098632812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.7483148574829102,
+      "beforeVelocity": {
+        "y": -160.23001098632812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    },
+    {
+      "fallingVelocityUnchanged": false,
+      "afterVelocity": {
+        "y": 14,
+        "x": 0,
+        "z": 0
+      },
+      "label": "baseline",
+      "elapsed": 0.7645609378814697,
+      "beforeVelocity": {
+        "y": -7.020731449127197,
+        "x": 0.09253077954053879,
+        "z": 0.07854045182466507
+      },
+      "returnedNil": false,
+      "accepted": true
+    },
+    {
+      "fallingVelocityUnchanged": true,
+      "afterVelocity": {
+        "y": -163.50003051757812,
+        "x": 0,
+        "z": 0
+      },
+      "reason": "ASCENT_BLOCKED",
+      "label": "fixed",
+      "elapsed": 0.7645609378814697,
+      "beforeVelocity": {
+        "y": -163.50003051757812,
+        "x": 0,
+        "z": 0
+      },
+      "returnedNil": false,
+      "accepted": false
+    }
+  ],
+  "status": "passed",
+  "finishedAt": "2026-11-10T11:18:22Z",
+  "baselineAfterFirstRequest": {
+    "forcePresent": true,
+    "attachmentPresent": true,
+    "autoRotate": false,
+    "nativeState": "Enum.HumanoidStateType.FallingDown",
+    "velocity": {
+      "y": 14,
+      "x": 0,
+      "z": 0
+    },
+    "evaluateStateMachine": false,
+    "force": {
+      "y": 2472.1201171875,
+      "x": 0,
+      "z": 0
+    },
+    "ray": {
+      "normal": {
+        "y": -1,
+        "x": 0,
+        "z": 0
+      },
+      "ownRoof": true,
+      "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+      "distance": 2.0400009155273438,
+      "position": {
+        "y": -2,
+        "x": 0,
+        "z": 0
+      }
+    },
+    "platformStand": true,
+    "health": 100,
+    "position": {
+      "y": -4.040000915527344,
+      "x": 0,
+      "z": 0
+    },
+    "flightAttribute": true,
+    "flightRow": true,
+    "walkSpeed": 0,
+    "anchored": false
+  },
+  "cleaned": true,
+  "studioVersion": "0.746.0.7461269",
+  "cleanupFailures": [],
+  "checks": [
+    {
+      "name": "baseline real R6 spawn",
+      "passed": true
+    },
+    {
+      "name": "fixed real R6 spawn",
+      "passed": true
+    },
+    {
+      "name": "fixed ordinary clear lift precondition",
+      "passed": true
+    },
+    {
+      "name": "fixed pure predicate observes own ceiling",
+      "passed": true
+    },
+    {
+      "name": "pure predicate preserves actual pose and velocity",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 2",
+      "passed": true
+    },
+    {
+      "name": "real upward rays hit each own physical underside",
+      "passed": true
+    },
+    {
+      "name": "fixed removes existing gravity cancellation and restores physics",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 2",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 3",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 4",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 4",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 4",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 5",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 6",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 6",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 6",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 7",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 8",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 8",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 8",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 9",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 10",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 10",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 10",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 11",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 12",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 12",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 12",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 13",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 14",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 14",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 14",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 15",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 16",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 16",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 16",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 17",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 18",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 18",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 18",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 19",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 20",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 20",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 20",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 21",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 22",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 22",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 22",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 23",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 24",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 24",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 24",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 25",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 26",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 26",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 26",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 27",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 28",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 28",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 28",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 29",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 30",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 30",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 30",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 31",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 32",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 32",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 32",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 33",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 34",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 34",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 34",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 35",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 36",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 36",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 36",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 37",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 38",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 38",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 38",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 39",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 40",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 40",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 40",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 41",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 42",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 42",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 42",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 43",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 44",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 44",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 44",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 45",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 46",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 46",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 46",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 47",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 48",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 48",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 48",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 49",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 50",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 50",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 50",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 51",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 52",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 52",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 52",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 53",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 54",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 54",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 54",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 55",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 56",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 56",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 56",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 57",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 58",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 58",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 58",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 59",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 60",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 60",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 60",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 61",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 62",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 62",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 62",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 63",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 64",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 64",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 64",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 65",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 66",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 66",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 66",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 67",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 68",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 68",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 68",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 69",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 70",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 70",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 70",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 71",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 72",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 72",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 72",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 73",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 74",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 74",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 74",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 75",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 76",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 76",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 76",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 77",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 78",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 78",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 78",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 79",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 80",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 80",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 80",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 81",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 82",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 82",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 82",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 83",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 84",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 84",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 84",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 85",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 86",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 86",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 86",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 87",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 88",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 88",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 88",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 89",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 90",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 90",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 90",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 91",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 92",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 92",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 92",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 93",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 94",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 94",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 94",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 95",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 96",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 96",
+      "passed": true
+    },
+    {
+      "name": "baseline health remains unchanged 96",
+      "passed": true
+    },
+    {
+      "name": "fixed health remains unchanged 97",
+      "passed": true
+    },
+    {
+      "name": "fixed request refuses blocked ascent 98",
+      "passed": true
+    },
+    {
+      "name": "blocked retry preserves integrated native velocity 98",
+      "passed": true
+    },
+    {
+      "name": "baseline remains pinned beneath roof with lift active",
+      "passed": true
+    },
+    {
+      "name": "fixed falls physically after at least half a second",
+      "passed": true
+    },
+    {
+      "name": "fall is classified by ordinary World hazard",
+      "passed": true
+    },
+    {
+      "name": "no health change was used to produce the distinction",
+      "passed": true
+    }
+  ],
+  "fixedFinal": {
+    "forcePresent": false,
+    "attachmentPresent": false,
+    "autoRotate": true,
+    "hazard": "Fall",
+    "nativeState": "Enum.HumanoidStateType.Freefall",
+    "velocity": {
+      "y": -163.50003051757812,
+      "x": 0,
+      "z": 0
+    },
+    "evaluateStateMachine": true,
+    "ray": {
+      "normal": {
+        "y": -1,
+        "x": 0,
+        "z": 0
+      },
+      "ownRoof": true,
+      "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+      "distance": 70.50558471679688,
+      "position": {
+        "y": -2,
+        "x": 0,
+        "z": 0
+      }
+    },
+    "platformStand": false,
+    "health": 100,
+    "position": {
+      "y": -72.50558471679688,
+      "x": 0,
+      "z": 0
+    },
+    "flightAttribute": false,
+    "flightRow": false,
+    "walkSpeed": 8,
+    "anchored": false
+  },
+  "samples": [
+    {
+      "elapsed": 0.003139972686767578,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.5083999633789062,
+          "position": {
+            "y": -2,
+            "x": 0.00634765625,
+            "z": 0
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.508399963378906,
+          "x": 0.00634765625,
+          "z": 0
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Running",
+        "velocity": {
+          "y": -13.080000877380371,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.5032424926757812,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -4.503242492675781,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.06426382064819336,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0130157470703125,
+          "position": {
+            "y": -2,
+            "x": 0.00830078125,
+            "z": 0
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.0130157470703125,
+          "x": 0.00830078125,
+          "z": 0
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -26.159990310668945,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 3.8384933471679688,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -5.838493347167969,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.13007903099060059,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0431900024414062,
+          "position": {
+            "y": -2,
+            "x": 0.013671875,
+            "z": 0
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.043190002441406,
+          "x": 0.013671875,
+          "z": 0
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -39.239994049072266,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 6.045738220214844,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -8.045738220214844,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.18219399452209473,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0439300537109375,
+          "position": {
+            "y": -2,
+            "x": 0.01708984375,
+            "z": 0
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.0439300537109375,
+          "x": 0.01708984375,
+          "z": 0
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -49.05000686645508,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 8.273429870605469,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -10.273429870605469,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.2479100227355957,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0741043090820312,
+          "position": {
+            "y": -2,
+            "x": 0.0224609375,
+            "z": 0
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.074104309082031,
+          "x": 0.0224609375,
+          "z": 0
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -62.13002395629883,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 12.006675720214844,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -14.006675720214844,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.31340503692626953,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0168609619140625,
+          "position": {
+            "y": -2,
+            "x": 0.02734375,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.0168609619140625,
+          "x": 0.02734375,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -75.20999145507812,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 16.61193084716797,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -18.61193084716797,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.36392784118652344,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0176010131835938,
+          "position": {
+            "y": -2,
+            "x": 0.03076171875,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.017601013183594,
+          "x": 0.03076171875,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -85.01995849609375,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 20.63811492919922,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -22.63811492919922,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.4142649173736572,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0183334350585938,
+          "position": {
+            "y": -2,
+            "x": 0.03466796875,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.018333435058594,
+          "x": 0.03466796875,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -94.82992553710938,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 25.154800415039062,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -27.154800415039062,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.46504783630371094,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0190505981445312,
+          "position": {
+            "y": -2,
+            "x": 0.0380859375,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.019050598144531,
+          "x": 0.0380859375,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -104.639892578125,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 30.16197967529297,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -32.16197967529297,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.5330560207366943,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.13677978515625,
+          "position": {
+            "y": -2,
+            "x": 0.0439453125,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.13677978515625,
+          "x": 0.0439453125,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "hazard": "Fall",
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -117.7198486328125,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 37.60123062133789,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -39.60123062133789,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.5975158214569092,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0783309936523438,
+          "position": {
+            "y": -2,
+            "x": 0.046875,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.078330993652344,
+          "x": 0.046875,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "hazard": "Fall",
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -130.79983520507812,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 45.9124641418457,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -47.9124641418457,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.6638069152832031,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0207290649414062,
+          "position": {
+            "y": -2,
+            "x": 0.05126953125,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.020729064941406,
+          "x": 0.05126953125,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "hazard": "Fall",
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -143.87991333007812,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 55.095706939697266,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -57.095706939697266,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.714094877243042,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0213165283203125,
+          "position": {
+            "y": -2,
+            "x": 0.05517578125,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.0213165283203125,
+          "x": 0.05517578125,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "hazard": "Fall",
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -153.68997192382812,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 62.555397033691406,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -64.5553970336914,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    },
+    {
+      "elapsed": 0.7645609378814697,
+      "baseline": {
+        "forcePresent": true,
+        "attachmentPresent": true,
+        "autoRotate": false,
+        "nativeState": "Enum.HumanoidStateType.FallingDown",
+        "velocity": {
+          "y": 14,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": false,
+        "force": {
+          "y": 2472.1201171875,
+          "x": 0,
+          "z": 0
+        },
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 2.0219192504882812,
+          "position": {
+            "y": -2,
+            "x": 0.05859375,
+            "z": -0.001953125
+          }
+        },
+        "platformStand": true,
+        "health": 100,
+        "position": {
+          "y": -4.021919250488281,
+          "x": 0.05859375,
+          "z": -0.001953125
+        },
+        "flightAttribute": true,
+        "flightRow": true,
+        "walkSpeed": 0,
+        "anchored": false
+      },
+      "fixed": {
+        "forcePresent": false,
+        "attachmentPresent": false,
+        "autoRotate": true,
+        "hazard": "Fall",
+        "nativeState": "Enum.HumanoidStateType.Freefall",
+        "velocity": {
+          "y": -163.50003051757812,
+          "x": 0,
+          "z": 0
+        },
+        "evaluateStateMachine": true,
+        "ray": {
+          "normal": {
+            "y": -1,
+            "x": 0,
+            "z": 0
+          },
+          "ownRoof": true,
+          "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+          "distance": 70.50558471679688,
+          "position": {
+            "y": -2,
+            "x": 0,
+            "z": 0
+          }
+        },
+        "platformStand": false,
+        "health": 100,
+        "position": {
+          "y": -72.50558471679688,
+          "x": 0,
+          "z": 0
+        },
+        "flightAttribute": false,
+        "flightRow": false,
+        "walkSpeed": 8,
+        "anchored": false
+      }
+    }
+  ],
+  "baselineFinal": {
+    "forcePresent": true,
+    "attachmentPresent": true,
+    "autoRotate": false,
+    "nativeState": "Enum.HumanoidStateType.FallingDown",
+    "velocity": {
+      "y": 14,
+      "x": 0,
+      "z": 0
+    },
+    "evaluateStateMachine": false,
+    "force": {
+      "y": 2472.1201171875,
+      "x": 0,
+      "z": 0
+    },
+    "ray": {
+      "normal": {
+        "y": -1,
+        "x": 0,
+        "z": 0
+      },
+      "ownRoof": true,
+      "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+      "distance": 2.0219192504882812,
+      "position": {
+        "y": -2,
+        "x": 0.05859375,
+        "z": -0.001953125
+      }
+    },
+    "platformStand": true,
+    "health": 100,
+    "position": {
+      "y": -4.021919250488281,
+      "x": 0.05859375,
+      "z": -0.001953125
+    },
+    "flightAttribute": true,
+    "flightRow": true,
+    "walkSpeed": 0,
+    "anchored": false
+  },
+  "fixedAfterFirstRequest": {
+    "forcePresent": false,
+    "attachmentPresent": false,
+    "autoRotate": true,
+    "nativeState": "Enum.HumanoidStateType.Running",
+    "velocity": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "evaluateStateMachine": true,
+    "ray": {
+      "normal": {
+        "y": -1,
+        "x": 0,
+        "z": 0
+      },
+      "ownRoof": true,
+      "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+      "distance": 2.0400009155273438,
+      "position": {
+        "y": -2,
+        "x": 0,
+        "z": 0
+      }
+    },
+    "platformStand": false,
+    "health": 100,
+    "position": {
+      "y": -4.040000915527344,
+      "x": 0,
+      "z": 0
+    },
+    "flightAttribute": false,
+    "flightRow": false,
+    "walkSpeed": 8,
+    "anchored": false
+  },
+  "buildInfoSource": "return table.freeze({format=1,sourceSha256='458c2bd5b90deef04c4f75be5bc8686c636ba8015db1d7c053b41739af1230bf'})\n",
+  "factoryLightingRestoredBeforeYield": true,
+  "limits": [
+    "Prepared engine regression only; not a natural encounter or campaign pass",
+    "World:hazard classifies a real fall without the fixture committing a death",
+    "Domain attack/capture ordering requires separate tests and campaign acceptance"
+  ],
+  "fixedInitial": {
+    "forcePresent": true,
+    "attachmentPresent": true,
+    "autoRotate": false,
+    "nativeState": "Enum.HumanoidStateType.FallingDown",
+    "velocity": {
+      "y": 14,
+      "x": 0,
+      "z": 0
+    },
+    "evaluateStateMachine": false,
+    "force": {
+      "y": 2472.1201171875,
+      "x": 0,
+      "z": 0
+    },
+    "ray": {
+      "normal": {
+        "y": -1,
+        "x": 0,
+        "z": 0
+      },
+      "ownRoof": true,
+      "part": "Workspace.DragonAscentPhysics_fixed_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+      "distance": 2.0400009155273438,
+      "position": {
+        "y": -2,
+        "x": 0,
+        "z": 0
+      }
+    },
+    "platformStand": true,
+    "health": 100,
+    "position": {
+      "y": -4.040000915527344,
+      "x": 0,
+      "z": 0
+    },
+    "flightAttribute": true,
+    "flightRow": true,
+    "walkSpeed": 0,
+    "anchored": false
+  },
+  "baselineRevision": "e6d9",
+  "preparation": {
+    "noForcedHumanoidState": true,
+    "isolatedWorlds": true,
+    "offsets": [
+      {
+        "y": 100,
+        "x": 4096,
+        "z": 32768
+      },
+      {
+        "y": 100,
+        "x": 4224,
+        "z": 32768
+      }
+    ],
+    "goalY": 4.5,
+    "noHealthWrites": true,
+    "noKills": true,
+    "ceilingBottomY": -2,
+    "noActiveCampaignReferences": true,
+    "realBaseWorldR6": true,
+    "initialRootY": -4.04,
+    "fixedRoofEnabledAfterOrdinaryLiftBeforeFirstPhysics": true,
+    "noSessionOrDirector": true
+  },
+  "baselineInitial": {
+    "forcePresent": false,
+    "attachmentPresent": false,
+    "autoRotate": true,
+    "nativeState": "Enum.HumanoidStateType.Running",
+    "velocity": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "evaluateStateMachine": true,
+    "ray": {
+      "normal": {
+        "y": -1,
+        "x": 0,
+        "z": 0
+      },
+      "ownRoof": true,
+      "part": "Workspace.DragonAscentPhysics_baseline_b74ed2b6-8e36-452e-940d-f9f0333a7243.Geometry.OwnCeiling",
+      "distance": 2.0400009155273438,
+      "position": {
+        "y": -2,
+        "x": 0,
+        "z": 0
+      }
+    },
+    "platformStand": false,
+    "health": 100,
+    "position": {
+      "y": -4.040000915527344,
+      "x": 0,
+      "z": 0
+    },
+    "flightAttribute": false,
+    "flightRow": false,
+    "walkSpeed": 8,
+    "anchored": false
+  },
+  "placeVersion": 0
+}

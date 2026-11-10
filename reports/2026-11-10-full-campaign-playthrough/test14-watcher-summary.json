@@ -1,0 +1,398 @@
+{
+  "attempt": 14,
+  "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+  "seed": 1259618153,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "status": "terminal",
+  "terminalResult": "Lost",
+  "lastStage": 6,
+  "completeCampaignAccepted": false,
+  "qaPolicy": {
+    "policyLoads": 1,
+    "inputRevisionsObserved": 0,
+    "earlySha256": "461abaa9803a2e2211d0f3ed696d3100f01c587c6d7d811fafce781d7de8703e",
+    "combatSha256": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+    "tubesSha256": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013",
+    "observerSha256": "cb04b24e48bcc885fb7635643b2a6355373641fec5c5ea54267ffe8af49885a7"
+  },
+  "stageRecords": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794321190.625786,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:8",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:2",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        },
+        {
+          "ownerUserId": -2,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:5",
+          "slot": 2,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:8",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+      "stock": 3
+    },
+    {
+      "index": 2,
+      "rawLife": 47,
+      "attempt": 3,
+      "epoch": 2,
+      "at": 1794321531.98814,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:365",
+      "source": "campaign-2",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:365",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 1,
+          "attempt": 3
+        }
+      ],
+      "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+      "stock": 1
+    },
+    {
+      "index": 3,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 3,
+      "at": 1794321557.006784,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+      "source": "campaign-3",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 0,
+          "attempt": 4
+        }
+      ],
+      "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+      "stock": 0
+    },
+    {
+      "index": 4,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 4,
+      "at": 1794321575.49384,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+      "source": "campaign-4",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 0,
+          "attempt": 4
+        }
+      ],
+      "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+      "stock": 0
+    },
+    {
+      "index": 5,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 5,
+      "at": 1794321589.552528,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+      "source": "campaign-5",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 0,
+          "attempt": 4
+        }
+      ],
+      "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+      "stock": 0
+    },
+    {
+      "index": 6,
+      "rawLife": 47,
+      "attempt": 4,
+      "epoch": 6,
+      "at": 1794321735.371493,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+      "source": "campaign-6",
+      "cohort": [
+        {
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Eliminated",
+          "rawLife": 0,
+          "stock": 0,
+          "attempt": 4
+        },
+        {
+          "ownerUserId": -3,
+          "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+          "slot": 3,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 0,
+          "attempt": 4
+        }
+      ],
+      "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+      "stock": 0
+    }
+  ],
+  "finalCohort": [
+    {
+      "ownerUserId": -1,
+      "slot": 1,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    },
+    {
+      "ownerUserId": -2,
+      "slot": 2,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    },
+    {
+      "ownerUserId": -3,
+      "slot": 3,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    }
+  ],
+  "terminalEvents": [
+    {
+      "view": "Menu",
+      "revision": 495,
+      "rawLife": 47,
+      "attempt": 4,
+      "data": {
+        "eventId": "s-507",
+        "code": "OK"
+      },
+      "userId": 3,
+      "levelEpoch": 6,
+      "respawns": 0,
+      "now": 1794321754.656489,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "Death",
+      "seq": 1657,
+      "connected": true
+    },
+    {
+      "view": "Menu",
+      "revision": 495,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 3,
+      "data": {
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": false,
+          "position": [
+            249.01513671875,
+            -59.83049392700195,
+            -0.015907621011137962
+          ]
+        },
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "reason": "CampaignFall"
+      },
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+      "levelEpoch": 6,
+      "respawns": 0,
+      "now": 1794321754.656489,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "ConfirmedDeath",
+      "seq": 1658,
+      "connected": true
+    },
+    {
+      "levelEpoch": 6,
+      "revision": 495,
+      "now": 1794321754.672007,
+      "late": false,
+      "kind": "RunResult",
+      "data": {
+        "result": "Lost"
+      },
+      "seq": 1661
+    }
+  ],
+  "deathCounts": {
+    "1": 10,
+    "2": 1,
+    "6": 1
+  },
+  "deathReasons": {
+    "Fall": 9,
+    "CombatUnderflow": 2,
+    "CampaignFall": 1
+  },
+  "cachedCurrentCaution": "current.rawLife=47 is a pre-death cached planning field. The terminal cohort and ConfirmedDeath report all heroes Eliminated with rawLife0.",
+  "archive": {
+    "file": "attempt-14-full-natural-archive.json",
+    "sha256": "7705aa89184c64ca5c8969c088c1d823d5ff7c32497993c8d4a0213305a05204",
+    "bytes": 1585623
+  },
+  "watcher": {
+    "checkpoints": [
+      "test14-checkpoint-001-20261110T143505Z.json",
+      "test14-checkpoint-002-20261110T143809Z.json",
+      "test14-checkpoint-003-20261110T143900Z.json",
+      "test14-checkpoint-004-20261110T143947Z.json",
+      "test14-checkpoint-005-20261110T144037Z.json",
+      "test14-checkpoint-006-20261110T144132Z.json",
+      "test14-checkpoint-007-20261110T144217Z.json"
+    ],
+    "immutableArchives": [
+      "test14-archive-001-20261110T143807Z.json",
+      "test14-archive-002-20261110T143813Z.json",
+      "test14-archive-003-20261110T143902Z.json",
+      "test14-archive-004-20261110T143951Z.json",
+      "test14-archive-005-20261110T144046Z.json",
+      "test14-archive-006-20261110T144231Z.json"
+    ],
+    "consoles": [
+      "test14-client1-console-initial-20261110T143505Z.json",
+      "test14-client2-console-initial-20261110T143505Z.json",
+      "test14-client3-console-initial-20261110T143505Z.json",
+      "test14-server-console-change-20261110T143809Z.json",
+      "test14-server-console-change-20261110T143900Z.json",
+      "test14-server-console-change-20261110T143948Z.json",
+      "test14-server-console-initial-20261110T143505Z.json"
+    ],
+    "lastImmutableArchive": "test14-archive-006-20261110T144231Z.json",
+    "childDisconnectedAfterLastArchive": true,
+    "ownedExportsCleaned": true,
+    "controlCalls": 0,
+    "productionLuaExceptionsObserved": 0
+  },
+  "errors": [],
+  "coverage": "Continuous normal-input stages1–5 completed. Serpents6 ended Lost. Stages7–13 not reached in attempt14.",
+  "mountEvidence": {
+    "mountedCount": 1,
+    "releasedCount": 1,
+    "detailLimit": "Filtered archive counts establish mount/release; retained events do not establish a particular release mechanism."
+  },
+  "diagnosisFile": "test14-serpents-final-room-extract.json"
+}

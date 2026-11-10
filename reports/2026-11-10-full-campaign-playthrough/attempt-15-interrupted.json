@@ -1,0 +1,51 @@
+{
+  "attempt": 15,
+  "scope": "Extract of successful initial MCP observation; test interrupted without a terminal gameplay result",
+  "runId": "45910a60-fb0c-4cf4-83c4-d8bc209171cf",
+  "seed": 1926006789,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "launchedAt": "2026-11-10T15:03:28Z",
+  "sampleCountAtObservation": 21,
+  "policyLoads": 1,
+  "stage": 1,
+  "cohort": [
+    {
+      "slot": 1,
+      "ownerUserId": -1,
+      "actorId": "45910a60-fb0c-4cf4-83c4-d8bc209171cf:actor:2",
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 47
+    },
+    {
+      "slot": 2,
+      "ownerUserId": -2,
+      "actorId": "45910a60-fb0c-4cf4-83c4-d8bc209171cf:actor:5",
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 47
+    },
+    {
+      "slot": 3,
+      "ownerUserId": -3,
+      "actorId": "45910a60-fb0c-4cf4-83c4-d8bc209171cf:actor:8",
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 47
+    }
+  ],
+  "parentReceipt": {
+    "Complete": true,
+    "Bytes": 11,
+    "payload": "{\"ok\":true}"
+  },
+  "terminationEvidence": {
+    "log": "0.746.0.7461269_20261110T150328Z_Studio_22AF7_last.log",
+    "line": 1441,
+    "at": "2026-11-10T15:07:12.486Z",
+    "message": "PlaceEventHandler::eventFilter: close event received on MainWindow",
+    "userClarification": "User confirmed closing extra Studio windows; subsequent acceptance switches to ordinary Play in the existing Studio window",
+    "timeoutClaim": false
+  },
+  "completeCampaignAccepted": false
+}

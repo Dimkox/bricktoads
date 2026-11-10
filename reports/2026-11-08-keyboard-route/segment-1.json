@@ -1,0 +1,511 @@
+{
+  "schema": 1,
+  "scenario": "ordinary_keyboard_route_continuation_before_attack_clock_fix",
+  "productionCommit": "67f57316fc4fdbbc13e4655f2db892cf10068322",
+  "sourceSha256": "111e5acea788db6c93dc5dc011c291ea974604ca4fe60c08b69f3bf733ea5eac",
+  "runId": "0f201fcd-a035-4f98-8e47-d3bee1e92138",
+  "startingAttempt": 2,
+  "result": "paused_for_helper_correction",
+  "preparation": {
+    "healthOrPositionOrKillWrites": false,
+    "continuedExistingUserRun": true,
+    "inputPath": "MCP keyboard to ordinary production client"
+  },
+  "samples": [
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": -81.97976684570312,
+          "state": "Running",
+          "z": 24.51795196533203,
+          "vz": 0,
+          "snapshotAge": 0.08899998664855957,
+          "vx": 0,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 2.999999523162842,
+          "x": -79.80000305175781,
+          "z": 17.662378311157227
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": -79.04808044433594,
+          "state": "Running",
+          "z": 20.537778854370117,
+          "vz": -10.958765983581543,
+          "snapshotAge": 0.04137015342712402,
+          "vx": -0.00002411841524008196,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3.0000457763671875,
+          "x": -79.80000305175781,
+          "z": 18.426061630249023
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.007490396499634,
+          "x": -78.82347869873047,
+          "state": "Running",
+          "z": 17.310747146606445,
+          "vz": -0.00635446235537529,
+          "snapshotAge": 0.12396979331970215,
+          "vx": 16.125646591186523,
+          "vy": -0.6723393201828003
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3.007490396499634,
+          "x": -75.99456787109375,
+          "z": 18.309377670288086
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": -69.43518829345703,
+          "state": "Running",
+          "z": 17.541282653808594,
+          "vz": 0,
+          "snapshotAge": 0.10606217384338379,
+          "vx": 10.867436408996582,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3,
+          "x": 2,
+          "z": 0
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": -58.28172302246094,
+          "state": "Running",
+          "z": 14.523658752441406,
+          "vz": 0,
+          "snapshotAge": 0.05405592918395996,
+          "vx": 16.007293701171875,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3,
+          "x": 2,
+          "z": 0
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": -50.25076675415039,
+          "state": "Running",
+          "z": 13.015823364257812,
+          "vz": 0,
+          "snapshotAge": 0.08678603172302246,
+          "vx": 0,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3,
+          "x": 2,
+          "z": 0
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": -36.63138961791992,
+          "state": "Running",
+          "z": 10.018707275390625,
+          "vz": 0,
+          "snapshotAge": 0.040370941162109375,
+          "vx": 2.936007499694824,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3,
+          "x": 2,
+          "z": 0
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": -21.093542098999023,
+          "state": "Running",
+          "z": 7.0015716552734375,
+          "vz": 0,
+          "snapshotAge": 0.11865806579589844,
+          "vx": 15.99779224395752,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3,
+          "x": 2,
+          "z": 0
+        }
+      }
+    },
+    {
+      "status": "Route zone 1",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.002932548522949,
+          "x": -6.07979154586792,
+          "state": "Running",
+          "z": 2.4789834022521973,
+          "vz": 0,
+          "snapshotAge": 0.03284597396850586,
+          "vx": 16.0057430267334,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3,
+          "x": 2,
+          "z": 0
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.002932548522949,
+          "x": 8.518791198730469,
+          "state": "Running",
+          "z": -5.0518083572387695,
+          "vz": 0,
+          "snapshotAge": 0.08321499824523926,
+          "vx": 8.94339370727539,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 2.9963839054107666,
+          "x": 19.999963760375977,
+          "z": -7.000028610229492
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "notice": "REACTION",
+          "anchored": false,
+          "platformStand": true,
+          "y": 3.247814893722534,
+          "x": 20.169395446777344,
+          "state": "PlatformStanding",
+          "z": -4.830737113952637,
+          "vz": 6.374828338623047,
+          "snapshotAge": 0.0852818489074707,
+          "vx": 13.04670524597168,
+          "vy": -9.84111213684082
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3.247814893722534,
+          "x": 20.02785873413086,
+          "z": -1.8340778350830078
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "anchored": false,
+          "platformStand": true,
+          "y": 3.0000457763671875,
+          "x": 20.757333755493164,
+          "state": "PlatformStanding",
+          "z": -4.5223493576049805,
+          "vz": -0.7092568874359131,
+          "snapshotAge": 0.05262899398803711,
+          "vx": -0.7201000452041626,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 1,
+        "target": {
+          "y": 2.9993369579315186,
+          "x": 20.46515655517578,
+          "z": -7.100205898284912
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Slate",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.0000457763671875,
+          "x": 14.729228973388672,
+          "state": "Running",
+          "z": 16.178956985473633,
+          "vz": 0,
+          "snapshotAge": 0.11806392669677734,
+          "vx": 0,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 1.144517421722412,
+          "x": 12.778103828430176,
+          "z": 14.232648849487305
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Slate",
+          "anchored": false,
+          "platformStand": false,
+          "y": 3.002932548522949,
+          "x": 10.916911125183105,
+          "state": "Running",
+          "z": 8.317110061645508,
+          "vz": -15.77692985534668,
+          "snapshotAge": 0.08695197105407715,
+          "vx": 0,
+          "vy": 0
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 3.002932548522949,
+          "x": 12.293255805969238,
+          "z": 13.106550216674805
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "notice": "REACTION",
+          "anchored": false,
+          "platformStand": true,
+          "y": 1.9852453470230103,
+          "x": 11.466431617736816,
+          "state": "PlatformStanding",
+          "z": 13.508261680603027,
+          "vz": 5.882713317871094,
+          "snapshotAge": 0.03612089157104492,
+          "vx": -24.045799255371094,
+          "vy": -19.61155891418457
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 1.9852453470230103,
+          "x": 12.945598602294922,
+          "z": 16.118255615234375
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Slate",
+          "anchored": false,
+          "platformStand": false,
+          "y": 2.9789750576019287,
+          "x": 8.931536674499512,
+          "state": "Running",
+          "z": 13.307215690612793,
+          "vz": -11.350566864013672,
+          "snapshotAge": 0.07042503356933594,
+          "vx": 11.280423164367676,
+          "vy": -0.14479918777942657
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 2.9789750576019287,
+          "x": 6.264813423156738,
+          "z": 14.681473731994629
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Slate",
+          "anchored": false,
+          "platformStand": false,
+          "y": 1.4433687925338745,
+          "x": 9.21212100982666,
+          "state": "Running",
+          "z": 12.199413299560547,
+          "vz": 0,
+          "snapshotAge": 0.11710596084594727,
+          "vx": 0,
+          "vy": 24.58209800720215
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 1.996124267578125,
+          "x": 12.949416160583496,
+          "z": 17
+        }
+      }
+    },
+    {
+      "status": "Route zone 2",
+      "running": true,
+      "summary": {
+        "jumps": 0,
+        "position": {
+          "floor": "Air",
+          "notice": "REACTION",
+          "anchored": false,
+          "platformStand": true,
+          "y": 1.4591517448425293,
+          "x": 11.065857887268066,
+          "state": "PlatformStanding",
+          "z": 9.962526321411133,
+          "vz": -1.0694053173065186,
+          "snapshotAge": 0.08559203147888184,
+          "vx": -6.067045211791992,
+          "vy": -7.414539337158203
+        },
+        "phase": "Walk",
+        "queued": 0,
+        "target": {
+          "y": 2.9999873638153076,
+          "x": 11.554437637329102,
+          "z": 12.987285614013672
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Partial existing run; no full fresh-route acceptance",
+    "Reached zone2 through ordinary controls; no jumps attempted before pause",
+    "Repeated R/retreat and REACTION; helper queue timing issue under correction",
+    "No confirmed permanent physics lock; body returned to upright after reaction"
+  ]
+}

@@ -1,0 +1,63 @@
+Dragon flight
+exit=0
+PASS runtime installs finite Dragon control without adding an enemy
+PASS surviving heavy hit mounts the same body without healing or spending resources
+PASS mount rejects airborne obstructed or already reserved bodies
+PASS mounted human enemy retains life and rejects a new control command
+PASS disconnect stops rider steering after timeout but keeps the vulnerable body
+PASS mounted fire has fixed profile22 and global two-shot cap
+PASS fire respects shields walls ordinary damage and immutable accepted response
+PASS hero fire impulse uses a cloned accepted direction after the rider turns and tuning changes
+PASS NPC fire impulse survives an actual new rider appearance with captured response and direction
+PASS accepted hero and NPC fire impacts retain direction after the attacker body is removed
+PASS incoming hero hit releases the mount before applying the physical response
+PASS capture rechecks the effect victim and never adds a second damage event
+PASS capture miss and later interruption cannot attach a stale actor
+PASS actor replacement and run close clean temporary links and all projectiles
+PASS public schema rejects internal Dragon actions before any side effect
+PASS both respawn shields retain fire damage and impulse policy
+PASS mount neutralizes a gate only while the same surviving Dragon remains mounted
+PASS mounted motion keeps processing after the ground encounter reaches the boss
+PASS an obstructed accepted shot consumes attack timing without spawning beyond the wall
+DragonFlight: 19 PASS
+
+Physical world
+exit=0
+PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls
+PASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped
+PASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup
+PASS camera selects one world, clears cross-group state and never falls back from an explicit missing world
+PASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped
+PASS ordinary species and guardian projectile modes have distinct original readable presentation
+PASS narrow support cannot crash safe respawn search
+PASS modern delayed jump uses bounded server ground history and preserves horizontal momentum
+PASS jump consumption survives stale floor reports and midair input, then resets after actual landing
+PASS jump grace rejects expired, deep, dead, held and reacting requests
+PASS jump history belongs to one actual actor in one modern world and preserves legacy behavior
+PASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry
+PASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing
+PASS carry drops and new-run cleanup retain old body references without crossing group or actor generations
+PASS ground clubs are independent noncolliding original item models with one group translation
+PASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing
+PASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset
+PASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation
+PASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption
+PASS Dragon headbutt has real finite neck poses and clears on reaction/death
+PASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat
+PASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses
+PASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup
+PASS accepted response snapshots stay bound to their own profile without a live config table
+PASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors
+PASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates
+PASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped
+PASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage
+PASS original wing motors move only for authoritative flight and return to rest
+PASS fire orders first contact and detects a thin wall before its projected muzzle
+
+Jump geometry
+exit=0
+PASS all5 route gaps fit the main-game jump envelope with takeoff and landing space
+
+Playable matches source
+exit=0
+C:\Users\User\Documents\bricktoads\places\BrickToadsPlayable.rbxlx: 403209 bytes; sha256=b6661521af567b1d50ff1b53ff484b9487c27e54d1a70f2f597a5ae3e6a47ef2

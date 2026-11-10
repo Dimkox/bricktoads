@@ -1,0 +1,267 @@
+{
+  "commands": [
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_boss_queue.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_connections.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_enemy_carry.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_gameplay.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_groups.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_guardian.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_healing_flies.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_level_route.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_pig_strikes.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_stand.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_walker_clubs.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_walker_strikes.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tests/group_world/run.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_stand_gateway.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_bricktoads_place.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_build.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_combat_stand.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_lua54.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_walker_acceptance.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_test_place.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_walker_acceptance.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py",
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py",
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_walker_acceptance.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "compiled_files": 67,
+  "compile_errors": [],
+  "artifacts": {
+    "places/BrickToadsPlayable.rbxlx": {
+      "bytes": 342918,
+      "sha256": "275b4fab2758a107f0e1769f9c66f5859c78a99ffc56c6532ee4be70796a89bf"
+    },
+    "build/WalkerHeavyAcceptance.rbxlx": {
+      "bytes": 357212,
+      "sha256": "b6304f45b6165dc2c3ced581b765e1a664b7092827c5790dca82319b26779104"
+    }
+  },
+  "studio_status": "not_run",
+  "preparation": "Isolated fixture: rawLife35 is directly seeded; NPC attacker anchored; real AI and geometry must resolve the strike. Studio not run.",
+  "red_evidence": "Four packaging tests first failed because the isolated builder was missing.",
+  "final_targeted_commands": [
+    {
+      "command": [
+        "python3",
+        "tools/test_walker_acceptance.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau-compile",
+        "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_walker_acceptance.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py",
+        "--check"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "independent_review": {
+    "reviewer": "walker_acceptance_review",
+    "engine_run": false,
+    "addressed": [
+      "Actual motor C0 windup and return, not only attributes",
+      "Same hero object/model membership, not only lifecycle actorId",
+      "Later grounded non-reaction physics state after property reset",
+      "Count every Hit action to exclude a hidden extra light hit/recovery"
+    ],
+    "verdict": "approved_as_acceptance_preparation_no_remaining_P1_P2",
+    "not_judged": [
+      "Studio import and execution",
+      "Actual geometry/impulse result",
+      "Motor tolerances",
+      "Physical recovery timing",
+      "Runtime JSON receipt"
+    ]
+  }
+}

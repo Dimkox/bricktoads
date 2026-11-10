@@ -1,0 +1,14 @@
+./reports/2026-11-10-qa-tubes-shark-evasion/probe-experimental.luau:17: First body must finish without the Shark/Gear cascade
+stacktrace:
+[C] function assert
+./reports/2026-11-10-qa-tubes-shark-evasion/probe-experimental.luau:17
+CASE	0.1	0	FirstBodyEnded	29.999999999999577	1	3	0	Shark	2	Gear	0
+CASE	0.1	0.133	FirstBodyEnded	48.56666666666519	1	3	0	Shark	1	Gear	0
+CASE	0.1	0.167	FirstBodyEnded	91.26666666666277	1	3	0	Shark	0	Gear	0
+CASE	0.133	0	Won	28.616666666666323	1	3	31	Shark	1	Gear	0
+CASE	0.133	0.133	FirstBodyEnded	9.300000000000042	1	3	0	Shark	0	Gear	0
+CASE	0.133	0.167	FirstBodyEnded	4.29999999999999	1	3	0	Shark	0	Gear	0
+CASE	0.167	0	FirstBodyEnded	3.849999999999991	1	3	0	Shark	0	Gear	0
+CASE	0.167	0.133	Timeout	99.99999999999561	1	3	47	Shark	0	Gear	0
+CASE	0.167	0.167	FirstBodyEnded	22.883333333333315	1	3	0	Shark	0	Gear	0
+FAILURES	9

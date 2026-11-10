@@ -1,0 +1,196 @@
+{
+  "studioVersion": "0.746.0.7461269",
+  "networkSettings": {
+    "OutboundNetworkMinDelayMs": 0,
+    "OutboundNetworkJitterMs": 0,
+    "OutboundNetworkLossPercent": 0,
+    "InboundNetworkMinDelayMs": 0,
+    "InboundNetworkLossPercent": 0,
+    "InboundNetworkJitterMs": 0
+  },
+  "networkProfile": "Unmodified baseline; six network settings remain zero",
+  "startedPlayers": 3,
+  "result": {
+    "scenario": "Heroes",
+    "roundTrips": [],
+    "status": "FAIL",
+    "trace": [],
+    "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "players": 3,
+    "commands": [
+      {
+        "id": "1",
+        "kind": "Menu",
+        "userId": -1,
+        "args": {
+          "role": "Hero",
+          "kind": "SelectRole"
+        }
+      },
+      {
+        "id": "2",
+        "kind": "Menu",
+        "userId": -2,
+        "args": {
+          "role": "Hero",
+          "kind": "SelectRole"
+        }
+      },
+      {
+        "id": "3",
+        "kind": "Menu",
+        "userId": -3,
+        "args": {
+          "role": "Hero",
+          "kind": "SelectRole"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "at": 1794236139.525725,
+        "observed": "Heroes",
+        "name": "Supported initial scenario",
+        "expected": "Heroes",
+        "pass": true
+      },
+      {
+        "at": 1794236139.525737,
+        "observed": 3,
+        "name": "Three real client launch requested",
+        "expected": 3,
+        "pass": true
+      },
+      {
+        "at": 1794236139.525744,
+        "observed": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+        "name": "Build source identity supplied",
+        "expected": "Nonempty BuildId",
+        "pass": true
+      },
+      {
+        "at": 1794236187.115636,
+        "observed": [
+          {
+            "registryCurrent": true,
+            "typeof": "Instance",
+            "name": "Player1",
+            "className": "Player",
+            "userId": -1,
+            "groupId": "group-1",
+            "currentInstance": true,
+            "parentIsPlayers": true
+          },
+          {
+            "registryCurrent": true,
+            "typeof": "Instance",
+            "name": "Player2",
+            "className": "Player",
+            "userId": -2,
+            "groupId": "group-1",
+            "currentInstance": true,
+            "parentIsPlayers": true
+          },
+          {
+            "registryCurrent": true,
+            "typeof": "Instance",
+            "name": "Player3",
+            "className": "Player",
+            "userId": -3,
+            "groupId": "group-1",
+            "currentInstance": true,
+            "parentIsPlayers": true
+          }
+        ],
+        "name": "Actual Player instances share one group",
+        "expected": 3,
+        "pass": true
+      },
+      {
+        "at": 1794236187.115641,
+        "observed": true,
+        "name": "Fresh lobby",
+        "expected": "No active session",
+        "pass": true
+      },
+      {
+        "at": 1794236197.132623,
+        "observed": {
+          "received": 2,
+          "expected": 3
+        },
+        "name": "Client Menu replies",
+        "expected": "Condition observed within 10 seconds",
+        "pass": false
+      }
+    ],
+    "skipped": [
+      "Physical mobile hardware, human touch/UI and measured device performance",
+      "Same-account reconnect into the same live server",
+      "One/two-hero courses, deliberate crash/restart and human RocketRat control (separate scenarios)"
+    ],
+    "final": {
+      "at": 1794236197.132797,
+      "faulted": false,
+      "heroes": [],
+      "worldName": "BrickToadsWorld_group-1",
+      "groupId": "group-1",
+      "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+    },
+    "startup": {
+      "players": [
+        {
+          "joinedAt": 1794236176.885035,
+          "readyAt": 1794236178.215754,
+          "groupId": "group-1",
+          "readyElapsedSeconds": 38.69174719997682,
+          "userId": -1,
+          "name": "Player1",
+          "ready": true,
+          "snapshotCount": 1,
+          "joinedElapsedSeconds": 37.361036099959165,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        {
+          "joinedAt": 1794236180.171535,
+          "readyAt": 1794236181.781831,
+          "groupId": "group-1",
+          "readyElapsedSeconds": 42.257806599955074,
+          "userId": -2,
+          "name": "Player2",
+          "ready": true,
+          "snapshotCount": 1,
+          "joinedElapsedSeconds": 40.64751729997806,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        {
+          "joinedAt": 1794236185.996586,
+          "readyAt": 1794236187.114073,
+          "groupId": "group-1",
+          "readyElapsedSeconds": 47.59001939999871,
+          "userId": -3,
+          "name": "Player3",
+          "ready": true,
+          "snapshotCount": 1,
+          "joinedElapsedSeconds": 46.47253729996737,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        }
+      ],
+      "windowSeconds": 90,
+      "reason": "First cold Studio run launched three clients but client scripts began after the prior 45-second deadline."
+    },
+    "scope": "Actual Studio Players, production Intent/State, server course simulation and replicated bodies.",
+    "summary": {
+      "passed": 5,
+      "samples": 0,
+      "failed": 1,
+      "roundTrips": 0
+    },
+    "seed": 41,
+    "elapsedSeconds": 57.60866309993435,
+    "preparation": "Real clients select roles/heroes and Start; server selects seed and advances twice to stage 3.",
+    "error": "Client Menu replies\nServerScriptService.BrickToads.ScooterNetworkAcceptance:140 function check\nServerScriptService.BrickToads.ScooterNetworkAcceptance:151 function waitFor\nServerScriptService.BrickToads.ScooterNetworkAcceptance:166 function requests\nServerScriptService.BrickToads.ScooterNetworkAcceptance:237\nServerScriptService.BrickToads.ScooterNetworkAcceptance:204\n",
+    "tag": "BrickToadsScooterNetworkTest"
+  },
+  "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+}

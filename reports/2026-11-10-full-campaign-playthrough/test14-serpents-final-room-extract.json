@@ -1,0 +1,4347 @@
+{
+  "source": "attempt-14-full-natural-archive.json",
+  "sourceSha256": "7705aa89184c64ca5c8969c088c1d823d5ff7c32497993c8d4a0213305a05204",
+  "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+  "seed": 1259618153,
+  "terminalResult": "Lost",
+  "scope": "Bounded final-room Serpents input and support evidence; no live changes",
+  "geometry": {
+    "entryFloor": 7,
+    "centerX": 240,
+    "width": 20,
+    "maxX": 250,
+    "standingY": 21,
+    "approachTargetX": 249.1,
+    "targetEdgeInset": 0.9,
+    "source": "src/server/gameplay/CampaignDefinition.lua index==6"
+  },
+  "conclusion": "Accepted forward input outlasted the reduced QA plan at the entry edge. The actor crossed maxX=250 without a jump, lost support, then reversed below the ledge. This is a QA approach steering/latency failure; the frames do not demonstrate impossible geometry or a production defect.",
+  "limits": "ModeFrameRing samples roughly every .05s, not every simulation slice. Jump request receipts are not directly recorded; no planned jump occurs during the final floor7 approach. Native AssemblyVelocity is zero because the Modes body is anchored; logical velocity is the relevant velocity.",
+  "frames": [
+    {
+      "at": 1794321751.045349,
+      "modeNow": 1794321751.040383,
+      "modeElapsed": 15.765487303957345,
+      "heartbeatDt": 0.018808631226420403,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": -1,
+          "x": 0
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": -0.7391685261683989
+        },
+        "nativePosition": {
+          "y": 19.263504028320312,
+          "x": 210.40869140625,
+          "z": -0.31587883830070496
+        },
+        "decisionDt": 0.13199806213378906,
+        "support": "serpent-3",
+        "planned": {
+          "x": 0,
+          "z": -0.04619803288552493,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.020023,
+        "decisionAt": 1794321751.020023,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.021238,
+          "x": 0,
+          "run": false,
+          "z": -0.04619803288552493
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 19.263503409336543,
+          "x": 210.40868387240994,
+          "z": -0.31587884369450414
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.039539,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.107455,
+      "modeNow": 1794321751.105312,
+      "modeElapsed": 15.829832622781398,
+      "heartbeatDt": 0.015838848426938057,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": -1,
+          "x": 0
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": -0.7391685261683989
+        },
+        "nativePosition": {
+          "y": 19.336027145385742,
+          "x": 211.09765625,
+          "z": -0.2183944135904312
+        },
+        "decisionDt": 0.13199806213378906,
+        "support": "serpent-3",
+        "planned": {
+          "x": 0,
+          "z": -0.04619803288552493,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.020023,
+        "decisionAt": 1794321751.020023,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.021238,
+          "x": 0,
+          "run": false,
+          "z": -0.04619803288552493
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 19.33602664131729,
+          "x": 211.097654576227,
+          "z": -0.21839441421402686
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.039539,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.162701,
+      "modeNow": 1794321751.157569,
+      "modeElapsed": 15.883386347442867,
+      "heartbeatDt": 0.018091656267642975,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": -1,
+          "x": 0
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": -1.205895097918364
+        },
+        "nativePosition": {
+          "y": 19.396387100219727,
+          "x": 211.67108154296875,
+          "z": -0.14570331573486328
+        },
+        "decisionDt": 0.10172700881958008,
+        "support": "serpent-3",
+        "planned": {
+          "x": 0,
+          "z": -0.07536844361989775,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.12175,
+        "decisionAt": 1794321751.12175,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.139827,
+          "x": 0,
+          "run": false,
+          "z": -0.07536844361989775
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 19.396386730722966,
+          "x": 211.67107542558094,
+          "z": -0.1457033198385947
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.156488,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.22587,
+      "modeNow": 1794321751.223542,
+      "modeElapsed": 15.948663374409081,
+      "heartbeatDt": 0.01602751761674881,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": -1,
+          "x": 0
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": -1.205895097918364
+        },
+        "nativePosition": {
+          "y": 19.469959259033203,
+          "x": 212.37002563476562,
+          "z": -0.07727386057376862
+        },
+        "decisionDt": 0.10172700881958008,
+        "support": "serpent-3",
+        "planned": {
+          "x": 0,
+          "z": -0.07536844361989775,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.12175,
+        "decisionAt": 1794321751.12175,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.139827,
+          "x": 0,
+          "run": false,
+          "z": -0.07536844361989775
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 19.469960085493792,
+          "x": 212.3700222959038,
+          "z": -0.07727385712218268
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.156488,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.292627,
+      "modeNow": 1794321751.289118,
+      "modeElapsed": 16.01432083267719,
+      "heartbeatDt": 0.016911769285798073,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": -1,
+          "x": 0
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": -1.8832737719592427
+        },
+        "nativePosition": {
+          "y": 19.543962478637695,
+          "x": 213.0730438232422,
+          "z": -0.04146488010883331
+        },
+        "decisionDt": 0.115966796875,
+        "support": "serpent-3",
+        "planned": {
+          "x": 0,
+          "z": -0.11770461074745267,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.237717,
+        "decisionAt": 1794321751.237717,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.239859,
+          "x": 0,
+          "run": false,
+          "z": -0.11770461074745267
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 19.54396222215682,
+          "x": 213.0730425942026,
+          "z": -0.04146488103145358
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.256613,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.34353,
+      "modeNow": 1794321751.340342,
+      "modeElapsed": 16.066156542859975,
+      "heartbeatDt": 0.01807164028286934,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": -1,
+          "x": 0
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": -1.8832737719592427
+        },
+        "nativePosition": {
+          "y": 19.602386474609375,
+          "x": 213.62806701660156,
+          "z": -0.022238263860344887
+        },
+        "decisionDt": 0.10016608238220215,
+        "support": "serpent-3",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": true
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.337883,
+        "decisionAt": 1794321751.337883,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.323811,
+          "x": 0,
+          "run": false,
+          "z": -0.11770461074745267
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 19.602385947505862,
+          "x": 213.62806798501848,
+          "z": -0.022238263771497624
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.339139,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.410634,
+      "modeNow": 1794321751.406741,
+      "modeElapsed": 16.133423202671114,
+      "heartbeatDt": 0.01807164028286934,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 43.47014997527003,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21.933940887451172,
+          "x": 214.61399841308594,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.10016608238220215,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": true
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.337883,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.35731,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.337883,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21.933939978347603,
+          "x": 214.61400215027743,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.37217,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.478114,
+      "modeNow": 1794321751.47428,
+      "modeElapsed": 16.20015871804208,
+      "heartbeatDt": 0.017009027302265167,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 33.45982266962528,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 24.41918182373047,
+          "x": 215.68177795410156,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11696100234985352,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.454844,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.456974,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.454844,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 24.419182552012877,
+          "x": 215.68177039621287,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.473251,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.541208,
+      "modeNow": 1794321751.538804,
+      "modeElapsed": 16.2636882532388,
+      "heartbeatDt": 0.015940096229314804,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 23.93039239011705,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 26.167190551757812,
+          "x": 216.6982421875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11696100234985352,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.454844,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.456974,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.454844,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 26.167190263455947,
+          "x": 216.6982429593604,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.473251,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.595252,
+      "modeNow": 1794321751.589804,
+      "modeElapsed": 16.315493566915396,
+      "heartbeatDt": 0.017932608723640442,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 16.159595338627696,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 27.144664764404297,
+          "x": 217.52713012695312,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11573100090026855,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.570575,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.456974,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.570575,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 27.144663900099797,
+          "x": 217.52712797818594,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.473251,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.659008,
+      "modeNow": 1794321751.655683,
+      "modeElapsed": 16.38241443037987,
+      "heartbeatDt": 0.016077503561973572,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 6.121465818956494,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 27.809635162353516,
+          "x": 218.5978546142578,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11573100090026855,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.570575,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.589804,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.570575,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 27.809635964212646,
+          "x": 218.59786179361754,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.606526,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.711664,
+      "modeNow": 1794321751.706454,
+      "modeElapsed": 16.432656630873684,
+      "heartbeatDt": 0.017082348465919495,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -1.4148642551153898,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 27.866792678833008,
+          "x": 219.4017333984375,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1168680191040039,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.687443,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.589804,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.687443,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 27.866791929490848,
+          "x": 219.40173700151854,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.606526,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.774867,
+      "modeNow": 1794321751.772741,
+      "modeElapsed": 16.498749069869522,
+      "heartbeatDt": 0.01594865508377552,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -11.328730104491115,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 27.36733627319336,
+          "x": 220.45921325683594,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1168680191040039,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.687443,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.722224,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.687443,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 27.36733667788926,
+          "x": 220.45921602545195,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.738804,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.829596,
+      "modeNow": 1794321751.822181,
+      "modeElapsed": 16.549210635945204,
+      "heartbeatDt": 0.0185642559081316,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -18.89796501584351,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 26.54543685913086,
+          "x": 221.2666015625,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13341808319091797,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.820861,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.722224,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.820861,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 26.545436154806904,
+          "x": 221.26660108266287,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.738804,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.891057,
+      "modeNow": 1794321751.888521,
+      "modeElapsed": 16.61539741419256,
+      "heartbeatDt": 0.016045279800891876,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -28.825981752946973,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 24.88578224182129,
+          "x": 222.32559204101562,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13341808319091797,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.820861,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.840648,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.820861,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 24.88578287184463,
+          "x": 222.32558953462058,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.855506,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321751.94351,
+      "modeNow": 1794321751.940288,
+      "modeElapsed": 16.66586698405445,
+      "heartbeatDt": 0.017949726432561874,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -36.396417232230306,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 23.18015480041504,
+          "x": 223.1331024169922,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11704277992248535,
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.937904,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321751.840648,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321751.937904,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 23.180155521822293,
+          "x": 223.1331026524108,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321751.855506,
+        "checkpoint": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.00983,
+      "modeNow": 1794321752.005582,
+      "modeElapsed": 16.731682645156983,
+      "heartbeatDt": 0.0169525183737278,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 224.1861572265625,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11704277992248535,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.937904,
+        "decisionAt": 1794321751.937904,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.972915,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 224.18615323005133,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.98804,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.061105,
+      "modeNow": 1794321752.055984,
+      "modeElapsed": 16.78160324506462,
+      "heartbeatDt": 0.01696005091071129,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 224.98487854003906,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11704277992248535,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321751.937904,
+        "decisionAt": 1794321751.937904,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321751.972915,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 224.98488282857352,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321751.98804,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.112333,
+      "modeNow": 1794321752.109268,
+      "modeElapsed": 16.831485746428374,
+      "heartbeatDt": 0.01696005091071129,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 225.7830047607422,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13263320922851562,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.070537,
+        "decisionAt": 1794321752.070537,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.071985,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 3,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 225.7830028503936,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.088014,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.163778,
+      "modeNow": 1794321752.155945,
+      "modeElapsed": 16.882316167466346,
+      "heartbeatDt": 0.0190877802670002,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 226.59628295898438,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13263320922851562,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.070537,
+        "decisionAt": 1794321752.070537,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.071985,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 226.59628958700114,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.088014,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.230013,
+      "modeNow": 1794321752.223336,
+      "modeElapsed": 16.949458227492872,
+      "heartbeatDt": 0.016911061480641365,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 227.67056274414062,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1168680191040039,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.187405,
+        "decisionAt": 1794321752.187405,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.071985,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 227.67056254742556,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.088014,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.293527,
+      "modeNow": 1794321752.290519,
+      "modeElapsed": 17.016658824868504,
+      "heartbeatDt": 0.01705089770257473,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 228.7457733154297,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1168680191040039,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.187405,
+        "decisionAt": 1794321752.187405,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.223336,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 228.74577210543566,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.239052,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.343676,
+      "modeNow": 1794321752.340327,
+      "modeElapsed": 17.065567725338045,
+      "heartbeatDt": 0.016875118017196655,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 229.5283203125,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1507248878479004,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.33813,
+        "decisionAt": 1794321752.33813,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.223336,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 229.52831451294833,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.239052,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.411411,
+      "modeNow": 1794321752.407361,
+      "modeElapsed": 17.132075543515388,
+      "heartbeatDt": 0.01786777190864086,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 230.59243774414062,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1507248878479004,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.33813,
+        "decisionAt": 1794321752.33813,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.35892,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 230.5924396037858,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.371894,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.477184,
+      "modeNow": 1794321752.472069,
+      "modeElapsed": 17.197629981674257,
+      "heartbeatDt": 0.01599108800292015,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 231.6413116455078,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11637496948242188,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.454505,
+        "decisionAt": 1794321752.454505,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.35892,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 231.64131061432772,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.371894,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.541476,
+      "modeNow": 1794321752.538676,
+      "modeElapsed": 17.264777827076617,
+      "heartbeatDt": 0.017016982659697533,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 232.71568298339844,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11637496948242188,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.454505,
+        "decisionAt": 1794321752.454505,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.489078,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 232.71567614076548,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.504464,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.609171,
+      "modeNow": 1794321752.606627,
+      "modeElapsed": 17.331844759173695,
+      "heartbeatDt": 0.017016982659697533,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 233.7887420654297,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13309097290039062,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.587596,
+        "decisionAt": 1794321752.587596,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.588818,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 233.78874705431872,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.605329,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.660815,
+      "modeNow": 1794321752.656804,
+      "modeElapsed": 17.38200772646815,
+      "heartbeatDt": 0.01703111082315445,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 234.5913543701172,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13309097290039062,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.587596,
+        "decisionAt": 1794321752.587596,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.588818,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 234.59135453103,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.605329,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.726072,
+      "modeNow": 1794321752.72197,
+      "modeElapsed": 17.44797132443637,
+      "heartbeatDt": 0.016873927786946297,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 235.6467742919922,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.10099411010742188,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.68859,
+        "decisionAt": 1794321752.68859,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.588818,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 235.64677209852152,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.605329,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.792481,
+      "modeNow": 1794321752.789182,
+      "modeElapsed": 17.51499068643898,
+      "heartbeatDt": 0.01800520159304142,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 236.71908569335938,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.10099411010742188,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.68859,
+        "decisionAt": 1794321752.68859,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.72197,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 236.7190818905633,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.739298,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.843646,
+      "modeNow": 1794321752.839187,
+      "modeElapsed": 17.564839369617406,
+      "heartbeatDt": 0.016981232911348343,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 237.51666259765625,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13176798820495605,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.820358,
+        "decisionAt": 1794321752.820358,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.72197,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 237.5166608214181,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.739298,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.901698,
+      "modeNow": 1794321752.896876,
+      "modeElapsed": 17.620777544565502,
+      "heartbeatDt": 0.023973504081368446,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 238.4116668701172,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13176798820495605,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.820358,
+        "decisionAt": 1794321752.820358,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.839187,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 238.41167162058764,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.853963,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321752.958459,
+      "modeNow": 1794321752.954822,
+      "modeElapsed": 17.681502404622737,
+      "heartbeatDt": 0.017080852761864662,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 239.38327026367188,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11694884300231934,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.937307,
+        "decisionAt": 1794321752.937307,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.922552,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 239.3832693815034,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.937902,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.012541,
+      "modeNow": 1794321753.007301,
+      "modeElapsed": 17.73374971840531,
+      "heartbeatDt": 0.017080852761864662,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 240.21922302246094,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11694884300231934,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321752.937307,
+        "decisionAt": 1794321752.937307,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.922552,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 240.21922640202456,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.937902,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.062695,
+      "modeNow": 1794321753.057388,
+      "modeElapsed": 17.783149216324095,
+      "heartbeatDt": 0.017975466325879097,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 241.00961303710938,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11803412437438965,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.055341,
+        "decisionAt": 1794321753.055341,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321752.922552,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 241.0096183687251,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321752.937902,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.113949,
+      "modeNow": 1794321753.106691,
+      "modeElapsed": 17.833081065677106,
+      "heartbeatDt": 0.03495229408144951,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 241.80853271484375,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11803412437438965,
+        "support": "floor-6",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.055341,
+        "decisionAt": 1794321753.055341,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.057388,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 241.8085279583734,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.07137,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.165048,
+      "modeNow": 1794321753.160517,
+      "modeElapsed": 17.88289221841842,
+      "heartbeatDt": 0.017959607765078545,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 242.60549926757812,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11803412437438965,
+        "support": "floor-7",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.055341,
+        "decisionAt": 1794321753.055341,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.057388,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 242.6055064022344,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.07137,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.227283,
+      "modeNow": 1794321753.224363,
+      "modeElapsed": 17.950346110388637,
+      "heartbeatDt": 0.014572824351489544,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 243.6847686767578,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13377904891967773,
+        "support": "floor-7",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.18912,
+        "decisionAt": 1794321753.18912,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.191394,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 243.68476867375787,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.208873,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.291205,
+      "modeNow": 1794321753.288385,
+      "modeElapsed": 18.014574334025383,
+      "heartbeatDt": 0.017060622572898865,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 244.71241760253906,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13377904891967773,
+        "support": "floor-7",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.18912,
+        "decisionAt": 1794321753.18912,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.191394,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 244.71242025194582,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.208873,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.341468,
+      "modeNow": 1794321753.33917,
+      "modeElapsed": 18.06493248231709,
+      "heartbeatDt": 0.01694294810295105,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 245.51815795898438,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.14903903007507324,
+        "support": "floor-7",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.338159,
+        "decisionAt": 1794321753.338159,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.322765,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 245.51815062461313,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.338741,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.408718,
+      "modeNow": 1794321753.405798,
+      "modeElapsed": 18.13170763105154,
+      "heartbeatDt": 0.01793959178030491,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 246.5865478515625,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.14903903007507324,
+        "support": "floor-7",
+        "planned": {
+          "x": 1,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.338159,
+        "decisionAt": 1794321753.338159,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.322765,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 246.58655300436433,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.338741,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.46375,
+      "modeNow": 1794321753.458267,
+      "modeElapsed": 18.184163089841604,
+      "heartbeatDt": 0.02002418041229248,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 247.42584228515625,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11770892143249512,
+        "support": "floor-7",
+        "planned": {
+          "x": 0.5983639624773957,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.455868,
+        "decisionAt": 1794321753.455868,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.322765,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 247.42584034500535,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.338741,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.525567,
+      "modeNow": 1794321753.522058,
+      "modeElapsed": 18.24799893051386,
+      "heartbeatDt": 0.017780225723981857,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 248.4472198486328,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11770892143249512,
+        "support": "floor-7",
+        "planned": {
+          "x": 0.5983639624773957,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.455868,
+        "decisionAt": 1794321753.455868,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.458267,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 248.44721379576143,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.470914,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.575859,
+      "modeNow": 1794321753.571929,
+      "modeElapsed": 18.297940980643034,
+      "heartbeatDt": 0.014982614666223526,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 16,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 249.2462921142578,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.11770892143249512,
+        "support": "floor-7",
+        "planned": {
+          "x": 0.5983639624773957,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.455868,
+        "decisionAt": 1794321753.455868,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.458267,
+          "x": 1,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 249.24628659782823,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.470914,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.62741,
+      "modeNow": 1794321753.623968,
+      "modeElapsed": 18.35017149709165,
+      "heartbeatDt": 0.019268762320280075,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": 1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": 0,
+          "x": 9.57382339963833,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 21,
+          "x": 249.95814514160156,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.16604900360107422,
+        "support": "floor-7",
+        "planned": {
+          "x": -0.20210239916448813,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.621917,
+        "decisionAt": 1794321753.621917,
+        "stock": 0,
+        "rawLife": 47,
+        "attempt": 4,
+        "grounded": true,
+        "modeInput": {
+          "at": 1794321753.604509,
+          "x": 0.5983639624773957,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "finished": false,
+        "checkpoint": 4,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 21,
+          "x": 249.95815039146558,
+          "z": -0.015907621085500968
+        },
+        "connected": true,
+        "sessionLastMoveAt": 1794321753.623135,
+        "slot": 3,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.698359,
+      "modeNow": 1794321753.692008,
+      "modeElapsed": 18.41627953853458,
+      "heartbeatDt": 0.01802946627140045,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -9.916206216439605,
+          "x": -3.23363838663181,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 20.594221115112305,
+          "x": 250.15489196777344,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.16604900360107422,
+        "planned": {
+          "x": -0.20210239916448813,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.621917,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321753.655911,
+          "x": -0.20210239916448813,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321753.621917,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 20.594220568388224,
+          "x": 250.15489057113174,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321753.67071,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.75917,
+      "modeNow": 1794321753.755315,
+      "modeElapsed": 18.48193334043026,
+      "heartbeatDt": 0.0189676433801651,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -19.76427650079131,
+          "x": -3.23363838663181,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 19.543926239013672,
+          "x": 249.94259643554688,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13218188285827637,
+        "planned": {
+          "x": -0.27117732504948433,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.754099,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321753.655911,
+          "x": -0.20210239916448813,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321753.754099,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 19.543925641874743,
+          "x": 249.94258991709358,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321753.67071,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.827394,
+      "modeNow": 1794321753.822787,
+      "modeElapsed": 18.54876691568643,
+      "heartbeatDt": 0.017917022109031677,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -29.789312789216638,
+          "x": -4.338837200791749,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 17.81014060974121,
+          "x": 249.69012451171875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13218188285827637,
+        "planned": {
+          "x": -0.27117732504948433,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.754099,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321753.79089,
+          "x": -0.27117732504948433,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321753.754099,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 17.810140444338398,
+          "x": 249.69012268074667,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321753.803902,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.893869,
+      "modeNow": 1794321753.890283,
+      "modeElapsed": 18.61561877746135,
+      "heartbeatDt": 0.01796020194888115,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -39.81709205545485,
+          "x": -4.338837200791749,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 15.40345287322998,
+          "x": 249.4000701904297,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1335279941558838,
+        "planned": {
+          "x": -0.11339691848550046,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.887627,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321753.79089,
+          "x": -0.27117732504948433,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321753.887627,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 15.4034524668448,
+          "x": 249.40006333593544,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321753.803902,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321753.961886,
+      "modeNow": 1794321753.958624,
+      "modeElapsed": 18.681683651171625,
+      "heartbeatDt": 0.01798810251057148,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -49.726823111996055,
+          "x": -1.8143506957680073,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 12.371862411499023,
+          "x": 249.19667053222656,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1335279941558838,
+        "planned": {
+          "x": -0.11339691848550046,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321753.887627,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321753.923303,
+          "x": -0.11339691848550046,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321753.887627,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 12.371862800024488,
+          "x": 249.19667159305297,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321753.93757,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.028195,
+      "modeNow": 1794321754.023156,
+      "modeElapsed": 18.749732824973762,
+      "heartbeatDt": 0.019081560894846916,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -59.93419918231666,
+          "x": -1.8143506957680073,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 8.56023120880127,
+          "x": 249.07321166992188,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13338708877563477,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.021014,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321753.923303,
+          "x": -0.11339691848550046,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.021014,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 8.56023073595554,
+          "x": 249.07320652721862,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321753.93757,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.078303,
+      "modeNow": 1794321754.073154,
+      "modeElapsed": 18.799745026044548,
+      "heartbeatDt": 0.018004391342401505,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -67.43602934293449,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 5.315811634063721,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13338708877563477,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.021014,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.056364,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.021014,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 5.315811704220404,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.072032,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.131358,
+      "modeNow": 1794321754.124279,
+      "modeElapsed": 18.84900799486786,
+      "heartbeatDt": 0.017255159094929695,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -74.82547466643155,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": 1.7524216175079346,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13338708877563477,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.021014,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.056364,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.021014,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": 1.7524216326158355,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.072032,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.194415,
+      "modeNow": 1794321754.189164,
+      "modeElapsed": 18.915184939280152,
+      "heartbeatDt": 0.017045576125383377,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -84.7520163282752,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -3.6020359992980957,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13464808464050293,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.155662,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.056364,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.155662,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": -3.6020360678365773,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.072032,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.261072,
+      "modeNow": 1794321754.255869,
+      "modeElapsed": 18.98189346306026,
+      "heartbeatDt": 0.017985906451940536,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -94.75829489529133,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -9.666712760925293,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13464808464050293,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.155662,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.189164,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.155662,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": -9.666712979362684,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.205427,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.327758,
+      "modeNow": 1794321754.322869,
+      "modeElapsed": 19.0493307672441,
+      "heartbeatDt": 0.018475670367479324,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -104.87389052286744,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -16.476102828979492,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.13168692588806152,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.287349,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.288594,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.287349,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": -16.476102348671752,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.304248,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.394184,
+      "modeNow": 1794321754.390461,
+      "modeElapsed": 19.11659689154476,
+      "heartbeatDt": 0.018071496859192848,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -114.96380916796625,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -23.94959831237793,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.10022306442260742,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.387572,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.288594,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.387572,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": -23.949598805848275,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.304248,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.460243,
+      "modeNow": 1794321754.455908,
+      "modeElapsed": 19.18248314037919,
+      "heartbeatDt": 0.01802174374461174,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -124.84674649313092,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -31.9255313873291,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.10022306442260742,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.387572,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.390461,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.387572,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": -31.925531381925992,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.404685,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.526631,
+      "modeNow": 1794321754.522741,
+      "modeElapsed": 19.248944016173482,
+      "heartbeatDt": 0.01740168407559395,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -134.81587786227465,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -40.632240295410156,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1334209442138672,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.520993,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.390461,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.520993,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": -40.632241207500144,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.404685,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.592904,
+      "modeNow": 1794321754.590005,
+      "modeElapsed": 19.31562161166221,
+      "heartbeatDt": 0.01791338436305523,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -144.8175171855837,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -50.03422164916992,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "decisionDt": 0.1334209442138672,
+        "planned": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "status": "Alive",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "plannedAt": 1794321754.520993,
+        "finished": false,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "connected": true,
+        "decisionAt": 1794321754.520993,
+        "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "position": {
+          "y": -50.0342214568768,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "rawLife": 47,
+        "sessionLastMoveAt": 1794321754.538235,
+        "checkpoint": 4,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.66718,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.0179882999509573,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.83049392700195,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": false,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.724239,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.017112676054239273,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.791311,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.018010133877396584,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.856517,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.016985617578029633,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.922494,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.018423575907945633,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321754.973804,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.01605529524385929,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321755.039591,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.01800351031124592,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321755.107271,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.016003120690584183,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321755.172368,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.01702169142663479,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "at": 1794321755.222996,
+      "modeNow": 1794321754.656489,
+      "modeElapsed": 19.381870050914586,
+      "heartbeatDt": 0.01663859933614731,
+      "actor": {
+        "mounted": false,
+        "nativeLookVector": {
+          "z": 0,
+          "x": -1
+        },
+        "progress": 0,
+        "velocity": {
+          "y": -154.7547830734402,
+          "x": 0,
+          "z": 0
+        },
+        "nativePosition": {
+          "y": -59.864559173583984,
+          "x": 249.01513671875,
+          "z": -0.015907621011137962
+        },
+        "status": "Eliminated",
+        "modeActorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+        "connected": true,
+        "stock": 0,
+        "slot": 3,
+        "attempt": 4,
+        "grounded": false,
+        "modeInput": {
+          "at": 1794321754.522741,
+          "x": 0,
+          "run": false,
+          "z": 0
+        },
+        "anchored": true,
+        "checkpoint": 4,
+        "position": {
+          "y": -60.03502123012842,
+          "x": 249.0151331353679,
+          "z": -0.015907621085500968
+        },
+        "finished": false,
+        "rawLife": 0,
+        "nativeVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        }
+      }
+    }
+  ]
+}

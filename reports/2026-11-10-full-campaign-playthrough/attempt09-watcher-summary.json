@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "watcher": "campaign_traversal_late_attempt09",
+  "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+  "seed": 2104255637,
+  "build": "c1acc4659a262f4eaf489823bacc8f81169784dd47f033fcf3ec070ca7c6cbaa",
+  "serverStudioId": "4ad713f3-5dd7-4f42-af59-3358cbe0bb1f",
+  "status": "stopped_after_root_reported_terminal_and_child_disconnect",
+  "checkpointCount": 7,
+  "archiveCount": 3,
+  "lastMcpMetadata": {
+    "hero": {
+      "view": "Choice",
+      "connected": true,
+      "template": "Mr. Green",
+      "attempt": 4,
+      "userId": 1,
+      "connectionEpoch": 1,
+      "health": 0,
+      "status": "Eliminated",
+      "respawns": 0,
+      "retryReady": false
+    },
+    "policyLoads": 1,
+    "combat": {
+      "rawLife": 0,
+      "nextAttack": 1794310175.813464
+    },
+    "errors": [],
+    "expectedPlayers": 3,
+    "enemies": {
+      "-3": {
+        "kind": "GasTurret",
+        "position": {
+          "y": 56.999996185302734,
+          "x": 8.000128746032715,
+          "z": 7.999887466430664
+        },
+        "rawLife": 15
+      },
+      "-2": {
+        "kind": "Slug",
+        "dead": true,
+        "rawLife": 0
+      },
+      "-1": {
+        "kind": "SentryDrone",
+        "position": {
+          "y": 8.999999046325684,
+          "x": 8.000127792358398,
+          "z": -0.00011210505908820778
+        },
+        "rawLife": 15
+      }
+    },
+    "running": true,
+    "stages": [
+      {
+        "index": 1,
+        "rawLife": 47,
+        "attempt": 1,
+        "epoch": 1,
+        "at": 1794309744.894027,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:2",
+        "stock": 3,
+        "cohort": [
+          {
+            "attempt": 1,
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:2"
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:5"
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "causeway-1"
+      },
+      {
+        "index": 2,
+        "rawLife": 47,
+        "attempt": 1,
+        "epoch": 2,
+        "at": 1794309965.68784,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8",
+        "stock": 3,
+        "cohort": [
+          {
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "attempt": 4,
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Alive",
+            "stock": 0,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:173"
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "campaign-2"
+      },
+      {
+        "index": 3,
+        "rawLife": 47,
+        "attempt": 1,
+        "epoch": 3,
+        "at": 1794309989.062294,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8",
+        "stock": 3,
+        "cohort": [
+          {
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "campaign-3"
+      },
+      {
+        "index": 4,
+        "rawLife": 47,
+        "attempt": 1,
+        "epoch": 4,
+        "at": 1794310005.085448,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8",
+        "stock": 3,
+        "cohort": [
+          {
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "campaign-4"
+      },
+      {
+        "index": 5,
+        "rawLife": 47,
+        "attempt": 1,
+        "epoch": 5,
+        "at": 1794310018.552359,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8",
+        "stock": 3,
+        "cohort": [
+          {
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:8"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "campaign-5"
+      },
+      {
+        "index": 6,
+        "rawLife": 47,
+        "attempt": 2,
+        "epoch": 6,
+        "at": 1794310131.398818,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:191",
+        "stock": 2,
+        "cohort": [
+          {
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "attempt": 2,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 2,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:191"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "campaign-6"
+      },
+      {
+        "index": 7,
+        "rawLife": 47,
+        "attempt": 2,
+        "epoch": 7,
+        "at": 1794310153.447752,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:191",
+        "stock": 2,
+        "cohort": [
+          {
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "attempt": 2,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 2,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:191"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "campaign-7"
+      },
+      {
+        "index": 8,
+        "rawLife": 47,
+        "attempt": 2,
+        "epoch": 8,
+        "at": 1794310175.846637,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:191",
+        "stock": 2,
+        "cohort": [
+          {
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Eliminated",
+            "attempt": 4,
+            "stock": 0,
+            "rawLife": 0
+          },
+          {
+            "attempt": 2,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 2,
+            "rawLife": 47,
+            "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:191"
+          }
+        ],
+        "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+        "source": "campaign-8"
+      }
+    ],
+    "registeredPlayers": [
+      {
+        "name": "Player1",
+        "userId": -1
+      },
+      {
+        "name": "Player2",
+        "userId": -2
+      },
+      {
+        "name": "Player3",
+        "userId": -3
+      }
+    ],
+    "sampleCount": 450,
+    "build": "c1acc4659a262f4eaf489823bacc8f81169784dd47f033fcf3ec070ca7c6cbaa",
+    "groupId": "group-1",
+    "livePlayers": [
+      {
+        "name": "Player1",
+        "userId": -1
+      },
+      {
+        "name": "Player2",
+        "userId": -2
+      },
+      {
+        "name": "Player3",
+        "userId": -3
+      }
+    ],
+    "outerNotice": "REACTION",
+    "seed": 2104255637,
+    "cohort": [
+      {
+        "ownerUserId": -1,
+        "slot": 1,
+        "status": "Eliminated",
+        "attempt": 4,
+        "stock": 0,
+        "rawLife": 0
+      },
+      {
+        "ownerUserId": -2,
+        "slot": 2,
+        "status": "Eliminated",
+        "attempt": 4,
+        "stock": 0,
+        "rawLife": 0
+      },
+      {
+        "attempt": 4,
+        "ownerUserId": -3,
+        "slot": 3,
+        "status": "Alive",
+        "stock": 0,
+        "rawLife": 47,
+        "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:304"
+      }
+    ],
+    "navigation": {
+      "phase": "Walk",
+      "target": {
+        "y": 3,
+        "x": 703,
+        "z": 0
+      }
+    },
+    "current": {
+      "index": 8,
+      "slot": 3,
+      "attempt": 4,
+      "epoch": 8,
+      "plan": {
+        "x": 0,
+        "z": 1,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "runId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb",
+      "actorId": "01e2ae78-9301-47ad-9eaa-91a2bb7499fb:actor:304",
+      "position": {
+        "y": 54.649261474609375,
+        "x": -15.01950740814209,
+        "z": -5.945342063903809
+      },
+      "target": -3,
+      "stock": 0,
+      "stage": "Ascent",
+      "rawLife": 47
+    },
+    "body": {
+      "state": "Enum.HumanoidStateType.Dead",
+      "floor": "Enum.Material.Air",
+      "platformStand": false,
+      "anchored": false,
+      "velocityY": -445.21429443359375
+    }
+  },
+  "observerDisconnect": "Error: The requested `studio_id` is not connected — that Roblox Studio instance may have been closed or its place unloaded. Call `list_roblox_studios` for the current instances, then continue on the one the user confirms (or the one whose `name` matches).",
+  "outstandingOwnedExport": null,
+  "terminal": {
+    "source": "Parent agent report after direct terminal read",
+    "result": "Lost",
+    "index": 8,
+    "mode": "Ascent",
+    "lastBody": {
+      "x": -20.87,
+      "y": -45.83
+    },
+    "cohort": "All eliminated",
+    "fullTerminalArchive": "Parent retrieves automatic EndTest receipt09"
+  },
+  "interpretation": {
+    "scope": "Observed QA input failure; no campaign completion or handoff",
+    "cause": "Ascent pilot supplies zero X steering below Y95, so NPC/checkpoint lateral displacement is not recentered. Parent observed final lateral drift and fall.",
+    "productionRouteChanges": false,
+    "watcherGameOrPolicyChanges": false
+  },
+  "archiveFiles": [
+    "attempt09archive-001-20261110T112449Z.json",
+    "attempt09archive-002-20261110T112715Z.json",
+    "attempt09archive-003-20261110T112915Z.json"
+  ],
+  "cleanup": "Each immutable archive exported completely and only its owned snapshot StringValues/folder removed; no pending export at disconnect."
+}

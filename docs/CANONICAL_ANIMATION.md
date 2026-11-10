@@ -1,0 +1,89 @@
+# Canonical animation query domain
+
+`src/server/gameplay/CanonicalAnimation.lua` is a pure presentation profile. It reads no actor, game service or clock and applies no command effects. Runtime integration, reconstructed meshes and Studio visual acceptance remain separate. Its pinned source catalog and SHA-256 provenance are available through `provenance`; complete source family FSMs, canonical later-boss appearances and 3D velocity/proportion mapping remain unfinished.
+
+The current game runtime implements all thirteen campaign stages, real additional enemy families, a physical race rival and five later boss controllers. Those gameplay state machines do not imply a finished canonical animation transfer. `CampaignWorld` supplies procedural geometry for ordinary enemies, the rival, later bosses and mode objects; imported Green/Player Two and first-Guardian presentation retain the bindings below. The [course](../research/2026-11-09-campaign-courses.md), [enemy](../research/2026-11-09-campaign-enemies.md), [race](../research/2026-11-09-campaign-race.md) and [boss](../research/2026-11-09-campaign-bosses.md) notes separate source-backed mechanics from authored seconds, poses, effects and geometry. No claim of complete source animation, sound, device or natural full-campaign acceptance follows from those controllers.
+
+## Clip queries
+
+- `ids()` returns a frozen array of the 69 even animation IDs `0x02..0x8A`.
+- `describe(id, options?)` returns frozen metadata: source label/lines, `displayAdvances`, branch and deliberate label fall-through. Unknown IDs return `nil, 'UNKNOWN_ANIMATION'`.
+- `sampleAdvance(id, advance, options?)` returns `{animationId, branch, advance, frameId?, ended, events}`. Advances start at zero. Command parameters never become frames. A command-only clip may end at advance zero with events and no frame. A sample after the end has no frame or repeated commands.
+- `eventsBetween(id, previousExclusive, nextInclusive, options?)` returns frozen command markers in source order. Use `previousExclusive=-1` to include commands before the first display byte. Events include `kind`, `opcode`, frozen `params`, source byte offset, display advance and `appliesDamage=false`. An `E2 / HitOpportunity` marker does not confirm contact or apply a hit.
+
+`options.branch` is `Normal` by default. The verified alternative `DashLowLifeTail` is available only for animation `0x16`. It enters source byte `0x37`, after the normal stream's zero terminator, because the successful low-Life effect overrides the pointer to `0x36` and the source continuation then increments it. The tail displays `0x31×11`, then `0x23×4`. The query does not select this branch by inspecting or changing health; the authoritative caller selects it.
+
+## Explicit source clock
+
+`sampleClock(id, clock)` accepts this structure:
+
+```lua
+{
+    elapsedCalls = 0,             -- zero-based unpaused interpreter-call offset
+    callerMask = 1,               -- exactly 0, 1 or 3
+    firstFrameCounterPhase = 0,   -- required integer 0..callerMask
+    firstRead = 'Advance',        -- 'Advance' or 'Read'
+    branch = 'Normal',
+}
+```
+
+`Advance` models entry through `start_read_anim`: increment the byte pointer when `(FrameCounter & mask)==0`, then read. `Read` models a first read through `read_obj_anim` without that initial increment; subsequent calls use the supplied mask. `DashLowLifeTail` forces first-read mode `Read`, matching the immediate successful-effect continuation. The first global counter phase is required rather than guessed. `callerMask('Hero')=1`, `callerMask('Pig')=3`, `callerMask('TallWalker')=0`, `callerMask('Dragon')=3`; remaining callers return `UNKNOWN_CALLER` until traced.
+
+The result contains the current source `frameId`, source byte offset, end state and **only the command events consumed on that call**. To retain markers when rendering skips source calls, iterate the elapsed call interval; do not sample only its endpoint and assume intermediate commands replay. Later end samples carry no repeated termination events. Queries are bounded to `0..4096` calls and cache immutable schedules. Invalid clock data fails explicitly. Entering an unverified source context can return `UNKNOWN_OPCODE` or `SOURCE_BOUNDS`; it must not be treated as a newly invented pose.
+
+This clock executes only byte-pointer/command-length logic. It never executes speed, link, hit, sound, weapon creation or cancellation effects. Actual B hold/cancel paths, contact-triggered pointer overrides, lag/PCM/PAL timing and complete caller FSMs need their own verified integration. Literal source frame values may also need caller postprocessing: Tall Walker drives articulated components, and some boss callers OR a high bit before rendering.
+
+## Locomotion selectors
+
+`heroFrame(state, input?)` returns one verified source frame or an explicit error. Supported states are `Idle` (`blink` optional), `Walk`, `Run`, `CarryWalk`, `DepthWalk` (`phase` is an explicit zero-based cycle position), `CarryIdle`, and `Air`.
+
+For `Air`, `holding=true` chooses `0x2E`; otherwise an integer `zSpeedRaw` in signed-byte or byte form is required. Unsigned `(zSpeedRaw+2)%256 < 5` chooses the apex frame `0x2D`, otherwise `0x05`. Mapping Roblox vertical velocity into source raw speed is an integration decision, not performed here. Selecting `Run` is also the caller's responsibility; this helper does not claim the source's complete two-player speed/floor gait selector is reproduced in a three-player 3D scene.
+
+`dragonFrame(state, input?)` supports `Locomotion`, `Disabled`, `LightReaction`, `Attack` and `Capture`. Normal cycle positions yield `09,09,0A,0A`; `approaching=true` with nonzero `zSpeedRaw` chooses `09`. Disabled selects `0A`; a light reaction `timerRaw>=0x26` selects `0C`, later reaction uses the normal cycle. Attack/capture selects `0B`. These are **final Dragon caller frames**, replacing the shared bird helper's intermediate `1C/1D/1E` values.
+
+## Boss Walker intro
+
+`bossWalkerIntro(counter)` requires the already incremented source counter `1..0xFF` and returns presentation facts: fear assignment/frame/pointer mask, foot frame/motion, stomp, camera cut and end state. `bossWalkerEventsBetween(previousExclusive, counterInclusive)` covers skipped updates and returns the two stomp markers (`0x30/0x64`), foot motion start (`0x50`), arena cut (`0xE0`) and end (`0xFF`).
+
+`fearAnimation` is a **write request**, not a complete actor state: source animation `2C` is written through `DF`, nothing is assigned on the `E0` camera-cut branch, and `2E` is written from `E1` through `FE`. A nil assignment at `E0` or `FF` does not clear existing fear; the last clip can finish naturally. `clearExistingFear` remains false. The source masks its pointer with 7, drops a stick and unlinks carried objects; the profile reports those facts without performing them. The camera setup is a 2D perspective cut and must not be used as literal Roblox world coordinates. No health reset, new shield or damage effect is emitted. The source helper covers two hero slots; applying its presentation to a third hero is an explicit adaptation.
+
+## First-route runtime binding
+
+`BossIntro` now owns a finite, party-scoped intro between guardian readiness and active `Boss`. Its identity captures run/level and the living hero actor identities. It starts at counter `1`, advances on a local 60 Hz clock, consumes skipped source markers, and activates the existing guardian pattern only at `FF` (nominal 4.25 seconds). Run end/replacement and explicit cancellation clear the presentation. New bodies cannot inherit the captured hero's fear state. Applying the two-slot source reaction to three heroes is an explicit cooperative adaptation.
+
+At `E0`, runtime retains the preceding fear `32` assignment; `E1` selects `33`. Runtime releases its cosmetic fear context at `FF` rather than emulating the source animation pointer's final natural tail. This boundary and the fixed local clock are adaptation: the runtime does not reproduce the recurring `Anim_Ptr & 7` interpreter, exact global source phase, Z impulses, PCM/lag or PAL duration. Existing held-club/carried-object release uses the accepted item lifecycle. The intro creates no damage, health reset, invulnerability or total input lock.
+
+With a valid `BossWalkerIntroLeg` resource, `BossIntroWorld` supplies three anchored, noncolliding props: one imported slender red `IntroLeg12` mesh and two reused impact markers. The source graphic `12` silhouette informs the mesh; its depth, raised details and motion path are authored. The earlier 16-part broad boot proxy remains the fallback for an invalid or missing runtime resource. Metadata, mesh children and origin attachments are validated before cloning. The party's replicated intro context drives the client's finite view and `E0` camera cut; stale run/level, other-party, free-camera and ended contexts release/decline that view. Original music and impact sounds are not implemented.
+
+Four uploaded head resources bind graphics `32/33` to `FearBeforeCut`/`FearAfterCut` for Green and Player Two. They replace the cosmetic Head at its authored Neck attachment and retain the existing physical body. The current [manifest](../assets/characters/canonical-hero/roblox-fear-morphs.json) uses private Model 127590624870763 and atlas 96845591138258 from [hero-fear-wide-mouth.glb](../assets/characters/canonical-hero/hero-fear-wide-mouth.glb): 8,712,432 bytes, SHA-256 `e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1`.
+
+The mouth's nominal opening is 4.73 studs high, about 3.02×/3.48× the former Green BeforeCut/AfterCut height, with widths 1.27/1.65 studs. The chin reaches neck Y−4.24, about four studs farther down; the eyes/skull stay near normal head height. This asset change leaves source `32/33`, counters, source poses and runtime logic unchanged. All seven earlier GLBs remain unchanged, including Boss Walker and the smaller fear package from Model 94539676546833. [Current asset notes](../assets/characters/canonical-hero/hero-fear-wide-mouth-README.md) describe the authored cavity/depth/neck geometry; [earlier asset notes](../assets/characters/canonical-hero/README-hero-fear-morphs.md) retain the previous package's measurements. Complete source whole-body shapes and Z mapping remain unfinished.
+
+## Active Guardian appearance
+
+`GuardianAppearance` binds the three imported `GuardianChassis`, `GuardianLeftCannon` and `GuardianRightCannon` meshes to the existing physical root. Three cosmetic Motor6Ds preserve the imported Y180 rest rotations through source mount attachments; two muzzle-flash parts and their welds are assembled before manual server ownership. No parts or joints are created during shot or damage playback. The accepted `GuardianPattern` shot hook alternates barrel recoil/flash for `Bullet` and `Heavy`; generic `cue(true)` also serves blocked melee and is not a firing signal. Health fraction decreases tint the saved MeshPart and optional SurfaceAppearance colors, then restore them. Cleanup restores hidden physical-body visibility and removes the cosmetic assembly.
+
+The source recoil counter is 7; its conversion to 7/60 seconds, displacement, flash and hurt tint are authored Roblox presentation. Camera-relative cannon graphic `10` is verified, while the compact whole chassis, rear anatomy, 3D cross section and material are authored reconstruction. Reticle `11` and cracked-glass `C7` remain unimplemented camera/HUD effects. This binding changes no projectile origin, damage, health, controls, intro timing or ownership.
+
+Private Model 103948186317063, atlas 90154814086213 and [boss-walker-roblox.json](../assets/characters/canonical-hero/boss-walker-roblox.json) supply `ServerStorage.BrickToadsBossTemplates/BossWalkerGuardian` and `BossWalkerIntroLeg`. Strict packaging checks actual GLB provenance, native mesh extents, visible geometry, exact children, root mount/muzzle axes, side and forward clearance before serializing the imported texture and Metal material. [Asset notes](../assets/characters/canonical-hero/boss-walker-README.md) and [prepared native evidence](../reports/2026-11-09-guardian-visuals/README.md) separate source facts, adaptation and acceptance limits.
+
+## Verification and regeneration
+
+Run `.tools/luau-0.745/luau.exe tests/run_canonical_animation.luau` for the native contracts. The generated literal can be checked without writes using `.tools/python-3.13.9/python.exe research/generate_canonical_animation_data.py --check`, or regenerated by omitting `--check`. It comes from the checked-in [catalog](../research/2026-11-09-canonical-character-animation-catalog.json), whose read-only extractor verifies four pinned source hashes. No engine acceptance is implied by these commands.
+
+## Current hero3D binding
+
+`CanonicalHeroPresentation` now selects idle/walk/run, the seven traced hero actions and the first-route fear `32/33` context for a tagged cosmetic rig. `GameWorld:updatePresentation` supplies accepted server attack identity/timestamps, movement and interruption state; each appearance owns its own sequence. `CharacterAppearance` applies all14 joint targets in the authored attachment frame (`base * delta`), preserving imported rotated MeshPart rest axes. Reactions, death, carry, club, Dragon and airborne states cancel the source sequence and retain existing fallback presentation. Equipped clubs bind to the actual canonical hand rather than the hidden R6 arm.
+
+Source graphics order comes from `CanonicalAnimation`; the authored radians,1.25 studs per gait phase and local60 calls/s, mask1, phase0/Read attack clock are3D adaptation. Source E2 markers remain inert. Eight strict private morph resources preassemble 19 cosmetic meshes and 19 motors, alongside the six physical-body motors. Graphics1C/1E use enlarged limbs; fear32/33 use heads only. Complete fear-body silhouettes, remaining morph geometry, full caller/low-Life branching and remaining family states are unfinished. Native presentation, rotated-rest and world-context tests remain in `tests/run_canonical_hero_presentation.luau` and `tests/canonical_hero_presentation/run.py`; Guardian binding contracts are in `tests/guardian_appearance/run.py`.
+
+The earlier mouth-asset checkpoint passed 47 validation commands and compilation of 126 Luau files: 9 Guardian appearance, 16 intro asset, 14 Guardian pattern, 4 Guardian session and 31 builder contracts passed. Its 42 embedded scripts had source fingerprint `d6ada582f21045fc2035b5a81bc6ff97ae32be427f8af521df04aaa6c8e03923`; that saved playable was 777566 bytes, SHA-256 `43657a454e90539db5e3e6d44aae701953fb3c35475d7416a89d9f838028cccf`. These receipts belong to that presentation snapshot, not the newer campaign build. The [retained saved-file evidence](../reports/2026-11-09-fear-mouth-proportions/README.md) repeats the prepared real Session/Director Guardian encounter and confirms both heroes select the new `32/33` assets, restore original cosmetic heads and preserve HP 37/100, attempt 1 and respawns 3 through Life `47→31→15→0` and Exit.
+
+Final serialized float32 GLB vertices were transformed by the actual native Neck CFrames in each fear pose. With the prepared floor at world Y0, the minimum world Y values were:
+
+| Hero | BeforeCut32 | AfterCut33 |
+| --- | ---: | ---: |
+| Green | 0.2887868 | 0.6074063 |
+| Player Two | 0.2814567 | 0.5990034 |
+
+These measurements establish that the jaw reaches nearly to the feet while remaining above the floor in those poses. Separate loaded native Edit front/three-quarter poses additionally confirmed visible cavity/torso fit; the saved inspection captures are not ordinary gameplay footage. Positions, support and time were prepared. The [preceding Guardian checkpoint](../reports/2026-11-09-guardian-visuals/README.md) retains its 777545-byte receipt, loaded intro/battle meshes, accepted shots, blocked melee, damage and party-isolation evidence; its Edit textures loaded after warmup. Cold loading, physical devices, a normal human full-campaign run, complete canonical character/animation coverage and production readiness remain unverified. The [earlier fear/camera checkpoint](../reports/2026-11-09-boss-appearance/README.md) retains its separate three-hero, interruption and camera evidence.

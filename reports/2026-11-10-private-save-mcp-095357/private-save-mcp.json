@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "operation": "Authorized private save without publishing",
+  "studioId": "d20f44d3-c33f-4e42-9ad6-a19be316ea58",
+  "target": {
+    "placeId": 117412694427208,
+    "universeId": 10775039796
+  },
+  "preflight": {
+    "studioMode": "Edit",
+    "running": false,
+    "qaArtifactsAbsent": true,
+    "qaArtifacts": [],
+    "qaSourceAppendAbsent": true,
+    "serverSourceLength": 7045,
+    "clientSourceLength": 89547,
+    "climbingFixPresent": true,
+    "buildSourceSha256": "19d30b64738cf3858e2a33ffea07a381fda8b093a4e850b44751c646e1e19bf9",
+    "universeVisibility": "PRIVATE",
+    "universeReadStatus": "200 OK"
+  },
+  "attemptCount": 1,
+  "request": {
+    "service": "AssetService",
+    "method": "SavePlaceAsync",
+    "parameters": {
+      "PlaceId": 117412694427208,
+      "SaveWithoutPublish": true
+    },
+    "datamodel_type": "Edit"
+  },
+  "result": {
+    "at": "2026-11-10T09:53:57Z",
+    "universeId": 10775039796,
+    "method": "AssetService:SavePlaceAsync",
+    "attempted": true,
+    "success": false,
+    "placeId": 117412694427208,
+    "error": "Game:SavePlace can only be called from a server script, aborting save function",
+    "SaveWithoutPublish": true
+  },
+  "persisted": false,
+  "followUp": "Stopped after documented call rejected its execution context. No retry, context workaround, UI action, public publication, or operation on the separate multiplayer QA server."
+}

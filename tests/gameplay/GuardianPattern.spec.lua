@@ -72,6 +72,17 @@ return function(GuardianPattern)
         return pattern,d,world,session,events,step,ground
     end
 
+    test('cosmetic cannon hook follows successful projectiles and never blocked melee or invalid spawns',function()
+        local pattern,d,w=fixture();local shots={}
+        function w:bossShot(mode)shots[#shots+1]=mode end
+        d.now=2
+        eq(pattern:fire({x=-1,z=0}),'OK');eq(#shots,1);eq(shots[1],'Bullet')
+        eq(pattern:hit(1,-99,'Punch'),true);eq(#shots,1)
+        w.noGround=true;eq(pattern:_spawn('Heavy',{x=-1,z=0}),false);eq(#shots,1)
+        w.noGround=nil;eq(pattern:_spawn('Heavy',{x=-1,z=0}),true);eq(#shots,2);eq(shots[2],'Heavy')
+        eq(d.enemies[-99].rawLife,47);eq(d.enemies[-99].health,3);eq(d.enemies[-99].ownerUserId,99)
+    end)
+
     test('finite Heavy phase gives idle disconnected human a ground ball without replacing ownership',function()
         local _,d,w,s,_,step=fixture(); d.enemies[-99].connected=false
         step(7.999,0); eq(count(d.projectiles),0)
@@ -111,13 +122,13 @@ return function(GuardianPattern)
         local p,d,w,s,_,_,ground=fixture(); local id=ground(8)
         local h=s.state.heroes[1]; local shield=h.shield; local raw=s.combat[1].rawLife
         local interaction=p:interaction(1)
-        eq(interaction.available,true); eq(interaction.label,'ВЗЯТЬ ШАР'); eq(interaction.carrying,false)
+        eq(interaction.available,true); eq(interaction.label,"PICK UP BALL"); eq(interaction.carrying,false)
         eq(p:interact(1,12),'OK'); eq(p:interact(2,12),'NO_INTERACTION')
         eq(d.projectiles[id].mode,'Carried'); eq(d.projectiles[id].holder,1)
         eq(h.shield,shield); eq(h.health,5); eq(h.respawns,3); eq(s.combat[1].rawLife,raw)
         eq(s.attacks,0); eq(w.holds[1],nil)
         local carrying=p:interaction(1)
-        eq(carrying.available,true); eq(carrying.label,'БРОСИТЬ ШАР'); eq(carrying.carrying,true)
+        eq(carrying.available,true); eq(carrying.label,"THROW BALL"); eq(carrying.carrying,true)
     end)
 
     test('pickup requires server distance height and a living connected non-dying hero',function()

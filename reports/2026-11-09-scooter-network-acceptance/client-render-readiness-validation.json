@@ -1,0 +1,36 @@
+{
+  "scope": "Test-driver startup readiness and diagnostics only. Deterministic actual-source doubles do not prove Roblox scheduling or gameplay correctness.",
+  "productionSourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+  "clientSha256": "01e7d568234d19fe8ad23eabb37c0ebfe89e83c7991066e524ab6a26994c6e29",
+  "runnerSha256": "2c247eaee69ceb73907272326e3c21dbe3c202c4e7b00543f594e58bdde6d83f",
+  "compile": {
+    "runtime": "Native Luau 0.745",
+    "exitCode": 0
+  },
+  "regression": {
+    "exitCode": 0,
+    "stdout": "queued-state: PASS\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=1 kind=Menu\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=1 ok=true\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReadySent commandListenerReady=true renderFrameCount=2\nready=1 discarded=0 menuReceived=1 replies=1\nlater-state: PASS\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient CommandReceived id=1 kind=Menu\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReplySent id=1 ok=true\n[BT-SCOOTER-NETWORK-CLIENT] ActualTestClient ReadySent commandListenerReady=true renderFrameCount=2\nready=1 discarded=0 menuReceived=1 replies=1\n",
+    "assertions": [
+      "No Ready before two RenderStepped callbacks",
+      "No Ready without first ordered production State",
+      "Command listener available when first Ready is published",
+      "Exactly one Ready",
+      "Production Menu group envelope preserved",
+      "No invented server acceptance",
+      "Small Heartbeat records at most once per second"
+    ]
+  },
+  "observedClientLog": {
+    "file": "0.746.0.7461269_20261109T150348Z_Studio_4E530_last.log",
+    "player": "Player1",
+    "events": [
+      "15:04:31.889Z ReadySent commandListenerReady=true",
+      "15:04:34.572Z CommandReceived id=1 kind=Menu",
+      "15:04:34.573Z ReplySent id=1 ok=true",
+      "15:04:35.676Z RenderJobMode Manual -> None",
+      "15:04:43.058Z StudioHangMonitor MainThreadHangs",
+      "15:04:43.225Z RenderJobMode None -> TaskScheduler"
+    ],
+    "interpretation": "Client was still completing Studio UI/render/plugin startup after the first command. The driver has no self-disable, self-destroy or focus gate. Missing id4 is an unresolved native delivery/scheduling failure; heartbeat and render readiness provide the next run evidence."
+  }
+}

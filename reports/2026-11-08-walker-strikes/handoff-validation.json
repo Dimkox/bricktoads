@@ -1,0 +1,377 @@
+{
+  "date": "2026-11-08",
+  "implementation_head": "4f10421470bbb1b09f75a6d1007ebaa351810ceb",
+  "base_head": "d474ca0a4d8cfedba5c49d55f68671d879a25e0f",
+  "luau_version": "0.745",
+  "luau_archive_sha256": "186e5ddaa2b048ebc7390c11ed1b00c04e7d3beaffed429250329e3575d2ece2",
+  "commands": [
+    {
+      "command": [
+        "luau",
+        "tests/run.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS server clock cannot move backwards",
+        "PASS safe relocation wins a serialized race without double spending",
+        "PASS death cancels a prepared emergency replacement",
+        "PASS attack cancels a prepared emergency replacement",
+        "PASS 120 deterministic life-cycle sequences preserve invariants",
+        "RESULT: 46 passed; 0 failed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_stand.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS game sessions accept explicit group and level identities without changing stand defaults",
+        "PASS contextual object action runs only after actor authority and cooldown checks",
+        "PASS trusted contextual action may extend cooldown while client Club remains invalid",
+        "PASS heavy reaction history survives recovery while a light hit has no heavy epoch",
+        "Session tests: 42 PASS, 0 FAIL",
+        "PASS native Luau stand contracts; engine physics NOT RUN"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_connections.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS binding returns a damaged live hero without healing or a new appearance",
+        "PASS binding replacement does not cancel an already accepted attack",
+        "PASS binding preserves current life, actor, reserve and both shield deadlines",
+        "PASS binding reconnects an offline dead hero with exactly one successful respawn",
+        "ConnectionRegistry tests: 18 PASS, 0 FAIL",
+        "PASS native Luau connection contracts; actual same-account transport NOT RUN"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_gameplay.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS boss gateway validates sender and exact invitation payloads",
+        "PASS boss invitation expires into NPC once and a late reply never replaces it",
+        "PASS dead guardian releases its assignment without restoring its body or queue",
+        "PASS ready owner disconnects before guardian spawn without creating a false online controller",
+        "GameController: 37 PASS",
+        "PASS spectator targets retain zero-health and offline living heroes; skip eliminated dying absent actors"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_boss_queue.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS close clears the assignment without requeue and keeps later users waiting",
+        "PASS close at assignment expiry removes its owner without consuming the next candidate",
+        "PASS stale server timestamps cannot reopen an expired invitation",
+        "PASS private views cannot mutate queue order or the active assignment",
+        "PASS invalid operations return errors without consuming another players invitation",
+        "BossQueue: 20 passed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_groups.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS shared guardian FIFO targets each group and accepting moves only the invited observer",
+        "PASS waiting survives observer switches and a created lobby stays spectator until Hero selection",
+        "PASS same-run eliminated hero is excluded only from that groups guardian slot",
+        "PASS failed ordinary claims preserve global waiting and success cancels its invitation",
+        "PASS one global token bucket prevents group hopping from resetting intent limits",
+        "MatchHub: 11 passed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_level_route.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS modern flying shots cannot be reflected and final exit needs guardian defeat",
+        "PASS lost run closes the route before later districts spawn",
+        "PASS route activates its two then four flies and clears them on closure",
+        "PASS production grab preserves a human Pig body then throws through its existing health and command guards",
+        "PASS combat Walker death creates one club and actual boss introduction frees weapon hands",
+        "LevelRoute: 10 passed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_guardian.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS direct attacks cannot bypass the thrown-ball rule and IDs remain unique",
+        "GuardianPattern: 13 passed",
+        "PASS actual Session pickup retains normal shield/resources and throw clears it before flight",
+        "PASS stale actor cannot pick up and actual death never transfers held ball to a new appearance",
+        "PASS actual Session throw survives small flight steps without hurting or stunning its owner",
+        "GuardianSession: 3 passed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_healing_flies.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS catch respects cooldown and consumes a repeated packet at most once",
+        "PASS BeginAttack removes respawn protection before tongue effect without spending another reserve",
+        "PASS failed authoritative health event neither consumes food nor changes raw Life",
+        "PASS later zones activate once and another run has independent food",
+        "PASS closing a run cancels pending tongues and removes its remaining visuals",
+        "HealingFlies: 15 passed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_enemy_carry.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS physical hazards kill an existing held or thrown enemy through its one death path",
+        "PASS failed BeginAttack creates no pending link or takeover engagement",
+        "PASS an accepted grab clears normal respawn protection before its delayed effect without another reserve",
+        "PASS stale or client-selected target intents cannot enter the grab shortcut",
+        "PASS closing clears held flight and pending states idempotently without spawning or damage",
+        "EnemyCarry: 24 passed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_walker_clubs.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS old target context or an expired effect window cannot replay a swing",
+        "PASS boss introduction drops current equipment once while a later ball-hand release can drop a repickup",
+        "PASS existing R-heavy action is not converted into a club swing",
+        "PASS schema and sequence validation reject client Club targets damage and repeated swings",
+        "PASS clubs and equipment stay independent between directors and closed runs clear all visuals and effects",
+        "WalkerClubs: 23 passed"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_pig_strikes.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS running decisions are gated by depth, target validity and a bounded random cadence",
+        "PASS claiming an unengaged running Pig stops its approach without changing body or health",
+        "PASS an invalid running target clears rush before the melee action is chosen",
+        "PASS other species retain their existing attack and client schema cannot supply a trusted Pig action",
+        "PASS Pig skips a heavy-reacting nearest hero while light reaction can select the heavy standing branch",
+        "PigStrikes: 15 PASS"
+      ]
+    },
+    {
+      "command": [
+        "luau",
+        "tests/run_walker_strikes.luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS incoming damage cancels a Walker windup before it can hit",
+        "PASS combat death during a windup emits exactly one existing club and never a duplicate strike",
+        "PASS physical death during a windup cancels the effect without granting a safe club",
+        "PASS a retreating unengaged Walker can be claimed without healing or replacing its body",
+        "PASS Pig standing/running and legacy ordinary profiles remain independent of Walker configuration",
+        "WalkerStrikes: 16 PASS"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tests/group_world/run.py",
+        "--luau",
+        "luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS ground clubs are independent noncolliding original item models with one group translation",
+        "PASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing",
+        "PASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset",
+        "PASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation",
+        "PASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption",
+        "PASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_stand_gateway.py",
+        "--luau",
+        "luau"
+      ],
+      "exit": 0,
+      "summary": [
+        "PASS both protection deadlines and hold survive replacement without renewal",
+        "PASS already accepted attack survives owner replacement and resolves once",
+        "PASS offline death waits and returns with exactly one successful respawn",
+        "PASS new owner receives new epoch and rejects the prior epoch",
+        "PASS late different user is a spectator without a replacement role",
+        "Gateway contracts: 14 PASS, 0 FAIL; fake transport, NOT real reconnect"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_build.py"
+      ],
+      "exit": 0,
+      "summary": [
+        "test_sources_are_exact_and_server_only (__main__.BuildTests.test_sources_are_exact_and_server_only) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 3 tests in 0.004s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_bricktoads_place.py"
+      ],
+      "exit": 0,
+      "summary": [
+        "test_spawn_is_above_a_collidable_anchored_floor (__main__.BrickToadsPlaceTests.test_spawn_is_above_a_collidable_anchored_floor) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 7 tests in 0.025s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_combat_stand.py"
+      ],
+      "exit": 0,
+      "summary": [
+        "test_verified_core_unchanged (__main__.StandBuildTests.test_verified_core_unchanged) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 7 tests in 0.007s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py"
+      ],
+      "exit": 0,
+      "summary": [
+        "/workspace/scratch/0a367f1aa9f4/bricktoads/places/BrickToadsPlayable.rbxlx: 342918 bytes; sha256=275b4fab2758a107f0e1769f9c66f5859c78a99ffc56c6532ee4be70796a89bf"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py",
+        "--check"
+      ],
+      "exit": 0,
+      "summary": [
+        "/workspace/scratch/0a367f1aa9f4/bricktoads/places/BrickToadsPlayable.rbxlx: 342918 bytes; sha256=275b4fab2758a107f0e1769f9c66f5859c78a99ffc56c6532ee4be70796a89bf"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py"
+      ],
+      "exit": 0,
+      "summary": [
+        "/workspace/scratch/0a367f1aa9f4/bricktoads/build/CombatStand.rbxlx: 65918 bytes; sha256=4eef58eb60fcf6f7bd710fb3bc9dd7a2f11010e03493170f7e0ce978fdb9a931"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py",
+        "--check"
+      ],
+      "exit": 0,
+      "summary": [
+        "/workspace/scratch/0a367f1aa9f4/bricktoads/build/CombatStand.rbxlx: 65918 bytes; sha256=4eef58eb60fcf6f7bd710fb3bc9dd7a2f11010e03493170f7e0ce978fdb9a931"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_test_place.py"
+      ],
+      "exit": 0,
+      "summary": [
+        "/workspace/scratch/0a367f1aa9f4/bricktoads/build/LifecycleTests.rbxlx: 36562 bytes; sha256=495baac5a990f358525ac9ec40b30ccde1cdbbb0ac40d6156898874258db5e4f"
+      ]
+    }
+  ],
+  "compilation": {
+    "compiledSourceAndTests": 64,
+    "compiledTools": 2,
+    "failures": []
+  },
+  "playable": {
+    "path": "places/BrickToadsPlayable.rbxlx",
+    "bytes": 342918,
+    "sha256": "275b4fab2758a107f0e1769f9c66f5859c78a99ffc56c6532ee4be70796a89bf"
+  },
+  "github_ci_on_implementation_head": [
+    {
+      "name": "BrickToads checks",
+      "status": "success",
+      "url": "https://github.com/Dimkox/bricktoads/actions/runs/42472587598"
+    },
+    {
+      "name": "Combat stand checks",
+      "status": "success",
+      "url": "https://github.com/Dimkox/bricktoads/actions/runs/42472587581"
+    },
+    {
+      "name": "GitGuardian Security Checks",
+      "status": "success",
+      "url": "https://github.com/Dimkox/bricktoads/runs/128706631959"
+    }
+  ],
+  "independent_review": {
+    "base": "d474ca0a4d8cfedba5c49d55f68671d879a25e0f",
+    "head": "4f10421470bbb1b09f75a6d1007ebaa351810ceb",
+    "actionable_findings": [],
+    "reviewer_ran_tests": false,
+    "test_execution": "The coordinating session independently ran the listed 23 commands; the reviewer inspected sources and existing coverage."
+  },
+  "not_run_in_this_continuation": [
+    "Roblox Studio engine acceptance",
+    "Separate NPC-heavy engine scenario",
+    "Full unprepared combat level",
+    "Physical phone/tablet acceptance",
+    "Actual same-account reconnect"
+  ],
+  "production_files_changed_in_this_continuation": false
+}

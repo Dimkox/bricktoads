@@ -1,0 +1,150 @@
+{
+  "at": "2026-11-10T19:27:55.354057+00:00",
+  "status": "REJECTED_liveness_unproven_originals_restored",
+  "scope": "Rejected QA Pig spacing hint and margin candidate; no production/client/Studio changes",
+  "hashes": {
+    "baseline-combat.lua": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38",
+    "baseline-bridge.lua": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add",
+    "candidate-combat.lua": "cb44211da82b85a9d9ee815576b15aa5a59841aa0cc32c8e0775171856005c28",
+    "candidate-bridge.lua": "74c59dc75f263b8bb22aab3853bac63dd8275be560b1bbee81252194bd0a5132"
+  },
+  "checks": [
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\probe-baseline.luau"
+      ],
+      "exit": 1,
+      "expectedExit": 1,
+      "log": "composition-red.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\probe-current.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "composition-green.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\baseline-session-envelope.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "session-baseline.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\candidate-session-envelope.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "session-candidate.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\probe-gates.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "gates.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\regression-bridge-26.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "bridge-26.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\regression-dragon-146.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "dragon-146.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\regression-guardian-10.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "guardian-10.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\regression-stepoff-26.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "stepoff-26.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau.exe",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\probe-closed-loop.luau"
+      ],
+      "exit": 1,
+      "expectedExit": 1,
+      "log": "closed-loop-red.txt"
+    },
+    {
+      "command": [
+        ".tools\\luau-0.745\\luau-compile.exe",
+        "--null",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\candidate-combat.lua",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\candidate-bridge.lua",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\probe-current.luau",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\candidate-session-envelope.luau",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\probe-gates.luau",
+        "reports\\2026-11-10-qa-pig-spacing-interior\\probe-closed-loop.luau"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "log": "compile.txt"
+    }
+  ],
+  "conditionalSessionResults": {
+    "baselineRed": 2,
+    "baselineGreen": 1,
+    "candidateGreen": 3,
+    "candidateRed": 0
+  },
+  "closedLoop30s": {
+    "pigLife": 15,
+    "pigDead": false,
+    "acceptedPrimary": 2,
+    "heroHits": 19,
+    "heroLife": 47,
+    "effectiveEnemyDamage": 0
+  },
+  "limits": [
+    "Prepared Pig remains2.8studs diagonallyrelative tohero in conditional envelope; not retained nativeNPC trajectory",
+    "Fixedacceptedcontactimposed with realSession/profile18; mappedground/Humanoidboundary, noengineparity",
+    "Baseline80msdeliveryalreadyGREEN; not exactnative replay",
+    "Reservedinsetmayreverseorstopspacing; actual source corner has zeroMove before primary",
+    "ActualDirector/NPC closed-loop has no imposedhit or q-follow but mappedground and preparedlook remain nonnative; failed to establish combat progress",
+    "NochangedTinyFacepriority, flights, runprimary oracceptedholdguards"
+  ],
+  "atFreeze": "2026-11-10T18:25:44.018818+00:00",
+  "atFreezeRestorationHashes": {
+    "tools/qa/campaign_combat_pilot.lua": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38",
+    "tools/qa/full_campaign_bridge.server.luau": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add"
+  },
+  "reproductionBindings": "Pinned baseline BFB/97, pinned rejected candidate and retained probes; current working QA is not the historical policy under test",
+  "workingQAHashes": {
+    "tools/qa/campaign_combat_pilot.lua": "4f1d67ebec451fa545eaea1e9baa58c6d1a071c7fa274845c42c5f7e41462129",
+    "tools/qa/full_campaign_bridge.server.luau": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add"
+  }
+}

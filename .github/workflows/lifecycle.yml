@@ -22,7 +22,14 @@ jobs:
           curl --fail --location --retry 2 --output /tmp/luau.zip https://github.com/luau-lang/luau/releases/download/0.745/luau-ubuntu.zip
           echo '186e5ddaa2b048ebc7390c11ed1b00c04e7d3beaffed429250329e3575d2ece2  /tmp/luau.zip' | sha256sum --check
           unzip -q /tmp/luau.zip -d /tmp/bricktoads-luau
-          chmod +x /tmp/bricktoads-luau/luau
+          chmod +x /tmp/bricktoads-luau/luau /tmp/bricktoads-luau/luau-compile
+      - name: Compile source and tests without executing engine APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          find src tests \( -name '*.lua' -o -name '*.luau' \) -print0 | while IFS= read -r -d '' file; do
+            /tmp/bricktoads-luau/luau-compile "$file" > /dev/null
+          done
       - name: Native Luau contract tests
         run: /tmp/bricktoads-luau/luau tests/run.luau
       - name: Playable game contracts
@@ -31,17 +38,76 @@ jobs:
           /tmp/bricktoads-luau/luau tests/run_boss_queue.luau
           /tmp/bricktoads-luau/luau tests/run_groups.luau
           /tmp/bricktoads-luau/luau tests/run_level_route.luau
+          /tmp/bricktoads-luau/luau tests/run_level_variation.luau
+          /tmp/bricktoads-luau/luau tests/run_level_traversal.luau
+          /tmp/bricktoads-luau/luau tests/run_route_driver_navigation.luau
+          /tmp/bricktoads-luau/luau tests/run_movement_input.luau
+          /tmp/bricktoads-luau/luau tests/run_running_combat.luau
           /tmp/bricktoads-luau/luau tests/run_guardian.luau
           /tmp/bricktoads-luau/luau tests/run_healing_flies.luau
           /tmp/bricktoads-luau/luau tests/run_enemy_carry.luau
           /tmp/bricktoads-luau/luau tests/run_walker_clubs.luau
           /tmp/bricktoads-luau/luau tests/run_pig_strikes.luau
+          /tmp/bricktoads-luau/luau tests/run_walker_strikes.luau
+          /tmp/bricktoads-luau/luau tests/run_dragon_strikes.luau
+          /tmp/bricktoads-luau/luau tests/run_dragon_flight.luau
+          /tmp/bricktoads-luau/luau tests/run_source_combat.luau
+          /tmp/bricktoads-luau/luau tests/run_journal.luau
+          /tmp/bricktoads-luau/luau tests/run_feedback.luau
+          /tmp/bricktoads-luau/luau tests/run_localization.luau
+          /tmp/bricktoads-luau/luau tests/run_canonical_animation.luau
+          /tmp/bricktoads-luau/luau tests/run_canonical_walker.luau
+          /tmp/bricktoads-luau/luau tests/run_canonical_hero_presentation.luau
+          /tmp/bricktoads-luau/luau tests/run_boss_intro.luau
+          /tmp/bricktoads-luau/luau tests/run_campaign_modes.luau
+          /tmp/bricktoads-luau/luau tests/run_campaign_bosses.luau
+          /tmp/bricktoads-luau/luau tests/run_campaign_enemies.luau
+          /tmp/bricktoads-luau/luau tests/run_campaign_progression.luau
+          /tmp/bricktoads-luau/luau tests/run_campaign_input.luau
+          /tmp/bricktoads-luau/luau tests/run_campaign_roster.luau
+          /tmp/bricktoads-luau/luau tests/run_campaign_race.luau
+          /tmp/bricktoads-luau/luau tests/run_scooter_acceptance.luau
           python3 tests/group_world/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/character_appearance/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/canonical_hero_presentation/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/guardian_appearance/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/boss_intro_asset/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/campaign_world/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/campaign_input/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/scooter_network/test_client_ready_order.py --luau /tmp/bricktoads-luau/luau
+      - name: Compile Studio multiplayer acceptance tools
+        run: |
+          /tmp/bricktoads-luau/luau-compile tools/studio_scooter_network_acceptance.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_network.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/studio_scooter_role_network_acceptance.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_role_network.luau > /dev/null
       - name: Structural build tests
         run: python3 tools/test_build.py
+      - name: English source and localization coverage
+        run: python3 tools/test_localization.py
+      - name: Canonical animation data matches the pinned catalog
+        run: |
+          python3 research/generate_canonical_animation_data.py --check
+          python3 tools/test_canonical_animation_data.py
       - name: Development place build tests
         run: python3 tools/test_bricktoads_place.py
+      - name: Isolated Walker acceptance package tests
+        run: python3 tools/test_walker_acceptance.py --luau /tmp/bricktoads-luau/luau
       - name: Verify development place matches sources
         run: python3 tools/build_bricktoads_place.py --check
       - name: Serialize Studio contract-test place
         run: python3 tools/build_test_place.py
+      - name: Build isolated Walker engine fixture (not engine acceptance)
+        run: python3 tools/build_walker_acceptance.py
+      - name: Preserve unrun Studio fixture
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: WalkerHeavyAcceptance-${{ github.sha }}
+          path: build/WalkerHeavyAcceptance.rbxlx
+          if-no-files-found: error
+      - name: Preserve playable for later Studio acceptance
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: BrickToadsPlayable-${{ github.sha }}
+          path: places/BrickToadsPlayable.rbxlx
+          if-no-files-found: error

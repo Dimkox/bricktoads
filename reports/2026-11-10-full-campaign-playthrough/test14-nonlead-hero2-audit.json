@@ -1,0 +1,237 @@
+{
+  "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+  "seed": 1259618153,
+  "observationCurrent": {
+    "index": 5,
+    "slot": 3,
+    "attempt": 4,
+    "epoch": 5,
+    "plan": {
+      "x": 0,
+      "z": 1,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380",
+    "position": {
+      "y": 3,
+      "x": 325.5357360839844,
+      "z": -16.52842140197754
+    },
+    "runId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb",
+    "stock": 0,
+    "stage": "Surf",
+    "rawLife": 47
+  },
+  "cohortAtRead": [
+    {
+      "ownerUserId": -1,
+      "slot": 1,
+      "status": "Eliminated",
+      "attempt": 4,
+      "stock": 0,
+      "rawLife": 0
+    },
+    {
+      "ownerUserId": -2,
+      "slot": 2,
+      "status": "Eliminated",
+      "attempt": 4,
+      "stock": 0,
+      "rawLife": 0
+    },
+    {
+      "attempt": 4,
+      "ownerUserId": -3,
+      "slot": 3,
+      "status": "Alive",
+      "stock": 0,
+      "rawLife": 47,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:380"
+    }
+  ],
+  "stage1Cohort": [
+    {
+      "attempt": 1,
+      "ownerUserId": -1,
+      "slot": 1,
+      "status": "Alive",
+      "stock": 3,
+      "rawLife": 47,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:2"
+    },
+    {
+      "attempt": 1,
+      "ownerUserId": -2,
+      "slot": 2,
+      "status": "Alive",
+      "stock": 3,
+      "rawLife": 47,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:5"
+    },
+    {
+      "attempt": 1,
+      "ownerUserId": -3,
+      "slot": 3,
+      "status": "Alive",
+      "stock": 3,
+      "rawLife": 47,
+      "actorId": "c2145e11-2bf7-419f-b0ed-b3afaf7a09bb:actor:8"
+    }
+  ],
+  "hero2": [
+    {
+      "attempt": 1,
+      "at": 1794321248.009415,
+      "sinceStage": 57.383628845214844,
+      "sinceCommittedSpawn": 58.17544889450073,
+      "reason": "Fall",
+      "stockBefore": 3,
+      "rawLifeBefore": 47,
+      "position": [
+        -42.95482635498047,
+        -39.35697937011719,
+        -29.9942626953125
+      ],
+      "velocity": [
+        1.5245927572250366,
+        -125.0907211303711,
+        -3.738083600997925
+      ],
+      "belowMinZBy": 3.9942626953125,
+      "nextCommit": {
+        "at": 1794321248.076576,
+        "stock": 2,
+        "shieldUntil": 1794321250.076576
+      }
+    },
+    {
+      "attempt": 2,
+      "at": 1794321250.456098,
+      "sinceStage": 59.8303120136261,
+      "sinceCommittedSpawn": 2.3795220851898193,
+      "reason": "Fall",
+      "stockBefore": 2,
+      "rawLifeBefore": 47,
+      "position": [
+        -40.31071853637695,
+        -35.40260314941406,
+        -30.253833770751953
+      ],
+      "velocity": [
+        -0.339132159948349,
+        -119.1648941040039,
+        -5.864743232727051
+      ],
+      "belowMinZBy": 4.253833770751953,
+      "nextCommit": {
+        "at": 1794321250.470446,
+        "stock": 1,
+        "shieldUntil": 1794321252.470446
+      }
+    },
+    {
+      "attempt": 3,
+      "at": 1794321253.544502,
+      "sinceStage": 62.918715953826904,
+      "sinceCommittedSpawn": 3.0740559101104736,
+      "reason": "Fall",
+      "stockBefore": 1,
+      "rawLifeBefore": 47,
+      "position": [
+        -37.28451156616211,
+        -42.1323356628418,
+        -29.465272903442383
+      ],
+      "velocity": [
+        -5.773159728050814e-15,
+        -130.01780700683594,
+        7.389644451905042e-13
+      ],
+      "belowMinZBy": 3.465272903442383,
+      "nextCommit": {
+        "at": 1794321253.571741,
+        "stock": 0,
+        "shieldUntil": 1794321255.571741
+      }
+    },
+    {
+      "attempt": 4,
+      "at": 1794321256.036912,
+      "sinceStage": 65.4111258983612,
+      "sinceCommittedSpawn": 2.4651708602905273,
+      "reason": "Fall",
+      "stockBefore": 0,
+      "rawLifeBefore": 47,
+      "position": [
+        -33.678184509277344,
+        -36.11419677734375,
+        -28.52650260925293
+      ],
+      "velocity": [
+        2.1465582847595215,
+        -119.90382385253906,
+        -2.23486328125
+      ],
+      "belowMinZBy": 2.5265026092529297
+    }
+  ],
+  "hero1FirstDeathAt": 1794321293.026282,
+  "allHero2DeathsBeforeLeadDeath": true,
+  "geometry": {
+    "support": {
+      "minX": -82,
+      "maxX": 4,
+      "minZ": -26,
+      "maxZ": 26,
+      "top": 0
+    },
+    "hero2InitialSpawn": {
+      "x": -65,
+      "y": 3,
+      "z": 0
+    },
+    "firstNPCs": [
+      {
+        "id": -1,
+        "kind": "Pig",
+        "x": -35,
+        "z": -8,
+        "rawLife": 15
+      },
+      {
+        "id": -2,
+        "kind": "Pig",
+        "x": -25,
+        "z": 8,
+        "rawLife": 15
+      },
+      {
+        "id": -3,
+        "kind": "Walker",
+        "x": -8,
+        "z": 0,
+        "rawLife": 31
+      }
+    ]
+  },
+  "interpretation": {
+    "confirmed": [
+      "All4 hero2 appearances died from Fall, not CombatUnderflow, with raw47 immediately before Death.",
+      "All4 occurred before hero1's first death; hero2 never became lead and the frozen bridge returned neutral for every level1 nonlead request.",
+      "Every fatal X remains over first support's X span; every fatal Z is beyond its negative lateral edge.",
+      "After first fall, the3 further lives were spent within about8seconds. Canonical findSafe searches nearest valid point to the fallen body; it can return near the same edge, and spawn shields do not make physical falls safe."
+    ],
+    "consistentButNotProven": [
+      "Active NPC targeting and ordinary hit/contact displacement can drive an idle follower to the edge.",
+      "Exact attacker/impact type and each respawn's position cannot be established: retained archive has no individual Hit events or nonlead motion records."
+    ],
+    "notEstablished": [
+      "No production spawn-safety or shield bug is established; the fatal poses are already below the floor.",
+      "No basis to attribute the deaths to a test-duration timeout."
+    ]
+  },
+  "recommendation": "For a later QA-only revision, replace unconditional nonlead neutral with a strictly local ordinary-Move edge recovery on the same authored support, targeting an interior margin. Keep primary/run/jump off and all NPC AI/resources/physics unchanged. This reduces edge retention after knockback/paid retry but does not grant safety against AI. Do not implement or hot-load in attempt14.",
+  "liveChanges": false
+}

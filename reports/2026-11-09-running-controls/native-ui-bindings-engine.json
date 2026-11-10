@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-09",
+  "studioVersion": "0.746.0.7461269",
+  "scope": "Public VirtualInput presses the production Automatic UIButton binding and concurrent keyboard bindings in Studio device simulation; not physical multitouch.",
+  "device": "iphone_17_pro",
+  "orientation": "LandscapeLeft",
+  "sourceSha256": "a3ea0a318b5fb9f8958476a78696fe0a3d0c0a91cc34291c264b1aea43f268e8",
+  "serverPaused": true,
+  "productionModuleSha256": "7f85db79b5e2fad1b319b596f35ecfe094b7bab487150d27ff8cfe208669e2da",
+  "coordinates": "Device emulator mouse position and GUI coordinates differ by safe area and core UI insets. Three explicit candidate points were checked; second reached native Right action.",
+  "observations": {
+    "1": {
+      "at": "202.5, 258.5",
+      "buttons": {
+        "1": "Right"
+      },
+      "enabled": true,
+      "afterDirectionRelease": false,
+      "mouse": "140, 238",
+      "right": false
+    },
+    "2": {
+      "at": "202.5, 316.5",
+      "enabled": true,
+      "buttons": [],
+      "afterActionRelease": {
+        "right": true,
+        "attack": false,
+        "jump": false
+      },
+      "afterDirectionRelease": false,
+      "concurrent": {
+        "right": true,
+        "attack": true,
+        "jump": true
+      },
+      "mouse": "140, 296",
+      "right": true
+    },
+    "3": {
+      "at": "202.5, 200.5",
+      "buttons": [],
+      "enabled": true,
+      "afterDirectionRelease": false,
+      "mouse": "140, 180",
+      "right": false
+    }
+  },
+  "physicalDeviceStatus": "NOT_RUN"
+}

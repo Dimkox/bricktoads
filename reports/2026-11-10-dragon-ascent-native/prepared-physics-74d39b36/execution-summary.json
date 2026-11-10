@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "scope": "Prepared native physics regression only; no full-campaign acceptance claimed",
+  "studioId": "97ee37f5-3840-470c-b002-094802085c47",
+  "placeId": 117412694427208,
+  "productionBuildSha256": "458c2bd5b90deef04c4f75be5bc8686c636ba8015db1d7c053b41739af1230bf",
+  "fixtureSha256": "27828929e544976226782677efd0d2a2e89c57a7e7c3d6c3b7a2899e3037fe2c",
+  "checksPassed": 204,
+  "checksTotal": 204,
+  "samples": 14,
+  "baseline": {
+    "finalRootY": -4.021919250488281,
+    "finalVelocityY": 14,
+    "forcePresent": true,
+    "health": 100
+  },
+  "fixed": {
+    "finalRootY": -72.50558471679688,
+    "finalVelocityY": -163.50003051757812,
+    "forcePresent": false,
+    "firstOrdinaryFallAt": 0.4975268840789795,
+    "health": 100
+  },
+  "nativeResult": "native-result.json",
+  "firstAttempt": "Passed and cleaned, but MCP text truncated its oversized result; preserved separately. Frozen fixture compressed duplicate check details and reran to export complete evidence.",
+  "cleanupPostflight": {
+    "remainingOwnedWorlds": [],
+    "running": true,
+    "remainingOwnedModuleFolders": [],
+    "placeId": 117412694427208,
+    "server": true
+  },
+  "lightingRestoredBeforeYield": true
+}

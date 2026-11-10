@@ -1,4 +1,4 @@
-return function(Pattern,Session,Core,Combat,Config,FakeWorld)
+return function(Pattern,Session,Core,Combat,Config,FakeWorld,Director,Controller)
     local passed=0
     local function test(name,fn) fn();passed+=1;print('PASS '..name) end
     local function fixture()
@@ -72,6 +72,27 @@ return function(Pattern,Session,Core,Combat,Config,FakeWorld)
         end
         assert(d.bossHits==1 and d.enemies[-99].rawLife==31 and not d.projectiles[-1001])
         assert(s.combat[1].rawLife==47 and s.state.heroes[1].respawns==3)
+        local counts={GuardianBallPickedUp=0,GuardianBallThrown=0,BossHit=0}
+        for _,row in ipairs(s.logs) do if counts[row.kind]~=nil then counts[row.kind]+=1 end end
+        assert(counts.GuardianBallPickedUp==1 and counts.GuardianBallThrown==1 and counts.BossHit==1,
+            'The real pickup throw impact chain needs one confirmed feedback event per effect')
+    end)
+    test('actual controller defeat clears Guardian projectiles and carriers before its final step stops',function()
+        local s,w,d,p,ground,packet=fixture()
+        for i=1,3 do s:_die(1,'Preparation exhaustion');s:step(i*.1) end
+        ground();assert(s:intent(1,packet('Punch',1),.4)=='OK')
+        d.projectiles[-1002]={mode='Bullet',position={x=2,y=3,z=0},created=.4,expiresAt=30}
+        w.positions[-1002]={x=2,y=3,z=0}
+        assert(p.carriers[1] and next(d.projectiles))
+        d.guardian=p;w.stage=function(self,stage) self.stageName=stage end
+        s:_die(1,'Final real death');assert(s.state.status=='Lost')
+        setmetatable(d,{__index=Director})
+        local controller=setmetatable({current=s,director=d,world=w},{__index=Controller})
+        controller:step(.5,.1)
+        assert(controller.finished and d.result=='Lost')
+        assert(next(d.projectiles)==nil and next(p.carriers)==nil and w.positions[-1002]==nil,
+            'No next Start or second Director step may be required to remove a closed boss attack')
+        controller:step(.6,.1);assert(next(d.projectiles)==nil)
     end)
     print('GuardianSession: '..passed..' passed')
 end

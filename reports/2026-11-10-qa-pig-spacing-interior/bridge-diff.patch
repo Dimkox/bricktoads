@@ -1,0 +1,21 @@
+--- baseline-bridge
++++ candidate-bridge
+@@ -191,8 +191,16 @@
+             qa.navigation={phase='Hold accepted strike on authored support',target=p}
+             return {x=0,z=0,run=false,primary=false,jump=false,hold=true}
+         elseif combatPlan.evasion then
+-            local goal=point(math.clamp(p.x+(combatPlan.x or 0)*6,support.minX+3,support.maxX-3),support.top+3,
+-                math.clamp(p.z+(combatPlan.z or 0)*6,support.minZ+3,support.maxZ-3))
++            -- Only the validated ordinary Pig-spacing branch reserves room
++            -- for its light contact response. Other evasions retain 3 studs.
++            local marginX,marginZ=3,3
++            if combatPlan.pigSpacing==true then
++                local width,depth=support.maxX-support.minX,support.maxZ-support.minZ
++                if width>=8 then marginX=math.min(7,width/2-1) end
++                if depth>=8 then marginZ=math.min(7,depth/2-1) end
++            end
++            local goal=point(math.clamp(p.x+(combatPlan.x or 0)*6,support.minX+marginX,support.maxX-marginX),support.top+3,
++                math.clamp(p.z+(combatPlan.z or 0)*6,support.minZ+marginZ,support.maxZ-marginZ))
+             local dx,dz=goal.x-p.x,goal.z-p.z;local n=math.max(1,math.sqrt(dx*dx+dz*dz))
+             qa.navigation={phase='Evade on authored support',target=goal}
+             return {x=dx/n,z=dz/n,run=false,primary=false,jump=false,evasion=true}

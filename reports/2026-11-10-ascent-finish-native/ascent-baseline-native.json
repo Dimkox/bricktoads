@@ -1,0 +1,2129 @@
+{
+  "cleanup": true,
+  "scenario": "prepared_native_ascent_finish_handoff",
+  "cases": [
+    {
+      "initial": {
+        "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "position": {
+          "y": 3,
+          "x": -6.800000190734863,
+          "z": -4.80078125
+        },
+        "stock": 3
+      },
+      "last": {
+        "resources": {
+          "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+          "rawLife": 47,
+          "attempt": 1,
+          "status": "Alive",
+          "stock": 3
+        },
+        "physicalPosition": {
+          "y": 93,
+          "x": -1.9645628929138184,
+          "z": -4.64453125
+        },
+        "finished": false,
+        "collidableOverlaps": [
+          {
+            "geometry": "CourseSupport_17",
+            "bodyPart": "Head"
+          }
+        ],
+        "nativeState": "FallingDown",
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "logicalPosition": {
+          "y": 93,
+          "x": -1.964562842231667,
+          "z": -4.644571533299493
+        },
+        "complete": false,
+        "at": 1794311009.553979,
+        "anchored": true,
+        "support": "floor-16",
+        "platformStand": false,
+        "floorMaterial": "Enum.Material.Air",
+        "finalFloor": {
+          "top": 96,
+          "standingY": 99,
+          "name": "CourseSupport_17",
+          "rootInside": false
+        },
+        "simulationNow": 8.750000000000014,
+        "grounded": true
+      },
+      "label": "baseline",
+      "minimumPostReleaseY": 95.37899780273438,
+      "framesToRelease": 485,
+      "releaseSamples": [
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.70834350585938,
+            "x": -2.1531245708465576,
+            "z": -4.833984375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.556699,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 95.37899780273438,
+            "x": -2.271953821182251,
+            "z": -5.513671875
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.0000144265140988864,
+            "x": 0.00004107529821339995,
+            "z": -0.00006612641300307587
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.565736,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": true
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 95.94983673095703,
+            "x": -2.15449857711792,
+            "z": -5.63671875
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000005669845450029243,
+            "x": 0.000044915304897585884,
+            "z": -0.0000493814550281968
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.58193,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": true
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.67991638183594,
+            "x": -2.1065444946289062,
+            "z": -5.478515625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": -0.000020020252122776583,
+            "x": 0.00006280878005782142,
+            "z": -0.00001503239582234528
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.598401,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.44552612304688,
+            "x": -2.1640124320983887,
+            "z": -5.482421875
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.00001347519446426304,
+            "x": 0.00005995819083182141,
+            "z": -0.000011786339200625662
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.616814,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 95.92841339111328,
+            "x": -2.152552366256714,
+            "z": -5.681640625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000016036832676036283,
+            "x": 0.00004034953235532157,
+            "z": -0.000008908214113034774
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.631742,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": true
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 95.94520568847656,
+            "x": -2.1001651287078857,
+            "z": -5.75
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000012750976566167083,
+            "x": 0.000047266123146982864,
+            "z": -0.000011393769455025904
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.64814,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": true
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.26742553710938,
+            "x": -2.100153923034668,
+            "z": -5.62890625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000011977178473898675,
+            "x": 0.000049286347348243,
+            "z": -0.000014201801604940556
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.664999,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.36048889160156,
+            "x": -2.128368854522705,
+            "z": -5.580078125
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000011569197340577375,
+            "x": 0.000052578783652279526,
+            "z": -0.000014375047612702474
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.681626,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.20335388183594,
+            "x": -2.1515469551086426,
+            "z": -5.615234375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000011860481208714191,
+            "x": 0.000047722736780997366,
+            "z": -0.000012874265848950017
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.69779,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.07330322265625,
+            "x": -2.1145718097686768,
+            "z": -5.70703125
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000012106791473343037,
+            "x": 0.00004140548116993159,
+            "z": -0.000012375441656331532
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.714998,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.12965393066406,
+            "x": -2.0929064750671387,
+            "z": -5.70703125
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.00001275955764867831,
+            "x": 0.000044572192564373836,
+            "z": -0.000012089844858564902
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.731472,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.22494506835938,
+            "x": -2.113760232925415,
+            "z": -5.646484375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000011862843166454695,
+            "x": 0.000043093743443023413,
+            "z": -0.00001483514097344596
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.748829,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.21490478515625,
+            "x": -2.135594129562378,
+            "z": -5.630859375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000012522974429884925,
+            "x": 0.000041394141589989886,
+            "z": -0.000013047980246483348
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.764614,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.14572143554688,
+            "x": -2.1196563243865967,
+            "z": -5.673828125
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000013170506463211495,
+            "x": 0.0000391860849049408,
+            "z": -0.00001212239840242546
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.782293,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.15109252929688,
+            "x": -2.105602502822876,
+            "z": -5.681640625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000014010214727022685,
+            "x": 0.00003817386459559202,
+            "z": -0.000011055764844059013
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.800028,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17825317382812,
+            "x": -2.109705924987793,
+            "z": -5.666015625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000014545639714924619,
+            "x": 0.000037522153434110805,
+            "z": -0.00001052059178618947
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.81502,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.19366455078125,
+            "x": -2.1230781078338623,
+            "z": -5.6484375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000015078499927767552,
+            "x": 0.00003580981501727365,
+            "z": -0.000011129611266369466
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.831796,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17269897460938,
+            "x": -2.123380661010742,
+            "z": -5.66015625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000014482398000836838,
+            "x": 0.000034004646295215935,
+            "z": -0.000011113083928648848
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.848868,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.16336059570312,
+            "x": -2.114626884460449,
+            "z": -5.671875
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000016212918126257136,
+            "x": 0.000033437823731219396,
+            "z": -0.000007286153959285002
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.865793,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17234802246094,
+            "x": -2.1133453845977783,
+            "z": -5.666015625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.00001710764627205208,
+            "x": 0.000031874100386630744,
+            "z": -0.000006373090855049668
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.881685,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.18061828613281,
+            "x": -2.1189780235290527,
+            "z": -5.658203125
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000016391453755204566,
+            "x": 0.000029884458854212426,
+            "z": -0.000010850181752175558
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.898993,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17759704589844,
+            "x": -2.1211907863616943,
+            "z": -5.658203125
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000017463238691561855,
+            "x": 0.00002920049701060634,
+            "z": -0.000009906038030749187
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.916393,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17146301269531,
+            "x": -2.1182096004486084,
+            "z": -5.6640625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.00001823825550673064,
+            "x": 0.000029279623049660586,
+            "z": -0.000001459966824768344
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.931238,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17167663574219,
+            "x": -2.115924119949341,
+            "z": -5.666015625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.0000197889021364972,
+            "x": 0.00002862896872102283,
+            "z": -6.188702172948979e-8
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.947986,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17550659179688,
+            "x": -2.1173927783966064,
+            "z": -5.6640625
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.00002110075729433447,
+            "x": 0.000027852904167957604,
+            "z": 0.0000011535746580193518
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.965115,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17646789550781,
+            "x": -2.119141101837158,
+            "z": -5.662109375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000018715923943091184,
+            "x": 0.000023972548660822213,
+            "z": -0.000005819010311824968
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.983327,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17503356933594,
+            "x": -2.119203805923462,
+            "z": -5.662109375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000019133165551465936,
+            "x": 0.00002415580274828244,
+            "z": -0.0000048436977522214875
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311009.998292,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17320251464844,
+            "x": -2.117764949798584,
+            "z": -5.662109375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000016033638530643657,
+            "x": 0.000005500916813616641,
+            "z": -5.840604444529163e-7
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311010.015157,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        },
+        {
+          "resources": {
+            "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+            "rawLife": 47,
+            "attempt": 1,
+            "status": "Alive",
+            "stock": 3
+          },
+          "physicalPosition": {
+            "y": 96.17398071289062,
+            "x": -2.1173129081726074,
+            "z": -5.662109375
+          },
+          "finished": true,
+          "collidableOverlaps": [
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Torso"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_Arena",
+              "bodyPart": "Left Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Arm"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Left Leg"
+            },
+            {
+              "geometry": "CourseSupport_17",
+              "bodyPart": "Right Leg"
+            }
+          ],
+          "nativeState": "FallingDown",
+          "velocity": {
+            "y": 0.000016927686374401674,
+            "x": 0.0000045514016164815985,
+            "z": 3.106762278548558e-7
+          },
+          "logicalPosition": {
+            "y": 96.70833333333333,
+            "x": -2.1531246505480794,
+            "z": -4.8331333416159055
+          },
+          "complete": true,
+          "at": 1794311010.031692,
+          "anchored": false,
+          "platformStand": false,
+          "floorMaterial": "Enum.Material.Air",
+          "finalFloor": {
+            "top": 96,
+            "standingY": 99,
+            "name": "CourseSupport_17",
+            "rootInside": false
+          },
+          "simulationNow": 8.833333333333352,
+          "grounded": false
+        }
+      ],
+      "cleanup": true,
+      "complete": true,
+      "startedAt": 1794311009.483838,
+      "sourceMatchesBaseline": true,
+      "release": {
+        "resources": {
+          "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+          "rawLife": 47,
+          "attempt": 1,
+          "status": "Alive",
+          "stock": 3
+        },
+        "physicalPosition": {
+          "y": 96.70834350585938,
+          "x": -2.1531245708465576,
+          "z": -4.833984375
+        },
+        "finished": true,
+        "collidableOverlaps": [
+          {
+            "geometry": "CourseSupport_17",
+            "bodyPart": "Torso"
+          },
+          {
+            "geometry": "CourseSupport_Arena",
+            "bodyPart": "Torso"
+          },
+          {
+            "geometry": "CourseSupport_17",
+            "bodyPart": "Left Arm"
+          },
+          {
+            "geometry": "CourseSupport_Arena",
+            "bodyPart": "Left Arm"
+          },
+          {
+            "geometry": "CourseSupport_17",
+            "bodyPart": "Right Arm"
+          },
+          {
+            "geometry": "CourseSupport_17",
+            "bodyPart": "Left Leg"
+          },
+          {
+            "geometry": "CourseSupport_Arena",
+            "bodyPart": "Left Leg"
+          },
+          {
+            "geometry": "CourseSupport_17",
+            "bodyPart": "Right Leg"
+          }
+        ],
+        "nativeState": "FallingDown",
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "logicalPosition": {
+          "y": 96.70833333333333,
+          "x": -2.1531246505480794,
+          "z": -4.8331333416159055
+        },
+        "complete": true,
+        "at": 1794311009.556562,
+        "anchored": false,
+        "platformStand": false,
+        "floorMaterial": "Enum.Material.Air",
+        "finalFloor": {
+          "top": 96,
+          "standingY": 99,
+          "name": "CourseSupport_17",
+          "rootInside": false
+        },
+        "simulationNow": 8.833333333333352,
+        "grounded": false
+      },
+      "intentCounts": {
+        "Jump:OK": 16,
+        "Move:OK": 267
+      },
+      "aligned": {
+        "resources": {
+          "actorId": "ascent-fixture-1a9a9860-6172-4f4e-b1d3-4b3775aa404f:actor:2",
+          "rawLife": 47,
+          "attempt": 1,
+          "status": "Alive",
+          "stock": 3
+        },
+        "physicalPosition": {
+          "y": 3,
+          "x": -0.07894475758075714,
+          "z": -4.80078125
+        },
+        "finished": false,
+        "collidableOverlaps": [
+          {
+            "geometry": "CourseSupport_2",
+            "bodyPart": "Head"
+          }
+        ],
+        "nativeState": "Running",
+        "velocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "logicalPosition": {
+          "y": 3,
+          "x": -0.07894475906754042,
+          "z": -4.80078125
+        },
+        "complete": false,
+        "at": 1794311009.492796,
+        "anchored": true,
+        "support": "floor-1",
+        "platformStand": false,
+        "floorMaterial": "Enum.Material.Metal",
+        "finalFloor": {
+          "top": 96,
+          "standingY": 99,
+          "name": "CourseSupport_17",
+          "rootInside": false
+        },
+        "simulationNow": 0.7500000000000007,
+        "grounded": true
+      },
+      "preparation": {
+        "preparedPoses": false,
+        "npcControllers": false,
+        "authoredSpawn": true,
+        "entryAlignment": "Ordinary Move from actual safe spawn to center X0; no pose preparation"
+      }
+    }
+  ],
+  "sourceSha256": "c1acc4659a262f4eaf489823bacc8f81169784dd47f033fcf3ec070ca7c6cbaa",
+  "baselineModesSha256": "67A2CF0500C9F3C441F5B267A4CDF361A5507058BF890CC95815BBBE008B52FA",
+  "limits": [
+    "Synthetic server roster; no actual Players, client/network or full-playthrough claim",
+    "Real Modes/Session fixed-step inputs from authored spawn; no prepared hero poses",
+    "NPC controllers are not constructed; authored geometry and course hazards remain active",
+    "Course simulation advances faster than wall clock; post-release samples use actual physics Heartbeats"
+  ],
+  "seed": 2104255637,
+  "status": "complete",
+  "oldPilotCommit": "da2babf",
+  "oldPilotSha256": "BCC2E30F1E9ABDAC6DCB50FB2FD2AF8BB99B3BF518043093C4EA41B0C30B028A"
+}

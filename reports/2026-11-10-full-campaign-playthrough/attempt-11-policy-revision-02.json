@@ -1,0 +1,3856 @@
+{
+  "applied": true,
+  "after": {
+    "current": {
+      "index": 1,
+      "slot": 1,
+      "attempt": 3,
+      "epoch": 1,
+      "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+      "plan": {
+        "aimX": -0.44131745871165334,
+        "x": 0.4413174587116539,
+        "z": -0.8973510464897712,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0.8973510464897715,
+        "run": false
+      },
+      "guardianHits": 0,
+      "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+      "position": {
+        "y": 2.980351448059082,
+        "x": 145.16143798828125,
+        "z": -8.296186447143555
+      },
+      "target": -8,
+      "stock": 1,
+      "stage": "Route",
+      "rawLife": 39
+    },
+    "errors": [],
+    "expectedPlayers": 3,
+    "navigation": {
+      "phase": "Walk",
+      "target": {
+        "y": 2.9974710941314697,
+        "x": 144.68344116210938,
+        "z": -7.324253559112549
+      }
+    },
+    "registeredPlayers": [
+      {
+        "name": "Player1",
+        "userId": -1
+      },
+      {
+        "name": "Player2",
+        "userId": -2
+      },
+      {
+        "name": "Player3",
+        "userId": -3
+      }
+    ],
+    "running": true,
+    "stages": [
+      {
+        "index": 1,
+        "rawLife": 47,
+        "attempt": 1,
+        "epoch": 1,
+        "at": 1794313568.519635,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:2",
+        "stock": 3,
+        "cohort": [
+          {
+            "attempt": 1,
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:2"
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+          }
+        ],
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "source": "causeway-1"
+      }
+    ],
+    "seed": 388791054,
+    "policyLoads": 2,
+    "sampleCount": 962,
+    "cohort": [
+      {
+        "attempt": 3,
+        "ownerUserId": -1,
+        "slot": 1,
+        "status": "Alive",
+        "stock": 1,
+        "rawLife": 39,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+      },
+      {
+        "attempt": 1,
+        "ownerUserId": -2,
+        "slot": 2,
+        "status": "Alive",
+        "stock": 3,
+        "rawLife": 47,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+      },
+      {
+        "attempt": 1,
+        "ownerUserId": -3,
+        "slot": 3,
+        "status": "Alive",
+        "stock": 3,
+        "rawLife": 47,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+      }
+    ],
+    "build": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a"
+  },
+  "scope": "QA input-selection revision during an ordinary campaign; production code and game state unchanged",
+  "samples": [
+    {
+      "at": 1794314573.518121,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 1,
+          "x": -0.7070857994339351,
+          "z": 0.7071277623165936,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 8.020773887634277,
+          "x": 155.970703125,
+          "z": -23.759357452392578
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314573.619244,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.7258846556386995,
+          "x": -0.7258846556387001,
+          "z": 0.6878164484135909,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6878164484135914,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 7.881147384643555,
+          "x": 155.28994750976562,
+          "z": -23.10680389404297
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314573.73364,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.7226301680848191,
+          "x": -0.7226301680848183,
+          "z": 0.6912348661444293,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6912348661444286,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 7.954286098480225,
+          "x": 154.1159210205078,
+          "z": -21.980131149291992
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314573.835137,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.721657994232445,
+          "x": -0.7216579942324458,
+          "z": 0.6922497666019132,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6922497666019138,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 7.2463202476501465,
+          "x": 152.9636688232422,
+          "z": -20.87019920349121
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314573.936351,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 4.596792697906494,
+          "x": 151.8075408935547,
+          "z": -19.76424217224121
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.036857,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 1.2526898384094238,
+          "x": 150.2149658203125,
+          "z": -18.332788467407227
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.149507,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 1.7158502340316772,
+          "x": 149.89955139160156,
+          "z": -18.05787467956543
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.251119,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 1.0719164609909058,
+          "x": 149.7418212890625,
+          "z": -17.920608520507812
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.354071,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 0.9979388117790222,
+          "x": 149.74771118164062,
+          "z": -17.928197860717773
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.467629,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.7307898415639353,
+          "x": -0.7307898415639305,
+          "z": 0.682602525242154,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6826025252421487,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.9298605918884277,
+          "x": 149.74774169921875,
+          "z": -17.92820167541504
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.569694,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.7307903367479828,
+          "x": -0.7307903367479822,
+          "z": 0.6826019951009304,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6826019951009298,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.999004602432251,
+          "x": 149.74774169921875,
+          "z": -17.92820167541504
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.68436,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.7307900524882799,
+          "x": -0.7307903917676679,
+          "z": 0.682601936197121,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6826022994278419,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.999974489212036,
+          "x": 149.05638122558594,
+          "z": -17.282428741455078
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.800072,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.7307946874736208,
+          "x": -0.7307859876719406,
+          "z": 0.6826066511706037,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6825973372057154,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.999999523162842,
+          "x": 147.88706970214844,
+          "z": -16.190271377563477
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314574.916675,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.7307965865711512,
+          "x": -0.7307790186989547,
+          "z": 0.6826141119471476,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6825953040095968,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.999999761581421,
+          "x": 146.71775817871094,
+          "z": -15.098106384277344
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.032604,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.73079770374226,
+          "x": -0.7307631942944447,
+          "z": 0.6826310525200123,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.6825941079477906,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.999999761581421,
+          "x": 145.54844665527344,
+          "z": -14.005939483642578
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.133214,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.9663373734164332,
+          "x": 0.9663373734164332,
+          "z": 0.2572782166034058,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.2572782166034058,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 144.37913513183594,
+          "z": -12.913735389709473
+        },
+        "target": "courtyard-fly-1",
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.233721,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6607333807542239,
+          "x": -0.660733380754222,
+          "z": 0.7506206762120906,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.750620676212089,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 145.08203125,
+          "z": -12.29074478149414
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.336448,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6274341861772293,
+          "x": -0.8238710158514427,
+          "z": 0.5667773365616445,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.7786695974648797,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 144.8209991455078,
+          "z": -11.331156730651855
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.454548,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.9807148328382428,
+          "x": 0.9807148328382428,
+          "z": 0.19544415225597678,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.19544415225597678,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 143.7637481689453,
+          "z": -10.130167961120605
+        },
+        "target": "courtyard-fly-1",
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.568742,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5605138950097082,
+          "x": -0.5605138950097078,
+          "z": 0.8281450196077051,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8281450196077049,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 144.26455688476562,
+          "z": -9.385843276977539
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.684098,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5344331720183062,
+          "x": 0.5344331720183062,
+          "z": -0.8452107338684546,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8452107338684546,
+          "run": true
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 143.4429473876953,
+          "z": -7.431638240814209
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.785988,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.9936818024604064,
+          "x": 0.9936818024604064,
+          "z": 0.1122340209519295,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.1122340209519295,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 142.13246154785156,
+          "z": -6.513570308685303
+        },
+        "target": "courtyard-fly-1",
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314575.90319,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5435361328994303,
+          "x": -0.5435361328994326,
+          "z": 0.8393857708066836,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8393857708066851,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 142.30589294433594,
+          "z": -5.973329067230225
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.018208,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.48485423640618,
+          "x": -0.7990237377682375,
+          "z": 0.601299481525533,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.874594974510476,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 142.59837341308594,
+          "z": -5.180059909820557
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.134067,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5311877681936581,
+          "x": 0.5311877681936581,
+          "z": -0.847254126529603,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.847254126529603,
+          "run": true
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 141.39825439453125,
+          "z": -4.144967079162598
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.234611,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.9992672479744396,
+          "x": 0.9992672479744396,
+          "z": 0.03827488896900914,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.03827488896900914,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 140.11981201171875,
+          "z": -3.1828877925872803
+        },
+        "target": "courtyard-fly-1",
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.336478,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5375630464911555,
+          "x": -0.5375630464911563,
+          "z": 0.8432235593525285,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8432235593525288,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 140.30999755859375,
+          "z": -2.6806249618530273
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.449847,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5039643023356692,
+          "x": -0.8295978143419215,
+          "z": 0.5583614120254969,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.863724482674494,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 140.06651306152344,
+          "z": -1.504675269126892
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.565938,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.9998544247209065,
+          "x": 0.9998544247209062,
+          "z": -0.017062513473270768,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.01706251347327077,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 138.83099365234375,
+          "z": -0.5217306613922119
+        },
+        "target": "courtyard-fly-1",
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.666849,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.48770588901741385,
+          "x": -0.48770588901741835,
+          "z": 0.8730079987134881,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8730079987134907,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 139.47738647460938,
+          "z": -0.24916468560695648
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.769289,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.3357447169316744,
+          "x": -0.7912329236553652,
+          "z": 0.6115148898626941,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.9419530163720852,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 141.07699584960938,
+          "z": -0.2764645516872406
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314576.884566,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.2964878875457441,
+          "x": -0.8918146942618898,
+          "z": 0.4524008743344469,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.9550366131927416,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 141.25823974609375,
+          "z": 0.3720858097076416
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.000851,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.4254299603924269,
+          "x": -0.905473861784785,
+          "z": 0.4244020330117991,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.9049913528871412,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 139.8603515625,
+          "z": 1.1418291330337524
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.101816,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5456283985742209,
+          "x": 0.5456283985742209,
+          "z": -0.8380272374268817,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8380272374268817,
+          "run": true
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3,
+          "x": 138.17771911621094,
+          "z": 1.9495900869369507
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.217003,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5836750201318951,
+          "x": 0.5836750201318951,
+          "z": -0.8119873588141826,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8119873588141826,
+          "run": true
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.9999959468841553,
+          "x": 138.4654083251953,
+          "z": 0.9358163475990295
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.33328,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6113895185860183,
+          "x": 0.6113895185860183,
+          "z": -0.7913298026506754,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.7913298026506754,
+          "run": true
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.9994282722473145,
+          "x": 139.82684326171875,
+          "z": -1.1548290252685547
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.43565,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6409729135437927,
+          "x": 0.6409729135437927,
+          "z": -0.767563498417676,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.767563498417676,
+          "run": true
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.998897075653076,
+          "x": 141.15670776367188,
+          "z": -2.9381656646728516
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.54936,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6844657287377014,
+          "x": -0.6844657287377024,
+          "z": 0.7290450371434992,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.7290450371435,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3.156251907348633,
+          "x": 141.97654724121094,
+          "z": -3.97819185256958
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.651504,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.241701364517212,
+          "x": 141.99952697753906,
+          "z": -4.004963397979736
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.766601,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 1.2626631259918213,
+          "x": 141.9102783203125,
+          "z": -3.879230499267578
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.883374,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 0.9983415603637695,
+          "x": 141.90992736816406,
+          "z": -3.8776540756225586
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314577.985138,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "notice": "REACTION",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "stock": 1,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 0.9983177185058594,
+          "x": 141.90992736816406,
+          "z": -3.8776612281799316
+        },
+        "target": -8,
+        "guardianHits": 0,
+        "stage": "Route",
+        "rawLife": 35
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 35,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.101009,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6701871734123904,
+          "x": 0.05361497387299124,
+          "z": -0.059375370117570374,
+          "jump": false,
+          "primary": true,
+          "aimZ": -0.7421921264696296,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.9298739433288574,
+          "x": 141.9099578857422,
+          "z": -3.8776566982269287
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.217371,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.998429536819458,
+          "x": 141.98277282714844,
+          "z": -3.9584147930145264
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.333855,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6670053985197401,
+          "x": -0.66700539851974,
+          "z": 0.7450528829187382,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.745052882918738,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.999929428100586,
+          "x": 142.0578155517578,
+          "z": -4.041525363922119
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.44941,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6639003097352383,
+          "x": 0.6639003097352383,
+          "z": -0.7478210873821723,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.7478210873821723,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.9999375343322754,
+          "x": 141.28724670410156,
+          "z": -3.1678543090820312
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.567333,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6644022644618591,
+          "x": 0.6644022644618591,
+          "z": -0.7473751607980785,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.7473751607980785,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.9999876022338867,
+          "x": 141.6840057373047,
+          "z": -3.617727279663086
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.668818,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.6644186342369969,
+          "x": 0.6644186342369969,
+          "z": -0.7473606080592178,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.7473606080592178,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.999999761581421,
+          "x": 142.65908813476562,
+          "z": -4.714402675628662
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.784647,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5470838252795799,
+          "x": 0.04376670602236639,
+          "z": -0.06696622614386866,
+          "jump": false,
+          "primary": true,
+          "aimZ": -0.8370778267983582,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3.9731667041778564,
+          "x": 143.85787963867188,
+          "z": -6.095867156982422
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314578.885628,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "x": 0,
+          "z": 0,
+          "primary": false,
+          "run": false,
+          "jump": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 4.97426176071167,
+          "x": 144.74664306640625,
+          "z": -7.430356979370117
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.001966,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.5486787868686707,
+          "x": -0.5486787868686707,
+          "z": 0.8360332462529968,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8360332462529968,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3.7366762161254883,
+          "x": 145.345458984375,
+          "z": -8.473310470581055
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.102372,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.5805402526571046,
+          "x": -0.192718505859375,
+          "z": 0.2702956199645996,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8142315487899159,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3.955883026123047,
+          "x": 144.72268676757812,
+          "z": -7.5008463859558105
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.216054,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": 0.5574972329904375,
+          "x": 0.256500244140625,
+          "z": -0.3819589614868164,
+          "jump": false,
+          "primary": false,
+          "aimZ": -0.8301787971322839,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3.9975357055664062,
+          "x": 144.27346801757812,
+          "z": -6.848580837249756
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.317744,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.5396259069394391,
+          "x": 0.5396259069394385,
+          "z": -0.8419049118278077,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8419049118278072,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 3.9727985858917236,
+          "x": 144.56997680664062,
+          "z": -7.292946815490723
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.420991,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.5658326437012724,
+          "x": 0.5658326437012738,
+          "z": -0.8245201145648463,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8245201145648473,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 7.178731918334961,
+          "x": 144.95938110351562,
+          "z": -7.860741138458252
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.535243,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.5643211912326137,
+          "x": -0.5643211912326137,
+          "z": 0.8255553240854326,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8255553240854326,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 8.600873947143555,
+          "x": 145.6337127685547,
+          "z": -8.849698066711426
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.652169,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.564994211039941,
+          "x": -0.564994211039941,
+          "z": 0.8250948681765962,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8250948681765962,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 8.412582397460938,
+          "x": 146.44642639160156,
+          "z": -10.03373908996582
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.766166,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.5653308890676297,
+          "x": -0.5653308890676297,
+          "z": 0.824864222685166,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.824864222685166,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 6.370388031005859,
+          "x": 146.54751586914062,
+          "z": -10.17914867401123
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.866923,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.548742666610854,
+          "x": 0.5487426666108547,
+          "z": -0.835991319237711,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8359913192377113,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.724656581878662,
+          "x": 145.81993103027344,
+          "z": -9.14781379699707
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    },
+    {
+      "at": 1794314579.968498,
+      "current": {
+        "index": 1,
+        "slot": 1,
+        "attempt": 3,
+        "epoch": 1,
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "plan": {
+          "aimX": -0.44131745871165334,
+          "x": 0.4413174587116539,
+          "z": -0.8973510464897712,
+          "jump": false,
+          "primary": false,
+          "aimZ": 0.8973510464897715,
+          "run": false
+        },
+        "guardianHits": 0,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+        "position": {
+          "y": 2.980351448059082,
+          "x": 145.16143798828125,
+          "z": -8.296186447143555
+        },
+        "target": -8,
+        "stock": 1,
+        "stage": "Route",
+        "rawLife": 39
+      },
+      "policyLoads": 2,
+      "cohort": [
+        {
+          "attempt": 3,
+          "ownerUserId": -1,
+          "slot": 1,
+          "status": "Alive",
+          "stock": 1,
+          "rawLife": 39,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -2,
+          "slot": 2,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+        },
+        {
+          "attempt": 1,
+          "ownerUserId": -3,
+          "slot": 3,
+          "status": "Alive",
+          "stock": 3,
+          "rawLife": 47,
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+        }
+      ]
+    }
+  ],
+  "complete": true,
+  "before": {
+    "current": {
+      "index": 1,
+      "slot": 1,
+      "attempt": 3,
+      "epoch": 1,
+      "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+      "plan": {
+        "aimX": 1,
+        "x": 0.0002899169921875,
+        "z": 0.000003814697265625,
+        "jump": false,
+        "primary": false,
+        "aimZ": 0,
+        "run": false
+      },
+      "guardianHits": 0,
+      "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89",
+      "position": {
+        "y": 8.024002075195312,
+        "x": 155.970703125,
+        "z": -23.759357452392578
+      },
+      "target": -8,
+      "stock": 1,
+      "stage": "Route",
+      "rawLife": 39
+    },
+    "errors": [],
+    "expectedPlayers": 3,
+    "navigation": {
+      "phase": "Walk",
+      "target": {
+        "y": 2.9999992847442627,
+        "x": 155.9709930419922,
+        "z": -23.759353637695312
+      }
+    },
+    "registeredPlayers": [
+      {
+        "name": "Player1",
+        "userId": -1
+      },
+      {
+        "name": "Player2",
+        "userId": -2
+      },
+      {
+        "name": "Player3",
+        "userId": -3
+      }
+    ],
+    "running": true,
+    "stages": [
+      {
+        "index": 1,
+        "rawLife": 47,
+        "attempt": 1,
+        "epoch": 1,
+        "at": 1794313568.519635,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:2",
+        "stock": 3,
+        "cohort": [
+          {
+            "attempt": 1,
+            "ownerUserId": -1,
+            "slot": 1,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:2"
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -2,
+            "slot": 2,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+          },
+          {
+            "attempt": 1,
+            "ownerUserId": -3,
+            "slot": 3,
+            "status": "Alive",
+            "stock": 3,
+            "rawLife": 47,
+            "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+          }
+        ],
+        "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+        "source": "causeway-1"
+      }
+    ],
+    "seed": 388791054,
+    "policyLoads": 1,
+    "sampleCount": 956,
+    "cohort": [
+      {
+        "attempt": 3,
+        "ownerUserId": -1,
+        "slot": 1,
+        "status": "Alive",
+        "stock": 1,
+        "rawLife": 39,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:89"
+      },
+      {
+        "attempt": 1,
+        "ownerUserId": -2,
+        "slot": 2,
+        "status": "Alive",
+        "stock": 3,
+        "rawLife": 47,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:5"
+      },
+      {
+        "attempt": 1,
+        "ownerUserId": -3,
+        "slot": 3,
+        "status": "Alive",
+        "stock": 3,
+        "rawLife": 47,
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:8"
+      }
+    ],
+    "build": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a"
+  },
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "appliedAt": 1794314573.405755,
+  "newCombatSha256": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+  "oldCombatSha256": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+  "runId": "d59c909e-aaef-4678-945d-ff1838791ab5"
+}

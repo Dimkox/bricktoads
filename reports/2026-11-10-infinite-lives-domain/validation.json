@@ -1,0 +1,29 @@
+{
+  "scope": "trusted infinite lives domain/session only",
+  "nativeStudioProof": false,
+  "healthDamageUnchanged": true,
+  "clientIntentToggleAdded": false,
+  "focusedTests": 24,
+  "focusedFailures": 0,
+  "finiteLifecycleCases": 46,
+  "finiteSessionCases": 42,
+  "combatAssertions": 1054,
+  "sourceHashes": {
+    "tests/run_infinite_lives.luau": "29541fb63981738a951c1cde08dee60c8e1d46aa44db3232da84a9c5b82e3b2e",
+    "tests/InfiniteLives.spec.lua": "c3f52f82ea00ca961cd6d7fd2b57b96193726c77671c726ed32da70e8c3a5501",
+    "tests/run_stand.luau": "648d278e8053e528a87bed7d4251bcc336e2f756b09f522593f77c9a365c61bf",
+    "src/stand/server/Session.lua": "843590c10c45326c2a575ea9d45ea33e5485f9528012eef8a02e83849059b869",
+    "src/server/RunLifecycle.lua": "94b7c0486448726f3611cf0e380ee4fcab502910b787858a770d1cb4d57317be"
+  },
+  "redLog": "red-before-core.log",
+  "gateRedLog": "red-malformed-development.log",
+  "greenLog": "green.log",
+  "finiteLogs": [
+    "lifecycle-regression.log",
+    "stand-regression.log"
+  ],
+  "compileLog": "compile.log",
+  "standPackagingCases": 7,
+  "approvedCoreGitBlob": "b22773c676dc13f114f6cfb7e1fad0aa23c5dacc",
+  "packagingLog": "stand-package-approved-core.log"
+}

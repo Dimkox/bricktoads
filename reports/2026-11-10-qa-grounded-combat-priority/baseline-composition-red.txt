@@ -1,0 +1,9 @@
+./build/ground_priority_base_probe.luau:76: Grounded combat composition failures: 5/26
+stacktrace:
+[C] function assert
+./build/ground_priority_base_probe.luau:76
+FAIL	Validated running primary crosses range to enemy without being replaced by a navigation Jump
+FAIL	Prioritized ready Dash never invents a new navigation flight
+FAIL	Near-edge evasion moves inward toward current support inset without run/attack/jump
+FAIL	Evasion precedes navigation mutation or run-up staging
+FAIL	Follow-up accepted attack hold is not replaced by movement or Jump

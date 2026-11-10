@@ -15,11 +15,24 @@ return function(base,level)
     config.Attacks.PigJab={windup=.30,cooldown=.8,reaction=28/60,reach=6,width=3,height=4,recoveryPose=.20}
     config.Attacks.PigHeavy={windup=.55,cooldown=1.3,reaction=.75,reach=6,width=3,height=4,recoveryPose=.30}
     config.Attacks.PigRush={windup=.22,cooldown=1.4,reaction=.75,reach=6,width=3,height=4,recoveryPose=.35}
+    config.Attacks.EnemyRunStrike=table.clone(config.Attacks.PigRush)
     config.Impulses[0]=table.clone(config.Impulses[18])
     config.Impulses[4]=table.clone(config.Impulses[22])
     config.Pig={rushAfterZone=3,rushSpeed=16,alignment=2,decisionInterval=.1,
         rushRoll=32,npcDamage={PigJab=1,PigHeavy=2,PigRush=2},
         npcProfile={PigJab=0,PigHeavy=2,PigRush=4}}
+    config.Attacks.WalkerLight={windup=.40,cooldown=1.0,reaction=28/60,reach=7.5,width=3.25,height=4,recoveryPose=.20}
+    config.Attacks.WalkerHeavy={windup=.65,cooldown=1.6,reaction=.75,reach=7.5,width=3.25,height=4,recoveryPose=.35}
+    config.Walker={range=6.5,minRange=2.5,retreatSpeed=7,
+        npcDamage={WalkerLight=1,WalkerHeavy=2},npcProfile={WalkerLight=0,WalkerHeavy=2}}
+    -- Ordinary Dragon animation32 has base4/hero22, never the hero Dash finisher.
+    config.Attacks.DragonHeadbutt={windup=.35,cooldown=1.25,reaction=.75,reach=6,width=3,height=4,recoveryPose=.25}
+    config.Dragon={npcDamage={DragonHeadbutt=2,DragonFire=2},npcProfile={DragonHeadbutt=4,DragonFire=4}}
+    config.Attacks.DragonFire={cooldown=.45,reaction=.75}
+    config.DragonFlight={speed=10,altitude=1.5,liftSeconds=.4,liftHeight=4,turnSeconds=.3,
+        disabledSeconds=6,mountRange=5,mountHeight=4,attackRange=5,
+        captureWindup=.25,captureWindow=.3,captureSeconds=1.25,captureHeight=3,
+        captureGeometry={reach=6,width=3,height=4},fireLife=2,fireSpeed=32,fireRadius=1}
     config.Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=45}
     config.BossQueue={inviteSeconds=10,connectSeconds=15}
     config.Groups={maxGroups=4,spacing=512}
@@ -31,6 +44,35 @@ return function(base,level)
         horizontal=26,vertical=16,throwDamage=config.Enemy.punchDamage,sourceProfile=17,sourceRawDamage=4}
     if level then
         config.Calibration='ORIGINAL_3D_ROUTE_STATIC_ROSTER'
+        -- Main-route jump budget covers its5-stud gaps and2-stud rises with
+        -- takeoff/landing room at16studs/s. The independent stand keeps42.
+        config.JumpPower=50
+        config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75,npcRunDistance=12}
+        config.SourceCombat={heavyProtection=28/60,npcLightReaction=1.05,npcHeavyReaction=.85}
+        for _,action in ipairs({'HeroJab','HeroKick','HeroUppercut','HeroPowerPunch','HeroBoot','HeroElbow'}) do
+            config.Attacks[action]=table.clone(config.Attacks.Punch)
+            config.Attacks[action].reaction=action=='HeroJab' and 28/60 or .75
+            config.Attacks[action].recoveryPose=.2
+        end
+        config.Impulses[19]={horizontal=24,vertical=20}
+        config.Impulses[24]={horizontal=34,vertical=30}
+        config.Impulses[28]={horizontal=9,vertical=-12}
+        config.Impulses[1]=table.clone(config.Impulses[19])
+        config.Impulses[3]=table.clone(config.Impulses[21])
+        config.Impulses[6]=table.clone(config.Impulses[24])
+        config.Impulses[10]=table.clone(config.Impulses[28])
+        -- Source rope animations use ordinary7/13 and hero25/31. Geometry,
+        -- reaction seconds and these physical responses remain Roblox tuning.
+        config.Attacks.RopeStrike=table.clone(config.Attacks.HeroKick)
+        config.Attacks.RopeBoot=table.clone(config.Attacks.HeroKick)
+        -- Armed animation48 selects source collision index3 instead of2. The
+        -- expanded 3D vertical contact budget is explicit physical calibration.
+        config.Attacks.RopeClaw=table.clone(config.Attacks.RopeStrike)
+        config.Attacks.RopeClaw.height=config.Attacks.RopeStrike.height+2
+        config.Impulses[7]=table.clone(config.Impulses[19])
+        config.Impulses[13]=table.clone(config.Impulses[22])
+        config.Impulses[25]=table.clone(config.Impulses[24])
+        config.Impulses[31]=table.clone(config.Impulses[22])
         config.Boss.interval=1.6
         config.Boss.ballInterval=8
         config.Boss.ballLife=20

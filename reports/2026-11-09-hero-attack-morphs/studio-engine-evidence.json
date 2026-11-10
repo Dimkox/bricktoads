@@ -1,0 +1,382 @@
+{
+  "initial": {
+    "one": {
+      "morphs": {
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 17,
+      "id": 1,
+      "hp": 37,
+      "assemblyRoot": true,
+      "grounded": true,
+      "actorId": 80001,
+      "manualServerOwner": true,
+      "colliders": 2,
+      "frame": 1,
+      "kind": "Idle",
+      "motors": 23
+    },
+    "two": {
+      "morphs": {
+        "PowerFist": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        },
+        "BigBoot": {
+          "visible": 1,
+          "original": 0,
+          "jointError": 0
+        }
+      },
+      "meshes": 17,
+      "id": 2,
+      "hp": 100,
+      "assemblyRoot": true,
+      "grounded": true,
+      "actorId": 80002,
+      "manualServerOwner": true,
+      "colliders": 2,
+      "frame": 1,
+      "kind": "Idle",
+      "motors": 23
+    }
+  },
+  "noContext": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "motors": 23
+  },
+  "fistWindup": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 29,
+    "kind": "Attack",
+    "motors": 23
+  },
+  "deathPriority": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "fallback": "Dead",
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "motors": 23
+  },
+  "club": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "fallback": "Club",
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "motors": 23
+  },
+  "bootWindup": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 31,
+    "kind": "Attack",
+    "motors": 23
+  },
+  "partialTransparency": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0.25,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 1,
+    "kind": "Idle",
+    "motors": 23
+  },
+  "fistActive": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 0,
+        "original": 1,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "active": "PowerFist",
+    "id": 1,
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 28,
+    "kind": "Attack",
+    "motors": 23
+  },
+  "hpBeforeReplace": 37,
+  "playerTwo": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 0,
+        "original": 1,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "active": "PowerFist",
+    "id": 2,
+    "hp": 100,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80002,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 28,
+    "kind": "Attack",
+    "motors": 23
+  },
+  "fistEnd": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 1,
+    "kind": "Idle",
+    "motors": 23
+  },
+  "otherHp": 100,
+  "airborne": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "fallback": "Airborne",
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": false,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "motors": 23
+  },
+  "bootActive": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 0,
+        "original": 1,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "active": "BigBoot",
+    "id": 1,
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 30,
+    "kind": "Attack",
+    "motors": 23
+  },
+  "passed": true,
+  "replacement": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "otherSame": true,
+    "id": 1,
+    "hp": 100,
+    "oldDestroyed": true,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80003,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "frame": 1,
+    "kind": "Idle",
+    "motors": 23
+  },
+  "interrupted": {
+    "morphs": {
+      "PowerFist": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      },
+      "BigBoot": {
+        "visible": 1,
+        "original": 0,
+        "jointError": 0
+      }
+    },
+    "meshes": 17,
+    "id": 1,
+    "fallback": "Reaction",
+    "hp": 37,
+    "assemblyRoot": true,
+    "grounded": true,
+    "actorId": 80001,
+    "manualServerOwner": true,
+    "colliders": 2,
+    "motors": 23
+  },
+  "scope": "Prepared native World/server fixture from freshly reopened serialized place; clock advanced explicitly; no claim of physical touch or complete normal-input combat"
+}

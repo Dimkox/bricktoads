@@ -1,0 +1,260 @@
+{
+  "commands": [
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_boss_queue.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_connections.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_dragon_strikes.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_enemy_carry.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_feedback.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_gameplay.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_groups.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_guardian.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_healing_flies.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_journal.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_level_route.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_pig_strikes.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_source_combat.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_stand.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_walker_clubs.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau",
+        "tests/run_walker_strikes.luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tests/group_world/run.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_stand_gateway.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_bricktoads_place.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_build.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_combat_stand.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_lua54.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test_walker_acceptance.py",
+        "--luau",
+        "/workspace/scratch/0a367f1aa9f4/luau-bin/luau"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_test_place.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_walker_acceptance.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_bricktoads_place.py",
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/build_combat_stand.py",
+        "--check"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "compiled_files": 78,
+  "compile_errors": [],
+  "artifacts": {
+    "places/BrickToadsPlayable.rbxlx": {
+      "bytes": 370551,
+      "sha256": "f47327696381f21452017587aa53a6569209b645db8ce0efc1e6bf7a56541219"
+    },
+    "build/WalkerHeavyAcceptance.rbxlx": {
+      "bytes": 385161,
+      "sha256": "a41d6c01875ccb7b6895b6ef54ff8d2342f97fc619b3d13e17bd68178118b3d4"
+    }
+  },
+  "studio_status": "not_run_by_owner_instruction",
+  "review": {
+    "reviewer": "gameplay_completion_review",
+    "initial_verdict": "four_P2_request_changes",
+    "no_P1": true,
+    "fixed_with_failing_regressions": [
+      "Captured reaction/impulses/NPC recovery policy/post-heavy protection propagated to effects",
+      "Carried/thrown source actors excluded before recovery or damage",
+      "Actual heavy flag separates blocked light reactions from heavy protection/selector",
+      "Per-Player monotonic snapshotSeq/serverNow rejects cross-scope rollback before HUD sync"
+    ],
+    "additional_regressions": [
+      "Late reaction processing cannot renew elapsed protection",
+      "Zero health without death remains in HUD counts",
+      "Exact respawn shield state, death actor observation and slot-owner mapping retained in private journal"
+    ],
+    "fix_verification": "All4P2 cases observed RED then GREEN; full30commands and compiler rerun after fixes.",
+    "not_judged": [
+      "Studio physics",
+      "Motor appearance",
+      "Device layout",
+      "Published-service behaviour",
+      "Emulator/frame parity",
+      "Deferred Dragon transport/scooter/audio/persistence/avatar work"
+    ]
+  }
+}

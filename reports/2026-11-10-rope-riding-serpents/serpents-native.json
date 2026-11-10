@@ -1,0 +1,161 @@
+{
+  "cleanup": [
+    {
+      "lightingRestored": true,
+      "errors": [],
+      "pass": true,
+      "worldRemoved": true,
+      "blankPlaceDefaultsRestored": true,
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 6,
+      "nativeObjectsRemoved": true
+    }
+  ],
+  "fixedTicks": 962,
+  "checks": [
+    "Serpents initial pair spawn",
+    "Serpents fresh pair resources",
+    "Serpents prepared planar first coil",
+    "Before carry authored spike rows retained",
+    "Before carry four active spikes",
+    "Before carry all sixteen serpent segments",
+    "Before carry native segments match authored pose and size",
+    "Serpents head crosses outbound and returning ends",
+    "Serpents rider 1 carried through both directions",
+    "Serpents rider 1 remains on same native Model",
+    "Serpents carried rider 1 native Model",
+    "Serpents carried rider 1 local/native pose",
+    "Serpents rider 2 carried through both directions",
+    "Serpents rider 2 remains on same native Model",
+    "Serpents carried rider 2 native Model",
+    "Serpents carried rider 2 local/native pose",
+    "Serpents first carried rider preserves respawns",
+    "Serpents first carried rider preserves actorId",
+    "Serpents first carried rider preserves rawLife",
+    "Serpents first carried rider preserves attempt",
+    "Serpents first carried rider preserves status",
+    "Serpents second carried rider preserves respawns",
+    "Serpents second carried rider preserves actorId",
+    "Serpents second carried rider preserves rawLife",
+    "Serpents second carried rider preserves attempt",
+    "Serpents second carried rider preserves status",
+    "After reversals all sixteen serpent segments",
+    "After reversals native segments match authored pose and size",
+    "After reversals authored spike rows retained",
+    "After reversals four active spikes",
+    "Serpents ordinary walk crosses first room exit",
+    "Serpents first exit opens shared second checkpoint",
+    "Serpents trailing body stays on its ledge",
+    "Serpents exit walker preserves respawns",
+    "Serpents exit walker preserves actorId",
+    "Serpents exit walker preserves rawLife",
+    "Serpents exit walker preserves attempt",
+    "Serpents exit walker preserves status",
+    "Serpents trailing checkpoint hero preserves respawns",
+    "Serpents trailing checkpoint hero preserves actorId",
+    "Serpents trailing checkpoint hero preserves rawLife",
+    "Serpents trailing checkpoint hero preserves attempt",
+    "Serpents trailing checkpoint hero preserves status",
+    "Serpents first exit native Model",
+    "Serpents first exit local/native pose",
+    "Serpents trailing checkpoint native Model",
+    "Serpents trailing checkpoint local/native pose",
+    "Serpents physical fall pose prepared",
+    "Serpents physical fall Session step",
+    "Serpents ordinary fall awaits respawn",
+    "Serpents confirmed native death reason Fall",
+    "Serpents ordinary retry spends exactly one reserve",
+    "Serpents retry replaces only dead Model",
+    "Serpents paid retry uses opened room ledge",
+    "Serpents paid checkpoint retry native Model",
+    "Serpents paid checkpoint retry local/native pose",
+    "Serpents surviving walker preserves respawns",
+    "Serpents surviving walker preserves actorId",
+    "Serpents surviving walker preserves rawLife",
+    "Serpents surviving walker preserves attempt",
+    "Serpents surviving walker preserves status",
+    "After checkpoint retry authored spike rows retained",
+    "After checkpoint retry four active spikes",
+    "Serpents prepared acceptance does not claim course clear"
+  ],
+  "cases": [
+    {
+      "hero": 1,
+      "distinctSupports": 4,
+      "directions": {
+        "negative": true,
+        "positive": true
+      },
+      "start": {
+        "y": 4.5,
+        "x": 19,
+        "z": 5
+      },
+      "elapsed": 16.000000000000373,
+      "finish": {
+        "y": 7.755578152257926,
+        "x": 40.51254276674742,
+        "z": 5
+      },
+      "case": "Stationary segment rider"
+    },
+    {
+      "hero": 2,
+      "distinctSupports": 4,
+      "directions": {
+        "negative": true,
+        "positive": true
+      },
+      "start": {
+        "y": 5.902094970808767,
+        "x": 30.917807251874514,
+        "z": -5
+      },
+      "elapsed": 16.000000000000373,
+      "finish": {
+        "y": 7.360095726417304,
+        "x": 36.841232326366075,
+        "z": -5
+      },
+      "case": "Stationary segment rider"
+    },
+    {
+      "trailingStart": {
+        "y": 3,
+        "x": 0,
+        "z": 2
+      },
+      "after": {
+        "respawns": 2,
+        "actorId": "native-serpents-ea6a4db5-9d23-41f9-8e81-feced5cea778:actor:9",
+        "rawLife": 47,
+        "attempt": 2,
+        "status": "Alive"
+      },
+      "checkpoint": {
+        "y": 9,
+        "x": 80,
+        "z": 0
+      },
+      "deathReason": "Fall",
+      "pending": {
+        "respawns": 3,
+        "rawLife": 0,
+        "attempt": 1,
+        "status": "AwaitingRespawn"
+      },
+      "spawn": {
+        "y": 9,
+        "x": 80,
+        "z": 2
+      },
+      "case": "First exit shared checkpoint and real native fall retry"
+    }
+  ],
+  "sourceSha256": "88597bef8c796dcbfc233312f075571891a41f32dee9d1a8dbb7b5de4fad342b",
+  "fixture": "Prepared stage6 seed8125; two synthetic heroes; real Session, CampaignDirector, GameWorld, CampaignWorld and native Models",
+  "preparation": "World offset Z4096/Y32; initial phase0; hero1 on serpent1 head at Z+5 and hero2 on segment3 at Z-5. Later hero1 starts X65.9/Y9/Z-2 on vault1 exit ledge and hero2 X0/Y3/Z2 on arrival. Real physical fall is prepared below the native FallY.",
+  "status": "PASS",
+  "limitations": "Synthetic server roster, explicit starting poses and initial phase; no actual Players, natural route clear, keyboard/touch, network, reconnect or physical-device claim"
+}

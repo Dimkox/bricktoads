@@ -1,0 +1,55 @@
+{
+  "scenario": "prepared_native_tubes_combat_arbitration",
+  "scope": "Isolated synthetic Hero3 stage9, not continuous full campaign or registered clients",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "helperSha256": "89bd80f301deb2d82311bc456b99e7a5ae6b6f322925d7c277f275d301b56e2e",
+  "frozenPolicies": {
+    "CombatPilot": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+    "EarlyPilot": "f4cb9f153ea18f7e931906419e6173ce37fdef24fabaced85fdf1d85fb772ab5",
+    "LatePilot": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8",
+    "Nav": "d8c7603544f84ca56b3511c253d2818756ad8ae5c737bd55d8103a9f0bae5959",
+    "Runner": "623effda0dab80713d720b2c4e44e7821c345d58e1f8c938593a30dc0a559362",
+    "TubesArbitration": "89bd80f301deb2d82311bc456b99e7a5ae6b6f322925d7c277f275d301b56e2e",
+    "campaign_combat_pilot": "8197836117c1bc114b7a236738db1490c047420c113083fc93ecb1b8bd64b3da"
+  },
+  "comparison": {
+    "routeOnly": {
+      "result": "Won",
+      "elapsed": 37.54834294319153,
+      "attempt": 3,
+      "stock": 1,
+      "rawLife": 15,
+      "intents": {
+        "Move:REACTION": 38,
+        "Move:OK": 291
+      }
+    },
+    "withArbitration": {
+      "result": "Won",
+      "elapsed": 30.55519700050354,
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 15,
+      "intents": {
+        "Move:OK": 265,
+        "Move:REACTION": 14,
+        "Attack:OK": 8
+      }
+    }
+  },
+  "limits": [
+    "Native route-only baseline also Won after two paid deaths; full attempt10 archive supplies the observed Lost negative case.",
+    "Prepared native scene starts at authored stage9 spawn and uses synthetic sole Hero3; no previous-stage damage, live clients or network jitter.",
+    "Numeric real-API/NPC-AI matrix won18/25;5 failures used60Hz intents above40/s rate limit, plus seed1 .08/.167 failures. This is not universal seed/cadence proof.",
+    "No production code changes; no direct health/reserve/pose/kill/AI-state writes by policy or driver."
+  ],
+  "checks": {
+    "nativeNPCsActive": true,
+    "ordinarySessionMoveJumpPunch": true,
+    "lightingRestoredBeforeFirstYield": true,
+    "withArbitrationNoDeaths": true,
+    "withArbitrationSameActor": true,
+    "withArbitrationAllReservesPreserved": true,
+    "bothWorldsAndModuleTreesAutoCleaned": true
+  }
+}

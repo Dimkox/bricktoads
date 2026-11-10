@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import hashlib; from pathlib import Path; raw=Path("src/server/RunLifecycle.lua").read_bytes().replace(b"\r\n",b"\n"); actual=hashlib.sha1(f"blob {len(raw)}\0".encode()+raw).hexdigest(); assert actual=="274e59f2bfe347e4496fdad7c9f617b2c32aa271", actual
+                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b22773c676dc13f114f6cfb7e1fad0aa23c5dacc

@@ -1,0 +1,4854 @@
+{
+  "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+  "seed": 1158731273,
+  "stage9Started": 1794331512.183408,
+  "events": [
+    {
+      "revision": 255,
+      "data": {
+        "effectAt": 1794331512.666724,
+        "kind": "Robot",
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+        "attack": "Bolt"
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "CampaignEnemyAttack",
+      "seq": 1086,
+      "now": 1794331512.216724
+    },
+    {
+      "revision": 255,
+      "data": {
+        "effectAt": 1794331514.313098,
+        "kind": "Robot",
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+        "attack": "Bolt"
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "CampaignEnemyAttack",
+      "seq": 1087,
+      "now": 1794331513.863098
+    },
+    {
+      "view": "Playing",
+      "revision": 256,
+      "rawLife": 47,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "inputAction": "Punch",
+        "action": "HeroJab",
+        "seq": 18
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331514.06252,
+      "late": false,
+      "status": "Alive",
+      "kind": "AttackAccepted",
+      "seq": 1089,
+      "connected": true
+    },
+    {
+      "revision": 256,
+      "data": {
+        "action": "HeroJab",
+        "attacker": 1,
+        "profile": 0,
+        "after": 13,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+        "position": {
+          "y": 3,
+          "x": 20,
+          "z": 6
+        },
+        "target": -1,
+        "before": 15,
+        "sourceRaw": true,
+        "dying": false
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1090,
+      "now": 1794331514.181403
+    },
+    {
+      "view": "Playing",
+      "revision": 257,
+      "rawLife": 47,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "inputAction": "Punch",
+        "action": "HeroJab",
+        "seq": 25
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331514.695571,
+      "late": false,
+      "status": "Alive",
+      "kind": "AttackAccepted",
+      "seq": 1092,
+      "connected": true
+    },
+    {
+      "revision": 257,
+      "data": {
+        "action": "HeroJab",
+        "attacker": 1,
+        "profile": 0,
+        "after": 11,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+        "position": {
+          "y": 0.9998208284378052,
+          "x": 20.81191635131836,
+          "z": 6.982874870300293
+        },
+        "target": -1,
+        "before": 13,
+        "sourceRaw": true,
+        "dying": false
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1093,
+      "now": 1794331514.796003
+    },
+    {
+      "view": "Playing",
+      "revision": 258,
+      "rawLife": 47,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "inputAction": "Punch",
+        "action": "HeroJab",
+        "seq": 32
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331515.346187,
+      "late": false,
+      "status": "Alive",
+      "kind": "AttackAccepted",
+      "seq": 1095,
+      "connected": true
+    },
+    {
+      "revision": 258,
+      "data": {
+        "action": "HeroJab",
+        "attacker": 1,
+        "profile": 0,
+        "after": 9,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+        "position": {
+          "y": 0.9997361898422241,
+          "x": 23.14501953125,
+          "z": 9.5657377243042
+        },
+        "target": -1,
+        "before": 11,
+        "sourceRaw": true,
+        "dying": false
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1096,
+      "now": 1794331515.446342
+    },
+    {
+      "view": "Playing",
+      "revision": 259,
+      "rawLife": 47,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "inputAction": "Punch",
+        "action": "HeroJab",
+        "seq": 39
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331515.994861,
+      "late": false,
+      "status": "Alive",
+      "kind": "AttackAccepted",
+      "seq": 1098,
+      "connected": true
+    },
+    {
+      "revision": 259,
+      "data": {
+        "action": "HeroJab",
+        "attacker": 1,
+        "profile": 0,
+        "after": 7,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+        "position": {
+          "y": 0.9965634942054749,
+          "x": 25.81195068359375,
+          "z": 12.521434783935547
+        },
+        "target": -1,
+        "before": 9,
+        "sourceRaw": true,
+        "dying": false
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1099,
+      "now": 1794331516.096242
+    },
+    {
+      "view": "Playing",
+      "revision": 260,
+      "rawLife": 47,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "inputAction": "Punch",
+        "action": "HeroJab",
+        "seq": 46
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331516.596529,
+      "late": false,
+      "status": "Alive",
+      "kind": "AttackAccepted",
+      "seq": 1101,
+      "connected": true
+    },
+    {
+      "revision": 260,
+      "data": {
+        "action": "HeroJab",
+        "attacker": 1,
+        "profile": 0,
+        "after": 5,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+        "position": {
+          "y": 0.9481955766677856,
+          "x": 28.151201248168945,
+          "z": 15.139640808105469
+        },
+        "target": -1,
+        "before": 7,
+        "sourceRaw": true,
+        "dying": false
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-1",
+      "userId": -1,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1102,
+      "now": 1794331516.69687
+    },
+    {
+      "revision": 260,
+      "data": {
+        "effectAt": 1794331518.530481,
+        "kind": "Electrofish",
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-2",
+        "attack": "Shock"
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-2",
+      "userId": -2,
+      "late": false,
+      "kind": "CampaignEnemyAttack",
+      "seq": 1104,
+      "now": 1794331518.130481
+    },
+    {
+      "view": "Playing",
+      "revision": 261,
+      "rawLife": 31,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "action": "DragonFire",
+        "attacker": -2,
+        "profile": 22,
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": true,
+          "position": [
+            32.203636169433594,
+            3,
+            0.05648944154381752
+          ]
+        },
+        "blocked": false,
+        "after": 31,
+        "impulse": true,
+        "before": 47,
+        "dying": false
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331518.531439,
+      "late": false,
+      "status": "Alive",
+      "kind": "Hit",
+      "seq": 1106,
+      "connected": true
+    },
+    {
+      "revision": 261,
+      "data": {
+        "effectAt": 1794331520.345323,
+        "kind": "Hammerfish",
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-3",
+        "attack": "Lunge"
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-3",
+      "userId": -3,
+      "late": false,
+      "kind": "CampaignEnemyAttack",
+      "seq": 1107,
+      "now": 1794331519.945323
+    },
+    {
+      "revision": 261,
+      "data": {
+        "action": "WalkerHeavy",
+        "attacker": -3,
+        "profile": 2,
+        "after": 0,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-2",
+        "position": {
+          "y": 2.7718729972839355,
+          "x": 37,
+          "z": 0
+        },
+        "target": -2,
+        "before": 15,
+        "sourceRaw": true,
+        "dying": true
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-2",
+      "userId": -2,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1108,
+      "now": 1794331520.479685
+    },
+    {
+      "view": "Playing",
+      "revision": 262,
+      "rawLife": 31,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "inputAction": "Punch",
+        "action": "HeroJab",
+        "seq": 89
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331520.978661,
+      "late": false,
+      "status": "Alive",
+      "kind": "AttackAccepted",
+      "seq": 1111,
+      "connected": true
+    },
+    {
+      "revision": 262,
+      "data": {
+        "action": "HeroJab",
+        "attacker": 1,
+        "profile": 0,
+        "after": 13,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-3",
+        "position": {
+          "y": 3,
+          "x": 37,
+          "z": 0.32317379117012024
+        },
+        "target": -3,
+        "before": 15,
+        "sourceRaw": true,
+        "dying": false
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-3",
+      "userId": -3,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1112,
+      "now": 1794331521.083036
+    },
+    {
+      "revision": 262,
+      "data": {
+        "before": 13,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-3",
+        "after": 15
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-3",
+      "userId": -3,
+      "late": false,
+      "kind": "EnemyRecovery",
+      "seq": 1113,
+      "now": 1794331522.147246
+    },
+    {
+      "revision": 262,
+      "data": {
+        "effectAt": 1794331532.5971038,
+        "kind": "Shark",
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+        "attack": "Bite"
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+      "userId": -4,
+      "late": false,
+      "kind": "CampaignEnemyAttack",
+      "seq": 1115,
+      "now": 1794331532.297104
+    },
+    {
+      "revision": 262,
+      "data": {
+        "action": "PigHeavy",
+        "attacker": -4,
+        "profile": 2,
+        "after": 0,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-5",
+        "position": {
+          "y": 1.2716386318206787,
+          "x": 198,
+          "z": 0
+        },
+        "target": -5,
+        "before": 15,
+        "sourceRaw": true,
+        "dying": true
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-5",
+      "userId": -5,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1116,
+      "now": 1794331532.610971
+    },
+    {
+      "view": "Playing",
+      "revision": 263,
+      "rawLife": 31,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "inputAction": "Punch",
+        "action": "HeroJab",
+        "seq": 205
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331533.279077,
+      "late": false,
+      "status": "Alive",
+      "kind": "AttackAccepted",
+      "seq": 1119,
+      "connected": true
+    },
+    {
+      "revision": 263,
+      "data": {
+        "action": "HeroJab",
+        "attacker": 1,
+        "profile": 0,
+        "after": 13,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+        "position": {
+          "y": 2.999999761581421,
+          "x": 198,
+          "z": 0.0102850878611207
+        },
+        "target": -4,
+        "before": 15,
+        "sourceRaw": true,
+        "dying": false
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+      "userId": -4,
+      "late": false,
+      "kind": "EnemyHit",
+      "seq": 1120,
+      "now": 1794331533.396769
+    },
+    {
+      "revision": 263,
+      "data": {
+        "before": 13,
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+        "after": 15
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+      "userId": -4,
+      "late": false,
+      "kind": "EnemyRecovery",
+      "seq": 1121,
+      "now": 1794331534.464615
+    },
+    {
+      "revision": 263,
+      "data": {
+        "effectAt": 1794331538.212195,
+        "kind": "Shark",
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+        "attack": "Bite"
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+      "userId": -4,
+      "late": false,
+      "kind": "CampaignEnemyAttack",
+      "seq": 1122,
+      "now": 1794331537.912195
+    },
+    {
+      "view": "Playing",
+      "revision": 264,
+      "rawLife": 15,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "action": "PigHeavy",
+        "attacker": -4,
+        "profile": 20,
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": true,
+          "position": [
+            256.4448547363281,
+            2.9976072311401367,
+            0.01028508972376585
+          ]
+        },
+        "blocked": false,
+        "after": 15,
+        "impulse": true,
+        "before": 31,
+        "dying": false
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331538.746231,
+      "late": false,
+      "status": "Alive",
+      "kind": "Hit",
+      "seq": 1124,
+      "connected": true
+    },
+    {
+      "revision": 264,
+      "data": {
+        "effectAt": 1794331540.116513,
+        "kind": "Shark",
+        "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+        "attack": "Bite"
+      },
+      "levelEpoch": 9,
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:enemy:9:-4",
+      "userId": -4,
+      "late": false,
+      "kind": "CampaignEnemyAttack",
+      "seq": 1125,
+      "now": 1794331539.816513
+    },
+    {
+      "view": "Playing",
+      "revision": 265,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "action": "Dash",
+        "attacker": -9001,
+        "profile": 21,
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": true,
+          "position": [
+            270.0820007324219,
+            1.1508435010910034,
+            0.015364594757556915
+          ]
+        },
+        "blocked": false,
+        "after": 0,
+        "impulse": true,
+        "before": 15,
+        "dying": true
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331540.227888,
+      "late": false,
+      "status": "Alive",
+      "kind": "Hit",
+      "seq": 1127,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 265,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "mode": "Tubes",
+        "kind": "Gear"
+      },
+      "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331540.227888,
+      "late": false,
+      "status": "Alive",
+      "kind": "CampaignHazardHit",
+      "seq": 1128,
+      "connected": true
+    },
+    {
+      "view": "Menu",
+      "revision": 266,
+      "rawLife": 0,
+      "attempt": 4,
+      "data": {
+        "eventId": "s-270",
+        "code": "OK"
+      },
+      "userId": 1,
+      "levelEpoch": 9,
+      "respawns": 0,
+      "now": 1794331541.029779,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "Death",
+      "seq": 1129,
+      "connected": true
+    },
+    {
+      "levelEpoch": 9,
+      "revision": 266,
+      "now": 1794331541.029779,
+      "late": false,
+      "kind": "RunResult",
+      "data": {
+        "result": "Lost"
+      },
+      "seq": 1132
+    }
+  ],
+  "lateModeFrames": [
+    {
+      "heartbeatDt": 0.023200467228889465,
+      "modeElapsed": 24.81711890269071,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.022172,
+      "modeNow": 1794331536.998873,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 0.9999999403953552
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.01096730890166658,
+            "x": 14.725132657636436,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.996082067489624,
+            "x": 245.9025115966797,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.15683603286743164,
+          "planned": {
+            "x": 0.6621163256155699,
+            "z": 0.04871409192738901,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.018927,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331536.96539,
+            "x": 0.6621050455662958,
+            "run": false,
+            "z": 0.05048946281040056
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.018927,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.996082140066151,
+            "x": 245.90251506724871,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331536.979553,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016139455139636993,
+      "modeElapsed": 24.877641861326993,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.075226,
+      "modeNow": 1794331537.058286,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.005698563682595208,
+            "x": 14.729202047682998,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9955945014953613,
+            "x": 246.79371643066406,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.15683603286743164,
+          "planned": {
+            "x": 0.6621163256155699,
+            "z": 0.04871409192738901,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.018927,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.039169,
+            "x": 0.6621163256155699,
+            "run": false,
+            "z": 0.04871409192738901
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.018927,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9955944775684387,
+            "x": 246.79371460471486,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.056083,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.021938927471637726,
+      "modeElapsed": 24.93569662142545,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.139897,
+      "modeNow": 1794331537.118129,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.000749919750616862,
+            "x": 14.725060711021502,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.995497703552246,
+            "x": 247.64854431152344,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.116851806640625,
+          "planned": {
+            "x": 0.6621307149385567,
+            "z": 0.05199544804276712,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.135779,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.039169,
+            "x": 0.6621163256155699,
+            "run": false,
+            "z": 0.04871409192738901
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.135779,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9954976088653837,
+            "x": 247.64854665774175,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.056083,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.021019473671913147,
+      "modeElapsed": 24.997524510137737,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.201383,
+      "modeNow": 1794331537.180183,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.005492739629665568,
+            "x": 14.725061626944562,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.995759963989258,
+            "x": 248.5587921142578,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.116851806640625,
+          "planned": {
+            "x": 0.6621307149385567,
+            "z": 0.05199544804276712,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.135779,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.161307,
+            "x": 0.6621307149385567,
+            "run": false,
+            "z": 0.05199544804276712
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.135779,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.995760045077849,
+            "x": 248.5587938575566,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.178126,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.02295241318643093,
+      "modeElapsed": 25.068440535105765,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.274209,
+      "modeNow": 1794331537.250844,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.006258306055026822,
+            "x": 14.742698292230886,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9961798191070557,
+            "x": 249.6030731201172,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.13448810577392578,
+          "planned": {
+            "x": 0.10706884064469885,
+            "z": 0.053920855496159444,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.270267,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.161307,
+            "x": 0.6621307149385567,
+            "run": false,
+            "z": 0.05199544804276712
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.270267,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.996179837770557,
+            "x": 249.60306871610396,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.178126,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.015981344506144524,
+      "modeElapsed": 25.130422421731055,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.329265,
+      "modeNow": 1794331537.313466,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.00688121983085524,
+            "x": 14.725119068678584,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.996589183807373,
+            "x": 250.51559448242188,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.13448810577392578,
+          "planned": {
+            "x": 0.10706884064469885,
+            "z": 0.053920855496159444,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.270267,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.294788,
+            "x": 0.6621307149385567,
+            "run": false,
+            "z": 0.05199544804276712
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.270267,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.996589134025998,
+            "x": 250.5155918987507,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.312036,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016822410747408867,
+      "modeElapsed": 25.195346633903682,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.394904,
+      "modeNow": 1794331537.377972,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.007339900962548107,
+            "x": 14.748574164347186,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9970531463623047,
+            "x": 251.47210693359375,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.12286210060119629,
+          "planned": {
+            "x": -0.8286247658355796,
+            "z": 0.054594664141458624,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.393129,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.294788,
+            "x": 0.6621307149385567,
+            "run": false,
+            "z": 0.05199544804276712
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.393129,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997053163203164,
+            "x": 251.472105580218,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.312036,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.017951706424355507,
+      "modeElapsed": 25.26004025992006,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.461123,
+      "modeNow": 1794331537.443771,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.006111944323145945,
+            "x": 14.309747714987587,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997504234313965,
+            "x": 252.4149169921875,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.12286210060119629,
+          "planned": {
+            "x": -0.8286247658355796,
+            "z": 0.054594664141458624,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.393129,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.411936,
+            "x": 0.10706884064469885,
+            "run": false,
+            "z": 0.053920855496159444
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.393129,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997504350062104,
+            "x": 252.41491412351544,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.427874,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016013631597161293,
+      "modeElapsed": 25.313269236125052,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.51214,
+      "modeNow": 1794331537.496825,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.0037888016985804483,
+            "x": 13.64166856417493,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9977481365203857,
+            "x": 253.15342712402344,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.12286210060119629,
+          "planned": {
+            "x": -0.8286247658355796,
+            "z": 0.054594664141458624,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.393129,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.411936,
+            "x": 0.10706884064469885,
+            "run": false,
+            "z": 0.053920855496159444
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.393129,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997748135177787,
+            "x": 253.15342177875752,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.427874,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.017014484852552414,
+      "modeElapsed": 25.363311835564673,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.563084,
+      "modeNow": 1794331537.547385,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.001138139956741946,
+            "x": 12.195823262821275,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997854232788086,
+            "x": 253.795654296875,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.13377594947814941,
+          "planned": {
+            "x": -0.9985654162677319,
+            "z": 0.05354539601171576,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.526905,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.512651,
+            "x": -0.8286247658355796,
+            "run": false,
+            "z": 0.054594664141458624
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.526905,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9978543394767403,
+            "x": 253.79565476283477,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.528497,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.017053889110684395,
+      "modeElapsed": 25.413597826845944,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.613117,
+      "modeNow": 1794331537.596572,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0007963462245679752,
+            "x": 10.29650183816946,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997838020324707,
+            "x": 254.34652709960938,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.13377594947814941,
+          "planned": {
+            "x": -0.9985654162677319,
+            "z": 0.05354539601171576,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.526905,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.563322,
+            "x": -0.9985654162677319,
+            "run": false,
+            "z": 0.05354539601171576
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.526905,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9978381373757177,
+            "x": 254.3465196733346,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.577835,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.020063400268554688,
+      "modeElapsed": 25.46275315526873,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.664438,
+      "modeNow": 1794331537.645426,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.002083438401765036,
+            "x": 8.490473563105015,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9977564811706543,
+            "x": 254.79344177246094,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.13377594947814941,
+          "planned": {
+            "x": -0.9985654162677319,
+            "z": 0.05354539601171576,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.526905,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.563322,
+            "x": -0.9985654162677319,
+            "run": false,
+            "z": 0.05354539601171576
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.526905,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9977564571790563,
+            "x": 254.79343578398397,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.577835,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01995643973350525,
+      "modeElapsed": 25.520338038913906,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.722607,
+      "modeNow": 1794331537.703256,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0033888944221524336,
+            "x": 6.525566453086229,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997586250305176,
+            "x": 255.21051025390625,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.15367984771728516,
+          "planned": {
+            "x": -0.9986562330301907,
+            "z": 0.051824012098153335,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.680585,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.703256,
+            "x": -0.9986562330301907,
+            "run": false,
+            "z": 0.051824012098153335
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.680585,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997586253710198,
+            "x": 255.21051201032472,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.720232,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.018958618864417076,
+      "modeElapsed": 25.582203002646565,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.78448,
+      "modeNow": 1794331537.76554,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0017471741640993736,
+            "x": 4.582516233522659,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9974358081817627,
+            "x": 255.5397491455078,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.15367984771728516,
+          "planned": {
+            "x": -0.9986562330301907,
+            "z": 0.051824012098153335,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.680585,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.703256,
+            "x": -0.9986562330301907,
+            "run": false,
+            "z": 0.051824012098153335
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.680585,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9974359255688148,
+            "x": 255.53975572449923,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.720232,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.014989335089921951,
+      "modeElapsed": 25.641269613057375,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.840165,
+      "modeNow": 1794331537.823476,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.00035654349093874535,
+            "x": 2.8787941386990283,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9973809719085693,
+            "x": 255.74705505371094,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.12044215202331543,
+          "planned": {
+            "x": -0.7554890254817191,
+            "z": 0.05214460452473132,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.801027,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.823476,
+            "x": -0.9986562330301907,
+            "run": false,
+            "z": 0.051824012098153335
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.801027,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997380908038797,
+            "x": 255.7470598135407,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.838295,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.018860645592212677,
+      "modeElapsed": 25.69023477472365,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.892343,
+      "modeNow": 1794331537.873739,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.0006897541319022052,
+            "x": 1.569841376882347,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997396230697632,
+            "x": 255.84585571289062,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.12044215202331543,
+          "planned": {
+            "x": -0.7554890254817191,
+            "z": 0.05214460452473132,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.801027,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.823476,
+            "x": -0.9986562330301907,
+            "run": false,
+            "z": 0.051824012098153335
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.801027,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997396231839793,
+            "x": 255.84585799003494,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.838295,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01696673035621643,
+      "modeElapsed": 25.74801909737289,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331537.948476,
+      "modeNow": 1794331537.931428,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.0018676178403358116,
+            "x": 0.13599809675420893,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9974758625030518,
+            "x": 255.88404846191406,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.14313292503356934,
+          "planned": {
+            "x": -0.11208017747794245,
+            "z": 0.0531221042763587,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.94416,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.931428,
+            "x": -0.7554890254817191,
+            "run": false,
+            "z": 0.05214460452473132
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.94416,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9974759758820735,
+            "x": 255.88404683053992,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331537.946011,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.02403235249221325,
+      "modeElapsed": 25.80823217704892,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.015416,
+      "modeNow": 1794331537.994688,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": -1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.0024410554340339326,
+            "x": -0.8500594353590089,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997608184814453,
+            "x": 255.85464477539062,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.14313292503356934,
+          "planned": {
+            "x": -0.11208017747794245,
+            "z": 0.0531221042763587,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.94416,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.994688,
+            "x": -0.11208017747794245,
+            "run": false,
+            "z": 0.0531221042763587
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.94416,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997608259981888,
+            "x": 255.85463723562995,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.013044,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.017022915184497833,
+      "modeElapsed": 25.87131710164249,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.072162,
+      "modeNow": 1794331538.054331,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": -1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.00145455384693274,
+            "x": -0.721848303650505,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9977211952209473,
+            "x": 255.80604553222656,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.14313292503356934,
+          "planned": {
+            "x": -0.11208017747794245,
+            "z": 0.0531221042763587,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331537.94416,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331537.994688,
+            "x": -0.11208017747794245,
+            "run": false,
+            "z": 0.0531221042763587
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331537.94416,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9977211145157345,
+            "x": 255.80603876204958,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.013044,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01708192378282547,
+      "modeElapsed": 25.930820094421506,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.129739,
+      "modeNow": 1794331538.112942,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": -1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.0005399085349376102,
+            "x": -0.6107278986499194,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9977715015411377,
+            "x": 255.76727294921875,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.15334606170654297,
+          "planned": {
+            "x": 0.09716867631222274,
+            "z": 0.05295599442967801,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.097506,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.112942,
+            "x": 0.09716867631222274,
+            "run": false,
+            "z": 0.05295599442967801
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.097506,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997771420812943,
+            "x": 255.7672659973475,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.127055,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.015353471972048283,
+      "modeElapsed": 25.99713814817369,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.19496,
+      "modeNow": 1794331538.178946,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": -1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.00026955649537729003,
+            "x": -0.13000143412616738,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9977731704711914,
+            "x": 255.746826171875,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.15334606170654297,
+          "planned": {
+            "x": 0.09716867631222274,
+            "z": 0.05295599442967801,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.097506,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.112942,
+            "x": 0.09716867631222274,
+            "run": false,
+            "z": 0.05295599442967801
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.097506,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9977731065698263,
+            "x": 255.74682510449674,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.127055,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016963636502623558,
+      "modeElapsed": 26.04542103316635,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.247605,
+      "modeNow": 1794331538.227838,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 0.9999999403953552
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0007979285402846016,
+            "x": 0.19294595457784194,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9977431297302246,
+            "x": 255.75099182128906,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.12885499000549316,
+          "planned": {
+            "x": -0.034525516049084104,
+            "z": 0.052486211985829916,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.226361,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.112942,
+            "x": 0.09716867631222274,
+            "run": false,
+            "z": 0.05295599442967801
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.226361,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9977431442924396,
+            "x": 255.75099241728472,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.127055,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016952859237790108,
+      "modeElapsed": 26.11221178341657,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.312582,
+      "modeNow": 1794331538.294531,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0008033198047057953,
+            "x": 0.4295733985888197,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9976816177368164,
+            "x": 255.77529907226562,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.12885499000549316,
+          "planned": {
+            "x": -0.034525516049084104,
+            "z": 0.052486211985829916,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.226361,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.247833,
+            "x": -0.034525516049084104,
+            "run": false,
+            "z": 0.052486211985829916
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.226361,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9976816297710775,
+            "x": 255.77529768769062,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.259921,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01595563255250454,
+      "modeElapsed": 26.164067587815225,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.364243,
+      "modeNow": 1794331538.346936,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0006629566455513946,
+            "x": 0.553949133487677,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997642993927002,
+            "x": 255.80181884765625,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.11703896522521973,
+          "planned": {
+            "x": -0.1404805876084201,
+            "z": 0.05241180199261599,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.3434,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.247833,
+            "x": -0.034525516049084104,
+            "run": false,
+            "z": 0.052486211985829916
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.3434,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9976428974428155,
+            "x": 255.80181635358818,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.259921,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.017004895955324173,
+      "modeElapsed": 26.229257724247873,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.430301,
+      "modeNow": 1794331538.412868,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0005179523690964083,
+            "x": 0.6980628467073691,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9976043701171875,
+            "x": 255.84384155273438,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.11703896522521973,
+          "planned": {
+            "x": -0.1404805876084201,
+            "z": 0.05241180199261599,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.3434,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.380795,
+            "x": -0.034525516049084104,
+            "run": false,
+            "z": 0.052486211985829916
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.3434,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997604446328025,
+            "x": 255.8438407568805,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.393686,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01789028011262417,
+      "modeElapsed": 26.296277021057904,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.498486,
+      "modeNow": 1794331538.479435,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.0003719148298408116,
+            "x": 0.8331107351296433,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9975736141204834,
+            "x": 255.8962860107422,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.1340188980102539,
+          "planned": {
+            "x": 0.998626001068659,
+            "z": 0.052403339489184624,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.477419,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.479435,
+            "x": -0.1404805876084201,
+            "run": false,
+            "z": 0.05241180199261599
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.477419,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997573717949303,
+            "x": 255.89629038678962,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.495593,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01698646880686283,
+      "modeElapsed": 26.36312829796225,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.562646,
+      "modeNow": 1794331538.545686,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -0.00012527932196992192,
+            "x": 0.7685867850822254,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997558832168579,
+            "x": 255.94927978515625,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.1340188980102539,
+          "planned": {
+            "x": 0.998626001068659,
+            "z": 0.052403339489184624,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.477419,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.479435,
+            "x": -0.1404805876084201,
+            "run": false,
+            "z": 0.05241180199261599
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.477419,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997558886406395,
+            "x": 255.94928178792858,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.495593,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01814356818795204,
+      "modeElapsed": 26.414009558968246,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.613984,
+      "modeNow": 1794331538.597288,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 0.9999999403953552
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 5.1149777190005394e-05,
+            "x": 0.7233636799300911,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9975574016571045,
+            "x": 255.9868621826172,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.13370203971862793,
+          "planned": {
+            "x": 0.998618975284949,
+            "z": 0.05253705550217179,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.611121,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.597288,
+            "x": 0.998626001068659,
+            "run": false,
+            "z": 0.052403339489184624
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.611121,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.997557343271177,
+            "x": 255.9868675956723,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.612402,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.015119640156626701,
+      "modeElapsed": 26.482551927678287,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.67921,
+      "modeNow": 1794331538.663659,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.0003363342039912607,
+            "x": 2.729098513833753,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.997572183609009,
+            "x": 256.121826171875,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.13370203971862793,
+          "planned": {
+            "x": 0.998618975284949,
+            "z": 0.05253705550217179,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.611121,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.597288,
+            "x": 0.998626001068659,
+            "run": false,
+            "z": 0.052403339489184624
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.611121,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9975722025793203,
+            "x": 256.1218261847349,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.612402,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.018889153376221657,
+      "modeElapsed": 26.530257931910455,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.731526,
+      "modeNow": 1794331538.713931,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.0004323003037412787,
+            "x": 4.015466045396078,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.9975926876068115,
+            "x": 256.2932434082031,
+            "z": 0.01028508972376585
+          },
+          "decisionDt": 0.11706399917602539,
+          "planned": {
+            "x": 0.9986122379604471,
+            "z": 0.05266496174523849,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331538.728185,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.697083,
+            "x": 0.998618975284949,
+            "run": false,
+            "z": 0.05253705550217179
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331538.728185,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.9975925777123584,
+            "x": 256.29324556988155,
+            "z": 0.010285089691834053
+          },
+          "rawLife": 31,
+          "sessionLastMoveAt": 1794331538.711872,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.014434891752898693,
+      "modeElapsed": 26.59786121919751,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.795347,
+      "modeNow": 1794331538.780977,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 14.388320419753551,
+            "x": 4.7589021785570464,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 3.503652334213257,
+            "x": 257.4904479980469,
+            "z": 0.010795035399496555
+          },
+          "decisionDt": 0.11706399917602539,
+          "planned": {
+            "x": 0.9986122379604471,
+            "z": 0.05266496174523849,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331538.728185,
+          "reactionEnd": 1794331539.496231,
+          "anchored": true,
+          "decisionAt": 1794331538.728185,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.746231,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "checkpoint": 2,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 3.503652404062982,
+            "x": 257.4904408413355,
+            "z": 0.010795035197601015
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331538.711872,
+          "finished": false,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.018983526155352592,
+      "modeElapsed": 26.646266634576023,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.848083,
+      "modeNow": 1794331538.829725,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 13.644899599051175,
+            "x": 4.636372288017575,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 4.176113605499268,
+            "x": 258.79730224609375,
+            "z": 0.011421794071793556
+          },
+          "decisionDt": 0.11557316780090332,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331538.843758,
+          "reactionEnd": 1794331539.496231,
+          "anchored": true,
+          "decisionAt": 1794331538.843758,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.746231,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "checkpoint": 2,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 4.176113402193406,
+            "x": 258.7972961047849,
+            "z": 0.011421794064683024
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331538.711872,
+          "finished": false,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.019997520372271538,
+      "modeElapsed": 26.71128680743277,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.913438,
+      "modeNow": 1794331538.893552,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 12.71208455958771,
+            "x": 4.484131022887275,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 5.025742053985596,
+            "x": 260.31585693359375,
+            "z": 0.012131383642554283
+          },
+          "decisionDt": 0.11557316780090332,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331538.843758,
+          "reactionEnd": 1794331539.496231,
+          "anchored": true,
+          "decisionAt": 1794331538.843758,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.746231,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "checkpoint": 2,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 5.0257422864453885,
+            "x": 260.3158683903046,
+            "z": 0.012131383994077776
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331538.711872,
+          "finished": false,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.014998139813542366,
+      "modeElapsed": 26.779278377071023,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331538.978037,
+      "modeNow": 1794331538.962462,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 2.5133491138498716,
+            "x": 0,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 5.465298175811768,
+            "x": 261.3647155761719,
+            "z": 0.012739795260131359
+          },
+          "decisionDt": 0.13247299194335938,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331538.976231,
+          "reactionEnd": 1794331539.496231,
+          "anchored": true,
+          "decisionAt": 1794331538.976231,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.746231,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "checkpoint": 2,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 5.465297947266619,
+            "x": 261.3647003335234,
+            "z": 0.012739795169565207
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331538.711872,
+          "finished": false,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.020131820812821388,
+      "modeElapsed": 26.83008469082415,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.034178,
+      "modeNow": 1794331539.012703,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -5.107597949119336,
+            "x": 0,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 5.340534687042236,
+            "x": 262.0201416015625,
+            "z": 0.013120011426508427
+          },
+          "decisionDt": 0.13247299194335938,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331538.976231,
+          "reactionEnd": 1794331539.496231,
+          "anchored": true,
+          "decisionAt": 1794331538.976231,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331538.746231,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "checkpoint": 2,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 5.340534575049201,
+            "x": 262.0201493388541,
+            "z": 0.013120010991922277
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331538.711872,
+          "finished": false,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.022145001217722893,
+      "modeElapsed": 26.881420833058655,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.084523,
+      "modeNow": 1794331539.063257,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 0.9999999403953552
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -10.657180384492067,
+            "x": 0.0523427315056324,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 4.853252410888672,
+            "x": 262.5882263183594,
+            "z": 0.013449153862893581
+          },
+          "decisionDt": 0.13247299194335938,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331538.976231,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 4.853252470991742,
+            "x": 262.5882386924539,
+            "z": 0.013449153509226881
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331538.976231,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.018880490213632584,
+      "modeElapsed": 26.94011600036174,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.14219,
+      "modeNow": 1794331539.122824,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -9.849624250944778,
+            "x": 0.2759504512003469,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 4.25766658782959,
+            "x": 263.1501159667969,
+            "z": 0.013768486678600311
+          },
+          "decisionDt": 0.12469601631164551,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331539.100927,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 4.257666822439536,
+            "x": 263.15011150168533,
+            "z": 0.013768486951336404
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331539.100927,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.020198600366711617,
+      "modeElapsed": 26.99477005098015,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.196819,
+      "modeNow": 1794331539.178818,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -9.147164109518696,
+            "x": 0.4683121625212392,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 3.7440266609191895,
+            "x": 263.6044921875,
+            "z": 0.014019394293427467
+          },
+          "decisionDt": 0.12469601631164551,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331539.100927,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 3.7440267774811704,
+            "x": 263.6045002576498,
+            "z": 0.014019394565601317
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331539.100927,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.017104465514421463,
+      "modeElapsed": 27.064269757829607,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.262529,
+      "modeNow": 1794331539.246339,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -8.31795329895088,
+            "x": 0.6926248950385928,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 3.1438021659851074,
+            "x": 264.1036376953125,
+            "z": 0.014284473843872547
+          },
+          "decisionDt": 0.1428380012512207,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331539.243765,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 3.1438022070668046,
+            "x": 264.1036376724663,
+            "z": 0.014284474199380382
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331539.243765,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016864867880940437,
+      "modeElapsed": 27.127977903932333,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.328186,
+      "modeNow": 1794331539.310899,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -7.616248073285251,
+            "x": 0.8799115891011979,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.6418166160583496,
+            "x": 264.4981384277344,
+            "z": 0.01448338944464922
+          },
+          "decisionDt": 0.1428380012512207,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331539.243765,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.6418165704815997,
+            "x": 264.49814284171373,
+            "z": 0.014483388979539994
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331539.243765,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.014880765229463577,
+      "modeElapsed": 27.180556608363986,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.379086,
+      "modeNow": 1794331539.363699,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -7.076303287118969,
+            "x": 1.022492022188029,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 2.259988784790039,
+            "x": 264.7872009277344,
+            "z": 0.014621363952755928
+          },
+          "decisionDt": 0.11736083030700684,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331539.361126,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 2.25998871626925,
+            "x": 264.78718868788695,
+            "z": 0.014621364355276537
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331539.361126,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016099216416478157,
+      "modeElapsed": 27.231899607926607,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.429903,
+      "modeNow": 1794331539.414524,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -6.580834595674557,
+            "x": 1.151858583883306,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.9132806062698364,
+            "x": 265.04254150390625,
+            "z": 0.014736524783074856
+          },
+          "decisionDt": 0.11736083030700684,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331539.361126,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.9132806018876218,
+            "x": 265.04255477174144,
+            "z": 0.01473652510455197
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331539.361126,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01880010962486267,
+      "modeElapsed": 27.296296472661197,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.498146,
+      "modeNow": 1794331539.479299,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -6.001145263557695,
+            "x": 1.3016244812226159,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.5129960775375366,
+            "x": 265.33245849609375,
+            "z": 0.014858134090900421
+          },
+          "decisionDt": 0.1332261562347412,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "reactionEnd": 1794331539.496231,
+          "plannedAt": 1794331539.494352,
+          "connected": true,
+          "stock": 0,
+          "rawLife": 15,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.050839,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "finished": false,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.5129961370163318,
+            "x": 265.3324537237661,
+            "z": 0.014858134397418829
+          },
+          "slot": 1,
+          "checkpoint": 2,
+          "decisionAt": 1794331539.494352,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01987656019628048,
+      "modeElapsed": 27.344911423511803,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.549214,
+      "modeNow": 1794331539.529142,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -5.592138716809793,
+            "x": 1.4059500272402707,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.2343460321426392,
+            "x": 265.53240966796875,
+            "z": 0.01493547111749649
+          },
+          "decisionDt": 0.1332261562347412,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.494352,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.529142,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.494352,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.2343459771172227,
+            "x": 265.5323985258264,
+            "z": 0.01493547121655167
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.545566,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01599382422864437,
+      "modeElapsed": 27.41309925634414,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.612209,
+      "modeNow": 1794331539.596525,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -5.057195613796195,
+            "x": 1.5407941858007455,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.8754802346229553,
+            "x": 265.7909851074219,
+            "z": 0.015026570297777653
+          },
+          "decisionDt": 0.1332261562347412,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.494352,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.529142,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.494352,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.8754802272731008,
+            "x": 265.7909828428506,
+            "z": 0.015026570162072404
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.545566,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016993438825011253,
+      "modeElapsed": 27.462080342695117,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.662664,
+      "modeNow": 1794331539.645627,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -4.699082661417536,
+            "x": 1.630028270771775,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.6393082141876221,
+            "x": 265.9638977050781,
+            "z": 0.015081429854035378
+          },
+          "decisionDt": 0.13373780250549316,
+          "planned": {
+            "x": 0.7071067811865475,
+            "z": -0.7071067811865475,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.62809,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.529142,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.62809,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.6393081948988666,
+            "x": 265.9639051027088,
+            "z": 0.015081429533858704
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.545566,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.017035631462931633,
+      "modeElapsed": 27.514323364011943,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.714406,
+      "modeNow": 1794331539.697018,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -3.662356241616868,
+            "x": 2.392681991033588,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.42305639386177063,
+            "x": 266.1557312011719,
+            "z": 0.015131727792322636
+          },
+          "decisionDt": 0.13373780250549316,
+          "planned": {
+            "x": 0.7071067811865475,
+            "z": -0.7071067811865475,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.62809,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.662987,
+            "x": 0.7071067811865475,
+            "run": false,
+            "z": -0.7071067811865475
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.62809,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.4230564024385115,
+            "x": 266.15573786421606,
+            "z": 0.015131728092973038
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.679929,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01803772710263729,
+      "modeElapsed": 27.564428162761033,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.765,
+      "modeNow": 1794331539.746784,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -2.423958517903375,
+            "x": 3.373862232007325,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.28053906559944153,
+            "x": 266.3794860839844,
+            "z": 0.015173118561506271
+          },
+          "decisionDt": 0.13332200050354004,
+          "planned": {
+            "x": 0.7071067811865475,
+            "z": -0.7071067811865475,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.761412,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.662987,
+            "x": 0.7071067811865475,
+            "run": false,
+            "z": -0.7071067811865475
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.761412,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.2805390798156536,
+            "x": 266.3794851936505,
+            "z": 0.015173118615494792
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.679929,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.0179725494235754,
+      "modeElapsed": 27.614149135537446,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.816411,
+      "modeNow": 1794331539.796866,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": -1.266581135718838,
+            "x": 4.281742542216938,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.19815681874752045,
+            "x": 266.6381530761719,
+            "z": 0.015208483673632145
+          },
+          "decisionDt": 0.13332200050354004,
+          "planned": {
+            "x": 0.7071067811865475,
+            "z": -0.7071067811865475,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.761412,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.796866,
+            "x": 0.7071067811865475,
+            "run": false,
+            "z": -0.7071067811865475
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.761412,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.19815682372618085,
+            "x": 266.6381527981359,
+            "z": 0.015208483449071417
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.81312,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.013978649862110615,
+      "modeElapsed": 27.682045434601605,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.87917,
+      "modeNow": 1794331539.865003,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 0.20648911024033165,
+            "x": 5.423801327932913,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.17431633174419403,
+            "x": 267.0469665527344,
+            "z": 0.015248991549015045
+          },
+          "decisionDt": 0.13332200050354004,
+          "planned": {
+            "x": 0.7071067811865475,
+            "z": -0.7071067811865475,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.761412,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.796866,
+            "x": 0.7071067811865475,
+            "run": false,
+            "z": -0.7071067811865475
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.761412,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.17431633046014547,
+            "x": 267.0469706636165,
+            "z": 0.01524899149666131
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.81312,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.015997759997844696,
+      "modeElapsed": 27.731141064316034,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.93023,
+      "modeNow": 1794331539.914181,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 0.9999999403953552
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 1.19977209076579,
+            "x": 6.184884274252925,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.21648672223091125,
+            "x": 267.380126953125,
+            "z": 0.015273523516952991
+          },
+          "decisionDt": 0.13219714164733887,
+          "planned": {
+            "x": 0.7339946562763564,
+            "z": -0.6791552433411328,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.893609,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.89798,
+            "x": 0.7071067811865475,
+            "run": false,
+            "z": -0.7071067811865475
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.893609,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.21648672908057126,
+            "x": 267.38011716301605,
+            "z": 0.015273523219763717
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.912437,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01822410710155964,
+      "modeElapsed": 27.796131963841617,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331539.997049,
+      "modeNow": 1794331539.979363,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 0.9999999403953552
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 2.4275758851583236,
+            "x": 7.115031894369444,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.34418514370918274,
+            "x": 267.8670349121094,
+            "z": 0.015300920233130455
+          },
+          "decisionDt": 0.13219714164733887,
+          "planned": {
+            "x": 0.7339946562763564,
+            "z": -0.6791552433411328,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331539.893609,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331539.89798,
+            "x": 0.7071067811865475,
+            "run": false,
+            "z": -0.7071067811865475
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331539.893609,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.3441851409529726,
+            "x": 267.86703949654964,
+            "z": 0.01530091994705497
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331539.912437,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01803596317768097,
+      "modeElapsed": 27.86245197430253,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.063539,
+      "modeNow": 1794331540.045648,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.5488939191424684,
+            "x": 8.015148687434294,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.5519623756408691,
+            "x": 268.41552734375,
+            "z": 0.015323895961046219
+          },
+          "decisionDt": 0.11766290664672852,
+          "planned": {
+            "x": 0.9870738851403904,
+            "z": -0.160265858104136,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331540.011272,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.045648,
+            "x": 0.9870738851403904,
+            "run": false,
+            "z": -0.160265858104136
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331540.011272,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.5519623860248445,
+            "x": 268.41553964522814,
+            "z": 0.01532389580657123
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331540.061606,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01805930957198143,
+      "modeElapsed": 27.92974277585745,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.12979,
+      "modeNow": 1794331540.112945,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.6551078322502017,
+            "x": 9.309438169544823,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 0.7952345609664917,
+            "x": 269.04229736328125,
+            "z": 0.015342981554567814
+          },
+          "decisionDt": 0.11766290664672852,
+          "planned": {
+            "x": 0.9870738851403904,
+            "z": -0.160265858104136,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331540.011272,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.045648,
+            "x": 0.9870738851403904,
+            "run": false,
+            "z": -0.160265858104136
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331540.011272,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 0.7952345635930347,
+            "x": 269.0422887103255,
+            "z": 0.01534298177405496
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331540.061606,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.014251896180212498,
+      "modeElapsed": 27.996963538229465,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.193901,
+      "modeNow": 1794331540.179288,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.752975494014636,
+            "x": 10.486167645996368,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.0450447797775269,
+            "x": 269.7444763183594,
+            "z": 0.01535856444388628
+          },
+          "decisionDt": 0.1332230567932129,
+          "planned": {
+            "x": 0.9570541130221096,
+            "z": 0.2899093388414094,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "plannedAt": 1794331540.144495,
+          "finished": false,
+          "stock": 0,
+          "slot": 1,
+          "attempt": 4,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.179288,
+            "x": 0.9570541130221096,
+            "run": false,
+            "z": 0.2899093388414094
+          },
+          "anchored": true,
+          "connected": true,
+          "decisionAt": 1794331540.144495,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.0450447392562048,
+            "x": 269.744462999072,
+            "z": 0.015358564795356548
+          },
+          "rawLife": 15,
+          "sessionLastMoveAt": 1794331540.192984,
+          "checkpoint": 2,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016924383118748665,
+      "modeElapsed": 28.04506420250982,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.245267,
+      "modeNow": 1794331540.227888,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.2479007500895025,
+            "x": 11.205671014601963,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.1508435010910034,
+            "x": 270.0820007324219,
+            "z": 0.015364594757556915
+          },
+          "decisionDt": 0.1332230567932129,
+          "planned": {
+            "x": 0.9570541130221096,
+            "z": 0.2899093388414094,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331540.144495,
+          "anchored": true,
+          "reactionEnd": 1794331540.977888,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "decisionAt": 1794331540.144495,
+          "stock": 0,
+          "rawLife": 0,
+          "deathAt": 1794331541.027888,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.227888,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "checkpoint": 2,
+          "finished": false,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.2049752150043467,
+            "x": 270.27412949872354,
+            "z": 0.015367704636805445
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331540.192984,
+          "attempt": 4,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.018114101141691208,
+      "modeElapsed": 28.110875354148448,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.310977,
+      "modeNow": 1794331540.294014,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.2479007500895025,
+            "x": 11.205671014601963,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.1508435010910034,
+            "x": 270.0820007324219,
+            "z": 0.015364594757556915
+          },
+          "decisionDt": 0.1324598789215088,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331540.276955,
+          "anchored": true,
+          "reactionEnd": 1794331540.977888,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "decisionAt": 1794331540.276955,
+          "stock": 0,
+          "rawLife": 0,
+          "deathAt": 1794331541.027888,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.227888,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "checkpoint": 2,
+          "finished": false,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.2049752150043467,
+            "x": 270.27412949872354,
+            "z": 0.015367704636805445
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331540.192984,
+          "attempt": 4,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.01509508490562439,
+      "modeElapsed": 28.16421132069081,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.361033,
+      "modeNow": 1794331540.34675,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.2479007500895025,
+            "x": 11.205671014601963,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.1508435010910034,
+            "x": 270.0820007324219,
+            "z": 0.015364594757556915
+          },
+          "decisionDt": 0.1324598789215088,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331540.276955,
+          "anchored": true,
+          "reactionEnd": 1794331540.977888,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "decisionAt": 1794331540.276955,
+          "stock": 0,
+          "rawLife": 0,
+          "deathAt": 1794331541.027888,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.227888,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "checkpoint": 2,
+          "finished": false,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.2049752150043467,
+            "x": 270.27412949872354,
+            "z": 0.015367704636805445
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331540.192984,
+          "attempt": 4,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.016900992020964622,
+      "modeElapsed": 28.21424533147365,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.414232,
+      "modeNow": 1794331540.396812,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.2479007500895025,
+            "x": 11.205671014601963,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.1508435010910034,
+            "x": 270.0820007324219,
+            "z": 0.015364594757556915
+          },
+          "decisionDt": 0.13501620292663574,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331540.411971,
+          "anchored": true,
+          "reactionEnd": 1794331540.977888,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "decisionAt": 1794331540.411971,
+          "stock": 0,
+          "rawLife": 0,
+          "deathAt": 1794331541.027888,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.227888,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "checkpoint": 2,
+          "finished": false,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.2049752150043467,
+            "x": 270.27412949872354,
+            "z": 0.015367704636805445
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331540.192984,
+          "attempt": 4,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    },
+    {
+      "heartbeatDt": 0.014912639744579792,
+      "modeElapsed": 28.279860947281122,
+      "index": 9,
+      "epoch": 9,
+      "at": 1794331540.478611,
+      "modeNow": 1794331540.463203,
+      "mode": "Tubes",
+      "runId": "b280d913-e985-4f4d-a190-d80e85728ea0",
+      "actors": [
+        {
+          "mounted": false,
+          "nativeLookVector": {
+            "z": 0,
+            "x": 1
+          },
+          "progress": 0,
+          "velocity": {
+            "y": 3.2479007500895025,
+            "x": 11.205671014601963,
+            "z": 0
+          },
+          "nativePosition": {
+            "y": 1.1508435010910034,
+            "x": 270.0820007324219,
+            "z": 0.015364594757556915
+          },
+          "decisionDt": 0.13501620292663574,
+          "planned": {
+            "x": 0,
+            "z": 0,
+            "primary": false,
+            "run": false,
+            "jump": false
+          },
+          "status": "Alive",
+          "plannedAt": 1794331540.411971,
+          "anchored": true,
+          "reactionEnd": 1794331540.977888,
+          "modeActorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "decisionAt": 1794331540.411971,
+          "stock": 0,
+          "rawLife": 0,
+          "deathAt": 1794331541.027888,
+          "grounded": false,
+          "modeInput": {
+            "at": 1794331540.227888,
+            "x": 0,
+            "run": false,
+            "z": 0
+          },
+          "checkpoint": 2,
+          "finished": false,
+          "connected": true,
+          "actorId": "b280d913-e985-4f4d-a190-d80e85728ea0:actor:141",
+          "position": {
+            "y": 1.2049752150043467,
+            "x": 270.27412949872354,
+            "z": 0.015367704636805445
+          },
+          "slot": 1,
+          "sessionLastMoveAt": 1794331540.192984,
+          "attempt": 4,
+          "nativeVelocity": {
+            "y": 0,
+            "x": 0,
+            "z": 0
+          }
+        }
+      ]
+    }
+  ]
+}

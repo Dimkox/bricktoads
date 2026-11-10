@@ -1,4 +1,4 @@
-return function(Director,Definition,Config,Flies,Carry,Clubs)
+return function(Director,Definition,Config,Flies,Carry,Clubs,Combat)
     local passed=0
     local function test(name,fn) fn(); passed+=1; print('PASS '..name) end
     local function fixture()
@@ -48,7 +48,7 @@ return function(Director,Definition,Config,Flies,Carry,Clubs)
             return {step=function() end,hit=function(_,_,target) return target==-99 end,
                 interaction=function() return {available=false} end,interact=function() return 'NO_INTERACTION' end}
         end}
-        return Director.new(s,w,{},Config,pattern,Flies,Carry,Clubs),w,s
+        return Director.new(s,w,Combat,Config,pattern,Flies,Carry,Clubs),w,s
     end
     local function clear(d)
         local ids={};for id,e in pairs(d.enemies) do if not e.dead and not e.boss then ids[#ids+1]=id end end
@@ -124,29 +124,30 @@ return function(Director,Definition,Config,Flies,Carry,Clubs)
         assert(d:claim(41,-1)=='OK')
         local body,identity=w.actors[-1],d.enemies[-1].actorId
         w.positions[1]={x=-37,y=3,z=-8}
-        assert(d:interaction(1).label=='СХВАТИТЬ')
+        assert(d:interaction(1).label=="GRAB")
         assert(d:interact(1,.1,'Punch')=='OK');d:step(.25,.1)
         assert(d.carry:stateFor(-1)=='Carried' and w.held[-1]==1)
         local packet={kind='Move',x=1,z=0,runId='route-run',actorId=identity,attempt=1,levelEpoch=1,connectionEpoch=1,seq=1}
         assert(d:command(41,packet,.3,function()return true end)=='HELD')
         assert(d:interact(1,.7,'Punch')=='OK')
-        assert(d.enemies[-1].health==2 and d.carry:stateFor(-1)=='Thrown')
+        assert(d.enemies[-1].rawLife==11 and d.enemies[-1].health==2.2 and d.carry:stateFor(-1)=='Thrown')
         assert(w.actors[-1]==body and d.enemies[-1].actorId==identity and d.enemies[-1].ownerUserId==41)
         packet.seq=2;assert(d:command(41,packet,.8,function()return true end)=='THROWN')
         d:step(1.7,.1);packet.seq=3
-        assert(d:command(41,packet,1.8,function()return true end)=='OK' and d.enemies[-1].health==2)
+        assert(d:command(41,packet,1.8,function()return true end)=='OK'
+            and d.enemies[-1].rawLife==15 and d.enemies[-1].health==3)
         assert(d:controlled(41).carryState==nil)
     end)
     test('combat Walker death creates one club and actual boss introduction frees weapon hands',function()
         local d,w=fixture()
         assert(d.clubs,'Production director must compose WalkerClubs')
-        assert(d:hit(1,-3,'Dash'));d.now=.4;assert(d:hit(1,-3,'Punch'))
+        assert(d:hit(1,-3,'Dash'));d.now=.4;assert(d:hit(1,-3,'Dash'))
         local count=0;for _ in pairs(w.clubs)do count+=1 end;assert(count==1)
         d:_kill(-3,'Combat');local again=0;for _ in pairs(w.clubs)do again+=1 end;assert(again==1)
         w.positions[1]={x=-8,y=3,z=0}
-        assert(d:interaction(1).label=='ВЗЯТЬ ДУБИНУ')
+        assert(d:interaction(1).label=="PICK UP CLUB")
         assert(d:interact(1,.5,'Punch')=='OK' and d.clubs:hasClub(1))
-        assert(d:interaction(1).label=='УДАР ДУБИНОЙ')
+        assert(d:interaction(1).label=="CLUB HIT")
         d:_boss();assert(not d.clubs:hasClub(1) and w.equipped==nil)
     end)
     print('LevelRoute: '..passed..' passed')

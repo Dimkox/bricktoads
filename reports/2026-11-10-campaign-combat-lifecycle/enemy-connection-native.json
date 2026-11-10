@@ -1,0 +1,140 @@
+{
+  "status": "PASS",
+  "cleanup": [
+    {
+      "pass": true,
+      "errors": [],
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 9,
+      "worldRemoved": true
+    },
+    {
+      "pass": true,
+      "errors": [],
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 12,
+      "worldRemoved": true
+    },
+    {
+      "lightingRestored": true,
+      "atmosphereRestored": true,
+      "errors": [],
+      "scope": "shared world side effects",
+      "ownedWorldsRemoved": true,
+      "pass": true,
+      "defaultsRestored": true
+    }
+  ],
+  "fixedTicks": 178,
+  "checks": [
+    "Electrofish initial spawn",
+    "Electrofish normal one-life claim",
+    "Electrofish initial Move accepted",
+    "Electrofish native same body moves from accepted input",
+    "Electrofish disconnect callback accepted",
+    "Electrofish offline horizontal input stops",
+    "Electrofish offline command rejected",
+    "Electrofish reconnect callback accepted",
+    "Electrofish reconnect stays stopped until new input",
+    "Electrofish previous epoch rejected",
+    "Electrofish rejected command leaves native body stopped",
+    "Electrofish fresh connection Move accepted",
+    "Electrofish fresh input resumes native movement",
+    "Electrofish enemy identity Life and owner unchanged",
+    "Electrofish other user cannot claim owned body",
+    "Electrofish same native hero Model",
+    "Electrofish preserves hero respawns",
+    "Electrofish preserves hero actorId",
+    "Electrofish preserves hero rawLife",
+    "Electrofish preserves hero attempt",
+    "Electrofish preserves hero status",
+    "Electrofish isolated fixture never clears course",
+    "Swellcheeks initial spawn",
+    "Swellcheeks normal one-life claim",
+    "Swellcheeks initial Move accepted",
+    "Swellcheeks native same body moves from accepted input",
+    "Swellcheeks disconnect callback accepted",
+    "Swellcheeks offline horizontal input stops",
+    "Swellcheeks offline command rejected",
+    "Swellcheeks reconnect callback accepted",
+    "Swellcheeks reconnect stays stopped until new input",
+    "Swellcheeks previous epoch rejected",
+    "Swellcheeks rejected command leaves native body stopped",
+    "Swellcheeks fresh connection Move accepted",
+    "Swellcheeks fresh input resumes native movement",
+    "Swellcheeks enemy identity Life and owner unchanged",
+    "Swellcheeks other user cannot claim owned body",
+    "Swellcheeks same native hero Model",
+    "Swellcheeks preserves hero respawns",
+    "Swellcheeks preserves hero actorId",
+    "Swellcheeks preserves hero rawLife",
+    "Swellcheeks preserves hero attempt",
+    "Swellcheeks preserves hero status",
+    "Swellcheeks isolated fixture never clears course"
+  ],
+  "fixture": "Isolated authored seed41 stage9 Electrofish and stage12 Swellcheeks; native GameWorld Models, real Session and CampaignDirector owner commands",
+  "limitations": "Synthetic server roster/owner; selected family and hero modes stepped, other ordinary AI idle; no actual Players, rejoin, network, keyboard, touch or full-route claim",
+  "cases": [
+    {
+      "offlineNativeX": 78.90000915527344,
+      "enemyId": -2,
+      "rawLife": 15,
+      "heroAfter": {
+        "respawns": 3,
+        "actorId": "native-enemy-connection-0cebae77-a387-4cd9-9780-8fac140925a3:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive"
+      },
+      "startNativeX": 78,
+      "movingNativeX": 78.90000915527344,
+      "oldConnectionEpoch": 1,
+      "reconnectedIdleNativeX": 78.90000915527344,
+      "freshNativeX": 79.80001831054688,
+      "actorId": "native-enemy-connection-0cebae77-a387-4cd9-9780-8fac140925a3:enemy:1:-2",
+      "newConnectionEpoch": 3,
+      "heroBefore": {
+        "respawns": 3,
+        "actorId": "native-enemy-connection-0cebae77-a387-4cd9-9780-8fac140925a3:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive"
+      },
+      "kind": "Electrofish",
+      "stage": 9,
+      "ownerUserId": 900099
+    },
+    {
+      "offlineNativeX": -19.200000762939453,
+      "enemyId": -2,
+      "rawLife": 47,
+      "heroAfter": {
+        "respawns": 3,
+        "actorId": "native-enemy-connection-a01bf7e6-3fa4-4044-bdca-d65288dd6e92:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive"
+      },
+      "startNativeX": -20,
+      "movingNativeX": -19.200000762939453,
+      "oldConnectionEpoch": 1,
+      "reconnectedIdleNativeX": -19.200000762939453,
+      "freshNativeX": -18.400001525878906,
+      "actorId": "native-enemy-connection-a01bf7e6-3fa4-4044-bdca-d65288dd6e92:enemy:1:-2",
+      "newConnectionEpoch": 3,
+      "heroBefore": {
+        "respawns": 3,
+        "actorId": "native-enemy-connection-a01bf7e6-3fa4-4044-bdca-d65288dd6e92:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "status": "Alive"
+      },
+      "kind": "Swellcheeks",
+      "stage": 12,
+      "ownerUserId": 900099
+    }
+  ],
+  "sourceSha256": "006fe6609a197b9e288ea9a982cd79ca5ca0095853b2489b2f03628b0ae0f2de"
+}

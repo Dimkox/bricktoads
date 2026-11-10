@@ -1,0 +1,212 @@
+{
+  "scope": "Read-only Jet7 diagnosis plus isolated prepared normal-input native acceptance; no full campaign claim or source changes",
+  "seed": 388791054,
+  "frozenPilotSha256": "f4cb9f153ea18f7e931906419e6173ce37fdef24fabaced85fdf1d85fb772ab5",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "observedFailure": {
+    "archive": "reports/2026-11-10-full-campaign-playthrough/attempt-11-full-natural-archive.json",
+    "slot": 2,
+    "attempt": 4,
+    "stock": 0,
+    "reason": "CampaignCrash",
+    "priorNativePose": {
+      "x": 347.2585754394531,
+      "y": 20.460962295532227,
+      "z": 0
+    },
+    "obstacle": {
+      "id": "ride-11",
+      "kind": "ElectricGate",
+      "x": 351,
+      "y": 26,
+      "z": 0,
+      "w": 3,
+      "h": 9,
+      "d": 44
+    },
+    "actualExpandedBounds": {
+      "minX": 347.9,
+      "maxX": 354.1,
+      "minY": 19,
+      "maxY": 33
+    },
+    "plannerExpandedY": {
+      "min": 18.65,
+      "max": 33.35
+    },
+    "identification": "Recorded prior native X is0.6414stud before gate entry, approximately one fixed slice at ~39stud/s. Modes checks hazards before applying the next native pose on a fatal frame. No other authored hazard is near this X. Gate11 is therefore strongly identified; exact accepted input timing/velocity was not retained."
+  },
+  "native": [
+    {
+      "result": "Won",
+      "elapsed": 13.190200090408325,
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 47,
+      "decisions": 121,
+      "initialInputDelay": 0,
+      "maxDecisionInterval": 0.126478910446167,
+      "maxComputeSeconds": 0.09537139999156352,
+      "intentCounts": {
+        "Jump:OK": 2,
+        "Move:OK": 121,
+        "Attack:OK": 2
+      },
+      "cleanup": true
+    },
+    {
+      "result": "Won",
+      "elapsed": 16.288856029510498,
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 47,
+      "decisions": 127,
+      "initialInputDelay": 2.4,
+      "maxDecisionInterval": 0.11793303489685059,
+      "maxComputeSeconds": 0.062275700009195134,
+      "intentCounts": {
+        "Attack:OK": 2,
+        "Move:OK": 127
+      },
+      "cleanup": true
+    }
+  ],
+  "numericCourseProbes": {
+    "passed": 42,
+    "failed": 1,
+    "groups": [
+      {
+        "file": ".tools/jet_actual_seed_probe.luau",
+        "cadences": [
+          0.016666666666666666,
+          0.08,
+          0.1,
+          0.133,
+          0.167
+        ],
+        "passed": 5
+      },
+      {
+        "file": ".tools/jet_phase_probe.luau",
+        "cadence": 0.1,
+        "initialWaits": [
+          0,
+          0.4,
+          0.8,
+          1.2,
+          1.6,
+          2,
+          2.4,
+          2.8
+        ],
+        "passed": 8
+      },
+      {
+        "file": ".tools/jet_actual_delay_probe.luau",
+        "cadencePattern": [
+          0.08,
+          0.1,
+          0.133,
+          0.167
+        ],
+        "delayFrames": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "passed": 4
+      },
+      {
+        "file": ".tools/jet_slow_cadence_probe.luau",
+        "cadences": [
+          0.2,
+          0.25,
+          0.3,
+          0.4
+        ],
+        "passed": 4
+      },
+      {
+        "file": ".tools/jet_latched_cadence_probe.luau",
+        "oneInitialGap": 0.3,
+        "cadences": [
+          0.1,
+          0.133,
+          0.167
+        ],
+        "passed": 3
+      },
+      {
+        "file": ".tools/jet_fractional_physics_probe.luau",
+        "cadences": [
+          0.1,
+          0.133,
+          0.167
+        ],
+        "physicsPatterns": [
+          [
+            0.008333333333333333
+          ],
+          [
+            0.0125
+          ],
+          [
+            0.02
+          ],
+          [
+            0.022222222222222223
+          ],
+          [
+            0.013,
+            0.021,
+            0.019,
+            0.027,
+            0.014,
+            0.018
+          ]
+        ],
+        "passed": 15
+      },
+      {
+        "file": ".tools/jet_phase_delay_probe.luau",
+        "initialWait": 2.4,
+        "cadencePattern": [
+          0.08,
+          0.1,
+          0.133,
+          0.167
+        ],
+        "passedDelayFrames": [
+          2,
+          4,
+          6
+        ],
+        "failedDelayFrames": [
+          8
+        ],
+        "passed": 3,
+        "failed": 1,
+        "failedPose": {
+          "x": 268.1917916666667,
+          "y": 25.36993191730327,
+          "z": 0
+        },
+        "failedObstacle": "ride-8 ElectricGate; artificial .133s independent actuation delay, not the observed gate11 failure"
+      }
+    ]
+  },
+  "findings": [
+    "Actual seed layout is reachable using the frozen policy and ordinary inputs; no demonstrated production geometry/physics defect.",
+    "Jet search horizon1.8s models normal group speed/restart acceleration; no Jet rewind occurred before the observed full11 death, so checkpoint restart speed is not implicated by the archive.",
+    "Planner hazard collision margin is .35stud more conservative vertically than production BODY; an undersized vertical collision box is ruled out.",
+    "The native trace lacks decision intervals, actuation times and Modes vertical velocity, so the exact missed-gate cause remains unproven.",
+    "Independent long actuation delay can defeat this policy in a different gate; this does not establish the full11 cause or justify a speculative patch."
+  ],
+  "limits": [
+    "Numeric probes use real Session lifecycle/CampaignModes and normal Modes movement/interaction APIs with a numeric world adapter; they omit CampaignDirector/NPC AI.",
+    "Two native scenes use real Session intents, CampaignDirector and active ordinary NPC/encounter AI, original health/reserves and normal paid respawn paths; no deaths occurred.",
+    "Prepared scenes use synthetic sole Hero2 from authored spawn and server-side dispatch, not original network clients or continuous campaign history."
+  ],
+  "decision": "No Jet policy/production change. Preserve observed failure and positive evidence; root may proceed after the reproduced Surf fix."
+}

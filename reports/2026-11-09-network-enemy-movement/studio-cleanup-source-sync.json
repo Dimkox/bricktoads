@@ -1,0 +1,484 @@
+{
+  "release": {
+    "bytes": 434589,
+    "placeSha256": "5555f320e5d2c2e3451a4564c4e0206098c4fb1f763df643dea39127d12bc45c",
+    "sourceSha256": "2a4d441f5989e5561b8a06f5bbe5a18799a605575671f45ddd02ef4898a01f08",
+    "scripts": [
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BrickToadsServer"
+        ],
+        "className": "Script",
+        "characters": 6455,
+        "sha256": "b9ad5a74e0dda9ce7de5084da85df173ae1778644b529df0bb0e5ca3b01a6ae7"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "RunLifecycle"
+        ],
+        "className": "ModuleScript",
+        "characters": 13753,
+        "sha256": "cda5e4089bb04e76b2b075d21d119368db670d17bbfccdf5cb638b5f8375b968"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossQueue"
+        ],
+        "className": "ModuleScript",
+        "characters": 8816,
+        "sha256": "09bd54c98a25daabef3e12c215305eeeae8115091dec202dac069b48ddd6a2b1"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonFlight"
+        ],
+        "className": "ModuleScript",
+        "characters": 14601,
+        "sha256": "6c349be13a7bac3ea8f2f01fbdcf3644f45656abebeffb013e713179de38e25e"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 12533,
+        "sha256": "0a72c52677909f7de24aba566c2e7d2a9aeeadb8d8e37388525bc22eb3a2bdf5"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "EnemyCarry"
+        ],
+        "className": "ModuleScript",
+        "characters": 9964,
+        "sha256": "9ece41dc1e9a66b97840266684a19738bd31f941914bb428e1153d161c11a87c"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 4800,
+        "sha256": "ce9d6db0068ec8074eb67d13d1e5c498ebe68140f080cb90beabdaf7617b6b88"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameController"
+        ],
+        "className": "ModuleScript",
+        "characters": 17747,
+        "sha256": "1fc4c908a2737a3230b4dc124c43a970f41d6e745c54391ae1e455ec8fd0527c"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 81753,
+        "sha256": "91b8578505639a544514ac4714e993337160826a6dd8bfdde456a3690d6b350a"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GuardianPattern"
+        ],
+        "className": "ModuleScript",
+        "characters": 12660,
+        "sha256": "ade0161938331506c895b56ea2b3ba72630b3cbff55260152ce95f7e80e699b7"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "HealingFlies"
+        ],
+        "className": "ModuleScript",
+        "characters": 5449,
+        "sha256": "d3b0be0aae05221a1f9b40d6851e772dd27ccbd763879090064765914026a64f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDefinition"
+        ],
+        "className": "ModuleScript",
+        "characters": 3370,
+        "sha256": "239d3e0200e9d76790e04564aedc8da9d041ef44874e5c763c9cd1d81f93abbc"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDirector"
+        ],
+        "className": "ModuleScript",
+        "characters": 35337,
+        "sha256": "dea30abe0868ded81cd25513b33c29584eb3aaa878638dc234e84c1b8f64ec39"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "MatchHub"
+        ],
+        "className": "ModuleScript",
+        "characters": 12853,
+        "sha256": "e6e74c674a60f5a2862b8c1fc0da414152e0084a485e26b8f4376fc376b998fc"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "RunJournal"
+        ],
+        "className": "ModuleScript",
+        "characters": 5181,
+        "sha256": "c62046c1bde00c75aef8d4a759d56e07d1cd8f85189c46e16257b36fa4b5437f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "SourceCombat"
+        ],
+        "className": "ModuleScript",
+        "characters": 2434,
+        "sha256": "af6b9f57c514f60980bf9a37f32ece85a38784c407898684efe3e64e8586d3c4"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "WalkerClubs"
+        ],
+        "className": "ModuleScript",
+        "characters": 9547,
+        "sha256": "138fa6283331668cef79bc4c301615863b9f9630c95eec6d3001ec7e14bd576a"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Combat"
+        ],
+        "className": "ModuleScript",
+        "characters": 3364,
+        "sha256": "9472b0e88151e1d14b55b018618dab3626fd54c671617dbf246695e1b421bfda"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Session"
+        ],
+        "className": "ModuleScript",
+        "characters": 16818,
+        "sha256": "3bc7ae00c87ca343bd53188f4354714e28774fac420798eccd9ead7a0feb467b"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Config"
+        ],
+        "className": "ModuleScript",
+        "characters": 747,
+        "sha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "ConnectionRegistry"
+        ],
+        "className": "ModuleScript",
+        "characters": 1717,
+        "sha256": "7f6cd4b6216cc993a359a55d318c46a819c90ecf0f893f4d34843cb168956c92"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "RobloxWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 14159,
+        "sha256": "487cdb395fcdf61c4ebf0dab41396fa860678d4291bd3d3b8729344af2799672"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BuildInfo"
+        ],
+        "className": "ModuleScript",
+        "characters": 112,
+        "sha256": "fbd5543e4fb36b04e6975c34c499c77b0e7e59bf9efbdb03c9e139b701aead41"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "BrickToadsConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 119,
+        "sha256": "e5183fd2f3eda75057cdf62e5cf2b462fc7e62fcfbc62ddff2bd5fa2a3ab8360"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BossQueuePanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 10110,
+        "sha256": "c65b2dc3e057179226961d1a21660cf24ecb35b381c9f41533ca1b32cb864cec"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BrickToadsClient"
+        ],
+        "className": "LocalScript",
+        "characters": 80503,
+        "sha256": "c9e3956895171dd6a64b62d30a926217e0dc4c06c7dd2208db5eef79dde5890a"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "CombatFeedback"
+        ],
+        "className": "ModuleScript",
+        "characters": 6453,
+        "sha256": "b6a11280bcda8d20a54b705a4c6c6ab49777b5aefc2a16a7527f764822f92f54"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "GroupPanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 11991,
+        "sha256": "101ad3ba5ae88caff6d1601f9e3bd2f5a3b553d51c75d61fae12f3d972ea7d1c"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "MovementInput"
+        ],
+        "className": "ModuleScript",
+        "characters": 2001,
+        "sha256": "cf225a4334a50dd21fa0fe8437f6bbb240bf860f608d2915d7815912c96743b8"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "RobloxInputBindings"
+        ],
+        "className": "ModuleScript",
+        "characters": 3082,
+        "sha256": "7f85db79b5e2fad1b319b596f35ecfe094b7bab487150d27ff8cfe208669e2da"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "SpectatorCamera"
+        ],
+        "className": "ModuleScript",
+        "characters": 7039,
+        "sha256": "88af488439f503b3aff6c784a08f2b2a6285d55dca570f290a5de2492f37c8b7"
+      }
+    ]
+  },
+  "sourceComparison": [
+    {
+      "path": "ServerScriptService.BrickToads.BrickToadsServer",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.RunLifecycle",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.BossQueue",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.DragonFlight",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.DragonWorld",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.EnemyCarry",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GameConfig",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GameController",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GameWorld",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GuardianPattern",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.HealingFlies",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.LevelDefinition",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.LevelDirector",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.MatchHub",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.RunJournal",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.SourceCombat",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.WalkerClubs",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.Combat",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.Session",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.Config",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.ConnectionRegistry",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.RobloxWorld",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.BuildInfo",
+      "match": true
+    },
+    {
+      "path": "ReplicatedStorage.BrickToads.BrickToadsConfig",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.BossQueuePanel",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.BrickToadsClient",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.CombatFeedback",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.GroupPanel",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.MovementInput",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.RobloxInputBindings",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.SpectatorCamera",
+      "match": true
+    }
+  ],
+  "cleanup": {
+    "orientation": "Sensor",
+    "temporaryFolders": [],
+    "testResult": {
+      "ok": true,
+      "result": {
+        "result": "Native two-client human enemy walk9/run16/runjump and EnemyRunStrike profile22 hit47to31 verified; club physical ownership/movement fixture passed; hero counterattack was legitimately interrupted by NPC reaction, not accepted as mega proof. No full route.",
+        "source": "2a4d441f5989e5561b8a06f5bbe5a18799a605575671f45ddd02ef4898a01f08",
+        "tag": "final-server-owned-enemy-and-club"
+      }
+    }
+  }
+}

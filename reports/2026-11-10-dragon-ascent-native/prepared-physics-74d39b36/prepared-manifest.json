@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "status": "executed_passed",
+  "scenario": "isolated_native_dragon_ceiling_physics",
+  "fixtureFile": "tools/qa/studio_dragon_ceiling_physics.server.luau",
+  "baselineRevision": "e6d9",
+  "fixedFactory": "Current authorized Studio gameplay.DragonWorld.Source with dragonAscentBlocked",
+  "initialRootY": -4.04,
+  "roofBottomY": -2,
+  "goalY": 4.5,
+  "observationSeconds": 0.75,
+  "requiresExplicitPlayServerId": true,
+  "statedLimits": [
+    "Prepared native physics regression; not a campaign or natural encounter pass",
+    "No Studio actions have been performed while preparing this artifact",
+    "Baseline versus fixed factories own separate real R6 GameWorld/BaseWorld worlds",
+    "Fixed active lift is created with owned roof noncolliding, then roof enabled before first physics yield",
+    "No explicit Humanoid state, health, kill, live-campaign, or player mutations",
+    "Constructor Lighting/Atmosphere writes restored before first yield",
+    "Cleanup owns only generated fixture worlds and ModuleScripts"
+  ],
+  "nativeEvidence": "native-result.json",
+  "executionSummary": "execution-summary.json"
+}

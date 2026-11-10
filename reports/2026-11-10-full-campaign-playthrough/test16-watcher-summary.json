@@ -1,0 +1,168 @@
+{
+  "attempt": 16,
+  "mode": "One existing Studio ordinary Play, one registered client",
+  "studioId": "97ee37f5-3840-470c-b002-094802085c47",
+  "runId": "73937d7b-557f-4b5f-b78c-52545a2e833b",
+  "seed": 338231076,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "terminalResult": "Lost",
+  "terminalStage": 1,
+  "policyLoads": 1,
+  "sampleCount": 93,
+  "terminalCohort": [
+    {
+      "ownerUserId": 11946162891,
+      "slot": 1,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    }
+  ],
+  "deaths": [
+    {
+      "view": "Playing",
+      "revision": 31,
+      "rawLife": 0,
+      "attempt": 1,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            2.784574508666992,
+            -126.44937133789062,
+            4.849385738372803
+          ],
+          "held": false,
+          "position": [
+            43.89179992675781,
+            -35.07853317260742,
+            -4.41978645324707
+          ]
+        },
+        "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:2",
+        "reason": "Fall"
+      },
+      "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:2",
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794323774.161264,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 121,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 86,
+      "rawLife": 0,
+      "attempt": 2,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            0.007210495416074991,
+            5.156684875488281,
+            -0.001225795946083963
+          ],
+          "held": false,
+          "position": [
+            242.6736602783203,
+            1.1332311630249023,
+            0.5515246987342834
+          ]
+        },
+        "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:34",
+        "reason": "CombatUnderflow"
+      },
+      "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:34",
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794323835.444606,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 339,
+      "connected": true
+    },
+    {
+      "view": "Playing",
+      "revision": 90,
+      "rawLife": 0,
+      "attempt": 3,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            23.999984741210938,
+            -136.4824676513672,
+            -0.02748040296137333
+          ],
+          "held": false,
+          "position": [
+            268.4020080566406,
+            -37.03110122680664,
+            0.599248468875885
+          ]
+        },
+        "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:90",
+        "reason": "Fall"
+      },
+      "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:90",
+      "levelEpoch": 1,
+      "respawns": 1,
+      "now": 1794323837.864371,
+      "late": false,
+      "status": "AwaitingRespawn",
+      "kind": "ConfirmedDeath",
+      "seq": 348,
+      "connected": true
+    },
+    {
+      "view": "Menu",
+      "revision": 93,
+      "rawLife": 0,
+      "attempt": 4,
+      "userId": 1,
+      "data": {
+        "observed": {
+          "velocity": [
+            15.996842384338379,
+            -133.84263610839844,
+            -0.31784066557884216
+          ],
+          "held": false,
+          "position": [
+            266.0796813964844,
+            -35.91193389892578,
+            0.6083720326423645
+          ]
+        },
+        "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:95",
+        "reason": "Fall"
+      },
+      "actorId": "73937d7b-557f-4b5f-b78c-52545a2e833b:actor:95",
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794323839.479784,
+      "late": false,
+      "status": "Eliminated",
+      "kind": "ConfirmedDeath",
+      "seq": 352,
+      "connected": true
+    }
+  ],
+  "archive": "test16-archive-001-20261110T151646Z.json",
+  "archiveBytes": 26666,
+  "archiveSha256": "c47e61f7452fd990da705ea2875cfdc375f70a98d0f8b61802ef1885df183f31",
+  "completeCampaignAccepted": false,
+  "observationLimits": [
+    "Archive filename timestamp names the initial watch batch, not a claimed exact terminal snapshot time.",
+    "qa.current.rawLife47 is cached before fatal observation; terminal cohort and ConfirmedDeath establish rawLife0/Eliminated.",
+    "No source/policy/actor/pose/health/resource/game-state writes or stop calls by watcher.",
+    "Owned diagnostic snapshot export was removed after complete export.",
+    "Existing Studio remains in Play; root owns stop and exact Edit backup restoration.",
+    "Initial console had known cosmetic representation warnings and no Lua exception; no later console assertion is made."
+  ]
+}

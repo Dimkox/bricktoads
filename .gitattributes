@@ -7,3 +7,5 @@
 *.yml text eol=lf
 *.json text eol=lf
 *.txt text eol=lf
+# Keep the frozen mouth validator reproducible across checkouts.
+assets/characters/canonical-hero/validate_hero_fear_wide_mouth.cjs text eol=lf

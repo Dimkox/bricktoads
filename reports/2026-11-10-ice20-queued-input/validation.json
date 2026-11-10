@@ -1,0 +1,76 @@
+{
+  "at": "2026-11-10T17:33:24.275615+00:00",
+  "status": "frozen_independently_reviewed_pending_native_validation",
+  "independentReview": "Exact five-line Ice-only delta and outside-Ice byte equality independently verified; compiler PASS, baseline queued5/9 and candidate9/9 rerun. Fixed-delay queue is not an exact native20 RenderStepped/network replay; new seed844260480 remains2/9, explicitly retained.",
+  "baselineSha256": "e7c8152f21d45b281ca75150c39e1f78ff289c9bbce73f25945375f981b3037c",
+  "candidateSha256": "1d5693ed7ed9089a7c645c8bf4f3b8b2578fe169dd758f316c47f9b51a280695",
+  "workingPolicySha256": "1d5693ed7ed9089a7c645c8bf4f3b8b2578fe169dd758f316c47f9b51a280695",
+  "onlyIceBytesChanged": true,
+  "sourcePhysicsChanged": false,
+  "compileExit": 0,
+  "checks": [
+    {
+      "probe": "probe-queued-baseline.luau",
+      "log": "baseline-red.txt",
+      "passed": 5,
+      "failed": 4,
+      "exit": 0
+    },
+    {
+      "probe": "probe-queued-candidate.luau",
+      "log": "candidate-green.txt",
+      "passed": 9,
+      "failed": 0,
+      "exit": 0
+    },
+    {
+      "probe": "probe-first-section-36.luau",
+      "log": "first-section-36.txt",
+      "passed": 36,
+      "failed": 0,
+      "exit": 0
+    },
+    {
+      "probe": "probe-static-candidate.luau",
+      "log": "static-36.txt",
+      "passed": 36,
+      "failed": 0,
+      "exit": 0
+    },
+    {
+      "probe": "probe-npc-candidate.luau",
+      "log": "npc-oldseed-18.txt",
+      "passed": 18,
+      "failed": 0,
+      "exit": 0
+    },
+    {
+      "probe": "newseed-1158731273-npc18.luau",
+      "log": "npc-newseed-18.txt",
+      "passed": 18,
+      "failed": 0,
+      "exit": 0
+    },
+    {
+      "probe": "probe-other-100.luau",
+      "log": "other-100.txt",
+      "passed": 100,
+      "failed": 0,
+      "exit": 0
+    },
+    {
+      "probe": "probe-live-8.luau",
+      "log": "live-8.txt",
+      "passed": 8,
+      "failed": 0,
+      "exit": 0
+    }
+  ],
+  "limits": [
+    "Queued test is a conservative logical delivery envelope, not exact Roblox transport replay",
+    "One actual seed1158731273, one hero, no multiplayer acceptance",
+    "Ordinary regular Move held .133/.167/.2; urgent Move+Jump2/60; cadence .133/.167/.2",
+    "Native20 checkpoint Snowball pre-input sweep remains a separate UX limitation",
+    "No Studio control or native test by audit agent; no all13 native Won claim"
+  ]
+}

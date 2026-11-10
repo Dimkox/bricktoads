@@ -1,0 +1,6 @@
+./tests/campaign_enemies/ConnectionMovement.spec.lua:87: Electrofish: ./tests/campaign_enemies/ConnectionMovement.spec.lua:6: Electrofish reconnect needs fresh movement after timeout expected 78.9, got 87.90000000000006
+Swellcheeks: ./tests/campaign_enemies/ConnectionMovement.spec.lua:6: Swellcheeks reconnect needs fresh movement after timeout expected -19.2, got -11.199999999999992
+stacktrace:
+[C] function assert
+./tests/campaign_enemies/ConnectionMovement.spec.lua:87
+./build/run_late_enemy_movement.luau:1

@@ -1,0 +1,106 @@
+{
+  "status": "focused_verified_frozen_pending_review",
+  "createdAt": "2026-11-10T16:02:26.606939+00:00",
+  "scope": "QA-only Rope patrol; no production or live changes",
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "baselineSha256": "2b9f6e47e6128bb0482a52bdfc2f4ee7b898be51c5baa2b5451c3c17a03a573c",
+  "candidateSha256": "da9956a8db58d9d2d37852764e3764e470ef2830eccfa984a37976ddb314ac5f",
+  "onlyRopeBranchChanged": true,
+  "checks": [
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-rope-patrol\\probe-baseline.luau"
+      ],
+      "exit": 1,
+      "expected": 1,
+      "log": "baseline-red.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-rope-patrol\\probe-current.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "patrol-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-rope-patrol\\other100.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "other-100-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-rope-patrol\\live8.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "live-8-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "tools\\qa\\campaign_early_course_pilot.lua",
+        "reports\\2026-11-10-qa-rope-patrol\\fixture.lua",
+        "reports\\2026-11-10-qa-rope-patrol\\probe-current.luau",
+        "reports\\2026-11-10-qa-rope-patrol\\probe-baseline.luau"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "compile.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "tools\\qa\\campaign_early_course_pilot.lua"
+      ],
+      "exit": 0,
+      "expected": 0,
+      "log": "diff-check.txt"
+    }
+  ],
+  "matrix": {
+    "seeds": [
+      1006313601,
+      1,
+      41
+    ],
+    "cadence": [
+      0.1,
+      0.133,
+      0.167
+    ],
+    "queuedMoveDelay": [
+      0,
+      0.133
+    ],
+    "baselineFailures": 18,
+    "candidatePasses": 18
+  },
+  "candidateOutcome": {
+    "modeComplete": true,
+    "seconds": 23.416666666667,
+    "actorUnchanged": true,
+    "attempt": 1,
+    "stock": 3,
+    "rawLife": 31,
+    "hits": 1,
+    "ordinaryMoveOnly": true
+  },
+  "limits": [
+    "Actual native17 death is three committed Raven/LargeRaven Swoops at the parked+16,+16 corner. The baseline numeric replay reproduces attackers-3,-10,-5 and fatal third hit aroundY122.67/t11.733, but fresh fixture resources are1/3 rather than original native4/0. It stops at first-body fatal state, not whole-runLost.",
+    "Numeric actor/presentation adapter uses actual Session/Modes/CampaignDirector/LevelDirector/CampaignEnemies and all10 original active NPCs. It does not prove native R6/network/body collisions or every projectile wall obstruction. NPC knockback after friendly hits is not modeled by physical Roblox dynamics.",
+    "One ordinary LargeRaven hit remains47->31; no deathless/no-damage claim. Other100-case course check omits actual NPC AI;8 live-threat checks are distinct pure-plan contracts.",
+    "No native Play attempt18 or full13-stage acceptance is established."
+  ]
+}

@@ -1,19 +1,21 @@
 -- Group selection changes the observed world; membership and role eligibility stay server-owned.
-local HttpService = game:GetService("HttpService")
 local GroupPanel = {}
 GroupPanel.__index = GroupPanel
+local function sourceText(source,args)
+    return (source:gsub('{([%w_]+):?[%w_]*}',function(key) return tostring(args and args[key] or '') end))
+end
 
-local statusNames = {Lobby = "Сбор команды", Active = "Идёт игра", Won = "Победа", Lost = "Игра окончена"}
+local statusNames = {Lobby = "Forming team", Active = "Playing", Won = "Victory", Lost = "Game over", Faulted = "Party stopped"}
 local reasons = {
-    ROLE_ACTIVE = "Сначала завершите игру за живого персонажа.",
-    ACTIVE_ROLE = "Сначала завершите игру за живого персонажа.",
-    ROLE_RESERVED = "Сначала отмените принятое приглашение стража.",
-    GROUP_FULL = "В команде нет свободных мест.",
-    GROUP_LIMIT = "Достигнут предел команд.",
-    UNKNOWN_GROUP = "Эта команда больше недоступна.",
-    STALE_GROUP = "Выбранная команда изменилась. Обновляем список.",
-    WRONG_GROUP = "Выбранная команда изменилась. Обновляем список.",
-    HERO_LOCKED = "В этой команде нельзя повторно выбрать роль противника.",
+    ROLE_ACTIVE = "Finish playing your living character first.",
+    ACTIVE_ROLE = "Finish playing your living character first.",
+    ROLE_RESERVED = "Cancel your accepted Guardian invitation first.",
+    GROUP_FULL = "This team has no free places.",
+    GROUP_LIMIT = "The team limit has been reached.",
+    UNKNOWN_GROUP = "This team is no longer available.",
+    STALE_GROUP = "The selected team changed. Refreshing the list.",
+    WRONG_GROUP = "The selected team changed. Refreshing the list.",
+    HERO_LOCKED = "You cannot select another enemy role in this team.",
 }
 
 local function make(className, name, parent, properties)
@@ -28,8 +30,9 @@ local function position(item, x, y, width, height)
     item.Position, item.Size = UDim2.fromOffset(x, y), UDim2.fromOffset(width, height)
 end
 
-function GroupPanel.new(menuParent, spectatorParent, safeParent, sendIntent, colors, onToggle)
-    local self = setmetatable({sendIntent = sendIntent, colors = colors, onToggle = onToggle, rows = {}}, GroupPanel)
+function GroupPanel.new(menuParent, spectatorParent, safeParent, sendIntent, colors, onToggle, translate, groupName)
+    local self = setmetatable({sendIntent = sendIntent, colors = colors, onToggle = onToggle, rows = {},
+        translate=translate,groupName=groupName}, GroupPanel)
     local function round(item, radius)
         make("UICorner", "Corner", item, {CornerRadius = UDim.new(0, radius or 12)})
         return item
@@ -55,12 +58,12 @@ function GroupPanel.new(menuParent, spectatorParent, safeParent, sendIntent, col
         BackgroundColor3 = colors.panel, BorderSizePixel = 0, LayoutOrder = 8, Visible = false,
     }))
     self.menuHeading = text(self.menuCard, "GroupHeading", 12, colors.lime, true)
-    self.menuHeading.Text = "ВАША КОМАНДА"
+    self.menuHeading.Text = "YOUR TEAM"
     self.menuCurrent = text(self.menuCard, "CurrentGroup", 18, colors.text, true)
     self.menuHelp = text(self.menuCard, "GroupHelp", 13, colors.muted, false)
-    self.menuHelp.Text = "Другая команда продолжает свою игру. В начатой игре вы будете наблюдателем."
-    self.menuButton = button(self.menuCard, "ChooseGroup", "Выбрать команду", function() self:_setOpen(true) end, 1)
-    self.hudButton = button(spectatorParent, "GroupsButton", "Группы", function() self:_setOpen(true) end, 2)
+    self.menuHelp.Text = "Other teams keep playing their games. You enter an active game as a spectator."
+    self.menuButton = button(self.menuCard, "ChooseGroup", "Choose team", function() self:_setOpen(true) end, 1)
+    self.hudButton = button(spectatorParent, "GroupsButton", "Groups", function() self:_setOpen(true) end, 2)
     self.hudButton.Visible = false
 
     self.overlay = make("Frame", "GroupSelector", safeParent, {
@@ -74,11 +77,11 @@ function GroupPanel.new(menuParent, spectatorParent, safeParent, sendIntent, col
         BackgroundColor3 = colors.panel, BorderSizePixel = 0, Active = true, ZIndex = 71,
     }), 16)
     self.title = text(self.shell, "GroupSelectorTitle", 21, colors.text, true)
-    self.title.Text = "ГРУППЫ"
+    self.title.Text = "GROUPS"
     self.current = text(self.shell, "GroupSelectorCurrent", 14, colors.lime, true)
-    self.close = button(self.shell, "CloseGroups", "Закрыть", function() self:_setOpen(false) end)
+    self.close = button(self.shell, "CloseGroups", "Close", function() self:_setOpen(false) end)
     self.help = text(self.shell, "GroupSelectorHelp", 13, colors.muted, false)
-    self.help.Text = "В начатую игру можно войти наблюдателем. Состав её героев уже закреплён."
+    self.help.Text = "Join an active game as a spectator. Its heroes are already locked in."
     self.list = make("ScrollingFrame", "GroupList", self.shell, {
         BackgroundTransparency = 1, BorderSizePixel = 0, CanvasSize = UDim2.new(),
         AutomaticCanvasSize = Enum.AutomaticSize.Y, ScrollBarThickness = 4,
@@ -87,8 +90,8 @@ function GroupPanel.new(menuParent, spectatorParent, safeParent, sendIntent, col
     make("UIListLayout", "GroupListLayout", self.list, {SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 8)})
     make("UIPadding", "GroupListPadding", self.list, {PaddingRight = UDim.new(0, 8), PaddingBottom = UDim.new(0, 4)})
     self.empty = text(self.list, "NoOtherGroups", 14, colors.muted, false)
-    self.empty.Text, self.empty.Size = "Других команд пока нет. Создайте свою.", UDim2.new(1, 0, 0, 64)
-    self.create = button(self.shell, "CreateGroup", "Создать команду", function() self:_create() end)
+    self.empty.Text, self.empty.Size = "No other teams yet. Create your own.", UDim2.new(1, 0, 0, 64)
+    self.create = button(self.shell, "CreateGroup", "Create team", function() self:_create() end)
     self.notice = text(self.shell, "GroupSelectorNotice", 12, colors.yellow, false)
     return self
 end
@@ -117,7 +120,7 @@ end
 
 function GroupPanel:_create()
     if not self.overlay.Visible or self.pending or not self.data or self.data.canCreateGroup ~= true then return end
-    self.createRequestId = self.createRequestId or HttpService:GenerateGUID(false)
+    self.createRequestId = self.createRequestId or game:GetService("HttpService"):GenerateGUID(false)
     self.pending, self.pendingAt = "Create", os.clock()
     self.sendIntent({kind = "CreateGroup", requestId = self.createRequestId})
     self:_draw()
@@ -126,9 +129,13 @@ end
 function GroupPanel:_draw()
     local data, seen, count = self.data, {}, 0
     if not data then return end
-    local currentName = data.groupName or "Текущая команда"
-    self.menuCurrent.Text, self.current.Text = currentName, "Сейчас: " .. currentName
-    self.menuButton.Text = self.pending and "Переходим…" or "Выбрать команду"
+    local T=self.translate or sourceText
+    local groupName=self.groupName or function(name) return T(name or 'Team') end
+    local transfer = type(data.serverTransfer) == "table" and data.serverTransfer.state
+    local serverPending, transferFailed = transfer == "Pending", transfer == "Failed"
+    local currentName = groupName(data.groupName or "Current team",data.groupId)
+    self.menuCurrent.Text, self.current.Text = currentName, T("Current: {team}", {team=currentName})
+    self.menuButton.Text = self.pending and "Joining…" or "Choose team"
     for _, group in ipairs(data.groups or {}) do
         if group.id ~= data.groupId then
             count += 1
@@ -148,11 +155,12 @@ function GroupPanel:_draw()
                 self.rows[targetId] = row
             end
             local enabled = group.canJoin == true and not self.pending
-            local action = group.status == "Active" and "Наблюдать" or "Войти в команду"
-            if group.canJoin ~= true then action = reasons[group.reason] or "Переход сейчас недоступен." end
-            if self.pending == group.id then action = "Переходим…" end
-            row.Text = (group.name or "Команда") .. " · " .. (statusNames[group.status] or "Ожидание")
-                .. "\nГероев: " .. tostring(group.heroes or 0) .. " · игроков: " .. tostring(group.players or 0) .. "\n" .. action
+            local action = group.status == "Active" and "Watch" or "Join team"
+            if group.canJoin ~= true then action = reasons[group.reason] or "You cannot switch right now." end
+            if self.pending == group.id then action = "Joining…" end
+            row.Text = T("{team} · {status}\nHeroes: {heroes:int} · players: {players:int}\n{action}", {
+                team=groupName(group.name or "Team",group.id),status=T(statusNames[group.status] or "Waiting"),
+                heroes=group.heroes or 0,players=group.players or 0,action=T(action)})
             row.LayoutOrder, row.Active, row.Selectable = count, enabled, enabled
             row.TextColor3 = group.canJoin == true and self.colors.text or self.colors.muted
         end
@@ -163,17 +171,27 @@ function GroupPanel:_draw()
     self.create.Selectable = self.create.Active
     self.create.BackgroundColor3 = self.create.Active and self.colors.lime or self.colors.card
     self.create.TextColor3 = self.create.Active and self.colors.ink or self.colors.muted
-    self.create.Text = self.pending == "Create" and "Создаём…" or "Создать команду"
-    self.notice.Text = self.pending and "Ждём подтверждения перехода…"
-        or (reasons[data.notice] or (data.canCreateGroup == false and "Создание команды сейчас недоступно." or ""))
+    self.create.Text = serverPending and "Joining…" or (self.pending == "Create" and "Creating…"
+        or (transferFailed and "Try again" or "Create team"))
+    self.notice.Text = serverPending and "Moving to a new server…"
+        or (self.pending and "Waiting for transfer confirmation…")
+        or (transferFailed and "Could not move. Try again.")
+        or (reasons[data.notice] or (data.canCreateGroup == false and "Team creation is currently unavailable." or ""))
 end
 
 function GroupPanel:update(data, hero)
     local changed = self.data and data and self.data.groupId ~= data.groupId
+    local transfer = data and type(data.serverTransfer) == "table" and data.serverTransfer.state
     if changed then
         self.pending, self.createRequestId = nil, nil
         self.overlay.Visible = false
         self.list.CanvasPosition = Vector2.zero
+    elseif transfer == "Pending" then
+        self.pending = "Server"
+    elseif transfer == "Failed" then
+        self.pending, self.createRequestId = nil, nil
+    elseif self.pending == "Server" then
+        self.pending = nil
     elseif self.pending and data and data.notice then
         self.pending = nil
     end
@@ -190,7 +208,7 @@ function GroupPanel:update(data, hero)
 end
 
 function GroupPanel:step()
-    if self.pending and os.clock() - self.pendingAt > 4 then
+    if self.pending and self.pending ~= "Server" and os.clock() - self.pendingAt > 4 then
         self.pending = nil
         self.sendIntent({kind = "Sync"})
         self:_draw()

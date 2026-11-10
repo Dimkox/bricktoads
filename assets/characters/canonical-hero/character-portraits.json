@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "sourceGlbsUnchanged": true,
+  "portraits": [
+    {
+      "file": "green-brawler-portrait.png",
+      "source": "green-brawler.glb",
+      "sourceSha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+      "sha256": "793f8b9306dce619f0faa548cd99cc5c7cf4c35972c6d8efd48e5b72f8906f22",
+      "size": [
+        512,
+        512
+      ],
+      "camera": {
+        "azimuthDegrees": 18,
+        "elevationDegrees": 3,
+        "forward": "front is-Z"
+      },
+      "sourceMeshNames": [
+        "Head",
+        "LeftUpperArm",
+        "RightUpperArm",
+        "UpperTorso"
+      ]
+    },
+    {
+      "file": "player-two-portrait.png",
+      "source": "canonical-hero-player2.glb",
+      "sourceSha256": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+      "sha256": "14877b42596f4862087727d23ade4b7732458b53c09ada009fa417ade1528a68",
+      "size": [
+        512,
+        512
+      ],
+      "camera": {
+        "azimuthDegrees": 18,
+        "elevationDegrees": 3,
+        "forward": "front is-Z"
+      },
+      "sourceMeshNames": [
+        "Head",
+        "LeftUpperArm",
+        "RightUpperArm",
+        "UpperTorso"
+      ]
+    }
+  ]
+}

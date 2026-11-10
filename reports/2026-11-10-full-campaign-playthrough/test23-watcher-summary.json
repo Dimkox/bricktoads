@@ -1,0 +1,150 @@
+{
+  "attempt": 23,
+  "runId": "bricktoads-qa-23-01-384fb79f",
+  "seed": 1158731273,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "status": "interrupted_unknown",
+  "terminalResult": null,
+  "lastStage": 1,
+  "sampleCount": 211,
+  "policyLoads": 1,
+  "errors": [],
+  "registeredPlayers": [
+    {
+      "name": "Archaicus14",
+      "userId": 11946162891
+    }
+  ],
+  "cohort": [
+    {
+      "ownerUserId": 11946162891,
+      "actorId": "bricktoads-qa-23-01-384fb79f:actor:146",
+      "slot": 1,
+      "status": "Alive",
+      "rawLife": 15,
+      "stock": 1,
+      "attempt": 3
+    }
+  ],
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794333404.41052,
+      "actorId": "bricktoads-qa-23-01-384fb79f:actor:2",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-qa-23-01-384fb79f:actor:2",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "bricktoads-qa-23-01-384fb79f",
+      "stock": 3
+    }
+  ],
+  "completedStages": [],
+  "guardianReturns": 2,
+  "lastArchivedCurrent": {
+    "slot": 1,
+    "index": 1,
+    "rawLife": 15,
+    "attempt": 3,
+    "epoch": 1,
+    "notice": "REACTION",
+    "plan": {
+      "aimX": 0.9998807761139542,
+      "x": 0.9998807761139542,
+      "z": 0.015441293914588566,
+      "aimZ": 0.015441293914588566,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "guardianHits": 2,
+    "actorId": "bricktoads-qa-23-01-384fb79f:actor:146",
+    "position": {
+      "y": 1.3802589178085327,
+      "x": 592.8184814453125,
+      "z": -0.36864542961120605
+    },
+    "target": -99,
+    "stock": 1,
+    "stage": "Boss",
+    "runId": "bricktoads-qa-23-01-384fb79f"
+  },
+  "lastCheckpointAt": "2026-11-10 18:00:15 UTC",
+  "interruptionObservedAt": "2026-11-10 18:01:15 UTC",
+  "interruptionEvidence": {
+    "failedStudioId": "97ee37f5-3840-470c-b002-094802085c47",
+    "tool": "execute_luau Server Read:Invoke()",
+    "error": "The requested studio_id is not connected — that Roblox Studio instance may have been closed or its place unloaded.",
+    "inventoryAfterFailure": [
+      {
+        "id": "e9bedaa4-e32e-48c4-b9c9-5d0e23d8678d",
+        "name": null
+      }
+    ],
+    "unknownInstanceControlled": false
+  },
+  "checkpoints": [
+    {
+      "at": "2026-11-10 17:57:09 UTC",
+      "file": "test23-checkpoint-001.json",
+      "stage": 1,
+      "sampleCount": 24
+    },
+    {
+      "at": "2026-11-10 17:58:04 UTC",
+      "file": "test23-checkpoint-002.json",
+      "stage": 1,
+      "sampleCount": 76
+    },
+    {
+      "at": "2026-11-10 17:58:47 UTC",
+      "file": "test23-checkpoint-003.json",
+      "stage": 1,
+      "sampleCount": 117
+    },
+    {
+      "at": "2026-11-10 17:59:32 UTC",
+      "file": "test23-checkpoint-004.json",
+      "stage": 1,
+      "sampleCount": 159
+    },
+    {
+      "at": "2026-11-10 18:00:15 UTC",
+      "file": "test23-checkpoint-005.json",
+      "stage": 1,
+      "sampleCount": 200
+    }
+  ],
+  "immutableArchives": [
+    "test23-archive-001.json",
+    "test23-archive-002.json"
+  ],
+  "terminalArchive": null,
+  "firstStockDrop": {
+    "observedAt": "2026-11-10 17:58:47 UTC",
+    "sampleCount": 117,
+    "stock": 2,
+    "attempt": 2,
+    "actorId": "bricktoads-qa-23-01-384fb79f:actor:97",
+    "rootAlertSentImmediately": true,
+    "freezeOwnedByRoot": true
+  },
+  "scope": "Ordinary Play in the single existing Studio window, registered Archaicus14 UserId11946162891; watcher performed read-only MCP observations only. Reviewed immediate changed-input adapter B40c4b42 and root-provided one-shot unique seed identity were active.",
+  "limits": [
+    "No terminal gameplay result retained; disconnection is not evidence of Lost, Won, timeout or cause of termination.",
+    "Last immutable archive is sample211: Guardian2 returns, actor146/attempt3/stock1/Life15; later state is unknown.",
+    "No completed level or Ice native acceptance established by retained archive.",
+    "Root owns any Studio reconnection, original Edit-source restoration using backup.bootstrapAppend, and disposable QA cleanup; watcher performed no such actions."
+  ]
+}

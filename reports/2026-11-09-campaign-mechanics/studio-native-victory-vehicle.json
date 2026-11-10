@@ -1,0 +1,571 @@
+{
+  "vehicle": {
+    "before": {
+      "actors": [
+        {
+          "slot": 1,
+          "attempt": 1,
+          "anchored": true,
+          "movement": "Ride",
+          "networkOwner": "anchored",
+          "respawns": 3,
+          "actorId": "campaign-native-3:actor:2",
+          "position": {
+            "y": 3,
+            "x": 24,
+            "z": -2
+          },
+          "status": "Alive",
+          "assembly": true,
+          "rawLife": 47,
+          "health": 5
+        },
+        {
+          "slot": 2,
+          "attempt": 1,
+          "anchored": true,
+          "movement": "Ride",
+          "networkOwner": "anchored",
+          "respawns": 3,
+          "actorId": "campaign-native-3:actor:5",
+          "position": {
+            "y": 3,
+            "x": 24,
+            "z": 2
+          },
+          "status": "Alive",
+          "assembly": true,
+          "rawLife": 47,
+          "health": 5
+        }
+      ],
+      "index": 3,
+      "modeState": {
+        "actors": [
+          {
+            "mounted": true,
+            "finished": false,
+            "slot": 1,
+            "attempt": 1,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-3:actor:2",
+            "position": {
+              "y": 3,
+              "x": 24,
+              "z": -2
+            },
+            "oxygen": 18,
+            "specialControl": true,
+            "progress": 0,
+            "medium": "Dry"
+          },
+          {
+            "mounted": true,
+            "finished": false,
+            "slot": 2,
+            "attempt": 1,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-3:actor:5",
+            "position": {
+              "y": 3,
+              "x": 24,
+              "z": 2
+            },
+            "oxygen": 18,
+            "specialControl": true,
+            "progress": 0,
+            "medium": "Dry"
+          }
+        ],
+        "chaseProgress": -32,
+        "bombIndex": 1,
+        "discardedSeconds": 0,
+        "elapsed": 0,
+        "bombCount": 0,
+        "complete": false,
+        "room": 1,
+        "objective": "Board the speeder; steer and jump through the course",
+        "camera": {
+          "phase": "Riding",
+          "mode": "Speeder",
+          "angle": 0,
+          "rewindSerial": 0
+        },
+        "vehicleGroup": {
+          "checkpoint": 1,
+          "speed": 32,
+          "elapsed": 0,
+          "serial": 0,
+          "phase": "Riding"
+        },
+        "mode": "Speeder",
+        "chaseLife": 207
+      },
+      "levelEpoch": 1,
+      "geometryCount": 97,
+      "supportCount": 6,
+      "source": "38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1",
+      "mode": "Speeder",
+      "stage": "Speeder",
+      "state": "Active"
+    },
+    "after": {
+      "actors": [
+        {
+          "slot": 1,
+          "attempt": 2,
+          "anchored": true,
+          "movement": "Ride",
+          "networkOwner": "anchored",
+          "respawns": 2,
+          "actorId": "campaign-native-3:actor:9",
+          "position": {
+            "y": 3,
+            "x": 32.622623443603516,
+            "z": -2
+          },
+          "status": "Alive",
+          "assembly": true,
+          "rawLife": 47,
+          "health": 5
+        },
+        {
+          "slot": 2,
+          "attempt": 1,
+          "anchored": true,
+          "movement": "Ride",
+          "networkOwner": "anchored",
+          "respawns": 3,
+          "actorId": "campaign-native-3:actor:5",
+          "position": {
+            "y": 3,
+            "x": 32.622623443603516,
+            "z": 2
+          },
+          "status": "Alive",
+          "assembly": true,
+          "rawLife": 47,
+          "health": 5
+        }
+      ],
+      "index": 3,
+      "modeState": {
+        "actors": [
+          {
+            "mounted": true,
+            "finished": false,
+            "slot": 1,
+            "attempt": 2,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-3:actor:9",
+            "position": {
+              "y": 3,
+              "x": 32.622625,
+              "z": -2
+            },
+            "oxygen": 18,
+            "specialControl": true,
+            "progress": 8.622625,
+            "medium": "Dry"
+          },
+          {
+            "mounted": true,
+            "finished": false,
+            "slot": 2,
+            "attempt": 1,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-3:actor:5",
+            "position": {
+              "y": 3,
+              "x": 32.622625,
+              "z": 2
+            },
+            "oxygen": 18,
+            "specialControl": true,
+            "progress": 8.622625,
+            "medium": "Dry"
+          }
+        ],
+        "chaseProgress": -32,
+        "bombIndex": 1,
+        "discardedSeconds": 0,
+        "elapsed": 0.41666666666666663,
+        "bombCount": 0,
+        "complete": false,
+        "room": 1,
+        "objective": "Board the speeder; steer and jump through the course",
+        "camera": {
+          "rewindTo": {
+            "y": 3,
+            "x": 24,
+            "z": 2
+          },
+          "rewindFrom": {
+            "y": 3,
+            "x": 78.53343055555555,
+            "z": -12
+          },
+          "phase": "Riding",
+          "mode": "Speeder",
+          "angle": 0,
+          "rewindSerial": 1
+        },
+        "vehicleGroup": {
+          "elapsed": 0.39999999999999997,
+          "phase": "Riding",
+          "phaseElapsed": 0,
+          "checkpoint": 1,
+          "rewindFrom": {
+            "y": 3,
+            "x": 78.53343055555555,
+            "z": -12
+          },
+          "start": [
+            {
+              "y": 3,
+              "x": 24,
+              "z": -2
+            },
+            {
+              "y": 3,
+              "x": 24,
+              "z": 2
+            }
+          ],
+          "rewindTo": {
+            "y": 3,
+            "x": 24,
+            "z": 2
+          },
+          "serial": 1,
+          "speed": 32.14
+        },
+        "mode": "Speeder",
+        "chaseLife": 207
+      },
+      "levelEpoch": 1,
+      "geometryCount": 99,
+      "supportCount": 6,
+      "source": "38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1",
+      "mode": "Speeder",
+      "stage": "Speeder",
+      "state": "Active"
+    },
+    "source": "38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1",
+    "survivorSameBody": true,
+    "collidedBodyReplaced": true,
+    "preparation": "Entry actors removed; boarding uses real validated Punch; first rider positioned at an existing course hazard",
+    "prepared": true,
+    "stopped": {
+      "actors": [
+        {
+          "slot": 1,
+          "attempt": 1,
+          "anchored": false,
+          "movement": "Idle",
+          "networkOwner": "nil",
+          "respawns": 3,
+          "position": {
+            "y": 3,
+            "x": 24,
+            "z": -2
+          },
+          "status": "AwaitingRespawn",
+          "assembly": true,
+          "rawLife": 0,
+          "health": 0
+        },
+        {
+          "slot": 2,
+          "attempt": 1,
+          "anchored": true,
+          "movement": "Ride",
+          "networkOwner": "anchored",
+          "respawns": 3,
+          "actorId": "campaign-native-3:actor:5",
+          "position": {
+            "y": 3,
+            "x": 24,
+            "z": 2
+          },
+          "status": "Alive",
+          "assembly": true,
+          "rawLife": 47,
+          "health": 5
+        }
+      ],
+      "index": 3,
+      "modeState": {
+        "actors": [
+          {
+            "mounted": true,
+            "finished": false,
+            "slot": 1,
+            "attempt": 1,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-3:actor:2",
+            "position": {
+              "y": 3,
+              "x": 78.53343055555555,
+              "z": -12
+            },
+            "oxygen": 18,
+            "specialControl": true,
+            "progress": 54.533430555555555,
+            "medium": "Dry"
+          },
+          {
+            "mounted": true,
+            "finished": false,
+            "slot": 2,
+            "attempt": 1,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-3:actor:5",
+            "position": {
+              "y": 3,
+              "x": 24,
+              "z": 2
+            },
+            "oxygen": 18,
+            "specialControl": true,
+            "progress": 0,
+            "medium": "Dry"
+          }
+        ],
+        "chaseProgress": -32,
+        "bombIndex": 1,
+        "discardedSeconds": 0,
+        "elapsed": 0.016666666666666666,
+        "bombCount": 0,
+        "complete": false,
+        "room": 1,
+        "objective": "Board the speeder; steer and jump through the course",
+        "camera": {
+          "rewindTo": {
+            "y": 3,
+            "x": 24,
+            "z": 2
+          },
+          "rewindFrom": {
+            "y": 3,
+            "x": 78.53343055555555,
+            "z": -12
+          },
+          "phase": "Stopped",
+          "mode": "Speeder",
+          "angle": 0,
+          "rewindSerial": 1
+        },
+        "vehicleGroup": {
+          "elapsed": 0,
+          "phase": "Stopped",
+          "phaseElapsed": 0,
+          "checkpoint": 1,
+          "rewindFrom": {
+            "y": 3,
+            "x": 78.53343055555555,
+            "z": -12
+          },
+          "start": {
+            "2": {
+              "y": 3,
+              "x": 24,
+              "z": 2
+            }
+          },
+          "rewindTo": {
+            "y": 3,
+            "x": 24,
+            "z": 2
+          },
+          "serial": 1,
+          "speed": 0
+        },
+        "mode": "Speeder",
+        "chaseLife": 207
+      },
+      "levelEpoch": 1,
+      "geometryCount": 99,
+      "supportCount": 6,
+      "source": "38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1",
+      "mode": "Speeder",
+      "stage": "Speeder",
+      "state": "Active"
+    }
+  },
+  "finalVictory": {
+    "source": "38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1",
+    "statuses": {
+      "OK": 27,
+      "COOLDOWN": 131
+    },
+    "prepared": true,
+    "accepted": 27,
+    "before": {
+      "actors": [
+        {
+          "slot": 1,
+          "attempt": 1,
+          "anchored": false,
+          "movement": "Idle",
+          "networkOwner": "nil",
+          "respawns": 3,
+          "actorId": "campaign-native-13:actor:2",
+          "position": {
+            "y": 3,
+            "x": 38,
+            "z": 0
+          },
+          "status": "Alive",
+          "assembly": true,
+          "rawLife": 47,
+          "health": 5
+        }
+      ],
+      "index": 13,
+      "modeState": {
+        "actors": [
+          {
+            "mounted": false,
+            "finished": true,
+            "slot": 1,
+            "attempt": 1,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-13:actor:2",
+            "position": {
+              "y": 3,
+              "x": 38,
+              "z": 0
+            },
+            "oxygen": 18,
+            "specialControl": false,
+            "progress": 0,
+            "medium": "Dry"
+          }
+        ],
+        "chaseProgress": -32,
+        "bombIndex": 1,
+        "discardedSeconds": 0,
+        "elapsed": 0.05,
+        "bombCount": 0,
+        "complete": true,
+        "room": 1,
+        "objective": "Enter the eclipse arena and defeat the final guardian",
+        "camera": {
+          "mode": "Finale",
+          "angle": 0
+        },
+        "mode": "Finale",
+        "chaseLife": 207
+      },
+      "levelEpoch": 1,
+      "geometryCount": 10,
+      "supportCount": 4,
+      "source": "38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1",
+      "mode": "Finale",
+      "stage": "Boss",
+      "state": "Active"
+    },
+    "boss": {
+      "bossDefeated": true,
+      "bossRawLife": 0,
+      "rawLife": 0,
+      "progress": 240,
+      "bossVulnerable": false,
+      "maxRawLife": 15,
+      "bossState": "Defeated",
+      "bossPhase": 2,
+      "bossType": "DarkQueen",
+      "bossName": "Dark Queen",
+      "bossMaxProgress": 240,
+      "bossMaxRawLife": 15,
+      "maxProgress": 240,
+      "bossProgress": 240,
+      "projectiles": 0
+    },
+    "sameBossBody": true,
+    "preparation": "Entrance and stance positions only; real validated attacks; no Life/progress/death writes",
+    "result": "Won",
+    "after": {
+      "actors": [
+        {
+          "slot": 1,
+          "attempt": 1,
+          "anchored": false,
+          "movement": "Air",
+          "networkOwner": "nil",
+          "respawns": 3,
+          "actorId": "campaign-native-13:actor:2",
+          "position": {
+            "y": 27.406740188598633,
+            "x": 101,
+            "z": 0
+          },
+          "status": "Alive",
+          "assembly": true,
+          "rawLife": 47,
+          "health": 5
+        }
+      ],
+      "index": 13,
+      "modeState": {
+        "actors": [
+          {
+            "mounted": false,
+            "finished": true,
+            "slot": 1,
+            "attempt": 1,
+            "grounded": true,
+            "checkpoint": 1,
+            "segment": 1,
+            "actorId": "campaign-native-13:actor:2",
+            "position": {
+              "y": 3,
+              "x": 38,
+              "z": 0
+            },
+            "oxygen": 18,
+            "specialControl": false,
+            "progress": 0,
+            "medium": "Dry"
+          }
+        ],
+        "chaseProgress": -32,
+        "bombIndex": 1,
+        "discardedSeconds": 0,
+        "elapsed": 15.850000000000367,
+        "bombCount": 0,
+        "complete": true,
+        "room": 1,
+        "objective": "Enter the eclipse arena and defeat the final guardian",
+        "camera": {
+          "mode": "Finale",
+          "angle": 0
+        },
+        "mode": "Finale",
+        "chaseLife": 207
+      },
+      "levelEpoch": 1,
+      "geometryCount": 10,
+      "supportCount": 4,
+      "source": "38bda09a769a7b405b8bc7705a00337956c9164fd55a60e04b26af7d9981d4a1",
+      "mode": "Finale",
+      "stage": "Won",
+      "state": "Active"
+    }
+  }
+}

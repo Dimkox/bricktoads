@@ -45,7 +45,7 @@ return function(Director,Session,Core,Combat,baseConfig,FakeWorld)
         local session={state={runId='run-enemies',levelEpoch=1,status='Active',heroes={[1]={status='Alive',connected=true}}},order={1},combat={[1]={}},now=0}
         function session:_hit(a,t,action) world.hits+=1; world.lastHit={a,t,action}; return true end
         local cfg={MoveTimeout=.35,Enemy={hearts=3,punchDamage=1,dashDamage=2,speed=9,range=5,windup=.65,cooldown=1.6,reaction=.35,attack='Dash'},Boss={hits=3,interval=2.4,projectileSpeed=12,returnSpeed=26,projectileLife=12,aggroRange=200},Attacks={Dash={reach=8,width=3,height=4}}}
-        return Director.new(session,world,{},cfg),world,session
+        return Director.new(session,world,Combat,cfg),world,session
     end
     local function clearWave(d)
         local ids={}; for id,e in pairs(d.enemies) do if not e.dead then ids[#ids+1]=id end end
@@ -129,7 +129,7 @@ return function(Director,Session,Core,Combat,baseConfig,FakeWorld)
         local role=d:controlled(71)
         assert(role.enemyId==-1 and type(role.actorId)=='string' and role.actorId==body.actorId)
         assert(role.hearts==2 and role.maxHearts==3 and role.status=='Alive' and role.attempt==1)
-        assert(role.connectionEpoch==1 and role.connected and role.template=='Sentry' and role.name=='Ржавый дозорный')
+        assert(role.connectionEpoch==1 and role.connected and role.template=='Sentry' and role.name=="Rusty Guard")
         assert(body.ownerName=='Guest @guest' and d.byUserId[71]==-1)
         assert(d:claim(72,-1)=='ENEMY_OCCUPIED' and d:claim(71,-2)=='ENEMY_ALREADY_OWNED')
     end)

@@ -1,0 +1,17 @@
+Command: .tools/luau-0.745/luau.exe build/run_audit_clinger_endpoint.luau
+Runner: require('../tests/campaign_modes/ClingerEndpoint.spec')(require('../src/server/gameplay/CampaignDefinition'),require('../src/server/gameplay/CampaignModes'))
+Exit code before endpoint progress clamp: 1
+
+./tests/campaign_modes/ClingerEndpoint.spec.lua:46: the actual orb waiting at the route endpoint must catch the rider before course completion
+stacktrace:
+[C] function assert
+./tests/campaign_modes/ClingerEndpoint.spec.lua:46
+./build/run_audit_clinger_endpoint.luau:1
+
+Original read-only probe, authored seed 41 with real Session/Core/Combat:
+40 seconds without input: attempt 2, stock 2, Alive, shield nil,
+hero progress 77.1, orb progress 816.1, actual route length 522.
+Then normal current-segment Move inputs: course completed at 58.55 seconds,
+hero/orb physical distance approached 9.24e-14, orb progress 1224.2.
+The rendered orb was at the endpoint while its collision coordinate kept
+advancing beyond the route. No actor pose or resource writes after startup.

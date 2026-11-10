@@ -1,0 +1,77 @@
+{
+  "status": "frozen_independently_reviewed_pending_native_playthrough",
+  "independentReview": "ice19_review independently reran exact DA baseline static30/36 and NPC12/18; E7 compile, static36/36 and NPC18/18 passed. Ordinary Move/Jump only, Ice-only delta, no production/resource/AI writes. CLEAR for bounded single-window native retry; engine collision parity and all13 acceptance remain pending.",
+  "at": "2026-11-10T17:14:57.686705+00:00",
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "playableSha256": "9f9689b3da56384344209a2743f0eac4eb74e573b3100e0f2a06155e59598a4b",
+  "baselineSha256": "da9956a8db58d9d2d37852764e3764e470ef2830eccfa984a37976ddb314ac5f",
+  "candidateSha256": "e7c8152f21d45b281ca75150c39e1f78ff289c9bbce73f25945375f981b3037c",
+  "workingPolicySha256": "e7c8152f21d45b281ca75150c39e1f78ff289c9bbce73f25945375f981b3037c",
+  "onlyIceChanged": true,
+  "checks": [
+    {
+      "probe": "probe-static-baseline.luau",
+      "log": "static-red.txt",
+      "passed": 30,
+      "failed": 6,
+      "expectedFailures": 6,
+      "scope": "Session/Modes logical simulation"
+    },
+    {
+      "probe": "probe-static-candidate.luau",
+      "log": "static-candidate.txt",
+      "passed": 36,
+      "failed": 0,
+      "expectedFailures": 0,
+      "scope": "Session/Modes logical simulation"
+    },
+    {
+      "probe": "probe-npc-baseline.luau",
+      "log": "npc-red.txt",
+      "passed": 12,
+      "failed": 6,
+      "expectedFailures": 6,
+      "scope": "Original NPC source with presentation boundary"
+    },
+    {
+      "probe": "probe-npc-candidate.luau",
+      "log": "npc-candidate.txt",
+      "passed": 18,
+      "failed": 0,
+      "expectedFailures": 0,
+      "scope": "Original NPC source with presentation boundary"
+    },
+    {
+      "probe": "probe-first-section-36.luau",
+      "log": "first-section-36-green.txt",
+      "passed": 36,
+      "failed": 0,
+      "expectedFailures": 0,
+      "scope": "Session/Modes logical simulation"
+    },
+    {
+      "probe": "probe-other-100.luau",
+      "log": "other-100-green.txt",
+      "passed": 100,
+      "failed": 0,
+      "expectedFailures": 0,
+      "scope": "Session/Modes logical simulation"
+    },
+    {
+      "probe": "probe-live-8.luau",
+      "log": "live-8-green.txt",
+      "passed": 8,
+      "failed": 0,
+      "expectedFailures": 0,
+      "scope": "Session/Modes logical simulation"
+    }
+  ],
+  "compileExit": 0,
+  "limits": [
+    "No Studio control or native test by this agent",
+    "Actual NPC source runs in a non-engine presentation/ground-movement adapter",
+    "Full new static36 and NPC18 use seed990047694 and one hero; cadence .1/.133/.167, startup delays0/.5/1/1.5/2/2.5; static outer1/60 or.1, NPC1/60",
+    "Old first-section36 only proves crossing X87 with original three bodies; not complete Ice",
+    "No claim of all-seed, delayed-packet, multiplayer or all13 full campaign acceptance"
+  ]
+}

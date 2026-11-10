@@ -1,0 +1,106 @@
+{
+  "scope": "QA-only first Ice Snowball/gap regression, with separate prepared native stage evidence",
+  "seed": 614217761,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "baselinePolicy": "8c7d521749c78ec921f158633067a35b773c7b4a42933b28d6f9a93ca9a6fa16",
+  "fixedPolicy": "461abaa9803a2e2211d0f3ed696d3100f01c587c6d7d811fafce781d7de8703e",
+  "geometry": {
+    "firstFloor": {
+      "minX": -12,
+      "maxX": 21,
+      "top": 0
+    },
+    "secondFloor": {
+      "minX": 25,
+      "maxX": 54,
+      "top": 0
+    },
+    "thirdFloor": {
+      "minX": 58,
+      "maxX": 87,
+      "top": 2
+    },
+    "movingSnowball": {
+      "x": 50,
+      "y": 5,
+      "z": -9,
+      "width": 4,
+      "height": 6,
+      "depth": 7,
+      "zAmplitude": 10,
+      "period": 3
+    }
+  },
+  "firstSectionRegression": {
+    "cases": 36,
+    "baseline": {
+      "passes": 29,
+      "failures": 7,
+      "exit": 1
+    },
+    "fixed": {
+      "passes": 36,
+      "failures": 0,
+      "exit": 0
+    },
+    "inputCadence": [
+      0.08,
+      0.133,
+      0.167
+    ],
+    "outerHeartbeat": [
+      0.016666666666666666,
+      0.1
+    ],
+    "entryPhases": [
+      0,
+      0.5,
+      1,
+      1.5,
+      2,
+      2.5
+    ],
+    "cohort": 3,
+    "success": "All original three bodies cross raised floor3 beyondX87 atY>=4.9, without deaths or attempt/reserve changes. Actual Session Life damage is retained; later course is outside this focused assertion."
+  },
+  "native": {
+    "preparation": "Fresh authored slot3 spawn atZ+6, original47Life/3reserves, ordinary input start delay0.5seconds, then0.1second input cadence; live Snowmen and all geometry/hazards on native Heartbeats; no prepared pose or resource writes",
+    "baseline": {
+      "file": "native-adverse-baseline.json",
+      "result": "Lost",
+      "elapsed": 19.27728796005249,
+      "firstFall": "localX71.128/Y-58.988/Z-9.984 after static attacker-9001/Dash atX46.325",
+      "terminal": {
+        "attempt": 4,
+        "stock": 0,
+        "rawLife": 0
+      }
+    },
+    "fixed": {
+      "file": "native-fixed.json",
+      "result": "Won",
+      "elapsed": 13.334272861480713,
+      "terminal": {
+        "attempt": 1,
+        "stock": 3,
+        "rawLife": 47
+      },
+      "hitEvents": 0,
+      "deathEvents": 0,
+      "cleanup": true
+    }
+  },
+  "validation": {
+    "broadEarlyCourses": 100,
+    "liveThreatAndRewind": 8,
+    "compile": true,
+    "diffCheck": true
+  },
+  "limits": [
+    "Prepared synthetic solo server stage, not registered clients or continuous campaign acceptance",
+    "Numeric boundary doubles Roblox presentation and does not construct ordinary NPC AI; native evidence keeps real NPC AI active",
+    "Whole-stage54-case coarse stress still has34 failures (including later hazards and quarter-second outer batches), versus38 baseline failures; no deathless-whole-Ice or quarter-second-batch acceptance claim",
+    "A rejected optional unconditional first-cadence wait had one later-gap regression; final source excludes it and retains the independently tested native461ABA variant",
+    "All earlier Surf proof/source snapshots remain unchanged"
+  ]
+}

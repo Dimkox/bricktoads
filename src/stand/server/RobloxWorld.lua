@@ -190,13 +190,26 @@ function World:targets(uid, cfg)
     local result={}; for _,candidate in ipairs(candidates) do result[#result+1]=candidate.id end
     return result
 end
-function World:impulse(uid, attacker, cfg, profile)
-    assert(self.config.Impulses[profile]==cfg,"Unbound response profile")
-    local a,b=self.actors[uid],self.actors[attacker]
-    if not a or not b or a.root.Anchored then return end
-    local facing=b.root.CFrame.LookVector
-    local horizontal=Vector3.new(facing.X,0,facing.Z)
-    if horizontal.Magnitude<0.001 then horizontal=Vector3.new(1,0,0) else horizontal=horizontal.Unit end
+function World:impulse(uid, attacker, cfg, profile, impulseDirection)
+    assert((self.config.Impulses and self.config.Impulses[profile]==cfg) or (cfg and cfg.profile==profile),"Unbound response profile")
+    local a=self.actors[uid]
+    if not a or a.root.Anchored then return end
+    local horizontal
+    if type(impulseDirection)=='table' then
+        local x,z=impulseDirection.x,impulseDirection.z
+        if type(x)=='number' and x==x and math.abs(x)<math.huge
+            and type(z)=='number' and z==z and math.abs(z)<math.huge then
+            local scale=math.max(math.abs(x),math.abs(z))
+            if scale>0 then horizontal=Vector3.new(x/scale,0,z/scale).Unit end
+        end
+    end
+    if not horizontal then
+        local b=self.actors[attacker]
+        if not b then return end
+        local facing=b.root.CFrame.LookVector
+        horizontal=Vector3.new(facing.X,0,facing.Z)
+        if horizontal.Magnitude<0.001 then horizontal=Vector3.new(1,0,0) else horizontal=horizontal.Unit end
+    end
     a.root:ApplyImpulse((horizontal*cfg.horizontal+Vector3.new(0,cfg.vertical,0))*a.root.AssemblyMass)
 end
 function World:hazard(uid)

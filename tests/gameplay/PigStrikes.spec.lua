@@ -109,6 +109,7 @@ return function(Director,Session,Core,Combat,Config,FakeWorld)
         tick(.1);assert(not d.enemies[-1].rushing and w.pursuits[-1].speed==Config.Enemy.speed)
         d.zoneIndex=3;tick(.2);assert(d.enemies[-1].rushing and w.pursuits[-1].speed==Config.Pig.rushSpeed)
         -- Entering melee captures the running action and clears the approach flag.
+        w.actualRuns[-1]=true -- The physical adapter confirms the approach reached running speed.
         w.positions[1].x=4;tick(.3);assert(d.enemies[-1].windup.action=='PigRush' and not d.enemies[-1].rushing)
         s.combat[1].rawLife=15;tick(.3+Config.Attacks.PigRush.windup)
         assert(w.lastProfile==22 and s.combat[1].rawLife==0 and s.combat[1].deathAt,'Never substitute raw255 profile21')
@@ -125,7 +126,8 @@ return function(Director,Session,Core,Combat,Config,FakeWorld)
     test('claiming an unengaged running Pig stops its approach without changing body or health',function()
         local d,s,w,tick=fixture();d.zoneIndex=3;w.positions[1].x=15;d.random=function()return 1 end
         tick(.1);assert(d.enemies[-1].rushing and not d.enemies[-1].engaged)
-        local actor=w.actors[-1];assert(d:claim(71,-1)=='OK')
+        w.actualRuns[-1]=true
+        local actor=w.actors[-1];assert(d:claim(71,-1)=='OK' and not w:isRunning(-1))
         assert(not d.enemies[-1].rushing and not d.enemies[-1].windup and w.actors[-1]==actor and d.enemies[-1].health==3)
         tick(.2);assert(not d.enemies[-1].rushing)
     end)
@@ -134,6 +136,7 @@ return function(Director,Session,Core,Combat,Config,FakeWorld)
             function(s,w)s.combat[1].reactionEnd=2 end}) do
             local d,s,w,tick=fixture();d.zoneIndex=3;w.positions[1].x=15;d.random=function()return 1 end
             tick(.1);assert(d.enemies[-1].rushing)
+            w.actualRuns[-1]=true
             w.positions[1].x=4;change(s,w);tick(.2)
             if s.combat[1].reactionEnd then assert(not d.enemies[-1].windup,'Heavy-reacting target is ineligible')
             else assert(d.enemies[-1].windup and d.enemies[-1].windup.action=='PigJab','Invalid rush must not become a hop') end
@@ -141,7 +144,9 @@ return function(Director,Session,Core,Combat,Config,FakeWorld)
     end)
     test('other species retain their existing attack and client schema cannot supply a trusted Pig action',function()
         local d=fixture();d:_beginStrike(-2,d.enemies[-2],1)
-        assert(d.enemies[-2].windup.action=='Dash')
+        assert(d.enemies[-2].windup.action=='WalkerLight')
+        d.enemies[-2].kind='Dragon';d:_beginStrike(-2,d.enemies[-2],1)
+        assert(d.enemies[-2].windup.action=='DragonHeadbutt')
         local d2,s2,w2,tick2,command=fixture();assert(d2:claim(71,-1)=='OK')
         assert(command(.1,'PigJab')=='INVALID_INTENT' and command(.2,'PigRush')=='INVALID_INTENT')
     end)

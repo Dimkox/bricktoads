@@ -1,0 +1,212 @@
+COMPILATION .tools/luau-0.745/luau-compile.exe --null src/client/BossQueuePanel.luau src/client/BrickToadsClient.client.luau src/client/CombatFeedback.luau src/client/GroupPanel.luau src/client/MovementInput.luau src/client/RobloxInputBindings.luau src/client/SpectatorCamera.luau src/server/BrickToadsServer.server.luau src/server/RunLifecycle.lua src/server/gameplay/BossQueue.lua src/server/gameplay/DragonFlight.lua src/server/gameplay/DragonWorld.lua src/server/gameplay/EnemyCarry.lua src/server/gameplay/GameConfig.lua src/server/gameplay/GameController.lua src/server/gameplay/GameWorld.lua src/server/gameplay/GuardianPattern.lua src/server/gameplay/HealingFlies.lua src/server/gameplay/LevelDefinition.lua src/server/gameplay/LevelDirector.lua src/server/gameplay/MatchHub.lua src/server/gameplay/RunJournal.lua src/server/gameplay/SourceCombat.lua src/server/gameplay/WalkerClubs.lua src/shared/BrickToadsConfig.luau src/stand/client/Stand.client.lua src/stand/server/Combat.lua src/stand/server/Config.lua src/stand/server/ConnectionRegistry.lua src/stand/server/RobloxWorld.lua src/stand/server/Session.lua src/stand/server/Stand.server.lua tests/CombatFeedback.spec.luau tests/Lifecycle.spec.lua tests/SpectatorCamera.spec.luau tests/gameplay/BossQueue.spec.lua tests/gameplay/DragonFlight.spec.lua tests/gameplay/DragonStrikes.spec.lua tests/gameplay/DragonTransportStudioAcceptance.server.luau tests/gameplay/EnemyCarry.spec.lua tests/gameplay/GameController.spec.lua tests/gameplay/GuardianPattern.spec.lua tests/gameplay/GuardianSession.spec.lua tests/gameplay/HealingFlies.spec.lua tests/gameplay/LevelDirector.spec.lua tests/gameplay/LevelRoute.spec.lua tests/gameplay/MatchHub.spec.lua tests/gameplay/MovementInput.spec.lua tests/gameplay/PigStrikes.spec.lua tests/gameplay/RunJournal.spec.lua tests/gameplay/RunningCombat.spec.lua tests/gameplay/SourceCombat.spec.lua tests/gameplay/WalkerClubs.spec.lua tests/gameplay/WalkerHeavyStudioAcceptance.server.luau tests/gameplay/WalkerStrikes.spec.lua tests/group_world/contracts.luau tests/run.luau tests/run_boss_queue.luau tests/run_connections.luau tests/run_dragon_flight.luau tests/run_dragon_strikes.luau tests/run_enemy_carry.luau tests/run_feedback.luau tests/run_gameplay.luau tests/run_groups.luau tests/run_guardian.luau tests/run_healing_flies.luau tests/run_journal.luau tests/run_level_route.luau tests/run_level_traversal.luau tests/run_movement_input.luau tests/run_pig_strikes.luau tests/run_route_driver_navigation.luau tests/run_running_combat.luau tests/run_source_combat.luau tests/run_stand.luau tests/run_walker_clubs.luau tests/run_walker_strikes.luau tests/stand/Combat.spec.lua tests/stand/CombatStandSecurityScenarios.lua tests/stand/CombatStandStudioAcceptance.server.lua tests/stand/CombatStandStudioClient.client.lua tests/stand/ConnectionRegistry.spec.lua tests/stand/FakeWorld.lua tests/stand/Session.spec.lua tests/stand/StandGateway.spec.lua tests/stand/StandGatewayFixture.lua tests/stand/StudioReconnectTransportProbe.server.lua tests/stand/observe_actual_reconnect.luau tools/studio_launch_combat_acceptance.luau tools/studio_level_route_driver.luau
+Compiled 17 KLOC into 1103 KB bytecode (read 0.01s, parse 0.03s, compile 0.08s)
+EXIT 0
+
+1 .tools/luau-0.745/luau.exe tests/run_movement_input.luau
+PASS one held native Bool direction walks and repeated press notifications cannot create a run
+PASS press release press within a quarter second runs only while that direction stays held
+PASS double tap uses an inclusive press-to-press deadline rather than release-to-press time
+PASS independent simultaneous direction actions normalize diagonals and release only their own axis
+PASS opposite directions cancel movement and cannot hide a running latch that resumes later
+PASS a second independent direction keeps diagonal run until the actual running direction is released
+PASS opposition on the other axis does not cancel an independently held running direction
+PASS camera-relative projection follows rotated and vertical cameras without changing run intent
+PASS context reset clears held directions and tap history across focus body and view changes
+PASS interruption can retain native held directions as walking without manufacturing another tap
+PASS different owners never share pressed directions or double tap history
+PASS native binding context is disabled Bool Automatic with independent keyboard and UIButton bindings
+PASS native press release callbacks preserve independent directions and simultaneous jump attack
+MovementInput: 13 PASS
+EXIT 0
+
+2 .tools/luau-0.745/luau.exe tests/run_running_combat.luau
+PASS Move permits only an optional boolean run and retains strict action authority
+PASS stale actor connection and sequence cannot start or stop another accepted run
+PASS stationary requested run and knockback alone cannot promote primary or standing R
+PASS actual running primary bypasses opportunistic interactions and freezes Dash before stopping
+PASS running hero still selects Boot against a heavy target and Dash finisher at actual low Life
+PASS mandatory Pig and guardian held actions retain priority even when physical run is reported
+PASS standing ordinary primary retains opportunistic interaction priority
+PASS held guardian movement strips the client run request before it reaches physical control
+PASS legacy stand keeps standing Dash and ignores the main-game running shortcut guard
+PASS incoming impulse timeout disconnect and new appearance clear accepted run state
+PASS actual impact increments the reset signal while an emergency shield does not
+PASS human ground enemy forwards bounded run and accepts one fixed-profile running strike
+PASS enemy running profile never inherits a hero finisher and preserves exact zero arithmetic
+PASS Walker NPC run approach latches until actual running attack and resets on claim or impact
+PASS requested NPC source rush cannot make a wall-pushing mega and qualified Pig keeps its source action
+PASS running Walker approaches through6.25 before committing its6-stud strike against a stationary hero
+PASS enemy disconnect and death clear run and publish reaction reset without a new body
+PASS accepted running strikes finish after disconnect without resuming locomotion or changing their action
+RunningCombat: 18 PASS
+EXIT 0
+
+3 .tools/luau-0.745/luau.exe tests/run_feedback.luau
+PASS first sync and reconnect baseline never replay old combat
+PASS repeated stale and shuffled packets cannot duplicate or reverse confirmed feedback
+PASS group run and level boundaries cannot attach old feedback to another body
+PASS blocked damage and confirmed interactions have distinct finite text
+PASS a gap emits only remaining recent rows with bounded cursor memory
+PASS malformed and foreign actor rows cannot become client effects
+PASS short role hints follow server interaction and control state
+PASS actual controlled running offers mega before an opportunistic pickup
+PASS mandatory held actions and boss controls keep priority over a stale run hint
+PASS zero hearts do not remove a still-living hero or ordinary actor from the HUD count
+PASS monotonic snapshot envelope prevents rollback and replay across groups and runs
+PASS Dragon transport has confirmed feedback and gate-aligned live counts
+CombatFeedback: 12 PASS
+EXIT 0
+
+4 .tools/python-3.13.9/python.exe tools/test_bricktoads_place.py
+test_conflicting_lua_and_luau_names_fail (__main__.BrickToadsPlaceTests.test_conflicting_lua_and_luau_names_fail) ... ok
+test_missing_sources_fail_without_emitting_an_empty_place (__main__.BrickToadsPlaceTests.test_missing_sources_fail_without_emitting_an_empty_place) ... ok
+test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint (__main__.BrickToadsPlaceTests.test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint) ... ok
+test_private_source_receipt_changes_when_an_embedded_source_changes (__main__.BrickToadsPlaceTests.test_private_source_receipt_changes_when_an_embedded_source_changes) ... ok
+test_rebuild_is_deterministic (__main__.BrickToadsPlaceTests.test_rebuild_is_deterministic) ... ok
+test_server_scripts_cannot_be_built_into_public_containers (__main__.BrickToadsPlaceTests.test_server_scripts_cannot_be_built_into_public_containers) ... ok
+test_sources_are_current_and_server_code_is_private (__main__.BrickToadsPlaceTests.test_sources_are_current_and_server_code_is_private) ... ok
+test_spawn_is_above_a_collidable_anchored_floor (__main__.BrickToadsPlaceTests.test_spawn_is_above_a_collidable_anchored_floor) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.274s
+
+OK
+EXIT 0
+
+5 .tools/python-3.13.9/python.exe tools/build_bricktoads_place.py --check
+C:\Users\User\Documents\bricktoads\places\BrickToadsPlayable.rbxlx: 433259 bytes; sha256=f2c7d7a5759718233b5a849b765a498390196b1247bde5ad54e15df07bf1f58a
+EXIT 0
+
+SUMMARY
+{
+  "status": "pass",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "suite_counts": {
+    "movement_input": 13,
+    "running_combat": 18,
+    "combat_feedback": 12,
+    "python_playable": 8
+  },
+  "source_receipt": {
+    "source_sha256": "bfb49dd5e90731863794101d7aa399076353238567dbe14a3e87b4d7e576dcd0",
+    "embedded_sources": 30,
+    "production_scripts_including_receipt": 31,
+    "matches": true
+  },
+  "playable": {
+    "bytes": 433259,
+    "sha256": "f2c7d7a5759718233b5a849b765a498390196b1247bde5ad54e15df07bf1f58a"
+  },
+  "sources_preserved": true,
+  "starter_preserved": true,
+  "playable_preserved": true
+}
+
+FINAL POST-POPUP HUD SNAPSHOT
+COMPILATION .tools/luau-0.745/luau-compile.exe --null src/client/BossQueuePanel.luau src/client/BrickToadsClient.client.luau src/client/CombatFeedback.luau src/client/GroupPanel.luau src/client/MovementInput.luau src/client/RobloxInputBindings.luau src/client/SpectatorCamera.luau src/server/BrickToadsServer.server.luau src/server/RunLifecycle.lua src/server/gameplay/BossQueue.lua src/server/gameplay/DragonFlight.lua src/server/gameplay/DragonWorld.lua src/server/gameplay/EnemyCarry.lua src/server/gameplay/GameConfig.lua src/server/gameplay/GameController.lua src/server/gameplay/GameWorld.lua src/server/gameplay/GuardianPattern.lua src/server/gameplay/HealingFlies.lua src/server/gameplay/LevelDefinition.lua src/server/gameplay/LevelDirector.lua src/server/gameplay/MatchHub.lua src/server/gameplay/RunJournal.lua src/server/gameplay/SourceCombat.lua src/server/gameplay/WalkerClubs.lua src/shared/BrickToadsConfig.luau src/stand/client/Stand.client.lua src/stand/server/Combat.lua src/stand/server/Config.lua src/stand/server/ConnectionRegistry.lua src/stand/server/RobloxWorld.lua src/stand/server/Session.lua src/stand/server/Stand.server.lua tests/CombatFeedback.spec.luau tests/Lifecycle.spec.lua tests/SpectatorCamera.spec.luau tests/gameplay/BossQueue.spec.lua tests/gameplay/DragonFlight.spec.lua tests/gameplay/DragonStrikes.spec.lua tests/gameplay/DragonTransportStudioAcceptance.server.luau tests/gameplay/EnemyCarry.spec.lua tests/gameplay/GameController.spec.lua tests/gameplay/GuardianPattern.spec.lua tests/gameplay/GuardianSession.spec.lua tests/gameplay/HealingFlies.spec.lua tests/gameplay/LevelDirector.spec.lua tests/gameplay/LevelRoute.spec.lua tests/gameplay/MatchHub.spec.lua tests/gameplay/MovementInput.spec.lua tests/gameplay/PigStrikes.spec.lua tests/gameplay/RunJournal.spec.lua tests/gameplay/RunningCombat.spec.lua tests/gameplay/SourceCombat.spec.lua tests/gameplay/WalkerClubs.spec.lua tests/gameplay/WalkerHeavyStudioAcceptance.server.luau tests/gameplay/WalkerStrikes.spec.lua tests/group_world/contracts.luau tests/run.luau tests/run_boss_queue.luau tests/run_connections.luau tests/run_dragon_flight.luau tests/run_dragon_strikes.luau tests/run_enemy_carry.luau tests/run_feedback.luau tests/run_gameplay.luau tests/run_groups.luau tests/run_guardian.luau tests/run_healing_flies.luau tests/run_journal.luau tests/run_level_route.luau tests/run_level_traversal.luau tests/run_movement_input.luau tests/run_pig_strikes.luau tests/run_route_driver_navigation.luau tests/run_running_combat.luau tests/run_source_combat.luau tests/run_stand.luau tests/run_walker_clubs.luau tests/run_walker_strikes.luau tests/stand/Combat.spec.lua tests/stand/CombatStandSecurityScenarios.lua tests/stand/CombatStandStudioAcceptance.server.lua tests/stand/CombatStandStudioClient.client.lua tests/stand/ConnectionRegistry.spec.lua tests/stand/FakeWorld.lua tests/stand/Session.spec.lua tests/stand/StandGateway.spec.lua tests/stand/StandGatewayFixture.lua tests/stand/StudioReconnectTransportProbe.server.lua tests/stand/observe_actual_reconnect.luau tools/studio_launch_combat_acceptance.luau tools/studio_level_route_driver.luau
+Compiled 17 KLOC into 1104 KB bytecode (read 0.04s, parse 0.07s, compile 0.20s)
+EXIT 0
+
+1 .tools/luau-0.745/luau.exe tests/run_movement_input.luau
+PASS one held native Bool direction walks and repeated press notifications cannot create a run
+PASS press release press within a quarter second runs only while that direction stays held
+PASS double tap uses an inclusive press-to-press deadline rather than release-to-press time
+PASS independent simultaneous direction actions normalize diagonals and release only their own axis
+PASS opposite directions cancel movement and cannot hide a running latch that resumes later
+PASS a second independent direction keeps diagonal run until the actual running direction is released
+PASS opposition on the other axis does not cancel an independently held running direction
+PASS camera-relative projection follows rotated and vertical cameras without changing run intent
+PASS context reset clears held directions and tap history across focus body and view changes
+PASS interruption can retain native held directions as walking without manufacturing another tap
+PASS different owners never share pressed directions or double tap history
+PASS native binding context is disabled Bool Automatic with independent keyboard and UIButton bindings
+PASS native press release callbacks preserve independent directions and simultaneous jump attack
+MovementInput: 13 PASS
+EXIT 0
+
+2 .tools/luau-0.745/luau.exe tests/run_running_combat.luau
+PASS Move permits only an optional boolean run and retains strict action authority
+PASS stale actor connection and sequence cannot start or stop another accepted run
+PASS stationary requested run and knockback alone cannot promote primary or standing R
+PASS actual running primary bypasses opportunistic interactions and freezes Dash before stopping
+PASS running hero still selects Boot against a heavy target and Dash finisher at actual low Life
+PASS mandatory Pig and guardian held actions retain priority even when physical run is reported
+PASS standing ordinary primary retains opportunistic interaction priority
+PASS held guardian movement strips the client run request before it reaches physical control
+PASS legacy stand keeps standing Dash and ignores the main-game running shortcut guard
+PASS incoming impulse timeout disconnect and new appearance clear accepted run state
+PASS actual impact increments the reset signal while an emergency shield does not
+PASS human ground enemy forwards bounded run and accepts one fixed-profile running strike
+PASS enemy running profile never inherits a hero finisher and preserves exact zero arithmetic
+PASS Walker NPC run approach latches until actual running attack and resets on claim or impact
+PASS requested NPC source rush cannot make a wall-pushing mega and qualified Pig keeps its source action
+PASS running Walker approaches through6.25 before committing its6-stud strike against a stationary hero
+PASS enemy disconnect and death clear run and publish reaction reset without a new body
+PASS accepted running strikes finish after disconnect without resuming locomotion or changing their action
+RunningCombat: 18 PASS
+EXIT 0
+
+3 .tools/luau-0.745/luau.exe tests/run_feedback.luau
+PASS first sync and reconnect baseline never replay old combat
+PASS repeated stale and shuffled packets cannot duplicate or reverse confirmed feedback
+PASS group run and level boundaries cannot attach old feedback to another body
+PASS blocked damage and confirmed interactions have distinct finite text
+PASS a gap emits only remaining recent rows with bounded cursor memory
+PASS malformed and foreign actor rows cannot become client effects
+PASS short role hints follow server interaction and control state
+PASS actual controlled running offers mega before an opportunistic pickup
+PASS mandatory held actions and boss controls keep priority over a stale run hint
+PASS zero hearts do not remove a still-living hero or ordinary actor from the HUD count
+PASS monotonic snapshot envelope prevents rollback and replay across groups and runs
+PASS Dragon transport has confirmed feedback and gate-aligned live counts
+CombatFeedback: 12 PASS
+EXIT 0
+
+4 .tools/python-3.13.9/python.exe tools/test_bricktoads_place.py
+test_conflicting_lua_and_luau_names_fail (__main__.BrickToadsPlaceTests.test_conflicting_lua_and_luau_names_fail) ... ok
+test_missing_sources_fail_without_emitting_an_empty_place (__main__.BrickToadsPlaceTests.test_missing_sources_fail_without_emitting_an_empty_place) ... ok
+test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint (__main__.BrickToadsPlaceTests.test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint) ... ok
+test_private_source_receipt_changes_when_an_embedded_source_changes (__main__.BrickToadsPlaceTests.test_private_source_receipt_changes_when_an_embedded_source_changes) ... ok
+test_rebuild_is_deterministic (__main__.BrickToadsPlaceTests.test_rebuild_is_deterministic) ... ok
+test_server_scripts_cannot_be_built_into_public_containers (__main__.BrickToadsPlaceTests.test_server_scripts_cannot_be_built_into_public_containers) ... ok
+test_sources_are_current_and_server_code_is_private (__main__.BrickToadsPlaceTests.test_sources_are_current_and_server_code_is_private) ... ok
+test_spawn_is_above_a_collidable_anchored_floor (__main__.BrickToadsPlaceTests.test_spawn_is_above_a_collidable_anchored_floor) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.637s
+
+OK
+EXIT 0
+
+5 .tools/python-3.13.9/python.exe tools/build_bricktoads_place.py --check
+C:\Users\User\Documents\bricktoads\places\BrickToadsPlayable.rbxlx: 434044 bytes; sha256=12a14dc9a8e6972e033d093f45d512d0dca23656a927775f90c29cdd26ed11cd
+EXIT 0
+
+SUMMARY
+{
+  "status": "pass",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "suite_counts": {
+    "movement_input": 13,
+    "running_combat": 18,
+    "combat_feedback": 12,
+    "python_playable": 8
+  },
+  "source_receipt": {
+    "source_sha256": "ca590a35b8ea4f9b6f2280490886117a4779cb338345ca6fe44d91692f94e96a",
+    "embedded_sources": 30,
+    "production_scripts_including_receipt": 31,
+    "matches": true
+  },
+  "playable": {
+    "bytes": 434044,
+    "sha256": "12a14dc9a8e6972e033d093f45d512d0dca23656a927775f90c29cdd26ed11cd"
+  },
+  "sources_preserved": true,
+  "starter_preserved": true,
+  "playable_preserved": true
+}

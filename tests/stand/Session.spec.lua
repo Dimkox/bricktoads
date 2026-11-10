@@ -178,11 +178,12 @@ return function(Core, Combat, Session, Config, World)
         eq(w.impulses,1); eq(s.combat[2].rawLife,43); eq(s.combat[3].rawLife,47)
     end)
     test("physical response keeps the selected hero profile",function()
-        for _,case in ipairs({{47,"Punch",18},{47,"Dash",22},{15,"Dash",21}}) do
+        for _,case in ipairs({{47,"Punch",18,9,0},{47,"Dash",22,32,18},{15,"Dash",21,34,27}}) do
             local s,w=setup(); s.combat[2].rawLife=case[1]
             attack(s,w,1,2,0,case[2]); eq(w.lastProfile,case[3])
             assert(Config.Impulses[case[3]],"Each source profile needs explicit stand calibration")
-            eq(w.lastCalibration,Config.Impulses[case[3]])
+            eq(w.lastCalibration.profile,case[3])
+            eq(w.lastCalibration.horizontal,case[4]);eq(w.lastCalibration.vertical,case[5])
         end
     end)
     test("rate limit is bounded and recovers with server time",function()

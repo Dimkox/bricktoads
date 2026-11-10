@@ -1,0 +1,7628 @@
+{
+  "schema": 1,
+  "reference": {
+    "repository": "feos-tas/DisAssemble",
+    "commit": "f1a43b69577246850d136473700a333b3cdfe93f",
+    "game": "Battletoads USA NES (1991)",
+    "sourceKind": "static disassembly analysis, no emulator timing trace",
+    "files": [
+      {
+        "cache": "main.asm",
+        "upstream": "Battletoads (U) [!].asm",
+        "sha256": "71042cf2a4a8fad952e9eb3bcb591cece666c5a790d7ea177b1908d052fca074"
+      },
+      {
+        "cache": "anims_moves.asm",
+        "upstream": "data/anims_moves.asm",
+        "sha256": "5dfbe797fa1299d6f6342dbd3a0b6af9e45ff44a0c214bf0cac676ef85e5d181"
+      },
+      {
+        "cache": "levels_cfgs1.asm",
+        "upstream": "data/levels_cfgs1.asm",
+        "sha256": "378eaf70e0865a25f42a40a9e0f0723941631f2ac740d38e8e9c47dec7e1c1db"
+      },
+      {
+        "cache": "levels_cfgs2.asm",
+        "upstream": "data/levels_cfgs2.asm",
+        "sha256": "58f1ae597eaaf83eb1ec8796c54bdc0bc446b90d2d5fd5342706e877c5e98e36"
+      }
+    ]
+  },
+  "interpretation": {
+    "frameId": "Source graphics frame, NOT R15/R6 animation or tile ID",
+    "displayAdvance": "One literal frame byte; control commands consume no extra display advance",
+    "timing": "Caller FrameCounter mask controls pointer advance; interruption/lag/phase can change elapsed time",
+    "damage": "E2 events are opportunities; only authoritative source latch/contact confirms a successful effect",
+    "proportions": "See canonical visual source sheet/metadata; frame IDs alone do not establish mesh dimensions",
+    "callerPostprocessing": "Some callers transform frame values (Walker articulated geometry; bosses OR0x80). Decode the caller before treating an ID as a complete sprite frame."
+  },
+  "opcodes": [
+    {
+      "opcode": 224,
+      "name": "XSpeed",
+      "parameterBytes": 1
+    },
+    {
+      "opcode": 225,
+      "name": "ZSpeed",
+      "parameterBytes": 1
+    },
+    {
+      "opcode": 226,
+      "name": "HitOpportunity",
+      "parameterBytes": 2
+    },
+    {
+      "opcode": 227,
+      "name": "PickupObject",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 228,
+      "name": "LinkObject",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 229,
+      "name": "DamageLinked",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 230,
+      "name": "SetFlag4",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 231,
+      "name": "AddXSpeed",
+      "parameterBytes": 1
+    },
+    {
+      "opcode": 232,
+      "name": "SwapDirection",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 233,
+      "name": "Tongue",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 234,
+      "name": "WriteDirection",
+      "parameterBytes": 1
+    },
+    {
+      "opcode": 235,
+      "name": "XSpeedByShadow",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 236,
+      "name": "SwapDirection",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 237,
+      "name": "CreateImpactFrame37",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 238,
+      "name": "CreateImpactFrame38",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 239,
+      "name": "CreateObject32",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 240,
+      "name": "SoundFlag",
+      "parameterBytes": 1
+    },
+    {
+      "opcode": 241,
+      "name": "PlaySound",
+      "parameterBytes": 2
+    },
+    {
+      "opcode": 242,
+      "name": "AddZ",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 243,
+      "name": "CreateWeapon",
+      "parameterBytes": 1
+    },
+    {
+      "opcode": 244,
+      "name": "HeldJumpZSpeed",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 245,
+      "name": "ClearDamageLatch",
+      "parameterBytes": 0
+    },
+    {
+      "opcode": 246,
+      "name": "DirectionByX",
+      "parameterBytes": 0
+    }
+  ],
+  "animations": [
+    {
+      "animationId": 2,
+      "animationHex": "02",
+      "label": "udar_small_punch",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 71,
+      "sourceEndLine": 71,
+      "frameRuns": [
+        {
+          "frameId": 25,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 4,
+          "advances": 8
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 71,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            48
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 71,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            1
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 71,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            0,
+            16
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 71,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 5
+        }
+      ],
+      "displayAdvances": 12,
+      "terminatorByte": 20,
+      "sourceEffectiveEndLine": 71,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 4,
+      "animationHex": "04",
+      "label": "udar_small_punch2",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 72,
+      "sourceEndLine": 72,
+      "frameRuns": [
+        {
+          "frameId": 27,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 4,
+          "advances": 8
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 72,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            48
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 72,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            1
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 72,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            0,
+            16
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 72,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 5
+        }
+      ],
+      "displayAdvances": 12,
+      "terminatorByte": 20,
+      "sourceEffectiveEndLine": 72,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 6,
+      "animationHex": "06",
+      "label": "udar_uppercut",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 73,
+      "sourceEndLine": 74,
+      "frameRuns": [
+        {
+          "frameId": 24,
+          "startAdvance": 0,
+          "advances": 9
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 9,
+          "advances": 2
+        },
+        {
+          "frameId": 34,
+          "startAdvance": 11,
+          "advances": 16
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 27,
+          "advances": 2
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 11,
+          "sourceLine": 73,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            64
+          ],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 73,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            2,
+            35
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 17,
+          "sourceLine": 73,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 12
+        }
+      ],
+      "displayAdvances": 29,
+      "terminatorByte": 36,
+      "sourceEffectiveEndLine": 74,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 8,
+      "animationHex": "08",
+      "label": "move_pick_obj",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 75,
+      "sourceEndLine": 75,
+      "frameRuns": [
+        {
+          "frameId": 11,
+          "startAdvance": 0,
+          "advances": 6
+        },
+        {
+          "frameId": 13,
+          "startAdvance": 6,
+          "advances": 6
+        },
+        {
+          "frameId": 11,
+          "startAdvance": 12,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 12,
+          "sourceLine": 75,
+          "opcode": 227,
+          "command": "PickupObject",
+          "params": [],
+          "atDisplayAdvance": 12
+        }
+      ],
+      "displayAdvances": 16,
+      "terminatorByte": 17,
+      "sourceEffectiveEndLine": 75,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 10,
+      "animationHex": "0A",
+      "label": "move_pick_enemy",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 76,
+      "sourceEndLine": 76,
+      "frameRuns": [
+        {
+          "frameId": 11,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 13,
+          "startAdvance": 4,
+          "advances": 6
+        },
+        {
+          "frameId": 11,
+          "startAdvance": 10,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 76,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 76,
+          "opcode": 228,
+          "command": "LinkObject",
+          "params": [],
+          "atDisplayAdvance": 11
+        }
+      ],
+      "displayAdvances": 14,
+      "terminatorByte": 17,
+      "sourceEffectiveEndLine": 76,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 12,
+      "animationHex": "0C",
+      "label": "move_brosok",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 77,
+      "sourceEndLine": 78,
+      "frameRuns": [
+        {
+          "frameId": 14,
+          "startAdvance": 0,
+          "advances": 8
+        },
+        {
+          "frameId": 15,
+          "startAdvance": 8,
+          "advances": 13
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 8,
+          "sourceLine": 77,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 77,
+          "opcode": 229,
+          "command": "DamageLinked",
+          "params": [],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 77,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            80
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 77,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 77,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 77,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 20,
+          "sourceLine": 77,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 77,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 13
+        },
+        {
+          "byteIndex": 24,
+          "sourceLine": 77,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 14
+        },
+        {
+          "byteIndex": 26,
+          "sourceLine": 78,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 15
+        },
+        {
+          "byteIndex": 28,
+          "sourceLine": 78,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 16
+        },
+        {
+          "byteIndex": 30,
+          "sourceLine": 78,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 17
+        },
+        {
+          "byteIndex": 32,
+          "sourceLine": 78,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 18
+        },
+        {
+          "byteIndex": 34,
+          "sourceLine": 78,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 19
+        },
+        {
+          "byteIndex": 36,
+          "sourceLine": 78,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 20
+        },
+        {
+          "byteIndex": 38,
+          "sourceLine": 78,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 21
+        }
+      ],
+      "displayAdvances": 21,
+      "terminatorByte": 39,
+      "sourceEffectiveEndLine": 78,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 14,
+      "animationHex": "0E",
+      "label": "udar_big_punch",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 81,
+      "sourceEndLine": 82,
+      "frameRuns": [
+        {
+          "frameId": 29,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 24,
+          "startAdvance": 3,
+          "advances": 8
+        },
+        {
+          "frameId": 28,
+          "startAdvance": 11,
+          "advances": 21
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 32,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 11,
+          "sourceLine": 81,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            160
+          ],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 81,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 81,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            3,
+            55
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 28,
+          "sourceLine": 82,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            2
+          ],
+          "atDisplayAdvance": 21
+        }
+      ],
+      "displayAdvances": 36,
+      "terminatorByte": 45,
+      "sourceEffectiveEndLine": 82,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 16,
+      "animationHex": "10",
+      "label": "udar_big_uppercut",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 89,
+      "sourceEndLine": 89,
+      "frameRuns": [
+        {
+          "frameId": 24,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 4,
+          "advances": 2
+        },
+        {
+          "frameId": 26,
+          "startAdvance": 6,
+          "advances": 9
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 6,
+          "sourceLine": 89,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 89,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            5,
+            55
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 89,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 7
+        }
+      ],
+      "displayAdvances": 15,
+      "terminatorByte": 22,
+      "sourceEffectiveEndLine": 89,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 18,
+      "animationHex": "12",
+      "label": "udar_big_uppercut2",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 90,
+      "sourceEndLine": 91,
+      "frameRuns": [
+        {
+          "frameId": 33,
+          "startAdvance": 0,
+          "advances": 8
+        },
+        {
+          "frameId": 32,
+          "startAdvance": 8,
+          "advances": 11
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 8,
+          "sourceLine": 90,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            65,
+            83
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 90,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            32
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 90,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 90,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 12
+        }
+      ],
+      "displayAdvances": 19,
+      "terminatorByte": 27,
+      "sourceEffectiveEndLine": 91,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 20,
+      "animationHex": "14",
+      "label": "udar_big_bad_boot",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 92,
+      "sourceEndLine": 94,
+      "frameRuns": [
+        {
+          "frameId": 31,
+          "startAdvance": 0,
+          "advances": 12
+        },
+        {
+          "frameId": 30,
+          "startAdvance": 12,
+          "advances": 25
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 2,
+          "sourceLine": 92,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 92,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            160
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 17,
+          "sourceLine": 92,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            134,
+            55
+          ],
+          "atDisplayAdvance": 13
+        },
+        {
+          "byteIndex": 20,
+          "sourceLine": 92,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            5
+          ],
+          "atDisplayAdvance": 13
+        }
+      ],
+      "displayAdvances": 37,
+      "terminatorByte": 46,
+      "sourceEffectiveEndLine": 94,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 22,
+      "animationHex": "16",
+      "label": "udar_s_razbega",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 95,
+      "sourceEndLine": 97,
+      "frameRuns": [
+        {
+          "frameId": 35,
+          "startAdvance": 0,
+          "advances": 18
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 95,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 95,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 7,
+          "sourceLine": 95,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 11,
+          "sourceLine": 95,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 95,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 95,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 23,
+          "sourceLine": 95,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 27,
+          "sourceLine": 96,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 31,
+          "sourceLine": 96,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 35,
+          "sourceLine": 96,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 39,
+          "sourceLine": 96,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 43,
+          "sourceLine": 96,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            37
+          ],
+          "atDisplayAdvance": 11
+        }
+      ],
+      "displayAdvances": 18,
+      "terminatorByte": 53,
+      "sourceEffectiveEndLine": 97,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 24,
+      "animationHex": "18",
+      "label": "move_yazik",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 100,
+      "sourceEndLine": 101,
+      "frameRuns": [
+        {
+          "frameId": 41,
+          "startAdvance": 0,
+          "advances": 6
+        },
+        {
+          "frameId": 42,
+          "startAdvance": 6,
+          "advances": 21
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 7,
+          "sourceLine": 100,
+          "opcode": 233,
+          "command": "Tongue",
+          "params": [],
+          "atDisplayAdvance": 7
+        }
+      ],
+      "displayAdvances": 27,
+      "terminatorByte": 28,
+      "sourceEffectiveEndLine": 101,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 26,
+      "animationHex": "1A",
+      "label": "udar_palkoi",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 104,
+      "sourceEndLine": 105,
+      "frameRuns": [
+        {
+          "frameId": 38,
+          "startAdvance": 0,
+          "advances": 6
+        },
+        {
+          "frameId": 40,
+          "startAdvance": 6,
+          "advances": 11
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 6,
+          "sourceLine": 104,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 104,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 11,
+          "sourceLine": 104,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            130,
+            68
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 104,
+          "opcode": 237,
+          "command": "CreateImpactFrame37",
+          "params": [],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 20,
+          "sourceLine": 104,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 11
+        }
+      ],
+      "displayAdvances": 17,
+      "terminatorByte": 27,
+      "sourceEffectiveEndLine": 105,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 28,
+      "animationHex": "1C",
+      "label": "udar_s_verevki",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 108,
+      "sourceEndLine": 108,
+      "frameRuns": [
+        {
+          "frameId": 44,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 3,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 108,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 108,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 108,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 108,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            135,
+            19
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 108,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 108,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 5
+        }
+      ],
+      "displayAdvances": 9,
+      "terminatorByte": 20,
+      "sourceEffectiveEndLine": 108,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 30,
+      "animationHex": "1E",
+      "label": "udar_s_verevki2",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 120,
+      "sourceEndLine": 121,
+      "frameRuns": [
+        {
+          "frameId": 44,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 1,
+          "advances": 19
+        },
+        {
+          "frameId": 44,
+          "startAdvance": 20,
+          "advances": 2
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 22,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 120,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            254
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 120,
+          "opcode": 232,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 120,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            254
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 120,
+          "opcode": 232,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 120,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            135,
+            36
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 120,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            254
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 120,
+          "opcode": 232,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 120,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            254
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 21,
+          "sourceLine": 120,
+          "opcode": 232,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 7
+        }
+      ],
+      "displayAdvances": 23,
+      "terminatorByte": 38,
+      "sourceEffectiveEndLine": 121,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 32,
+      "animationHex": "20",
+      "label": "move_yazik_s_verevki",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 98,
+      "sourceEndLine": 99,
+      "frameRuns": [
+        {
+          "frameId": 54,
+          "startAdvance": 0,
+          "advances": 6
+        },
+        {
+          "frameId": 55,
+          "startAdvance": 6,
+          "advances": 21
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 7,
+          "sourceLine": 98,
+          "opcode": 233,
+          "command": "Tongue",
+          "params": [],
+          "atDisplayAdvance": 7
+        }
+      ],
+      "displayAdvances": 27,
+      "terminatorByte": 28,
+      "sourceEffectiveEndLine": 99,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 34,
+      "animationHex": "22",
+      "label": "udar_nogami_s_verevki",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 113,
+      "sourceEndLine": 114,
+      "frameRuns": [
+        {
+          "frameId": 44,
+          "startAdvance": 0,
+          "advances": 7
+        },
+        {
+          "frameId": 76,
+          "startAdvance": 7,
+          "advances": 13
+        },
+        {
+          "frameId": 44,
+          "startAdvance": 20,
+          "advances": 2
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 22,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 113,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            192
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 113,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 113,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            255
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 113,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            141,
+            54
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 113,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            141,
+            54
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 113,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            141,
+            54
+          ],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 34,
+          "sourceLine": 114,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            32
+          ],
+          "atDisplayAdvance": 20
+        }
+      ],
+      "displayAdvances": 23,
+      "terminatorByte": 39,
+      "sourceEffectiveEndLine": 114,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 36,
+      "animationHex": "24",
+      "label": "ugar_girya",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 122,
+      "sourceEndLine": 124,
+      "frameRuns": [
+        {
+          "frameId": 44,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 52,
+          "startAdvance": 1,
+          "advances": 14
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 15,
+          "advances": 1
+        },
+        {
+          "frameId": 52,
+          "startAdvance": 16,
+          "advances": 1
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 17,
+          "advances": 1
+        },
+        {
+          "frameId": 52,
+          "startAdvance": 18,
+          "advances": 1
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 19,
+          "advances": 1
+        },
+        {
+          "frameId": 44,
+          "startAdvance": 20,
+          "advances": 2
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 22,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 122,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            255
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 122,
+          "opcode": 232,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 122,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 122,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 122,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 17,
+          "sourceLine": 122,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 21,
+          "sourceLine": 122,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 25,
+          "sourceLine": 123,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 29,
+          "sourceLine": 123,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 33,
+          "sourceLine": 123,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 37,
+          "sourceLine": 123,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 41,
+          "sourceLine": 123,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            54
+          ],
+          "atDisplayAdvance": 11
+        }
+      ],
+      "displayAdvances": 23,
+      "terminatorByte": 56,
+      "sourceEffectiveEndLine": 124,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 38,
+      "animationHex": "26",
+      "label": "move_jump_hit?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 127,
+      "sourceEndLine": 127,
+      "frameRuns": [
+        {
+          "frameId": 5,
+          "startAdvance": 0,
+          "advances": 16
+        },
+        {
+          "frameId": 6,
+          "startAdvance": 16,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 127,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 127,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 127,
+          "opcode": 234,
+          "command": "WriteDirection",
+          "params": [
+            140
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 128,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 16
+        },
+        {
+          "byteIndex": 25,
+          "sourceLine": 128,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            2,
+            32
+          ],
+          "atDisplayAdvance": 16
+        },
+        {
+          "byteIndex": 28,
+          "sourceLine": 128,
+          "opcode": 237,
+          "command": "CreateImpactFrame37",
+          "params": [],
+          "atDisplayAdvance": 16
+        }
+      ],
+      "displayAdvances": 22,
+      "terminatorByte": 35,
+      "sourceEffectiveEndLine": 128,
+      "fallsThroughDeclaredBlock": true
+    },
+    {
+      "animationId": 40,
+      "animationHex": "28",
+      "label": "move_jump_mini?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 129,
+      "sourceEndLine": 129,
+      "frameRuns": [
+        {
+          "frameId": 5,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 6,
+          "startAdvance": 3,
+          "advances": 2
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 129,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            0,
+            16
+          ],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 5,
+      "terminatorByte": 8,
+      "sourceEffectiveEndLine": 129,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 42,
+      "animationHex": "2A",
+      "label": "udar_jump_hit2?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 128,
+      "sourceEndLine": 128,
+      "frameRuns": [
+        {
+          "frameId": 5,
+          "startAdvance": 0,
+          "advances": 12
+        },
+        {
+          "frameId": 6,
+          "startAdvance": 12,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 12,
+          "sourceLine": 128,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 128,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            2,
+            32
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 128,
+          "opcode": 237,
+          "command": "CreateImpactFrame37",
+          "params": [],
+          "atDisplayAdvance": 12
+        }
+      ],
+      "displayAdvances": 18,
+      "terminatorByte": 25,
+      "sourceEffectiveEndLine": 128,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 44,
+      "animationHex": "2C",
+      "label": "move_fear",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 131,
+      "sourceEndLine": 131,
+      "frameRuns": [
+        {
+          "frameId": 50,
+          "startAdvance": 0,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 131,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            1
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 131,
+          "opcode": 235,
+          "command": "XSpeedByShadow",
+          "params": [],
+          "atDisplayAdvance": 1
+        }
+      ],
+      "displayAdvances": 6,
+      "terminatorByte": 9,
+      "sourceEffectiveEndLine": 131,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 46,
+      "animationHex": "2E",
+      "label": "move_fear_front",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 132,
+      "sourceEndLine": 132,
+      "frameRuns": [
+        {
+          "frameId": 51,
+          "startAdvance": 0,
+          "advances": 7
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 132,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            2
+          ],
+          "atDisplayAdvance": 1
+        }
+      ],
+      "displayAdvances": 7,
+      "terminatorByte": 9,
+      "sourceEffectiveEndLine": 132,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 48,
+      "animationHex": "30",
+      "label": "udar_small_foot",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 134,
+      "sourceEndLine": 134,
+      "frameRuns": [
+        {
+          "frameId": 31,
+          "startAdvance": 0,
+          "advances": 7
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 2,
+          "sourceLine": 134,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            192
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 134,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            135,
+            80
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 134,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 7,
+      "terminatorByte": 14,
+      "sourceEffectiveEndLine": 134,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 50,
+      "animationHex": "32",
+      "label": "udar_golova?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 135,
+      "sourceEndLine": 135,
+      "frameRuns": [
+        {
+          "frameId": 11,
+          "startAdvance": 0,
+          "advances": 11
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 135,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 11,
+      "terminatorByte": 14,
+      "sourceEffectiveEndLine": 135,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 52,
+      "animationHex": "34",
+      "label": "move_golova?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 136,
+      "sourceEndLine": 136,
+      "frameRuns": [
+        {
+          "frameId": 11,
+          "startAdvance": 0,
+          "advances": 8
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 136,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            255
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 136,
+          "opcode": 228,
+          "command": "LinkObject",
+          "params": [],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 8,
+      "terminatorByte": 11,
+      "sourceEffectiveEndLine": 136,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 54,
+      "animationHex": "36",
+      "label": "udar_po_golove_razmah",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 106,
+      "sourceEndLine": 107,
+      "frameRuns": [
+        {
+          "frameId": 38,
+          "startAdvance": 0,
+          "advances": 14
+        },
+        {
+          "frameId": 87,
+          "startAdvance": 14,
+          "advances": 12
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 106,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            5
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 17,
+          "sourceLine": 106,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            138,
+            38
+          ],
+          "atDisplayAdvance": 15
+        }
+      ],
+      "displayAdvances": 26,
+      "terminatorByte": 31,
+      "sourceEffectiveEndLine": 107,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 56,
+      "animationHex": "38",
+      "label": "move_jump_hit?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 127,
+      "sourceEndLine": 127,
+      "frameRuns": [
+        {
+          "frameId": 5,
+          "startAdvance": 0,
+          "advances": 16
+        },
+        {
+          "frameId": 6,
+          "startAdvance": 16,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 127,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 127,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 127,
+          "opcode": 234,
+          "command": "WriteDirection",
+          "params": [
+            140
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 128,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 16
+        },
+        {
+          "byteIndex": 25,
+          "sourceLine": 128,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            2,
+            32
+          ],
+          "atDisplayAdvance": 16
+        },
+        {
+          "byteIndex": 28,
+          "sourceLine": 128,
+          "opcode": 237,
+          "command": "CreateImpactFrame37",
+          "params": [],
+          "atDisplayAdvance": 16
+        }
+      ],
+      "displayAdvances": 22,
+      "terminatorByte": 35,
+      "sourceEffectiveEndLine": 128,
+      "fallsThroughDeclaredBlock": true
+    },
+    {
+      "animationId": 58,
+      "animationHex": "3A",
+      "label": "udar_i_podkid?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 137,
+      "sourceEndLine": 139,
+      "frameRuns": [
+        {
+          "frameId": 24,
+          "startAdvance": 0,
+          "advances": 19
+        },
+        {
+          "frameId": 22,
+          "startAdvance": 19,
+          "advances": 1
+        },
+        {
+          "frameId": 20,
+          "startAdvance": 20,
+          "advances": 1
+        },
+        {
+          "frameId": 18,
+          "startAdvance": 21,
+          "advances": 1
+        },
+        {
+          "frameId": 16,
+          "startAdvance": 22,
+          "advances": 1
+        },
+        {
+          "frameId": 14,
+          "startAdvance": 23,
+          "advances": 1
+        },
+        {
+          "frameId": 12,
+          "startAdvance": 24,
+          "advances": 1
+        },
+        {
+          "frameId": 10,
+          "startAdvance": 25,
+          "advances": 1
+        },
+        {
+          "frameId": 9,
+          "startAdvance": 26,
+          "advances": 1
+        },
+        {
+          "frameId": 8,
+          "startAdvance": 27,
+          "advances": 16
+        },
+        {
+          "frameId": 12,
+          "startAdvance": 43,
+          "advances": 1
+        },
+        {
+          "frameId": 16,
+          "startAdvance": 44,
+          "advances": 1
+        },
+        {
+          "frameId": 22,
+          "startAdvance": 45,
+          "advances": 1
+        },
+        {
+          "frameId": 30,
+          "startAdvance": 46,
+          "advances": 1
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 47,
+          "advances": 1
+        },
+        {
+          "frameId": 42,
+          "startAdvance": 48,
+          "advances": 6
+        },
+        {
+          "frameId": 40,
+          "startAdvance": 54,
+          "advances": 1
+        },
+        {
+          "frameId": 38,
+          "startAdvance": 55,
+          "advances": 1
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 56,
+          "advances": 1
+        },
+        {
+          "frameId": 34,
+          "startAdvance": 57,
+          "advances": 1
+        },
+        {
+          "frameId": 32,
+          "startAdvance": 58,
+          "advances": 1
+        },
+        {
+          "frameId": 30,
+          "startAdvance": 59,
+          "advances": 1
+        },
+        {
+          "frameId": 28,
+          "startAdvance": 60,
+          "advances": 1
+        },
+        {
+          "frameId": 26,
+          "startAdvance": 61,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 137,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 36,
+          "sourceLine": 138,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 34
+        },
+        {
+          "byteIndex": 47,
+          "sourceLine": 138,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 43
+        },
+        {
+          "byteIndex": 54,
+          "sourceLine": 139,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            130,
+            32
+          ],
+          "atDisplayAdvance": 48
+        }
+      ],
+      "displayAdvances": 62,
+      "terminatorByte": 71,
+      "sourceEffectiveEndLine": 139,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 60,
+      "animationHex": "3C",
+      "label": "byte_3000_E5A0",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 140,
+      "sourceEndLine": 140,
+      "frameRuns": [
+        {
+          "frameId": 20,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 16,
+          "startAdvance": 1,
+          "advances": 1
+        },
+        {
+          "frameId": 12,
+          "startAdvance": 2,
+          "advances": 1
+        },
+        {
+          "frameId": 8,
+          "startAdvance": 3,
+          "advances": 4
+        },
+        {
+          "frameId": 14,
+          "startAdvance": 7,
+          "advances": 1
+        },
+        {
+          "frameId": 20,
+          "startAdvance": 8,
+          "advances": 1
+        },
+        {
+          "frameId": 28,
+          "startAdvance": 9,
+          "advances": 1
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 10,
+          "advances": 1
+        },
+        {
+          "frameId": 40,
+          "startAdvance": 11,
+          "advances": 3
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 14,
+          "advances": 1
+        },
+        {
+          "frameId": 32,
+          "startAdvance": 15,
+          "advances": 1
+        },
+        {
+          "frameId": 28,
+          "startAdvance": 16,
+          "advances": 1
+        },
+        {
+          "frameId": 24,
+          "startAdvance": 17,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 140,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 140,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            64,
+            64
+          ],
+          "atDisplayAdvance": 11
+        }
+      ],
+      "displayAdvances": 18,
+      "terminatorByte": 23,
+      "sourceEffectiveEndLine": 140,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 62,
+      "animationHex": "3E",
+      "label": "udar_po_golove_palka?",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 102,
+      "sourceEndLine": 103,
+      "frameRuns": [
+        {
+          "frameId": 63,
+          "startAdvance": 0,
+          "advances": 6
+        },
+        {
+          "frameId": 64,
+          "startAdvance": 6,
+          "advances": 11
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 6,
+          "sourceLine": 102,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 102,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            130,
+            36
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 102,
+          "opcode": 237,
+          "command": "CreateImpactFrame37",
+          "params": [],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 102,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 11
+        }
+      ],
+      "displayAdvances": 17,
+      "terminatorByte": 25,
+      "sourceEffectiveEndLine": 103,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 64,
+      "animationHex": "40",
+      "label": "udar_i_prijok",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 130,
+      "sourceEndLine": 130,
+      "frameRuns": [
+        {
+          "frameId": 6,
+          "startAdvance": 0,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 130,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 130,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            4,
+            32
+          ],
+          "atDisplayAdvance": 1
+        }
+      ],
+      "displayAdvances": 6,
+      "terminatorByte": 11,
+      "sourceEffectiveEndLine": 130,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 66,
+      "animationHex": "42",
+      "label": "move_effect_ot_electro",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 145,
+      "sourceEndLine": 146,
+      "frameRuns": [
+        {
+          "frameId": 93,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 94,
+          "startAdvance": 1,
+          "advances": 14
+        },
+        {
+          "frameId": 93,
+          "startAdvance": 15,
+          "advances": 14
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 145,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            111
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 145,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 145,
+          "opcode": 228,
+          "command": "LinkObject",
+          "params": [],
+          "atDisplayAdvance": 15
+        },
+        {
+          "byteIndex": 20,
+          "sourceLine": 145,
+          "opcode": 240,
+          "command": "SoundFlag",
+          "params": [
+            24
+          ],
+          "atDisplayAdvance": 15
+        },
+        {
+          "byteIndex": 25,
+          "sourceLine": 146,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            111
+          ],
+          "atDisplayAdvance": 18
+        },
+        {
+          "byteIndex": 27,
+          "sourceLine": 146,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 18
+        },
+        {
+          "byteIndex": 38,
+          "sourceLine": 146,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 28
+        }
+      ],
+      "displayAdvances": 29,
+      "terminatorByte": 41,
+      "sourceEffectiveEndLine": 146,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 68,
+      "animationHex": "44",
+      "label": "move_effect_ot_electro2",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 149,
+      "sourceEndLine": 149,
+      "frameRuns": [
+        {
+          "frameId": 93,
+          "startAdvance": 0,
+          "advances": 5
+        },
+        {
+          "frameId": 94,
+          "startAdvance": 5,
+          "advances": 5
+        },
+        {
+          "frameId": 93,
+          "startAdvance": 10,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 149,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            255
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 149,
+          "opcode": 229,
+          "command": "DamageLinked",
+          "params": [],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 149,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            255
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 149,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 149,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 13
+        }
+      ],
+      "displayAdvances": 14,
+      "terminatorByte": 22,
+      "sourceEffectiveEndLine": 149,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 70,
+      "animationHex": "46",
+      "label": "udar_s_verevki_fast",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 109,
+      "sourceEndLine": 109,
+      "frameRuns": [
+        {
+          "frameId": 67,
+          "startAdvance": 0,
+          "advances": 6
+        },
+        {
+          "frameId": 68,
+          "startAdvance": 6,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 6,
+          "sourceLine": 109,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 109,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            7,
+            83
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 11,
+          "sourceLine": 109,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 109,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 7
+        }
+      ],
+      "displayAdvances": 10,
+      "terminatorByte": 18,
+      "sourceEffectiveEndLine": 109,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 72,
+      "animationHex": "48",
+      "label": "udar_s_verevki_kluvom",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 111,
+      "sourceEndLine": 112,
+      "frameRuns": [
+        {
+          "frameId": 67,
+          "startAdvance": 0,
+          "advances": 7
+        },
+        {
+          "frameId": 68,
+          "startAdvance": 7,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 7,
+          "sourceLine": 111,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 111,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 111,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            199,
+            35
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 111,
+          "opcode": 237,
+          "command": "CreateImpactFrame37",
+          "params": [],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 111,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 111,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 8
+        }
+      ],
+      "displayAdvances": 11,
+      "terminatorByte": 23,
+      "sourceEffectiveEndLine": 112,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 74,
+      "animationHex": "4A",
+      "label": "move_effect_ot_electro3",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 150,
+      "sourceEndLine": 150,
+      "frameRuns": [
+        {
+          "frameId": 97,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 98,
+          "startAdvance": 4,
+          "advances": 2
+        },
+        {
+          "frameId": 99,
+          "startAdvance": 6,
+          "advances": 3
+        },
+        {
+          "frameId": 128,
+          "startAdvance": 9,
+          "advances": 1
+        },
+        {
+          "frameId": 99,
+          "startAdvance": 10,
+          "advances": 3
+        },
+        {
+          "frameId": 98,
+          "startAdvance": 13,
+          "advances": 1
+        },
+        {
+          "frameId": 97,
+          "startAdvance": 14,
+          "advances": 7
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 9,
+          "sourceLine": 150,
+          "opcode": 239,
+          "command": "CreateObject32",
+          "params": [],
+          "atDisplayAdvance": 9
+        }
+      ],
+      "displayAdvances": 21,
+      "terminatorByte": 22,
+      "sourceEffectiveEndLine": 150,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 76,
+      "animationHex": "4C",
+      "label": "byte_3000_E627",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 147,
+      "sourceEndLine": 148,
+      "frameRuns": [
+        {
+          "frameId": 93,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 94,
+          "startAdvance": 1,
+          "advances": 14
+        },
+        {
+          "frameId": 93,
+          "startAdvance": 15,
+          "advances": 10
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 147,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 147,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 147,
+          "opcode": 228,
+          "command": "LinkObject",
+          "params": [],
+          "atDisplayAdvance": 15
+        },
+        {
+          "byteIndex": 20,
+          "sourceLine": 147,
+          "opcode": 240,
+          "command": "SoundFlag",
+          "params": [
+            24
+          ],
+          "atDisplayAdvance": 15
+        },
+        {
+          "byteIndex": 25,
+          "sourceLine": 148,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 18
+        },
+        {
+          "byteIndex": 27,
+          "sourceLine": 148,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 18
+        },
+        {
+          "byteIndex": 34,
+          "sourceLine": 148,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 24
+        }
+      ],
+      "displayAdvances": 25,
+      "terminatorByte": 37,
+      "sourceEffectiveEndLine": 148,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 78,
+      "animationHex": "4E",
+      "label": "udar_girei_po_pushke",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 125,
+      "sourceEndLine": 126,
+      "frameRuns": [
+        {
+          "frameId": 44,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 52,
+          "startAdvance": 4,
+          "advances": 11
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 15,
+          "advances": 1
+        },
+        {
+          "frameId": 52,
+          "startAdvance": 16,
+          "advances": 1
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 17,
+          "advances": 1
+        },
+        {
+          "frameId": 36,
+          "startAdvance": 18,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 125,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 125,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 7,
+          "sourceLine": 125,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            254
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 125,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            141,
+            54
+          ],
+          "atDisplayAdvance": 8
+        }
+      ],
+      "displayAdvances": 19,
+      "terminatorByte": 27,
+      "sourceEffectiveEndLine": 126,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 80,
+      "animationHex": "50",
+      "label": "udar_botinkami_po_pushke",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 116,
+      "sourceEndLine": 117,
+      "frameRuns": [
+        {
+          "frameId": 44,
+          "startAdvance": 0,
+          "advances": 5
+        },
+        {
+          "frameId": 76,
+          "startAdvance": 5,
+          "advances": 12
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 116,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 116,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 116,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 116,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            135,
+            117
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 116,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 7
+        }
+      ],
+      "displayAdvances": 17,
+      "terminatorByte": 27,
+      "sourceEffectiveEndLine": 117,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 82,
+      "animationHex": "52",
+      "label": "udar_vs_big_raven",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 118,
+      "sourceEndLine": 119,
+      "frameRuns": [
+        {
+          "frameId": 67,
+          "startAdvance": 0,
+          "advances": 5
+        },
+        {
+          "frameId": 77,
+          "startAdvance": 5,
+          "advances": 15
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 118,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 118,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 118,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 118,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            135,
+            117
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 118,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 7
+        }
+      ],
+      "displayAdvances": 20,
+      "terminatorByte": 30,
+      "sourceEffectiveEndLine": 119,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 84,
+      "animationHex": "54",
+      "label": "byte_3000_E5B8",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 141,
+      "sourceEndLine": 142,
+      "frameRuns": [
+        {
+          "frameId": 93,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 94,
+          "startAdvance": 1,
+          "advances": 4
+        },
+        {
+          "frameId": 93,
+          "startAdvance": 5,
+          "advances": 2
+        },
+        {
+          "frameId": 94,
+          "startAdvance": 7,
+          "advances": 2
+        },
+        {
+          "frameId": 93,
+          "startAdvance": 9,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 141,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 141,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 141,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 7,
+          "sourceLine": 141,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 141,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 11,
+          "sourceLine": 141,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 141,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            26
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 141,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            26
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 24,
+          "sourceLine": 142,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 28,
+          "sourceLine": 142,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 14
+        }
+      ],
+      "displayAdvances": 15,
+      "terminatorByte": 31,
+      "sourceEffectiveEndLine": 142,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 86,
+      "animationHex": "56",
+      "label": "byte_3000_E5D8",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 143,
+      "sourceEndLine": 144,
+      "frameRuns": [
+        {
+          "frameId": 93,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 94,
+          "startAdvance": 1,
+          "advances": 5
+        },
+        {
+          "frameId": 93,
+          "startAdvance": 6,
+          "advances": 2
+        },
+        {
+          "frameId": 94,
+          "startAdvance": 8,
+          "advances": 1
+        },
+        {
+          "frameId": 93,
+          "startAdvance": 9,
+          "advances": 8
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 143,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 7,
+          "sourceLine": 143,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 143,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            26
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 17,
+          "sourceLine": 143,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            26
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 143,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 24,
+          "sourceLine": 144,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 25,
+          "sourceLine": 144,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 27,
+          "sourceLine": 144,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 13
+        },
+        {
+          "byteIndex": 29,
+          "sourceLine": 144,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 14
+        },
+        {
+          "byteIndex": 31,
+          "sourceLine": 144,
+          "opcode": 242,
+          "command": "AddZ",
+          "params": [],
+          "atDisplayAdvance": 15
+        },
+        {
+          "byteIndex": 33,
+          "sourceLine": 144,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 16
+        }
+      ],
+      "displayAdvances": 17,
+      "terminatorByte": 36,
+      "sourceEffectiveEndLine": 144,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 88,
+      "animationHex": "58",
+      "label": "byte_3000_E693",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 153,
+      "sourceEndLine": 153,
+      "frameRuns": [
+        {
+          "frameId": 108,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 110,
+          "startAdvance": 3,
+          "advances": 4
+        },
+        {
+          "frameId": 100,
+          "startAdvance": 7,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 153,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 153,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 8,
+      "terminatorByte": 13,
+      "sourceEffectiveEndLine": 153,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 90,
+      "animationHex": "5A",
+      "label": "anim_throw_snowball",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 158,
+      "sourceEndLine": 159,
+      "frameRuns": [
+        {
+          "frameId": 11,
+          "startAdvance": 0,
+          "advances": 2
+        },
+        {
+          "frameId": 13,
+          "startAdvance": 2,
+          "advances": 4
+        },
+        {
+          "frameId": 82,
+          "startAdvance": 6,
+          "advances": 4
+        },
+        {
+          "frameId": 83,
+          "startAdvance": 10,
+          "advances": 9
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 19,
+          "advances": 2
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 5,
+          "sourceLine": 158,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 7,
+          "sourceLine": 158,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 158,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 11,
+          "sourceLine": 158,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 158,
+          "opcode": 244,
+          "command": "HeldJumpZSpeed",
+          "params": [],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 158,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 159,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 159,
+          "opcode": 230,
+          "command": "SetFlag4",
+          "params": [],
+          "atDisplayAdvance": 12
+        }
+      ],
+      "displayAdvances": 21,
+      "terminatorByte": 32,
+      "sourceEffectiveEndLine": 159,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 92,
+      "animationHex": "5C",
+      "label": "byte_3000_E67B",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 151,
+      "sourceEndLine": 152,
+      "frameRuns": [
+        {
+          "frameId": 108,
+          "startAdvance": 0,
+          "advances": 9
+        },
+        {
+          "frameId": 110,
+          "startAdvance": 9,
+          "advances": 8
+        },
+        {
+          "frameId": 100,
+          "startAdvance": 17,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 151,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            2
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 151,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            131,
+            48
+          ],
+          "atDisplayAdvance": 10
+        }
+      ],
+      "displayAdvances": 18,
+      "terminatorByte": 23,
+      "sourceEffectiveEndLine": 152,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 94,
+      "animationHex": "5E",
+      "label": "byte_3000_E6C8",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 157,
+      "sourceEndLine": 157,
+      "frameRuns": [],
+      "events": [
+        {
+          "byteIndex": 0,
+          "sourceLine": 157,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 0
+        },
+        {
+          "byteIndex": 2,
+          "sourceLine": 157,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            137,
+            32
+          ],
+          "atDisplayAdvance": 0
+        }
+      ],
+      "displayAdvances": 0,
+      "terminatorByte": 5,
+      "sourceEffectiveEndLine": 157,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 96,
+      "animationHex": "60",
+      "label": "byte_3000_E6A1",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 154,
+      "sourceEndLine": 154,
+      "frameRuns": [
+        {
+          "frameId": 108,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 110,
+          "startAdvance": 3,
+          "advances": 4
+        },
+        {
+          "frameId": 100,
+          "startAdvance": 7,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 154,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 154,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            20
+          ],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 8,
+      "terminatorByte": 13,
+      "sourceEffectiveEndLine": 154,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 98,
+      "animationHex": "62",
+      "label": "byte_3000_E6AF",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 155,
+      "sourceEndLine": 155,
+      "frameRuns": [
+        {
+          "frameId": 108,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 110,
+          "startAdvance": 3,
+          "advances": 4
+        },
+        {
+          "frameId": 100,
+          "startAdvance": 7,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 155,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 155,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            133
+          ],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 8,
+      "terminatorByte": 13,
+      "sourceEffectiveEndLine": 155,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 100,
+      "animationHex": "64",
+      "label": "byte_3000_E6BD",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 156,
+      "sourceEndLine": 156,
+      "frameRuns": [
+        {
+          "frameId": 108,
+          "startAdvance": 0,
+          "advances": 2
+        },
+        {
+          "frameId": 110,
+          "startAdvance": 2,
+          "advances": 2
+        },
+        {
+          "frameId": 100,
+          "startAdvance": 4,
+          "advances": 1
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 2,
+          "sourceLine": 156,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            92
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 156,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            21
+          ],
+          "atDisplayAdvance": 2
+        }
+      ],
+      "displayAdvances": 5,
+      "terminatorByte": 10,
+      "sourceEffectiveEndLine": 156,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 102,
+      "animationHex": "66",
+      "label": "byte_3000_E708",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 162,
+      "sourceEndLine": 163,
+      "frameRuns": [
+        {
+          "frameId": 133,
+          "startAdvance": 0,
+          "advances": 8
+        },
+        {
+          "frameId": 134,
+          "startAdvance": 8,
+          "advances": 2
+        },
+        {
+          "frameId": 135,
+          "startAdvance": 10,
+          "advances": 6
+        },
+        {
+          "frameId": 134,
+          "startAdvance": 16,
+          "advances": 3
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 162,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 162,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 11,
+          "sourceLine": 162,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 162,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 10
+        }
+      ],
+      "displayAdvances": 19,
+      "terminatorByte": 28,
+      "sourceEffectiveEndLine": 163,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 104,
+      "animationHex": "68",
+      "label": "byte_3000_E6EF",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 160,
+      "sourceEndLine": 161,
+      "frameRuns": [
+        {
+          "frameId": 133,
+          "startAdvance": 0,
+          "advances": 7
+        },
+        {
+          "frameId": 134,
+          "startAdvance": 7,
+          "advances": 1
+        },
+        {
+          "frameId": 135,
+          "startAdvance": 8,
+          "advances": 1
+        },
+        {
+          "frameId": 134,
+          "startAdvance": 9,
+          "advances": 1
+        },
+        {
+          "frameId": 135,
+          "startAdvance": 10,
+          "advances": 1
+        },
+        {
+          "frameId": 133,
+          "startAdvance": 11,
+          "advances": 8
+        },
+        {
+          "frameId": 134,
+          "startAdvance": 19,
+          "advances": 2
+        },
+        {
+          "frameId": 135,
+          "startAdvance": 21,
+          "advances": 6
+        },
+        {
+          "frameId": 134,
+          "startAdvance": 27,
+          "advances": 3
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 160,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 160,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            32
+          ],
+          "atDisplayAdvance": 7
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 160,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            128,
+            80
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 160,
+          "opcode": 245,
+          "command": "ClearDamageLatch",
+          "params": [],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 17,
+          "sourceLine": 160,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            32
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 20,
+          "sourceLine": 160,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            128,
+            80
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 24,
+          "sourceLine": 161,
+          "opcode": 245,
+          "command": "ClearDamageLatch",
+          "params": [],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 26,
+          "sourceLine": 162,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 34,
+          "sourceLine": 162,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 18
+        },
+        {
+          "byteIndex": 36,
+          "sourceLine": 162,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 18
+        },
+        {
+          "byteIndex": 41,
+          "sourceLine": 162,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 21
+        }
+      ],
+      "displayAdvances": 30,
+      "terminatorByte": 53,
+      "sourceEffectiveEndLine": 163,
+      "fallsThroughDeclaredBlock": true
+    },
+    {
+      "animationId": 106,
+      "animationHex": "6A",
+      "label": "byte_3000_E725",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 164,
+      "sourceEndLine": 165,
+      "frameRuns": [
+        {
+          "frameId": 185,
+          "startAdvance": 0,
+          "advances": 10
+        },
+        {
+          "frameId": 186,
+          "startAdvance": 10,
+          "advances": 7
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 164,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 164,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 13,
+          "sourceLine": 164,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            32
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 15,
+          "sourceLine": 164,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            2
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 164,
+          "opcode": 241,
+          "command": "PlaySound",
+          "params": [
+            21,
+            46
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 23,
+          "sourceLine": 165,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            1
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 27,
+          "sourceLine": 165,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            1
+          ],
+          "atDisplayAdvance": 14
+        }
+      ],
+      "displayAdvances": 17,
+      "terminatorByte": 32,
+      "sourceEffectiveEndLine": 165,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 108,
+      "animationHex": "6C",
+      "label": "byte_3000_E746",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 166,
+      "sourceEndLine": 167,
+      "frameRuns": [
+        {
+          "frameId": 198,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 184,
+          "startAdvance": 1,
+          "advances": 7
+        },
+        {
+          "frameId": 198,
+          "startAdvance": 8,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 166,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            1
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 166,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 166,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 166,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 166,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 166,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 26,
+          "sourceLine": 167,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 11
+        },
+        {
+          "byteIndex": 30,
+          "sourceLine": 167,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 34,
+          "sourceLine": 167,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 13
+        },
+        {
+          "byteIndex": 37,
+          "sourceLine": 167,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            64
+          ],
+          "atDisplayAdvance": 13
+        }
+      ],
+      "displayAdvances": 14,
+      "terminatorByte": 40,
+      "sourceEffectiveEndLine": 167,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 110,
+      "animationHex": "6E",
+      "label": "byte_3000_E76F",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 168,
+      "sourceEndLine": 168,
+      "frameRuns": [],
+      "events": [
+        {
+          "byteIndex": 0,
+          "sourceLine": 168,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            137,
+            160
+          ],
+          "atDisplayAdvance": 0
+        }
+      ],
+      "displayAdvances": 0,
+      "terminatorByte": 3,
+      "sourceEffectiveEndLine": 168,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 112,
+      "animationHex": "70",
+      "label": "move_brosok_shara_vpered",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 79,
+      "sourceEndLine": 80,
+      "frameRuns": [
+        {
+          "frameId": 14,
+          "startAdvance": 0,
+          "advances": 8
+        },
+        {
+          "frameId": 97,
+          "startAdvance": 8,
+          "advances": 14
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 8,
+          "sourceLine": 79,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 79,
+          "opcode": 229,
+          "command": "DamageLinked",
+          "params": [],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 79,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 79,
+          "opcode": 234,
+          "command": "WriteDirection",
+          "params": [
+            192
+          ],
+          "atDisplayAdvance": 9
+        }
+      ],
+      "displayAdvances": 22,
+      "terminatorByte": 29,
+      "sourceEffectiveEndLine": 80,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 114,
+      "animationHex": "72",
+      "label": "udar_big_punch_fast",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 83,
+      "sourceEndLine": 84,
+      "frameRuns": [
+        {
+          "frameId": 29,
+          "startAdvance": 0,
+          "advances": 1
+        },
+        {
+          "frameId": 24,
+          "startAdvance": 1,
+          "advances": 2
+        },
+        {
+          "frameId": 28,
+          "startAdvance": 3,
+          "advances": 8
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 11,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 83,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 83,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 83,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            3,
+            54
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 83,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            2
+          ],
+          "atDisplayAdvance": 9
+        }
+      ],
+      "displayAdvances": 15,
+      "terminatorByte": 24,
+      "sourceEffectiveEndLine": 84,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 116,
+      "animationHex": "74",
+      "label": "udar_big_uppercut_fast",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 85,
+      "sourceEndLine": 85,
+      "frameRuns": [
+        {
+          "frameId": 24,
+          "startAdvance": 0,
+          "advances": 2
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 2,
+          "advances": 1
+        },
+        {
+          "frameId": 26,
+          "startAdvance": 3,
+          "advances": 7
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 85,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 85,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            6,
+            54
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 85,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 4
+        }
+      ],
+      "displayAdvances": 10,
+      "terminatorByte": 17,
+      "sourceEffectiveEndLine": 85,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 118,
+      "animationHex": "76",
+      "label": "udar_big_bad_boot_fast",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 86,
+      "sourceEndLine": 87,
+      "frameRuns": [
+        {
+          "frameId": 31,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 30,
+          "startAdvance": 4,
+          "advances": 10
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 86,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 86,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 86,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            134,
+            54
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 86,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 5
+        }
+      ],
+      "displayAdvances": 14,
+      "terminatorByte": 23,
+      "sourceEffectiveEndLine": 87,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 120,
+      "animationHex": "78",
+      "label": "udar_po_golove_fast",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 88,
+      "sourceEndLine": 88,
+      "frameRuns": [
+        {
+          "frameId": 38,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 87,
+          "startAdvance": 4,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 88,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            16
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 88,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 88,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            138,
+            38
+          ],
+          "atDisplayAdvance": 5
+        }
+      ],
+      "displayAdvances": 10,
+      "terminatorByte": 17,
+      "sourceEffectiveEndLine": 88,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 122,
+      "animationHex": "7A",
+      "label": "udar_po_robotam",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 169,
+      "sourceEndLine": 169,
+      "frameRuns": [
+        {
+          "frameId": 11,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 3,
+          "advances": 3
+        },
+        {
+          "frameId": 15,
+          "startAdvance": 6,
+          "advances": 4
+        },
+        {
+          "frameId": 29,
+          "startAdvance": 10,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 6,
+          "sourceLine": 169,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            2
+          ],
+          "atDisplayAdvance": 6
+        }
+      ],
+      "displayAdvances": 14,
+      "terminatorByte": 16,
+      "sourceEffectiveEndLine": 169,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 124,
+      "animationHex": "7C",
+      "label": "anim_moved_by_wind",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 170,
+      "sourceEndLine": 170,
+      "frameRuns": [
+        {
+          "frameId": 97,
+          "startAdvance": 0,
+          "advances": 4
+        },
+        {
+          "frameId": 95,
+          "startAdvance": 4,
+          "advances": 3
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 170,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            128
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 170,
+          "opcode": 240,
+          "command": "SoundFlag",
+          "params": [
+            24
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 8,
+          "sourceLine": 170,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            76,
+            128
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 170,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            64
+          ],
+          "atDisplayAdvance": 5
+        }
+      ],
+      "displayAdvances": 7,
+      "terminatorByte": 16,
+      "sourceEffectiveEndLine": 170,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 126,
+      "animationHex": "7E",
+      "label": "udar_akuli",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 171,
+      "sourceEndLine": 172,
+      "frameRuns": [
+        {
+          "frameId": 215,
+          "startAdvance": 0,
+          "advances": 17
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 171,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 171,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            76,
+            32
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 171,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            76,
+            32
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 171,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            64
+          ],
+          "atDisplayAdvance": 6
+        }
+      ],
+      "displayAdvances": 17,
+      "terminatorByte": 27,
+      "sourceEffectiveEndLine": 172,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 128,
+      "animationHex": "80",
+      "label": "udar_utki",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 173,
+      "sourceEndLine": 174,
+      "frameRuns": [
+        {
+          "frameId": 103,
+          "startAdvance": 0,
+          "advances": 6
+        },
+        {
+          "frameId": 104,
+          "startAdvance": 6,
+          "advances": 3
+        },
+        {
+          "frameId": 103,
+          "startAdvance": 9,
+          "advances": 7
+        },
+        {
+          "frameId": 104,
+          "startAdvance": 16,
+          "advances": 3
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 173,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            160
+          ],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 3,
+          "sourceLine": 173,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 1
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 173,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 173,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            32
+          ],
+          "atDisplayAdvance": 5
+        },
+        {
+          "byteIndex": 12,
+          "sourceLine": 173,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            128,
+            80
+          ],
+          "atDisplayAdvance": 6
+        },
+        {
+          "byteIndex": 18,
+          "sourceLine": 173,
+          "opcode": 245,
+          "command": "ClearDamageLatch",
+          "params": [],
+          "atDisplayAdvance": 9
+        },
+        {
+          "byteIndex": 20,
+          "sourceLine": 173,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            240
+          ],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 22,
+          "sourceLine": 173,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 10
+        },
+        {
+          "byteIndex": 26,
+          "sourceLine": 174,
+          "opcode": 236,
+          "command": "SwapDirection",
+          "params": [],
+          "atDisplayAdvance": 13
+        },
+        {
+          "byteIndex": 30,
+          "sourceLine": 174,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            131,
+            48
+          ],
+          "atDisplayAdvance": 16
+        },
+        {
+          "byteIndex": 36,
+          "sourceLine": 174,
+          "opcode": 245,
+          "command": "ClearDamageLatch",
+          "params": [],
+          "atDisplayAdvance": 19
+        }
+      ],
+      "displayAdvances": 19,
+      "terminatorByte": 37,
+      "sourceEffectiveEndLine": 174,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 130,
+      "animationHex": "82",
+      "label": "nogoi_s_propellera",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 115,
+      "sourceEndLine": 115,
+      "frameRuns": [
+        {
+          "frameId": 44,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 43,
+          "startAdvance": 3,
+          "advances": 6
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 115,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            96
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 5,
+          "sourceLine": 115,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            136,
+            53
+          ],
+          "atDisplayAdvance": 3
+        },
+        {
+          "byteIndex": 9,
+          "sourceLine": 115,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            0
+          ],
+          "atDisplayAdvance": 4
+        }
+      ],
+      "displayAdvances": 9,
+      "terminatorByte": 16,
+      "sourceEffectiveEndLine": 115,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 132,
+      "animationHex": "84",
+      "label": "udar_big_blag",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 175,
+      "sourceEndLine": 175,
+      "frameRuns": [
+        {
+          "frameId": 111,
+          "startAdvance": 0,
+          "advances": 2
+        },
+        {
+          "frameId": 113,
+          "startAdvance": 2,
+          "advances": 10
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 2,
+          "sourceLine": 175,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            132,
+            32
+          ],
+          "atDisplayAdvance": 2
+        }
+      ],
+      "displayAdvances": 12,
+      "terminatorByte": 15,
+      "sourceEffectiveEndLine": 175,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 134,
+      "animationHex": "86",
+      "label": "byte_3000_E7E7",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 176,
+      "sourceEndLine": 176,
+      "frameRuns": [
+        {
+          "frameId": 115,
+          "startAdvance": 0,
+          "advances": 3
+        },
+        {
+          "frameId": 116,
+          "startAdvance": 3,
+          "advances": 13
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 3,
+          "sourceLine": 176,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            137,
+            32
+          ],
+          "atDisplayAdvance": 3
+        }
+      ],
+      "displayAdvances": 16,
+      "terminatorByte": 19,
+      "sourceEffectiveEndLine": 176,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 136,
+      "animationHex": "88",
+      "label": "byte_3000_E7FB",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 177,
+      "sourceEndLine": 177,
+      "frameRuns": [
+        {
+          "frameId": 120,
+          "startAdvance": 0,
+          "advances": 8
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 2,
+          "sourceLine": 177,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            6
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 6,
+          "sourceLine": 177,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            6
+          ],
+          "atDisplayAdvance": 4
+        },
+        {
+          "byteIndex": 10,
+          "sourceLine": 177,
+          "opcode": 243,
+          "command": "CreateWeapon",
+          "params": [
+            6
+          ],
+          "atDisplayAdvance": 6
+        }
+      ],
+      "displayAdvances": 8,
+      "terminatorByte": 14,
+      "sourceEffectiveEndLine": 177,
+      "fallsThroughDeclaredBlock": false
+    },
+    {
+      "animationId": 138,
+      "animationHex": "8A",
+      "label": "byte_3000_E80A",
+      "sourceFile": "data/anims_moves.asm",
+      "sourceLine": 178,
+      "sourceEndLine": 179,
+      "frameRuns": [
+        {
+          "frameId": 1,
+          "startAdvance": 0,
+          "advances": 2
+        },
+        {
+          "frameId": 2,
+          "startAdvance": 2,
+          "advances": 3
+        },
+        {
+          "frameId": 1,
+          "startAdvance": 5,
+          "advances": 3
+        },
+        {
+          "frameId": 2,
+          "startAdvance": 8,
+          "advances": 3
+        },
+        {
+          "frameId": 1,
+          "startAdvance": 11,
+          "advances": 3
+        },
+        {
+          "frameId": 2,
+          "startAdvance": 14,
+          "advances": 8
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 2,
+          "sourceLine": 178,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            64
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 4,
+          "sourceLine": 178,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            128,
+            112
+          ],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 7,
+          "sourceLine": 178,
+          "opcode": 245,
+          "command": "ClearDamageLatch",
+          "params": [],
+          "atDisplayAdvance": 2
+        },
+        {
+          "byteIndex": 14,
+          "sourceLine": 178,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            64
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 16,
+          "sourceLine": 178,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            128,
+            112
+          ],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 19,
+          "sourceLine": 178,
+          "opcode": 245,
+          "command": "ClearDamageLatch",
+          "params": [],
+          "atDisplayAdvance": 8
+        },
+        {
+          "byteIndex": 24,
+          "sourceLine": 178,
+          "opcode": 224,
+          "command": "XSpeed",
+          "params": [
+            160
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 26,
+          "sourceLine": 178,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            3
+          ],
+          "atDisplayAdvance": 12
+        },
+        {
+          "byteIndex": 30,
+          "sourceLine": 179,
+          "opcode": 226,
+          "command": "HitOpportunity",
+          "params": [
+            130,
+            48
+          ],
+          "atDisplayAdvance": 14
+        }
+      ],
+      "displayAdvances": 22,
+      "terminatorByte": 41,
+      "sourceEffectiveEndLine": 179,
+      "fallsThroughDeclaredBlock": false
+    }
+  ],
+  "dashLowLifeTail": {
+    "sourceLines": [
+      15829,
+      15840
+    ],
+    "condition": "Actual effect-time victim Life <0x10 and attacker animation0x16",
+    "pointerOverride": 54,
+    "immediateEffectReaderEntryByte": 55,
+    "warning": "Main anim_make_hit restores Y from overridden tmp_var_22 and then INY before reading; this alternate tail follows the ordinary zero terminator.",
+    "playbackFromEffectEntry": {
+      "frameRuns": [
+        {
+          "frameId": 49,
+          "startAdvance": 0,
+          "advances": 11
+        },
+        {
+          "frameId": 35,
+          "startAdvance": 11,
+          "advances": 4
+        }
+      ],
+      "events": [
+        {
+          "byteIndex": 1,
+          "sourceLine": 97,
+          "opcode": 225,
+          "command": "ZSpeed",
+          "params": [
+            4
+          ],
+          "atDisplayAdvance": 1
+        }
+      ],
+      "displayAdvances": 15,
+      "terminatorByte": 17,
+      "sourceEffectiveEndLine": 97
+    }
+  },
+  "objectDispatch": [
+    {
+      "typeId": 0,
+      "typeHex": "00",
+      "handler": "no_obj_code",
+      "handlerLine": 2843,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 1,
+      "typeHex": "01",
+      "handler": "object_player",
+      "handlerLine": 6196,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 2,
+      "typeHex": "02",
+      "handler": "object_player",
+      "handlerLine": 6196,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 3,
+      "typeHex": "03",
+      "handler": "warp_part?",
+      "handlerLine": 8448,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 4,
+      "typeHex": "04",
+      "handler": "object_delete?",
+      "handlerLine": 8397,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 5,
+      "typeHex": "05",
+      "handler": "object_tall_walker_head",
+      "handlerLine": 8610,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 6,
+      "typeHex": "06",
+      "handler": "object_rope",
+      "handlerLine": 8876,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 7,
+      "typeHex": "07",
+      "handler": "object_rope",
+      "handlerLine": 8876,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 8,
+      "typeHex": "08",
+      "handler": "obj_wall_destroy",
+      "handlerLine": 9592,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 9,
+      "typeHex": "09",
+      "handler": "obj_tongue",
+      "handlerLine": 13675,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 10,
+      "typeHex": "0A",
+      "handler": "object_muhi",
+      "handlerLine": 9449,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 11,
+      "typeHex": "0B",
+      "handler": "object_Psyko_Pig",
+      "handlerLine": 16730,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 12,
+      "typeHex": "0C",
+      "handler": "object_dmg_hit",
+      "handlerLine": 4070,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 13,
+      "typeHex": "0D",
+      "handler": "object_level1_boss_noga",
+      "handlerLine": 4103,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 14,
+      "typeHex": "0E",
+      "handler": "object_level1_boss_turrets",
+      "handlerLine": 4281,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 15,
+      "typeHex": "0F",
+      "handler": "object_level1_boss",
+      "handlerLine": 4401,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 16,
+      "typeHex": "10",
+      "handler": "object_level1_boss_bullet",
+      "handlerLine": 4494,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 17,
+      "typeHex": "11",
+      "handler": "object_tall_walker",
+      "handlerLine": 4608,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 18,
+      "typeHex": "12",
+      "handler": "object_tall_walker",
+      "handlerLine": 4608,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 19,
+      "typeHex": "13",
+      "handler": "object_raven",
+      "handlerLine": 4990,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 20,
+      "typeHex": "14",
+      "handler": "object_dead_raven",
+      "handlerLine": 4869,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 21,
+      "typeHex": "15",
+      "handler": "object_invader",
+      "handlerLine": 5472,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 22,
+      "typeHex": "16",
+      "handler": "object_raven_large",
+      "handlerLine": 4927,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 23,
+      "typeHex": "17",
+      "handler": "object_dragon",
+      "handlerLine": 2943,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 24,
+      "typeHex": "18",
+      "handler": "object_bike",
+      "handlerLine": 9148,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 25,
+      "typeHex": "19",
+      "handler": "object_set_palette",
+      "handlerLine": 9213,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 26,
+      "typeHex": "1A",
+      "handler": "object_infernorace_animation",
+      "handlerLine": 9379,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 27,
+      "typeHex": "1B",
+      "handler": "object_tall_walker_head",
+      "handlerLine": 8610,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 28,
+      "typeHex": "1C",
+      "handler": "object_hodulya_palka",
+      "handlerLine": 8676,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 29,
+      "typeHex": "1D",
+      "handler": "object_flying_life_bar",
+      "handlerLine": 5575,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 30,
+      "typeHex": "1E",
+      "handler": "object_fireball",
+      "handlerLine": 9655,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 31,
+      "typeHex": "1F",
+      "handler": "create_Psyko_Pig",
+      "handlerLine": 16834,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 32,
+      "typeHex": "20",
+      "handler": "object_psyko_Pig_ambush",
+      "handlerLine": 9620,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 33,
+      "typeHex": "21",
+      "handler": "object_turbo_tunnel_falling_obstacle",
+      "handlerLine": 9712,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 34,
+      "typeHex": "22",
+      "handler": "object_WARP",
+      "handlerLine": 8407,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 35,
+      "typeHex": "23",
+      "handler": "object_turbo_tunnel_obstacle",
+      "handlerLine": 9747,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 36,
+      "typeHex": "24",
+      "handler": "object_turbo_tunnel_obstacle",
+      "handlerLine": 9747,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 37,
+      "typeHex": "25",
+      "handler": "object_turbo_tunnel_obstacle",
+      "handlerLine": 9747,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 38,
+      "typeHex": "26",
+      "handler": "object_checkpoint_part1",
+      "handlerLine": 9729,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 39,
+      "typeHex": "27",
+      "handler": "object_checkpoint_part2",
+      "handlerLine": 9828,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 40,
+      "typeHex": "28",
+      "handler": "object_turbo_tunnel_rat_rocket",
+      "handlerLine": 10088,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 41,
+      "typeHex": "29",
+      "handler": "object_turbo_tunnel_falling_obstacle",
+      "handlerLine": 9712,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 42,
+      "typeHex": "2A",
+      "handler": "object_turbo_tunnel_obstacle_up",
+      "handlerLine": 9743,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 43,
+      "typeHex": "2B",
+      "handler": "object_turbo_tunnel_fly_obstacle",
+      "handlerLine": 10147,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 44,
+      "typeHex": "2C",
+      "handler": "object_turbo_tunnel_balls",
+      "handlerLine": 10176,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 45,
+      "typeHex": "2D",
+      "handler": "object_saturn_toadtrap",
+      "handlerLine": 10191,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 46,
+      "typeHex": "2E",
+      "handler": "object_electro_trap",
+      "handlerLine": 10396,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 47,
+      "typeHex": "2F",
+      "handler": "object_raven_claw",
+      "handlerLine": 10536,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 48,
+      "typeHex": "30",
+      "handler": "objects_power_ups",
+      "handlerLine": 10626,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 49,
+      "typeHex": "31",
+      "handler": "object_retro_blaster",
+      "handlerLine": 10789,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 50,
+      "typeHex": "32",
+      "handler": "object_retro_blaster_shoot",
+      "handlerLine": 20092,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 51,
+      "typeHex": "33",
+      "handler": "object_snowman",
+      "handlerLine": 20148,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 52,
+      "typeHex": "34",
+      "handler": "object_platform_last_level",
+      "handlerLine": 18044,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 53,
+      "typeHex": "35",
+      "handler": "object_level4_platform_mov_down",
+      "handlerLine": 17881,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 54,
+      "typeHex": "36",
+      "handler": "object_prujina",
+      "handlerLine": 17775,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 55,
+      "typeHex": "37",
+      "handler": "object_rotating_spike",
+      "handlerLine": 18310,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 56,
+      "typeHex": "38",
+      "handler": "object_ice_cube",
+      "handlerLine": 20333,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 57,
+      "typeHex": "39",
+      "handler": "object_sosulka",
+      "handlerLine": 20722,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 58,
+      "typeHex": "3A",
+      "handler": "object_snowball",
+      "handlerLine": 20837,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 59,
+      "typeHex": "3B",
+      "handler": "object_snow",
+      "handlerLine": 21052,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 60,
+      "typeHex": "3C",
+      "handler": "object_leve4_wall",
+      "handlerLine": 21102,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 61,
+      "typeHex": "3D",
+      "handler": "object_large_snowball",
+      "handlerLine": 21228,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 62,
+      "typeHex": "3E",
+      "handler": "object_level4_moving_platform",
+      "handlerLine": 17935,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 63,
+      "typeHex": "3F",
+      "handler": "object_level4_wall_moving",
+      "handlerLine": 21083,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 64,
+      "typeHex": "40",
+      "handler": "object_level4_spike_moving",
+      "handlerLine": 21294,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 65,
+      "typeHex": "41",
+      "handler": "object_levels_checkpoint",
+      "handlerLine": 21320,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 66,
+      "typeHex": "42",
+      "handler": "object_restore_point",
+      "handlerLine": 21362,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 67,
+      "typeHex": "43",
+      "handler": "object_level4_sosulka_kamennaya",
+      "handlerLine": 21062,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 68,
+      "typeHex": "44",
+      "handler": "object_multiple_del?",
+      "handlerLine": 21305,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 69,
+      "typeHex": "45",
+      "handler": "object_level4_spike_moving",
+      "handlerLine": 21294,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 70,
+      "typeHex": "46",
+      "handler": "object_dead_robo_manus_ili_begushaya_krisa",
+      "handlerLine": 18470,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 71,
+      "typeHex": "47",
+      "handler": "object_giblet",
+      "handlerLine": 18542,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 72,
+      "typeHex": "48",
+      "handler": "object_inferno_race_create",
+      "handlerLine": 18721,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 73,
+      "typeHex": "49",
+      "handler": "object_turbo_tunnel_warning_sprite",
+      "handlerLine": 18762,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 74,
+      "typeHex": "4A",
+      "handler": "object_elevator_platform",
+      "handlerLine": 18804,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 75,
+      "typeHex": "4B",
+      "handler": "object_rat_race_palette_fade",
+      "handlerLine": 9370,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 76,
+      "typeHex": "4C",
+      "handler": "object_snake",
+      "handlerLine": 18916,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 77,
+      "typeHex": "4D",
+      "handler": "object_snake_animation",
+      "handlerLine": 18920,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 78,
+      "typeHex": "4E",
+      "handler": "object_snake_hide_head",
+      "handlerLine": 18932,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 79,
+      "typeHex": "4F",
+      "handler": "object_snake_pit_hole?",
+      "handlerLine": 18946,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 80,
+      "typeHex": "50",
+      "handler": "object_sentry_drone",
+      "handlerLine": 19012,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 81,
+      "typeHex": "51",
+      "handler": "object_slizen",
+      "handlerLine": 19050,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 82,
+      "typeHex": "52",
+      "handler": "object_gas_turret",
+      "handlerLine": 19173,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 83,
+      "typeHex": "53",
+      "handler": "object_gas",
+      "handlerLine": 19210,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 84,
+      "typeHex": "54",
+      "handler": "object_ventilyator",
+      "handlerLine": 19279,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 85,
+      "typeHex": "55",
+      "handler": "object_ventilyator",
+      "handlerLine": 19279,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 86,
+      "typeHex": "56",
+      "handler": "object_veter",
+      "handlerLine": 19660,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 87,
+      "typeHex": "57",
+      "handler": "object_ball",
+      "handlerLine": 19808,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 88,
+      "typeHex": "58",
+      "handler": "obj_ratbomb_sub?",
+      "handlerLine": 19894,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 89,
+      "typeHex": "59",
+      "handler": "object_ball_laucnh_hole",
+      "handlerLine": 19771,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 90,
+      "typeHex": "5A",
+      "handler": "object_ratrace_bomb",
+      "handlerLine": 19909,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 91,
+      "typeHex": "5B",
+      "handler": "object_screen_light",
+      "handlerLine": 9309,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 92,
+      "typeHex": "5C",
+      "handler": "object_hordhead",
+      "handlerLine": 11003,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 93,
+      "typeHex": "5D",
+      "handler": "object_last_lvl_flying",
+      "handlerLine": 13821,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 94,
+      "typeHex": "5E",
+      "handler": "object_last_lvl_flying",
+      "handlerLine": 13821,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 95,
+      "typeHex": "5F",
+      "handler": "object_palka_v_stene",
+      "handlerLine": 13902,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 96,
+      "typeHex": "60",
+      "handler": "object_last_lvl_head",
+      "handlerLine": 13985,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 97,
+      "typeHex": "61",
+      "handler": "object_veter2?",
+      "handlerLine": 19656,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 98,
+      "typeHex": "62",
+      "handler": "object_swellcheeks",
+      "handlerLine": 14024,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 99,
+      "typeHex": "63",
+      "handler": "object_level1_boss_dmg_spr",
+      "handlerLine": 4263,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 100,
+      "typeHex": "64",
+      "handler": "object_level1_boss_ball",
+      "handlerLine": 8521,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 101,
+      "typeHex": "65",
+      "handler": "object_level1_boss_dead",
+      "handlerLine": 4226,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 102,
+      "typeHex": "66",
+      "handler": "object_rocket_rat2_inferno",
+      "handlerLine": 11501,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 103,
+      "typeHex": "67",
+      "handler": "object_inferno_race_electricity",
+      "handlerLine": 11177,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 104,
+      "typeHex": "68",
+      "handler": "object_mines_rokets_creator",
+      "handlerLine": 11260,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 105,
+      "typeHex": "69",
+      "handler": "object_level7_fires",
+      "handlerLine": 11394,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 106,
+      "typeHex": "6A",
+      "handler": "object_level7_rockets",
+      "handlerLine": 11457,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 107,
+      "typeHex": "6B",
+      "handler": "object_shesterenka",
+      "handlerLine": 11626,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 108,
+      "typeHex": "6C",
+      "handler": "object_water_splash",
+      "handlerLine": 11785,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 109,
+      "typeHex": "6D",
+      "handler": "object_robot",
+      "handlerLine": 11883,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 110,
+      "typeHex": "6E",
+      "handler": "object_electrofish",
+      "handlerLine": 12123,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 111,
+      "typeHex": "6F",
+      "handler": "object_hammerfish",
+      "handlerLine": 12243,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 112,
+      "typeHex": "70",
+      "handler": "object_shark",
+      "handlerLine": 12371,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 113,
+      "typeHex": "71",
+      "handler": "object_shark",
+      "handlerLine": 12371,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 114,
+      "typeHex": "72",
+      "handler": "object_utka",
+      "handlerLine": 12063,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 115,
+      "typeHex": "73",
+      "handler": "object_angelica_ili_pimpl",
+      "handlerLine": 14234,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 116,
+      "typeHex": "74",
+      "handler": "object_verevka_s_propellerom",
+      "handlerLine": 12494,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 117,
+      "typeHex": "75",
+      "handler": "object_terra_tubes_xz",
+      "handlerLine": 12538,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 118,
+      "typeHex": "76",
+      "handler": "object_vodovorot",
+      "handlerLine": 12635,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 119,
+      "typeHex": "77",
+      "handler": "object_brevno",
+      "handlerLine": 12731,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 120,
+      "typeHex": "78",
+      "handler": "object_surfcity_watermine",
+      "handlerLine": 12841,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 121,
+      "typeHex": "79",
+      "handler": "object_big_blag",
+      "handlerLine": 13055,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 122,
+      "typeHex": "7A",
+      "handler": "object_electroball",
+      "handlerLine": 14809,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 123,
+      "typeHex": "7B",
+      "handler": "object_electroball_phase2",
+      "handlerLine": 12981,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 124,
+      "typeHex": "7C",
+      "handler": "object_general_slaughter",
+      "handlerLine": 13345,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 125,
+      "typeHex": "7D",
+      "handler": "object_robu_manus",
+      "handlerLine": 13462,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 126,
+      "typeHex": "7E",
+      "handler": "object_dark_queen",
+      "handlerLine": 14307,
+      "animationTrace": "DISPATCH_ONLY"
+    },
+    {
+      "typeId": 127,
+      "typeHex": "7F",
+      "handler": "object_last_lvl_end",
+      "handlerLine": 14210,
+      "animationTrace": "DISPATCH_ONLY"
+    }
+  ],
+  "families": [
+    {
+      "name": "Hero",
+      "types": [
+        1,
+        2
+      ],
+      "status": "PARTIAL_TRACE",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "PsykoPig",
+      "types": [
+        11,
+        31,
+        32
+      ],
+      "status": "PARTIAL_TRACE",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "TallWalker",
+      "types": [
+        17,
+        18
+      ],
+      "status": "PARTIAL_TRACE",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Raven",
+      "types": [
+        19
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "LargeRaven",
+      "types": [
+        22
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Invader",
+      "types": [
+        21
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Dragon",
+      "types": [
+        23
+      ],
+      "status": "PARTIAL_TRACE",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "RocketRat",
+      "types": [
+        40,
+        102
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "SaturnToadtrap",
+      "types": [
+        45
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "RetroBlaster",
+      "types": [
+        49
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Snowman",
+      "types": [
+        51
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Snake",
+      "types": [
+        76,
+        77,
+        78
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "SentryDrone",
+      "types": [
+        80
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Slime",
+      "types": [
+        81
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "GasTurret",
+      "types": [
+        82
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Hordhead",
+      "types": [
+        92
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "FlyingHead",
+      "types": [
+        93,
+        94,
+        96
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Swellcheeks",
+      "types": [
+        98
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Robot",
+      "types": [
+        109
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Electrofish",
+      "types": [
+        110
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Hammerfish",
+      "types": [
+        111
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Shark",
+      "types": [
+        112,
+        113
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Duck",
+      "types": [
+        114
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "BossWalker",
+      "types": [
+        13,
+        14,
+        15
+      ],
+      "status": "PARTIAL_TRACE",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "BigBlag",
+      "types": [
+        121
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "Buzzball",
+      "types": [
+        122,
+        123
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "GeneralSlaughter",
+      "types": [
+        124
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "RoboManus",
+      "types": [
+        125
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    },
+    {
+      "name": "DarkQueen",
+      "types": [
+        126
+      ],
+      "status": "DISPATCH_ONLY",
+      "unknown": [
+        "complete appearance/animation state trace",
+        "dynamic spawn count",
+        "all intro conditions"
+      ]
+    }
+  ],
+  "levels": [
+    {
+      "order": 1,
+      "sourceLevelId": 1,
+      "name": "Ragnarok's Canyon",
+      "staticTypeIds": [
+        1,
+        2,
+        6,
+        7,
+        8,
+        10,
+        11,
+        13,
+        14,
+        15,
+        23,
+        25,
+        31,
+        32,
+        34,
+        48,
+        101
+      ],
+      "authoredRecordsAcrossSegments": 40,
+      "streamMarkers": [
+        {
+          "byteOffset": 396,
+          "marker": 254
+        },
+        {
+          "byteOffset": 441,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "PsykoPig",
+        "Dragon",
+        "BossWalker"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 2,
+      "sourceLevelId": 2,
+      "name": "Wookie Hole",
+      "staticTypeIds": [
+        1,
+        2,
+        6,
+        7,
+        8,
+        10,
+        19,
+        22,
+        25,
+        45,
+        46,
+        49
+      ],
+      "authoredRecordsAcrossSegments": 74,
+      "streamMarkers": [
+        {
+          "byteOffset": 814,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Raven",
+        "LargeRaven",
+        "SaturnToadtrap",
+        "RetroBlaster"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 3,
+      "sourceLevelId": 3,
+      "name": "Turbo Tunnel",
+      "staticTypeIds": [
+        1,
+        2,
+        6,
+        7,
+        10,
+        21,
+        24,
+        25,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        42,
+        43,
+        71,
+        73
+      ],
+      "authoredRecordsAcrossSegments": 133,
+      "streamMarkers": [
+        {
+          "byteOffset": 1463,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Invader",
+        "RocketRat"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 4,
+      "sourceLevelId": 4,
+      "name": "Arctic Caverns",
+      "staticTypeIds": [
+        1,
+        2,
+        10,
+        25,
+        34,
+        48,
+        51,
+        53,
+        56,
+        57,
+        58,
+        59,
+        60,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        117
+      ],
+      "authoredRecordsAcrossSegments": 75,
+      "streamMarkers": [
+        {
+          "byteOffset": 825,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Snowman"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 5,
+      "sourceLevelId": 12,
+      "name": "Surf City",
+      "staticTypeIds": [
+        1,
+        2,
+        10,
+        21,
+        24,
+        25,
+        34,
+        36,
+        38,
+        48,
+        104,
+        118,
+        119,
+        121
+      ],
+      "authoredRecordsAcrossSegments": 44,
+      "streamMarkers": [
+        {
+          "byteOffset": 484,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Invader",
+        "BigBlag"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 6,
+      "sourceLevelId": 8,
+      "name": "Karnath's Lair",
+      "staticTypeIds": [
+        1,
+        2,
+        34,
+        76,
+        77,
+        79
+      ],
+      "authoredRecordsAcrossSegments": 53,
+      "streamMarkers": [
+        {
+          "byteOffset": 55,
+          "marker": 254
+        },
+        {
+          "byteOffset": 78,
+          "marker": 254
+        },
+        {
+          "byteOffset": 101,
+          "marker": 254
+        },
+        {
+          "byteOffset": 102,
+          "marker": 255
+        },
+        {
+          "byteOffset": 147,
+          "marker": 254
+        },
+        {
+          "byteOffset": 170,
+          "marker": 254
+        },
+        {
+          "byteOffset": 193,
+          "marker": 254
+        },
+        {
+          "byteOffset": 216,
+          "marker": 254
+        },
+        {
+          "byteOffset": 239,
+          "marker": 254
+        },
+        {
+          "byteOffset": 262,
+          "marker": 254
+        },
+        {
+          "byteOffset": 263,
+          "marker": 255
+        },
+        {
+          "byteOffset": 297,
+          "marker": 254
+        },
+        {
+          "byteOffset": 320,
+          "marker": 254
+        },
+        {
+          "byteOffset": 343,
+          "marker": 254
+        },
+        {
+          "byteOffset": 366,
+          "marker": 254
+        },
+        {
+          "byteOffset": 389,
+          "marker": 254
+        },
+        {
+          "byteOffset": 412,
+          "marker": 254
+        },
+        {
+          "byteOffset": 435,
+          "marker": 254
+        },
+        {
+          "byteOffset": 436,
+          "marker": 255
+        },
+        {
+          "byteOffset": 470,
+          "marker": 254
+        },
+        {
+          "byteOffset": 493,
+          "marker": 254
+        },
+        {
+          "byteOffset": 516,
+          "marker": 254
+        },
+        {
+          "byteOffset": 539,
+          "marker": 254
+        },
+        {
+          "byteOffset": 562,
+          "marker": 254
+        },
+        {
+          "byteOffset": 585,
+          "marker": 254
+        },
+        {
+          "byteOffset": 608,
+          "marker": 254
+        },
+        {
+          "byteOffset": 609,
+          "marker": 255
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Snake"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 7,
+      "sourceLevelId": 6,
+      "name": "Volkmire's Inferno",
+      "staticTypeIds": [
+        1,
+        2,
+        10,
+        21,
+        24,
+        25,
+        26,
+        38,
+        48,
+        62,
+        71,
+        72,
+        102,
+        103,
+        104
+      ],
+      "authoredRecordsAcrossSegments": 105,
+      "streamMarkers": [
+        {
+          "byteOffset": 1155,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Invader",
+        "RocketRat"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 8,
+      "sourceLevelId": 7,
+      "name": "Intruder Excluder",
+      "staticTypeIds": [
+        1,
+        2,
+        10,
+        25,
+        28,
+        48,
+        54,
+        65,
+        66,
+        74,
+        80,
+        81,
+        82,
+        84,
+        85,
+        89,
+        125
+      ],
+      "authoredRecordsAcrossSegments": 65,
+      "streamMarkers": [
+        {
+          "byteOffset": 715,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "SentryDrone",
+        "Slime",
+        "GasTurret",
+        "RoboManus"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 9,
+      "sourceLevelId": 11,
+      "name": "Terra Tubes",
+      "staticTypeIds": [
+        1,
+        2,
+        25,
+        48,
+        63,
+        65,
+        66,
+        68,
+        107,
+        109,
+        110,
+        111,
+        112,
+        114,
+        116,
+        117
+      ],
+      "authoredRecordsAcrossSegments": 56,
+      "streamMarkers": [
+        {
+          "byteOffset": 176,
+          "marker": 254
+        },
+        {
+          "byteOffset": 199,
+          "marker": 254
+        },
+        {
+          "byteOffset": 222,
+          "marker": 254
+        },
+        {
+          "byteOffset": 245,
+          "marker": 254
+        },
+        {
+          "byteOffset": 433,
+          "marker": 254
+        },
+        {
+          "byteOffset": 456,
+          "marker": 254
+        },
+        {
+          "byteOffset": 622,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Robot",
+        "Electrofish",
+        "Hammerfish",
+        "Shark",
+        "Duck"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 10,
+      "sourceLevelId": 9,
+      "name": "Rat Race",
+      "staticTypeIds": [
+        1,
+        2,
+        25,
+        34,
+        65,
+        66,
+        74,
+        75,
+        80,
+        82,
+        85,
+        89,
+        90,
+        124
+      ],
+      "authoredRecordsAcrossSegments": 66,
+      "streamMarkers": [
+        {
+          "byteOffset": 682,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "SentryDrone",
+        "GasTurret",
+        "GeneralSlaughter"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 11,
+      "sourceLevelId": 10,
+      "name": "Clinger-Winger",
+      "staticTypeIds": [
+        1,
+        2,
+        24,
+        25,
+        122
+      ],
+      "authoredRecordsAcrossSegments": 6,
+      "streamMarkers": [
+        {
+          "byteOffset": 66,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Buzzball"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 12,
+      "sourceLevelId": 5,
+      "name": "The Revolution",
+      "staticTypeIds": [
+        1,
+        2,
+        52,
+        53,
+        54,
+        55,
+        65,
+        66,
+        92,
+        93,
+        95,
+        96,
+        98,
+        127
+      ],
+      "authoredRecordsAcrossSegments": 108,
+      "streamMarkers": [
+        {
+          "byteOffset": 1188,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "Hordhead",
+        "FlyingHead",
+        "Swellcheeks"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    },
+    {
+      "order": 13,
+      "sourceLevelId": 13,
+      "name": "Armageddon",
+      "staticTypeIds": [
+        1,
+        2,
+        25,
+        115,
+        126
+      ],
+      "authoredRecordsAcrossSegments": 6,
+      "streamMarkers": [
+        {
+          "byteOffset": 44,
+          "marker": 254
+        },
+        {
+          "byteOffset": 67,
+          "marker": 254
+        }
+      ],
+      "familiesReferenced": [
+        "Hero",
+        "DarkQueen"
+      ],
+      "status": "STATIC_CONFIG_ONLY_NOT_COMPLETE_DYNAMIC_ROSTER",
+      "warning": "Indexes all authored stream segments, including after FE stop markers and checkpoint labels; not one unconditional spawn order. FF target words are excluded. Transformations/created actors may add families absent from direct static types."
+    }
+  ],
+  "heroLocomotion": {
+    "rash_walk_frames": [
+      4,
+      5,
+      4,
+      8,
+      6,
+      7,
+      6,
+      3
+    ],
+    "rash_run_frames": [
+      5,
+      5,
+      8,
+      8,
+      7,
+      7,
+      3,
+      3
+    ],
+    "rash_with_obj_frames": [
+      17,
+      18,
+      17,
+      16
+    ],
+    "rash_move_UD_frames": [
+      1,
+      9,
+      1,
+      10
+    ],
+    "tableLines": [
+      13635,
+      13636,
+      13637,
+      13638
+    ],
+    "phaseSelectorLines": [
+      8298,
+      8346
+    ],
+    "idleFrames": [
+      1,
+      2
+    ],
+    "jumpFrames": [
+      5,
+      45
+    ],
+    "holdingJumpFrame": 46,
+    "jumpSelector": "Airborne without held object: unsigned((Zspeed+2)&255)<5 selects0x2D near apex, otherwise0x05; held object selects0x2E.",
+    "idleLines": [
+      8369,
+      8385
+    ],
+    "jumpLines": [
+      8190,
+      8204
+    ],
+    "timing": "Speed/counter/direction-driven, not a fixed fps walk clip; source run renderer also checks both players speed/floor conditions."
+  },
+  "dragonFinalFrames": {
+    "sourceHandler": "object_dragon",
+    "sourceLines": [
+      2943,
+      3056
+    ],
+    "normalCycle": [
+      9,
+      9,
+      10,
+      10
+    ],
+    "approachFrame": 9,
+    "heavyDisabledFrame": 10,
+    "lightReactionFrame": 12,
+    "headbuttAndCaptureFrame": 11,
+    "warning": "Shared loc_0_96F7/byte_0_9942 writes intermediate1C/1D/1E; object_dragon overwrites these when AnimID==0. They are not the final Dragon locomotion frames."
+  },
+  "priorityBindings": [
+    {
+      "family": "Hero",
+      "sourceAnimations": [
+        2,
+        4,
+        6,
+        14,
+        18,
+        20,
+        22,
+        24,
+        26,
+        54,
+        112
+      ],
+      "callerMask": 1,
+      "sourceCallsPerAdvance": 2,
+      "callerLine": 7268,
+      "unknown": [
+        "global FrameCounter phase at action entry",
+        "complete B hold/cancel windows",
+        "hit-triggered Dash pointer override"
+      ],
+      "meaning": {
+        "02": "jab A",
+        "04": "jab B",
+        "06": "uppercut",
+        "0E": "power punch morph",
+        "12": "heavy follow-up kick",
+        "14": "large boot morph",
+        "16": "running strike",
+        "18": "tongue",
+        "1A": "club swing",
+        "36": "Dragon-target elbow",
+        "70": "boss ball throw"
+      }
+    },
+    {
+      "family": "PsykoPig",
+      "sourceAnimations": [
+        40,
+        42,
+        64
+      ],
+      "callerMask": 3,
+      "sourceCallsPerAdvance": 4,
+      "callerLine": 16787
+    },
+    {
+      "family": "TallWalker",
+      "sourceAnimations": [
+        58,
+        60
+      ],
+      "callerMask": 0,
+      "sourceCallsPerAdvance": 1,
+      "callerLine": 4676,
+      "warning": "Procedural articulated-leg geometry also uses counters and frame-minus18 transform; generic hero pose is not canonical walker animation."
+    },
+    {
+      "family": "Dragon",
+      "sourceAnimations": [
+        50,
+        52
+      ],
+      "callerMask": 3,
+      "sourceCallsPerAdvance": 4,
+      "callerLine": 5358,
+      "warning": "Flight/turn/disabled states use source caller overrides09/0A/0C and physics; shared frame table1C/1D/1E is intermediate, not final Dragon art."
+    }
+  ],
+  "bossIntros": [
+    {
+      "boss": "BossWalker",
+      "status": "PARTIAL_STATIC_TRACE",
+      "sourceLines": [
+        4074,
+        4084,
+        4103,
+        4206
+      ],
+      "counter": {
+        "field": "Objects_cnt2",
+        "initial": 0,
+        "advance": "increment once per active unpaused object update before comparison",
+        "deleteAt": 255
+      },
+      "events": [
+        {
+          "counter": 48,
+          "kind": "impact",
+          "soundId": 98,
+          "shakeByte": 248
+        },
+        {
+          "counter": 80,
+          "kind": "foot-motion-start",
+          "graphicsFrame": 18
+        },
+        {
+          "counter": 100,
+          "kind": "impact",
+          "soundId": 98,
+          "shakeByte": 248
+        },
+        {
+          "counter": 224,
+          "kind": "arena-camera-cut-and-music",
+          "musicLevelId": 14,
+          "bank6Function": 93,
+          "fearCallSkipped": true,
+          "function": "sub_6000_8E74",
+          "sourceLines": [
+            34374,
+            34445
+          ],
+          "cameraSourcePixels": {
+            "x": 1728,
+            "y": 8
+          },
+          "clearsHeroStateFlagsNotHealth": true,
+          "heroCoordinates": "Recomputes X from previous Y; sets Y=0x0108 and adds0x40 to Z; source 2D perspective setup, not a Roblox position mapping."
+        },
+        {
+          "counter": 255,
+          "kind": "delete-intro-foot"
+        }
+      ],
+      "heroFear": [
+        {
+          "counterFrom": 1,
+          "counterThrough": 223,
+          "animationId": 44,
+          "graphicsFrame": 50
+        },
+        {
+          "counterFrom": 225,
+          "counterThrough": 254,
+          "animationId": 46,
+          "graphicsFrame": 51
+        }
+      ],
+      "heroHandling": {
+        "sourceSlots": [
+          0,
+          1
+        ],
+        "animPointerMask": 7,
+        "dropsStick": true,
+        "unlinksCarriedObject": true,
+        "linkedObjectXSpeed": 64,
+        "linkedObjectZSpeed": 2,
+        "newInvulnerability": "NOT ESTABLISHED; do not invent"
+      },
+      "control": "Nonzero animation follows hero animation branch before ordinary locomotion; B selector can still run. Not proof of total input lock.",
+      "nominal60HzSeconds": {
+        "impactA": 0.8,
+        "motionStart": 1.3333333333333333,
+        "impactB": 1.6666666666666667,
+        "music": 3.7333333333333334,
+        "delete": 4.25
+      },
+      "unknown": [
+        "exact foot model/camera trajectories in world units",
+        "PCM/lag/PAL elapsed-time parity",
+        "same-update input ordering effects",
+        "three-player adaptation"
+      ]
+    },
+    {
+      "boss": "BigBlag",
+      "status": "PARTIAL_STATIC_TRACE",
+      "sourceLines": [
+        13055,
+        13071
+      ],
+      "finding": "At initial graphicsFrame0 set Obj_various_cnt=0x80; decrement, force direction0x80, call write_anim_fear while nonzero.",
+      "unknown": [
+        "full spawn/intro camera path",
+        "exact complete intro visual frame sequence"
+      ]
+    },
+    {
+      "boss": "GeneralSlaughter",
+      "status": "PARTIAL_STATIC_TRACE",
+      "sourceLines": [
+        13345,
+        13458
+      ],
+      "finding": "Initial graphicsFrame0 starts boss music. Before cnt2 reaches0xB5 calls write_dir_and_anim_fear; helper increments cnt2. First0x20 phase cameraY2=0x0C; later grounded state starts Zspeed6.",
+      "unknown": [
+        "complete sprite-frame phase table and spawn camera trajectory"
+      ]
+    },
+    {
+      "boss": "RoboManus",
+      "status": "PARTIAL_STATIC_TRACE",
+      "sourceLines": [
+        13462,
+        13518
+      ],
+      "finding": "Initial frame0 gates on camera, applies player positioning/protection branch; setup disables PPU, initializes frame1/cnt3=0x40 and bank3 function4; while cnt2 positive calls write_dir_and_anim_fear.",
+      "unknown": [
+        "all setup frame transitions and camera/graphics upload timing"
+      ]
+    },
+    {
+      "boss": "Buzzball",
+      "status": "PARTIAL_STATIC_TRACE",
+      "sourceLines": [
+        14809,
+        14878
+      ],
+      "finding": "Chase-to-fight transition: zero Xspeed increments cnt3, pulses gfx/sound on FrameCounter&4, calls write_anim_fear, then changes existing type7A→7B when cnt3 sign becomes negative; boss music changes.",
+      "unknown": [
+        "first chase appearance choreography",
+        "complete combat-phase visual progression"
+      ]
+    },
+    {
+      "boss": "DarkQueen",
+      "status": "UNKNOWN_INTRO_TRACE",
+      "sourceLines": [
+        14307,
+        14500
+      ],
+      "finding": "Combat source handler and anim8A verified, but first appearance/interstitial setup not yet followed to completion.",
+      "unknown": [
+        "both appearance sequences and end-game scene choreography"
+      ]
+    }
+  ],
+  "verification": {
+    "animationPointers": 69,
+    "objectDispatchEntries": 128,
+    "levels": 13,
+    "allAnimationsTerminated": true,
+    "runtimeParity": "NOT IMPLEMENTED BY THIS EXTRACTION",
+    "emulatorTrace": "NOT RUN",
+    "pinnedHashesVerified": 4,
+    "semanticParserChecks": 7
+  }
+}

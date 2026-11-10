@@ -1,0 +1,15 @@
+require('./campaign_bosses/CampaignBoss.spec')(require('../src/server/gameplay/CampaignBoss'),
+    require('../src/stand/server/Session'),require('../src/server/RunLifecycle'),require('../src/stand/server/Combat'),
+    require('../src/server/gameplay/GameConfig')(require('../src/stand/server/Config'),require('../src/server/gameplay/LevelDefinition')),
+    require('./stand/FakeWorld'))
+require('./campaign_bosses/ReactionExpiry.spec')(require('../src/server/gameplay/CampaignBoss'),
+    require('../src/stand/server/Session'),require('../src/server/RunLifecycle'),require('../src/stand/server/Combat'),
+    require('../src/server/gameplay/GameConfig')(require('../src/stand/server/Config'),require('../src/server/gameplay/LevelDefinition')),
+    require('./stand/FakeWorld'),require('../src/server/gameplay/SourceCombat'))
+require('./campaign_bosses/BossMoveTimeout.spec')()
+require('./campaign_bosses/CampaignBossMovement.spec')(require('../src/server/gameplay/CampaignBoss'),
+    require('../src/server/gameplay/GameConfig')(require('../src/stand/server/Config'),require('../src/server/gameplay/LevelDefinition')))
+require('./campaign_bosses/CampaignBossProjectile.spec')(require('../src/server/gameplay/CampaignBoss'),
+    require('../src/stand/server/Session'),require('../src/server/RunLifecycle'),require('../src/stand/server/Combat'),
+    require('../src/server/gameplay/GameConfig')(require('../src/stand/server/Config'),require('../src/server/gameplay/LevelDefinition')),
+    require('./stand/FakeWorld'))

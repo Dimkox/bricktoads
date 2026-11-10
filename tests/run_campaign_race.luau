@@ -1,0 +1,8 @@
+local Race=require('../src/server/gameplay/CampaignRace')
+local Definition=require('../src/server/gameplay/CampaignDefinition')
+local Session=require('../src/stand/server/Session')
+local Core=require('../src/server/RunLifecycle')
+local Combat=require('../src/stand/server/Combat')
+local Config=require('../src/stand/server/Config')
+local FakeWorld=require('./stand/FakeWorld')
+require('./campaign_race/CampaignRace.spec')(Race,Definition,Session,Core,Combat,Config,FakeWorld)

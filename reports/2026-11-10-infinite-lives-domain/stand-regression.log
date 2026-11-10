@@ -1,0 +1,70 @@
+PASS Combat: 1054 assertions
+PASS one two three heroes have independent actors and reserves
+PASS all six ordered trio attack pairs use the same profile
+PASS duplicate and reordered attack cannot replay damage or impulse
+PASS payload cannot supply target health position time or NaN
+PASS stale actor packet does not poison new sequence
+PASS failed physical spawn spends no resource
+PASS safe point race aborts without spending
+PASS unsafe initial spawn is not a free emergency attempt
+PASS normal shield blocks health but not unproven impulse immunity
+PASS missed own attack cancels normal shield before impact
+PASS normal movement retains shield and expires without input
+PASS emergency cycles consume exactly three respawns then release live body
+PASS safe relocation beats simultaneous timeout without new life or healing
+PASS emergency attack releases hold even when it misses
+PASS emergency protection prevents health and impulse
+PASS offline body remains target while new commands are rejected
+PASS already accepted attack resolves after disconnect
+PASS old connection cannot control returned actor
+PASS offline emergency timeout cannot consume another reserve
+PASS lethal dash begins dying state before one confirmed death
+PASS exact arithmetic zero alone is not lethal
+PASS server stall does not deliver an expired hit window
+PASS backward time and wrong run do not mutate state
+PASS one hit chooses one target and does not hit self
+PASS physical response keeps the selected hero profile
+PASS rate limit is bounded and recovers with server time
+PASS failed emergency replacement preserves the current living actor
+PASS safe relocation preserves an intermediate combat state
+PASS acceptance order not slot number decides simultaneous attacks
+PASS missing identity and non-scalar input is rejected
+PASS malformed identity types and non-finite counters cannot mutate the session
+PASS non-table packets and unknown schema are harmless rejections
+PASS non-finite and oversized movement never reaches the world
+PASS forged context and foreign actor cannot poison the owners sequence
+PASS an overtaken attack cannot cancel protection or replay after a newer move
+PASS a new sequence during cooldown cannot replace an accepted attack
+PASS rate-limited attacks cannot cancel normal or emergency protection
+PASS snapshot exposes eliminated view without changing lives or the continuing teammate
+PASS game sessions accept explicit group and level identities without changing stand defaults
+PASS contextual object action runs only after actor authority and cooldown checks
+PASS trusted contextual action may extend cooldown while client Club remains invalid
+PASS heavy reaction history survives recovery while a light hit has no heavy epoch
+Session tests: 42 PASS, 0 FAIL
+PASS infinite lives: default is finite for every hero
+PASS infinite lives: trusted option is strictly boolean and cannot smuggle client fields
+PASS infinite lives: trusted toggle is per hero and receipt replay is inert
+PASS infinite lives: six deaths retain finite reserve, unique actors, attempts and shields
+PASS infinite lives: zero finite reserve still permits normal infinite respawns
+PASS infinite lives: zero reserve emergency retries retain ordinary deadlines and new identities
+PASS infinite lives: turning off preserves unspent reserves and normal finite defeat
+PASS infinite lives: turning off a zero reserve living hero neither heals nor kills it
+PASS infinite lives: turning off a zero reserve dead hero settles defeat instead of a ghost
+PASS infinite lives: turning off clears an unaffordable living emergency retry without losing its body
+PASS infinite lives: eliminated heroes and closed runs cannot be revived by toggling
+PASS infinite lives: enabling during a reservation preserves exactly one normal commit
+PASS infinite lives: offline zero reserve hero cannot spawn until its normal reconnect
+PASS infinite lives: level progression preserves the option and each finite reserve
+PASS infinite lives: server setter requires the explicit development gate
+PASS infinite lives: setter is boolean, server only, and idempotent without actor effects
+PASS infinite lives: server may configure before the first ordinary appearance without spawning early
+PASS infinite lives: real Session performs seven normal deaths without consuming reserves or duplicating actors
+PASS infinite lives: real Session can enable at zero and disable back to an ordinary final death
+PASS infinite lives: infinite lives keeps ordinary damage, reaction, delayed death and respawn
+PASS infinite lives: real Session emergency fallback retries indefinitely at zero stock
+PASS infinite lives: real Session disabling between zero stock death and step closes the run
+PASS infinite lives: bulk setter skips an eliminated teammate without reviving it
+PASS infinite lives: bulk disable settles all zero reserve dead heroes without partial-toggle ghosts
+Infinite lives domain/session: 24 passed, 0 failed
+PASS native Luau stand contracts; engine physics NOT RUN

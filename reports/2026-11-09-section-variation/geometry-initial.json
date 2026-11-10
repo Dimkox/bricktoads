@@ -1,0 +1,96 @@
+{
+  "fixtures": "Server-invoked isolated groups; prepared death and geometry samples; no full-route or physical-touch claim",
+  "geometry": {
+    "gapCount": 5,
+    "coverCount": 2,
+    "seed": 1
+  },
+  "checks": [
+    "join fixture 1",
+    "join fixture 2",
+    "nonhost Start refused",
+    "refused Start preserves lobby geometry",
+    "create second group",
+    "start first generated run",
+    "start second generated run",
+    "route is private to each controller/world",
+    "canonical stays unchanged",
+    "folder carries actual run seed",
+    "World rejects rebuild with actors",
+    "active Start refused",
+    "active refusal preserves body and map",
+    "confirmed death respawns same route",
+    "rejoin retains route and run",
+    "ordinary resources end the prepared run",
+    "new Start accepted after loss",
+    "new run selects a fresh server seed",
+    "peer run and body survive rebuild",
+    "snapshot reports the actual route",
+    "journal describes actual seed and sections",
+    "deterministic geometry rebuild",
+    "floor 1 matches local route and one offset",
+    "cover 1 is collidable district support",
+    "floor 2 matches local route and one offset",
+    "floor 3 matches local route and one offset",
+    "gap 1 has no hidden collidable bridge",
+    "floor 4 matches local route and one offset",
+    "floor 5 matches local route and one offset",
+    "floor 6 matches local route and one offset",
+    "floor 7 matches local route and one offset",
+    "floor 8 matches local route and one offset",
+    "gap 2 has no hidden collidable bridge",
+    "gap 3 has no hidden collidable bridge",
+    "gap 4 has no hidden collidable bridge",
+    "floor 9 matches local route and one offset",
+    "cover 2 is collidable district support",
+    "floor 10 matches local route and one offset",
+    "floor 11 matches local route and one offset",
+    "gap 5 has no hidden collidable bridge",
+    "probe includes real cover and all required gaps",
+    "same seed rebuild accepted",
+    "same seed produces same physical geometry",
+    "different seed rebuild accepted",
+    "different seed changes physical geometry"
+  ],
+  "status": "PASS",
+  "runs": {
+    "first": {
+      "sectionChoices": [
+        2,
+        3,
+        1,
+        1,
+        2,
+        2
+      ],
+      "version": 1,
+      "seed": 1351649879
+    },
+    "peer": {
+      "sectionChoices": [
+        1,
+        2,
+        2,
+        3,
+        3,
+        1
+      ],
+      "version": 1,
+      "seed": 627249998
+    },
+    "next": {
+      "sectionChoices": [
+        1,
+        1,
+        2,
+        1,
+        3,
+        2
+      ],
+      "version": 1,
+      "seed": 597288381
+    }
+  },
+  "peerUnchanged": true,
+  "sourceSha256": "9ff383981955eda6a69650277127d05c3026b779fa825834a65b5d4582b76183"
+}

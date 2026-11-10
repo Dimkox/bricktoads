@@ -1,0 +1,83 @@
+{
+  "current": {
+    "slot": 1,
+    "index": 1,
+    "rawLife": 15,
+    "attempt": 1,
+    "epoch": 1,
+    "plan": {
+      "x": 0.9739917835933376,
+      "z": 0.22658333012970966,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "guardianHits": 0,
+    "actorId": "bricktoads-qa-25-01-b980fe3d:actor:2",
+    "position": {
+      "y": 2.9902286529541016,
+      "x": 384.1791687011719,
+      "z": -20.254159927368164
+    },
+    "target": -11,
+    "stock": 3,
+    "stage": "Route",
+    "runId": "bricktoads-qa-25-01-b980fe3d"
+  },
+  "errors": [],
+  "expectedPlayers": 1,
+  "seed": 1158731273,
+  "navigation": {
+    "phase": "Evade on authored support",
+    "target": {
+      "y": 3,
+      "x": 390.0231194027319,
+      "z": -18.89465994658991
+    }
+  },
+  "cohort": [
+    {
+      "ownerUserId": 11946162891,
+      "actorId": "bricktoads-qa-25-01-b980fe3d:actor:2",
+      "slot": 1,
+      "status": "Alive",
+      "rawLife": 15,
+      "stock": 3,
+      "attempt": 1
+    }
+  ],
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794339375.595976,
+      "actorId": "bricktoads-qa-25-01-b980fe3d:actor:2",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-qa-25-01-b980fe3d:actor:2",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "bricktoads-qa-25-01-b980fe3d",
+      "stock": 3
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Archaicus14",
+      "userId": 11946162891
+    }
+  ],
+  "policyLoads": 1,
+  "sampleCount": 190,
+  "build": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a"
+}

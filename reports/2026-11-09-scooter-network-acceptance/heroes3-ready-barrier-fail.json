@@ -1,0 +1,578 @@
+{
+  "studioVersion": "0.746.0.7461269",
+  "networkSettings": {
+    "OutboundNetworkMinDelayMs": 0,
+    "OutboundNetworkJitterMs": 0,
+    "OutboundNetworkLossPercent": 0,
+    "InboundNetworkMinDelayMs": 0,
+    "InboundNetworkLossPercent": 0,
+    "InboundNetworkJitterMs": 0
+  },
+  "networkProfile": "Unmodified baseline; six network settings remain zero",
+  "startedPlayers": 3,
+  "result": {
+    "scenario": "Heroes",
+    "roundTrips": [
+      {
+        "ok": true,
+        "seconds": 0.030176877975463867,
+        "id": "1",
+        "kind": "Menu",
+        "userId": -1
+      },
+      {
+        "ok": true,
+        "seconds": 0.1125800609588623,
+        "id": "3",
+        "kind": "Menu",
+        "userId": -3
+      },
+      {
+        "ok": true,
+        "seconds": 1.1168839931488037,
+        "id": "2",
+        "kind": "Menu",
+        "userId": -2
+      },
+      {
+        "ok": true,
+        "seconds": 0.03956913948059082,
+        "id": "5",
+        "kind": "Menu",
+        "userId": -2
+      },
+      {
+        "ok": true,
+        "seconds": 0.5504050254821777,
+        "id": "6",
+        "kind": "Menu",
+        "userId": -3
+      }
+    ],
+    "status": "FAIL",
+    "trace": [],
+    "authoritativeLobby": [
+      {
+        "userId": -1,
+        "preference": "Hero",
+        "currentInstance": true,
+        "name": "Player1"
+      },
+      {
+        "selectedHero": "Mr. Yellow",
+        "name": "Player2",
+        "userId": -2,
+        "currentInstance": true,
+        "preference": "Hero"
+      },
+      {
+        "selectedHero": "Mr. Brown",
+        "name": "Player3",
+        "userId": -3,
+        "currentInstance": true,
+        "preference": "Hero"
+      }
+    ],
+    "players": 3,
+    "commands": [
+      {
+        "readyAt": 1794236671.581766,
+        "userId": -1,
+        "client": {
+          "commandListenerReady": true,
+          "receivedCommands": 1,
+          "groupId": "group-1",
+          "lastCommand": {
+            "id": "1",
+            "kind": "Menu",
+            "at": 1794236674.159772
+          },
+          "userId": -1,
+          "presentationDisabled": true,
+          "name": "Player1",
+          "snapshotSeq": 25,
+          "snapshotCount": 25,
+          "repliesSent": 0,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        "ok": true,
+        "receivedAt": 1794236674.16584,
+        "id": "1",
+        "sentAt": 1794236674.135663,
+        "replyUserId": -1,
+        "roundTripSeconds": 0.030176877975463867,
+        "timedOut": false,
+        "replyName": "Player1",
+        "name": "Player1",
+        "args": {
+          "role": "Hero",
+          "kind": "SelectRole"
+        },
+        "actualInstanceAtSend": true,
+        "kind": "Menu",
+        "readyAtSend": true,
+        "replied": true
+      },
+      {
+        "readyAt": 1794236674.13374,
+        "userId": -2,
+        "client": {
+          "commandListenerReady": true,
+          "receivedCommands": 1,
+          "groupId": "group-1",
+          "lastCommand": {
+            "id": "2",
+            "kind": "Menu",
+            "at": 1794236675.2147
+          },
+          "userId": -2,
+          "presentationDisabled": true,
+          "name": "Player2",
+          "snapshotSeq": 23,
+          "snapshotCount": 23,
+          "repliesSent": 0,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        "ok": true,
+        "receivedAt": 1794236675.252649,
+        "id": "2",
+        "sentAt": 1794236674.135765,
+        "replyUserId": -2,
+        "roundTripSeconds": 1.1168839931488037,
+        "timedOut": false,
+        "replyName": "Player2",
+        "name": "Player2",
+        "args": {
+          "role": "Hero",
+          "kind": "SelectRole"
+        },
+        "actualInstanceAtSend": true,
+        "kind": "Menu",
+        "readyAtSend": true,
+        "replied": true
+      },
+      {
+        "readyAt": 1794236674.129783,
+        "userId": -3,
+        "client": {
+          "commandListenerReady": true,
+          "receivedCommands": 1,
+          "groupId": "group-1",
+          "lastCommand": {
+            "id": "3",
+            "kind": "Menu",
+            "at": 1794236674.206563
+          },
+          "userId": -3,
+          "presentationDisabled": true,
+          "name": "Player3",
+          "snapshotSeq": 10,
+          "snapshotCount": 10,
+          "repliesSent": 0,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        "ok": true,
+        "receivedAt": 1794236674.248392,
+        "id": "3",
+        "sentAt": 1794236674.135812,
+        "replyUserId": -3,
+        "roundTripSeconds": 0.1125800609588623,
+        "timedOut": false,
+        "replyName": "Player3",
+        "name": "Player3",
+        "args": {
+          "role": "Hero",
+          "kind": "SelectRole"
+        },
+        "actualInstanceAtSend": true,
+        "kind": "Menu",
+        "readyAtSend": true,
+        "replied": true
+      },
+      {
+        "waitedSeconds": 10.049033880233765,
+        "readyAt": 1794236671.581766,
+        "id": "4",
+        "userId": -1,
+        "timedOut": true,
+        "sentAt": 1794236675.280569,
+        "replied": false,
+        "name": "Player1",
+        "args": {
+          "template": "Mr. Green",
+          "kind": "SelectHero"
+        },
+        "actualInstanceAtSend": true,
+        "kind": "Menu",
+        "readyAtSend": true,
+        "actualInstanceAtTimeout": true
+      },
+      {
+        "readyAt": 1794236674.13374,
+        "userId": -2,
+        "client": {
+          "commandListenerReady": true,
+          "receivedCommands": 2,
+          "lastReply": {
+            "id": "2",
+            "ok": true,
+            "at": 1794236675.215481
+          },
+          "groupId": "group-1",
+          "lastCommand": {
+            "id": "5",
+            "kind": "Menu",
+            "at": 1794236675.313839
+          },
+          "userId": -2,
+          "presentationDisabled": true,
+          "name": "Player2",
+          "snapshotSeq": 35,
+          "snapshotCount": 35,
+          "repliesSent": 1,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        "ok": true,
+        "receivedAt": 1794236675.320203,
+        "id": "5",
+        "sentAt": 1794236675.280634,
+        "replyUserId": -2,
+        "roundTripSeconds": 0.03956913948059082,
+        "timedOut": false,
+        "replyName": "Player2",
+        "name": "Player2",
+        "args": {
+          "template": "Mr. Yellow",
+          "kind": "SelectHero"
+        },
+        "actualInstanceAtSend": true,
+        "kind": "Menu",
+        "readyAtSend": true,
+        "replied": true
+      },
+      {
+        "readyAt": 1794236674.129783,
+        "userId": -3,
+        "client": {
+          "commandListenerReady": true,
+          "receivedCommands": 2,
+          "lastReply": {
+            "id": "3",
+            "ok": true,
+            "at": 1794236674.208568
+          },
+          "groupId": "group-1",
+          "lastCommand": {
+            "id": "6",
+            "kind": "Menu",
+            "at": 1794236675.823502
+          },
+          "userId": -3,
+          "presentationDisabled": true,
+          "name": "Player3",
+          "snapshotSeq": 22,
+          "snapshotCount": 22,
+          "repliesSent": 1,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        "ok": true,
+        "receivedAt": 1794236675.831072,
+        "id": "6",
+        "sentAt": 1794236675.280667,
+        "replyUserId": -3,
+        "roundTripSeconds": 0.5504050254821777,
+        "timedOut": false,
+        "replyName": "Player3",
+        "name": "Player3",
+        "args": {
+          "template": "Mr. Brown",
+          "kind": "SelectHero"
+        },
+        "actualInstanceAtSend": true,
+        "kind": "Menu",
+        "readyAtSend": true,
+        "replied": true
+      }
+    ],
+    "checks": [
+      {
+        "at": 1794236625.969169,
+        "observed": "Heroes",
+        "name": "Supported initial scenario",
+        "expected": "Heroes",
+        "pass": true
+      },
+      {
+        "at": 1794236625.969175,
+        "observed": 3,
+        "name": "Three real client launch requested",
+        "expected": 3,
+        "pass": true
+      },
+      {
+        "at": 1794236625.969178,
+        "observed": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+        "name": "Build source identity supplied",
+        "expected": "Nonempty BuildId",
+        "pass": true
+      },
+      {
+        "at": 1794236674.135623,
+        "observed": [
+          {
+            "registryCurrent": true,
+            "typeof": "Instance",
+            "name": "Player1",
+            "className": "Player",
+            "userId": -1,
+            "groupId": "group-1",
+            "currentInstance": true,
+            "parentIsPlayers": true
+          },
+          {
+            "registryCurrent": true,
+            "typeof": "Instance",
+            "name": "Player2",
+            "className": "Player",
+            "userId": -2,
+            "groupId": "group-1",
+            "currentInstance": true,
+            "parentIsPlayers": true
+          },
+          {
+            "registryCurrent": true,
+            "typeof": "Instance",
+            "name": "Player3",
+            "className": "Player",
+            "userId": -3,
+            "groupId": "group-1",
+            "currentInstance": true,
+            "parentIsPlayers": true
+          }
+        ],
+        "name": "Actual Player instances share one group",
+        "expected": 3,
+        "pass": true
+      },
+      {
+        "at": 1794236674.135637,
+        "observed": true,
+        "name": "Fresh lobby",
+        "expected": "No active session",
+        "pass": true
+      },
+      {
+        "at": 1794236675.28052,
+        "observed": true,
+        "name": "Client Player1 Menu executed",
+        "expected": true,
+        "pass": true
+      },
+      {
+        "at": 1794236675.280529,
+        "observed": true,
+        "name": "Client Player2 Menu executed",
+        "expected": true,
+        "pass": true
+      },
+      {
+        "at": 1794236675.280534,
+        "observed": true,
+        "name": "Client Player3 Menu executed",
+        "expected": true,
+        "pass": true
+      },
+      {
+        "at": 1794236685.329503,
+        "observed": {
+          "received": 2,
+          "expected": 3,
+          "requests": [
+            {
+              "waitedSeconds": 10.049033880233765,
+              "readyAt": 1794236671.581766,
+              "id": "4",
+              "userId": -1,
+              "timedOut": true,
+              "sentAt": 1794236675.280569,
+              "replied": false,
+              "name": "Player1",
+              "args": {
+                "template": "Mr. Green",
+                "kind": "SelectHero"
+              },
+              "actualInstanceAtSend": true,
+              "kind": "Menu",
+              "readyAtSend": true,
+              "actualInstanceAtTimeout": true
+            },
+            {
+              "readyAt": 1794236674.13374,
+              "userId": -2,
+              "client": {
+                "commandListenerReady": true,
+                "receivedCommands": 2,
+                "lastReply": {
+                  "id": "2",
+                  "ok": true,
+                  "at": 1794236675.215481
+                },
+                "groupId": "group-1",
+                "lastCommand": {
+                  "id": "5",
+                  "kind": "Menu",
+                  "at": 1794236675.313839
+                },
+                "userId": -2,
+                "presentationDisabled": true,
+                "name": "Player2",
+                "snapshotSeq": 35,
+                "snapshotCount": 35,
+                "repliesSent": 1,
+                "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+              },
+              "ok": true,
+              "receivedAt": 1794236675.320203,
+              "id": "5",
+              "sentAt": 1794236675.280634,
+              "replyUserId": -2,
+              "roundTripSeconds": 0.03956913948059082,
+              "timedOut": false,
+              "replyName": "Player2",
+              "name": "Player2",
+              "args": {
+                "template": "Mr. Yellow",
+                "kind": "SelectHero"
+              },
+              "actualInstanceAtSend": true,
+              "kind": "Menu",
+              "readyAtSend": true,
+              "replied": true
+            },
+            {
+              "readyAt": 1794236674.129783,
+              "userId": -3,
+              "client": {
+                "commandListenerReady": true,
+                "receivedCommands": 2,
+                "lastReply": {
+                  "id": "3",
+                  "ok": true,
+                  "at": 1794236674.208568
+                },
+                "groupId": "group-1",
+                "lastCommand": {
+                  "id": "6",
+                  "kind": "Menu",
+                  "at": 1794236675.823502
+                },
+                "userId": -3,
+                "presentationDisabled": true,
+                "name": "Player3",
+                "snapshotSeq": 22,
+                "snapshotCount": 22,
+                "repliesSent": 1,
+                "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+              },
+              "ok": true,
+              "receivedAt": 1794236675.831072,
+              "id": "6",
+              "sentAt": 1794236675.280667,
+              "replyUserId": -3,
+              "roundTripSeconds": 0.5504050254821777,
+              "timedOut": false,
+              "replyName": "Player3",
+              "name": "Player3",
+              "args": {
+                "template": "Mr. Brown",
+                "kind": "SelectHero"
+              },
+              "actualInstanceAtSend": true,
+              "kind": "Menu",
+              "readyAtSend": true,
+              "replied": true
+            }
+          ]
+        },
+        "name": "Client Menu replies",
+        "expected": "Condition observed within 10 seconds",
+        "pass": false
+      }
+    ],
+    "skipped": [
+      "Physical mobile hardware, human touch/UI and measured device performance",
+      "Same-account reconnect into the same live server",
+      "One/two-hero courses, deliberate crash/restart and human RocketRat control (separate scenarios)"
+    ],
+    "startup": {
+      "players": [
+        {
+          "commandListenerReady": true,
+          "readyAt": 1794236671.581766,
+          "groupId": "group-1",
+          "readyElapsedSeconds": 45.61292430001777,
+          "userId": -1,
+          "joinedAt": 1794236670.312347,
+          "name": "Player1",
+          "readySignalReceivedAt": 1794236671.581764,
+          "ready": true,
+          "snapshotCount": 1,
+          "joinedElapsedSeconds": 44.343511300045066,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        {
+          "commandListenerReady": true,
+          "readyAt": 1794236674.13374,
+          "groupId": "group-1",
+          "readyElapsedSeconds": 48.164883699966595,
+          "userId": -2,
+          "joinedAt": 1794236670.689282,
+          "name": "Player2",
+          "readySignalReceivedAt": 1794236674.133736,
+          "ready": true,
+          "snapshotCount": 1,
+          "joinedElapsedSeconds": 44.72044459998142,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        },
+        {
+          "commandListenerReady": true,
+          "readyAt": 1794236674.129783,
+          "groupId": "group-1",
+          "readyElapsedSeconds": 48.16092739999294,
+          "userId": -3,
+          "joinedAt": 1794236672.786133,
+          "name": "Player3",
+          "readySignalReceivedAt": 1794236674.12978,
+          "ready": true,
+          "snapshotCount": 1,
+          "joinedElapsedSeconds": 46.8172854000004,
+          "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+        }
+      ],
+      "windowSeconds": 90,
+      "reason": "First cold Studio run launched three clients but client scripts began after the prior 45-second deadline."
+    },
+    "final": {
+      "at": 1794236685.329649,
+      "faulted": false,
+      "heroes": [],
+      "worldName": "BrickToadsWorld_group-1",
+      "groupId": "group-1",
+      "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+    },
+    "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "scope": "Actual Studio Players, production Intent/State, server course simulation and replicated bodies.",
+    "summary": {
+      "passed": 8,
+      "samples": 0,
+      "failed": 1,
+      "roundTrips": 5
+    },
+    "seed": 41,
+    "elapsedSeconds": 59.360724100028165,
+    "preparation": "Real clients select roles/heroes and Start; server selects seed and advances twice to stage 3.",
+    "error": "Client Menu replies\nServerScriptService.BrickToads.ScooterNetworkAcceptance:216 function requests\nServerScriptService.BrickToads.ScooterNetworkAcceptance:290\nServerScriptService.BrickToads.ScooterNetworkAcceptance:249\n",
+    "tag": "BrickToadsScooterNetworkTest"
+  },
+  "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+}

@@ -1,0 +1,61 @@
+{
+  "status": "focused_checks_pass_native_complete_see_comparison_json",
+  "helperSha256": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013",
+  "baselineSha256": "89bd80f301deb2d82311bc456b99e7a5ae6b6f322925d7c277f275d301b56e2e",
+  "checks": [
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_tubes_primary_bounds.luau"
+      ],
+      "exit": 0,
+      "output": "Tubes primary/support frozen regressions GREEN6\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_tubes_arbitration_contract.luau"
+      ],
+      "exit": 0,
+      "output": "Tubes composition contract 5 GREEN\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_tubes_seed614217761.luau"
+      ],
+      "exit": 0,
+      "output": "baseline\t0.08\tWon\t31.69999999999948\tattempt\t1\tstock\t3\tlife\t31\tattack\t10\tmiss\t0\thit\t1\nbaseline\t0.1\tWon\t31.66666666666615\tattempt\t1\tstock\t3\tlife\t15\tattack\t10\tmiss\t1\thit\t2\nbaseline\t0.133\tLost\t61.483333333331124\tattempt\t4\tstock\t0\tlife\t0\tattack\t7\tmiss\t3\thit\t12\nbaseline\t0.167\tWon\t38.79999999999908\tattempt\t3\tstock\t1\tlife\t31\tattack\t8\tmiss\t3\thit\t5\nfixed\t0.08\tWon\t31.69999999999948\tattempt\t1\tstock\t3\tlife\t31\tattack\t10\tmiss\t0\thit\t1\nfixed\t0.1\tWon\t31.66666666666615\tattempt\t1\tstock\t3\tlife\t15\tattack\t11\tmiss\t0\thit\t2\nfixed\t0.133\tWon\t32.18333333333279\tattempt\t1\tstock\t3\tlife\t15\tattack\t5\tmiss\t0\thit\t2\nfixed\t0.167\tWon\t31.716666666666146\tattempt\t2\tstock\t2\tlife\t31\tattack\t4\tmiss\t0\thit\t2\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_tubes_facing_alternatives.luau"
+      ],
+      "exit": 0,
+      "output": "hold-only\t1\t0.08\tLost\t50.43333333333175\t4\t0\t0\t19\t0\t11\nhold-only\t1\t0.1\tWon\t73.33333333333046\t4\t0\t15\t21\t0\t11\nhold-only\t1\t0.133\tWon\t45.18333333333205\t2\t2\t31\t7\t0\t3\nhold-only\t1\t0.167\tWon\t59.28333333333125\t4\t0\t47\t8\t0\t7\nhold-only\t614217761\t0.08\tWon\t31.69999999999948\t1\t3\t31\t10\t0\t1\nhold-only\t614217761\t0.1\tWon\t31.66666666666615\t1\t3\t15\t11\t0\t2\nhold-only\t614217761\t0.133\tLost\t57.98333333333132\t4\t0\t0\t6\t0\t11\nhold-only\t614217761\t0.167\tWon\t31.716666666666146\t2\t2\t31\t4\t0\t2\nphysical-bound\t1\t0.08\tLost\t50.43333333333175\t4\t0\t0\t19\t0\t11\nphysical-bound\t1\t0.1\tWon\t73.33333333333046\t4\t0\t15\t21\t0\t11\nphysical-bound\t1\t0.133\tWon\t62.74999999999772\t4\t0\t31\t9\t0\t6\nphysical-bound\t1\t0.167\tWon\t48.84999999999851\t3\t1\t31\t7\t0\t5\nphysical-bound\t614217761\t0.08\tWon\t31.69999999999948\t1\t3\t31\t10\t0\t1\nphysical-bound\t614217761\t0.1\tWon\t31.66666666666615\t1\t3\t15\t11\t0\t2\nphysical-bound\t614217761\t0.133\tWon\t32.18333333333279\t1\t3\t15\t5\t0\t2\nphysical-bound\t614217761\t0.167\tWon\t31.716666666666146\t2\t2\t31\t4\t0\t2\n"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "tools/qa/campaign_tubes_arbitration.lua"
+      ],
+      "exit": 0,
+      "output": "Compiled 0 KLOC into 4 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\n"
+    }
+  ],
+  "independentReview": "Late agent clear on E365 source and11frozen probes plus paired seed614 matrix",
+  "findings": [
+    "At the recorded x32.42368 dry primary, old virtual x32 clamp reverses the already-targeting +X motion.",
+    "Once Robot is dead, its staging limit unnecessarily holds the hero near the water-mouth fish; holding clipped primary alone still loses the .133 seeded numeric replay.",
+    "Fixed helper holds a clipped primary without aim hints, and uses the real support bound for post-Robot primary.",
+    "Full12 first Hit occurs before the retained backward-primary sample. Individual Hit/AttackMiss details were not retained, so all three damage events cannot be attributed to this one reversal."
+  ],
+  "limits": [
+    "Numeric adapter uses real Session/Modes/Director/NPC AI but approximates native physics; native evidence pending.",
+    "Fixed seed614/.167 still uses one normal reserve after a hazard death.",
+    "Broader6seed x4cadence numeric sweep23/24Won; seed1/.08 remains Lost, and some other seed1 cadences use reserves. No universal survival claim.",
+    "Full12 entered stage9 on attempt4/stock0; prepared native replay uses original47life/3reserves and must report paid deaths explicitly."
+  ]
+}

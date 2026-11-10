@@ -1,0 +1,72 @@
+ EVENT	2.083333333333331	CampaignJump	1	xyz	17.545208471211687	3	-9.350305590539072	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	2.199999999999997	CampaignJump	2	xyz	17.11335099814726	3	-8.004343776040901	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	2.2999999999999967	CampaignJump	3	xyz	17.394296706505962	3	-6.150640353418283	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ PLAN	3.049999999999994	xyz	34.41347799178553	3	-8.551465868577651	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9965496917703516	0.08299826403255273
+ PLAN	3.133333333333327	xyz	36.481865195751816	3	-8.700354884345744	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9972263170258714	0.07442897709236783
+ PLAN	3.21666666666666	xyz	38.550252399718104	3	-8.833928648234425	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9977695948769162	0.06675204520578257
+ PLAN	3.299999999999993	xyz	40.61863960368439	3	-8.953765798975553	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9982060418325098	0.059872347950233384
+ EVENT	3.3666666666666596	Hit	1	xyz	48.56198797054482	3	-9.877645711135647	vy	0	ground	true	support	floor-2	attacker	-9001	action	Dash	before	47	after	31
+ PLAN	3.383333333333326	xyz	42.68702680765068	3	-9.06128132898691	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.998556815733122	0.05370554676127838
+ EVENT	3.433333333333326	Hit	2	xyz	46.5412231075071	3	-9.599078164595337	vy	0	ground	true	support	floor-2	attacker	-9001	action	Dash	before	47	after	31
+ PLAN	3.4666666666666592	xyz	44.75541401161697	3	-9.157743814542046	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.998838829925204	0.04817667312766176
+ EVENT	3.5333333333333257	Hit	3	xyz	46.41012377479	3	-9.227734590156375	vy	0	ground	true	support	floor-2	attacker	-9001	action	Dash	before	47	after	31
+ PLAN	3.5499999999999923	xyz	46.82083343484102	3	-9.244543195953087	vy	0	ground	true	support	floor-2	react	4.283333333333326	jump	false	move	0.9987028395186562	0.05091795692458015
+ PLAN	3.6333333333333253	xyz	48.83060489561278	3	-9.326794624423014	vy	0	ground	true	support	floor-2	react	4.283333333333326	jump	false	move	0.9966137791927928	0.08222514896951655
+ PLAN	3.7166666666666583	xyz	50.76931142736565	3	-9.406137666521653	vy	0	ground	true	support	floor-2	react	4.283333333333326	jump	true	move	0.9936859283426919	0.11219748577273322
+ PLAN	3.7999999999999914	xyz	52.63946586513339	3	-9.482675161937525	vy	0	ground	true	support	floor-2	react	4.283333333333326	jump	true	move	0.9900346928828313	0.1408236730397204
+ PLAN	3.8833333333333244	xyz	54.44349219084042	2.875	-9.556506313977955	vy	-5	ground	false	support	nil	react	4.283333333333326	jump	false	move	0.9857686147492706	0.16810781711539843
+ PLAN	3.9666666666666575	xyz	56.18372867512175	1.8333333333333333	-9.627726818150434	vy	-17.5	ground	false	support	nil	react	4.283333333333326	jump	false	move	0.9809883011766111	0.19406687753098578
+ PLAN	4.049999999999991	xyz	57.86243090804892	-0.25000000000000006	-9.69642898619739	vy	-30	ground	false	support	nil	react	4.283333333333326	jump	false	move	0.9757858132655063	0.21872824835803573
+ PLAN	4.133333333333324	xyz	59.48177472269056	-3.375	-9.762701865745132	vy	-42.5	ground	false	support	nil	react	4.283333333333326	jump	false	move	0.9702444311330076	0.2421275363427026
+ PLAN	4.216666666666657	xyz	61.04385901529655	-7.541666666666667	-9.82663135572204	vy	-55	ground	false	support	nil	react	4.283333333333326	jump	false	move	0.9644387145866309	0.26430657541288527
+ PLAN	4.29999999999999	xyz	62.55070846576137	-12.75	-9.88830031769559	vy	-67.5	ground	false	support	nil	react	nil	jump	false	move	0.958434784932262	0.28531169452346145
+ PLAN	4.383333333333323	xyz	64.07889118179843	-19	-9.925576908302668	vy	-80	ground	false	support	nil	react	nil	jump	false	move	0.9963140102546131	0.08578107582894129
+ PLAN	4.466666666666656	xyz	65.67975104880358	-26.291666666666668	-9.940226266225284	vy	-92.5	ground	false	support	nil	react	nil	jump	false	move	0.9997168443754318	0.02379561035209333
+ EVENT	6.099999999999984	CampaignJump	1	xyz	17.545208471211687	3	-0.6496944094609247	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	6.199999999999983	CampaignJump	2	xyz	17.529916077674883	3	0	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	6.383333333333316	CampaignJump	3	xyz	17.545208471211687	3	0.6496944094609247	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ PLAN	7.04999999999998	xyz	33.25592266119428	3	0.2729187039387748	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9998783305720658	0.0155988477913807
+ PLAN	7.133333333333313	xyz	35.32430986516057	3	0.2448783210226656	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9999020520698971	0.013995937496590918
+ PLAN	7.216666666666646	xyz	37.39269706912686	3	0.219718955493954	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9999211478910929	0.0125577864354928
+ PLAN	7.299999999999979	xyz	39.46108427309315	3	0.19714457555153642	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9999365203115516	0.011267446348925661
+ PLAN	7.383333333333312	xyz	41.52947147705944	3	0.17688957319412316	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9999488955151252	0.010109716023761452
+ EVENT	7.433333333333312	CampaignJump	1	xyz	49.80302029292459	3	-0.11464958279751718	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ PLAN	7.4666666666666455	xyz	43.59785868102573	3	0.15871563589524604	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9999588579942406	0.009070960194724562
+ EVENT	7.533333333333312	CampaignJump	2	xyz	49.83200849902549	3	0	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ PLAN	7.5499999999999785	xyz	45.666245884992016	3	0.1424089403952821	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.9999668782182708	0.008138947499881564
+ PLAN	7.6333333333333115	xyz	47.734633088958304	3	0.12777763531836028	vy	0	ground	true	support	floor-2	react	nil	jump	false	move	0.999973334891354	0.007302705407184006
+ PLAN	7.716666666666645	xyz	49.80302029292459	3	0.11464958279751718	vy	0	ground	true	support	floor-2	react	nil	jump	true	move	0.9999785328604003	0.006552390278462251
+ EVENT	7.716666666666645	CampaignJump	3	xyz	49.80302029292459	3	0.11464958279751718	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ PLAN	7.799999999999978	xyz	51.87140749689088	6.625	0.10287033239452895	vy	38.5	ground	false	support	nil	react	nil	jump	false	move	0.9999827175251235	0.005879170950828749
+ PLAN	7.883333333333311	xyz	53.93979470085717	9.208333333333334	0.09230130337403268	vy	26	ground	false	support	nil	react	nil	jump	false	move	0.9999860864344885	0.005275124399997323
+ PLAN	7.966666666666644	xyz	56.00818190482346	10.750000000000002	0.08281815387184849	vy	13.5	ground	false	support	nil	react	nil	jump	false	move	0.9999887986196718	0.004733142210540528
+ PLAN	8.04999999999998	xyz	58.07656910878975	11.250000000000004	0.07430931771713498	vy	1	ground	false	support	nil	react	nil	jump	false	move	0.7071067811865475	-0.7071067811865475
+ PLAN	8.133333333333317	xyz	60.14495631275604	10.708333333333337	0.011295164596791675	vy	-11.5	ground	false	support	nil	react	nil	jump	false	move	0.7071067811865475	-0.7071067811865475
+ PLAN	8.216666666666654	xyz	62.213343516722325	9.125000000000005	-0.14080072585542885	vy	-24	ground	false	support	nil	react	nil	jump	false	move	0.7071067811865475	-0.7071067811865475
+ PLAN	8.299999999999992	xyz	64.28173072068861	6.500000000000006	-0.37882844955145806	vy	-36.5	ground	false	support	nil	react	nil	jump	false	move	0.7071067811865475	-0.7071067811865475
+ EVENT	8.766666666666682	CampaignJump	1	xyz	82.8972155563849	5	-5.247945508598237	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	8.866666666666687	CampaignJump	2	xyz	82.92620376248578	5	-5.239411996669321	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+./.tools/ice_trace_probe.luau:80: assertion failed!
+stacktrace:
+[C] function assert
+./.tools/ice_trace_probe.luau:80
+ EVENT	9.05000000000003	CampaignJump	3	xyz	82.8972155563849	5	-5.230809172021796	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	10.100000000000081	CampaignJump	1	xyz	115.99141081984494	3	-3.2370512090609873	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	10.200000000000086	CampaignJump	2	xyz	116.02039902594584	3	-3.2372236838550785	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	10.383333333333429	CampaignJump	3	xyz	115.99141081984494	3	-3.2373965980427726	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	11.600000000000156	CampaignJump	1	xyz	153.22238049123837	3	-4.280994989331559	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	11.700000000000161	CampaignJump	2	xyz	153.25136869733927	3	-4.2810044743754005	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	11.883333333333503	CampaignJump	3	xyz	153.22238049123837	3	-4.281013984229723	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	13.10000000000023	CampaignJump	1	xyz	190.4533501626322	5	-9.187084139622748	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	13.200000000000236	CampaignJump	2	xyz	190.4823383687331	5	-9.187085362201847	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	13.383333333333578	CampaignJump	3	xyz	190.4533501626322	5	-9.187086587973623	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	14.43333333333363	CampaignJump	1	xyz	223.5475454260934	3	-9.856551241937877	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	14.533333333333635	CampaignJump	2	xyz	223.5765336321943	3	-9.856551457643175	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	14.716666666666978	CampaignJump	3	xyz	223.5475454260934	3	-9.856551673911769	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	16.100000000000367	CampaignJump	1	xyz	264.9152895054199	3	-9.983592149164794	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	16.20000000000036	CampaignJump	2	xyz	264.9442777115208	3	-9.983592173837314	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+ EVENT	16.383333333333685	CampaignJump	3	xyz	264.9152895054199	3	-9.983592198574266	vy	51	ground	false	support	nil	attacker	nil	action	nil	before	nil	after	nil
+FAIL Ice seed=614217761 cadence=0.08 cohort=3 delay=0.5 outer=0.016666666666666666 stagger=0.021 complete=true deaths=3 elapsed=17.516666666666953
+ DEATH slot=1 t=4.499999999999989 reason=CampaignFall xyz=71.77596714270145,-61.166666666666664,-9.995054076776901
+ DEATH slot=2 t=4.666666666666655 reason=CampaignFall xyz=72.17569747241944,-61.166666666666664,-9.979364995977736
+ DEATH slot=3 t=4.766666666666655 reason=CampaignFall xyz=72.024443913347,-61.166666666666664,-9.961331970771013

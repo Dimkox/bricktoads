@@ -1,0 +1,247 @@
+{
+  "schema": 1,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "method": "Static source sprite components with exact post-intro tile-bank and palette swaps; no full-scene/emulator claim",
+  "paletteIndices": [
+    15,
+    15,
+    6,
+    22,
+    15,
+    15,
+    22,
+    38,
+    15,
+    22,
+    38,
+    54,
+    15,
+    15,
+    0,
+    32
+  ],
+  "bankPatches": [
+    {
+      "firstTile": 42,
+      "tiles": 64,
+      "sourceSet": "level1_boss_set"
+    },
+    {
+      "firstTile": 87,
+      "tiles": 17,
+      "sourceSet": "l1_boss_gfx_set1 part1"
+    },
+    {
+      "firstTile": 104,
+      "tiles": 11,
+      "sourceSet": "l1_boss_gfx_set1 part2"
+    },
+    {
+      "firstTile": 182,
+      "tiles": 8,
+      "sourceSet": "l1_boss_gfx_set2"
+    }
+  ],
+  "frames": [
+    {
+      "frameId": 16,
+      "meaning": "Boss Walker turret",
+      "metaspriteAddress": "DDAF",
+      "width": 31,
+      "height": 24,
+      "visibleBounds": {
+        "minX": -30,
+        "minY": 6,
+        "maxX": 0,
+        "maxY": 29
+      },
+      "parts": [
+        {
+          "tile": 45,
+          "x": -20,
+          "y": 6,
+          "attributes": 1
+        },
+        {
+          "tile": 46,
+          "x": -12,
+          "y": 6,
+          "attributes": 1
+        },
+        {
+          "tile": 47,
+          "x": -7,
+          "y": 7,
+          "attributes": 1
+        },
+        {
+          "tile": 48,
+          "x": -30,
+          "y": 14,
+          "attributes": 1
+        },
+        {
+          "tile": 49,
+          "x": -22,
+          "y": 14,
+          "attributes": 1
+        },
+        {
+          "tile": 50,
+          "x": -14,
+          "y": 14,
+          "attributes": 1
+        },
+        {
+          "tile": 51,
+          "x": -30,
+          "y": 22,
+          "attributes": 1
+        },
+        {
+          "tile": 52,
+          "x": -22,
+          "y": 22,
+          "attributes": 1
+        },
+        {
+          "tile": 53,
+          "x": -17,
+          "y": 22,
+          "attributes": 1
+        }
+      ]
+    },
+    {
+      "frameId": 17,
+      "meaning": "Boss Walker arena overlay",
+      "metaspriteAddress": "DDC6",
+      "width": 24,
+      "height": 24,
+      "visibleBounds": {
+        "minX": -12,
+        "minY": -4,
+        "maxX": 11,
+        "maxY": 19
+      },
+      "parts": [
+        {
+          "tile": 54,
+          "x": -4,
+          "y": -4,
+          "attributes": 3
+        },
+        {
+          "tile": 54,
+          "x": -4,
+          "y": 12,
+          "attributes": 3
+        },
+        {
+          "tile": 55,
+          "x": -12,
+          "y": 4,
+          "attributes": 3
+        },
+        {
+          "tile": 55,
+          "x": 4,
+          "y": 4,
+          "attributes": 3
+        }
+      ]
+    },
+    {
+      "frameId": 199,
+      "meaning": "Damaged glass sprite",
+      "metaspriteAddress": "BFC3",
+      "width": 40,
+      "height": 40,
+      "visibleBounds": {
+        "minX": -20,
+        "minY": -13,
+        "maxX": 19,
+        "maxY": 26
+      },
+      "parts": [
+        {
+          "tile": 104,
+          "x": -7,
+          "y": -13,
+          "attributes": 3
+        },
+        {
+          "tile": 105,
+          "x": -7,
+          "y": -5,
+          "attributes": 3
+        },
+        {
+          "tile": 106,
+          "x": -20,
+          "y": 3,
+          "attributes": 3
+        },
+        {
+          "tile": 107,
+          "x": -12,
+          "y": 3,
+          "attributes": 3
+        },
+        {
+          "tile": 108,
+          "x": -4,
+          "y": 3,
+          "attributes": 3
+        },
+        {
+          "tile": 109,
+          "x": 4,
+          "y": 9,
+          "attributes": 3
+        },
+        {
+          "tile": 110,
+          "x": 12,
+          "y": 9,
+          "attributes": 3
+        },
+        {
+          "tile": 111,
+          "x": -7,
+          "y": 11,
+          "attributes": 3
+        },
+        {
+          "tile": 112,
+          "x": 1,
+          "y": 11,
+          "attributes": 3
+        },
+        {
+          "tile": 113,
+          "x": -10,
+          "y": 19,
+          "attributes": 3
+        },
+        {
+          "tile": 114,
+          "x": -2,
+          "y": 19,
+          "attributes": 3
+        }
+      ]
+    }
+  ],
+  "inputs": {
+    "level1_boss.4": "6306e4c7374a8f9a2c303fb81b20806f19784dc0958ce4b86cff372b0603ff28",
+    "level4_obj.4": "e1538ce2904dacfac9b137f85b9b452d389ec942734312f734793da13e07ad80",
+    "l1_boss2.chr": "160a150d782a609fead608d9d2c0832dcb7867f55bac70ebe92b5fdbc41ef2be",
+    "level4_obj2.4": "3387f7f779578702a267f040354f451e6ad291d4de8fba3be3447cac78966358"
+  },
+  "unknown": [
+    "Complete final arena nametable/background composition",
+    "Unseen whole-robot geometry and rear view",
+    "Exact complete runtime projection/layout before a source emulation trace"
+  ]
+}

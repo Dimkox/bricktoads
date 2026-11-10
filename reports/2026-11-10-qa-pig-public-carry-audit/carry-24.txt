@@ -1,0 +1,25 @@
+PASS a close grounded Pig is captured as the same living owned body without resources or health changing
+PASS only grounded in-range facing living unlinked Pigs qualify
+PASS an accepted grab closes takeover before a delayed miss without acquiring the moved body
+PASS a grab outside its finite effect window cannot acquire an old target
+PASS two accepted grabs compete in acceptance order for the same body
+PASS capture cancels a current Pig windup but does not replace its owner
+PASS capture normalizes an expired enemy reaction before saving the carry physics
+PASS a historical holder hit cancels a pending grab even after recovery
+PASS enemy interruption history cancels a pending grab after its current reaction expired
+PASS an already accepted capture and carry persist on their same offline holder body
+PASS a new holder appearance cannot inherit the previous pending grab
+PASS manual throw releases the existing body and charges calibrated damage once at release
+PASS failed physical release does not charge throw damage or lose the held body
+PASS a held body that physically died between ticks cannot be thrown or charged release damage
+PASS a lethal release uses the existing death path once without resurrecting its carry state
+PASS occupied hands reject the heavy strike without throwing or ordinary attack fallback
+PASS a holder hit drops the same enemy without damage or new resources
+PASS holder death or a new appearance drops from the old pose without transferring the link
+PASS an accepted flight survives thrower death and ends with restored enemy control after its finite reaction
+PASS physical hazards kill an existing held or thrown enemy through its one death path
+PASS failed BeginAttack creates no pending link or takeover engagement
+PASS an accepted grab clears normal respawn protection before its delayed effect without another reserve
+PASS stale or client-selected target intents cannot enter the grab shortcut
+PASS closing clears held flight and pending states idempotently without spawning or damage
+EnemyCarry: 24 passed

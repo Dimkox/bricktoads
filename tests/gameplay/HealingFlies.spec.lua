@@ -52,7 +52,7 @@ return function(Flies,Session,Core,Combat,Config,FakeWorld,Definition)
     end)
     test('tongue catches add exactly eight raw Life on impact and preserve identity/resources',function()
         local s,w,f,packet,step=fixture(31);local h=s.state.heroes[1];local actor=h.actorId
-        assert(f:interaction(1).available and f:interaction(1).label=='ЛОВИТЬ МУХУ')
+        assert(f:interaction(1).available and f:interaction(1).label=="CATCH FLY")
         assert(s:intent(1,packet(1),.1)=='OK')
         assert(s.combat[1].rawLife==31 and w.food['early-1'],'no healing before actual catch')
         step(.27)

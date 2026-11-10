@@ -1,0 +1,8 @@
+./build/adjoining_baseline_probe.luau:31: Actual bridge composition deadzone failures: 4/4
+stacktrace:
+[C] function assert
+./build/adjoining_baseline_probe.luau:31
+FAIL	forward	lower	0.009999999999999787	0	0
+FAIL	forward	upper	0.009999999999999787	0	0
+FAIL	reverse	lower	0.009999999999999787	0	0
+FAIL	reverse	upper	0.009999999999999787	0	0

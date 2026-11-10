@@ -1,0 +1,1485 @@
+{
+  "date": "2026-11-09",
+  "scope": "Production UI screenshots and native input in Roblox Studio device simulation. No physical-device or full-level acceptance.",
+  "release": {
+    "bytes": 434044,
+    "placeSha256": "12a14dc9a8e6972e033d093f45d512d0dca23656a927775f90c29cdd26ed11cd",
+    "sourceSha256": "ca590a35b8ea4f9b6f2280490886117a4779cb338345ca6fe44d91692f94e96a",
+    "scripts": [
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BrickToadsServer"
+        ],
+        "className": "Script",
+        "characters": 6455,
+        "sha256": "b9ad5a74e0dda9ce7de5084da85df173ae1778644b529df0bb0e5ca3b01a6ae7"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "RunLifecycle"
+        ],
+        "className": "ModuleScript",
+        "characters": 13753,
+        "sha256": "cda5e4089bb04e76b2b075d21d119368db670d17bbfccdf5cb638b5f8375b968"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "BossQueue"
+        ],
+        "className": "ModuleScript",
+        "characters": 8816,
+        "sha256": "09bd54c98a25daabef3e12c215305eeeae8115091dec202dac069b48ddd6a2b1"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonFlight"
+        ],
+        "className": "ModuleScript",
+        "characters": 14601,
+        "sha256": "6c349be13a7bac3ea8f2f01fbdcf3644f45656abebeffb013e713179de38e25e"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "DragonWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 12533,
+        "sha256": "0a72c52677909f7de24aba566c2e7d2a9aeeadb8d8e37388525bc22eb3a2bdf5"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "EnemyCarry"
+        ],
+        "className": "ModuleScript",
+        "characters": 9964,
+        "sha256": "9ece41dc1e9a66b97840266684a19738bd31f941914bb428e1153d161c11a87c"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 4800,
+        "sha256": "ce9d6db0068ec8074eb67d13d1e5c498ebe68140f080cb90beabdaf7617b6b88"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameController"
+        ],
+        "className": "ModuleScript",
+        "characters": 17747,
+        "sha256": "1fc4c908a2737a3230b4dc124c43a970f41d6e745c54391ae1e455ec8fd0527c"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GameWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 81208,
+        "sha256": "9d4414c10651af6bfef81916a1834d58c23ef233e3bf7124144c9225d5aba642"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "GuardianPattern"
+        ],
+        "className": "ModuleScript",
+        "characters": 12660,
+        "sha256": "ade0161938331506c895b56ea2b3ba72630b3cbff55260152ce95f7e80e699b7"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "HealingFlies"
+        ],
+        "className": "ModuleScript",
+        "characters": 5449,
+        "sha256": "d3b0be0aae05221a1f9b40d6851e772dd27ccbd763879090064765914026a64f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDefinition"
+        ],
+        "className": "ModuleScript",
+        "characters": 3370,
+        "sha256": "239d3e0200e9d76790e04564aedc8da9d041ef44874e5c763c9cd1d81f93abbc"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "LevelDirector"
+        ],
+        "className": "ModuleScript",
+        "characters": 35337,
+        "sha256": "dea30abe0868ded81cd25513b33c29584eb3aaa878638dc234e84c1b8f64ec39"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "MatchHub"
+        ],
+        "className": "ModuleScript",
+        "characters": 12853,
+        "sha256": "e6e74c674a60f5a2862b8c1fc0da414152e0084a485e26b8f4376fc376b998fc"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "RunJournal"
+        ],
+        "className": "ModuleScript",
+        "characters": 5181,
+        "sha256": "c62046c1bde00c75aef8d4a759d56e07d1cd8f85189c46e16257b36fa4b5437f"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "SourceCombat"
+        ],
+        "className": "ModuleScript",
+        "characters": 2434,
+        "sha256": "af6b9f57c514f60980bf9a37f32ece85a38784c407898684efe3e64e8586d3c4"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "gameplay",
+          "WalkerClubs"
+        ],
+        "className": "ModuleScript",
+        "characters": 9547,
+        "sha256": "138fa6283331668cef79bc4c301615863b9f9630c95eec6d3001ec7e14bd576a"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Combat"
+        ],
+        "className": "ModuleScript",
+        "characters": 3364,
+        "sha256": "9472b0e88151e1d14b55b018618dab3626fd54c671617dbf246695e1b421bfda"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Session"
+        ],
+        "className": "ModuleScript",
+        "characters": 16818,
+        "sha256": "3bc7ae00c87ca343bd53188f4354714e28774fac420798eccd9ead7a0feb467b"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "Config"
+        ],
+        "className": "ModuleScript",
+        "characters": 747,
+        "sha256": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "ConnectionRegistry"
+        ],
+        "className": "ModuleScript",
+        "characters": 1717,
+        "sha256": "7f6cd4b6216cc993a359a55d318c46a819c90ecf0f893f4d34843cb168956c92"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "CombatRuntime",
+          "RobloxWorld"
+        ],
+        "className": "ModuleScript",
+        "characters": 14159,
+        "sha256": "487cdb395fcdf61c4ebf0dab41396fa860678d4291bd3d3b8729344af2799672"
+      },
+      {
+        "path": [
+          "ServerScriptService",
+          "BrickToads",
+          "BuildInfo"
+        ],
+        "className": "ModuleScript",
+        "characters": 112,
+        "sha256": "7e79f0edd77af32af971942b5e03a53baedc66bdb98cc5517a901f2ef70d8e83"
+      },
+      {
+        "path": [
+          "ReplicatedStorage",
+          "BrickToads",
+          "BrickToadsConfig"
+        ],
+        "className": "ModuleScript",
+        "characters": 119,
+        "sha256": "e5183fd2f3eda75057cdf62e5cf2b462fc7e62fcfbc62ddff2bd5fa2a3ab8360"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BossQueuePanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 10110,
+        "sha256": "c65b2dc3e057179226961d1a21660cf24ecb35b381c9f41533ca1b32cb864cec"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "BrickToadsClient"
+        ],
+        "className": "LocalScript",
+        "characters": 80503,
+        "sha256": "c9e3956895171dd6a64b62d30a926217e0dc4c06c7dd2208db5eef79dde5890a"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "CombatFeedback"
+        ],
+        "className": "ModuleScript",
+        "characters": 6453,
+        "sha256": "b6a11280bcda8d20a54b705a4c6c6ab49777b5aefc2a16a7527f764822f92f54"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "GroupPanel"
+        ],
+        "className": "ModuleScript",
+        "characters": 11991,
+        "sha256": "101ad3ba5ae88caff6d1601f9e3bd2f5a3b553d51c75d61fae12f3d972ea7d1c"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "MovementInput"
+        ],
+        "className": "ModuleScript",
+        "characters": 2001,
+        "sha256": "cf225a4334a50dd21fa0fe8437f6bbb240bf860f608d2915d7815912c96743b8"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "RobloxInputBindings"
+        ],
+        "className": "ModuleScript",
+        "characters": 3082,
+        "sha256": "7f85db79b5e2fad1b319b596f35ecfe094b7bab487150d27ff8cfe208669e2da"
+      },
+      {
+        "path": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "BrickToads",
+          "SpectatorCamera"
+        ],
+        "className": "ModuleScript",
+        "characters": 7039,
+        "sha256": "88af488439f503b3aff6c784a08f2b2a6285d55dca570f290a5de2492f37c8b7"
+      }
+    ]
+  },
+  "sourceComparison": [
+    {
+      "path": "ServerScriptService.BrickToads.BrickToadsServer",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.RunLifecycle",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.BossQueue",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.DragonFlight",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.DragonWorld",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.EnemyCarry",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GameConfig",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GameController",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GameWorld",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.GuardianPattern",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.HealingFlies",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.LevelDefinition",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.LevelDirector",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.MatchHub",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.RunJournal",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.SourceCombat",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.gameplay.WalkerClubs",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.Combat",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.Session",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.Config",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.ConnectionRegistry",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.CombatRuntime.RobloxWorld",
+      "match": true
+    },
+    {
+      "path": "ServerScriptService.BrickToads.BuildInfo",
+      "match": true
+    },
+    {
+      "path": "ReplicatedStorage.BrickToads.BrickToadsConfig",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.BossQueuePanel",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.BrickToadsClient",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.CombatFeedback",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.GroupPanel",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.MovementInput",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.RobloxInputBindings",
+      "match": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.BrickToads.SpectatorCamera",
+      "match": true
+    }
+  ],
+  "runtime": {
+    "source": "ca590a35b8ea4f9b6f2280490886117a4779cb338345ca6fe44d91692f94e96a",
+    "loggerFailures": 0
+  },
+  "nativeGoalTapWhileHoldingDirection": {
+    "heading": "Задача",
+    "rightHeld": true,
+    "scroll": "328, 195",
+    "context": true,
+    "details": true
+  },
+  "nativeCollapseTap": {
+    "details": false
+  },
+  "layouts": {
+    "iphoneLandscape": {
+      "items": {
+        "1": {
+          "visible": true,
+          "name": "MobileStatus",
+          "position": {
+            "1": 12,
+            "2": 12
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": false,
+              "name": "Title",
+              "text": "Герои 1",
+              "textSize": 14,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "State",
+              "text": "В бою · команда",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Respawns",
+              "text": "3 возв.",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "4": {
+              "visible": true,
+              "name": "Expand",
+              "text": "+",
+              "textSize": 15,
+              "TextFits": true
+            },
+            "5": {
+              "visible": true,
+              "name": "Heart1",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "6": {
+              "visible": true,
+              "name": "Heart2",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "7": {
+              "visible": true,
+              "name": "Heart3",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "8": {
+              "visible": true,
+              "name": "Heart4",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "9": {
+              "visible": true,
+              "name": "Heart5",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 172,
+            "2": 44
+          }
+        },
+        "2": {
+          "visible": true,
+          "name": "MobileGoal",
+          "position": {
+            "1": 478,
+            "2": 12
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Stage",
+              "text": "1/6 · Ворота",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "Summary",
+              "text": "Враги 3",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Expand",
+              "text": "+",
+              "textSize": 15,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 260,
+            "2": 44
+          }
+        },
+        "3": {
+          "visible": false,
+          "name": "MobileDetails",
+          "position": {
+            "1": 195,
+            "2": 64
+          },
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Heading",
+              "text": "Команда",
+              "textSize": 14,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 344,
+            "2": 124
+          }
+        },
+        "4": {
+          "visible": true,
+          "name": "Collapse",
+          "position": {
+            "1": 409,
+            "2": 64
+          },
+          "text": "СВЕРНУТЬ ↑",
+          "labels": [],
+          "size": {
+            "1": 122,
+            "2": 44
+          }
+        },
+        "5": {
+          "visible": true,
+          "name": "Forward",
+          "position": {
+            "1": 69,
+            "2": 167
+          },
+          "text": "↑",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "6": {
+          "visible": true,
+          "name": "Backward",
+          "position": {
+            "1": 69,
+            "2": 265
+          },
+          "text": "↓",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "7": {
+          "visible": true,
+          "name": "Left",
+          "position": {
+            "1": 20,
+            "2": 216
+          },
+          "text": "←",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "8": {
+          "visible": true,
+          "name": "Right",
+          "position": {
+            "1": 118,
+            "2": 216
+          },
+          "text": "→",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "9": {
+          "visible": true,
+          "name": "Punch",
+          "position": {
+            "1": 570,
+            "2": 203
+          },
+          "text": "УДАР",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 56
+          }
+        },
+        "10": {
+          "visible": true,
+          "name": "Jump",
+          "position": {
+            "1": 570,
+            "2": 267
+          },
+          "text": "ПРЫЖОК",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 44
+          }
+        }
+      },
+      "safe": {
+        "1": 750,
+        "2": 323
+      },
+      "viewport": {
+        "1": 750,
+        "2": 381
+      },
+      "contextEnabled": true,
+      "menu": false
+    },
+    "iphonePortrait": {
+      "items": {
+        "1": {
+          "visible": true,
+          "name": "MobileStatus",
+          "position": {
+            "1": 8,
+            "2": 8
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": false,
+              "name": "Title",
+              "text": "Герои 1",
+              "textSize": 14,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "State",
+              "text": "В бою · команда",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Respawns",
+              "text": "3 возв.",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "4": {
+              "visible": true,
+              "name": "Expand",
+              "text": "+",
+              "textSize": 15,
+              "TextFits": true
+            },
+            "5": {
+              "visible": true,
+              "name": "Heart1",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "6": {
+              "visible": true,
+              "name": "Heart2",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "7": {
+              "visible": true,
+              "name": "Heart3",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "8": {
+              "visible": true,
+              "name": "Heart4",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "9": {
+              "visible": true,
+              "name": "Heart5",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 172,
+            "2": 44
+          }
+        },
+        "2": {
+          "visible": true,
+          "name": "MobileGoal",
+          "position": {
+            "1": 133,
+            "2": 60
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Stage",
+              "text": "1/6 · Ворота",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "Summary",
+              "text": "Враги 3",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Expand",
+              "text": "+",
+              "textSize": 15,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 260,
+            "2": 44
+          }
+        },
+        "3": {
+          "visible": false,
+          "name": "MobileDetails",
+          "position": {
+            "1": 8,
+            "2": 112
+          },
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Heading",
+              "text": "Команда",
+              "textSize": 14,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 344,
+            "2": 124
+          }
+        },
+        "4": {
+          "visible": true,
+          "name": "Collapse",
+          "position": {
+            "1": 222,
+            "2": 112
+          },
+          "text": "СВЕРНУТЬ ↑",
+          "labels": [],
+          "size": {
+            "1": 122,
+            "2": 44
+          }
+        },
+        "5": {
+          "visible": true,
+          "name": "Forward",
+          "position": {
+            "1": 70,
+            "2": 536
+          },
+          "text": "↑",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "6": {
+          "visible": true,
+          "name": "Backward",
+          "position": {
+            "1": 70,
+            "2": 648
+          },
+          "text": "↓",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "7": {
+          "visible": true,
+          "name": "Left",
+          "position": {
+            "1": 14,
+            "2": 592
+          },
+          "text": "←",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "8": {
+          "visible": true,
+          "name": "Right",
+          "position": {
+            "1": 126,
+            "2": 592
+          },
+          "text": "→",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "9": {
+          "visible": true,
+          "name": "Punch",
+          "position": {
+            "1": 227,
+            "2": 572
+          },
+          "text": "УДАР",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 70
+          }
+        },
+        "10": {
+          "visible": true,
+          "name": "Jump",
+          "position": {
+            "1": 227,
+            "2": 650
+          },
+          "text": "ПРЫЖОК",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 50
+          }
+        }
+      },
+      "safe": {
+        "1": 401,
+        "2": 720
+      },
+      "viewport": {
+        "1": 401,
+        "2": 778
+      },
+      "contextEnabled": true,
+      "menu": false
+    },
+    "galaxyA06LandscapeOpenDetails": {
+      "items": {
+        "1": {
+          "visible": true,
+          "name": "MobileStatus",
+          "position": {
+            "1": 12,
+            "2": 12
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": false,
+              "name": "Title",
+              "text": "Герои 1",
+              "textSize": 14,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "State",
+              "text": "В бою · команда",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Respawns",
+              "text": "3 возв.",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "4": {
+              "visible": true,
+              "name": "Expand",
+              "text": "+",
+              "textSize": 15,
+              "TextFits": true
+            },
+            "5": {
+              "visible": true,
+              "name": "Heart1",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "6": {
+              "visible": true,
+              "name": "Heart2",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "7": {
+              "visible": true,
+              "name": "Heart3",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "8": {
+              "visible": true,
+              "name": "Heart4",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "9": {
+              "visible": true,
+              "name": "Heart5",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 172,
+            "2": 44
+          }
+        },
+        "2": {
+          "visible": true,
+          "name": "MobileGoal",
+          "position": {
+            "1": 433,
+            "2": 12
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Stage",
+              "text": "1/6 · Ворота",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "Summary",
+              "text": "Враги 3",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Expand",
+              "text": "-",
+              "textSize": 15,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 260,
+            "2": 44
+          }
+        },
+        "3": {
+          "visible": true,
+          "name": "MobileDetails",
+          "position": {
+            "1": 172,
+            "2": 64
+          },
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Heading",
+              "text": "Задача",
+              "textSize": 14,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 344,
+            "2": 204
+          }
+        },
+        "4": {
+          "visible": true,
+          "name": "Collapse",
+          "position": {
+            "1": 386,
+            "2": 64
+          },
+          "text": "СВЕРНУТЬ ↑",
+          "labels": [],
+          "size": {
+            "1": 122,
+            "2": 44
+          }
+        },
+        "5": {
+          "visible": true,
+          "name": "Forward",
+          "position": {
+            "1": 69,
+            "2": 124
+          },
+          "text": "↑",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "6": {
+          "visible": true,
+          "name": "Backward",
+          "position": {
+            "1": 69,
+            "2": 222
+          },
+          "text": "↓",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "7": {
+          "visible": true,
+          "name": "Left",
+          "position": {
+            "1": 20,
+            "2": 173
+          },
+          "text": "←",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "8": {
+          "visible": true,
+          "name": "Right",
+          "position": {
+            "1": 118,
+            "2": 173
+          },
+          "text": "→",
+          "labels": [],
+          "size": {
+            "1": 45,
+            "2": 45
+          }
+        },
+        "9": {
+          "visible": true,
+          "name": "Punch",
+          "position": {
+            "1": 525,
+            "2": 160
+          },
+          "text": "УДАР",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 56
+          }
+        },
+        "10": {
+          "visible": true,
+          "name": "Jump",
+          "position": {
+            "1": 525,
+            "2": 224
+          },
+          "text": "ПРЫЖОК",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 44
+          }
+        }
+      },
+      "safe": {
+        "1": 705,
+        "2": 280
+      },
+      "viewport": {
+        "1": 705,
+        "2": 338
+      },
+      "contextEnabled": true,
+      "menu": false
+    },
+    "ipadLandscape": {
+      "items": {
+        "1": {
+          "visible": true,
+          "name": "MobileStatus",
+          "position": {
+            "1": 12,
+            "2": 12
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": false,
+              "name": "Title",
+              "text": "Герои 1",
+              "textSize": 14,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "State",
+              "text": "В бою · команда",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Respawns",
+              "text": "3 возв.",
+              "textSize": 12,
+              "TextFits": true
+            },
+            "4": {
+              "visible": true,
+              "name": "Expand",
+              "text": "+",
+              "textSize": 15,
+              "TextFits": true
+            },
+            "5": {
+              "visible": true,
+              "name": "Heart1",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "6": {
+              "visible": true,
+              "name": "Heart2",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "7": {
+              "visible": true,
+              "name": "Heart3",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "8": {
+              "visible": true,
+              "name": "Heart4",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            },
+            "9": {
+              "visible": true,
+              "name": "Heart5",
+              "text": "♥",
+              "textSize": 20,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 172,
+            "2": 44
+          }
+        },
+        "2": {
+          "visible": true,
+          "name": "MobileGoal",
+          "position": {
+            "1": 1103,
+            "2": 12
+          },
+          "text": "",
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Stage",
+              "text": "1/6 · Ворота",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "2": {
+              "visible": true,
+              "name": "Summary",
+              "text": "Враги 3",
+              "textSize": 13,
+              "TextFits": true
+            },
+            "3": {
+              "visible": true,
+              "name": "Expand",
+              "text": "+",
+              "textSize": 15,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 260,
+            "2": 44
+          }
+        },
+        "3": {
+          "visible": false,
+          "name": "MobileDetails",
+          "position": {
+            "1": 12,
+            "2": 64
+          },
+          "labels": {
+            "1": {
+              "visible": true,
+              "name": "Heading",
+              "text": "Команда",
+              "textSize": 14,
+              "TextFits": true
+            }
+          },
+          "size": {
+            "1": 344,
+            "2": 124
+          }
+        },
+        "4": {
+          "visible": true,
+          "name": "Collapse",
+          "position": {
+            "1": 226,
+            "2": 64
+          },
+          "text": "СВЕРНУТЬ ↑",
+          "labels": [],
+          "size": {
+            "1": 122,
+            "2": 44
+          }
+        },
+        "5": {
+          "visible": true,
+          "name": "Forward",
+          "position": {
+            "1": 76,
+            "2": 790
+          },
+          "text": "↑",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "6": {
+          "visible": true,
+          "name": "Backward",
+          "position": {
+            "1": 76,
+            "2": 902
+          },
+          "text": "↓",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "7": {
+          "visible": true,
+          "name": "Left",
+          "position": {
+            "1": 20,
+            "2": 846
+          },
+          "text": "←",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "8": {
+          "visible": true,
+          "name": "Right",
+          "position": {
+            "1": 132,
+            "2": 846
+          },
+          "text": "→",
+          "labels": [],
+          "size": {
+            "1": 52,
+            "2": 52
+          }
+        },
+        "9": {
+          "visible": true,
+          "name": "Punch",
+          "position": {
+            "1": 1195,
+            "2": 826
+          },
+          "text": "УДАР",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 70
+          }
+        },
+        "10": {
+          "visible": true,
+          "name": "Jump",
+          "position": {
+            "1": 1195,
+            "2": 904
+          },
+          "text": "ПРЫЖОК",
+          "labels": [],
+          "size": {
+            "1": 162,
+            "2": 50
+          }
+        }
+      },
+      "safe": {
+        "1": 1375,
+        "2": 974
+      },
+      "viewport": {
+        "1": 1375,
+        "2": 1032
+      },
+      "contextEnabled": true,
+      "menu": false
+    }
+  },
+  "cleanup": {
+    "playStopped": true,
+    "temporaryProbesCleared": true,
+    "simulationRestored": true,
+    "orientation": "Sensor"
+  },
+  "physicalDevices": "NOT_RUN"
+}

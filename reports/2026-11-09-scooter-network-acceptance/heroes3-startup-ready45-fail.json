@@ -1,0 +1,73 @@
+{
+  "studioVersion": "0.746.0.7461269",
+  "networkSettings": {
+    "OutboundNetworkMinDelayMs": 0,
+    "OutboundNetworkJitterMs": 0,
+    "OutboundNetworkLossPercent": 0,
+    "InboundNetworkMinDelayMs": 0,
+    "InboundNetworkLossPercent": 0,
+    "InboundNetworkJitterMs": 0
+  },
+  "networkProfile": "Unmodified baseline; all six knobs zero",
+  "startedPlayers": 3,
+  "result": {
+    "players": 3,
+    "commands": [],
+    "scenario": "Heroes",
+    "checks": [
+      {
+        "at": 1794235720.760981,
+        "observed": "Heroes",
+        "name": "Supported initial scenario",
+        "expected": "Heroes",
+        "pass": true
+      },
+      {
+        "at": 1794235720.761004,
+        "observed": 3,
+        "name": "Three real client launch requested",
+        "expected": 3,
+        "pass": true
+      },
+      {
+        "at": 1794235720.761008,
+        "observed": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+        "name": "Build source identity supplied",
+        "expected": "Nonempty BuildId",
+        "pass": true
+      },
+      {
+        "at": 1794235765.831311,
+        "observed": {
+          "ready": 0,
+          "actual": 1
+        },
+        "name": "Three actual clients ready",
+        "expected": "Condition observed within 45 seconds",
+        "pass": false
+      }
+    ],
+    "scope": "Actual Studio Players, production Intent/State, server course simulation and replicated bodies.",
+    "trace": [],
+    "skipped": [
+      "Physical mobile hardware, human touch/UI and measured device performance",
+      "Same-account reconnect into the same live server",
+      "One/two-hero courses, deliberate crash/restart and human RocketRat control (separate scenarios)"
+    ],
+    "status": "FAIL",
+    "roundTrips": [],
+    "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff",
+    "summary": {
+      "passed": 3,
+      "samples": 0,
+      "failed": 1,
+      "roundTrips": 0
+    },
+    "seed": 41,
+    "elapsedSeconds": 45.07311719993595,
+    "preparation": "Real clients select roles/heroes and Start; server selects seed and advances twice to stage 3.",
+    "error": "Three actual clients ready\nServerScriptService.BrickToads.ScooterNetworkAcceptance:116 function check\nServerScriptService.BrickToads.ScooterNetworkAcceptance:127 function waitFor\nServerScriptService.BrickToads.ScooterNetworkAcceptance:185\nServerScriptService.BrickToads.ScooterNetworkAcceptance:180\n",
+    "tag": "BrickToadsScooterNetworkTest"
+  },
+  "sourceId": "b6b12b3ad99311bf937fb556fe9445a40efd0c4cec71cdb9feae3c7475447cff"
+}

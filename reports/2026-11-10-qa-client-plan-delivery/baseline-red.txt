@@ -1,0 +1,24 @@
+ CLOCK changed-axis reply=0.105 firstMove=0.2 addedDelay=0.09500000000000001
+FAIL Changed axes send in the same client turn as the reply: C:/Users/User/Documents/bricktoads/reports/2026-11-10-qa-client-plan-delivery/baseline-contract.luau:137: Render keepalive suppressed changed axes after the reply
+FAIL Changed run flag sends in the same client turn as the reply: C:/Users/User/Documents/bricktoads/reports/2026-11-10-qa-client-plan-delivery/baseline-contract.luau:141: Render keepalive suppressed changed run after the reply
+PASS Unchanged replies retain the .06 same-intent keepalive gate
+PASS Urgent Move precedes public Jump and Attack
+PASS Production sender preserves authentication envelope and sequence
+PASS Terminal reply sends neutral Move through production sender
+ RATE packets=1013 Move=449 Jump=376 Attack=188 worstOneSecond=37 rejected=0
+PASS Production40/s budget frame=0.016666666666666666 RTT=0
+ RATE packets=878 Move=428 Jump=300 Attack=150 worstOneSecond=34 rejected=0
+PASS Production40/s budget frame=0.016666666666666666 RTT=0.02
+ RATE packets=755 Move=372 Jump=231 Attack=152 worstOneSecond=30 rejected=0
+PASS Production40/s budget frame=0.016666666666666666 RTT=0.05
+ RATE packets=1057 Move=493 Jump=376 Attack=188 worstOneSecond=39 rejected=0
+PASS Production40/s budget frame=0.03333333333333333 RTT=0
+ RATE packets=1050 Move=600 Jump=300 Attack=150 worstOneSecond=38 rejected=0
+PASS Production40/s budget frame=0.03333333333333333 RTT=0.02
+ RATE packets=775 Move=404 Jump=231 Attack=140 worstOneSecond=30 rejected=0
+PASS Production40/s budget frame=0.03333333333333333 RTT=0.05
+TOTAL_PASS	10	TOTAL_FAILURES	2
+C:/Users/User/Documents/bricktoads/reports/2026-11-10-qa-client-plan-delivery/baseline-contract.luau:186: 2 client plan delivery contract failures
+stacktrace:
+[C] function assert
+C:/Users/User/Documents/bricktoads/reports/2026-11-10-qa-client-plan-delivery/baseline-contract.luau:186

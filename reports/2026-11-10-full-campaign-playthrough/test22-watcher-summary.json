@@ -1,0 +1,104 @@
+{
+  "attempt": 22,
+  "runId": "bricktoads-qa-22-00-5530a024",
+  "seed": 1158731273,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "status": "terminal",
+  "terminalResult": "Lost",
+  "lastStage": 1,
+  "sampleCount": 215,
+  "policyLoads": 1,
+  "errors": [],
+  "registeredPlayers": [
+    {
+      "name": "Archaicus14",
+      "userId": 11946162891
+    }
+  ],
+  "cohort": [
+    {
+      "ownerUserId": 11946162891,
+      "slot": 1,
+      "status": "Eliminated",
+      "rawLife": 0,
+      "stock": 0,
+      "attempt": 4
+    }
+  ],
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794332595.979177,
+      "actorId": "bricktoads-qa-22-00-5530a024:actor:2",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-qa-22-00-5530a024:actor:2",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "bricktoads-qa-22-00-5530a024",
+      "stock": 3
+    }
+  ],
+  "completedStages": [],
+  "guardianReturns": 2,
+  "lastObservedAt": "2026-11-10 17:47:06 UTC",
+  "checkpoints": [
+    {
+      "at": "2026-11-10 17:43:39 UTC",
+      "file": "test22-checkpoint-001.json",
+      "stage": 1,
+      "sampleCount": 23
+    },
+    {
+      "at": "2026-11-10 17:44:37 UTC",
+      "file": "test22-checkpoint-002.json",
+      "stage": 1,
+      "sampleCount": 78
+    },
+    {
+      "at": "2026-11-10 17:45:26 UTC",
+      "file": "test22-checkpoint-003.json",
+      "stage": 1,
+      "sampleCount": 124
+    },
+    {
+      "at": "2026-11-10 17:46:12 UTC",
+      "file": "test22-checkpoint-004.json",
+      "stage": 1,
+      "sampleCount": 168
+    },
+    {
+      "at": "2026-11-10 17:47:06 UTC",
+      "file": "test22-checkpoint-005.json",
+      "stage": 1,
+      "sampleCount": 215
+    }
+  ],
+  "immutableArchives": [
+    "test22-archive-001.json",
+    "test22-archive-002.json"
+  ],
+  "terminalArchive": "test22-terminal-archive.json",
+  "terminalArchiveCopy": "attempt-22-full-natural-archive.json",
+  "frozenSource": "game.ServerStorage.BrickToadsQATerminal22.archive",
+  "frozenBytes": 37618,
+  "parts": 2,
+  "exportMethod": "Read immutable root-frozen StringValue Part0001..0002, JSON-parse and exact copy; no repeated live Invoke concatenation.",
+  "scope": "Ordinary Play in the single existing Studio window, registered Archaicus14 UserId11946162891; watcher performed read-only MCP observations only. Root-provided QA one-shot pre-Start GUID generated unique run ID with native20's seed; no resource, pose or stage changes.",
+  "limits": [
+    "Natural terminal Lost1 with Guardian2 returns is not full13-stage Won or any Ice candidate acceptance.",
+    "Same campaign seed as native20 does not reproduce identical runtime timing or outcomes.",
+    "Keyboard/touch UX, degraded networking and true same-account reconnect remain outside this watcher scope.",
+    "Root owns Play stop, restoration using exact original Edit scripts plus recorded backup.bootstrapAppend, and disposable QA/backups cleanup; watcher performed no such actions."
+  ]
+}

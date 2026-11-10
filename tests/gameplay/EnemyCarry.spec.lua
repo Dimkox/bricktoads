@@ -67,11 +67,11 @@ return function(Carry,Session,Core,Combat,Config,FakeWorld)
     end
     test('a close grounded Pig is captured as the same living owned body without resources or health changing',function()
         local d,s,w,c,_,_,capture=fixture();local h=s.state.heroes[1];local body=w.actors[-1];local enemy=d.enemies[-1]
-        assert(c:interaction(1).available and c:interaction(1).label=='СХВАТИТЬ')
+        assert(c:interaction(1).available and c:interaction(1).label=="GRAB")
         capture();assert(w.actors[-1]==body and d.enemies[-1]==enemy and enemy.health==3)
         assert(enemy.actorId=='pig-actor' and enemy.ownerUserId==20 and enemy.connectionEpoch==4 and enemy.connected)
         assert(s.state.heroes[1].actorId==h.actorId and s.state.heroes[1].respawns==3 and s.combat[1].rawLife==47)
-        assert(c:blocksEnemy(-1) and c:interaction(1).carrying and c:interaction(1).label=='БРОСИТЬ ВРАГА')
+        assert(c:blocksEnemy(-1) and c:interaction(1).carrying and c:interaction(1).label=="THROW ENEMY")
         assert(count(s,'EnemyGrabAccepted')==1 and count(s,'EnemyGrabbed')==1)
     end)
     test('only grounded in-range facing living unlinked Pigs qualify',function()

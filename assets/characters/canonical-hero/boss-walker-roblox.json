@@ -1,0 +1,293 @@
+{
+  "appearanceProfile": "CanonicalBossWalkerAssets",
+  "sourceGlbFile": "boss-walker.glb",
+  "sourceGlbSha256": "4f1d852e369f83da380dd05b37a5d999886aea036eba220852678ed4a47adc08",
+  "sourceAssetId": "103948186317063",
+  "schema": 1,
+  "templates": [
+    {
+      "appearanceProfile": "CanonicalBossWalker",
+      "parts": [
+        {
+          "reflectance": 0,
+          "surfaceAppearances": [],
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "meshId": "rbxassetid://85237519968668",
+          "attachments": [
+            {
+              "name": "GuardianMountRigAttachment",
+              "cframe": [
+                9.983777715660835e-8,
+                -1.2094999551773071,
+                0.8374998569488525,
+                -1,
+                0,
+                -1.1920927533992653e-7,
+                0,
+                1,
+                0,
+                1.1920927533992653e-7,
+                0,
+                -1
+              ]
+            }
+          ],
+          "textureId": "rbxassetid://90154814086213",
+          "renderFidelity": "Automatic",
+          "transparency": 0,
+          "name": "GuardianChassis",
+          "meshSize": [
+            1.6794400215148926,
+            2.3573200702667236,
+            1.8997999429702759
+          ],
+          "doubleSided": false,
+          "cframe": [
+            0,
+            1.2094999551773071,
+            0.8374999761581421,
+            -1.0000001192092896,
+            0,
+            1.1920928955078125e-7,
+            0,
+            1,
+            0,
+            -1.1920928955078125e-7,
+            0,
+            -0.9999998807907104
+          ],
+          "material": "Metal",
+          "size": [
+            5.998000144958496,
+            8.419000625610352,
+            6.784999847412109
+          ]
+        },
+        {
+          "reflectance": 0,
+          "surfaceAppearances": [],
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "meshId": "rbxassetid://123800553544059",
+          "attachments": [
+            {
+              "name": "GuardianMountRigAttachment",
+              "cframe": [
+                -0.6670005321502686,
+                -0.11000001430511475,
+                -1.7294998168945312,
+                -1,
+                0,
+                -1.1920927533992653e-7,
+                0,
+                1,
+                0,
+                1.1920927533992653e-7,
+                0,
+                -1
+              ]
+            },
+            {
+              "name": "MuzzleRigAttachment",
+              "cframe": [
+                -0.06699991226196289,
+                -0.11000001430511475,
+                3.3704993724823,
+                -1,
+                0,
+                -1.1920927533992653e-7,
+                0,
+                1,
+                0,
+                1.1920927533992653e-7,
+                0,
+                -1
+              ]
+            }
+          ],
+          "textureId": "rbxassetid://90154814086213",
+          "renderFidelity": "Automatic",
+          "transparency": 0,
+          "name": "GuardianLeftCannon",
+          "meshSize": [
+            0.7375197410583496,
+            0.7616000175476074,
+            1.9485201835632324
+          ],
+          "doubleSided": false,
+          "cframe": [
+            -3.1670000553131104,
+            0.8100000023841858,
+            -1.2295000553131104,
+            -1.0000001192092896,
+            0,
+            1.1920928955078125e-7,
+            0,
+            1,
+            0,
+            -1.1920928955078125e-7,
+            0,
+            -0.9999998807907104
+          ],
+          "material": "Metal",
+          "size": [
+            2.6339991092681885,
+            2.7200000286102295,
+            6.959000587463379
+          ]
+        },
+        {
+          "reflectance": 0,
+          "surfaceAppearances": [],
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "meshId": "rbxassetid://115312056979921",
+          "attachments": [
+            {
+              "name": "GuardianMountRigAttachment",
+              "cframe": [
+                0.6670000553131104,
+                -0.11000001430511475,
+                -1.7294999361038208,
+                -1,
+                0,
+                -1.1920927533992653e-7,
+                0,
+                1,
+                0,
+                1.1920927533992653e-7,
+                0,
+                -1
+              ]
+            },
+            {
+              "name": "MuzzleRigAttachment",
+              "cframe": [
+                0.0670003890991211,
+                -0.11000001430511475,
+                3.370499610900879,
+                -1,
+                0,
+                -1.1920927533992653e-7,
+                0,
+                1,
+                0,
+                1.1920927533992653e-7,
+                0,
+                -1
+              ]
+            }
+          ],
+          "textureId": "rbxassetid://90154814086213",
+          "renderFidelity": "Automatic",
+          "transparency": 0,
+          "name": "GuardianRightCannon",
+          "meshSize": [
+            0.7375197410583496,
+            0.7616000175476074,
+            1.9485199451446533
+          ],
+          "doubleSided": false,
+          "cframe": [
+            3.1670000553131104,
+            0.8100000023841858,
+            -1.2295000553131104,
+            -1.0000001192092896,
+            0,
+            1.1920928955078125e-7,
+            0,
+            1,
+            0,
+            -1.1920928955078125e-7,
+            0,
+            -0.9999998807907104
+          ],
+          "material": "Metal",
+          "size": [
+            2.6339991092681885,
+            2.7200000286102295,
+            6.9589996337890625
+          ]
+        }
+      ],
+      "name": "BossWalkerGuardian",
+      "appearanceScale": 1
+    },
+    {
+      "appearanceProfile": "CanonicalBossWalkerIntroLeg",
+      "parts": [
+        {
+          "reflectance": 0,
+          "surfaceAppearances": [],
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "meshId": "rbxassetid://134685112427320",
+          "attachments": [
+            {
+              "name": "IntroOriginRigAttachment",
+              "cframe": [
+                1.7278127670288086,
+                -11.640000343322754,
+                -0.1200001910328865,
+                -1,
+                0,
+                -1.1920927533992653e-7,
+                0,
+                1,
+                0,
+                1.1920927533992653e-7,
+                0,
+                -1
+              ]
+            }
+          ],
+          "textureId": "rbxassetid://90154814086213",
+          "renderFidelity": "Automatic",
+          "transparency": 0,
+          "name": "IntroLeg12",
+          "meshSize": [
+            1.7823753356933594,
+            6.518400192260742,
+            0.8736000657081604
+          ],
+          "doubleSided": false,
+          "cframe": [
+            1.7278125286102295,
+            11.640000343322754,
+            -0.11999999731779099,
+            -1.0000001192092896,
+            0,
+            1.1920928955078125e-7,
+            0,
+            1,
+            0,
+            -1.1920928955078125e-7,
+            0,
+            -0.9999998807907104
+          ],
+          "material": "Metal",
+          "size": [
+            6.365626335144043,
+            23.280000686645508,
+            3.120000123977661
+          ]
+        }
+      ],
+      "name": "BossWalkerIntroLeg",
+      "appearanceScale": 1
+    }
+  ]
+}

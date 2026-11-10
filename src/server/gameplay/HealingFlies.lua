@@ -60,7 +60,7 @@ end
 function HealingFlies:interaction(slot)
     self.now=math.max(self.now,self.session.now)
     if not self:_hero(slot) or self.pendingBySlot[slot] then return {available=false} end
-    return {available=self:_nearest(slot)~=nil,label='ЛОВИТЬ МУХУ',kind='HealingFly',carrying=false}
+    return {available=self:_nearest(slot)~=nil,label="CATCH FLY",kind='HealingFly',carrying=false}
 end
 
 function HealingFlies:interact(slot,now)

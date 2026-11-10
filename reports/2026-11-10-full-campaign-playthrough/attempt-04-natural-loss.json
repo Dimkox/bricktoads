@@ -1,0 +1,547 @@
+{
+  "current": {
+    "index": 1,
+    "rawLife": 31,
+    "attempt": 4,
+    "epoch": 1,
+    "plan": {
+      "aimX": 0.5020530174703102,
+      "x": 0,
+      "z": 0,
+      "jump": false,
+      "primary": false,
+      "aimZ": 0.8648368445255765,
+      "run": false
+    },
+    "runId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8",
+    "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:185",
+    "position": {
+      "y": -29.852861404418945,
+      "x": 280.29290771484375,
+      "z": -22.062158584594727
+    },
+    "target": -10,
+    "stock": 0,
+    "stage": "Route",
+    "guardianHits": 0
+  },
+  "jumpProbes": [],
+  "errors": [],
+  "eventCounts": {
+    "1": {
+      "EnemySpawned": 10,
+      "ConfirmedDeath": 4,
+      "CommitSpawn": 4,
+      "SetHealth": 328,
+      "InteractionAccepted": 42,
+      "RunStarted": 1,
+      "AttackAccepted": 65,
+      "EnemyGrabbed": 21,
+      "EnemyHit": 41,
+      "EnemyRecovery": 53,
+      "RunResult": 1,
+      "EnemyAttackAccepted": 252,
+      "BeginAttack": 107,
+      "EnemyAttackMiss": 45,
+      "Hit": 166,
+      "EnemyThrowDamage": 20,
+      "ReserveSpawn": 4,
+      "EnemyThrown": 20,
+      "Death": 4,
+      "AttackMiss": 27,
+      "EnemyDeath": 8,
+      "EnemyDropped": 1,
+      "EnemyGrabAccepted": 22
+    }
+  },
+  "navigation": {
+    "phase": "No support",
+    "target": {
+      "y": -29.852861404418945,
+      "x": 280.29290771484375,
+      "z": -22.062158584594727
+    }
+  },
+  "running": false,
+  "events": [
+    {
+      "view": "Playing",
+      "revision": 2,
+      "rawLife": 47,
+      "attempt": 1,
+      "connected": true,
+      "userId": 1,
+      "now": 1794302447.087342,
+      "levelEpoch": 1,
+      "respawns": 3,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:2",
+      "status": "Alive",
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 3,
+      "data": {
+        "eventId": "s-3",
+        "code": "OK"
+      }
+    },
+    {
+      "revision": 3,
+      "data": {
+        "cause": "Combat",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-1",
+        "position": {
+          "y": 3,
+          "x": -43.48667907714844,
+          "z": -7.7171173095703125
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-1",
+      "now": 1794302448.853644,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 11,
+      "userId": -1
+    },
+    {
+      "revision": 3,
+      "data": {
+        "cause": "Combat",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-2",
+        "position": {
+          "y": 3,
+          "x": -36.575164794921875,
+          "z": 0.8938022255897522
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-2",
+      "now": 1794302449.570067,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 15,
+      "userId": -2
+    },
+    {
+      "revision": 23,
+      "data": {
+        "cause": "Fall",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-3",
+        "position": {
+          "y": -36.8470344543457,
+          "x": -20.919363021850586,
+          "z": -48.378204345703125
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-3",
+      "now": 1794302466.519893,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 81,
+      "userId": -3
+    },
+    {
+      "revision": 33,
+      "data": {
+        "cause": "Fall",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-5",
+        "position": {
+          "y": -36.85585403442383,
+          "x": 21.513687133789062,
+          "z": -30.65155601501465
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-5",
+      "now": 1794302475.986079,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 123,
+      "userId": -5
+    },
+    {
+      "view": "Playing",
+      "revision": 143,
+      "rawLife": 39,
+      "attempt": 1,
+      "data": {
+        "eventId": "s-144",
+        "code": "OK"
+      },
+      "connected": true,
+      "levelEpoch": 1,
+      "respawns": 3,
+      "now": 1794302565.367416,
+      "status": "AwaitingRespawn",
+      "late": false,
+      "kind": "Death",
+      "seq": 509,
+      "userId": 1
+    },
+    {
+      "view": "Playing",
+      "revision": 143,
+      "rawLife": 0,
+      "attempt": 1,
+      "connected": true,
+      "userId": 1,
+      "now": 1794302565.367416,
+      "levelEpoch": 1,
+      "respawns": 3,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:2",
+      "status": "AwaitingRespawn",
+      "late": false,
+      "kind": "ConfirmedDeath",
+      "seq": 510,
+      "data": {
+        "observed": {
+          "velocity": [
+            1.9184653865522705e-13,
+            -118.7967300415039,
+            4.831690603168681e-13
+          ],
+          "held": false,
+          "position": [
+            50.068241119384766,
+            -35.1719970703125,
+            -3.1279752254486084
+          ]
+        },
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:2",
+        "reason": "Fall"
+      }
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 2,
+      "shieldUntil": 1794302567.385242,
+      "shieldKind": "Normal",
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:146",
+      "now": 1794302565.385242,
+      "data": {
+        "eventId": "s-147",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 512,
+      "revision": 145
+    },
+    {
+      "revision": 150,
+      "data": {
+        "cause": "Fall",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-6",
+        "position": {
+          "y": -36.71797561645508,
+          "x": 49.24283218383789,
+          "z": -3.1706349849700928
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-6",
+      "now": 1794302570.218528,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 532,
+      "userId": -6
+    },
+    {
+      "view": "Playing",
+      "revision": 169,
+      "rawLife": 47,
+      "attempt": 2,
+      "data": {
+        "eventId": "s-171",
+        "code": "OK"
+      },
+      "connected": true,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "now": 1794302584.94841,
+      "status": "AwaitingRespawn",
+      "late": false,
+      "kind": "Death",
+      "seq": 595,
+      "userId": 1
+    },
+    {
+      "view": "Playing",
+      "revision": 169,
+      "rawLife": 0,
+      "attempt": 2,
+      "connected": true,
+      "userId": 1,
+      "now": 1794302584.94841,
+      "levelEpoch": 1,
+      "respawns": 2,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:146",
+      "status": "AwaitingRespawn",
+      "late": false,
+      "kind": "ConfirmedDeath",
+      "seq": 596,
+      "data": {
+        "observed": {
+          "velocity": [
+            9.592326932761353e-14,
+            -120.85289001464844,
+            1.9326762412674725e-12
+          ],
+          "held": false,
+          "position": [
+            47.33879852294922,
+            -36.68547058105469,
+            -21.26463508605957
+          ]
+        },
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:146",
+        "reason": "Fall"
+      }
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 1,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 3,
+      "shieldUntil": 1794302586.96544,
+      "shieldKind": "Normal",
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:173",
+      "now": 1794302584.96544,
+      "data": {
+        "eventId": "s-174",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 598,
+      "revision": 171
+    },
+    {
+      "view": "Playing",
+      "revision": 180,
+      "rawLife": 47,
+      "attempt": 3,
+      "data": {
+        "eventId": "s-183",
+        "code": "OK"
+      },
+      "connected": true,
+      "levelEpoch": 1,
+      "respawns": 1,
+      "now": 1794302593.431107,
+      "status": "AwaitingRespawn",
+      "late": false,
+      "kind": "Death",
+      "seq": 631,
+      "userId": 1
+    },
+    {
+      "view": "Playing",
+      "revision": 180,
+      "rawLife": 0,
+      "attempt": 3,
+      "connected": true,
+      "userId": 1,
+      "now": 1794302593.431107,
+      "levelEpoch": 1,
+      "respawns": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:173",
+      "status": "AwaitingRespawn",
+      "late": false,
+      "kind": "ConfirmedDeath",
+      "seq": 632,
+      "data": {
+        "observed": {
+          "velocity": [
+            -13.315783500671387,
+            -118.30638885498047,
+            8.870732307434082
+          ],
+          "held": false,
+          "position": [
+            46.238216400146484,
+            -35.12016677856445,
+            -16.739240646362305
+          ]
+        },
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:173",
+        "reason": "Fall"
+      }
+    },
+    {
+      "view": "Playing",
+      "userId": 1,
+      "levelEpoch": 1,
+      "respawns": 0,
+      "status": "Alive",
+      "connected": true,
+      "rawLife": 0,
+      "attempt": 4,
+      "shieldUntil": 1794302595.448203,
+      "shieldKind": "Normal",
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:185",
+      "now": 1794302593.448203,
+      "data": {
+        "eventId": "s-186",
+        "code": "OK"
+      },
+      "late": false,
+      "kind": "CommitSpawn",
+      "seq": 634,
+      "revision": 182
+    },
+    {
+      "revision": 184,
+      "data": {
+        "cause": "Unknown",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-4",
+        "position": {
+          "y": -35.053401947021484,
+          "x": 49.95630645751953,
+          "z": -12.999075889587402
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-4",
+      "now": 1794302595.682273,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 645,
+      "userId": -4
+    },
+    {
+      "revision": 189,
+      "data": {
+        "cause": "Combat",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-7",
+        "position": {
+          "y": 3,
+          "x": 155.56065368652344,
+          "z": -16.05118751525879
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-7",
+      "now": 1794302605.032624,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 673,
+      "userId": -7
+    },
+    {
+      "revision": 442,
+      "data": {
+        "cause": "Combat",
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-8",
+        "position": {
+          "y": 2.999866485595703,
+          "x": 166.47860717773438,
+          "z": -20.89946746826172
+        }
+      },
+      "levelEpoch": 1,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:enemy:1:-8",
+      "now": 1794302758.911405,
+      "late": false,
+      "kind": "EnemyDeath",
+      "seq": 1224,
+      "userId": -8
+    },
+    {
+      "view": "Menu",
+      "revision": 447,
+      "rawLife": 31,
+      "attempt": 4,
+      "data": {
+        "eventId": "s-451",
+        "code": "OK"
+      },
+      "connected": true,
+      "levelEpoch": 1,
+      "respawns": 0,
+      "now": 1794302769.558481,
+      "status": "Eliminated",
+      "late": false,
+      "kind": "Death",
+      "seq": 1244,
+      "userId": 1
+    },
+    {
+      "view": "Menu",
+      "revision": 447,
+      "rawLife": 0,
+      "attempt": 4,
+      "connected": true,
+      "userId": 1,
+      "now": 1794302769.558481,
+      "levelEpoch": 1,
+      "respawns": 0,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:185",
+      "status": "Eliminated",
+      "late": false,
+      "kind": "ConfirmedDeath",
+      "seq": 1245,
+      "data": {
+        "observed": {
+          "velocity": [
+            1.0464887619018555,
+            -123.03006744384766,
+            -24.30819320678711
+          ],
+          "held": false,
+          "position": [
+            280.6790466308594,
+            -36.06589889526367,
+            -23.332983016967773
+          ]
+        },
+        "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:185",
+        "reason": "Fall"
+      }
+    },
+    {
+      "levelEpoch": 1,
+      "revision": 447,
+      "now": 1794302769.558481,
+      "late": false,
+      "kind": "RunResult",
+      "data": {
+        "result": "Lost"
+      },
+      "seq": 1246
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Archaicus14",
+      "userId": 11946162891
+    }
+  ],
+  "policyLoads": 1,
+  "sampleCount": 306,
+  "result": "Lost",
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794302447.911369,
+      "actorId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8:actor:2",
+      "stock": 3,
+      "runId": "502ebb65-d11d-450c-8ff4-5b25a6f4c4d8",
+      "source": "causeway-1"
+    }
+  ]
+}

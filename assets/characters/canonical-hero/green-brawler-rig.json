@@ -1,0 +1,1326 @@
+{
+  "schema": 2,
+  "status": "owner-directed-green-brawler-study",
+  "brief": "docs/superpowers/specs/2026-11-09-green-brawler-art-direction.md",
+  "briefSha256": "f9b28be7d2601bee2f0f712a024c49bb6e0f3b1c1b23317aa938c22483d3dac2",
+  "artDirection": "owner-authored2026-11-09 detailed adaptation; not a minimal NES palette claim",
+  "rigContract": {
+    "nodes": 15,
+    "onePrimitivePerNode": true,
+    "oneSharedMaterial": true,
+    "newHumanoid": false,
+    "allDetailsMergedIntoExistingCosmeticSegments": true,
+    "neutralPose": "symmetric rig; asymmetric stance onlypreview",
+    "shoulderRestCorrectionRadians": 0,
+    "physics": "existing physical body/health/identity unchanged; all visuals massless/noCollide/noTouch/noQuery; pin server ownership after attachment"
+  },
+  "units": {
+    "authoring": "Roblox studs",
+    "gltf": "metres",
+    "metresPerStud": 0.28,
+    "up": [
+      0,
+      1,
+      0
+    ],
+    "forward": [
+      0,
+      0,
+      -1
+    ],
+    "root": [
+      0,
+      0,
+      0
+    ],
+    "groundYStuds": -3,
+    "boundsStuds": [
+      [
+        -2.939307515058806,
+        -3.0,
+        -1.4409301210188579
+      ],
+      [
+        2.939307515058806,
+        3.074600064717276,
+        0.7246064883578106
+      ]
+    ],
+    "heightStuds": 6.074600064717276
+  },
+  "parts": [
+    {
+      "name": "LowerTorso",
+      "parent": null,
+      "pivotStuds": [
+        0,
+        -0.014725155927975297,
+        0.06
+      ],
+      "vertices": 14640,
+      "triangles": 4880,
+      "boundsStuds": [
+        [
+          -0.8152645169235535,
+          -0.6071300531038593,
+          -0.5795979331085558
+        ],
+        [
+          0.8152645169235535,
+          0.6191301049487699,
+          0.527173708782681
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        0.006000025922455299,
+        -0.026212112162937395
+      ],
+      "boundingBoxSizeStuds": [
+        1.630529033847107,
+        1.2262601580526291,
+        1.1067716418912368
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 2442
+    },
+    {
+      "name": "UpperTorso",
+      "parent": "LowerTorso",
+      "pivotStuds": [
+        0,
+        0.3740748440720245,
+        0.05
+      ],
+      "vertices": 39276,
+      "triangles": 13092,
+      "boundsStuds": [
+        [
+          -1.6269436078967372,
+          0.14200530888602447,
+          -0.8695538794134855
+        ],
+        [
+          1.6269436078967372,
+          2.4891964917416045,
+          0.7246064883578106
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        1.3156009003138145,
+        -0.07247369552783745
+      ],
+      "boundingBoxSizeStuds": [
+        3.2538872157934744,
+        2.34719118285558,
+        1.594160367771296
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 6586
+    },
+    {
+      "name": "Head",
+      "parent": "UpperTorso",
+      "pivotStuds": [
+        0,
+        1.8860748440720245,
+        -0.04
+      ],
+      "vertices": 12996,
+      "triangles": 4332,
+      "boundsStuds": [
+        [
+          -0.9038598722555895,
+          1.6665767754102507,
+          -1.1232869780703305
+        ],
+        [
+          0.9038598722555895,
+          3.074600064717276,
+          0.4167574366740362
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        2.3705884200637635,
+        -0.35326477069814716
+      ],
+      "boundingBoxSizeStuds": [
+        1.807719744511179,
+        1.4080232893070255,
+        1.5400444147443668
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 2218
+    },
+    {
+      "name": "LeftUpperArm",
+      "parent": "UpperTorso",
+      "pivotStuds": [
+        -1.55,
+        1.6916748440720246,
+        0
+      ],
+      "vertices": 9492,
+      "triangles": 3164,
+      "boundsStuds": [
+        [
+          -2.939307515058806,
+          -0.19017089848584234,
+          -0.5938928651285597
+        ],
+        [
+          -0.8500000000000001,
+          2.4800748440720257,
+          0.6393028872922671
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -1.8946537575294031,
+        1.1449519727930917,
+        0.022705011081853743
+      ],
+      "boundingBoxSizeStuds": [
+        2.089307515058806,
+        2.670245742557868,
+        1.2331957524208268
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1618
+    },
+    {
+      "name": "RightUpperArm",
+      "parent": "UpperTorso",
+      "pivotStuds": [
+        1.55,
+        1.6916748440720246,
+        0
+      ],
+      "vertices": 9492,
+      "triangles": 3164,
+      "boundsStuds": [
+        [
+          0.8500000000000001,
+          -0.19017089848584234,
+          -0.5938928651285597
+        ],
+        [
+          2.939307515058806,
+          2.4800748440720257,
+          0.6393028872922671
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        1.8946537575294031,
+        1.1449519727930917,
+        0.022705011081853743
+      ],
+      "boundingBoxSizeStuds": [
+        2.089307515058806,
+        2.670245742557868,
+        1.2331957524208268
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1618
+    },
+    {
+      "name": "LeftLowerArm",
+      "parent": "LeftUpperArm",
+      "pivotStuds": [
+        -2.07,
+        0.2876748440720247,
+        0.02
+      ],
+      "vertices": 6852,
+      "triangles": 2284,
+      "boundsStuds": [
+        [
+          -2.69981150987921,
+          -0.8529928646932743,
+          -0.5254562513370782
+        ],
+        [
+          -1.551913629568352,
+          0.7304748440720243,
+          0.42842909294000825
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -2.1258625697237807,
+        -0.06125901031062497,
+        -0.04851357919853497
+      ],
+      "boundingBoxSizeStuds": [
+        1.147897880310858,
+        1.5834677087652986,
+        0.9538853442770865
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1170
+    },
+    {
+      "name": "RightLowerArm",
+      "parent": "RightUpperArm",
+      "pivotStuds": [
+        2.07,
+        0.2876748440720247,
+        0.02
+      ],
+      "vertices": 6852,
+      "triangles": 2284,
+      "boundsStuds": [
+        [
+          1.551913629568352,
+          -0.8529928646932743,
+          -0.5254562513370782
+        ],
+        [
+          2.69981150987921,
+          0.7304748440720243,
+          0.42842909294000825
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        2.1258625697237807,
+        -0.06125901031062497,
+        -0.04851357919853497
+      ],
+      "boundingBoxSizeStuds": [
+        1.147897880310858,
+        1.5834677087652986,
+        0.9538853442770865
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1170
+    },
+    {
+      "name": "LeftHand",
+      "parent": "LeftLowerArm",
+      "pivotStuds": [
+        -2.02,
+        -0.7599251559279758,
+        -0.14
+      ],
+      "vertices": 6876,
+      "triangles": 2292,
+      "boundsStuds": [
+        [
+          -2.5700000000000003,
+          -1.7748787424749783,
+          -0.6753781411625852
+        ],
+        [
+          -1.2003918502990873,
+          -0.4467251559279757,
+          0.21623393349594514
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -1.8851959251495438,
+        -1.110801949201477,
+        -0.22957210383332005
+      ],
+      "boundingBoxSizeStuds": [
+        1.369608149700913,
+        1.3281535865470027,
+        0.8916120746585303
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1164
+    },
+    {
+      "name": "RightHand",
+      "parent": "RightLowerArm",
+      "pivotStuds": [
+        2.02,
+        -0.7599251559279758,
+        -0.14
+      ],
+      "vertices": 6876,
+      "triangles": 2292,
+      "boundsStuds": [
+        [
+          1.2003918502990873,
+          -1.7748787424749783,
+          -0.6753781411625852
+        ],
+        [
+          2.5700000000000003,
+          -0.4467251559279757,
+          0.21623393349594514
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        1.8851959251495438,
+        -1.110801949201477,
+        -0.22957210383332005
+      ],
+      "boundingBoxSizeStuds": [
+        1.369608149700913,
+        1.3281535865470027,
+        0.8916120746585303
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1164
+    },
+    {
+      "name": "LeftUpperLeg",
+      "parent": "LowerTorso",
+      "pivotStuds": [
+        -0.63,
+        -0.2091251559279752,
+        0.05
+      ],
+      "vertices": 8052,
+      "triangles": 2684,
+      "boundsStuds": [
+        [
+          -1.4058310598157977,
+          -1.491452898855823,
+          -0.5554975890948799
+        ],
+        [
+          -0.16000000000000003,
+          0.22287484407202474,
+          0.5968397885400386
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -0.7829155299078989,
+        -0.6342890273918992,
+        0.020671099722579356
+      ],
+      "boundingBoxSizeStuds": [
+        1.2458310598157976,
+        1.7143277429278478,
+        1.1523373776349186
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1376
+    },
+    {
+      "name": "RightUpperLeg",
+      "parent": "LowerTorso",
+      "pivotStuds": [
+        0.63,
+        -0.2091251559279752,
+        0.05
+      ],
+      "vertices": 8052,
+      "triangles": 2684,
+      "boundsStuds": [
+        [
+          0.16000000000000003,
+          -1.491452898855823,
+          -0.5554975890948799
+        ],
+        [
+          1.4058310598157977,
+          0.22287484407202474,
+          0.5968397885400386
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.7829155299078989,
+        -0.6342890273918992,
+        0.020671099722579356
+      ],
+      "boundingBoxSizeStuds": [
+        1.2458310598157976,
+        1.7143277429278478,
+        1.1523373776349186
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1376
+    },
+    {
+      "name": "LeftLowerLeg",
+      "parent": "LeftUpperLeg",
+      "pivotStuds": [
+        -0.9,
+        -1.4835251559279756,
+        -0.02
+      ],
+      "vertices": 11028,
+      "triangles": 3676,
+      "boundsStuds": [
+        [
+          -1.401427726568047,
+          -2.6551463061561886,
+          -0.6899997875643292
+        ],
+        [
+          -0.38512785766871616,
+          -1.1352251559279756,
+          0.5189103191727636
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -0.8932777921183817,
+        -1.895185731042082,
+        -0.08554473419578279
+      ],
+      "boundingBoxSizeStuds": [
+        1.0162998688993308,
+        1.519921150228213,
+        1.2089101067370929
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1878
+    },
+    {
+      "name": "RightLowerLeg",
+      "parent": "RightUpperLeg",
+      "pivotStuds": [
+        0.9,
+        -1.4835251559279756,
+        -0.02
+      ],
+      "vertices": 11028,
+      "triangles": 3676,
+      "boundsStuds": [
+        [
+          0.3985722734319531,
+          -2.6551463061561886,
+          -0.6899997875643292
+        ],
+        [
+          1.414872142331284,
+          -1.1352251559279756,
+          0.5189103191727636
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.9067222078816186,
+        -1.895185731042082,
+        -0.08554473419578279
+      ],
+      "boundingBoxSizeStuds": [
+        1.0162998688993308,
+        1.519921150228213,
+        1.2089101067370929
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 1878
+    },
+    {
+      "name": "LeftFoot",
+      "parent": "LeftLowerLeg",
+      "pivotStuds": [
+        -0.82,
+        -2.6175251559279755,
+        0.15
+      ],
+      "vertices": 4344,
+      "triangles": 1448,
+      "boundsStuds": [
+        [
+          -1.4484796032274876,
+          -3.0,
+          -1.4409301210188579
+        ],
+        [
+          -0.4179845732219852,
+          -2.3583251559279756,
+          0.39
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -0.9332320882247364,
+        -2.6791625779639876,
+        -0.5254650605094289
+      ],
+      "boundingBoxSizeStuds": [
+        1.0304950300055025,
+        0.6416748440720244,
+        1.830930121018858
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 734
+    },
+    {
+      "name": "RightFoot",
+      "parent": "RightLowerLeg",
+      "pivotStuds": [
+        0.82,
+        -2.6175251559279755,
+        0.15
+      ],
+      "vertices": 4344,
+      "triangles": 1448,
+      "boundsStuds": [
+        [
+          0.4179845732219852,
+          -3.0,
+          -1.4409301210188579
+        ],
+        [
+          1.4484796032274876,
+          -2.3583251559279756,
+          0.39
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.9332320882247364,
+        -2.6791625779639876,
+        -0.5254650605094289
+      ],
+      "boundingBoxSizeStuds": [
+        1.0304950300055025,
+        0.6416748440720244,
+        1.830930121018858
+      ],
+      "neutralWorldAxes": {
+        "right": [
+          1,
+          0,
+          0
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "authoringVertices": 734
+    }
+  ],
+  "joints": [
+    {
+      "name": "Waist",
+      "parent": "LowerTorso",
+      "child": "UpperTorso",
+      "worldPositionStuds": [
+        0,
+        0.3740748440720245,
+        0.05
+      ],
+      "parentAttachmentStuds": [
+        0,
+        0.3887999999999998,
+        -0.009999999999999995
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Neck",
+      "parent": "UpperTorso",
+      "child": "Head",
+      "worldPositionStuds": [
+        0,
+        1.8860748440720245,
+        -0.04
+      ],
+      "parentAttachmentStuds": [
+        0,
+        1.512,
+        -0.09
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftShoulder",
+      "parent": "UpperTorso",
+      "child": "LeftUpperArm",
+      "worldPositionStuds": [
+        -1.55,
+        1.6916748440720246,
+        0
+      ],
+      "parentAttachmentStuds": [
+        -1.55,
+        1.3176,
+        -0.05
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightShoulder",
+      "parent": "UpperTorso",
+      "child": "RightUpperArm",
+      "worldPositionStuds": [
+        1.55,
+        1.6916748440720246,
+        0
+      ],
+      "parentAttachmentStuds": [
+        1.55,
+        1.3176,
+        -0.05
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftElbow",
+      "parent": "LeftUpperArm",
+      "child": "LeftLowerArm",
+      "worldPositionStuds": [
+        -2.07,
+        0.2876748440720247,
+        0.02
+      ],
+      "parentAttachmentStuds": [
+        -0.5199999999999998,
+        -1.404,
+        0.02
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightElbow",
+      "parent": "RightUpperArm",
+      "child": "RightLowerArm",
+      "worldPositionStuds": [
+        2.07,
+        0.2876748440720247,
+        0.02
+      ],
+      "parentAttachmentStuds": [
+        0.5199999999999998,
+        -1.404,
+        0.02
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftWrist",
+      "parent": "LeftLowerArm",
+      "child": "LeftHand",
+      "worldPositionStuds": [
+        -2.02,
+        -0.7599251559279758,
+        -0.14
+      ],
+      "parentAttachmentStuds": [
+        0.04999999999999982,
+        -1.0476000000000005,
+        -0.16
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightWrist",
+      "parent": "RightLowerArm",
+      "child": "RightHand",
+      "worldPositionStuds": [
+        2.02,
+        -0.7599251559279758,
+        -0.14
+      ],
+      "parentAttachmentStuds": [
+        -0.04999999999999982,
+        -1.0476000000000005,
+        -0.16
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftHip",
+      "parent": "LowerTorso",
+      "child": "LeftUpperLeg",
+      "worldPositionStuds": [
+        -0.63,
+        -0.2091251559279752,
+        0.05
+      ],
+      "parentAttachmentStuds": [
+        -0.63,
+        -0.1943999999999999,
+        -0.009999999999999995
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightHip",
+      "parent": "LowerTorso",
+      "child": "RightUpperLeg",
+      "worldPositionStuds": [
+        0.63,
+        -0.2091251559279752,
+        0.05
+      ],
+      "parentAttachmentStuds": [
+        0.63,
+        -0.1943999999999999,
+        -0.009999999999999995
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftKnee",
+      "parent": "LeftUpperLeg",
+      "child": "LeftLowerLeg",
+      "worldPositionStuds": [
+        -0.9,
+        -1.4835251559279756,
+        -0.02
+      ],
+      "parentAttachmentStuds": [
+        -0.27,
+        -1.2744000000000004,
+        -0.07
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightKnee",
+      "parent": "RightUpperLeg",
+      "child": "RightLowerLeg",
+      "worldPositionStuds": [
+        0.9,
+        -1.4835251559279756,
+        -0.02
+      ],
+      "parentAttachmentStuds": [
+        0.27,
+        -1.2744000000000004,
+        -0.07
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftAnkle",
+      "parent": "LeftLowerLeg",
+      "child": "LeftFoot",
+      "worldPositionStuds": [
+        -0.82,
+        -2.6175251559279755,
+        0.15
+      ],
+      "parentAttachmentStuds": [
+        0.08000000000000007,
+        -1.134,
+        0.16999999999999998
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightAnkle",
+      "parent": "RightLowerLeg",
+      "child": "RightFoot",
+      "worldPositionStuds": [
+        0.82,
+        -2.6175251559279755,
+        0.15
+      ],
+      "parentAttachmentStuds": [
+        -0.08000000000000007,
+        -1.134,
+        0.16999999999999998
+      ],
+      "childAttachmentStuds": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "atlas": {
+    "resolution": [
+      2048,
+      2048
+    ],
+    "layout": "unique8x8 cell per triangle with dilated gutters",
+    "maps": [
+      "baked albedo(sRGB macro colour + material grain)",
+      "ORM(occlusionR/roughnessG/metalnessB)",
+      "normal(OpenGL; transferred into new UV basis)"
+    ],
+    "allEmbedded": true,
+    "vertexColors": "COLOR_0 intentionally omitted: Roblox SurfaceAppearance discards it",
+    "emissive": "no emissive image, texture, factor or mask reference; highlights are geometry",
+    "externalMaps": [
+      "green-brawler-baked-albedo.png",
+      "green-brawler-baked-orm.png",
+      "green-brawler-baked-normal.png"
+    ],
+    "sourceRoleAtlas": "old256x256 maps retained only for authoring/software preview, not used by final GLB"
+  },
+  "headFeatures": {
+    "smallLowNeck": true,
+    "sunglassesGeometry": true,
+    "mouth": "closed asymmetric smirk, no teeth/snarl",
+    "jawHingeStuds": [
+      0,
+      2.0588748440720246,
+      -0.08
+    ],
+    "leftEyeRegionStuds": [
+      -0.43,
+      2.5988748440720246,
+      -0.63
+    ],
+    "rightEyeRegionStuds": [
+      0.43,
+      2.5988748440720246,
+      -0.63
+    ]
+  },
+  "accessories": {
+    "redCloth": "above elbows, both upper-arm nodes; tails actual closed ribbon geometry",
+    "kneeCuffs": "both lower-leg nodes; darkmetalbody, silverrings,6rivets and3short conical spikes each",
+    "excluded": [
+      "armour",
+      "gloves",
+      "hair",
+      "tail",
+      "headhorns",
+      "ears",
+      "weapons",
+      "text",
+      "logos"
+    ]
+  },
+  "previewPoseEulerRadians": {
+    "LowerTorso": [
+      0,
+      -0.13,
+      0
+    ],
+    "UpperTorso": [
+      0,
+      -0.08,
+      0
+    ],
+    "Head": [
+      0.08,
+      -0.22,
+      0
+    ],
+    "LeftUpperArm": [
+      0.2,
+      0,
+      0.15
+    ],
+    "LeftLowerArm": [
+      0.85,
+      0,
+      1.0
+    ],
+    "RightUpperArm": [
+      0.24,
+      0,
+      0.35
+    ],
+    "RightLowerArm": [
+      0.1,
+      0,
+      0.8
+    ],
+    "LeftUpperLeg": [
+      0.1,
+      0,
+      -0.12
+    ],
+    "RightUpperLeg": [
+      0.1,
+      0,
+      0.12
+    ],
+    "LeftLowerLeg": [
+      -0.2,
+      0,
+      0
+    ],
+    "RightLowerLeg": [
+      -0.2,
+      0,
+      0
+    ]
+  },
+  "previewOnly": "low-camera lighting/platform/stars/crop are not part of model or a fixed gameplay pose",
+  "frozenEarlierGlbs": {
+    "canonical-hero-player1.glb": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+    "canonical-hero-player2.glb": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+    "canonical-hero.glb": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c"
+  },
+  "pending": [
+    "actual Studio15MeshPart/PBR import",
+    "source-driven attack morph geometry",
+    "whole fear32/33 forms",
+    "runtime animation/network/device acceptance"
+  ],
+  "surfaceBake": {
+    "status": "PASS",
+    "sourceGlbSha256": "8bd9045d07ebfa228784114470d4790967e9af7a99a4a807e1e2b24c3d5b9ea7",
+    "sha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+    "bytes": 16143164,
+    "trianglePositionsAndNormalsSha256": "5929985f8336955a57428c699616cfab18574bf3df51c6cb3686cd104d843eca",
+    "geometryAndNodeTransformsUnchanged": true,
+    "triangles": 53400,
+    "nodes": 15,
+    "materials": 1,
+    "embeddedTextureCount": 3,
+    "atlasResolution": [
+      2048,
+      2048
+    ],
+    "tileSize": 8,
+    "vertices": 160200,
+    "parts": {
+      "LowerTorso": {
+        "vertices": 14640,
+        "triangles": 4880,
+        "sourceVertices": 2442
+      },
+      "UpperTorso": {
+        "vertices": 39276,
+        "triangles": 13092,
+        "sourceVertices": 6586
+      },
+      "Head": {
+        "vertices": 12996,
+        "triangles": 4332,
+        "sourceVertices": 2218
+      },
+      "LeftUpperArm": {
+        "vertices": 9492,
+        "triangles": 3164,
+        "sourceVertices": 1618
+      },
+      "RightUpperArm": {
+        "vertices": 9492,
+        "triangles": 3164,
+        "sourceVertices": 1618
+      },
+      "LeftLowerArm": {
+        "vertices": 6852,
+        "triangles": 2284,
+        "sourceVertices": 1170
+      },
+      "RightLowerArm": {
+        "vertices": 6852,
+        "triangles": 2284,
+        "sourceVertices": 1170
+      },
+      "LeftHand": {
+        "vertices": 6876,
+        "triangles": 2292,
+        "sourceVertices": 1164
+      },
+      "RightHand": {
+        "vertices": 6876,
+        "triangles": 2292,
+        "sourceVertices": 1164
+      },
+      "LeftUpperLeg": {
+        "vertices": 8052,
+        "triangles": 2684,
+        "sourceVertices": 1376
+      },
+      "RightUpperLeg": {
+        "vertices": 8052,
+        "triangles": 2684,
+        "sourceVertices": 1376
+      },
+      "LeftLowerLeg": {
+        "vertices": 11028,
+        "triangles": 3676,
+        "sourceVertices": 1878
+      },
+      "RightLowerLeg": {
+        "vertices": 11028,
+        "triangles": 3676,
+        "sourceVertices": 1878
+      },
+      "LeftFoot": {
+        "vertices": 4344,
+        "triangles": 1448,
+        "sourceVertices": 734
+      },
+      "RightFoot": {
+        "vertices": 4344,
+        "triangles": 1448,
+        "sourceVertices": 734
+      }
+    },
+    "COLOR_0": "omitted",
+    "emissiveTexture": "omitted; geometric highlights retained",
+    "colorSpace": "macro linear COLOR_0 multiplied by decoded sRGB texture, encoded IEC sRGB into albedo",
+    "padding": "each triangle has its own8x8 cell, clamp-barycentric dilation across cell;1.5texel minimum gutter",
+    "normalTransfer": "old tangent normal at .55 strength transformed into new triangle UV basis; new normal scale1",
+    "actualStudioImport": "PENDING"
+  }
+}

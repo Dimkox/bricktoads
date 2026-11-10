@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "sourceSha256": "d3724283b11cc446ef78787f91de120b90c14927e701c77a5c64aed7e4c6bd6b",
+  "checkCount": 146,
+  "jumpCases": [
+    {
+      "case": "Tower spring 1",
+      "launch": 65,
+      "nativeRise": 1.0416717529296875,
+      "rawLife": 47,
+      "attempt": 1,
+      "respawns": 3,
+      "airborneImpulseRejected": true
+    },
+    {
+      "case": "Tower off-pad 1",
+      "launch": 52,
+      "nativeRise": 0.8249969482421875,
+      "rawLife": 47,
+      "attempt": 1,
+      "respawns": 3,
+      "airborneImpulseRejected": true
+    },
+    {
+      "case": "Tower spring 2",
+      "launch": 65,
+      "nativeRise": 1.0416641235351562,
+      "rawLife": 47,
+      "attempt": 1,
+      "respawns": 3,
+      "airborneImpulseRejected": true
+    },
+    {
+      "case": "Tower off-pad 2",
+      "launch": 52,
+      "nativeRise": 0.8249969482421875,
+      "rawLife": 47,
+      "attempt": 1,
+      "respawns": 3,
+      "airborneImpulseRejected": true
+    },
+    {
+      "case": "Ascent static spring",
+      "launch": 68,
+      "nativeRise": 1.0916671752929688,
+      "rawLife": 47,
+      "attempt": 1,
+      "respawns": 3,
+      "airborneImpulseRejected": true
+    }
+  ],
+  "cleanup": [
+    {
+      "pass": true,
+      "errors": [],
+      "nativeBodyRemoved": true,
+      "actorRegistryEmpty": true,
+      "stage": 12,
+      "worldRemoved": true
+    },
+    {
+      "pass": true,
+      "errors": [],
+      "nativeBodyRemoved": true,
+      "actorRegistryEmpty": true,
+      "stage": 8,
+      "worldRemoved": true
+    }
+  ],
+  "scope": "Synthetic server roster; ordinary AI deliberately unstepped in isolated worlds; no network, keyboard, touch or full-route acceptance"
+}

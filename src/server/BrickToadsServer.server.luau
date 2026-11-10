@@ -6,13 +6,26 @@ local HttpService=game:GetService('HttpService')
 Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
+local worldType=require(gameplay.GameWorld)
+require(gameplay.DragonWorld)(worldType)
+require(gameplay.BossIntroWorld)(worldType)
 local config=require(gameplay.GameConfig)(require(runtime.Config),require(gameplay.LevelDefinition))
+local godMode=require(gameplay.StudioGodMode).attach(config,RunService:IsStudio(),game:GetService('ServerStorage'))
+local buildInfo=script.Parent:FindFirstChild('BuildInfo')
+local buildId=buildInfo and require(buildInfo).sourceSha256 or 'unpackaged-source'
 local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunLifecycle),
     Combat=require(runtime.Combat),Session=require(runtime.Session),Registry=require(runtime.ConnectionRegistry),
     Config=config,Controller=require(gameplay.GameController),Director=require(gameplay.LevelDirector),BossQueue=require(gameplay.BossQueue),
     GuardianPattern=require(gameplay.GuardianPattern),HealingFlies=require(gameplay.HealingFlies),
+    BossIntro=require(gameplay.BossIntro)(require(gameplay.CanonicalAnimation)),
     EnemyCarry=require(gameplay.EnemyCarry),
     WalkerClubs=require(gameplay.WalkerClubs),
+    SourceCombat=require(gameplay.SourceCombat),DragonFlight=require(gameplay.DragonFlight),
+    LevelVariation=require(gameplay.LevelVariation),
+    CampaignDefinition=require(gameplay.CampaignDefinition),CampaignDirector=require(gameplay.CampaignDirector),
+    CampaignModes=require(gameplay.CampaignModes),CampaignBoss=require(gameplay.CampaignBoss),
+    CampaignEnemies=require(gameplay.CampaignEnemies),
+    RunJournal=require(gameplay.RunJournal),BuildId=buildId,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor
@@ -24,11 +37,28 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
                 legacy:Destroy()
             end
         end
-        local world=require(gameplay.GameWorld).new(require(runtime.RobloxWorld),config,{
-            name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing}})
+        local world=worldType.new(require(runtime.RobloxWorld),config,{
+            name='BrickToadsWorld_'..groupId,offset={x=0,y=0,z=(index-1)*config.Groups.spacing},
+            characterAppearance=require(gameplay.CharacterAppearance),guardianAppearance=require(gameplay.GuardianAppearance),
+            campaignWorld=require(gameplay.CampaignWorld)})
         world.folder:SetAttribute('GroupId',groupId)
         return world
     end)
+godMode:bind(controller)
+if RunService:IsStudio() then
+    -- Read-only server-side export. No remote, gameplay mutation or test control.
+    local diagnostics=Instance.new('BindableFunction')
+    diagnostics.Name='BrickToadsDiagnostics';diagnostics.Parent=game:GetService('ServerStorage')
+    diagnostics.OnInvoke=function(groupId)
+        if type(groupId)~='string' then return nil end
+        local group=controller.groups[groupId]
+        if not group then return nil end
+        local run=group.controller
+        return {sourceSha256=buildId,placeId=game.PlaceId,placeVersion=game.PlaceVersion,
+            loggerFailures=run.current and (run.current.loggerFailures or 0) or 0,
+            current=run.journal and run.journal:snapshot(),previous=run.previousJournal and run.previousJournal:snapshot()}
+    end
+end
 local remotes=Instance.new('Folder'); remotes.Name='BrickToadsGame'; remotes.Parent=ReplicatedStorage
 local intent=Instance.new('RemoteEvent'); intent.Name='Intent'; intent.Parent=remotes
 local state=Instance.new('RemoteEvent'); state.Name='State'; state.Parent=remotes
@@ -53,7 +83,7 @@ local function broadcast(requester)
     for _,player in ipairs(requester and {requester} or players) do
         if player.Parent==Players then
             local snapshot=controller:snapshot(player,players)
-            if snapshot then snapshot.fault=fault; state:FireClient(player,snapshot) end
+            if snapshot then snapshot.fault=snapshot.fault==true or fault~=nil; state:FireClient(player,snapshot) end
         end
     end
 end
@@ -72,7 +102,9 @@ intent.OnServerEvent:Connect(function(player,payload)
     if type(payload)=='table' and (payload.kind=='Sync' or payload.kind=='Start' or payload.kind=='SelectHero'
         or payload.kind=='SelectRole' or payload.kind=='ClaimEnemy' or payload.kind=='ChooseView'
         or payload.kind=='QueueBoss' or payload.kind=='CancelBossQueue' or payload.kind=='ReplyBoss' or payload.kind=='ConnectBoss'
-        or payload.kind=='CreateGroup' or payload.kind=='JoinGroup') then
+        or payload.kind=='CreateGroup' or payload.kind=='JoinGroup'
+        or ((payload.kind=='Attack' or payload.kind=='Jump') and (code=='OK' or code=='NOT_RUNNING'
+            or code=='REACTION' or code=='COOLDOWN' or code=='HELD' or code=='THROWN'))) then
         if code~='RATE_LIMIT' and code~='STALE_CONNECTION' then broadcast(player) end
     end
 end)
@@ -81,15 +113,10 @@ RunService.Heartbeat:Connect(function(dt)
     if not fault then
         local ok,err=xpcall(function()
             controller:step(at,dt)
-            for _,id in ipairs(controller.order) do
-                local group=controller.groups[id]
-                local run=group.controller
-                if run.current then group.world:updatePresentation(run.current,dt,run.director.enemies) end
-            end
         end,debug.traceback)
         if not ok then fault=tostring(err); warn('[BrickToads] '..fault) end
     end
     for _,player in ipairs(Players:GetPlayers()) do replicationFocus(player) end
     if at-lastBroadcast>=config.SnapshotInterval then lastBroadcast=at; broadcast() end
 end)
-print('[BrickToads] playable causeway ready')
+print('[BrickToads] campaign runtime ready')

@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "status": "source-palette-3d-study-not-release-approved",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "source": "palette_chars main.asm line36743",
+  "sourceRGBFunction": "research/canonical-visuals/extract_source_frames.py::rgba",
+  "extractorSha256": "1ffd0e5716bf88d380bee3cc8c446bbff167fef787469cdf82659298c1d82bea",
+  "paletteIs": "source codes authoritative; RGB approximate2C02 display, not analog CRT measurement",
+  "base": {
+    "file": "canonical-hero.glb",
+    "sha256": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c",
+    "modified": false
+  },
+  "sharedRig": "canonical-hero-rig.json",
+  "gltfMetresPerStud": 0.28,
+  "variants": [
+    {
+      "file": "canonical-hero-player1.glb",
+      "sourcePlayerSlot": 0,
+      "sourcePaletteCodes": [
+        "0F",
+        "0F",
+        "0A",
+        "1A"
+      ],
+      "displayRGBApproximation": [
+        [
+          18,
+          19,
+          20
+        ],
+        [
+          18,
+          19,
+          20
+        ],
+        [
+          0,
+          102,
+          0
+        ],
+        [
+          88,
+          184,
+          44
+        ]
+      ],
+      "colorTransfer": "IEC sRGB to linear glTF COLOR_0: c<=0.04045 -> c/12.92, else ((c+0.055)/1.055)^2.4; exact inverse IEC in previews",
+      "bytes": 491644,
+      "sha256": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+      "colorNeutralizedWholeFileSha256": "ffaca8f98a30f479657054201c38812994a801dadb5075f3113fef2c2aba626f",
+      "colorVertexCounts": {
+        "1": 560,
+        "2": 292,
+        "3": 8362
+      },
+      "preview": "research/canonical-visuals/hero-model-player1-palette.png",
+      "geometryAndRigByteIdenticalToBase": true,
+      "templateNameAdaptation": "Mr. Green"
+    },
+    {
+      "file": "canonical-hero-player2.glb",
+      "sourcePlayerSlot": 1,
+      "sourcePaletteCodes": [
+        "0F",
+        "0F",
+        "17",
+        "27"
+      ],
+      "displayRGBApproximation": [
+        [
+          18,
+          19,
+          20
+        ],
+        [
+          18,
+          19,
+          20
+        ],
+        [
+          155,
+          83,
+          0
+        ],
+        [
+          250,
+          160,
+          66
+        ]
+      ],
+      "colorTransfer": "IEC sRGB to linear glTF COLOR_0: c<=0.04045 -> c/12.92, else ((c+0.055)/1.055)^2.4; exact inverse IEC in previews",
+      "bytes": 491644,
+      "sha256": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+      "colorNeutralizedWholeFileSha256": "ffaca8f98a30f479657054201c38812994a801dadb5075f3113fef2c2aba626f",
+      "colorVertexCounts": {
+        "1": 560,
+        "2": 292,
+        "3": 8362
+      },
+      "preview": "research/canonical-visuals/hero-model-player2-palette.png",
+      "geometryAndRigByteIdenticalToBase": true,
+      "templateNameAdaptation": "Mr. Yellow (legacy BrickToads name; source P2 is orange/brown, not an invented yellow palette)"
+    }
+  ],
+  "thirdHero": {
+    "included": false,
+    "reason": "The source has two playable slots. Brown/Pimple playable appearance is not inferred from P2 or a guessed third palette."
+  },
+  "validation": {
+    "status": "PASS",
+    "vertexPositionsNormalsIndicesAndNodeTransformsUnchanged": true,
+    "allDifferencesRestrictedToColor0": true,
+    "basePreserved": true,
+    "studioImport": "NOT_RUN",
+    "animation": "NOT_INCLUDED"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "status": "verified_frozen",
+  "scope": "QA-only ordinary-input step-off policy; frozen observation probes, no Studio or gameplay-state changes",
+  "file": "tools/qa/campaign_combat_pilot.lua",
+  "baselineSha256": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+  "revisedSha256": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "definition": {
+    "api": "CampaignDefinition.build(1,388791054)",
+    "seed": 388791054,
+    "zone": "Courtyard",
+    "floor": {
+      "x": 190,
+      "z": 4,
+      "w": 124,
+      "d": 60,
+      "y": -1,
+      "h": 2
+    },
+    "physicalMinZ": -26,
+    "strictDestinationMinZ": -23
+  },
+  "observedFixture": {
+    "hero": {
+      "x": 155.970703,
+      "y": 8.025629,
+      "z": -23.759357
+    },
+    "enemy": {
+      "x": 155.970993,
+      "y": 2.999987,
+      "z": -23.759354
+    },
+    "selectedGoal": {
+      "x": 151.02124553169415,
+      "z": -18.809606531694165
+    }
+  },
+  "changes": [
+    "Current hero/enemy observations must share an actual authored support, plus .001stud floating-point tolerance",
+    "Destination membership retains strict three-stud margins",
+    "Four diagonal seven-stud choices are local to stepOffEnemy; general unit/attack movement math remains unchanged",
+    "All retreat candidates retain dot<=0 initial direction gate"
+  ],
+  "red": {
+    "command": ".tools/luau-0.745/luau.exe build/test_combat_stepoff_boundary.luau",
+    "failure": "Native11 real seeded floor/Pig-head pose must produce an ordinary step-off",
+    "alsoFailedWith": "Ineffective .001-only membership patch F1AA78446FF127D4EA5E8C5096D90EB27778B6D5BC2857396692D5CE2DD66E49"
+  },
+  "green": {
+    "frozenProbes": 26,
+    "covers": [
+      "recorded real pose",
+      "four edges",
+      "four corners",
+      "exact XZ stack",
+      "outside-support hero/enemy",
+      "elevated Dragon/Walker",
+      "airborne/reaction/anchored/dead/boss/special/pending-held gates",
+      "deep-frozen context enforces observation immutability"
+    ],
+    "compile": true,
+    "diffCheck": true,
+    "independentReview": "campaign_traversal_early reran26 probes/compile/diffcheck; clear"
+  },
+  "limits": [
+    "No Studio action or new native claim by this agent; root owns live QA function replacement and ongoing full-run provenance.",
+    "Earlier synthetic-floor evidence is explicitly rejected and retained separately.",
+    "Existing away-direction gate remains authoritative; no destination is relaxed."
+  ]
+}

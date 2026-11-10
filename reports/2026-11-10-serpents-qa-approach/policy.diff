@@ -1,0 +1,14 @@
+--- early-baseline-461.lua
++++ early-candidate.lua
+@@ -427,7 +427,10 @@
+         if math.abs(dz)>.18 then x=0
+         else
+             local dx=base+9.1-position.x
+-            x=math.abs(dx)>.10 and clamp(dx*.3,-1,1) or 0
++            -- A request can return one movement packet later. Ease in before
++            -- the ledge's .9-stud target inset, including a full-speed arrival
++            -- from the preceding room; the old gain still drove off its edge.
++            x=math.abs(dx)>.10 and clamp(dx*.1,-1,1) or 0
+             if math.abs(dx)<=.15 then x=0;state.serpentStage='Wait' end
+         end
+     elseif state.serpentStage == 'Wait' then

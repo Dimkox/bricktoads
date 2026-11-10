@@ -1,0 +1,41 @@
+{
+  "status": "focused_verified_frozen",
+  "scope": "QA-only Nav run-up staging and landing-side horizontal hold",
+  "checks": [
+    {
+      "command": ".tools/python-3.13.9/python.exe reports/2026-11-10-qa-gap-runup-and-landing/prepare_probe.py",
+      "exit": 0,
+      "expected": 0,
+      "log": "prepare.txt"
+    },
+    {
+      "command": ".tools/luau-0.745/luau.exe build/gap_review_base.luau",
+      "exit": 1,
+      "expected": 1,
+      "log": "composition-red.txt"
+    },
+    {
+      "command": ".tools/luau-0.745/luau.exe build/gap_review_current.luau",
+      "exit": 0,
+      "expected": 0,
+      "log": "composition-green.txt"
+    },
+    {
+      "command": ".tools/luau-0.745/luau.exe tests/run_route_driver_navigation.luau",
+      "exit": 0,
+      "expected": 0,
+      "log": "navigation-green.txt"
+    },
+    {
+      "command": ".tools/luau-0.745/luau-compile.exe --null tools/studio_level_route_driver.luau tests/run_route_driver_navigation.luau build/gap_review_current.luau build/gap_review_base.luau",
+      "exit": 0,
+      "expected": 0,
+      "log": "compile.txt"
+    }
+  ],
+  "candidateSha256": "d54c668e93b31a00644a42f828fdfc22955e963dea9bbf87e47aca6564764826",
+  "testSha256": "1406926e1a4551a6cdfe29cd085c46a34f09b6f4edd5564c1b6198967ea0d8a2",
+  "productionUnchanged": true,
+  "nativeFollowup": "NOT RUN; parent owns ordinary single-window next campaign",
+  "independentReview": "CLEAR on exactD54C668E/test1406926E: reviewer independently reran88suite, regeneratedactual3888footGREEN3, compile, and freshsame-partfloorrows/movinggoal/reachedrunup/allowCrossingfalsechecks; no actionableissue"
+}

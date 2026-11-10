@@ -2,20 +2,32 @@
 local Vec={}
 Vec.__index=function(self,key)
     if key=='Magnitude' then return math.sqrt(self.X*self.X+self.Y*self.Y+self.Z*self.Z) end
+    if key=='Unit' then
+        local length=math.sqrt(self.X*self.X+self.Y*self.Y+self.Z*self.Z)
+        return setmetatable({X=self.X/length,Y=self.Y/length,Z=self.Z/length},Vec)
+    end
     return Vec[key]
 end
 function Vec.__add(a,b) return setmetatable({X=a.X+b.X,Y=a.Y+b.Y,Z=a.Z+b.Z},Vec) end
 function Vec.__sub(a,b) return setmetatable({X=a.X-b.X,Y=a.Y-b.Y,Z=a.Z-b.Z},Vec) end
+function Vec.__mul(a,b)
+    if type(a)=='number' then a,b=b,a end
+    return setmetatable({X=a.X*b,Y=a.Y*b,Z=a.Z*b},Vec)
+end
+function Vec.__unm(a) return setmetatable({X=-a.X,Y=-a.Y,Z=-a.Z},Vec) end
 local function vector(x,y,z) return setmetatable({X=x or 0,Y=y or 0,Z=z or 0},Vec) end
 local Frame={}; Frame.__index=Frame
 function Frame.__mul(a,b)
     return setmetatable({Position=a.Position+b.Position,rotationX=(a.rotationX or 0)+(b.rotationX or 0),
-        rotationY=(a.rotationY or 0)+(b.rotationY or 0),rotationZ=(a.rotationZ or 0)+(b.rotationZ or 0)},Frame)
+        rotationY=(a.rotationY or 0)+(b.rotationY or 0),rotationZ=(a.rotationZ or 0)+(b.rotationZ or 0),
+        RightVector=a.RightVector or vector(1,0,0),LookVector=a.LookVector or vector(0,0,-1)},Frame)
 end
-function Frame.__add(a,b) return setmetatable({Position=a.Position+b},Frame) end
+function Frame.__add(a,b) return setmetatable({Position=a.Position+b,
+    RightVector=a.RightVector or vector(1,0,0),LookVector=a.LookVector or vector(0,0,-1)},Frame) end
 function Frame:Lerp(other,alpha) return other end -- Pose selection only, not engine interpolation.
 local function frame(x,y,z)
-    return setmetatable({Position=type(x)=='table' and x or vector(x,y,z)},Frame)
+    return setmetatable({Position=type(x)=='table' and x or vector(x,y,z),
+        RightVector=vector(1,0,0),LookVector=vector(0,0,-1)},Frame)
 end
 local Node={}
 Node.__index=function(self,key)
@@ -29,6 +41,24 @@ Node.__newindex=function(self,key,value)
         if old then for i,child in ipairs(old.children) do if child==self then table.remove(old.children,i); break end end end
         rawset(self,'_parent',value)
         if value then value.children[#value.children+1]=self end
+        -- Opt-in reproduction of the live assembly ownership reset: the basic
+        -- rig was pinned before a later physical art part joined its assembly.
+        local physicalAddition=self.ClassName=='Part'
+        if self.ClassName=='Model' then
+            for _,p in ipairs(self:GetDescendants()) do if p:IsA('BasePart') then physicalAddition=true;break end end
+        end
+        if value and physicalAddition then
+            local ancestor,root=value,nil
+            while ancestor do
+                if ancestor.ClassName=='Model' then root=ancestor:FindFirstChild('HumanoidRootPart') end
+                if root then break end
+                ancestor=ancestor.Parent
+            end
+            if root and root.simulateAssemblyOwnershipReset then
+                root.networkOwnershipAuto=true;root.networkOwner=root.nearbyAutomaticOwner
+                root.assemblyOwnershipResets=(root.assemblyOwnershipResets or 0)+1
+            end
+        end
     else rawset(self,key,value) end
 end
 local function node(class,name,parent)
@@ -52,12 +82,32 @@ function Node:GetAttribute(name) return self.attributes[name] end
 function Node:Destroy() self.destroyed=true; self.Parent=nil end
 function Node:ClearAllChildren() for _,child in ipairs(self:GetChildren()) do child:Destroy() end end
 function Node:PivotTo(cf) self.HumanoidRootPart.CFrame=cf end
-function Node:CanSetNetworkOwnership() return not self.Anchored end
-function Node:SetNetworkOwner(owner) self.networkOwner=owner;self.networkOwnerSet=true end
+function Node:CanSetNetworkOwnership() return not self.Anchored and not self.networkOwnershipDenied,'Ownership unavailable in fixture' end
+function Node:SetNetworkOwner(owner)
+    self.networkOwner=owner;self.networkOwnerSet=true;self.networkOwnershipAuto=false
+    self.networkOwnershipPins=(self.networkOwnershipPins or 0)+1
+end
+function Node:GetNetworkOwner() return self.networkOwner end
+function Node:GetNetworkOwnershipAuto() return self.networkOwnershipAuto~=false end
 local workspace=node('Workspace','Workspace')
 local serverTime=0
 function workspace:GetServerTimeNow() return serverTime end
 function workspace:Raycast(origin,direction,params)
+    if direction.Y>0 then
+        local lowest,partHit
+        for _,p in ipairs(params.geometry:GetDescendants()) do
+            if p:IsA('BasePart') and p.CanCollide then
+                local bottom=p.Position.Y-p.Size.Y/2
+                if origin.X>=p.Position.X-p.Size.X/2 and origin.X<=p.Position.X+p.Size.X/2
+                    and origin.Z>=p.Position.Z-p.Size.Z/2 and origin.Z<=p.Position.Z+p.Size.Z/2
+                    and bottom>=origin.Y and bottom<=origin.Y+direction.Y and (not lowest or bottom<lowest) then
+                    lowest,partHit=bottom,p
+                end
+            end
+        end
+        if partHit then return {Instance=partHit,Position=vector(origin.X,lowest,origin.Z),Normal=vector(0,-1,0)} end
+        return nil
+    end
     local highest,partHit
     for _,p in ipairs(params.geometry:GetDescendants()) do
         if p:IsA('BasePart') and p.CanCollide then
@@ -76,6 +126,7 @@ local enum=setmetatable({},{__index=function(self,key)
     local group=setmetatable({},{__index=function(_,value) return value end}); rawset(self,key,group); return group
 end})
 local env=setmetatable({workspace=workspace,game={GetService=function(_,name) return name=='Workspace' and workspace or lighting end},
+    OverlapParams={new=function() return {} end},
     Color3={fromRGB=function(...) return {...} end,new=function(...) return {...} end},Enum=enum,
     Instance={new=function(class) return node(class) end},Vector3={new=vector},
     CFrame={new=frame,Angles=function(x,y,z)
@@ -85,7 +136,14 @@ local env=setmetatable({workspace=workspace,game={GetService=function(_,name) re
 local function source(text)
     local loader=assert(loadstring(text)); setfenv(loader,env); return loader()
 end
+function workspace:GetPartBoundsInRadius() return {} end
+function workspace:Spherecast(origin,radius,direction,params)
+    local hit=self:Raycast(origin,direction,params)
+    if hit and hit.Position then hit.Distance=(hit.Position-origin).Magnitude end
+    return hit
+end
 local World,Camera=source(WorldSource),source(CameraSource)
+source(DragonWorldSource)(World)
 local Base={}
 function Base.new(config)
     local folder=node('Folder','CombatStandWorld',workspace)
@@ -99,14 +157,16 @@ function Base.clearActors(self)
 end
 local function actor(self,id,position)
     local model=node('Model','Actor_'..id,self.actorFolder)
-    local root=node('Part','HumanoidRootPart',model); root.CFrame=frame(position)
+    local root=node('Part','HumanoidRootPart',model); root.CFrame=frame(position); root.Size=vector(2,2,1)
     for _,name in ipairs({'Torso','Head','Left Arm','Right Arm','Left Leg','Right Leg'}) do
         local limb=node('Part',name,model); limb.CFrame=frame(position)
     end
     root.Anchored=false; root.AssemblyLinearVelocity=vector()
     local a={model=model,root=root,humanoid={Health=100,PlatformStand=false,FloorMaterial=enum.Material.Slate,
         Jump=false,JumpPower=42,UseJumpPower=true,AutoRotate=true,WalkSpeed=12,EvaluateStateMachine=true},cue=0}
-    function a.humanoid:Move(direction) self.lastMove=direction end
+    a.humanoid.MoveDirection=vector()
+    function a.humanoid:Move(direction) self.lastMove=direction;self.MoveDirection=direction end
+    function a.humanoid:GetState() return self.nativeState or enum.HumanoidStateType.Running end
     self.actors[id]=a; return a
 end
 function Base.spawn(self,id,actorId,point)
@@ -216,6 +276,26 @@ eq(view.CFrame.Position,121,35,542,'A group without loaded actors must keep its 
 camera:sync({heroes={{actorId='same-id',status='Alive'}}})
 camera:refreshTargets(); assert(camera.models['same-id']==defaultActor.model,'Old snapshots retain default-world compatibility')
 print('PASS camera selects one world, clears cross-group state and never falls back from an explicit missing world')
+local introFolder=node('Folder','BossIntro',second.folder)
+for k,v in pairs({Active=true,IntroId='group2-intro',RunId='same-run',LevelEpoch=1,Counter=1,
+    Phase='BeforeCut',CameraCut=false,Focus=vector(115,19,512)})do introFolder:SetAttribute(k,v)end
+local introAttrs={};local introView={SetAttribute=function(_,k,v)introAttrs[k]=v end}
+camera:sync({runId='same-run',levelEpoch=1,groupId='G1',worldName='BrickToadsWorld',heroes={}})
+assert(not camera:stepIntro(.01,introView),'Another party intro must never move this camera')
+camera:sync({runId='same-run',levelEpoch=1,groupId='G2',worldName='BrickToadsWorld_G2',heroes={}})
+assert(camera:stepIntro(.01,introView) and introAttrs.BossIntroId=='group2-intro')
+local beforeCut=introView.CFrame.Position
+introFolder:SetAttribute('Counter',0xE0);introFolder:SetAttribute('CameraCut',true)
+assert(camera:stepIntro(.01,introView) and (introView.CFrame.Position-beforeCut).Magnitude>1,
+    'The source E0 marker must make an actual finite perspective cut')
+introFolder:SetAttribute('RunId','stale-run')
+assert(not camera:stepIntro(.01,introView) and introAttrs.BossIntroId==nil)
+introFolder:SetAttribute('RunId','same-run');camera.mode='Free';camera.freePosition=vector(1,2,3)
+assert(not camera:stepIntro(.01,introView),'Free spectators retain their chosen view')
+camera.mode='Follow';introFolder:SetAttribute('Counter',255)
+assert(not camera:stepIntro(.01,introView),'A finished intro cannot retain camera control')
+introFolder:Destroy();assert(not camera:stepIntro(.01,introView))
+print('PASS boss intro camera follows only current party/run and releases after cut completion or free view')
 
 local route=World.new(Base,{FallY=-20,Level=source(LevelSource)},
     {name='RouteWorld',offset={x=100,y=10,z=1024}})
@@ -262,6 +342,88 @@ local gold=pickup.root.Color
 route:projectile(-2001,{x=-30,y=3,z=0},false,'Bullet')
 assert(pickup.model:GetAttribute('Pickup')==false and pickup.root.Color~=gold,'Live bullets cannot look like ground pickups')
 print('PASS ordinary species and guardian projectile modes have distinct original readable presentation')
+
+local ownershipBase=table.clone(Base)
+function ownershipBase.spawn(world,id,actorId,point)
+    local ok=Base.spawn(world,id,actorId,point)
+    local root=world.actors[id].root
+    root.simulateAssemblyOwnershipReset=true;root.nearbyAutomaticOwner='nearby-player-2'
+    root:SetNetworkOwner(nil) -- Real BaseWorld already pins this basic rig.
+    return ok
+end
+local ownershipWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50,Enemy={speed=9}},
+    {name='CompletedEnemyOwnership',offset={x=100,y=10,z=9216}})
+for i,kind in ipairs({'Pig','Walker','Dragon','Boss'}) do
+    local id=-20-i
+    assert(ownershipWorld:spawnEnemy(id,kind,{x=-30+i*5,y=3,z=0}))
+    local root=ownershipWorld.actors[id].root
+    assert(root.assemblyOwnershipResets>0,'The complete species must actually invalidate the basic-rig ownership pin in this fixture')
+    assert(root:GetNetworkOwner()==nil and not root:GetNetworkOwnershipAuto(),
+        'Completed '..kind..' assembly must be pinned to the server after all physical art is attached')
+end
+local claimed=ownershipWorld.actors[-21]
+local claimedModel,claimedRoot,claimedHP=claimed.model,claimed.root,claimed.humanoid.Health
+claimedRoot.networkOwnershipAuto=true;claimedRoot.networkOwner='nearby-player-2'
+ownershipWorld:enemyIdentity(-21,'ownership-run:enemy:1:-21','Player2')
+assert(claimedRoot:GetNetworkOwner()==nil and not claimedRoot:GetNetworkOwnershipAuto(),
+    'Claim identity must retain server physics rather than transfer the assembly to the logical role owner')
+assert(ownershipWorld.actors[-21].model==claimedModel and ownershipWorld.actors[-21].root==claimedRoot
+    and claimed.humanoid.Health==claimedHP and claimedModel:GetAttribute('ControlledByPlayer')==true
+    and claimedModel:GetAttribute('ActorId')=='ownership-run:enemy:1:-21','Ownership correction cannot replace or heal the claimed body')
+local ownershipHero=actor(ownershipWorld,1,claimedRoot.Position-vector(3,0,0))
+ownershipHero.root.CFrame.LookVector=vector(1,0,0)
+assert(ownershipWorld:carryEnemy(-21,1))
+claimedRoot.networkOwnershipAuto=true;claimedRoot.networkOwner='nearby-player-2'
+assert(ownershipWorld:releaseEnemy(-21))
+assert(claimedRoot:GetNetworkOwner()==nil and not claimedRoot:GetNetworkOwnershipAuto()
+    and claimed.model==claimedModel and claimed.humanoid.Health==claimedHP,'Unanchoring the carried same body must restore server authority')
+local ownedDragon=ownershipWorld.actors[-23];ownedDragon.root.AssemblyMass=12
+ownedDragon.root.networkOwnershipAuto=true;ownedDragon.root.networkOwner='nearby-player-2'
+workspace.Gravity=196.2
+assert(ownershipWorld:dragonMotion(-23,1,0,4.5,10))
+assert(ownedDragon.root:GetNetworkOwner()==nil and not ownedDragon.root:GetNetworkOwnershipAuto(),
+    'Dragon flight retains server authority on its existing completed body')
+ownershipWorld:stopDragon(-23)
+claimedRoot.networkOwnershipDenied=true
+local canClaim,claimError=pcall(function() ownershipWorld:enemyIdentity(-21,'unchanged','Player2') end)
+assert(not canClaim and string.find(tostring(claimError),'Ownership unavailable',1,true),
+    'A failed server-ownership assignment must fail explicitly instead of silently accepting a client-owned body')
+claimedRoot.networkOwnershipDenied=nil
+ownershipWorld:clearActors()
+print('PASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership')
+
+local clubOwnershipWorld=World.new(Base,{FallY=-20,WalkSpeed=16},{name='ClubOwnership'})
+local clubOwner=actor(clubOwnershipWorld,1,vector(0,3,0))
+clubOwner.model:SetAttribute('ActorId','club-owner-body')
+clubOwner.root.simulateAssemblyOwnershipReset=true;clubOwner.root.nearbyAutomaticOwner='nearby-player-1'
+clubOwner.root:SetNetworkOwner(nil)
+local ownerRoot,ownerModel,ownerHP=clubOwner.root,clubOwner.model,clubOwner.humanoid.Health
+assert(clubOwnershipWorld:equipClub('ownership-club',1))
+assert(ownerRoot.assemblyOwnershipResets>0,'Attaching the actual nested club model must invalidate the old pin in this fixture')
+assert(ownerRoot:GetNetworkOwner()==nil and not ownerRoot:GetNetworkOwnershipAuto(),
+    'Equipped nested weapon must pin the same hero assembly after its parts join')
+assert(clubOwner.model==ownerModel and clubOwner.root==ownerRoot and clubOwner.humanoid.Health==ownerHP
+    and ownerModel:GetAttribute('ActorId')=='club-owner-body','Equipping cannot replace or heal the hero')
+ownerRoot.networkOwnershipAuto=true;ownerRoot.networkOwner='nearby-player-1'
+assert(clubOwnershipWorld:unequipClub('ownership-club'))
+assert(ownerRoot:GetNetworkOwner()==nil and not ownerRoot:GetNetworkOwnershipAuto(),
+    'Removing a weapon must restore explicit server authority after its assembly change')
+assert(clubOwnershipWorld:equipClub('old-owner-club',1))
+local replacementOwner=actor(clubOwnershipWorld,1,vector(20,3,0))
+replacementOwner.root:SetNetworkOwner('replacement-owner')
+local replacementPins=replacementOwner.root.networkOwnershipPins
+ownerRoot.networkOwnershipAuto=true;ownerRoot.networkOwner='nearby-player-1'
+assert(clubOwnershipWorld:unequipClub('old-owner-club'))
+assert(ownerRoot:GetNetworkOwner()==nil and not ownerRoot:GetNetworkOwnershipAuto()
+    and replacementOwner.root:GetNetworkOwner()=='replacement-owner'
+    and replacementOwner.root.networkOwnershipPins==replacementPins,'Unequip must pin its saved old owner and never the replacement')
+replacementOwner.root.Anchored=true
+assert(clubOwnershipWorld:equipClub('anchored-club',1) and clubOwnershipWorld:unequipClub('anchored-club'))
+assert(replacementOwner.root.Anchored and replacementOwner.root.networkOwnershipPins==replacementPins,
+    'Anchored equipment owners must skip ownership assignment and preserve their physical flags')
+assert(clubOwner.humanoid.Health==ownerHP)
+ownerModel:Destroy();clubOwnershipWorld:clearActors()
+print('PASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements')
 
 local actualBase=source(BaseWorldSource)
 local scopedSearch={floors=route.floors,actors={},origins={[1]=vector(720,13,1024)},deathReason={[1]='Fall'},lastSupport={},
@@ -352,7 +514,389 @@ assert(not legacy.humanoid.Jump,'Legacy worlds must retain the original grounded
 eq(legacy.root.AssemblyLinearVelocity,16,-20,3)
 print('PASS jump history belongs to one actual actor in one modern world and preserves legacy behavior')
 
+-- The real rotated 2x2x1 rig can remain on the floor after its root centre
+-- crosses an edge. Use the ordinary geometric Raycast double, not an always-hit stub.
+local footprintWorld=World.new(Base,{FallY=-20,Level=source(LevelSource)},
+    {name='JumpFootprintRoute',offset={x=400,y=20,z=7680}})
+footprintWorld.geometry:ClearAllChildren()
+local footprintFloor=node('Part','FootprintSupport',footprintWorld.geometry)
+footprintFloor.Size=vector(44,2,12); footprintFloor.CFrame=frame(vector(26,-1,0)+footprintWorld.offset)
+footprintFloor.CanCollide=true; footprintFloor:SetAttribute('SurfaceId','footprint-support')
+local function edgeActor(x,z,right,look)
+    local a=standing(footprintWorld,1)
+    a.root.CFrame=frame(vector(x,3,z or -.637)+footprintWorld.offset)
+    a.root.CFrame.RightVector=right or vector(0,0,1)
+    a.root.CFrame.LookVector=look or vector(1,0,0)
+    a.routeJumpSupport={consumed=false,groundedAt=0,groundedY=a.root.Position.Y}
+    serverTime=1 -- The old centre-supported observation is beyond the existing grace.
+    return a
+end
+local overhang=edgeActor(48.385)
+assert(not workspace:Raycast(overhang.root.Position,vector(0,-3.4,0),footprintWorld.ray),
+    'The observed root centre must genuinely miss the box floor ending at local X48')
+assert(workspace:Raycast(overhang.root.Position-vector(.5,0,0),vector(0,-3.4,0),footprintWorld.ray),
+    'The real face+X rig still has its half-depth over the same group-local floor')
+footprintWorld:jump(1)
+assert(overhang.humanoid.Jump,'Standing rotated body at X48.385 must jump after centre support history expires')
+eq(overhang.root.AssemblyLinearVelocity,0,42,0,'Footprint support must use the unchanged configured jump power')
+for _,case in ipairs({
+    {x=48.5001,accept=false},
+    {x=48.385,right=vector(0,0,-1),look=vector(-1,0,0),accept=true},
+    {x=48.9,right=vector(1,0,0),look=vector(0,0,-1),accept=true},
+    {x=49.0001,right=vector(1,0,0),look=vector(0,0,-1),accept=false},
+    {x=48.385,z=6.8,accept=true}, -- Only the physical corner overlaps this support.
+    {x=48.385,z=7.0001,accept=false},
+}) do
+    local a=edgeActor(case.x,case.z,case.right,case.look)
+    footprintWorld:jump(1)
+    assert(a.humanoid.Jump==case.accept,'Support must stay within the rotated actual-size footprint, including corners')
+end
+local narrow=edgeActor(48.385); narrow.root.Size=vector(2,2,.4)
+footprintWorld:jump(1)
+assert(not narrow.humanoid.Jump,'Support must use this actual root depth, not a fixed or cosmetic extent')
+print('PASS jump support follows actual rotated rig footprint and corners without extending beyond its box')
+
+for _,blocked in ipairs({'Air','Upward','Consumed','Hazard','NoSurface','NoFloor','TooHigh'}) do
+    local a=edgeActor(48.385)
+    if blocked=='Air' then a.humanoid.FloorMaterial=enum.Material.Air
+    elseif blocked=='Upward' then a.root.AssemblyLinearVelocity=vector(0,2,0)
+    elseif blocked=='Consumed' then a.routeJumpSupport.consumed=true
+    elseif blocked=='Hazard' then footprintFloor:SetAttribute('Hazard',true)
+    elseif blocked=='NoSurface' then footprintFloor:SetAttribute('SurfaceId',nil)
+    elseif blocked=='NoFloor' then footprintFloor.CanCollide=false
+    elseif blocked=='TooHigh' then a.root.CFrame.Position=a.root.Position+vector(0,1,0) end
+    footprintWorld:jump(1)
+    assert(not a.humanoid.Jump,'Footprint rays must preserve the existing '..blocked..' rejection')
+    footprintFloor.CanCollide=true; footprintFloor:SetAttribute('Hazard',nil)
+    footprintFloor:SetAttribute('SurfaceId','footprint-support')
+end
+local normalRaycast=workspace.Raycast
+function workspace:Raycast(origin,direction,params)
+    local hit=normalRaycast(self,origin,direction,params)
+    if hit and hit.Instance==footprintFloor then hit.Normal=vector(0,.94,0) end
+    return hit
+end
+local sloped=edgeActor(48.385); footprintWorld:jump(1)
+assert(not sloped.humanoid.Jump,'Footprint support must preserve the upward-facing normal gate')
+workspace.Raycast=normalRaycast
+footprintWorld:clearActors()
+print('PASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards')
+
+-- A natural Walker knockback can leave this real-size body hanging from the
+-- aqueduct edge: the engine reports Climbing/Air, but the rotated footprint
+-- still overlaps the floor. Use the observed pose and the geometric raycast.
+do
+    local climbingWorld=World.new(Base,{FallY=-20,WalkSpeed=16,JumpPower=50,
+        Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75},Level=source(LevelSource)},
+        {name='ClimbingFootprintRoute',offset={x=800,y=30,z=7936}})
+    climbingWorld.geometry:ClearAllChildren()
+    local floor=node('Part','ClimbingEdgeSupport',climbingWorld.geometry)
+    floor.Size=vector(42,2,38);floor.CFrame=frame(vector(25,-1,0)+climbingWorld.offset)
+    floor.CanCollide=true;floor:SetAttribute('SurfaceId','climbing-edge-support')
+    local function hangingActor(x)
+        local previous=climbingWorld.actors[1]
+        if previous then previous.model:Destroy() end
+        local a=actor(climbingWorld,1,vector(x or 46.49994,.2314,-3.5528)+climbingWorld.offset)
+        a.root.CFrame.RightVector=vector(0,0,1);a.root.CFrame.LookVector=vector(1,0,0)
+        a.root.AssemblyLinearVelocity=vector(-3,0,2)
+        a.humanoid.FloorMaterial=enum.Material.Air;a.humanoid.nativeState=enum.HumanoidStateType.Climbing
+        a.humanoid.JumpPower=50
+        a.routeJumpSupport={consumed=false,groundedAt=0,groundedY=3+climbingWorld.offset.Y}
+        serverTime=2 -- Both delayed-input grace and any reaction have expired.
+        return a
+    end
+    local hanging=hangingActor()
+    assert(not workspace:Raycast(hanging.root.Position,vector(0,-3.4,0),climbingWorld.ray),
+        'The hanging root centre must miss the actual floor ending at X46')
+    assert(workspace:Raycast(hanging.root.Position-vector(.5,0,0),vector(0,-3.4,0),climbingWorld.ray),
+        'The hanging actual rotated half-depth must still overlap the floor')
+    climbingWorld:jump(1)
+    assert(hanging.humanoid.Jump,'A supported Climbing/Air edge hang must accept one ordinary Jump after ground grace expires')
+    eq(hanging.root.AssemblyLinearVelocity,-3,50,2,'Edge dismount uses configured jump power and preserves horizontal impulse')
+    assert(hanging.routeJumpSupport.consumed and hanging.routeJumpSupport.groundedAt==0,
+        'Climbing dismount must consume one jump without refreshing ground history')
+    hanging.humanoid.Jump=false;hanging.root.AssemblyLinearVelocity=vector(-3,0,2)
+    hanging.routeJumpSupport.airborne=true
+    serverTime=3;climbingWorld:hazard(1);climbingWorld:jump(1)
+    assert(not hanging.humanoid.Jump and hanging.routeJumpSupport.consumed,
+        'Remaining Climbing/Air cannot rearm a consumed jump, including after observed flight')
+    eq(hanging.root.AssemblyLinearVelocity,-3,0,2)
+    print('PASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing')
+
+    for _,blocked in ipairs({'Freefall','BeyondFootprint','NarrowRoot','Upward','Consumed','Dead','Anchored','Reaction',
+        'Hazard','NoSurface','NoFloor','TooHigh','ForeignSupport','WallOnly','DownwardNormal'}) do
+        local a=hangingActor(blocked=='BeyondFootprint' and 46.5001 or nil)
+        local extra,originalRaycast
+        if blocked=='Freefall' then a.humanoid.nativeState=enum.HumanoidStateType.Freefall
+        elseif blocked=='NarrowRoot' then a.root.Size=vector(2,2,.4)
+        elseif blocked=='Upward' then a.root.AssemblyLinearVelocity=vector(-3,2,2)
+        elseif blocked=='Consumed' then a.routeJumpSupport.consumed=true;a.routeJumpSupport.airborne=true
+        elseif blocked=='Dead' then a.humanoid.Health=0
+        elseif blocked=='Anchored' then a.root.Anchored=true
+        elseif blocked=='Reaction' then a.humanoid.PlatformStand=true
+        elseif blocked=='Hazard' then floor:SetAttribute('Hazard',true)
+        elseif blocked=='NoSurface' then floor:SetAttribute('SurfaceId',nil)
+        elseif blocked=='NoFloor' then floor.CanCollide=false
+        elseif blocked=='TooHigh' then a.root.CFrame.Position=a.root.Position+vector(0,4,0)
+        elseif blocked=='ForeignSupport' then
+            floor.CanCollide=false
+            extra=node('Part','ForeignSupport',workspace);extra.CFrame=floor.CFrame;extra.Size=floor.Size
+            extra.CanCollide=true;extra:SetAttribute('SurfaceId','foreign-floor')
+        elseif blocked=='WallOnly' then
+            floor.CanCollide=false
+            extra=node('Part','WallWithoutUpwardSupport',climbingWorld.geometry)
+            extra.Size=vector(2,20,38);extra.CFrame=frame(vector(45,5,0)+climbingWorld.offset)
+            extra.CanCollide=true;extra:SetAttribute('SurfaceId','wall')
+        elseif blocked=='DownwardNormal' then
+            originalRaycast=workspace.Raycast
+            function workspace:Raycast(origin,direction,params)
+                local hit=originalRaycast(self,origin,direction,params)
+                if hit and hit.Instance==floor then hit.Normal=vector(0,.94,0) end
+                return hit
+            end
+        end
+        local before=a.root.AssemblyLinearVelocity
+        climbingWorld:jump(1)
+        assert(not a.humanoid.Jump,'Climbing edge dismount must preserve '..blocked..' rejection')
+        eq(a.root.AssemblyLinearVelocity,before.X,before.Y,before.Z,'Rejected '..blocked..' input must not alter velocity')
+        if originalRaycast then workspace.Raycast=originalRaycast end
+        if extra then extra:Destroy() end
+        floor.CanCollide=true;floor:SetAttribute('Hazard',nil);floor:SetAttribute('SurfaceId','climbing-edge-support')
+    end
+    climbingWorld:clearActors()
+    print('PASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards')
+end
+
+-- Trusted route fixtures exercise the physical boundary independently of the
+-- pure section/seed generator: the second route moves the actual aqueduct gap.
+local canonicalRebuild=source(LevelSource)
+local mapA,mapB=source(LevelSource),source(LevelSource)
+mapA.variation={version=1,seed=111,sectionChoices={1,1,1,1,1,1}}
+mapA.zones[1].obstacles={{kind='StoneCover',x=-50,y=1.5,z=-20,w=8,h=3,d=4}}
+mapB.variation={version=1,seed=222,sectionChoices={2,2,1,1,1,1}}
+mapB.zones[1].platforms[1].z=4;mapB.zones[1].platforms[1].d=56
+mapB.zones[2].platforms[1].x=29;mapB.zones[2].platforms[1].w=50
+mapB.zones[2].platforms[2].x=91.5;mapB.zones[2].platforms[2].w=65
+mapB.zones[2].gaps={{minX=54,maxX=59,minZ=-19,maxZ=19}}
+mapB.zones[3].obstacles={{kind='StoneCover',x=170,y=1.5,z=20,w=8,h=3,d=4}}
+local sharedRebuildConfig={FallY=-20,JumpPower=50,Level=canonicalRebuild}
+local rebuilding=World.new(Base,sharedRebuildConfig,{name='RebuildRouteA',offset={x=100,y=10,z=10240}})
+local untouched=World.new(Base,sharedRebuildConfig,{name='RebuildRouteB',offset={x=100,y=10,z=10752}})
+local neighbourFloor=untouched.allFloors[1]
+assert(type(rebuilding.rebuildLevel)=='function','A new run needs an explicit empty-world level rebuild boundary')
+rebuilding:clearActors();assert(rebuilding:rebuildLevel(mapA))
+assert(rebuilding.config.Level==mapA and sharedRebuildConfig.Level==canonicalRebuild and untouched.config.Level==canonicalRebuild)
+assert(rebuilding.folder:GetAttribute('LayoutSeed')==111 and rebuilding.folder:GetAttribute('LayoutVersion')==1)
+assert(rebuilding:groundPosition({x=50,y=3,z=0})==nil and rebuilding:groundPosition({x=56,y=3,z=0}),
+    'The first route must preserve its own actual gap instead of a visual-only change')
+local oldFloor,oldCover=rebuilding.allFloors[1],rebuilding.geometry:FindFirstChild('StoneCover')
+assert(oldCover and oldCover.CanCollide and oldCover.Anchored and oldCover:GetAttribute('SurfaceId')=='Floodgate')
+assert(not table.find(rebuilding.allFloors,oldCover),'Cover is collision geometry, not a new respawn platform or combat actor')
+rebuilding:progress(7,false);rebuilding:stage('Exit')
+local liveLayoutBody=actor(rebuilding,1,vector(35,13,10240))
+local oldGate,oldOrigin=rebuilding.gates[1],rebuilding.origins[1]
+local accepted,reason=rebuilding:rebuildLevel(mapB)
+assert(accepted==false and reason=='ACTORS_PRESENT','An existing body must reject a level rebuild')
+assert(rebuilding.config.Level==mapA and rebuilding.allFloors[1]==oldFloor and not oldFloor.destroyed
+    and rebuilding.geometry:FindFirstChild('StoneCover')==oldCover and rebuilding.gates[1]==oldGate
+    and not rebuilding.exitGate.beam.CanCollide and rebuilding.origins[1]==oldOrigin
+    and rebuilding.folder:GetAttribute('LayoutSeed')==111 and rebuilding.actors[1]==liveLayoutBody,
+    'Rejection must precede every config, geometry, gate, origin, body and seed mutation')
+rebuilding:healingFly('old-layout-fly',{x=-50,y=4.5,z=0});rebuilding:clubItem('old-layout-club',{x=-50,y=1.2,z=0})
+rebuilding:clearActors()
+rebuilding.lastSupport[1]='stale-layout';rebuilding.deathReason[1]='Fall';rebuilding.origins[1]=vector(777,888,999);rebuilding.blocked=true
+assert(rebuilding:rebuildLevel(mapB))
+assert(oldFloor.destroyed and oldCover.destroyed and liveLayoutBody.model.destroyed)
+assert(rebuilding.config.Level==mapB and #rebuilding.floors==1 and rebuilding.gates[1].beam.CanCollide
+    and rebuilding.exitGate.beam.CanCollide and rebuilding.stageName=='Approach' and not rebuilding.blocked)
+assert(next(rebuilding.lastSupport)==nil and next(rebuilding.deathReason)==nil and next(rebuilding.actors)==nil)
+assert(#rebuilding.healingFlyFolder:GetChildren()==0 and #rebuilding.clubItemFolder:GetChildren()==0)
+assert(rebuilding.folder:GetAttribute('LayoutSeed')==222 and rebuilding.folder:GetAttribute('LayoutVersion')==1)
+eq(rebuilding.origins[1],35,13,10237,'New safe origins follow the first support centre and one group offset')
+eq(rebuilding.allFloors[2].Position,129,9,10240,'Rebuilt geometry receives its world translation exactly once')
+assert(rebuilding:groundPosition({x=50,y=3,z=0}) and rebuilding:groundPosition({x=56,y=3,z=0})==nil,
+    'The second map must replace the collidable crossing rather than retain the old floor')
+assert(not neighbourFloor.destroyed and untouched.config.Level==canonicalRebuild and untouched.allFloors[1]==neighbourFloor)
+print('PASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata')
+
+local newCover=rebuilding.geometry:FindFirstChild('StoneCover')
+eq(newCover.Position,270,11.5,10260,'Stone cover uses domain-local layout coordinates plus the group offset once')
+eq(newCover.Size,8,3,4)
+assert(newCover.CanCollide and newCover:GetAttribute('SurfaceId')=='Courtyard' and newCover:GetAttribute('ZoneIndex')==3)
+local coverGround=rebuilding:groundPosition({x=170,y=6,z=20})
+assert(coverGround and coverGround.x==170 and coverGround.z==20 and math.abs(coverGround.y-4.2)<.00001)
+rebuilding:progress(3,false)
+local coverHero=actor(rebuilding,1,vector(270,16,10260));coverHero.humanoid.JumpPower=50
+rebuilding:hazard(1);assert(rebuilding.lastSupport[1]=='Courtyard')
+rebuilding:jump(1);assert(coverHero.humanoid.Jump and coverHero.root.AssemblyLinearVelocity.Y==50,
+    'A supplied cover must retain ordinary physical support and the existing jump rule')
+local coverRespawn=actualBase.findSafe({floors=rebuilding.floors,actors={},origins={[1]=coverHero.root.Position},
+    deathReason={},lastSupport={[1]=rebuilding.lastSupport[1]},isSafe=function() return true end},1)
+assert(coverRespawn and coverRespawn.surface:GetAttribute('SurfaceId')=='Courtyard',
+    'Standing on cover must not invent a different respawn surface from its district support')
+local keptFloor=rebuilding.allFloors[1]
+untouched:clearActors();assert(untouched:rebuildLevel(mapA))
+assert(rebuilding.allFloors[1]==keptFloor and not keptFloor.destroyed and rebuilding.config.Level==mapB)
+eq(untouched.geometry:FindFirstChild('StoneCover').Position,50,11.5,10732,'Neighbouring layout keeps its own one-time offset')
+rebuilding:clearActors();untouched:clearActors()
+print('PASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds')
+
 Base.move=actualBase.move; Base.setReaction=actualBase.setReaction
+Base.hold=actualBase.hold; Base.kill=actualBase.kill
+local locomotionWorld=World.new(Base,{FallY=-20,WalkSpeed=16,JumpPower=50,MoveTimeout=.35,Enemy={speed=9},
+    Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75},Level=source(LevelSource)},
+    {name='LocomotionRoute',offset={x=100,y=10,z=8192}})
+local function freshRunner(id)
+    local old=locomotionWorld.actors[id]
+    if old then old.model:Destroy() end
+    local a=actor(locomotionWorld,id,vector(-40,3,0)+locomotionWorld.offset)
+    a.humanoid.JumpPower=50
+    a.root.CFrame.LookVector=vector(1,0,0)
+    return a
+end
+serverTime=100
+local runner=freshRunner(1)
+locomotionWorld:move(1,1,0,true)
+assert(runner.humanoid.WalkSpeed==24,'The server run cap must survive the DragonWorld move decorator')
+assert(not locomotionWorld:isRunning(1) and locomotionWorld:movementMode(1)=='Idle',
+    'A run flag while stationary or pushing a wall is not actual running')
+runner.root.AssemblyLinearVelocity=vector(17.99,0,0)
+assert(not locomotionWorld:isRunning(1),'Below75% of hero run speed cannot qualify')
+runner.root.AssemblyLinearVelocity=vector(18,0,0)
+assert(locomotionWorld:isRunning(1) and locomotionWorld:movementMode(1)=='Run')
+runner.root.AssemblyLinearVelocity=vector(-24,0,0)
+assert(not locomotionWorld:isRunning(1),'Velocity opposite the requested heading cannot qualify')
+locomotionWorld:move(1,1,0,false);runner.root.AssemblyLinearVelocity=vector(32,0,0)
+assert(runner.humanoid.WalkSpeed==16 and not locomotionWorld:isRunning(1),
+    'Knockback speed alone must not become a run request')
+locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0)
+runner.root.CFrame=frame(vector(50,3,0)+locomotionWorld.offset)
+assert(not locomotionWorld:isRunning(1),'A stale floor report over a real route gap cannot qualify')
+runner.root.CFrame=frame(vector(-40,3,0)+locomotionWorld.offset)
+for _,block in ipairs({'Air','Held','Reaction','Carrying','Flight','Boss'}) do
+    runner.humanoid.FloorMaterial=block=='Air' and enum.Material.Air or enum.Material.Slate
+    runner.root.Anchored=block=='Held';runner.humanoid.PlatformStand=block=='Reaction'
+    runner.model:SetAttribute('CarryingEnemy',block=='Carrying' and -1 or nil)
+    runner.model:SetAttribute('DragonFlight',block=='Flight' and true or nil)
+    locomotionWorld.enemyKinds[1]=block=='Boss' and 'Boss' or nil
+    assert(not locomotionWorld:isRunning(1),'Blocked '..block..' cannot qualify as ground run')
+end
+runner.humanoid.FloorMaterial=enum.Material.Slate;runner.root.Anchored=false;runner.humanoid.PlatformStand=false
+runner.model:SetAttribute('CarryingEnemy',nil);runner.model:SetAttribute('DragonFlight',nil);locomotionWorld.enemyKinds[1]=nil
+locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0)
+serverTime=100.35
+assert(not locomotionWorld:isRunning(1),'Missing movement heartbeat expires at the existing timeout')
+locomotionWorld:move(1,0,0,false)
+eq(runner.root.AssemblyLinearVelocity,24,0,0,'Stopping voluntary movement must not erase a physical impulse')
+assert(not locomotionWorld:isRunning(1) and runner.humanoid.WalkSpeed==16)
+locomotionWorld:move(1,1,0,true);locomotionWorld:setReaction(1,true);locomotionWorld:setReaction(1,false)
+assert(not locomotionWorld:isRunning(1) and runner.humanoid.WalkSpeed==16 and runner.humanoid.MoveDirection.Magnitude==0,
+    'Recovery cannot resume an old run or voluntary movement')
+print('PASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle')
+
+runner=freshRunner(1);serverTime=101
+locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0)
+locomotionWorld:jump(1)
+local runTakeoff=runner.root.AssemblyLinearVelocity
+eq(runTakeoff,24,50,0,'Run jump retains real takeoff speed and the same vertical jump power')
+runner.humanoid.FloorMaterial=enum.Material.Air
+runner.root.CFrame=frame(vector(-38,5,0)+locomotionWorld.offset)
+locomotionWorld:move(1,0,1,false)
+assert(runner.humanoid.WalkSpeed==24 and locomotionWorld:movementMode(1)=='Air' and not locomotionWorld:isRunning(1))
+locomotionWorld:move(1,0,0,false);locomotionWorld:move(1,-1,0,false)
+assert(runner.humanoid.WalkSpeed==24,'Release and steering retain the accepted run-jump air-control cap')
+runner.root.AssemblyLinearVelocity=vector(37,8,-4);locomotionWorld:move(1,1,0,true)
+eq(runner.root.AssemblyLinearVelocity,37,8,-4,'Air control must not overwrite actual external impulses')
+locomotionWorld:jump(1)
+eq(runner.root.AssemblyLinearVelocity,37,8,-4,'Running does not grant another jump in flight')
+locomotionWorld:hazard(1)
+runner.humanoid.FloorMaterial=enum.Material.Slate;runner.root.CFrame=frame(vector(-38,3,0)+locomotionWorld.offset)
+runner.root.AssemblyLinearVelocity=vector();locomotionWorld:hazard(1);locomotionWorld:move(1,1,0,false)
+assert(runner.humanoid.WalkSpeed==16,'Only an actual landing releases the frozen air-control cap')
+runner=freshRunner(1);locomotionWorld:move(1,1,0,false);runner.root.AssemblyLinearVelocity=vector(16,0,0)
+locomotionWorld:jump(1);local walkTakeoff=runner.root.AssemblyLinearVelocity
+assert(runTakeoff.X>walkTakeoff.X and runTakeoff.Y==walkTakeoff.Y,'Longer run-jump range comes from real horizontal speed')
+runner.humanoid.FloorMaterial=enum.Material.Air;runner.root.CFrame=frame(vector(-38,5,0)+locomotionWorld.offset)
+locomotionWorld:move(1,1,0,true)
+assert(runner.humanoid.WalkSpeed==16,'A walking jump cannot promote its air-control cap to run in midair')
+print('PASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion')
+
+runner=freshRunner(1);locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0)
+local oldRunner=runner
+runner=actor(locomotionWorld,1,vector(-40,3,0)+locomotionWorld.offset)
+locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0)
+locomotionWorld:resetLocomotion(1,oldRunner)
+assert(oldRunner.humanoid.MoveDirection.Magnitude==0 and oldRunner.humanoid.WalkSpeed==16
+    and locomotionWorld:isRunning(1),'Old-body cleanup must not stop or alter its replacement')
+locomotionWorld:hold(1,true);locomotionWorld:hold(1,false)
+assert(not locomotionWorld:isRunning(1) and runner.humanoid.WalkSpeed==16)
+local groundEnemy=freshRunner(-8);locomotionWorld.enemyKinds[-8]='Drone'
+locomotionWorld:move(-8,1,0,true);groundEnemy.root.AssemblyLinearVelocity=vector(16,0,0)
+assert(groundEnemy.humanoid.WalkSpeed==16 and locomotionWorld:isRunning(-8))
+locomotionWorld:move(-8,1,0,false)
+assert(groundEnemy.humanoid.WalkSpeed==9 and not locomotionWorld:isRunning(-8))
+local mount=freshRunner(-9);mount.model:SetAttribute('EnemyKind','Dragon');locomotionWorld.enemyKinds[-9]='Drone'
+locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0)
+assert(locomotionWorld:dragonLink(-9,1,'Mounted'))
+locomotionWorld:move(1,0,0,false);assert(locomotionWorld:dragonUnlink(1))
+assert(runner.humanoid.WalkSpeed==16 and not locomotionWorld:isRunning(1)
+    and runner.humanoid.MoveDirection.Magnitude==0,'Dragon unlink cannot restore saved run speed or old running intent')
+print('PASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release')
+
+runner=freshRunner(1);serverTime=102
+locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0);locomotionWorld:hazard(1)
+runner.humanoid.FloorMaterial=enum.Material.Air;runner.root.CFrame=frame(vector(50,2,0)+locomotionWorld.offset)
+runner.root.AssemblyLinearVelocity=vector(24,-8,0);serverTime=102.1;locomotionWorld:hazard(1)
+locomotionWorld:jump(1);locomotionWorld:move(1,0,1,false)
+assert(runner.humanoid.WalkSpeed==24,'A real running walk-off keeps its run air cap through the existing jump grace')
+eq(runner.root.AssemblyLinearVelocity,24,50,0)
+runner=freshRunner(1);runner.root.CFrame=frame(vector(-30,3,0)+locomotionWorld.offset)
+groundEnemy=freshRunner(-8);locomotionWorld.enemyKinds[-8]='Drone'
+locomotionWorld:enemyMove(-8,1,16);groundEnemy.root.AssemblyLinearVelocity=vector(16,0,0)
+assert(locomotionWorld:isRunning(-8),'Safe NPC run approach uses the same actual-running eligibility')
+groundEnemy.root.CFrame=frame(vector(47,3,0)+locomotionWorld.offset)
+runner.root.CFrame=frame(vector(60,3,0)+locomotionWorld.offset)
+locomotionWorld:enemyMove(-8,1,16)
+assert(groundEnemy.humanoid.MoveDirection.Magnitude==0 and not locomotionWorld:isRunning(-8),
+    'The existing three-ray edge stop must cancel NPC run intent without clearing real velocity')
+eq(groundEnemy.root.AssemblyLinearVelocity,16,0,0)
+runner=freshRunner(1);groundEnemy=freshRunner(-8);locomotionWorld.enemyKinds[-8]='Drone'
+groundEnemy.root.CFrame=frame(runner.root.Position+vector(3,0,0))
+locomotionWorld:move(1,1,0,true);runner.root.AssemblyLinearVelocity=vector(24,0,0)
+locomotionWorld:move(-8,1,0,true);groundEnemy.root.AssemblyLinearVelocity=vector(16,0,0)
+assert(locomotionWorld:carryEnemy(-8,1));assert(locomotionWorld:releaseEnemy(-8))
+assert(runner.humanoid.WalkSpeed==16 and groundEnemy.humanoid.WalkSpeed==9
+    and not locomotionWorld:isRunning(1) and not locomotionWorld:isRunning(-8),
+    'Pig carry and release cannot save or restore either actor run speed')
+local otherLocomotion=World.new(Base,locomotionWorld.config,{name='OtherLocomotion',offset={x=100,y=10,z=8704}})
+local otherRunner=actor(otherLocomotion,1,vector(-40,3,0)+otherLocomotion.offset)
+otherLocomotion:move(1,1,0,true);otherRunner.root.AssemblyLinearVelocity=vector(24,0,0)
+locomotionWorld:resetLocomotion(1)
+assert(otherLocomotion:isRunning(1),'Locomotion state cannot cross worlds sharing a slot ID')
+print('PASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups')
+
+runner=freshRunner(1)
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip'}) do
+    local motor=node('Motor6D',name,runner.model.Torso);motor.C0=frame()
+end
+local gaitSession={now=102.1,sourceCombat=true,combat={[1]={}}}
+runner.root.AssemblyLinearVelocity=vector(24,0,0);runner.walkPhase=0
+locomotionWorld:move(1,1,0,false);locomotionWorld:updatePresentation(gaitSession,.1,{})
+local walkPhase=runner.walkPhase;local walkPose=runner.poseMotors['Right Shoulder'].joint.C0.rotationX
+runner.walkPhase=0;locomotionWorld:move(1,1,0,true);locomotionWorld:updatePresentation(gaitSession,.1,{})
+assert(runner.walkPhase>walkPhase and runner.poseMotors['Right Shoulder'].joint.C0.rotationX~=walkPose
+    and runner.model:GetAttribute('MovementMode')=='Run','Run gait and cadence must differ visibly from walking')
+gaitSession.combat[1].attack={action='Dash'};locomotionWorld:updatePresentation(gaitSession,.1,{})
+assert(runner.poseMotors['Right Shoulder'].joint.C0.rotationX==-.5,'Accepted attack pose has priority over running gait')
+gaitSession.combat[1].attack=nil;runner.model:SetAttribute('CarryingEnemy',-8)
+locomotionWorld:updatePresentation(gaitSession,.1,{})
+assert(runner.poseMotors['Right Shoulder'].joint.C0.rotationX==2.65,'Carry pose has priority over ground locomotion')
+runner.model:SetAttribute('CarryingEnemy',nil)
+locomotionWorld:clearActors()
+assert(otherLocomotion:isRunning(1),'Run cleanup cannot stop another active group')
+otherLocomotion:clearActors()
+print('PASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority')
+
 local carrying=World.new(Base,{FallY=-20,Level=source(LevelSource),Enemy={speed=9},WalkSpeed=12},
     {name='EnemyCarryWorld',offset={x=100,y=10,z=2048}})
 local holder=actor(carrying,1,vector(100,13,2048))
@@ -630,3 +1174,436 @@ pose()
 assert(posingPig.attackPoseAction=='Punch' and posingPig.model:GetAttribute('AttackPhase')==nil,
     'Legacy ordinary enemy presentation keeps its original Punch fallback')
 print('PASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation')
+
+local walkerPose=actor(pigWorld,-2,vector(103,13,3072));pigWorld.enemyKinds[-2]='Drone'
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip'}) do
+    local motor=node('Motor6D',name,walkerPose.model.Torso);motor.C0=frame()
+end
+local walkerState={kind='Walker',windup={at=2.5,action='WalkerLight'}}
+poseSession.now=2
+local function poseWalker()
+    pigWorld:updatePresentation(poseSession,.1,{[-2]=walkerState})
+    return walkerPose.poseMotors['Right Hip'].joint.C0.rotationX,
+        walkerPose.poseMotors['Left Hip'].joint.C0.rotationX
+end
+local lightLeg,lightSupport=poseWalker()
+assert(walkerPose.model:GetAttribute('PrimaryAttack')=='WalkerLight' and walkerPose.model:GetAttribute('AttackPhase')=='Windup',
+    'Walker needs its own trusted primary telegraph rather than the generic Punch fallback')
+walkerState.windup.action='WalkerHeavy'
+local heavyLeg,heavySupport=poseWalker()
+assert(lightLeg~=heavyLeg and lightLeg~=lightSupport and heavyLeg==heavySupport,
+    'The light leg preparation must differ from the two-leg heavy launch preparation')
+walkerState.windup=nil;walkerState.lastStrikeAction='WalkerHeavy';walkerState.strikeRecoveryUntil=2.35
+poseSession.now=2.2
+local recoveryLeg=poseWalker()
+assert(walkerPose.model:GetAttribute('AttackPhase')=='Recovery' and recoveryLeg~=heavyLeg,
+    'Walker recovery has a separate finite leg pose selected by Session time')
+poseSession.now=2.35;poseWalker()
+assert(walkerPose.model:GetAttribute('PrimaryAttack')==nil and walkerPose.model:GetAttribute('AttackPhase')==nil
+    and walkerPose.attackPoseUntil==nil and walkerPose.attackPoseAction==nil,'Walker expiry clears all primary presentation state')
+walkerState.windup={at=3,action='WalkerLight'};walkerState.reactionUntil=3
+poseWalker();assert(walkerPose.model:GetAttribute('AttackPhase')==nil,'Incoming reactions suppress Walker telegraphs')
+walkerState.reactionUntil=nil;pigWorld.enemyCarries[-2]={mode='Carried'}
+poseWalker();assert(walkerPose.model:GetAttribute('AttackPhase')==nil,'Held bodies cannot retain Walker strike poses')
+pigWorld.enemyCarries[-2]=nil;walkerPose.humanoid.Health=0
+poseWalker();assert(walkerPose.model:GetAttribute('AttackPhase')==nil,'Dead Walker cannot display an active strike')
+walkerPose.humanoid.Health=100
+pigState={kind='Pig',windup={at=3,action='PigJab'}}
+pigWorld:updatePresentation(poseSession,.1,{[-1]=pigState,[-2]=walkerState})
+assert(posingPig.model:GetAttribute('PrimaryAttack')=='PigJab','Walker presentation must not replace Pig primary states')
+print('PASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption')
+
+for _,entry in ipairs({{actor=posingPig,kind='Pig',id=-1},{actor=walkerPose,kind='Walker',id=-2}}) do
+    local state={kind=entry.kind,windup={at=3,action='EnemyRunStrike'}}
+    local states={[entry.id]=state};poseSession.now=2.5
+    pigWorld:updatePresentation(poseSession,.1,states)
+    assert(entry.actor.model:GetAttribute('PrimaryAttack')=='EnemyRunStrike'
+        and entry.actor.model:GetAttribute('AttackPhase')=='Windup','Ground enemy run strike needs a trusted finite telegraph')
+    state.windup=nil;state.lastStrikeAction='EnemyRunStrike';state.strikeRecoveryUntil=2.8
+    pigWorld:updatePresentation(poseSession,.1,states)
+    assert(entry.actor.model:GetAttribute('AttackPhase')=='Recovery')
+    poseSession.now=2.8;pigWorld:updatePresentation(poseSession,.1,states)
+    assert(entry.actor.model:GetAttribute('PrimaryAttack')==nil,'Running-strike art cannot outlive its server recovery deadline')
+end
+print('PASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority')
+
+local dragonPose=actor(pigWorld,-3,vector(110,13,3072));pigWorld.enemyKinds[-3]='Drone'
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip','Neck'}) do
+    local motor=node('Motor6D',name,dragonPose.model.Torso);motor.C0=frame()
+end
+local dragonState={kind='Dragon',windup={at=4,action='DragonHeadbutt'}}
+poseSession.now=3
+local function poseDragon() pigWorld:updatePresentation(poseSession,.1,{[-3]=dragonState}) end
+poseDragon()
+assert(dragonPose.model:GetAttribute('PrimaryAttack')=='DragonHeadbutt'
+    and dragonPose.model:GetAttribute('AttackPhase')=='Windup','Dragon must present its own accepted headbutt')
+local dragonNeck=dragonPose.poseMotors.Neck
+assert(dragonNeck and dragonNeck.joint.C0.rotationX~=0,'Headbutt needs a real original neck pose')
+local preparedNeck=dragonNeck.joint.C0.rotationX
+dragonState.windup=nil;dragonState.lastStrikeAction='DragonHeadbutt';dragonState.strikeRecoveryUntil=3.25
+poseDragon();assert(dragonNeck.joint.C0.rotationX~=preparedNeck and dragonPose.model:GetAttribute('AttackPhase')=='Recovery')
+poseSession.now=3.25;poseDragon()
+assert(dragonNeck.joint.C0.rotationX==0 and dragonPose.model:GetAttribute('PrimaryAttack')==nil,
+    'Headbutt neck/phase must reset after the finite recovery')
+dragonState.windup={at=5,action='DragonHeadbutt'};dragonState.reactionUntil=5;poseDragon()
+assert(dragonNeck.joint.C0.rotationX==0 and dragonPose.model:GetAttribute('PrimaryAttack')==nil)
+dragonState.reactionUntil=nil;dragonPose.humanoid.Health=0;poseDragon()
+assert(dragonPose.model:GetAttribute('AttackPhase')==nil,'Death must cancel Dragon presentation')
+dragonPose.humanoid.Health=100
+print('PASS Dragon headbutt has real finite neck poses and clears on reaction/death')
+
+local sourceHero=actor(pigWorld,1,vector(100,13,3072))
+for _,name in ipairs({'Left Shoulder','Right Shoulder','Left Hip','Right Hip'}) do
+    local motor=node('Motor6D',name,sourceHero.model.Torso);motor.C0=frame()
+end
+local sourceSession={now=4,sourceCombat={},combat={[1]={rawLife=47,attack={at=4.2,action='HeroUppercut'}}}}
+pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('PrimaryAttack')=='HeroUppercut','Modern hero must show the server-selected action')
+local upperArm=sourceHero.poseMotors['Right Shoulder'].joint.C0.rotationX
+sourceSession.combat[1].attack.action='HeroBoot';pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.poseMotors['Right Shoulder'].joint.C0.rotationX~=upperArm
+    and sourceHero.poseMotors['Right Hip'].joint.C0.rotationX~=0,'Boot must have a distinct arm and leg pose')
+sourceSession.combat[1].attack=nil;sourceSession.combat[1].lastStrikeAction='HeroBoot';sourceSession.combat[1].strikeRecoveryUntil=4.3
+pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('AttackPhase')=='Recovery')
+sourceSession.now=4.3;pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('PrimaryAttack')==nil and sourceHero.poseMotors['Right Hip'].joint.C0.rotationX==0)
+sourceSession.combat[1].attack={action='HeroKick'};sourceSession.combat[1].reactionEnd=5
+pigWorld:updatePresentation(sourceSession,.1,{})
+assert(sourceHero.model:GetAttribute('PrimaryAttack')==nil,'Incoming damage suppresses the hero attack pose')
+print('PASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat')
+
+local retreatWorld=World.new(Base,{FallY=-20,Level=source(LevelSource),Enemy={speed=9},WalkSpeed=12},
+    {name='WalkerRetreatWorld',offset={x=100,y=10,z=3584}})
+local retreatWalker=actor(retreatWorld,-1,vector(100,13,3584))
+local closeHero=actor(retreatWorld,1,vector(102,13,3584))
+closeHero.humanoid.FloorMaterial=enum.Material.Air -- Target grounding is not a movement prerequisite.
+retreatWalker.root.AssemblyLinearVelocity=vector(4,5,6)
+local originalFrame=retreatWalker.root.CFrame
+assert(type(retreatWorld.enemyRetreat)=='function','Walker close-range movement needs a safe away-from-target command')
+oldRaycast=workspace.Raycast
+local retreatRays=0
+function workspace:Raycast(origin,direction,params)
+    if params==retreatWorld.ray then retreatRays+=1 end
+    return oldRaycast(self,origin,direction,params)
+end
+retreatWorld:enemyRetreat(-1,1,7)
+eq(retreatWalker.humanoid.lastMove,-1,0,0,'Retreat must move away from the actual same-group target')
+assert(retreatWalker.humanoid.WalkSpeed==7 and retreatRays==3,'Retreat uses its configured speed and all three edge-support rays')
+assert(retreatWalker.root.CFrame==originalFrame,'Backstep must not teleport or rotate the physical root')
+eq(retreatWalker.root.AssemblyLinearVelocity,4,5,6,'Backstep must preserve existing impulses and gravity velocity')
+retreatWorld:enemyMove(-1,1,9)
+eq(retreatWalker.humanoid.lastMove,1,0,0,'Shared safety must preserve normal pursuit toward the target')
+assert(retreatWalker.humanoid.WalkSpeed==9)
+retreatWalker.root.CFrame=frame(20,13,3584);closeHero.root.CFrame=frame(22,13,3584)
+retreatWorld:enemyRetreat(-1,1,7)
+eq(retreatWalker.humanoid.lastMove,0,0,0,'A backward step across the real platform edge must stop voluntary movement')
+eq(retreatWalker.root.Position,20,13,3584)
+eq(retreatWalker.root.AssemblyLinearVelocity,4,5,6,'Unsafe-edge stopping cannot erase an outside impulse')
+retreatWalker.root.CFrame=frame(100,13,3609.5);closeHero.root.CFrame=frame(102,13,3609.5)
+retreatWorld:enemyRetreat(-1,1,7)
+eq(retreatWalker.humanoid.lastMove,0,0,0,'A safe centre ray is insufficient when a side support ray crosses the edge')
+retreatWalker.root.CFrame=frame(100,13,3584);closeHero.root.CFrame=frame(102,13,3584)
+for _,guard in ipairs({'Anchored','Reaction','Carried','Dead','MissingTarget'}) do
+    retreatWalker.root.Anchored=guard=='Anchored';retreatWalker.humanoid.PlatformStand=guard=='Reaction'
+    retreatWalker.humanoid.Health=guard=='Dead' and 0 or 100
+    retreatWorld.enemyCarries[-1]=guard=='Carried' and {mode='Carried'} or nil
+    if guard=='MissingTarget' then closeHero.root.Parent=nil end
+    local before=retreatWalker.humanoid.lastMove
+    retreatWorld:enemyRetreat(-1,1,7)
+    assert(retreatWalker.humanoid.lastMove==before,'Held, reacting, dead, anchored or targetless bodies cannot start a backstep')
+end
+retreatWorld.enemyCarries[-1]=nil
+workspace.Raycast=oldRaycast
+assert(default.folder.Parent==workspace and pigWorld.folder.Parent==workspace,'Retreat affects no other group world')
+print('PASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses')
+
+local movementLinks=World.new(Base,{FallY=-20,Enemy={speed=9},WalkSpeed=12},{name='DragonMovementReset',offset={x=102,y=10,z=5120}})
+local movementDragon=actor(movementLinks,-1,vector(102,13,5120))
+local movementHero=actor(movementLinks,1,vector(106,13,5120))
+for _,mode in ipairs({'Mounted','Captured'}) do
+    movementHero.humanoid:Move(vector(1,0,0),false)
+    assert(movementLinks:dragonLink(-1,1,mode))
+    eq(movementHero.humanoid.MoveDirection,0,0,0,'Dragon link must clear the previous hero movement command')
+    movementLinks:move(1,1,0)
+    movementLinks:move(1,0,0) -- Session timeout/disconnect stop while the link owns physics.
+    eq(movementHero.humanoid.MoveDirection,0,0,0,'Linked movement suppression cannot preserve a previous walking command')
+    -- Exercise release clearing independently, including a residual actuator command.
+    movementHero.humanoid:Move(vector(1,0,0),false)
+    local oldMove=movementHero.humanoid.Move
+    local resetState
+    function movementHero.humanoid:Move(direction,relative)
+        if direction.Magnitude==0 then
+            resetState={evaluate=self.EvaluateStateMachine,standing=self.PlatformStand,anchored=movementHero.root.Anchored}
+        end
+        oldMove(self,direction,relative)
+    end
+    assert(movementLinks:dragonUnlink(1))
+    movementHero.humanoid.Move=oldMove
+    eq(movementHero.humanoid.MoveDirection,0,0,0,'Mounted and captured release cannot resume stale voluntary movement')
+    assert(resetState and resetState.evaluate==false and resetState.standing and resetState.anchored,
+        'The old move command must be cleared before restoring normal body locomotion')
+    assert(movementHero.humanoid.EvaluateStateMachine and not movementHero.humanoid.PlatformStand
+        and movementHero.humanoid.WalkSpeed==12 and not movementHero.root.Anchored and movementHero.humanoid.Health==100,
+        'Clearing old movement must preserve saved physics and health')
+end
+movementHero.humanoid:Move(vector(1,0,0),false)
+assert(movementLinks:dragonLink(-1,1,'Captured'))
+movementHero.humanoid:Move(vector(1,0,0),false)
+local oldLinkedHero=movementHero
+local newMovementHero=actor(movementLinks,1,vector(120,13,5120))
+newMovementHero.humanoid:Move(vector(-1,0,0),false)
+movementLinks:clearActors()
+eq(oldLinkedHero.humanoid.MoveDirection,0,0,0,'Cleanup must stop the saved old linked body, not look up its replacement slot')
+eq(newMovementHero.humanoid.MoveDirection,-1,0,0,'Old-link cleanup cannot rewrite a new actor movement command')
+assert(oldLinkedHero.humanoid.Health==100 and next(movementLinks.dragonLinks)==nil)
+print('PASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup')
+
+local responseWorld=World.new(Base,{FallY=-20},{name='AcceptedResponseWorld'})
+local responseTarget=actor(responseWorld,1,vector(0,3,0))
+local responseAttacker=actor(responseWorld,2,vector(2,3,0))
+responseAttacker.root.CFrame.LookVector=vector(1,0,0)
+responseTarget.root.AssemblyMass=2
+local applied=0
+function responseTarget.root:ApplyImpulse(value) self.lastApplied=value;applied+=1 end
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18)
+eq(responseTarget.root.lastApplied,18,0,0,'A captured response survives removal of the live impulse table')
+local bound=pcall(actualBase.impulse,responseWorld,1,2,{profile=18,horizontal=9,vertical=0},22)
+assert(not bound and applied==1,'A snapshot cannot be rebound to a different profile')
+print('PASS accepted response snapshots stay bound to their own profile without a live config table')
+
+responseAttacker.root.CFrame.LookVector=vector(-1,0,0)
+local currentFacingFrame=responseAttacker.root.CFrame
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=1,z=0})
+eq(responseTarget.root.lastApplied,18,0,0,'A captured shot direction must override an attacker who later turns around')
+assert(responseAttacker.root.CFrame==currentFacingFrame,'A shot response cannot rotate the current attacker to fake its accepted direction')
+responseWorld.actors[2]=nil
+local appliedBefore=applied
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=3,y=0,z=0})
+assert(applied==appliedBefore+1,'Accepted direction must still apply an impulse after its attacker actor disappears')
+eq(responseTarget.root.lastApplied,18,0,0,'Explicit horizontal direction is normalized independently of current actors')
+local replacementAttacker=actor(responseWorld,2,vector(4,3,0));replacementAttacker.root.CFrame.LookVector=vector(-1,0,0)
+local replacementFrame=replacementAttacker.root.CFrame
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=1,y=0,z=0})
+eq(responseTarget.root.lastApplied,18,0,0,'A new attacker appearance cannot redirect an earlier shot')
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18)
+eq(responseTarget.root.lastApplied,-18,0,0,'Without a captured direction legacy attacks retain current-facing impulses')
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=0/0,z=1})
+eq(responseTarget.root.lastApplied,-18,0,0,'Malformed direction falls back to the existing actor facing')
+assert(replacementAttacker.root.CFrame==replacementFrame)
+responseWorld.actors[2]=nil;appliedBefore=applied
+actualBase.impulse(responseWorld,1,2,{profile=18,horizontal=9,vertical=0},18,{x=0,z=0})
+assert(applied==appliedBefore,'An absent attacker and invalid direction cannot invent an impulse')
+print('PASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors')
+
+-- Physical API contracts execute the real adapter; they do not integrate Roblox physics.
+assert(type(World.dragonMotion)=='function','Dragon flight needs a real world adapter')
+workspace.Gravity=196.2
+local flightWorld=World.new(Base,{FallY=-20,Enemy={speed=9},WalkSpeed=12,JumpPower=42},{name='DragonPhysical',offset={x=102,y=10,z=4096}})
+local deck=node('Part','DragonDeck',flightWorld.geometry);deck.CFrame=frame(106,9,4096);deck.Size=vector(40,2,30);deck.CanCollide=true;deck:SetAttribute('SurfaceId','dragon-deck')
+local dragon=actor(flightWorld,-1,vector(102,13,4096));dragon.root.AssemblyMass=12;dragon.root.CFrame.LookVector=vector(1,0,0)
+flightWorld.enemyKinds[-1]='Drone';dragon.model:SetAttribute('EnemyKind','Dragon')
+local rider=actor(flightWorld,1,vector(106,13,4096));rider.root.CFrame.LookVector=vector(-1,0,0)
+for _,p in ipairs(rider.model:GetDescendants()) do if p:IsA('BasePart') then p.CanCollide=p.Name=='Torso' end end
+assert(flightWorld:dragonGrounded(-1) and flightWorld:dragonFloor(-1)==3)
+assert(flightWorld:dragonMotion(-1,1,0,4.5,10))
+eq(dragon.root.AssemblyLinearVelocity,10,9,0,'Flight height is local to its group elevation')
+local force=flightWorld.dragonFlights[-1].force
+assert(math.abs(force.Force.Y-2354.4)<1e-6 and dragon.humanoid.PlatformStand)
+flightWorld:stopDragon(-1)
+assert(force.Parent==nil and not dragon.humanoid.PlatformStand and dragon.humanoid.EvaluateStateMachine==true)
+do
+    local blockedWorld=World.new(Base,{FallY=-35,Enemy={speed=9},WalkSpeed=12,JumpPower=42},
+        {name='DragonBlockedAscent',offset={x=1200,y=100,z=24576}})
+    blockedWorld.geometry:ClearAllChildren()
+    local function blockedActor(id,x,y)
+        local a=actor(blockedWorld,id,vector(x or 0,y or -4.04,0)+blockedWorld.offset)
+        a.root.AssemblyMass=12;a.model.Torso.CanCollide=true;a.model:SetAttribute('EnemyKind','Dragon')
+        return a
+    end
+    local trapped=blockedActor(-1)
+    local before=trapped.root.Position
+    assert(blockedWorld:dragonMotion(-1,0,0,4.5,10),'Fixture must begin with ordinary active lift')
+    local lift=blockedWorld.dragonFlights[-1]
+    local roof=node('Part','OwnSolidUnderside',blockedWorld.geometry)
+    roof.CFrame=frame(vector(0,-1,0)+blockedWorld.offset);roof.Size=vector(20,2,20);roof.CanCollide=true
+    local hit=workspace:Raycast(trapped.root.Position,vector(0,4.5+blockedWorld.offset.Y-trapped.root.Position.Y,0),blockedWorld.ray)
+    assert(hit and hit.Instance==roof and hit.Normal.Y==-1,'Actual group-local ascent must cross this own floor underside')
+    assert(type(blockedWorld.dragonAscentBlocked)=='function','Flight policy needs a read-only ascent obstruction query before resolving actions')
+    local velocityBefore=trapped.root.AssemblyLinearVelocity
+    local forceBefore=lift.force.Force
+    local ownershipBefore=trapped.root.networkOwnershipPins
+    local childrenBefore=#trapped.root:GetChildren()
+    assert(blockedWorld:dragonAscentBlocked(-1,4.5)==true)
+    assert(blockedWorld.dragonFlights[-1]==lift and lift.force.Parent==trapped.root and lift.attachment.Parent==trapped.root
+        and lift.force.Force==forceBefore and #trapped.root:GetChildren()==childrenBefore,
+        'Read-only obstruction query must not stop, create or alter lift objects')
+    eq(trapped.root.AssemblyLinearVelocity,velocityBefore.X,velocityBefore.Y,velocityBefore.Z,
+        'Read-only obstruction query must preserve physical velocity')
+    eq(trapped.root.Position,before.X,before.Y,before.Z,'Read-only obstruction query must preserve the actual pose')
+    assert(trapped.humanoid.PlatformStand and not trapped.humanoid.EvaluateStateMachine and not trapped.humanoid.AutoRotate
+        and trapped.humanoid.WalkSpeed==0 and trapped.model:GetAttribute('DragonFlight')==true
+        and trapped.root.networkOwnershipPins==ownershipBefore and trapped.humanoid.Health==100 and trapped.model.Torso.CanCollide,
+        'Read-only obstruction query must preserve flags, authority, health and collisions')
+    local accepted,reason=blockedWorld:dragonMotion(-1,0,0,4.5,10)
+    assert(accepted==false and reason=='ASCENT_BLOCKED','Solid own underside must abort an impossible native ascent')
+    assert(blockedWorld.dragonFlights[-1]==nil and lift.force.Parent==nil and lift.attachment.Parent==nil,
+        'Aborting lift must remove gravity cancellation and its attachment')
+    assert(not trapped.humanoid.PlatformStand and trapped.humanoid.EvaluateStateMachine and trapped.humanoid.AutoRotate
+        and trapped.humanoid.WalkSpeed==12 and trapped.model:GetAttribute('DragonFlight')==nil,
+        'Blocked ascent restores the body flags saved by ordinary flight')
+    eq(trapped.root.Position,before.X,before.Y,before.Z,'Blocked ascent must never reposition the actual body')
+    assert(trapped.humanoid.Health==100 and trapped.model.Torso.CanCollide,'Blocked ascent preserves health and collision flags')
+    trapped.root.AssemblyLinearVelocity=vector(2,-9,3)
+    for _=1,3 do
+        local okay,why=blockedWorld:dragonMotion(-1,0,0,4.5,10)
+        assert(okay==false and why=='ASCENT_BLOCKED' and blockedWorld.dragonFlights[-1]==nil)
+        eq(trapped.root.AssemblyLinearVelocity,2,-9,3,'Repeated blocked calls must preserve native falling velocity')
+        assert(not trapped.root:FindFirstChild('DragonLift') and not trapped.root:FindFirstChild('DragonGravity'),
+            'Blocked retries must not recreate lift objects')
+    end
+    local cold=blockedActor(-2);cold.root.AssemblyLinearVelocity=vector(1,-3,-1)
+    local okay,why=blockedWorld:dragonMotion(-2,0,0,4.5,10)
+    assert(okay==false and why=='ASCENT_BLOCKED' and blockedWorld.dragonFlights[-2]==nil)
+    eq(cold.root.AssemblyLinearVelocity,1,-3,-1,'Cold blocked requests must not reset existing physical velocity')
+    assert(not cold.humanoid.PlatformStand and cold.humanoid.EvaluateStateMachine and cold.humanoid.Health==100)
+    print('PASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries')
+
+    roof.CanCollide=false
+    local clear=blockedActor(-3)
+    assert(blockedWorld:dragonAscentBlocked(-3,4.5)==false)
+    assert(blockedWorld:dragonMotion(-3,1,0,4.5,10),'Noncolliding own art must not block physical lift')
+    eq(clear.root.AssemblyLinearVelocity,10,14,0)
+    roof.CanCollide=true
+    assert(blockedWorld:dragonAscentBlocked(-3,-5)==false)
+    assert(blockedWorld:dragonMotion(-3,0,1,-5,10),'A downward goal must not be blocked by the floor overhead')
+    assert(math.abs(clear.root.AssemblyLinearVelocity.Y+5.76)<1e-7 and clear.root.AssemblyLinearVelocity.Z==10)
+    blockedWorld:stopDragon(-3)
+    roof.CanCollide=false
+    local foreign=node('Folder','ForeignDragonRoof',workspace)
+    local foreignRoof=node('Part','SolidForeignUnderside',foreign)
+    foreignRoof.CFrame=roof.CFrame;foreignRoof.Size=roof.Size;foreignRoof.CanCollide=true
+    assert(blockedWorld:dragonAscentBlocked(-3,4.5)==false)
+    assert(blockedWorld:dragonMotion(-3,0,0,4.5,10),'Another group geometry must not enter the ascent query')
+    blockedWorld:stopDragon(-3);foreign:Destroy()
+    local high=node('Part','CeilingBeyondGoal',blockedWorld.geometry)
+    high.CFrame=frame(vector(30,7,0)+blockedWorld.offset);high.Size=vector(20,2,20);high.CanCollide=true
+    local lowGoal=blockedActor(-4,30,3)
+    assert(blockedWorld:dragonAscentBlocked(-4,4.5)==false)
+    assert(blockedWorld:dragonMotion(-4,1,0,4.5,10),'A ceiling beyond the actual requested goal must not block ascent')
+    eq(lowGoal.root.AssemblyLinearVelocity,10,9,0,'Nonzero group translation must be applied exactly once to the ascent goal')
+    blockedWorld:clearActors()
+    print('PASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets')
+end
+assert(flightWorld:dragonCanMount(1,-1,5,4))
+assert(flightWorld:dragonLink(-1,1,'Mounted'))
+assert(rider.root.Anchored and not rider.humanoid.EvaluateStateMachine and not rider.model.Torso.CanCollide)
+eq(rider.root.Position,102,16.2,4096,'Mounted hero must get group translation once')
+flightWorld:hold(1,false);assert(rider.root.Anchored,'Shield removal cannot unanchor a linked rider')
+flightWorld:setReaction(1,true);flightWorld:setReaction(1,false)
+flightWorld:dragonUnlink(1)
+assert(not rider.root.Anchored and rider.humanoid.EvaluateStateMachine and not rider.humanoid.PlatformStand
+    and rider.humanoid.WalkSpeed==12 and rider.model.Torso.CanCollide)
+print('PASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates')
+
+rider.root.CFrame=frame(106,13,4096)
+assert(flightWorld:dragonLink(-1,1,'Captured'))
+local predecessor=rider
+rider=actor(flightWorld,1,vector(120,13,4096))
+flightWorld:dragonUnlink(1,true)
+assert(not predecessor.root.Anchored and not rider.root.Anchored and rider.humanoid.PlatformStand==false)
+eq(rider.root.Position,120,13,4096,'Releasing the old body cannot teleport the replacement')
+local target=actor(flightWorld,2,vector(111,13,4096))
+local nearer=actor(flightWorld,-2,vector(109,13,4096))
+local found,blocked=flightWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{[-1]=true,[1]=true})
+assert(found[1]==-2 and found[2]==2 and not blocked,'Swept shots use deterministic nearest live actors from this group')
+local originalRay=workspace.Raycast
+function workspace:Raycast(origin,direction,params)
+    if direction.X>0 then return {Position=vector(110,13,4096),Instance=deck} end
+    return originalRay(self,origin,direction,params)
+end
+found,blocked=flightWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{[-1]=true,[1]=true})
+assert(blocked and #found==1 and found[1]==-2,'A wall must prevent hits on the actor behind it')
+workspace.Raycast=originalRay
+flightWorld:dragonFire(-5001,{x=3,y=4,z=0})
+eq(flightWorld.dragonFires[-5001].Position,105,14,4096)
+flightWorld:clearActors()
+assert(next(flightWorld.dragonFires)==nil and next(flightWorld.dragonLinks)==nil and next(flightWorld.dragonFlights)==nil)
+assert(default.folder.Parent==workspace and route.folder.Parent==workspace,'Flight cleanup stays inside its group')
+print('PASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped')
+
+local fireWorld=World.new(Base,{FallY=-20},{name='DragonFireVolume',offset={x=0,y=0,z=4608}})
+local sphereCalls=0
+function workspace:GetPartBoundsInRadius(origin,radius,params)
+    assert(radius==1 and params.RespectCanCollide==true and params.FilterDescendantsInstances[1]==fireWorld.geometry)
+    return self.fireOverlap and {fireWorld.floors[1]} or {}
+end
+function workspace:Spherecast(origin,radius,delta,params)
+    sphereCalls+=1;assert(radius==1 and delta.X==12 and params==fireWorld.ray)
+    return {Position=vector(9,3,4608),Distance=8,Instance=fireWorld.floors[1]}
+end
+actor(fireWorld,2,vector(9,3,4608))
+local ids,wall=fireWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{})
+assert(wall and #ids==0 and sphereCalls==1,'Fire needs a radius sweep and center-travel wall bound')
+workspace.fireOverlap=true
+ids,wall=fireWorld:dragonFireTargets({x=0,y=3,z=0},{x=12,y=3,z=0},1,{})
+assert(wall and #ids==0 and sphereCalls==1,'Initial wall overlap consumes fire before a sweep or damage')
+workspace.fireOverlap=nil
+print('PASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage')
+
+local artWorld=World.new(Base,{FallY=-20,WalkSpeed=12},{name='DragonArt'})
+assert(artWorld:spawnEnemy(-9,'Dragon',{x=0,y=3,z=0}))
+local art=artWorld.actors[-9]
+assert(art.wingMotors and #art.wingMotors==2,'Original Dragon wings need articulated motors')
+local wing=art.wingMotors[1]
+art.model:SetAttribute('DragonFlight',true)
+artWorld:updatePresentation({now=0,combat={}},.1,{[-9]={kind='Dragon'}})
+assert(wing.joint.C0.rotationZ~=wing.base.rotationZ,'Active flight needs a visible wing stroke')
+art.model:SetAttribute('DragonFlight',nil)
+artWorld:updatePresentation({now=1,combat={}},.1,{[-9]={kind='Dragon'}})
+assert(wing.joint.C0.rotationZ==wing.base.rotationZ,'Stopped flight must return its wing pose')
+print('PASS original wing motors move only for authoritative flight and return to rest')
+
+local entryWorld=World.new(Base,{FallY=-20},{name='DragonFireEntry'})
+local saveSphere,saveOverlap=workspace.Spherecast,workspace.GetPartBoundsInRadius
+function workspace:GetPartBoundsInRadius() return {} end
+function workspace:Spherecast() return nil end
+actor(entryWorld,-1,vector(2,3,2.9));actor(entryWorld,2,vector(3,3,0))
+local order=entryWorld:dragonFireTargets({x=0,y=3,z=0},{x=3.2,y=3,z=0},1,{})
+assert(order[1]==2 and order[2]==-1,'An initial actor overlap must precede a later grazing entry')
+local emitter=actor(entryWorld,-9,vector(0,3,0));emitter.root.CFrame.LookVector=vector(1,0,0)
+function workspace:Spherecast(origin,radius,direction,params)
+    assert(origin.X==0 and radius==1 and direction.X==2.8)
+    return {Position=vector(.9,3.25,0),Distance=0,Instance=entryWorld.floors[1]}
+end
+local muzzle,direction,obstructed=entryWorld:dragonMuzzle(-9)
+assert(muzzle and direction and obstructed,'A thin wall entirely before the muzzle must block the accepted shot')
+workspace.Spherecast,workspace.GetPartBoundsInRadius=saveSphere,saveOverlap
+print('PASS fire orders first contact and detects a thin wall before its projected muzzle')
+
+local appearanceCalls,appearanceUpdates=0,0
+local appearanceAdapter={}
+function appearanceAdapter.attach(body,template)
+    appearanceCalls+=1
+    if template~='Mr. Green' then return false end
+    local mesh=node('Part','GeneratedSurface',body.model)
+    mesh.Anchored=false;mesh.Massless=true;mesh.CanCollide=false
+    return true
+end
+function appearanceAdapter.update(body)
+    appearanceUpdates+=1
+    assert(body.root:GetNetworkOwner()==nil and not body.root:GetNetworkOwnershipAuto(),
+        'Pose updates must observe the fully assembled server-owned hero')
+end
+local appearanceWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50},
+    {name='HeroAppearanceIntegration',characterAppearance=appearanceAdapter})
+assert(appearanceWorld:spawn(1,'appearance-hero',nil,false,'Mr. Green'))
+local appearanceHero=appearanceWorld.actors[1]
+assert(appearanceCalls==1 and appearanceHero.root.assemblyOwnershipResets>0,
+    'The real spawn hook must attach cosmetics after basic assembly and exercise ownership reset')
+assert(appearanceHero.root:GetNetworkOwner()==nil and not appearanceHero.root:GetNetworkOwnershipAuto()
+    and appearanceHero.humanoid.Health==100,'Cosmetic assembly preserves HP and restores manual server authority')
+appearanceWorld:updatePresentation({now=0,combat={}},.1,{})
+assert(appearanceUpdates==1,'The world must update cosmetic joints after its normal pose presentation')
+appearanceWorld:clearActors()
+print('PASS hero appearance integration restores server authority after cosmetics and updates only presentation')

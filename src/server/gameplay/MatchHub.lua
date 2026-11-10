@@ -11,7 +11,7 @@ local function exact(payload,allowed)
     return true
 end
 local function active(controller)
-    return controller.current~=nil and not controller:_open()
+    return not controller.faulted and controller.current~=nil and not controller:_open()
 end
 
 -- The Hub registry owns connection tombstones. Group registries own only routed
@@ -53,12 +53,67 @@ function MatchHub.new(deps,worldFactory)
     local self=setmetatable({deps=deps,worldFactory=worldFactory,maxGroups=math.min(4,configured),
         connections=deps.Registry.new(),groups={},order={},routes={},requests={},
         buckets=setmetatable({},{__mode='k'}),notices=setmetatable({},{__mode='k'}),
-        envelopes=setmetatable({},{__mode='k'})},MatchHub)
+        envelopes=setmetatable({},{__mode='k'}),snapshotSeq=setmetatable({},{__mode='k'}),
+        actionSerial=setmetatable({},{__mode='k'}),queueDepth=0,pendingQuarantines={}},MatchHub)
     self.queue=deps.BossQueue.new(deps.Config.BossQueue,function(userId,context)
         return self:_queueEligible(userId,context)
     end)
+    -- Eligibility can quarantine a faulty group, but it must not close that
+    -- group's slot while BossQueue is iterating its entries or filling a slot.
+    for _,name in ipairs({'register','select','cancel','reply','connect','step','start','close','view'}) do
+        local method=self.queue[name]
+        self.queue[name]=function(queue,...)
+            self.queueDepth+=1
+            local results=table.pack(pcall(method,queue,...))
+            self.queueDepth-=1
+            if self.queueDepth==0 then self:_flushQuarantines() end
+            if not results[1] then error(results[2],0) end
+            return table.unpack(results,2,results.n)
+        end
+    end
     self:_create()
     return self
+end
+
+-- Server-only control. No remote intent routes to this method.
+function MatchHub:setInfiniteLives(enabled)
+    if type(enabled)~='boolean' then return 'INVALID_OPTION' end
+    local development=self.deps.Config.Development
+    if not development or development.allowInfiniteLives~=true then return 'DEVELOPMENT_ONLY' end
+    development.infiniteLives=enabled
+    for _,id in ipairs(self.order) do
+        local group=self.groups[id]
+        self:_guard(group,function()
+            local c=group.controller
+            c.deps.Config.Development.infiniteLives=enabled
+            if active(c) then assert(c.current:setInfiniteLives(enabled)=='OK') end
+        end)
+    end
+    return 'OK'
+end
+
+function MatchHub:_flushQuarantines()
+    if self.flushingQuarantines then return end
+    self.flushingQuarantines=true
+    while next(self.pendingQuarantines) do
+        local pending=self.pendingQuarantines
+        self.pendingQuarantines={}
+        for group in pairs(pending) do
+            if group.controller.quarantine then pcall(function() group.controller:quarantine() end) end
+        end
+    end
+    self.flushingQuarantines=false
+end
+
+function MatchHub:_guard(group,callback)
+    local ok,result=xpcall(callback,debug.traceback)
+    if ok then return result,true end
+    group.controller.faulted=true
+    self.pendingQuarantines[group]=true
+    if self.queueDepth==0 then self:_flushQuarantines() end
+    local notify=self.deps.warn or warn
+    if notify then pcall(notify,'[BrickToads '..group.id..'] '..tostring(result)) end
+    return 'PARTY_FAULTED',false
 end
 
 function MatchHub:_create()
@@ -67,7 +122,11 @@ function MatchHub:_create()
     local controllerDeps=table.clone(self.deps)
     controllerDeps.GroupId=id; controllerDeps.SharedBossQueue=self.queue
     controllerDeps.Registry={new=function() return groupRegistry(self,id) end}
-    local group={id=id,name='Команда '..index,world=world}
+    controllerDeps.nextActionFeedbackId=function(player)
+        self.actionSerial[player]=(self.actionSerial[player] or 0)+1
+        return self.actionSerial[player]
+    end
+    local group={id=id,name="Team "..index,world=world}
     group.controller=self.deps.Controller.new(controllerDeps,world)
     self.groups[id]=group; self.order[#self.order+1]=id
     return group
@@ -78,24 +137,37 @@ end
 function MatchHub:_livingRole(userId,context)
     for _,id in ipairs(self.order) do
         local group=self.groups[id]; local c=group.controller
-        if active(c) then
-            local slot=c.ownerSlots[userId]
-            local hero=slot and c.current.state.heroes[slot]
-            if hero and hero.status~='Eliminated' then return group end
-            local role=c.director:controlled(userId)
-            if role and role.status=='Alive' then
-                local matchingBoss=role.template=='Boss' and context and context.groupId==id
-                    and context.runId==c.current.state.runId and context.levelEpoch==c.current.state.levelEpoch
-                if not matchingBoss then return group end
+        local living,ok=self:_guard(group,function()
+            if active(c) then
+                local slot=c.ownerSlots[userId]
+                local hero=slot and c.current.state.heroes[slot]
+                if hero and hero.status~='Eliminated' then return true end
+                local role=c.director:controlled(userId)
+                if role and role.status=='Alive' then
+                    local matchingBoss=role.template=='Boss' and context and context.groupId==id
+                        and context.runId==c.current.state.runId and context.levelEpoch==c.current.state.levelEpoch
+                    if not matchingBoss then return true end
+                end
             end
-        end
+            return false
+        end)
+        if ok and living then return group end
     end
 end
 
 function MatchHub:_queueEligible(userId,context)
     local target=context and self.groups[context.groupId]
-    if target and active(target.controller) and target.controller.ownerSlots[userId] then return false end
-    return self:_livingRole(userId,context)==nil
+    if target then
+        local ownsHero,ok=self:_guard(target,function()
+            return active(target.controller) and target.controller.ownerSlots[userId]~=nil
+        end)
+        if not ok or ownsHero then return false end
+    end
+    local living=self:_livingRole(userId,context)
+    -- The role scan itself can discover a broken target. Do not grant an
+    -- invitation/acceptance just because its now-faulted roles were skipped.
+    if target and target.controller.faulted then return false end
+    return living==nil
 end
 
 function MatchHub:members(groupId,players)
@@ -117,15 +189,17 @@ function MatchHub:join(player)
     local id=self.routes[player.UserId] or self.order[1]
     self.routes[player.UserId]=id
     local group=self.groups[id]
-    if previous then group.controller:leave(previous) end
-    group.controller:join(player)
+    if previous then self:_guard(group,function() group.controller:leave(previous) end) end
+    self:_guard(group,function() group.controller:join(player) end)
     return true
 end
 
 function MatchHub:leave(player)
     if not self.connections:remove(player) then return false end
     local group=self.groups[self.routes[player.UserId]]
-    if group then group.controller:leave(player) end
+    if group then self:_guard(group,function() group.controller:leave(player) end) end
+    if self.deps.Transfer then self.deps.Transfer:remove(player) end
+    self.actionSerial[player]=nil;self.snapshotSeq[player]=nil;self.envelopes[player]=nil
     self.buckets[player]=nil; self.notices[player]=nil
     return true
 end
@@ -140,14 +214,14 @@ end
 function MatchHub:_move(player,target,now)
     local previous=self.groups[self.routes[player.UserId]]
     if previous==target then return end
-    if previous then previous.controller:leave(player) end
+    if previous then self:_guard(previous,function() previous.controller:leave(player) end) end
     self.routes[player.UserId]=target.id
     local queue=self.queue:view(player.UserId,now)
     if queue.state~='None' then
         target.controller.preferences[player.UserId]='Spectator'
         target.controller.viewChoices[player.UserId]='Spectating'
     end
-    target.controller:join(player)
+    self:_guard(target,function() target.controller:join(player) end)
 end
 
 function MatchHub:_rate(player,now)
@@ -191,7 +265,9 @@ function MatchHub:handle(player,payload,players)
         if requests and requests[payload.requestId] then return done('OK') end
         local reason=self:_switchReason(player.UserId,nil,now)
         if reason then return done(reason) end
-        if #self.order>=self.maxGroups then return done('GROUP_LIMIT') end
+        if #self.order>=self.maxGroups then
+            return done(self.deps.Transfer and self.deps.Transfer:request(player,payload.requestId) or 'GROUP_LIMIT')
+        end
         local group=self:_create()
         if not requests then requests={}; self.requests[player.UserId]=requests end
         requests[payload.requestId]=group.id
@@ -223,23 +299,31 @@ function MatchHub:handle(player,payload,players)
     if payload.kind=='ClaimEnemy' or payload.kind=='QueueBoss' or (payload.kind=='SelectRole' and payload.role=='Hero') then
         local owned=self:_livingRole(player.UserId,nil)
         if owned and owned~=selected then return done('ROLE_ACTIVE') end
-    elseif payload.kind=='Start' and c:_open() then
-        for _,candidate in ipairs(c:_heroes(self:members(selected.id,players))) do
-            if self:_livingRole(candidate.UserId,nil) then return done('ROLE_ACTIVE') end
-            local queue=self.queue:view(candidate.UserId,now)
-            if queue.state=='Accepted' or queue.state=='Ready' or queue.state=='Active' then return done('ROLE_RESERVED') end
+    elseif payload.kind=='Start' then
+        local open,readOk=self:_guard(selected,function() return c:_open() end)
+        if not readOk then return done('PARTY_FAULTED') end
+        if open then
+            local heroes,heroesOk=self:_guard(selected,function() return c:_heroes(self:members(selected.id,players)) end)
+            if not heroesOk then return done('PARTY_FAULTED') end
+            for _,candidate in ipairs(heroes) do
+                if self:_livingRole(candidate.UserId,nil) then return done('ROLE_ACTIVE') end
+                local queue=self.queue:view(candidate.UserId,now)
+                if queue.state=='Accepted' or queue.state=='Ready' or queue.state=='Active' then return done('ROLE_RESERVED') end
+            end
         end
     end
     local inner={}
     for key,value in pairs(payload) do if key~='groupId' then inner[key]=value end end
-    return done(c:handle(player,inner,self:members(selected.id,players)))
+    return done(self:_guard(selected,function() return c:handle(player,inner,self:members(selected.id,players)) end))
 end
 
 function MatchHub:snapshot(player,players)
     if not player.Parent then return nil end
     local selected=self:selected(player)
     if not selected then return nil end
-    local data=selected.controller:snapshot(player,self:members(selected.id,players))
+    local members=self:members(selected.id,players)
+    local data,ok=self:_guard(selected,function() return selected.controller:snapshot(player,members) end)
+    if not ok then data=self.deps.Controller.snapshot(selected.controller,player,members) end
     if not data then return nil end
     local now=self.deps.clock()
     data.groupId=selected.id; data.groupName=selected.name
@@ -248,11 +332,17 @@ function MatchHub:snapshot(player,players)
     for _,id in ipairs(self.order) do
         local group=self.groups[id]; local c=group.controller
         local reason=self:_switchReason(player.UserId,id,now)
+        local summary,readOk=self:_guard(group,function()
+            if c.faulted then return {status='Faulted',heroes=0} end
+            return {status=c.director and c.director.result or (c.current and c.current.state.status or 'Lobby'),
+                heroes=c.current and #c.current.order or 0}
+        end)
+        if not readOk then summary={status='Faulted',heroes=0} end
         data.groups[#data.groups+1]={id=id,name=group.name,
-            status=c.director and c.director.result or (c.current and c.current.state.status or 'Lobby'),
-            heroes=c.current and #c.current.order or 0,players=#self:members(id,players),canJoin=reason==nil,reason=reason}
+            status=summary.status,heroes=summary.heroes,players=#self:members(id,players),canJoin=reason==nil,reason=reason}
     end
-    data.canCreateGroup=#self.order<self.maxGroups and self:_switchReason(player.UserId,nil,now)==nil
+    data.canCreateGroup=(#self.order<self.maxGroups or self.deps.Transfer~=nil) and self:_switchReason(player.UserId,nil,now)==nil
+    if self.deps.Transfer then data.serverTransfer=self.deps.Transfer:snapshot(player) end
     data.notice=self.notices[player]
     local queue=data.bossQueue
     if queue then
@@ -262,19 +352,31 @@ function MatchHub:snapshot(player,players)
             if target then queue.groupId=target.id; queue.groupName=target.name end
         end
     end
+    self.snapshotSeq[player]=(self.snapshotSeq[player] or 0)+1
+    data.snapshotSeq=self.snapshotSeq[player];data.serverNow=now
     return data
 end
 
 function MatchHub:controlledSlot(userId)
     local group=self.groups[self.routes[userId]]
-    if not group then return nil end
-    local slot=group.controller:controlledSlot(userId)
-    if slot then return slot,group.world end
+    if not group or group.controller.faulted then return nil end
+    local slot,ok=self:_guard(group,function() return group.controller:controlledSlot(userId) end)
+    if ok and slot then return slot,group.world end
 end
 
 function MatchHub:step(now,dt)
     self.queue:step(now)
-    for _,id in ipairs(self.order) do self.groups[id].controller:step(now,dt) end
+    for _,id in ipairs(self.order) do
+        local group=self.groups[id];local controller=group.controller
+        if not controller.faulted then
+            self:_guard(group,function()
+                controller:step(now,dt)
+                if controller.current and group.world.updatePresentation then
+                    group.world:updatePresentation(controller.current,dt,controller.director.enemies)
+                end
+            end)
+        end
+    end
 end
 
 return MatchHub

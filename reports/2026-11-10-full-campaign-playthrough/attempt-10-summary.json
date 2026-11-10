@@ -1,0 +1,221 @@
+{
+  "reported_result": "Lost",
+  "complete_won": false,
+  "all_requested_checks_pass": false,
+  "run_id": "01138703-5a92-4ce0-a591-a0e00d8f1b84",
+  "observed_stages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "missing_stages": [
+    10,
+    11,
+    12,
+    13
+  ],
+  "checks": {
+    "stage_sequence": false,
+    "epochs": false,
+    "same_run": true,
+    "stage_times_nondecreasing": true,
+    "fixed_cohort": true,
+    "fixed_owners": true,
+    "owners_registered": true,
+    "stocks_nonincreasing": true,
+    "attempts_nondecreasing": true,
+    "resource_bounds": true,
+    "no_resurrection": true,
+    "terminal_won": false,
+    "run_result_won_event": false,
+    "terminal_result_consistent": true,
+    "terminal_index_13": false,
+    "terminal_live_survivor": false,
+    "no_reported_errors": true,
+    "stage_completion_events": false,
+    "boss_evidence_complete": false
+  },
+  "cohort": {
+    "slots": [
+      1,
+      2,
+      3
+    ],
+    "owners_by_slot": {
+      "1": -1,
+      "2": -2,
+      "3": -3
+    },
+    "terminal": [
+      {
+        "ownerUserId": -1,
+        "slot": 1,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      },
+      {
+        "ownerUserId": -2,
+        "slot": 2,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      },
+      {
+        "ownerUserId": -3,
+        "slot": 3,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      }
+    ]
+  },
+  "stage_completion_events": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "bosses": [
+    {
+      "level": 1,
+      "kind": "CausewayGuardian",
+      "phases_seen": [],
+      "states_seen": [],
+      "raw_life_min": null,
+      "progress_max": null,
+      "underflows_seen": 0,
+      "defeated_event_seen": false,
+      "guardian_hits_max": 3,
+      "expected_phases": [],
+      "complete_evidence": true
+    },
+    {
+      "level": 5,
+      "kind": "BigBlag",
+      "phases_seen": [
+        1,
+        2,
+        3
+      ],
+      "states_seen": [
+        "Active",
+        "Reaction",
+        "Ready",
+        "Recovery",
+        "Tell"
+      ],
+      "raw_life_min": 0,
+      "progress_max": null,
+      "underflows_seen": 1,
+      "defeated_event_seen": true,
+      "guardian_hits_max": 0,
+      "expected_phases": [
+        1,
+        2,
+        3
+      ],
+      "complete_evidence": true
+    },
+    {
+      "level": 8,
+      "kind": "RoboManus",
+      "phases_seen": [
+        1,
+        2
+      ],
+      "states_seen": [
+        "Active",
+        "Reaction",
+        "Ready",
+        "Recovery",
+        "Tell"
+      ],
+      "raw_life_min": 0,
+      "progress_max": 240,
+      "underflows_seen": 21,
+      "defeated_event_seen": true,
+      "guardian_hits_max": 0,
+      "expected_phases": [
+        1,
+        2
+      ],
+      "complete_evidence": true
+    },
+    {
+      "level": 10,
+      "kind": "GeneralSlaughter",
+      "phases_seen": [],
+      "states_seen": [],
+      "raw_life_min": null,
+      "progress_max": null,
+      "underflows_seen": 0,
+      "defeated_event_seen": false,
+      "guardian_hits_max": 0,
+      "expected_phases": [
+        1,
+        2
+      ],
+      "complete_evidence": false
+    },
+    {
+      "level": 11,
+      "kind": "Buzzball",
+      "phases_seen": [],
+      "states_seen": [],
+      "raw_life_min": null,
+      "progress_max": null,
+      "underflows_seen": 0,
+      "defeated_event_seen": false,
+      "guardian_hits_max": 0,
+      "expected_phases": [
+        1,
+        2
+      ],
+      "complete_evidence": false
+    },
+    {
+      "level": 13,
+      "kind": "DarkQueen",
+      "phases_seen": [],
+      "states_seen": [],
+      "raw_life_min": null,
+      "progress_max": null,
+      "underflows_seen": 0,
+      "defeated_event_seen": false,
+      "guardian_hits_max": 0,
+      "expected_phases": [
+        1,
+        2
+      ],
+      "complete_evidence": false
+    }
+  ],
+  "sample_count_supplied": 208,
+  "event_count_supplied": 268,
+  "violations": [],
+  "limits": [
+    "Resource/cohort checks compare stage-entry and terminal cohort observations; omitted within-level transitions are not independently verified.",
+    "Recorded Studio evidence does not establish manual input, genuine-account reconnect, or public-server soak coverage.",
+    "Samples were thinned: Every fifth one-second observation, all stage/boss-phase/attempt/stock transitions, and final30 observations",
+    "Incomplete boss observation coverage is not evidence of an unplayed phase; omitted payloads/sparse samples cannot prove those phases."
+  ],
+  "source": {
+    "path": "C:\\Users\\User\\Documents\\bricktoads\\reports\\2026-11-10-full-campaign-playthrough\\attempt-10-full-natural-archive.json",
+    "bytes": 278402,
+    "sha256": "01d6485ecc44fd264296d0c8a4ac0ea5351fe68854e77a899a55ba9c492e1573"
+  }
+}

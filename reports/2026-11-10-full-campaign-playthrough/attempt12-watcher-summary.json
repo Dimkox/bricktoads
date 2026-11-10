@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 1,
+  "watcher": "campaign_traversal_late_attempt12",
+  "runId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc",
+  "seed": 614217761,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "serverStudioId": "a23fe2ae-6e1d-43bb-8766-7613500a2547",
+  "status": "terminal_lost_at_tubes9_verified_from_parent_full_archive",
+  "watchStartedAt": "2026-11-10T13:28:37.421Z",
+  "checkpointCount": 1,
+  "completeWatcherArchiveCount": 0,
+  "terminalEvidence": {
+    "source": "attempt-12-full-natural-archive.json",
+    "result": "Lost",
+    "lastStageIndex": 9,
+    "lastStage": "Tubes",
+    "current": {
+      "slot": 3,
+      "index": 9,
+      "rawLife": 0,
+      "attempt": 4,
+      "epoch": 9,
+      "notice": "REACTION",
+      "plan": {
+        "x": 0,
+        "z": 0,
+        "primary": false,
+        "run": false,
+        "jump": false
+      },
+      "actorId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc:actor:249",
+      "position": {
+        "y": 3,
+        "x": 32.52949523925781,
+        "z": -0.04692775383591652
+      },
+      "stock": 0,
+      "stage": "Tubes",
+      "runId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc"
+    },
+    "cohort": [
+      {
+        "ownerUserId": -1,
+        "slot": 1,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      },
+      {
+        "ownerUserId": -2,
+        "slot": 2,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      },
+      {
+        "ownerUserId": -3,
+        "slot": 3,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      }
+    ],
+    "completedStages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "plannerErrors": [],
+    "sampleCount": 479,
+    "selectedSamples": 150,
+    "retainedEvents": 232,
+    "finalEvents": [
+      {
+        "view": "Playing",
+        "revision": 236,
+        "rawLife": 0,
+        "attempt": 3,
+        "userId": 3,
+        "data": {
+          "observed": {
+            "velocity": [
+              0,
+              0,
+              0
+            ],
+            "held": false,
+            "position": [
+              9.017934799194336,
+              -58.824424743652344,
+              0.058952562510967255
+            ]
+          },
+          "actorId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc:actor:177",
+          "reason": "CampaignFall"
+        },
+        "actorId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc:actor:177",
+        "levelEpoch": 6,
+        "respawns": 1,
+        "now": 1794317204.574821,
+        "late": false,
+        "status": "AwaitingRespawn",
+        "kind": "ConfirmedDeath",
+        "seq": 925,
+        "connected": true
+      },
+      {
+        "view": "Menu",
+        "revision": 312,
+        "rawLife": 0,
+        "attempt": 4,
+        "userId": 3,
+        "data": {
+          "observed": {
+            "velocity": [
+              0,
+              0,
+              0
+            ],
+            "held": false,
+            "position": [
+              32.52949523925781,
+              3,
+              -0.04692775383591652
+            ]
+          },
+          "actorId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc:actor:249",
+          "reason": "CombatUnderflow"
+        },
+        "actorId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc:actor:249",
+        "levelEpoch": 9,
+        "respawns": 0,
+        "now": 1794317344.198405,
+        "late": false,
+        "status": "Eliminated",
+        "kind": "ConfirmedDeath",
+        "seq": 1229,
+        "connected": true
+      },
+      {
+        "levelEpoch": 9,
+        "revision": 312,
+        "now": 1794317344.198405,
+        "late": false,
+        "kind": "RunResult",
+        "data": {
+          "result": "Lost"
+        },
+        "seq": 1231
+      }
+    ]
+  },
+  "qaPolicy": {
+    "policyLoads": 1,
+    "frozenAcrossRun": true,
+    "source": "Root launch declaration plus archive PolicyLoads1",
+    "earlySha256": "8c7d521749c78ec921f158633067a35b773c7b4a42933b28d6f9a93ca9a6fa16",
+    "combatSha256": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+    "tubesSha256": "89bd80f301deb2d82311bc456b99e7a5ae6b6f322925d7c277f275d301b56e2e",
+    "lateSha256": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8",
+    "rideObserver": "Prepared locally and reviewed, never attached to this run; no input revision"
+  },
+  "directObservation": {
+    "stage": "Ascent8 RoboManus",
+    "progress": 204,
+    "maxProgress": 240,
+    "currentLeadSlot": 3,
+    "actorId": "8ce8a102-d1f3-4a0e-a2c3-9b41c3643abc:actor:249",
+    "attempt": 4,
+    "stock": 0,
+    "rawLife": 47,
+    "position": {
+      "y": 98.9999771118164,
+      "x": 2.3014376163482666,
+      "z": 16.322351455688477
+    },
+    "detailOwnerWarning": "Read(detail) hero/body fields belong to first connected player, eliminated slot1. The lead slot3 status comes from current/cohort; the eliminated first player's Dead body is not the lead body."
+  },
+  "resourceMilestones": {
+    "surf5Entry": {
+      "attempt": 3,
+      "stock": 1
+    },
+    "serpents6Entry": {
+      "attempt": 3,
+      "stock": 1
+    },
+    "jet7Entry": {
+      "attempt": 4,
+      "stock": 0
+    },
+    "ascent8Entry": {
+      "attempt": 4,
+      "stock": 0
+    },
+    "observation": "Surf5 spent no additional reserve. A normal Serpents6 CampaignFall consumed the last reserve; the same final actor cleared Jet7 and Ascent8 before the Tubes9 CombatUnderflow."
+  },
+  "checkpointFiles": [
+    "attempt12checkpoint-001-20261110T132902Z.json"
+  ],
+  "console": {
+    "files": [
+      "attempt12-console-001-20261110T132902Z.json"
+    ],
+    "source": "MCP get_console_output in live Ascent8",
+    "assetRepresentationWarnings": [
+      "130642514131659",
+      "96845591138258",
+      "90154814086213"
+    ],
+    "productionExceptionObservation": "No Lua stack trace appeared in the one captured server-console snapshot; no broader runtime cleanliness claim is inferred from planner errors[]"
+  },
+  "archiveAttempt": {
+    "result": "The guarded first immutable-export command was rejected because the child had already disconnected; no export folder was created",
+    "completeWatcherArchives": 0,
+    "pendingOwnedExport": null,
+    "parentFullArchiveAvailable": true
+  },
+  "cleanup": {
+    "ownedExportObjectsCreated": 0,
+    "ownedExportObjectsRemaining": 0,
+    "childCallsAfterDisconnect": 0
+  },
+  "limits": [
+    "Observer attached after stages1\u0432\u0402\u201c7 had already cleared; their state transitions are preserved in the read metadata and parent full archive",
+    "Only one direct checkpoint and one console snapshot were captured before terminal child disconnection",
+    "No game, policy, health, stock, pose, geometry, physics or session-control changes by watcher",
+    "No full13 clear claimed"
+  ],
+  "resourceLedger": "attempt12-death-ledger.json",
+  "deathsByStage": {
+    "1": 6,
+    "2": 1,
+    "4": 3,
+    "6": 1,
+    "9": 1
+  },
+  "deathsByReason": {
+    "Fall": 4,
+    "CombatUnderflow": 4,
+    "CampaignFall": 4
+  }
+}

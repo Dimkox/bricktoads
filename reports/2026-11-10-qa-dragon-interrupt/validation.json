@@ -1,0 +1,157 @@
+{
+  "status": "verified_frozen_review_clear",
+  "createdAt": "2026-11-10T16:28:58.708394+00:00",
+  "scope": "QA-only rollback of forced Dragon evasion; retain Guardian Bullet priority and prior Dragon run-up height fix",
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "rejectedPrioritySha256": "03bef2ef955b301ee0c0f3bcc030a1808a9712cf115f070d08173ef33ecbac4f",
+  "candidateSha256": "bfb17590f568b6e9c1d30ccddee00b9aa5a152d6289b60651df544661e4f0a38",
+  "checks": [
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-dragon-interrupt\\probe-before.luau"
+      ],
+      "expectedExit": 1,
+      "exit": 1,
+      "log": "regression-red.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-dragon-interrupt\\probe-pair.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "paired-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports\\2026-11-10-qa-dragon-interrupt\\guardian-retained.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "guardian-retained-green.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports/2026-11-10-qa-dragon-runup/probe-current.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "runup-146.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "reports/2026-11-10-qa-dragon-runup/public-session-dash.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "dash-session.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau.exe",
+        "build/test_combat_stepoff_boundary.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "stepoff-26.txt"
+    },
+    {
+      "command": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "tools/qa/campaign_combat_pilot.lua",
+        "reports\\2026-11-10-qa-dragon-interrupt\\probe-before.luau",
+        "reports\\2026-11-10-qa-dragon-interrupt\\probe-pair.luau",
+        "reports\\2026-11-10-qa-dragon-interrupt\\guardian-retained.luau"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "compile.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "tools/qa/campaign_combat_pilot.lua"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "log": "diff-check.txt"
+    }
+  ],
+  "sourceContract": {
+    "modules": [
+      "Session",
+      "LevelDirector",
+      "DragonFlight",
+      "SourceCombat",
+      "RunLifecycle",
+      "Combat"
+    ],
+    "initialHero": {
+      "rawLife": 47,
+      "attempt": 1,
+      "stock": 3
+    },
+    "heroStart": {
+      "x": 284.7751159667969,
+      "y": 3,
+      "z": 5.169754505157471
+    },
+    "enemyStart": "Source-prepared4.5studs ahead with ordinary1.5stud altitude; exact simultaneous native enemy position was not retained",
+    "headbuttAcceptedAt": 3,
+    "headbuttEffectAt": 3.35,
+    "responseDelays": [
+      0.133,
+      0.15,
+      0.167
+    ],
+    "domainStep": 0.0016666666666666668,
+    "publicInputs": [
+      "Move run=true",
+      "Attack Punch selected as Dash by Session"
+    ],
+    "atDelay0167": {
+      "rejected03": {
+        "heroHits": 1,
+        "heroRawLife": 31,
+        "enemyRawLife": 47,
+        "actualHeroHitAt": 3.35
+      },
+      "candidate": {
+        "heroHits": 0,
+        "heroRawLife": 47,
+        "enemyRawLife": 31,
+        "acceptedAction": "Dash",
+        "actorAttemptStockUnchanged": true,
+        "acceptedAt": 3.1683333333333334,
+        "capturedDeadline": 3.3483333333333336,
+        "actualEnemyHitAt": 3.35
+      }
+    },
+    "reason": "Session stops normal movement after accepted running Attack(Punch). At response3.168333 captured Dash deadline3.348333 resolves at3.35 in Session.step before Director.step; heavy reaction cancels its Headbutt due3.35. Forced16stud/s evasion remains inside the3stud side bound and takes a real source Hit."
+  },
+  "native18": {
+    "runId": "6eaab629-5a80-4786-8025-4c3502d449f7",
+    "seed": 503914550,
+    "firstAttacker": -9,
+    "firstStrikeAcceptedAt": 1794327021.870071,
+    "firstHitAt": 1794327022.224,
+    "compositionEvidence": "At7021.983 Walk requestsperpendicularmovement; at7022.130 Stagegaprunup replacesitbeforeHit7022.224. This separate bridge issue is assigned to flight_evasion_audit."
+  },
+  "limits": [
+    "Paired proof uses real combat/lifecycle/AI modules with a numeric physical-movement and source cone adapter; native collisions, gravity, NPC-head support and network transport are not reproduced.",
+    "The starting hero position comes from native18; the enemy start and delay are source-calibrated prepared counterexamples, not a reconstruction of an unlogged simultaneous native enemy state.",
+    "Native18 and17 use different random seeds. The source counterexample proves the unconditional priority can regress, not that it caused every native18 death.",
+    "Guardian03 retained10assertions remainGREEN. The old03combined14priority probe is historical to that rejected frozen source; its mandatory-Dragon-evasion assertions are intentionally no longer candidate requirements.",
+    "No health/stock/pose/manualkill/phase/NPC control write occurs in the actual game; only this numeric adapter advances ordinary movement in an offline contract. No new native victory claimed."
+  ],
+  "independentReview": "CLEAR: solo_gap_audit independently reran03RED/currentNoHit paired matrix, checked actual GameController Session.step-before-Director.step ordering, retained Guardian10/runup146/stepoff26/SessionDash/compile/diff; frozen BFB17590 unchanged"
+}

@@ -1,0 +1,536 @@
+{
+  "sourceSha256": "a12a84d108eba5bac1ff201d08cf08e20860fd4a24221a622f62acb3a8bbdb9e",
+  "placeSha256": "80c8dc178fa87a274ab4f4ddacc9566624465e2e0c11ea93ddc346ff2bcef36f",
+  "assetId": "98446273547261",
+  "glbSha256": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+  "finalSavedInspection": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"orientation\":\"Sensor\",\"portraits\":{\"Mr. Green\":\"81768891375221\",\"Mr. Yellow\":\"112046401281853\"},\"positiveMeshExtents\":[15,15],\"sourceSha256\":\"a12a84d108eba5bac1ff201d08cf08e20860fd4a24221a622f62acb3a8bbdb9e\"}"
+      }
+    ],
+    "isError": false
+  },
+  "nativeFileMeshExtentCheck": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"upperTorsoSize\":[3.253887176513672,2.347191333770752,1.5941604375839234],\"positiveMeshExtents\":15,\"upperTorsoMeshSize\":[0.9110884070396423,0.657213568687439,0.44636493921279909],\"sourceSha256\":\"5e5e27e77a25ff79d3aca1e4507ebb107a13dd7ffe7a6091c8ca36fe738f974c\"}"
+      }
+    ],
+    "isError": false
+  },
+  "engineFixture": {
+    "jump": {
+      "velocity": [
+        24,
+        28.474973678588867,
+        -5.734413052911613e-19
+      ],
+      "joints": 15,
+      "mode": "Air",
+      "meshes": 15,
+      "id": 2,
+      "handLocal": [
+        1.708404541015625,
+        -0.38347721099853516,
+        -0.29445281624794006
+      ],
+      "maxJointError": 0.0000152587890625,
+      "fallback": "Airborne",
+      "profile": "CanonicalNESHero",
+      "actorId": 80002,
+      "health": 100,
+      "position": [
+        -55.690582275390625,
+        8.261924743652344,
+        -180
+      ],
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    },
+    "scope": "Prepared native server fixture; no claim of full normal-input combat or physical mobile acceptance",
+    "initial2": {
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "joints": 15,
+      "sourceFrame": 1,
+      "mode": "Idle",
+      "meshes": 15,
+      "id": 2,
+      "handLocal": [
+        1.6800689697265625,
+        -0.4298057556152344,
+        -0.2050018310546875
+      ],
+      "maxJointError": 0.000017061511243809946,
+      "profile": "CanonicalNESHero",
+      "actorId": 80002,
+      "health": 100,
+      "position": [
+        -65,
+        3,
+        -180
+      ],
+      "sourceKind": "Idle",
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    },
+    "run": {
+      "velocity": [
+        24,
+        -1.6784136520856273e-16,
+        -9.590540709682183e-15
+      ],
+      "joints": 15,
+      "sourceFrame": 7,
+      "mode": "Run",
+      "meshes": 15,
+      "id": 2,
+      "handLocal": [
+        2.1426541805267334,
+        1.2601728439331055,
+        -1.6650049686431885
+      ],
+      "maxJointError": 0.000015728399375802837,
+      "profile": "CanonicalNESHero",
+      "actorId": 80002,
+      "health": 100,
+      "position": [
+        -58.79053497314453,
+        3,
+        -180
+      ],
+      "sourceKind": "Run",
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    },
+    "passed": true,
+    "attacks": [
+      {
+        "action": "HeroJab",
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "joints": 15,
+        "sourceFrame": 25,
+        "mode": "Idle",
+        "meshes": 15,
+        "id": 1,
+        "handLocal": [
+          2.0475006103515625,
+          1.6978378295898438,
+          -2.655670166015625
+        ],
+        "maxJointError": 0.000015730207451269962,
+        "profile": "CanonicalNESHero",
+        "actorId": 80001,
+        "health": 37,
+        "position": [
+          -60.73329544067383,
+          3,
+          -187
+        ],
+        "sourceKind": "Attack",
+        "sourceCall": 3,
+        "rootIsAssemblyRoot": true,
+        "manualServerOwner": true
+      },
+      {
+        "action": "HeroUppercut",
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "joints": 15,
+        "sourceFrame": 24,
+        "mode": "Idle",
+        "meshes": 15,
+        "id": 1,
+        "handLocal": [
+          2.2312164306640625,
+          -0.1970500946044922,
+          -0.0924072265625
+        ],
+        "maxJointError": 0.000015258818166330457,
+        "profile": "CanonicalNESHero",
+        "actorId": 80001,
+        "health": 37,
+        "position": [
+          -60.73329544067383,
+          3,
+          -187
+        ],
+        "sourceKind": "Attack",
+        "sourceCall": 3,
+        "rootIsAssemblyRoot": true,
+        "manualServerOwner": true
+      },
+      {
+        "action": "HeroPowerPunch",
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "joints": 15,
+        "sourceFrame": 29,
+        "mode": "Idle",
+        "meshes": 15,
+        "id": 1,
+        "handLocal": [
+          2.1006317138671875,
+          0.9867572784423828,
+          -2.0128860473632812
+        ],
+        "maxJointError": 0.000015728399375802837,
+        "profile": "CanonicalNESHero",
+        "actorId": 80001,
+        "health": 37,
+        "position": [
+          -60.73329544067383,
+          3,
+          -187
+        ],
+        "sourceKind": "Attack",
+        "sourceCall": 4,
+        "rootIsAssemblyRoot": true,
+        "manualServerOwner": true
+      },
+      {
+        "action": "HeroKick",
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "joints": 15,
+        "sourceFrame": 33,
+        "mode": "Idle",
+        "meshes": 15,
+        "id": 1,
+        "handLocal": [
+          2.183990478515625,
+          1.1535463333129883,
+          -1.8256874084472656
+        ],
+        "maxJointError": 0.0000152587890625,
+        "profile": "CanonicalNESHero",
+        "actorId": 80001,
+        "health": 37,
+        "position": [
+          -60.73329544067383,
+          3,
+          -187
+        ],
+        "sourceKind": "Attack",
+        "sourceCall": 2,
+        "rootIsAssemblyRoot": true,
+        "manualServerOwner": true
+      },
+      {
+        "action": "HeroBoot",
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "joints": 15,
+        "sourceFrame": 31,
+        "mode": "Idle",
+        "meshes": 15,
+        "id": 1,
+        "handLocal": [
+          2.32403564453125,
+          1.6041302680969238,
+          -1.9339637756347656
+        ],
+        "maxJointError": 0.000015728399375802837,
+        "profile": "CanonicalNESHero",
+        "actorId": 80001,
+        "health": 37,
+        "position": [
+          -60.73329544067383,
+          3,
+          -187
+        ],
+        "sourceKind": "Attack",
+        "sourceCall": 3,
+        "rootIsAssemblyRoot": true,
+        "manualServerOwner": true
+      },
+      {
+        "action": "HeroElbow",
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "joints": 15,
+        "sourceFrame": 38,
+        "mode": "Idle",
+        "meshes": 15,
+        "id": 1,
+        "handLocal": [
+          2.1886138916015625,
+          4.313389778137207,
+          0.14043426513671875
+        ],
+        "maxJointError": 0.000015728399375802837,
+        "profile": "CanonicalNESHero",
+        "actorId": 80001,
+        "health": 37,
+        "position": [
+          -60.73329544067383,
+          3,
+          -187
+        ],
+        "sourceKind": "Attack",
+        "sourceCall": 3,
+        "rootIsAssemblyRoot": true,
+        "manualServerOwner": true
+      },
+      {
+        "action": "Dash",
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "joints": 15,
+        "sourceFrame": 35,
+        "mode": "Idle",
+        "meshes": 15,
+        "id": 1,
+        "handLocal": [
+          2.197998046875,
+          -0.4888033866882324,
+          0.024509429931640625
+        ],
+        "maxJointError": 0.000015730207451269962,
+        "profile": "CanonicalNESHero",
+        "actorId": 80001,
+        "health": 37,
+        "position": [
+          -60.73329544067383,
+          3,
+          -187
+        ],
+        "sourceKind": "Attack",
+        "sourceCall": 3,
+        "rootIsAssemblyRoot": true,
+        "manualServerOwner": true
+      }
+    ],
+    "initial1": {
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "joints": 15,
+      "sourceFrame": 1,
+      "mode": "Idle",
+      "meshes": 15,
+      "id": 1,
+      "handLocal": [
+        1.88519287109375,
+        -1.1108020544052124,
+        -0.229583740234375
+      ],
+      "maxJointError": 0.000017059845049516298,
+      "profile": "CanonicalNESHero",
+      "actorId": 80001,
+      "health": 100,
+      "position": [
+        -65,
+        3,
+        -187
+      ],
+      "sourceKind": "Idle",
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    },
+    "reaction": {
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "joints": 15,
+      "mode": "Idle",
+      "meshes": 15,
+      "id": 1,
+      "handLocal": [
+        2.6051177978515625,
+        -0.04845905303955078,
+        -1.8806571960449219
+      ],
+      "maxJointError": 0.000015728399375802837,
+      "fallback": "Reaction",
+      "profile": "CanonicalNESHero",
+      "actorId": 80001,
+      "health": 37,
+      "position": [
+        -60.73329544067383,
+        3,
+        -187
+      ],
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    },
+    "clubIdle": {
+      "sourceFallback": "Club",
+      "manualServerOwner": true,
+      "welds": 7,
+      "gripError": 0
+    },
+    "clubSwing": {
+      "sourceFallback": "Club",
+      "manualServerOwner": true,
+      "welds": 7,
+      "gripError": 0
+    },
+    "afterClub": {
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "joints": 15,
+      "sourceFrame": 1,
+      "mode": "Idle",
+      "meshes": 15,
+      "id": 1,
+      "handLocal": [
+        1.88519287109375,
+        -1.1108020544052124,
+        -0.2295687049627304
+      ],
+      "maxJointError": 0.000015728399375802837,
+      "profile": "CanonicalNESHero",
+      "actorId": 80001,
+      "health": 37,
+      "position": [
+        -60.73329544067383,
+        3,
+        -187
+      ],
+      "sourceKind": "Idle",
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    },
+    "replacement": {
+      "otherSame": true,
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "joints": 15,
+      "sourceFrame": 1,
+      "oldDestroyed": true,
+      "mode": "Idle",
+      "meshes": 15,
+      "id": 1,
+      "handLocal": [
+        1.88519287109375,
+        -1.1108020544052124,
+        -0.229583740234375
+      ],
+      "maxJointError": 0.000017059845049516298,
+      "profile": "CanonicalNESHero",
+      "actorId": 80003,
+      "health": 100,
+      "position": [
+        -65,
+        3,
+        -187
+      ],
+      "sourceKind": "Idle",
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    },
+    "walk": {
+      "velocity": [
+        16,
+        0,
+        0
+      ],
+      "joints": 15,
+      "sourceFrame": 8,
+      "mode": "Walk",
+      "meshes": 15,
+      "id": 1,
+      "handLocal": [
+        2.0579681396484375,
+        -0.5189652442932129,
+        -0.41905975341796875
+      ],
+      "maxJointError": 0.000015259254723787308,
+      "profile": "CanonicalNESHero",
+      "actorId": 80001,
+      "health": 37,
+      "position": [
+        -60.82539367675781,
+        3,
+        -187
+      ],
+      "sourceKind": "Walk",
+      "rootIsAssemblyRoot": true,
+      "manualServerOwner": true
+    }
+  },
+  "normalNativeDesktop": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[{\"profile\":\"CanonicalNESHero\",\"primary\":\"HeroJab\",\"template\":\"Mr. Green\",\"meshSize\":[0.9110884070396423,0.657213568687439,0.44636493921279909],\"brawler\":true,\"anchored\":false,\"phase\":\"Recovery\",\"manualServerOwner\":true}]"
+      }
+    ],
+    "isError": false
+  },
+  "mobileLayout": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"view\":\"Playing\",\"canSelect\":false,\"groupId\":\"group-1\",\"status\":\"Active\",\"scope\":\"Production envelope for layout fixture; no physical touch claim\",\"canStart\":false}"
+      }
+    ],
+    "isError": false
+  },
+  "mobileStartup": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"status\":\"Active\",\"view\":\"Playing\",\"portraitStatusAtStartup\":[{\"visible\":true,\"image\":\"rbxthumb://type=Asset&id=81768891375221&w=420&h=420\",\"loaded\":true},{\"visible\":false,\"image\":\"rbxthumb://type=Asset&id=112046401281853&w=420&h=420\",\"loaded\":false}]}"
+      }
+    ],
+    "isError": false
+  },
+  "scope": "The core engine fixture and native desktop Start/Attack ran on identical runtime with the prior model-thumbnail IDs (source5e5e27..., file88d769...). Final a12a84... changes only the front portrait image IDs/comment and its receipt; final saved-file extents and IDs were independently reopened and checked. Mobile layout ran on final source using a production group-scoped Start envelope, not physical touch.",
+  "remaining": [
+    "Third hero and other character families",
+    "Oversized attack morphs and full boss fear/appearance",
+    "Air/death/carry/weapon source-pose parity",
+    "Physical phone/tablet and performance acceptance",
+    "Full route normal-input clear, multiplayer and real reconnect",
+    "All13 modes/six bosses/public release"
+  ],
+  "portraitAssets": {
+    "green": "81768891375221",
+    "player2": "112046401281853",
+    "note": "Green image rendered in final native phone menu; P2 thumbnail was not ready at the captured startup and retained its local fallback. Do not count that P2 portrait as accepted."
+  },
+  "materialStudy": {
+    "retiredAssetId": "111493666857808",
+    "reason": "Vertex colours were lost under SurfaceAppearance; importer also wrote an invalid emissive reference6. Final baked file has neither dependency."
+  }
+}

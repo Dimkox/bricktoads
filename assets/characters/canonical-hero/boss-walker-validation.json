@@ -1,0 +1,500 @@
+{
+  "status": "PASS",
+  "sha256": "4f1d852e369f83da380dd05b37a5d999886aea036eba220852678ed4a47adc08",
+  "bytes": 3821508,
+  "meshCount": 4,
+  "totalTriangles": 34636,
+  "parts": [
+    {
+      "name": "GuardianChassis",
+      "role": "battle-chassis",
+      "boundsStuds": [
+        [
+          -2.999,
+          -3.0,
+          -2.555
+        ],
+        [
+          2.999,
+          5.419,
+          4.2299999999999995
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        1.2094999999999998,
+        0.8374999999999997
+      ],
+      "boundingBoxSizeStuds": [
+        5.998,
+        8.419,
+        6.785
+      ],
+      "layoutOffsetStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        0,
+        0,
+        0
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        0.0,
+        -1.2094999999999998,
+        -0.8374999999999997
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "split red impact armor -Z; broad black engine grille +Z",
+      "closedOrientableShellComponents": 130,
+      "triangles": 6704,
+      "authoringVertices": 3612,
+      "exportedVertices": 20112
+    },
+    {
+      "name": "GuardianLeftCannon",
+      "role": "battle-cannon",
+      "boundsStuds": [
+        [
+          -4.484,
+          -0.55,
+          -4.709
+        ],
+        [
+          -1.85,
+          2.17,
+          2.25
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -3.167,
+        0.8099999999999999,
+        -1.2294999999999998
+      ],
+      "boundingBoxSizeStuds": [
+        2.634,
+        2.7199999999999998,
+        6.959
+      ],
+      "layoutOffsetStuds": [
+        -16,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -4.48,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        -2.5,
+        0.7,
+        0.5
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        0.6669999999999998,
+        -0.10999999999999999,
+        1.7294999999999998
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "muzzle cavity faces -Z; service latch outboard",
+      "closedOrientableShellComponents": 44,
+      "triangles": 7324,
+      "authoringVertices": 3738,
+      "exportedVertices": 21972,
+      "muzzlePointStuds": [
+        -3.1,
+        0.7,
+        -4.6
+      ],
+      "muzzleForwardStuds": [
+        0,
+        0,
+        -1
+      ],
+      "muzzleAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "muzzleAttachmentInIdentityBoundingBoxPartStuds": [
+        0.06699999999999973,
+        -0.10999999999999999,
+        -3.3705
+      ],
+      "muzzleBoreRadiusStuds": 0.67,
+      "muzzleCavityRearStuds": [
+        -3.1,
+        0.7,
+        -3.66
+      ]
+    },
+    {
+      "name": "GuardianRightCannon",
+      "role": "battle-cannon",
+      "boundsStuds": [
+        [
+          1.85,
+          -0.55,
+          -4.709
+        ],
+        [
+          4.484,
+          2.17,
+          2.25
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        3.167,
+        0.8099999999999999,
+        -1.2294999999999998
+      ],
+      "boundingBoxSizeStuds": [
+        2.634,
+        2.7199999999999998,
+        6.959
+      ],
+      "layoutOffsetStuds": [
+        16,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        4.48,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        2.5,
+        0.7,
+        0.5
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        -0.6669999999999998,
+        -0.10999999999999999,
+        1.7294999999999998
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "muzzle cavity faces -Z; service latch outboard",
+      "closedOrientableShellComponents": 44,
+      "triangles": 7324,
+      "authoringVertices": 3738,
+      "exportedVertices": 21972,
+      "muzzlePointStuds": [
+        3.1,
+        0.7,
+        -4.6
+      ],
+      "muzzleForwardStuds": [
+        0,
+        0,
+        -1
+      ],
+      "muzzleAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "muzzleAttachmentInIdentityBoundingBoxPartStuds": [
+        -0.06699999999999973,
+        -0.10999999999999999,
+        -3.3705
+      ],
+      "muzzleBoreRadiusStuds": 0.67,
+      "muzzleCavityRearStuds": [
+        3.1,
+        0.7,
+        -3.66
+      ]
+    },
+    {
+      "name": "IntroLeg12",
+      "role": "intro-ground-origin-leg",
+      "boundsStuds": [
+        [
+          -1.455,
+          0.0,
+          -1.6800000000000002
+        ],
+        [
+          4.9106250000000005,
+          23.28,
+          1.44
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        1.7278125000000002,
+        11.64,
+        -0.1200000000000001
+      ],
+      "boundingBoxSizeStuds": [
+        6.3656250000000005,
+        23.28,
+        3.12
+      ],
+      "layoutOffsetStuds": [
+        35,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        9.8,
+        0.0,
+        0.0
+      ],
+      "layoutPurpose": "nonoverlapping native import only; subtract this offset before root binding",
+      "mountPointStuds": [
+        0,
+        0,
+        0
+      ],
+      "mountAxesRootSpace": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "originAttachmentInIdentityBoundingBoxPartStuds": [
+        -1.7278125000000002,
+        -11.64,
+        0.1200000000000001
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "rootAxes": "identity"
+      },
+      "frontAsymmetry": "source XY upper assembly leans +X, red joint and raised shaft runner on -Z",
+      "closedOrientableShellComponents": 36,
+      "triangles": 13284,
+      "authoringVertices": 6704,
+      "exportedVertices": 39852,
+      "sourceAnchorStuds": [
+        0,
+        2.1825,
+        0
+      ],
+      "sourceAnchorImagePixel": [
+        8,
+        116
+      ],
+      "authoredGroundOriginImageBoundary": [
+        8,
+        128
+      ],
+      "sourcePixelSize": [
+        35,
+        128
+      ],
+      "sourceStudsPerPixel": 0.181875,
+      "sourceXYMapping": "x=(pixelBoundaryX-8)*.181875; y=(128-pixelBoundaryY)*.181875",
+      "originAttachmentName": "IntroOriginRigAttachment",
+      "groundOriginStuds": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "allSixEarlierGlbsUnchanged": true,
+  "triangleLimitExclusive": 20000,
+  "exportVertexLimitExclusive": 65536,
+  "geometryClosure": "all indexed edges have exactly two incident faces per closed shell; all shells consistently outward oriented",
+  "componentOverlap": "armor plates and bolts intentionally intersect; shell components remain individually closed",
+  "actualStudioAcceptance": "NOT_RUN",
+  "serializedChecks": "PASS",
+  "decodedParts": {
+    "GuardianChassis": {
+      "decodedBoundsMetres": [
+        [
+          -0.8397200107574463,
+          -0.8399999737739563,
+          -0.715399980545044
+        ],
+        [
+          0.8397200107574463,
+          1.5173200368881226,
+          1.184399962425232
+        ]
+      ],
+      "minimumTriangleAreaSquareMetres": 6.1151438613705344e-06,
+      "maximumBoundErrorMetres": 3.7574767963732825e-08,
+      "unitNormals": true
+    },
+    "GuardianLeftCannon": {
+      "decodedBoundsMetres": [
+        [
+          -1.255519986152649,
+          -0.15399999916553497,
+          -1.318519949913025
+        ],
+        [
+          -0.5180000066757202,
+          0.6075999736785889,
+          0.6299999952316284
+        ]
+      ],
+      "minimumTriangleAreaSquareMetres": 7.055788273646613e-06,
+      "maximumBoundErrorMetres": 5.0086975011964796e-08,
+      "unitNormals": true
+    },
+    "GuardianRightCannon": {
+      "decodedBoundsMetres": [
+        [
+          0.5180000066757202,
+          -0.15399999916553497,
+          -1.318519949913025
+        ],
+        [
+          1.255519986152649,
+          0.6075999736785889,
+          0.6299999952316284
+        ]
+      ],
+      "minimumTriangleAreaSquareMetres": 7.055788273646613e-06,
+      "maximumBoundErrorMetres": 5.0086975011964796e-08,
+      "unitNormals": true
+    },
+    "IntroLeg12": {
+      "decodedBoundsMetres": [
+        [
+          -0.4074000120162964,
+          0.0,
+          -0.47040000557899475
+        ],
+        [
+          1.3749749660491943,
+          6.518400192260742,
+          0.4032000005245209
+        ]
+      ],
+      "minimumTriangleAreaSquareMetres": 2.456969859565561e-05,
+      "maximumBoundErrorMetres": 1.9226074154943262e-07,
+      "unitNormals": true
+    }
+  },
+  "meshNodesOnly": true,
+  "singleEmbeddedAlbedo": true,
+  "singlePrimitivePerMesh": true,
+  "singleMaterial": true,
+  "vertexColors": false,
+  "emissive": false,
+  "visualInspection": {
+    "views": [
+      "front",
+      "three-quarter",
+      "side"
+    ],
+    "scope": [
+      "battle assembly",
+      "IntroLeg12"
+    ],
+    "actualGeometryPreview": "boss-walker-preview.png",
+    "result": "PASS",
+    "sourceContour": "long narrow diagonal shaft, small toe, circular upper joint and diagonal +X plate retained",
+    "limits": "entire chassis and 3D depth authored; native Studio acceptance pending"
+  }
+}

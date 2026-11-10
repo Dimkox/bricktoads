@@ -1,0 +1,811 @@
+{
+  "scenario": "isolated_npc_walker_heavy",
+  "elapsed": 1.4508509635925293,
+  "placeId": 117412694427208,
+  "before": {
+    "heroAnchored": false,
+    "respawns": 3,
+    "heavyReactionEpoch": 0,
+    "heroPosition": {
+      "y": 3,
+      "x": -40,
+      "z": 4096
+    },
+    "walkerPosition": {
+      "y": 3,
+      "x": -46,
+      "z": 4096
+    },
+    "rawLife": 35,
+    "attempt": 1,
+    "grounded": true,
+    "heroVelocity": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "now": 0,
+    "platformStand": false,
+    "walkerMotorOffsets": [],
+    "humanoidState": "Running",
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  },
+  "sourceManifest": {
+    "source_pack_sha256": "5c480101dbbd0f42847293e25c9e03cb90a8f66da926032ef71d6178dc61af49",
+    "engine_status": "not_run",
+    "schema": 1,
+    "source_sha256": {
+      "src/server/BrickToadsServer.server.luau": "b9ad5a74e0dda9ce7de5084da85df173ae1778644b529df0bb0e5ca3b01a6ae7",
+      "src/stand/server/ConnectionRegistry.lua": "7f6cd4b6216cc993a359a55d318c46a819c90ecf0f893f4d34843cb168956c92",
+      "src/client/BrickToadsClient.client.luau": "2a2d2b370bf661430b33cba59c34c1c5dccc2c06188649d30d885108989ff7b3",
+      "src/stand/server/Stand.server.lua": "f69563f3f08c86f8e01aceb93e05197283df2ec80020f2753909fdf401fa8719",
+      "src/server/gameplay/LevelDefinition.lua": "239d3e0200e9d76790e04564aedc8da9d041ef44874e5c763c9cd1d81f93abbc",
+      "src/server/gameplay/HealingFlies.lua": "d3b0be0aae05221a1f9b40d6851e772dd27ccbd763879090064765914026a64f",
+      "src/stand/server/Session.lua": "c1a123f71805e3f238220b7e91e98aaf6fbb43cb42c47a3ed1d7c1cec9fe7f56",
+      "src/server/gameplay/BossQueue.lua": "09bd54c98a25daabef3e12c215305eeeae8115091dec202dac069b48ddd6a2b1",
+      "src/server/gameplay/WalkerClubs.lua": "138fa6283331668cef79bc4c301615863b9f9630c95eec6d3001ec7e14bd576a",
+      "tests/gameplay/WalkerHeavyStudioAcceptance.server.luau": "742775aa28f83626be2b164f1d715032d9e61fc67ccde2a0b0ce22e702ecb553",
+      "src/stand/server/RobloxWorld.lua": "487cdb395fcdf61c4ebf0dab41396fa860678d4291bd3d3b8729344af2799672",
+      "src/server/gameplay/GameWorld.lua": "582b54f1319ea44878d068b9624a3a2d4999847019ed9fb69d10c833df2b1ec8",
+      "src/client/CombatFeedback.luau": "0c7b8befd138ab0f809fa4982c1e8b6f05d45faede313b2835cd4449309f562d",
+      "src/stand/server/Combat.lua": "befef667938c62c867c219d07193fe037107979f2a12cfaf3bf1508f20188a97",
+      "src/shared/BrickToadsConfig.luau": "e5183fd2f3eda75057cdf62e5cf2b462fc7e62fcfbc62ddff2bd5fa2a3ab8360",
+      "src/stand/client/Stand.client.lua": "3a59bf7358a22bdd02362a63755b54c6a91e6cd1b06152cf027921167f91ad66",
+      "src/stand/server/Config.lua": "c423b8b8685940bd03f487f3bd2773d2302773ff48ba98a3a1414254b31b1624",
+      "src/server/gameplay/SourceCombat.lua": "6f7eb33cf649e46459bfe9f4dc15bbbc3416ed3eb76b8b0f9311bf90d5a55e05",
+      "src/server/gameplay/RunJournal.lua": "c62046c1bde00c75aef8d4a759d56e07d1cd8f85189c46e16257b36fa4b5437f",
+      "src/server/gameplay/EnemyCarry.lua": "9ece41dc1e9a66b97840266684a19738bd31f941914bb428e1153d161c11a87c",
+      "src/server/gameplay/DragonFlight.lua": "6c349be13a7bac3ea8f2f01fbdcf3644f45656abebeffb013e713179de38e25e",
+      "src/client/GroupPanel.luau": "101ad3ba5ae88caff6d1601f9e3bd2f5a3b553d51c75d61fae12f3d972ea7d1c",
+      "src/server/gameplay/LevelDirector.lua": "7cd86d26f19f8a80120853c41a36fb7da91c73333330f17597be7eecc98cd132",
+      "src/client/BossQueuePanel.luau": "c65b2dc3e057179226961d1a21660cf24ecb35b381c9f41533ca1b32cb864cec",
+      "src/server/gameplay/GameConfig.lua": "73b8c62738e4a840203438ebf2e5185a9237309bc532057c4b5af24750fa992e",
+      "src/server/gameplay/GuardianPattern.lua": "ade0161938331506c895b56ea2b3ba72630b3cbff55260152ce95f7e80e699b7",
+      "src/client/SpectatorCamera.luau": "88af488439f503b3aff6c784a08f2b2a6285d55dca570f290a5de2492f37c8b7",
+      "src/server/gameplay/GameController.lua": "1fc4c908a2737a3230b4dc124c43a970f41d6e745c54391ae1e455ec8fd0527c",
+      "src/server/gameplay/DragonWorld.lua": "29c78778eb61ad29f6025abbc31a38e4208aca78254298090ab25e59fb40f1fd",
+      "src/server/gameplay/MatchHub.lua": "e6e74c674a60f5a2862b8c1fc0da414152e0084a485e26b8f4376fc376b998fc",
+      "src/server/RunLifecycle.lua": "18192b02d59cca2140b3e7afa729c45f4eb43b683b4214c4f8230477968aa096"
+    }
+  },
+  "status": "pass",
+  "studioVersion": "0.746.0.7461269",
+  "idle": {
+    "heroAnchored": false,
+    "respawns": 3,
+    "heavyReactionEpoch": 1,
+    "heroPosition": {
+      "y": 0.9932989478111267,
+      "x": -30.4270076751709,
+      "z": 4096
+    },
+    "walkerPosition": {
+      "y": 3,
+      "x": -46,
+      "z": 4096
+    },
+    "rawLife": 31,
+    "attempt": 1,
+    "grounded": false,
+    "heroVelocity": {
+      "y": -0.00031899483292363584,
+      "x": -0.00003247290078434162,
+      "z": 6.49292132948176e-7
+    },
+    "now": 1.4347460269927979,
+    "platformStand": false,
+    "walkerMotorOffsets": {
+      "Left Shoulder": {
+        "position": 0,
+        "angle": 0.0009765625
+      },
+      "Right Shoulder": {
+        "position": 0,
+        "angle": 0.0009765625
+      },
+      "Left Hip": {
+        "position": 0,
+        "angle": 0
+      },
+      "Right Hip": {
+        "position": 0,
+        "angle": 0
+      }
+    },
+    "humanoidState": "PlatformStanding",
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  },
+  "checks": [
+    {
+      "name": "fixture uses the existing first-zone Walker",
+      "passed": true
+    },
+    {
+      "name": "initial spawn commits",
+      "passed": true
+    },
+    {
+      "name": "fixture health seed commits",
+      "passed": true
+    },
+    {
+      "observed": {
+        "heroAnchored": false,
+        "respawns": 3,
+        "heavyReactionEpoch": 0,
+        "heroPosition": {
+          "y": 3,
+          "x": -40,
+          "z": 4096
+        },
+        "walkerPosition": {
+          "y": 3,
+          "x": -46,
+          "z": 4096
+        },
+        "rawLife": 35,
+        "attempt": 1,
+        "grounded": true,
+        "phase": "Windup",
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "walkerAction": "WalkerHeavy",
+        "now": 0.028577089309692383,
+        "platformStand": false,
+        "pose": "WalkerHeavy",
+        "walkerMotorOffsets": {
+          "Left Shoulder": {
+            "position": 0,
+            "angle": 0.627392590045929
+          },
+          "Right Shoulder": {
+            "position": 0,
+            "angle": 0.627392590045929
+          },
+          "Left Hip": {
+            "position": 0,
+            "angle": 0.4314211308956146
+          },
+          "Right Hip": {
+            "position": 0,
+            "angle": 0.4314211308956146
+          }
+        },
+        "humanoidState": "Running",
+        "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+      },
+      "name": "NPC selects Heavy through the ordinary AI step",
+      "passed": true
+    },
+    {
+      "observed": {
+        "heroAnchored": false,
+        "respawns": 3,
+        "heavyReactionEpoch": 0,
+        "heroPosition": {
+          "y": 3,
+          "x": -40,
+          "z": 4096
+        },
+        "walkerPosition": {
+          "y": 3,
+          "x": -46,
+          "z": 4096
+        },
+        "rawLife": 35,
+        "attempt": 1,
+        "grounded": true,
+        "phase": "Windup",
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "walkerAction": "WalkerHeavy",
+        "now": 0.028577089309692383,
+        "platformStand": false,
+        "pose": "WalkerHeavy",
+        "walkerMotorOffsets": {
+          "Left Shoulder": {
+            "position": 0,
+            "angle": 0.627392590045929
+          },
+          "Right Shoulder": {
+            "position": 0,
+            "angle": 0.627392590045929
+          },
+          "Left Hip": {
+            "position": 0,
+            "angle": 0.4314211308956146
+          },
+          "Right Hip": {
+            "position": 0,
+            "angle": 0.4314211308956146
+          }
+        },
+        "humanoidState": "Running",
+        "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+      },
+      "name": "actual model presents a heavy windup",
+      "passed": true
+    },
+    {
+      "observed": {
+        "Left Shoulder": {
+          "position": 0,
+          "angle": 1.085961937904358
+        },
+        "Right Shoulder": {
+          "position": 0,
+          "angle": 1.085961937904358
+        },
+        "Left Hip": {
+          "position": 0,
+          "angle": 0.7467525005340576
+        },
+        "Right Hip": {
+          "position": 0,
+          "angle": 0.7467525005340576
+        }
+      },
+      "name": "actual hip motors move during the heavy windup",
+      "passed": true
+    },
+    {
+      "observed": {
+        "action": "WalkerHeavy",
+        "attacker": -3,
+        "profile": 20,
+        "observed": {
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "held": false,
+          "position": [
+            -40,
+            3,
+            4096
+          ]
+        },
+        "blocked": false,
+        "before": 35,
+        "impulse": true,
+        "after": 31,
+        "dying": false
+      },
+      "name": "real hit geometry produces one profile20 hit35 to31",
+      "passed": true
+    },
+    {
+      "observed": {
+        "heroAnchored": false,
+        "recover": false,
+        "respawns": 3,
+        "heavyReactionEpoch": 1,
+        "heroPosition": {
+          "y": 3,
+          "x": -40,
+          "z": 4096
+        },
+        "reactionEnd": 1.4344260692596436,
+        "walkerPosition": {
+          "y": 3,
+          "x": -46,
+          "z": 4096
+        },
+        "rawLife": 31,
+        "attempt": 1,
+        "grounded": true,
+        "phase": "Recovery",
+        "heroVelocity": {
+          "y": 0,
+          "x": 0,
+          "z": 0
+        },
+        "now": 0.6844260692596436,
+        "platformStand": true,
+        "pose": "WalkerHeavy",
+        "walkerMotorOffsets": {
+          "Left Shoulder": {
+            "position": 0,
+            "angle": 1.2783317565917969
+          },
+          "Right Shoulder": {
+            "position": 0,
+            "angle": 1.2783317565917969
+          },
+          "Left Hip": {
+            "position": 0,
+            "angle": 0.5499821901321411
+          },
+          "Right Hip": {
+            "position": 0,
+            "angle": 0.5499821901321411
+          }
+        },
+        "humanoidState": "Running",
+        "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+      },
+      "name": "heavy reaction reaches the unanchored engine body",
+      "passed": true
+    },
+    {
+      "observed": {
+        "maxY": 4.183728218078613,
+        "maxVelocityY": 17.91250228881836
+      },
+      "name": "engine observes an actual upward response",
+      "passed": true
+    },
+    {
+      "observed": {
+        "heroAnchored": false,
+        "respawns": 3,
+        "heavyReactionEpoch": 1,
+        "heroPosition": {
+          "y": 0.9932989478111267,
+          "x": -30.4270076751709,
+          "z": 4096
+        },
+        "walkerPosition": {
+          "y": 3,
+          "x": -46,
+          "z": 4096
+        },
+        "rawLife": 31,
+        "attempt": 1,
+        "grounded": false,
+        "heroVelocity": {
+          "y": -0.00031899483292363584,
+          "x": -0.00003247290078434162,
+          "z": 6.49292132948176e-7
+        },
+        "now": 1.4347460269927979,
+        "platformStand": false,
+        "walkerMotorOffsets": {
+          "Left Shoulder": {
+            "position": 0,
+            "angle": 0.0009765625
+          },
+          "Right Shoulder": {
+            "position": 0,
+            "angle": 0.0009765625
+          },
+          "Left Hip": {
+            "position": 0,
+            "angle": 0
+          },
+          "Right Hip": {
+            "position": 0,
+            "angle": 0
+          }
+        },
+        "humanoidState": "PlatformStanding",
+        "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+      },
+      "name": "single strike does not heal or spend a respawn",
+      "passed": true
+    },
+    {
+      "name": "same NPC stays alive without an owner or replacement",
+      "passed": true
+    },
+    {
+      "observed": {
+        "heroAnchored": false,
+        "respawns": 3,
+        "heavyReactionEpoch": 1,
+        "heroPosition": {
+          "y": 0.9932989478111267,
+          "x": -30.4270076751709,
+          "z": 4096
+        },
+        "walkerPosition": {
+          "y": 3,
+          "x": -46,
+          "z": 4096
+        },
+        "rawLife": 31,
+        "attempt": 1,
+        "grounded": false,
+        "heroVelocity": {
+          "y": -0.00031899483292363584,
+          "x": -0.00003247290078434162,
+          "z": 6.49292132948176e-7
+        },
+        "now": 1.4347460269927979,
+        "platformStand": false,
+        "walkerMotorOffsets": {
+          "Left Shoulder": {
+            "position": 0,
+            "angle": 0.0009765625
+          },
+          "Right Shoulder": {
+            "position": 0,
+            "angle": 0.0009765625
+          },
+          "Left Hip": {
+            "position": 0,
+            "angle": 0
+          },
+          "Right Hip": {
+            "position": 0,
+            "angle": 0
+          }
+        },
+        "humanoidState": "PlatformStanding",
+        "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+      },
+      "name": "finite heavy pose returns to idle",
+      "passed": true
+    },
+    {
+      "observed": {
+        "Left Shoulder": {
+          "position": 0,
+          "angle": 0.0009765625
+        },
+        "Right Shoulder": {
+          "position": 0,
+          "angle": 0.0009765625
+        },
+        "Left Hip": {
+          "position": 0,
+          "angle": 0
+        },
+        "Right Hip": {
+          "position": 0,
+          "angle": 0
+        }
+      },
+      "name": "actual motors settle near their original frames",
+      "passed": true
+    },
+    {
+      "observed": {
+        "heroAnchored": false,
+        "respawns": 3,
+        "heavyReactionEpoch": 1,
+        "heroPosition": {
+          "y": 1.8188295364379883,
+          "x": -30.42716407775879,
+          "z": 4096
+        },
+        "walkerPosition": {
+          "y": 3,
+          "x": -46,
+          "z": 4096
+        },
+        "rawLife": 31,
+        "attempt": 1,
+        "grounded": true,
+        "heroVelocity": {
+          "y": 42.498748779296875,
+          "x": 0.029001174494624138,
+          "z": 0.0008820952498354018
+        },
+        "now": 1.4505729675292969,
+        "platformStand": false,
+        "walkerMotorOffsets": {
+          "Left Shoulder": {
+            "position": 0,
+            "angle": 0.0006905339541845024
+          },
+          "Right Shoulder": {
+            "position": 0,
+            "angle": 0.0006905339541845024
+          },
+          "Left Hip": {
+            "position": 0,
+            "angle": 0
+          },
+          "Right Hip": {
+            "position": 0,
+            "angle": 0
+          }
+        },
+        "humanoidState": "Running",
+        "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+      },
+      "name": "same living body reaches grounded non-reaction state after physics",
+      "passed": true
+    }
+  ],
+  "windup": {
+    "heroAnchored": false,
+    "respawns": 3,
+    "heavyReactionEpoch": 0,
+    "heroPosition": {
+      "y": 3,
+      "x": -40,
+      "z": 4096
+    },
+    "walkerPosition": {
+      "y": 3,
+      "x": -46,
+      "z": 4096
+    },
+    "rawLife": 35,
+    "attempt": 1,
+    "grounded": true,
+    "phase": "Windup",
+    "heroVelocity": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "walkerAction": "WalkerHeavy",
+    "now": 0.1360640525817871,
+    "platformStand": false,
+    "pose": "WalkerHeavy",
+    "walkerMotorOffsets": {
+      "Left Shoulder": {
+        "position": 0,
+        "angle": 1.085961937904358
+      },
+      "Right Shoulder": {
+        "position": 0,
+        "angle": 1.085961937904358
+      },
+      "Left Hip": {
+        "position": 0,
+        "angle": 0.7467525005340576
+      },
+      "Right Hip": {
+        "position": 0,
+        "angle": 0.7467525005340576
+      }
+    },
+    "humanoidState": "Running",
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  },
+  "physicalRecovery": {
+    "heroAnchored": false,
+    "respawns": 3,
+    "heavyReactionEpoch": 1,
+    "heroPosition": {
+      "y": 1.8188295364379883,
+      "x": -30.42716407775879,
+      "z": 4096
+    },
+    "walkerPosition": {
+      "y": 3,
+      "x": -46,
+      "z": 4096
+    },
+    "rawLife": 31,
+    "attempt": 1,
+    "grounded": true,
+    "heroVelocity": {
+      "y": 42.498748779296875,
+      "x": 0.029001174494624138,
+      "z": 0.0008820952498354018
+    },
+    "now": 1.4505729675292969,
+    "platformStand": false,
+    "walkerMotorOffsets": {
+      "Left Shoulder": {
+        "position": 0,
+        "angle": 0.0006905339541845024
+      },
+      "Right Shoulder": {
+        "position": 0,
+        "angle": 0.0006905339541845024
+      },
+      "Left Hip": {
+        "position": 0,
+        "angle": 0
+      },
+      "Right Hip": {
+        "position": 0,
+        "angle": 0
+      }
+    },
+    "humanoidState": "Running",
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  },
+  "placeVersion": 0,
+  "afterRecovery": {
+    "heroAnchored": false,
+    "respawns": 3,
+    "heavyReactionEpoch": 1,
+    "heroPosition": {
+      "y": 0.9932989478111267,
+      "x": -30.4270076751709,
+      "z": 4096
+    },
+    "walkerPosition": {
+      "y": 3,
+      "x": -46,
+      "z": 4096
+    },
+    "rawLife": 31,
+    "attempt": 1,
+    "grounded": false,
+    "heroVelocity": {
+      "y": -0.00031899483292363584,
+      "x": -0.00003247290078434162,
+      "z": 6.49292132948176e-7
+    },
+    "now": 1.4347460269927979,
+    "platformStand": false,
+    "walkerMotorOffsets": {
+      "Left Shoulder": {
+        "position": 0,
+        "angle": 0.0009765625
+      },
+      "Right Shoulder": {
+        "position": 0,
+        "angle": 0.0009765625
+      },
+      "Left Hip": {
+        "position": 0,
+        "angle": 0
+      },
+      "Right Hip": {
+        "position": 0,
+        "angle": 0
+      }
+    },
+    "humanoidState": "PlatformStanding",
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  },
+  "limits": [
+    "Not natural level progression",
+    "No player input, networking or device acceptance",
+    "Anchored attacker; no retreat or gait acceptance",
+    "Embedded source receipt assumes no Studio source edits"
+  ],
+  "hit": {
+    "view": "Playing",
+    "userId": 1,
+    "levelEpoch": 1,
+    "respawns": 3,
+    "status": "Alive",
+    "runId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8",
+    "revision": 4,
+    "groupId": "combat-stand",
+    "attempt": 1,
+    "data": {
+      "action": "WalkerHeavy",
+      "attacker": -3,
+      "profile": 20,
+      "observed": {
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "held": false,
+        "position": [
+          -40,
+          3,
+          4096
+        ]
+      },
+      "blocked": false,
+      "before": 35,
+      "impulse": true,
+      "after": 31,
+      "dying": false
+    },
+    "now": 0.6844260692596436,
+    "connected": true,
+    "kind": "Hit",
+    "rawLife": 31,
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  },
+  "lastFrame": {
+    "heroAnchored": false,
+    "respawns": 3,
+    "heavyReactionEpoch": 1,
+    "heroPosition": {
+      "y": 1.8188295364379883,
+      "x": -30.42716407775879,
+      "z": 4096
+    },
+    "walkerPosition": {
+      "y": 3,
+      "x": -46,
+      "z": 4096
+    },
+    "rawLife": 31,
+    "attempt": 1,
+    "grounded": true,
+    "heroVelocity": {
+      "y": 42.498748779296875,
+      "x": 0.029001174494624138,
+      "z": 0.0008820952498354018
+    },
+    "now": 1.4505729675292969,
+    "platformStand": false,
+    "walkerMotorOffsets": {
+      "Left Shoulder": {
+        "position": 0,
+        "angle": 0.0006905339541845024
+      },
+      "Right Shoulder": {
+        "position": 0,
+        "angle": 0.0006905339541845024
+      },
+      "Left Hip": {
+        "position": 0,
+        "angle": 0
+      },
+      "Right Hip": {
+        "position": 0,
+        "angle": 0
+      }
+    },
+    "humanoidState": "Running",
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  },
+  "preparation": {
+    "directHealthSeed": true,
+    "walkerAnchored": true,
+    "isolatedWorld": true,
+    "onlyWalkerFromFirstZone": true,
+    "heroUnanchoredDuringStrike": true,
+    "walkerX": -46,
+    "z": 0,
+    "manualStrikeCall": false,
+    "seedRawLife": 35,
+    "manualHitCall": false,
+    "heroX": -40
+  },
+  "schema": 1,
+  "afterHit": {
+    "heroAnchored": false,
+    "recover": false,
+    "respawns": 3,
+    "heavyReactionEpoch": 1,
+    "heroPosition": {
+      "y": 3,
+      "x": -40,
+      "z": 4096
+    },
+    "reactionEnd": 1.4344260692596436,
+    "walkerPosition": {
+      "y": 3,
+      "x": -46,
+      "z": 4096
+    },
+    "rawLife": 31,
+    "attempt": 1,
+    "grounded": true,
+    "phase": "Recovery",
+    "heroVelocity": {
+      "y": 0,
+      "x": 0,
+      "z": 0
+    },
+    "now": 0.6844260692596436,
+    "platformStand": true,
+    "pose": "WalkerHeavy",
+    "walkerMotorOffsets": {
+      "Left Shoulder": {
+        "position": 0,
+        "angle": 1.2783317565917969
+      },
+      "Right Shoulder": {
+        "position": 0,
+        "angle": 1.2783317565917969
+      },
+      "Left Hip": {
+        "position": 0,
+        "angle": 0.5499821901321411
+      },
+      "Right Hip": {
+        "position": 0,
+        "angle": 0.5499821901321411
+      }
+    },
+    "humanoidState": "Running",
+    "actorId": "WalkerHeavyAcceptance_e9580a8f-3f1b-487d-80cc-43dc46e37dd8:actor:2"
+  }
+}

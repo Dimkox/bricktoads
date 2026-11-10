@@ -1,0 +1,187 @@
+{
+  "scope": "Prepared isolated stage-specific normal-input native acceptance; no registered clients, network/device or continuous full-campaign claim",
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "policySha256": {
+    "CombatPilot": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+    "EarlyPilot": "f4cb9f153ea18f7e931906419e6173ce37fdef24fabaced85fdf1d85fb772ab5",
+    "LatePilot": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8",
+    "Nav": "d8c7603544f84ca56b3511c253d2818756ad8ae5c737bd55d8103a9f0bae5959",
+    "Runner": "b201e2edbb0966a4fecbdf30ca5b5cd0a5a91bfe01d526a12d71f9064678c257"
+  },
+  "preparation": {
+    "authoredSpawn": true,
+    "preparedHeroPoses": false,
+    "originalRawLife": 47,
+    "originalReserves": 3,
+    "heroSlot": 1,
+    "AI": "Production NPC and boss AI active",
+    "clock": "Real native Heartbeats",
+    "input": "Ordinary Session Move/Jump/Punch at approximately0.1seconds, with normal validation and paid retries",
+    "lighting": "Constructor presentation state restored synchronously before yielding",
+    "cleanup": "Only owned cloned modules/worlds/fixture folders removed after export"
+  },
+  "harnessReporterCorrection": {
+    "red": "Initial fixtures aborted at the Roblox StringValue200000-character archive limit; partial evidence retained under stageN-harness-limit-partial.json",
+    "green": "Full JSON now remains in the ordinary Script closure and exports through25000-character Read chunks; StringValue contains only small metadata; replay archives reached478074 and1036005characters successfully"
+  },
+  "cases": [
+    {
+      "stage": 10,
+      "mode": "Race",
+      "result": "Won",
+      "status": "passed",
+      "runId": "prepared-stage-10-d421bdf5-d4f7-4531-8357-7b468e07d0bb",
+      "seed": 820297848,
+      "elapsedSeconds": 143.03420114517212,
+      "initial": {
+        "actorId": "prepared-stage-10-d421bdf5-d4f7-4531-8357-7b468e07d0bb:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "position": {
+          "y": 93,
+          "x": 0,
+          "z": -6
+        },
+        "status": "Alive",
+        "stock": 3
+      },
+      "terminal": {
+        "actorId": "prepared-stage-10-d421bdf5-d4f7-4531-8357-7b468e07d0bb:actor:104",
+        "attempt": 2,
+        "stock": 2,
+        "rawLife": 47,
+        "status": "Alive",
+        "boss": {
+          "bossDefeated": true,
+          "bossRawLife": 0,
+          "rawLife": 0,
+          "progress": 240,
+          "bossVulnerable": false,
+          "maxRawLife": 255,
+          "bossState": "Defeated",
+          "bossPhase": 2,
+          "bossType": "GeneralSlaughter",
+          "bossName": "General Slaughter",
+          "bossMaxProgress": 240,
+          "bossMaxRawLife": 255,
+          "maxProgress": 240,
+          "bossProgress": 240,
+          "projectiles": 0
+        }
+      },
+      "eventCounts": {
+        "ReserveSpawn": 2,
+        "CommitSpawn": 2,
+        "CampaignRaceStarted": 3,
+        "EnemySpawned": 2,
+        "CampaignEnemyAttack": 9,
+        "CampaignBombDefused": 3,
+        "CampaignCheckpoint": 2,
+        "InteractionAccepted": 3,
+        "CampaignRaceRivalClosed": 1,
+        "CampaignCourseCleared": 1,
+        "CampaignBossSpawned": 1,
+        "CampaignBossAttack": 39,
+        "SetHealth": 3,
+        "Hit": 3,
+        "BeginAttack": 96,
+        "AttackAccepted": 96,
+        "CampaignBossHit": 92,
+        "AttackMiss": 4,
+        "Death": 1,
+        "ConfirmedDeath": 1,
+        "CampaignCheckpointRespawn": 1,
+        "CampaignBossDefeated": 1,
+        "CampaignModeClosed": 1
+      },
+      "intentCounts": {
+        "Move:OK": 1286,
+        "Move:REACTION": 13,
+        "Attack:OK": 99
+      },
+      "frameStats": {
+        "max": 0.04112767428159714,
+        "total": 143.06228888453916,
+        "count": 8583
+      },
+      "cleanup": true,
+      "offset": {
+        "y": 32,
+        "x": 0,
+        "z": 49152
+      },
+      "trace": "stage10-native-result.json"
+    },
+    {
+      "stage": 11,
+      "mode": "Clinger",
+      "result": "Won",
+      "status": "passed",
+      "runId": "prepared-stage-11-c5cb75fb-d8dd-46b5-8631-c7c7a82d68e1",
+      "seed": 820297848,
+      "elapsedSeconds": 90.01035594940186,
+      "initial": {
+        "actorId": "prepared-stage-11-c5cb75fb-d8dd-46b5-8631-c7c7a82d68e1:actor:2",
+        "rawLife": 47,
+        "attempt": 1,
+        "position": {
+          "y": 3,
+          "x": 0,
+          "z": -6
+        },
+        "status": "Alive",
+        "stock": 3
+      },
+      "terminal": {
+        "actorId": "prepared-stage-11-c5cb75fb-d8dd-46b5-8631-c7c7a82d68e1:actor:2",
+        "attempt": 1,
+        "stock": 3,
+        "rawLife": 47,
+        "status": "Alive",
+        "boss": {
+          "bossDefeated": true,
+          "bossRawLife": 0,
+          "rawLife": 0,
+          "bossVulnerable": false,
+          "maxRawLife": 207,
+          "bossState": "Defeated",
+          "bossPhase": 2,
+          "bossType": "Buzzball",
+          "bossName": "Buzzball",
+          "bossMaxRawLife": 207,
+          "projectiles": 0
+        }
+      },
+      "eventCounts": {
+        "ReserveSpawn": 1,
+        "CommitSpawn": 1,
+        "CampaignBossSpawned": 1,
+        "CampaignCourseCleared": 1,
+        "BuzzballBattleStarted": 1,
+        "CampaignBossAttack": 14,
+        "BeginAttack": 58,
+        "AttackAccepted": 58,
+        "CampaignBossHit": 55,
+        "AttackMiss": 3,
+        "CampaignBossDefeated": 1,
+        "CampaignModeClosed": 1
+      },
+      "intentCounts": {
+        "Attack:OK": 58,
+        "Move:OK": 821
+      },
+      "frameStats": {
+        "max": 0.0321052111685276,
+        "total": 90.02954718051478,
+        "count": 5402
+      },
+      "cleanup": true,
+      "offset": {
+        "y": 32,
+        "x": 0,
+        "z": 53248
+      },
+      "trace": "stage11-native-result.json"
+    }
+  ]
+}

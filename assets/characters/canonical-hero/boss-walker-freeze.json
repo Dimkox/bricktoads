@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "status": "visually-reviewed-frozen-preupload",
+  "artifactSha256": "4f1d852e369f83da380dd05b37a5d999886aea036eba220852678ed4a47adc08",
+  "artifactBytes": 3821508,
+  "files": {
+    "boss-walker.glb": {
+      "sha256": "4f1d852e369f83da380dd05b37a5d999886aea036eba220852678ed4a47adc08",
+      "bytes": 3821508
+    },
+    "boss-walker-preview.png": {
+      "sha256": "afa2d7a2c38b42f0346767987e3cd01afd9051237b870c6d8edb26b521421c50",
+      "bytes": 185694
+    },
+    "boss-walker-rig.json": {
+      "sha256": "093039dc7b4f91233a20b7a0e61ddec5513bf6ba2d9a8d259ca40f7983a1ea92",
+      "bytes": 12469
+    },
+    "boss-walker-validation.json": {
+      "sha256": "a8a58b4767d9b06480f9b93a2c35299ac945df17f74fc440b669bdb681a778f1",
+      "bytes": 11143
+    },
+    "boss-walker-khronos.json": {
+      "sha256": "5e6494403a689e8e583d5bdeea88368bbe4fa93b06fc160750591e11363d1376",
+      "bytes": 1398
+    },
+    "boss-walker-README.md": {
+      "sha256": "8ce325bcd72a47dee20d30d005bc53cfc13790782706e817ce69b1b07772a988",
+      "bytes": 6706
+    },
+    "build_boss_walker.py": {
+      "sha256": "94246334ecee3b218bc0002db71759fd8cfc17b6a5a9527fed7399ff25d92e77",
+      "bytes": 28326
+    },
+    "validate_boss_walker.cjs": {
+      "sha256": "178cfc6f865f5b2e3ea99099ade62b00902d37278c6e86c75c001243b1bf22b0",
+      "bytes": 784
+    }
+  },
+  "authoringDependencies": {
+    "build_hero_attack_morphs.py": "942c321d4c15e1f10ccec09159a9590d87b54974e0224358268b91c8022c7bfb",
+    "build_green_brawler.py": "c92cf83914732e8682d1595efc3781c4e0b8afee3e5904548f2da0b93ae5b993",
+    "build_canonical_hero.py": "d984ab4131b7f7c4fadf97da8a36e79040754b2336ab02aff175992fe761b221",
+    "bake_green_brawler_surface.py": "592eb1d64be5ffad7827de3435d78ec13ca3969f082254e3495a766c67c13656"
+  },
+  "frozenEarlierGlbs": {
+    "canonical-hero.glb": "305453efba3302e3935183e4f3e2b28e2c72e7e6b7ff93beb4f9869d191af39c",
+    "canonical-hero-player1.glb": "178b62a171927e1a10e858ac30200f48839c43d2a4d7dd06bc0de0e73ecaa524",
+    "canonical-hero-player2.glb": "9cfd2e8f4eb8ddf3a81662a58236261be655956e5d5fdf504e59fd688c3a65be",
+    "green-brawler.glb": "22c949f45a084f68dd61053cd9e62c2651cb8d351bf124c9eb2a23347a0fe543",
+    "hero-attack-morphs.glb": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+    "hero-fear-morphs.glb": "ba7f9650dba2c0425db6ab0a3dc9f45041936c2eb798314864d0a8f93ac1e39a"
+  },
+  "officialKhronos": {
+    "numErrors": 0,
+    "numWarnings": 0,
+    "numInfos": 0,
+    "numHints": 0,
+    "messages": [],
+    "truncated": false
+  },
+  "visualInspection": {
+    "views": [
+      "front",
+      "three-quarter",
+      "side"
+    ],
+    "scope": [
+      "battle assembly",
+      "IntroLeg12"
+    ],
+    "actualGeometryPreview": "boss-walker-preview.png",
+    "result": "PASS",
+    "sourceContour": "long narrow diagonal shaft, small toe, circular upper joint and diagonal +X plate retained",
+    "limits": "entire chassis and 3D depth authored; native Studio acceptance pending"
+  },
+  "studioUpload": "NOT_RUN"
+}

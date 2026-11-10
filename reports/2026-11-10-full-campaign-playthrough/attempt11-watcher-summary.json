@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "watcher": "campaign_traversal_late_attempt11",
+  "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+  "seed": 388791054,
+  "productionBuild": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "serverStudioId": "c3504a8a-0b37-4075-bb05-7c72ba0180f9",
+  "status": "terminal_lost_at_jet7_verified_from_parent_full_archive",
+  "watchStartedAt": "2026-11-10T12:28:31.440Z",
+  "checkpointCount": 24,
+  "archiveCount": 9,
+  "terminalEvidence": {
+    "source": "attempt-11-full-natural-archive.json",
+    "result": "Lost",
+    "lastStageIndex": 7,
+    "lastStage": "Jet",
+    "completedStages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "cohort": [
+      {
+        "ownerUserId": -1,
+        "slot": 1,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      },
+      {
+        "ownerUserId": -2,
+        "slot": 2,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      },
+      {
+        "ownerUserId": -3,
+        "slot": 3,
+        "status": "Eliminated",
+        "rawLife": 0,
+        "stock": 0,
+        "attempt": 4
+      }
+    ],
+    "plannerErrors": [],
+    "sampleCount": 1465,
+    "selectedSamples": 335,
+    "retainedEvents": 199,
+    "finalDeaths": [
+      {
+        "view": "Choice",
+        "revision": 455,
+        "rawLife": 0,
+        "attempt": 4,
+        "userId": 3,
+        "data": {
+          "observed": {
+            "velocity": [
+              0,
+              0,
+              0
+            ],
+            "held": false,
+            "position": [
+              88.77936553955078,
+              -59.88094711303711,
+              0.09032266587018967
+            ]
+          },
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:370",
+          "reason": "CampaignFall"
+        },
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:370",
+        "levelEpoch": 6,
+        "respawns": 0,
+        "now": 1794315081.069786,
+        "late": false,
+        "status": "Eliminated",
+        "kind": "ConfirmedDeath",
+        "seq": 1661,
+        "connected": true
+      },
+      {
+        "view": "Menu",
+        "revision": 461,
+        "rawLife": 0,
+        "attempt": 4,
+        "userId": 2,
+        "data": {
+          "observed": {
+            "velocity": [
+              0,
+              0,
+              0
+            ],
+            "held": false,
+            "position": [
+              347.2585754394531,
+              20.460962295532227,
+              0
+            ]
+          },
+          "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:365",
+          "reason": "CampaignCrash"
+        },
+        "actorId": "d59c909e-aaef-4678-945d-ff1838791ab5:actor:365",
+        "levelEpoch": 7,
+        "respawns": 0,
+        "now": 1794315105.802925,
+        "late": false,
+        "status": "Eliminated",
+        "kind": "ConfirmedDeath",
+        "seq": 1696,
+        "connected": true
+      }
+    ],
+    "runResult": [
+      {
+        "levelEpoch": 7,
+        "revision": 461,
+        "now": 1794315105.819072,
+        "late": false,
+        "kind": "RunResult",
+        "data": {
+          "result": "Lost"
+        },
+        "seq": 1700
+      }
+    ],
+    "cachedPlannerCurrentWarning": "The parent current.rawLife47 snapshot predates the last confirmed death. Final life/status derives from ConfirmedDeath, cohort and RunResult."
+  },
+  "qaPolicy": {
+    "frozenAcrossWholeRun": false,
+    "policyLoads": 2,
+    "revision02": {
+      "scope": "QA input-selection revision during an ordinary campaign; production code and game state unchanged",
+      "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+      "appliedAt": 1794314573.405755,
+      "newCombatSha256": "c1b1a73293d2bf470c8f1737fb11258bdcabe3f27b814d68f87c393e42bb8090",
+      "oldCombatSha256": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+      "runId": "d59c909e-aaef-4678-945d-ff1838791ab5",
+      "applied": true,
+      "complete": true
+    },
+    "provenance": "attempt-11-policy-revision-02.json",
+    "sourceScript": "attempt-11-policy-revision-02.server.luau",
+    "disclosure": "The live QA input-selection plan changed during level1; production source remained7c03cb. This is one continuous ordinary-input campaign with a disclosed QA policy revision, not one frozen QA-policy run.",
+    "beforeCheckpoint": "attempt11checkpoint-014-20261110T124240Z.json",
+    "afterCheckpoint": "attempt11checkpoint-015-20261110T124325Z.json"
+  },
+  "stall": {
+    "stage": 1,
+    "target": "Pig−8",
+    "heroPosition": {
+      "x": 155.970703125,
+      "y": 8.025,
+      "z": -23.759357452392578
+    },
+    "enemyPosition": {
+      "x": 155.9709930419922,
+      "y": 2.999994993209839,
+      "z": -23.759353637695312
+    },
+    "heroRawLife": 39,
+    "heroAttempt": 3,
+    "heroStock": 1,
+    "observation": "Lead hero stood on the live Pig at nearly identical X/Z; ordinary plan converged to near-zero motion with no primary. Repeated checkpoints confirmed an extended no-progress stall before root revision02 resumed ordinary movement."
+  },
+  "resourceAttribution": {
+    "stage3SpeederConfirmedDeaths": 0,
+    "stage4IceConfirmedDeaths": 1,
+    "stage5SurfConfirmedDeaths": 4,
+    "stage5GroupStopRewindSerials": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "stage5Checkpoint": 3,
+    "detailFiles": [
+      "attempt11-stage3-4-death-details.json",
+      "attempt11-stage5-surf-death-details.json",
+      "attempt11-death-ledger.json"
+    ],
+    "limitation": "Crash/fall records alone do not establish a production defect or a universal QA-policy failure."
+  },
+  "console": {
+    "earlyCapture": "attempt11-console-001-20261110T122831Z.json",
+    "files": [
+      "attempt11-console-001-20261110T122831Z.json",
+      "attempt11-console-002-20261110T123323Z.json"
+    ],
+    "meaningfulChecks": [
+      {
+        "at": "2026-11-10T12:33:23.904Z",
+        "reason": "Confirmed level1 Pig atop-enemy stall at least120s",
+        "changed": true,
+        "characters": 910
+      },
+      {
+        "at": "2026-11-10T12:37:20.622Z",
+        "reason": "No net progress for137 seconds",
+        "changed": false,
+        "characters": 910
+      },
+      {
+        "at": "2026-11-10T12:39:37.352Z",
+        "reason": "No net progress for137 seconds",
+        "changed": false,
+        "characters": 910
+      },
+      {
+        "at": "2026-11-10T12:41:54.881Z",
+        "reason": "No net progress for137 seconds",
+        "changed": false,
+        "characters": 910
+      }
+    ],
+    "initialParentConsoles": "attempt-11-initial-consoles.json",
+    "assetWarnings": [
+      "130642514131659",
+      "96845591138258"
+    ],
+    "observerException": {
+      "source": "AssistantCommand",
+      "message": "attempt to index nil with 'selected'",
+      "classification": "Watcher-only read command attempted to use _G runtime hub from an MCP scope where it was absent; corrected to existing Read Bindable detail. No game or policy mutation occurred."
+    },
+    "productionExceptionObservation": "No production-script exception appeared in the captured server-console snapshots; this is limited to actual capture times and does not infer runtime cleanliness from qa.errors[] alone."
+  },
+  "observerRecovery": {
+    "notes": [
+      "Initial immutable archive was recovered after a local unsupported TextEncoder check; complete JSON/UTF8 byte count verified and owned export removed",
+      "A read-only MCP observer query emitted the classified AssistantCommand stack; subsequent metadata used the existing Bindable detail response and omitted journal",
+      "Checkpoint/archive intervals were nominal45/120s; startup recovery and monitor-window restart caused gaps. Filenames retain actual file times, and parent terminal full archive preserves run history."
+    ]
+  },
+  "checkpointFiles": [
+    "attempt11checkpoint-001-20261110T122831Z.json",
+    "attempt11checkpoint-002-20261110T123025Z.json",
+    "attempt11checkpoint-003-20261110T123323Z.json",
+    "attempt11checkpoint-004-20261110T123503Z.json",
+    "attempt11checkpoint-005-20261110T123549Z.json",
+    "attempt11checkpoint-006-20261110T123635Z.json",
+    "attempt11checkpoint-007-20261110T123720Z.json",
+    "attempt11checkpoint-008-20261110T123806Z.json",
+    "attempt11checkpoint-009-20261110T123851Z.json",
+    "attempt11checkpoint-010-20261110T123937Z.json",
+    "attempt11checkpoint-011-20261110T124022Z.json",
+    "attempt11checkpoint-012-20261110T124109Z.json",
+    "attempt11checkpoint-013-20261110T124154Z.json",
+    "attempt11checkpoint-014-20261110T124240Z.json",
+    "attempt11checkpoint-015-20261110T124325Z.json",
+    "attempt11checkpoint-016-20261110T124411Z.json",
+    "attempt11checkpoint-017-20261110T124457Z.json",
+    "attempt11checkpoint-018-20261110T124542Z.json",
+    "attempt11checkpoint-019-20261110T124628Z.json",
+    "attempt11checkpoint-020-20261110T124713Z.json",
+    "attempt11checkpoint-021-20261110T124759Z.json",
+    "attempt11checkpoint-022-20261110T124941Z.json",
+    "attempt11checkpoint-023-20261110T125026Z.json",
+    "attempt11checkpoint-024-20261110T125112Z.json"
+  ],
+  "archiveFiles": [
+    "attempt11archive-001-20261110T123026Z.json",
+    "attempt11archive-002-20261110T123403Z.json",
+    "attempt11archive-003-20261110T123705Z.json",
+    "attempt11archive-004-20261110T123906Z.json",
+    "attempt11archive-005-20261110T124108Z.json",
+    "attempt11archive-006-20261110T124309Z.json",
+    "attempt11archive-007-20261110T124511Z.json",
+    "attempt11archive-008-20261110T124712Z.json",
+    "attempt11archive-009-20261110T124944Z.json"
+  ],
+  "lastDirectCheckpoint": "attempt11checkpoint-024-20261110T125112Z.json",
+  "lastDirectStage": "Serpents6",
+  "observerDisconnect": "Error: The requested `studio_id` is not connected — that Roblox Studio instance may have been closed or its place unloaded. Call `list_roblox_studios` for the current instances, then continue on the one the user confirms (or the one whose `name` matches).",
+  "incompleteFinalExport": {
+    "folder": "Attempt11WatcherExport_30e7caad-7b92-4df9-9224-36a6da3b7427",
+    "bytes": 187327,
+    "parts": 16
+  },
+  "cleanup": {
+    "completedExportFoldersRemoved": true,
+    "incompleteExportExplicitlyRemoved": false,
+    "incompleteExportNote": "Archive10 was frozen into16 owned chunks before terminal child disconnection interrupted export. No further calls were made to the disconnected child; explicit watcher cleanup of this final runtime-only export was not verified. Parent automatic terminal archive was retrieved independently."
+  },
+  "scope": [
+    "Read-only game observer except owned archive export StringValues",
+    "No game, input policy, physics, pose, health, stock, geometry or session control changes by watcher",
+    "No EndTest/start/stop commands by watcher",
+    "No full13 clear claimed"
+  ]
+}

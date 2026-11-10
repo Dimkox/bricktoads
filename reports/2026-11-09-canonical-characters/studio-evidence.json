@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-09",
+  "scope": "Prepared native engine fixture for cosmetic rig/movement/identity; native desktop menu click for production skin activation. This is not a complete route, multiplayer, physical mobile, canonical source-pose or public asset-permission acceptance.",
+  "studio": "67cde5d7-c587-4240-9f6f-ef46082fa9bc",
+  "sourceSha256": "8f36c327f1e1a6ddb4c901ea034bdad99495f88bf04cccde1232fea41bdffc94",
+  "prototypeUploads": [
+    {
+      "file": "canonical-hero-player1.glb",
+      "assetId": "128871683590726",
+      "moderation": "Approved"
+    },
+    {
+      "file": "canonical-hero-player2.glb",
+      "assetId": "110833474840144",
+      "moderation": "Approved"
+    }
+  ],
+  "preparedInitial": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"fixture\":\"Prepared isolated World:spawn; not normal-input route acceptance\",\"rows\":[{\"physicalParts\":9,\"meshes\":15,\"appearance\":\"CanonicalNESHero\",\"slot\":1,\"serverOwner\":true,\"joints\":15,\"health\":100,\"automaticOwner\":false,\"position\":[-65,3,-187],\"rootIsAssemblyRoot\":true,\"template\":\"Mr. Green\"},{\"physicalParts\":9,\"meshes\":15,\"appearance\":\"CanonicalNESHero\",\"slot\":2,\"serverOwner\":true,\"joints\":15,\"health\":100,\"automaticOwner\":false,\"position\":[-65,3,-180],\"rootIsAssemblyRoot\":true,\"template\":\"Mr. Yellow\"}]}"
+      }
+    ],
+    "isError": false
+  },
+  "preparedMovement": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"jump\":{\"meshes\":15,\"template\":\"Mr. Yellow\",\"slot\":2,\"velocity\":[24,28.474973678588868,-1.6517142471458857e-20],\"maxJointError\":0.000015728399375802839,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80002,\"position\":[-50.69065475463867,8.261923789978028,-180],\"speed\":24,\"mode\":\"Air\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"initial1\":{\"meshes\":15,\"template\":\"Mr. Green\",\"slot\":1,\"velocity\":[0,0,0],\"maxJointError\":0.000017059845049516299,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80001,\"position\":[-65,3,-187],\"speed\":16,\"mode\":\"Idle\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"initial2\":{\"meshes\":15,\"template\":\"Mr. Yellow\",\"slot\":2,\"velocity\":[0,0,0],\"maxJointError\":0.000017059845049516299,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80002,\"position\":[-65,3,-180],\"speed\":16,\"mode\":\"Idle\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"run\":{\"meshes\":15,\"template\":\"Mr. Yellow\",\"slot\":2,\"velocity\":[24,-1.3355463617401113e-16,-1.191486836189142e-15],\"maxJointError\":0.00001526065170764923,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80002,\"position\":[-53.79060745239258,3,-180],\"speed\":24,\"mode\":\"Run\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"hurtHealthPresentation\":{\"action\":\"HeroPowerPunch\",\"meshes\":15,\"template\":\"Mr. Green\",\"slot\":1,\"phase\":\"Recovery\",\"velocity\":[0,0,0],\"maxJointError\":0.000015728399375802839,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":37,\"actorId\":80001,\"position\":[-56.59990692138672,3,-187],\"speed\":16,\"mode\":\"Idle\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"recovery\":{\"action\":\"HeroPowerPunch\",\"meshes\":15,\"template\":\"Mr. Green\",\"slot\":1,\"phase\":\"Recovery\",\"velocity\":[0,0,0],\"maxJointError\":0.000015735626220703126,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80001,\"position\":[-56.59990692138672,3,-187],\"speed\":16,\"mode\":\"Idle\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"windup\":{\"action\":\"HeroPowerPunch\",\"meshes\":15,\"template\":\"Mr. Green\",\"slot\":1,\"phase\":\"Windup\",\"velocity\":[0,0,0],\"maxJointError\":0.000015728399375802839,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80001,\"position\":[-56.59990692138672,3,-187],\"speed\":16,\"mode\":\"Idle\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"otherHeroAfter\":{\"meshes\":15,\"template\":\"Mr. Yellow\",\"slot\":2,\"velocity\":[0,-51.6400260925293,0],\"maxJointError\":0.000015258905477821828,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80002,\"position\":[-48.7252082824707,3.3654894828796388,-180],\"speed\":24,\"mode\":\"Air\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true},\"walk\":{\"meshes\":15,\"template\":\"Mr. Green\",\"slot\":1,\"velocity\":[16,0,0],\"maxJointError\":0.000015728399375802839,\"joints\":15,\"profile\":\"CanonicalNESHero\",\"health\":100,\"actorId\":80001,\"position\":[-56.6920051574707,3,-187],\"speed\":16,\"mode\":\"Walk\",\"rootIsAssemblyRoot\":true,\"manualServerOwner\":true}}"
+      }
+    ],
+    "isError": false
+  },
+  "nativeMenuStart": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"heroes\":[{\"actor\":\"Actor_92fd25eb-426a-4a8c-87e2-b98ac54e38bb:actor:2\",\"template\":\"Mr. Yellow\",\"position\":[-65,3,-11],\"ownerManual\":true,\"slot\":1,\"appearance\":\"CanonicalNESHero\"}],\"sourceSha256\":\"8f36c327f1e1a6ddb4c901ea034bdad99495f88bf04cccde1232fea41bdffc94\"}"
+      }
+    ],
+    "isError": false
+  }
+}

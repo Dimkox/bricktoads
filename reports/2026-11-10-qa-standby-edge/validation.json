@@ -1,0 +1,68 @@
+{
+  "status": "verified_frozen",
+  "independentReview": "CLEAR: early agent independently reran29 frozen probes and reviewed own-actor/support/grounded guards, unchanged authority predicate and same-floor ordinary-Move behavior on3888C4F3",
+  "bridgeSha256": "3888c4f37264707855d1a9475224fa989d642e4858eaa01f096e503ae287bdc3",
+  "previousBridgeSha256": "eb7415a21ae96f984127e0c30b6ddbd65431399b402201da9ec8b5638a64ae07",
+  "scope": "QA level1 nonlead standby only; no production or live edits",
+  "seed": 1259618153,
+  "baselineCommit": "df98106",
+  "probeChecks": 29,
+  "checks": [
+    {
+      "command": ".tools/python-3.13.9/python.exe reports/2026-11-10-qa-standby-edge/prepare_standby_probe.py",
+      "exit": 0,
+      "expectedExit": 0,
+      "output": "Generated actual current and df98106 baseline standby dispatch probes\r\n"
+    },
+    {
+      "command": ".tools/luau-0.745/luau.exe build/test_standby_edge_baseline.luau",
+      "exit": 1,
+      "expectedExit": 1,
+      "output": "./build/test_standby_edge_baseline.luau:22: Near-edge paid-spawn candidate must request only ordinary inward Move\r\nstacktrace:\r\n[C] function assert\r\n./build/test_standby_edge_baseline.luau:22 function check\r\n./build/test_standby_edge_baseline.luau:30\r\n"
+    },
+    {
+      "command": ".tools/luau-0.745/luau.exe build/test_standby_edge.luau",
+      "exit": 0,
+      "expectedExit": 0,
+      "output": "QA standby edge contract GREEN\t29\r\n"
+    },
+    {
+      "command": ".tools/luau-0.745/luau-compile.exe --null tools/qa/full_campaign_bridge.server.luau build/standby_current.lua build/standby_baseline.lua build/test_standby_edge.luau build/test_standby_edge_baseline.luau",
+      "exit": 0,
+      "expectedExit": 0,
+      "output": "Compiled 0 KLOC into 38 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\r\n"
+    },
+    {
+      "command": "git diff --check -- tools/qa/full_campaign_bridge.server.luau",
+      "exit": 0,
+      "expectedExit": 0,
+      "output": ""
+    }
+  ],
+  "support": {
+    "minX": -82,
+    "maxX": 4,
+    "minZ": -26,
+    "maxZ": 26,
+    "top": 0
+  },
+  "triggerEdgeBand": 5,
+  "targetInset": 6,
+  "identity": "Require actual owned actor ID and observed SurfaceId on the same authored support",
+  "authority": "Existing index==1 and slot~=leadSlot predicate is retained; no owner/cohort/role changes",
+  "interpretation": "Near-edge grounded inputs are source-derived safe-spawn candidates from recorded fall X coordinates; actual paid-spawn poses were not retained.",
+  "unchanged": [
+    "Current lead behavior",
+    "Mounted/captured lead handling",
+    "NPC AI/targets",
+    "Native physics/geometry",
+    "Health/stock/pose",
+    "Other campaign stages"
+  ],
+  "limits": [
+    "Frozen input-policy probes, not native AI/physics acceptance",
+    "No guarantee against impulses or attacks; airborne/unsupported observations stay neutral",
+    "The source-derived respawn candidates are not captured native poses"
+  ],
+  "liveActions": false
+}

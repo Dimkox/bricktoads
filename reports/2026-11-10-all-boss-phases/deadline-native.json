@@ -1,0 +1,350 @@
+{
+  "heartbeatTicks": 436,
+  "cleanup": [
+    {
+      "pass": true,
+      "errors": [],
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 5,
+      "worldRemoved": true
+    },
+    {
+      "pass": true,
+      "errors": [],
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 8,
+      "worldRemoved": true
+    },
+    {
+      "pass": true,
+      "errors": [],
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 10,
+      "worldRemoved": true
+    },
+    {
+      "pass": true,
+      "errors": [],
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 11,
+      "worldRemoved": true
+    },
+    {
+      "pass": true,
+      "errors": [],
+      "actorRegistryEmpty": true,
+      "nativeBodiesRemoved": true,
+      "stage": 13,
+      "worldRemoved": true
+    },
+    {
+      "lightingRestored": true,
+      "atmosphereRestored": true,
+      "errors": [],
+      "scope": "shared world side effects",
+      "ownedWorldsRemoved": true,
+      "pass": true,
+      "defaultsRestored": true
+    }
+  ],
+  "status": "PASS",
+  "checks": [
+    "stage 5 initial native hero spawn",
+    "stage 5 normal spawn shield expiry",
+    "stage 5 completed traversal releases native hero",
+    "stage 5 prepared human boss gate",
+    "stage 5 existing native human boss",
+    "stage 5 prepared distant hero stance",
+    "stage 5 finite movement deadline",
+    "stage 5 accepts owner Move 1",
+    "stage 5 owner Move records its own deadline",
+    "stage 5 one input moves actual Humanoid before timeout",
+    "stage 5 boss clears expired owner Move",
+    "stage 5 native Humanoid direction stops",
+    "stage 5 native boss stays stopped after timeout",
+    "stage 5 accepts owner Move 2",
+    "stage 5 a fresh owner Move resumes native walking",
+    "stage 5 same unanchored boss model root and identity",
+    "stage 5 walking preserves boss Life and progress",
+    "stage 5 walking preserves native hero resources and body",
+    "stage 8 initial native hero spawn",
+    "stage 8 normal spawn shield expiry",
+    "stage 8 completed traversal releases native hero",
+    "stage 8 prepared human boss gate",
+    "stage 8 existing native human boss",
+    "stage 8 prepared distant hero stance",
+    "stage 8 finite movement deadline",
+    "stage 8 accepts owner Move 1",
+    "stage 8 owner Move records its own deadline",
+    "stage 8 one input moves actual Humanoid before timeout",
+    "stage 8 boss clears expired owner Move",
+    "stage 8 native Humanoid direction stops",
+    "stage 8 native boss stays stopped after timeout",
+    "stage 8 accepts owner Move 2",
+    "stage 8 a fresh owner Move resumes native walking",
+    "stage 8 same unanchored boss model root and identity",
+    "stage 8 walking preserves boss Life and progress",
+    "stage 8 walking preserves native hero resources and body",
+    "stage 10 initial native hero spawn",
+    "stage 10 normal spawn shield expiry",
+    "stage 10 completed traversal releases native hero",
+    "stage 10 prepared human boss gate",
+    "stage 10 existing native human boss",
+    "stage 10 prepared distant hero stance",
+    "stage 10 finite movement deadline",
+    "stage 10 accepts owner Move 1",
+    "stage 10 owner Move records its own deadline",
+    "stage 10 one input moves actual Humanoid before timeout",
+    "stage 10 boss clears expired owner Move",
+    "stage 10 native Humanoid direction stops",
+    "stage 10 native boss stays stopped after timeout",
+    "stage 10 accepts owner Move 2",
+    "stage 10 a fresh owner Move resumes native walking",
+    "stage 10 same unanchored boss model root and identity",
+    "stage 10 walking preserves boss Life and progress",
+    "stage 10 walking preserves native hero resources and body",
+    "stage 11 initial native hero spawn",
+    "stage 11 normal spawn shield expiry",
+    "stage 11 completed traversal releases native hero",
+    "stage 11 prepared human boss gate",
+    "stage 11 existing native human boss",
+    "stage 11 prepared distant hero stance",
+    "stage 11 finite movement deadline",
+    "stage 11 accepts owner Move 1",
+    "stage 11 owner Move records its own deadline",
+    "stage 11 one input moves actual Humanoid before timeout",
+    "stage 11 boss clears expired owner Move",
+    "stage 11 native Humanoid direction stops",
+    "stage 11 native boss stays stopped after timeout",
+    "stage 11 accepts owner Move 2",
+    "stage 11 a fresh owner Move resumes native walking",
+    "stage 11 same unanchored boss model root and identity",
+    "stage 11 walking preserves boss Life and progress",
+    "stage 11 walking preserves native hero resources and body",
+    "stage 13 initial native hero spawn",
+    "stage 13 normal spawn shield expiry",
+    "stage 13 completed traversal releases native hero",
+    "stage 13 prepared human boss gate",
+    "stage 13 existing native human boss",
+    "stage 13 prepared distant hero stance",
+    "stage 13 finite movement deadline",
+    "stage 13 accepts owner Move 1",
+    "stage 13 owner Move records its own deadline",
+    "stage 13 one input moves actual Humanoid before timeout",
+    "stage 13 boss clears expired owner Move",
+    "stage 13 native Humanoid direction stops",
+    "stage 13 native boss stays stopped after timeout",
+    "stage 13 accepts owner Move 2",
+    "stage 13 a fresh owner Move resumes native walking",
+    "stage 13 same unanchored boss model root and identity",
+    "stage 13 walking preserves boss Life and progress",
+    "stage 13 walking preserves native hero resources and body"
+  ],
+  "fixture": "Prepared seed41 stages5/8/10/11/13; real Session, CampaignDirector and native GameWorld; synthetic boss owner",
+  "limitations": "Real Heartbeat and Humanoid physics. Synthetic roster/owner, cleared ordinary gates, finished traversal and prepared arena stances. No real Players, network, keyboard/touch or natural course-clear claim.",
+  "cases": [
+    {
+      "lateSampleAt": 1794295957.657358,
+      "ownerMoveCount": 2,
+      "later": {
+        "y": 3,
+        "x": 483.171630859375,
+        "z": 0
+      },
+      "firstMoveAt": 1794295956.6902769,
+      "before": {
+        "y": 3,
+        "x": 480,
+        "z": 0
+      },
+      "boss": "BigBlag",
+      "walkSpeed": 9,
+      "preparedGates": true,
+      "timeout": 0.35,
+      "rawLife": 255,
+      "resumed": {
+        "y": 3,
+        "x": 484.8022155761719,
+        "z": 0
+      },
+      "moving": {
+        "y": 3,
+        "x": 481.6142578125,
+        "z": 0
+      },
+      "actorId": "native-boss-deadline-60f3513e-384e-4de6-8994-459daa8c2f36:boss:1:BigBlag",
+      "stoppedAt": 1794295957.341179,
+      "lateDrift": 0,
+      "stage": 5,
+      "stopped": {
+        "y": 3,
+        "x": 483.171630859375,
+        "z": 0
+      }
+    },
+    {
+      "lateSampleAt": 1794295959.12478,
+      "ownerMoveCount": 2,
+      "later": {
+        "y": 99,
+        "x": 7.133645534515381,
+        "z": 28
+      },
+      "progress": 0,
+      "firstMoveAt": 1794295958.157917,
+      "before": {
+        "y": 99,
+        "x": 4,
+        "z": 28
+      },
+      "boss": "RoboManus",
+      "walkSpeed": 9,
+      "preparedGates": true,
+      "timeout": 0.35,
+      "rawLife": 15,
+      "resumed": {
+        "y": 99,
+        "x": 8.764025688171387,
+        "z": 28
+      },
+      "moving": {
+        "y": 99,
+        "x": 5.576531887054443,
+        "z": 28
+      },
+      "actorId": "native-boss-deadline-72d890a8-bb53-4243-ab13-01d649c89057:boss:1:RoboManus",
+      "stoppedAt": 1794295958.8245049,
+      "lateDrift": 0,
+      "stage": 8,
+      "stopped": {
+        "y": 99,
+        "x": 7.133645534515381,
+        "z": 28
+      }
+    },
+    {
+      "lateSampleAt": 1794295960.5742848,
+      "ownerMoveCount": 2,
+      "later": {
+        "y": 3,
+        "x": 25.171180725097656,
+        "z": 28
+      },
+      "progress": 0,
+      "firstMoveAt": 1794295959.623286,
+      "before": {
+        "y": 3,
+        "x": 22,
+        "z": 28
+      },
+      "boss": "GeneralSlaughter",
+      "walkSpeed": 9,
+      "preparedGates": true,
+      "timeout": 0.35,
+      "rawLife": 255,
+      "resumed": {
+        "y": 3,
+        "x": 26.801576614379883,
+        "z": 28
+      },
+      "moving": {
+        "y": 3,
+        "x": 23.61404800415039,
+        "z": 28
+      },
+      "actorId": "native-boss-deadline-f07736d3-7459-43a5-8dac-8418f391a74c:boss:1:GeneralSlaughter",
+      "stoppedAt": 1794295960.274205,
+      "lateDrift": 0,
+      "stage": 10,
+      "stopped": {
+        "y": 3,
+        "x": 25.171180725097656,
+        "z": 28
+      }
+    },
+    {
+      "lateSampleAt": 1794295962.0580359,
+      "ownerMoveCount": 2,
+      "later": {
+        "y": 3,
+        "x": 31.321182250976562,
+        "z": 0
+      },
+      "firstMoveAt": 1794295961.090745,
+      "before": {
+        "y": 3,
+        "x": 28,
+        "z": 0
+      },
+      "boss": "Buzzball",
+      "walkSpeed": 9,
+      "preparedGates": true,
+      "timeout": 0.35,
+      "rawLife": 207,
+      "resumed": {
+        "y": 3,
+        "x": 32.951576232910156,
+        "z": 0
+      },
+      "moving": {
+        "y": 3,
+        "x": 29.61404800415039,
+        "z": 0
+      },
+      "actorId": "native-boss-deadline-45942d4d-61b2-43cd-9818-0602d9884816:boss:1:Buzzball",
+      "stoppedAt": 1794295961.7415,
+      "lateDrift": 0,
+      "stage": 11,
+      "stopped": {
+        "y": 3,
+        "x": 31.321182250976562,
+        "z": 0
+      }
+    },
+    {
+      "lateSampleAt": 1794295963.524138,
+      "ownerMoveCount": 2,
+      "later": {
+        "y": 3,
+        "x": 87.32103729248047,
+        "z": 0
+      },
+      "progress": 0,
+      "firstMoveAt": 1794295962.5580878,
+      "before": {
+        "y": 3,
+        "x": 84,
+        "z": 0
+      },
+      "boss": "DarkQueen",
+      "walkSpeed": 9,
+      "preparedGates": true,
+      "timeout": 0.35,
+      "rawLife": 15,
+      "resumed": {
+        "y": 3,
+        "x": 88.95137786865234,
+        "z": 0
+      },
+      "moving": {
+        "y": 3,
+        "x": 85.61398315429688,
+        "z": 0
+      },
+      "actorId": "native-boss-deadline-64575d7f-a036-42ee-9c9e-7b5bedee4f3c:boss:1:DarkQueen",
+      "stoppedAt": 1794295963.20856,
+      "lateDrift": 0,
+      "stage": 13,
+      "stopped": {
+        "y": 3,
+        "x": 87.32103729248047,
+        "z": 0
+      }
+    }
+  ],
+  "sourceSha256": "d8bbd170ff44256aa64c8479e89421dcdb507ccfb4cea712941e1264fc0f7534"
+}

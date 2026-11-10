@@ -1,0 +1,67 @@
+{
+  "scope": "QA-only observed-platform membership correction; frozen state/input policy probes, no Studio or gameplay state mutation",
+  "file": "tools/qa/campaign_combat_pilot.lua",
+  "baselineSha256": "32762f2151421dc233e7e43d36cd234d39bb218bbcbdc9fd96b79a9b415e4ca4",
+  "revisedSha256": "f1aa78446ff127d4ea5e8c5096d90eb27778b6d5bc2857396692d5ce2dd66e49",
+  "productionSourceSha256": "7c03cb19472413e35c22eb6841c6b055ce7a6d07cd930a2d0dcce3c4f5574f9a",
+  "protectedStarterSha256": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353",
+  "observationToleranceStuds": 0.001,
+  "changes": [
+    "Player/enemy XZ membership in stepOffEnemy only",
+    "Destination membership remains strict with three-stud margins",
+    "Initial direction dot<=0 remains unchanged"
+  ],
+  "observedFixture": {
+    "hero": {
+      "x": 155.970703,
+      "y": 8.025629,
+      "z": -23.759357
+    },
+    "enemy": {
+      "x": 155.970993,
+      "y": 2.999987,
+      "z": -23.759354
+    },
+    "goal": {
+      "x": 148.970993,
+      "z": -23.759354
+    }
+  },
+  "red": {
+    "command": ".tools/luau-0.745/luau.exe build/test_combat_stepoff_boundary.luau",
+    "failure": "Native11 Pig-head pose must produce an ordinary step-off despite 3e-6 boundary observation error"
+  },
+  "green": {
+    "frozenProbes": 11,
+    "command": ".tools/luau-0.745/luau.exe build/test_combat_stepoff_boundary.luau",
+    "compile": true,
+    "diffCheck": true,
+    "tubesContractProbes": 5,
+    "tubesActualApiAIResult": {
+      "result": "Won",
+      "elapsed": 30.68333333333287,
+      "attempt": 1,
+      "stock": 3,
+      "rawLife": 15,
+      "acceptedAttacks": 10
+    }
+  },
+  "limits": [
+    "No Studio action or new native claim; root owns hot-loading and ongoing full campaign provenance.",
+    "Four boundary-side probes preserve the reported tangential separation; the existing strict away-direction gate remains authoritative."
+  ],
+  "status": "rejected_not_native_repro",
+  "rejection": {
+    "reason": "Synthetic floor innerMinZ was assigned to the enemy Z instead of using actual CampaignDefinition seed388791054. The observation-only patch did not fix the actual recorded pose.",
+    "fabricatedInnerMinZ": -23.759354,
+    "realFloor": {
+      "x": 190,
+      "z": 4,
+      "w": 124,
+      "d": 60,
+      "physicalMinZ": -26,
+      "innerMinZ": -23
+    },
+    "liveApplied": false
+  }
+}

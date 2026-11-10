@@ -1,0 +1,28 @@
+{
+  "status": "NotReproduced",
+  "studioId": "d20f44d3-c33f-4e42-9ad6-a19be316ea58",
+  "datamodel": "Server",
+  "fixture": "Separate owned native worlds at Z24000/Z26000, Y100; real production GameWorld clone and BaseWorld R6 Humanoids; baseline clone removes only new Climbing support acceptance.",
+  "attempts": [
+    {
+      "file": "native-edge-jump-initial-not-reproduced.json",
+      "preparation": "Observed low edge pose; normal backstep"
+    },
+    {
+      "file": "native-edge-jump-walkoff-not-reproduced.json",
+      "preparation": "Stand on own floor, walk beyond edge, normal backstep"
+    },
+    {
+      "file": "native-edge-jump-drop-not-reproduced.json",
+      "preparation": "Fall just beyond edge, normal backstep below floor top"
+    }
+  ],
+  "finding": "Both baseline and fixed fixtures entered Freefall rather than sustained native Climbing/Air, so no baseline-versus-fix success was asserted.",
+  "humanoidStateForced": false,
+  "activeCampaignModified": false,
+  "limitations": "Prepared isolated native unit fixtures only. These attempts prove neither actual edge dismount success nor campaign progress; targeted real-adapter RED/GREEN contracts separately pass.",
+  "cleanup": {
+    "remainingOwnedPrefixInstances": [],
+    "cleanupComplete": true
+  }
+}

@@ -1,0 +1,27 @@
+./tests/InfiniteLives.spec.lua:287: infinite lives contracts failed
+stacktrace:
+[C] function assert
+./tests/InfiniteLives.spec.lua:287
+./tests/run_infinite_lives.luau:6
+PASS infinite lives: default is finite for every hero
+PASS infinite lives: trusted option is strictly boolean and cannot smuggle client fields
+PASS infinite lives: trusted toggle is per hero and receipt replay is inert
+PASS infinite lives: six deaths retain finite reserve, unique actors, attempts and shields
+PASS infinite lives: zero finite reserve still permits normal infinite respawns
+PASS infinite lives: zero reserve emergency retries retain ordinary deadlines and new identities
+PASS infinite lives: turning off preserves unspent reserves and normal finite defeat
+PASS infinite lives: turning off a zero reserve living hero neither heals nor kills it
+PASS infinite lives: turning off a zero reserve dead hero settles defeat instead of a ghost
+PASS infinite lives: turning off clears an unaffordable living emergency retry without losing its body
+PASS infinite lives: eliminated heroes and closed runs cannot be revived by toggling
+PASS infinite lives: enabling during a reservation preserves exactly one normal commit
+PASS infinite lives: offline zero reserve hero cannot spawn until its normal reconnect
+PASS infinite lives: server setter requires the explicit development gate
+PASS infinite lives: setter is boolean, server only, and idempotent without actor effects
+PASS infinite lives: real Session performs seven normal deaths without consuming reserves or duplicating actors
+PASS infinite lives: real Session can enable at zero and disable back to an ordinary final death
+FAIL infinite lives: infinite lives keeps ordinary damage, reaction, delayed death and respawn: ./tests/InfiniteLives.spec.lua:5: expected -1, got 0
+PASS infinite lives: real Session emergency fallback retries indefinitely at zero stock
+PASS infinite lives: real Session disabling between zero stock death and step closes the run
+PASS infinite lives: bulk setter skips an eliminated teammate without reviving it
+Infinite lives domain/session: 20 passed, 1 failed
