@@ -30,4 +30,8 @@
 - [x] Check the remaining first-level scenery, projectiles, items, healing fly, finite effects, club and intro paths in a private native world (27 checks,25 scenery groups).
 - [x] Correct the live Clinger integration: automatic riding selects Ride and its actual deck, while hero/vehicle facing follows the traveled segment. Preserve input, positions, velocity, progression, chase, collision and resources; repeat the complete campaign on the corrected source.
 - [x] Export the baseline run, restore exact originals and verify final native vehicles/walls; run all13 stages continuously on final source with audiovisual observers.
-- [ ] Run relevant regression/CI checks, push and update Jira with the actual result and acceptance limits.
+- [x] Run relevant regression/CI checks, push and update Jira with the actual result and acceptance limits.
+
+## Delivery evidence
+
+Final source a2440cee completed native29 (13/13, all six bosses, explicit Studio God Mode). The final-source catalog and supplemental client check cover all29 families/166 visible segments. Native raw data and hash manifest are in reports/2026-11-11-full-campaign-cast-audio. Evidence commit30f5fee passed both CI workflows. Jira comments10501–10508 synchronize BT-29/27/14/62/63/26/33/74 without closing broader outstanding criteria. Studio was restored to exact final production sources, God Mode=true, with no owned QA remaining.
