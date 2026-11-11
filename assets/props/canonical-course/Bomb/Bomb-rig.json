@@ -1,0 +1,532 @@
+{
+  "schema": 1,
+  "kind": "Bomb",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Three-lobed bundled device: two round upper cylinders, long outer sides, lower central canister and dark triangular marking.', 'Representative source phase is green/black; the NES object cycles four palette flags.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -0.9099999999999999,
+      -1.05,
+      -0.845
+    ],
+    [
+      0.9099999999999999,
+      1.05,
+      0.845
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Bomb",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "19909-19980"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "19909-19980",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L19909-L19980"
+      }
+    ],
+    "sourceTypes": [
+      "5A"
+    ],
+    "graphicsFrameIds": [
+      "B3"
+    ],
+    "palette": {
+      "typeId": 90,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:12",
+      "trigger": [
+        0,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        39,
+        55
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:5",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            39,
+            55
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        0,
+        102,
+        0
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        88,
+        184,
+        44
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 179,
+        "frameHex": "B3",
+        "namespace": "object",
+        "metaspriteAddress": "B8D9",
+        "parts": [
+          {
+            "tile": 182,
+            "x": -12,
+            "y": -12,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 183,
+            "x": -4,
+            "y": -12,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 184,
+            "x": 4,
+            "y": -12,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 185,
+            "x": -12,
+            "y": -4,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 186,
+            "x": -4,
+            "y": -4,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 187,
+            "x": 4,
+            "y": -4,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 188,
+            "x": -12,
+            "y": 4,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 189,
+            "x": -4,
+            "y": 4,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 190,
+            "x": 4,
+            "y": 4,
+            "attributes": 0,
+            "paletteSlot": 0
+          }
+        ],
+        "visibleBounds": {
+          "minX": -12,
+          "minY": -12,
+          "maxX": 11,
+          "maxY": 10
+        },
+        "width": 24,
+        "height": 23,
+        "png": "frames/bomb-b3.png"
+      }
+    ],
+    "appearanceCues": [
+      "Three-lobed bundled device: two round upper cylinders, long outer sides, lower central canister and dark triangular marking.",
+      "Representative source phase is green/black; the NES object cycles four palette flags."
+    ],
+    "runtimeRole": "defuse objective",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Source AND3 cycles actor palette flags; the displayed green frame is representative phase0, not a constant full animation palette."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          782
+        ]
+      }
+    ],
+    "sourceHandler": "object_ratrace_bomb",
+    "bankRecipe": "Race",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/ratrace_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "bomb-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        0,
+        102,
+        0
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        88,
+        184,
+        44
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.2,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.43,
+          -0.8500000000000001,
+          -0.28997116487272956
+        ],
+        [
+          0.43,
+          0.56,
+          0.4899711648727295
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.43,
+          -1.05,
+          -0.28997116487272956
+        ],
+        [
+          0.43,
+          0.36000000000000004,
+          0.4899711648727295
+        ]
+      ],
+      "vertices": 30,
+      "authoringVertices": 30,
+      "paletteSplitTriangles": 0,
+      "triangles": 56,
+      "role": "Casing"
+    },
+    {
+      "name": "LeftCanister",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.2,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.9099999999999999,
+          -0.8500000000000001,
+          -0.34
+        ],
+        [
+          -0.33,
+          1.16,
+          0.34
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.9099999999999999,
+          -1.05,
+          -0.34
+        ],
+        [
+          -0.33,
+          0.96,
+          0.34
+        ]
+      ],
+      "vertices": 162,
+      "authoringVertices": 162,
+      "paletteSplitTriangles": 0,
+      "triangles": 312,
+      "role": "Casing"
+    },
+    {
+      "name": "RightCanister",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.2,
+        0.0
+      ],
+      "localBounds": [
+        [
+          0.33,
+          -0.8500000000000001,
+          -0.34
+        ],
+        [
+          0.9099999999999999,
+          1.16,
+          0.34
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.33,
+          -1.05,
+          -0.34
+        ],
+        [
+          0.9099999999999999,
+          0.96,
+          0.34
+        ]
+      ],
+      "vertices": 162,
+      "authoringVertices": 162,
+      "paletteSplitTriangles": 0,
+      "triangles": 312,
+      "role": "Casing"
+    },
+    {
+      "name": "Strap",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.2,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.845,
+          -0.31,
+          -0.845
+        ],
+        [
+          0.845,
+          0.47000000000000003,
+          0.845
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.845,
+          -0.51,
+          -0.845
+        ],
+        [
+          0.845,
+          0.27,
+          0.845
+        ]
+      ],
+      "vertices": 162,
+      "authoringVertices": 162,
+      "paletteSplitTriangles": 0,
+      "triangles": 320,
+      "role": "Band"
+    },
+    {
+      "name": "Emblem",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.2,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.5,
+          -0.12,
+          -0.4975
+        ],
+        [
+          0.5,
+          1.25,
+          0.19021130325903074
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.5,
+          -0.32,
+          -0.4975
+        ],
+        [
+          0.5,
+          1.05,
+          0.19021130325903074
+        ]
+      ],
+      "vertices": 118,
+      "authoringVertices": 118,
+      "paletteSplitTriangles": 0,
+      "triangles": 224,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        0,
+        102,
+        0
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        88,
+        184,
+        44
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 1224,
+    "vertices": 634,
+    "closedComponents": true,
+    "components": 12,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0017537014426634865
+  }
+}

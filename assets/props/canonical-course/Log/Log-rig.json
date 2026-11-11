@@ -1,0 +1,521 @@
+{
+  "schema": 1,
+  "kind": "Log",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Narrow uneven brown/orange log with dark bark grooves, uneven taper and bright exposed end.', 'Runtime full-lane log orientation/depth is authored.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -0.963665631459995,
+      -0.7803244396316783,
+      -2.389052558883258
+    ],
+    [
+      0.963665631459995,
+      0.7803244396316783,
+      2.389052558883258
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Log",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "12731-12809"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "12731-12809",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L12731-L12809"
+      }
+    ],
+    "sourceTypes": [
+      "77"
+    ],
+    "graphicsFrameIds": [
+      "EC"
+    ],
+    "palette": {
+      "typeId": 119,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:296",
+      "trigger": [
+        2,
+        4
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        34,
+        32
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:291",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            34,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs2.asm:294",
+          "trigger": [
+            0,
+            48
+          ],
+          "paletteRamOffset": 4,
+          "colorCodes": [
+            2,
+            18,
+            50
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        250,
+        160,
+        66
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 236,
+        "frameHex": "EC",
+        "namespace": "object",
+        "metaspriteAddress": "C2C3",
+        "parts": [
+          {
+            "tile": 47,
+            "x": 0,
+            "y": -13,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 48,
+            "x": 0,
+            "y": -5,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 49,
+            "x": -8,
+            "y": 3,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 50,
+            "x": 0,
+            "y": 3,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 51,
+            "x": -6,
+            "y": 11,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 52,
+            "x": 2,
+            "y": 11,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 53,
+            "x": -6,
+            "y": 19,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 54,
+            "x": 2,
+            "y": 19,
+            "attributes": 1,
+            "paletteSlot": 1
+          }
+        ],
+        "visibleBounds": {
+          "minX": -5,
+          "minY": -12,
+          "maxX": 7,
+          "maxY": 24
+        },
+        "width": 13,
+        "height": 37,
+        "png": "frames/log-ec.png"
+      }
+    ],
+    "appearanceCues": [
+      "Narrow uneven brown/orange log with dark bark grooves, uneven taper and bright exposed end.",
+      "Runtime full-lane log orientation/depth is authored."
+    ],
+    "runtimeRole": "full-depth surf hazard",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          76,
+          79
+        ]
+      }
+    ],
+    "sourceHandler": "object_brevno",
+    "bankRecipe": "Surf",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 8,
+        "decodedCompleteTiles": 8,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/byte_CC32.chr",
+        "firstTile": 41,
+        "tiles": 1,
+        "decodedCompleteTiles": 1,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/surfcity_obj.4",
+        "firstTile": 42,
+        "tiles": 97,
+        "decodedCompleteTiles": 97,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/turbotunnel_obj.4",
+        "firstTile": 139,
+        "tiles": 34,
+        "decodedCompleteTiles": 34,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/levels1_5_obj.4",
+        "firstTile": 173,
+        "tiles": 35,
+        "decodedCompleteTiles": 35,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 14,
+        "decodedCompleteTiles": 14,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "log-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        250,
+        160,
+        66
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        -0.23366563145999497,
+        -0.10595945362573778,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.73,
+          -0.653201701161822,
+          -2.3
+        ],
+        [
+          0.73,
+          0.6532017011618219,
+          2.3
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.963665631459995,
+          -0.7591611547875597,
+          -2.3
+        ],
+        [
+          0.496334368540005,
+          0.5472422475360841,
+          2.3
+        ]
+      ],
+      "vertices": 100,
+      "authoringVertices": 100,
+      "paletteSplitTriangles": 0,
+      "triangles": 196,
+      "role": "Wood"
+    },
+    {
+      "name": "EndGrain",
+      "parent": null,
+      "pivot": [
+        -0.23366563145999497,
+        -0.10595945362573778,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.56,
+          -0.5459596308218214,
+          -2.389052558883258
+        ],
+        [
+          0.56,
+          0.5459596308218213,
+          2.389052558883258
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.793665631459995,
+          -0.6519190844475592,
+          -2.389052558883258
+        ],
+        [
+          0.3263343685400051,
+          0.44000017719608353,
+          2.389052558883258
+        ]
+      ],
+      "vertices": 736,
+      "authoringVertices": 736,
+      "paletteSplitTriangles": 0,
+      "triangles": 1456,
+      "role": "Pattern"
+    },
+    {
+      "name": "Bark",
+      "parent": null,
+      "pivot": [
+        -0.23366563145999497,
+        -0.10595945362573778,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.6779584396309595,
+          -0.6743649860059405,
+          -1.9804071725478125
+        ],
+        [
+          0.7488498466863466,
+          0.6743649860059405,
+          1.9001085927255321
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.9116240710909544,
+          -0.7803244396316783,
+          -1.9804071725478125
+        ],
+        [
+          0.5151842152263516,
+          0.5684055323802027,
+          1.9001085927255321
+        ]
+      ],
+      "vertices": 182,
+      "authoringVertices": 182,
+      "paletteSplitTriangles": 0,
+      "triangles": 336,
+      "role": "Pattern"
+    },
+    {
+      "name": "Branch",
+      "parent": null,
+      "pivot": [
+        0.26633436854000503,
+        0.2440405463742622,
+        0.65
+      ],
+      "localBounds": [
+        [
+          -0.16545037166308552,
+          -0.2609036128077996,
+          -0.1896678412818813
+        ],
+        [
+          0.6973312629199899,
+          0.5362838932574161,
+          0.1896678412818813
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.10088399687691951,
+          -0.01686306643353741,
+          0.4603321587181187
+        ],
+        [
+          0.963665631459995,
+          0.7803244396316783,
+          0.8396678412818813
+        ]
+      ],
+      "vertices": 74,
+      "authoringVertices": 74,
+      "paletteSplitTriangles": 0,
+      "triangles": 140,
+      "role": "Wood"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        250,
+        160,
+        66
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 2128,
+    "vertices": 1092,
+    "closedComponents": true,
+    "components": 20,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.00041915629543166954
+  }
+}

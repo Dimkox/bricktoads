@@ -1,0 +1,252 @@
+{
+  "schema": 1,
+  "kind": "AirMine",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Authored airborne mine adaptation: compact hazardous device repeated across the real full-depth gameplay volume; use the proved water-mine family only as an explicitly visual analogue.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.5899999999999999,
+      -1.0699999999999998,
+      -1.3897350588938644
+    ],
+    [
+      1.5899999999999999,
+      1.0699999999999998,
+      1.3897350588938644
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "AirMine",
+    "sourceEvidence": [
+      {
+        "statement": "Runtime AirMine is a flight hazard across a depth44 volume. The proved source water mine78 is a possible visual family reference, not proof of an airborne mine identity.",
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": "75-81"
+      }
+    ],
+    "status": "authored-adaptation-unproved-source-identity",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "12841-12871",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L12841-L12871"
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          75
+        ]
+      }
+    ],
+    "sourceTypes": [],
+    "graphicsFrameIds": [],
+    "palette": null,
+    "rgbColors": [],
+    "frames": [],
+    "appearanceCues": [
+      "Authored airborne mine adaptation: compact hazardous device repeated across the real full-depth gameplay volume; use the proved water-mine family only as an explicitly visual analogue."
+    ],
+    "runtimeRole": "full-depth flight hazard",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "No exact NES source AirMine object/gfx mapping was proved. Full-depth mesh distribution is required by current Roblox hazard dimensions, not source sprite anatomy."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          75
+        ]
+      }
+    ],
+    "sourceAnalogue": {
+      "runtimeKind": "Mine",
+      "relationship": "visual analogue only; no asserted AirMine source type mapping"
+    }
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.24999999999999994,
+        -1.1102230246251565e-16
+      ],
+      "localBounds": [
+        [
+          -1.13,
+          -0.8199999999999998,
+          -1.13
+        ],
+        [
+          1.13,
+          0.8200000000000001,
+          1.13
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.13,
+          -1.0699999999999998,
+          -1.13
+        ],
+        [
+          1.13,
+          0.5700000000000001,
+          1.13
+        ]
+      ],
+      "vertices": 366,
+      "authoringVertices": 366,
+      "paletteSplitTriangles": 0,
+      "triangles": 728,
+      "role": "Casing"
+    },
+    {
+      "name": "Sensors",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.24999999999999994,
+        -1.1102230246251565e-16
+      ],
+      "localBounds": [
+        [
+          -1.5899999999999999,
+          -0.057028456932878,
+          -1.3897350588938644
+        ],
+        [
+          1.5899999999999999,
+          0.25,
+          1.3897350588938644
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.5899999999999999,
+          -0.30702845693287795,
+          -1.3897350588938644
+        ],
+        [
+          1.5899999999999999,
+          5.551115123125783e-17,
+          1.3897350588938644
+        ]
+      ],
+      "vertices": 420,
+      "authoringVertices": 420,
+      "paletteSplitTriangles": 0,
+      "triangles": 792,
+      "role": "Prongs"
+    },
+    {
+      "name": "Cap",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.24999999999999994,
+        -1.1102230246251565e-16
+      ],
+      "localBounds": [
+        [
+          -0.24,
+          0.68,
+          -0.24
+        ],
+        [
+          0.24,
+          1.3199999999999998,
+          0.24
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.24,
+          0.4300000000000001,
+          -0.2400000000000001
+        ],
+        [
+          0.24,
+          1.0699999999999998,
+          0.23999999999999988
+        ]
+      ],
+      "vertices": 104,
+      "authoringVertices": 104,
+      "paletteSplitTriangles": 0,
+      "triangles": 200,
+      "role": "Beacon"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        91,
+        0,
+        0
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "atlasResolution": [
+      48,
+      48
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 1720,
+    "vertices": 890,
+    "closedComponents": true,
+    "components": 16,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.003435007602893187
+  }
+}

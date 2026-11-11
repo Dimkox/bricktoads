@@ -24,6 +24,10 @@ class BrickToadsPlaceTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location('course_packaging_fixture', ROOT / 'tools/test_course_asset_packaging.py')
         helper = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(helper)
+        prop_spec = importlib.util.spec_from_file_location('course_prop_packaging_fixture', ROOT / 'tools/test_course_prop_packaging.py')
+        prop_helper = importlib.util.module_from_spec(prop_spec)
+        prop_spec.loader.exec_module(prop_helper)
+        prop_helper.prop_fixture(source)
         return helper.course_fixture(source)
 
     def morph_fixture(self, source):
@@ -470,6 +474,43 @@ class BrickToadsPlaceTests(unittest.TestCase):
         (self.root / 'assets/vehicles/canonical-course/roblox-course-vehicles.json').unlink()
         with self.assertRaises(FileNotFoundError):self.builder.build(self.root)
 
+    def test_course_props_are_mandatory_flat_private_exact_textured_resources(self):
+        receipt=json.loads((self.root/'assets/props/canonical-course/roblox-course-props.json').read_bytes())
+        storage=named(ET.fromstring(self.builder.build(self.root)),'ServerStorage')
+        self.assertTrue(any(p.findtext("Properties/string[@name='Name']")=='BrickToadsCoursePropTemplates'
+                            for p in storage.findall('Item')),'Mandatory prop templates are omitted')
+        folder=named(storage,'BrickToadsCoursePropTemplates')
+        self.assertEqual(len(folder.findall('Item')),28)
+        for kind,entry in receipt['templates'].items():
+            model=named(folder,kind)
+            self.assertEqual(model.attrib['class'],'Model')
+            self.assertEqual(named(model,'AppearanceProfile').findtext("Properties/string[@name='Value']"),'CanonicalCourseProp')
+            self.assertEqual(named(model,'FitMode').findtext("Properties/string[@name='Value']"),entry['fitMode'])
+            for axis,value in zip('XYZ',entry['referenceSize']):
+                self.assertAlmostEqual(float(named(model,'ReferenceSize'+axis).findtext("Properties/double[@name='Value']")),value)
+            self.assertFalse({p.attrib['class'] for p in model.iter('Item')}
+                             - {'Model','MeshPart','SurfaceAppearance','StringValue','NumberValue'})
+            for row in entry['parts']:
+                mesh=named(model,row['name'])
+                self.assertEqual(mesh.findtext("Properties/Content[@name='MeshId']/url"),row['meshId'])
+                self.assertEqual(mesh.findtext("Properties/Content[@name='TextureID']/url"),row['textureId'])
+                for axis,value in zip('XYZ',row['meshSize']):
+                    self.assertAlmostEqual(float(mesh.findtext(f"Properties/Vector3[@name='InitialSize']/{axis}")),value)
+                for axis,value in zip('XYZ',row['size']):
+                    self.assertAlmostEqual(float(mesh.findtext(f"Properties/Vector3[@name='size']/{axis}")),value)
+                for field,value in zip(('X','Y','Z','R00','R01','R02','R10','R11','R12','R20','R21','R22'),row['cframe']):
+                    self.assertAlmostEqual(float(mesh.findtext(f"Properties/CoordinateFrame[@name='CFrame']/{field}")),value)
+                for flag in ('CanCollide','CanTouch','CanQuery'):
+                    self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"),'false')
+                for flag in ('Anchored','Massless'):
+                    self.assertEqual(mesh.findtext(f"Properties/bool[@name='{flag}']"),'true')
+                self.assertEqual([p.attrib['class'] for p in mesh.findall('Item')],
+                                 ['SurfaceAppearance']*len(row['surfaceAppearances']))
+
+    def test_missing_course_prop_registry_is_not_silently_omitted(self):
+        (self.root/'assets/props/canonical-course/roblox-course-props.json').unlink()
+        with self.assertRaises(FileNotFoundError):self.builder.build(self.root)
+
     def test_sources_are_current_and_server_code_is_private(self):
         root = ET.fromstring(self.builder.build(self.root))
         server = named(named(root, "ServerScriptService"), "BrickToads")
@@ -513,7 +554,9 @@ class BrickToadsPlaceTests(unittest.TestCase):
             self.assertEqual(module.attrib["class"], "ModuleScript")
             self.assertEqual(module.findtext("Properties/ProtectedString[@name='Source']"), source)
         all_names = {i.findtext("Properties/string[@name='Name']") for i in root.iter("Item")}
-        self.assertNotIn("Stand", all_names)
+        entrypoint_names = {i.findtext("Properties/string[@name='Name']") for i in root.iter("Item")
+                            if i.attrib['class'] in {'Script','LocalScript','ModuleScript'}}
+        self.assertNotIn("Stand", entrypoint_names)
         self.assertNotIn("Diagnostics", all_names)
         self.assertNotIn("StudioReconnectTransportProbe", all_names)
 

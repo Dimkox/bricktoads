@@ -8,8 +8,12 @@ env.CFrame.new=function(...)
     return rawCFrameNew(...)
 end
 local ActualCourseAppearance=source(CourseAppearanceSource)
-env.script={Parent={CourseAppearance='CourseAppearance'}}
-env.require=function(name)assert(name=='CourseAppearance');return ActualCourseAppearance end
+local ActualCoursePropAppearance=source(CoursePropAppearanceSource)
+env.script={Parent={CourseAppearance='CourseAppearance',CoursePropAppearance='CoursePropAppearance'}}
+env.require=function(name)
+    if name=='CourseAppearance'then return ActualCourseAppearance end
+    assert(name=='CoursePropAppearance');return ActualCoursePropAppearance
+end
 function Frame:GetComponents()
     local c,s=math.cos(self.rotationY or 0),math.sin(self.rotationY or 0)
     return self.Position.X,self.Position.Y,self.Position.Z,c,0,s,0,1,0,-s,0,c

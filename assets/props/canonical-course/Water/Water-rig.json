@@ -1,0 +1,380 @@
+{
+  "schema": 1,
+  "kind": "Water",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Deep blue water field with cyan/teal serrated wave/foam strips in Surf City background components.', 'Runtime translucent 3D fluid volume and current dimensions are authored.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -2.0,
+      -0.18499197493025257,
+      -2.0
+    ],
+    [
+      2.0,
+      0.18499197493025257,
+      2.0
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Water",
+    "sourceEvidence": [
+      {
+        "statement": "Surf City source enum0C selects background gfxID9E (bank4 archive1E) and paletteID1E; source bank4 references surf_city_bkg and its block tables.",
+        "cacheFile": "main.asm",
+        "lines": "38610-38632;29182-29199;29256-29259;29323-29358;30228-30351"
+      }
+    ],
+    "status": "source-background-adaptation",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "38610-38632",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L38610-L38632"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "29182-29199",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L29182-L29199"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "29256-29259",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L29256-L29259"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "29323-29358",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L29323-L29358"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "30228-30351",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L30228-L30351"
+      },
+      {
+        "cacheFile": "gfx/surf_city_bkg.4",
+        "lines": null,
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/gfx/surf_city_bkg.4"
+      },
+      {
+        "cacheFile": "data/surf_city_blk_tiles.bin",
+        "lines": null,
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/data/surf_city_blk_tiles.bin"
+      },
+      {
+        "cacheFile": "data/surf_city_blk_attrib.bin",
+        "lines": null,
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/data/surf_city_blk_attrib.bin"
+      }
+    ],
+    "sourceTypes": [],
+    "graphicsFrameIds": [],
+    "palette": {
+      "paletteIndices": [
+        15,
+        7,
+        23,
+        39,
+        15,
+        2,
+        28,
+        44,
+        15,
+        7,
+        5,
+        20,
+        15,
+        7,
+        22,
+        39
+      ],
+      "source": "byte_6000_A3BD",
+      "rgbIsIllustrative": true,
+      "scope": "Source initial background palette, not sprite palette or live frame trace."
+    },
+    "rgbColors": [
+      [
+        8,
+        16,
+        144
+      ],
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        56,
+        180,
+        204
+      ]
+    ],
+    "frames": [],
+    "appearanceCues": [
+      "Deep blue water field with cyan/teal serrated wave/foam strips in Surf City background components.",
+      "Runtime translucent 3D fluid volume and current dimensions are authored."
+    ],
+    "runtimeRole": "fluid medium volume",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Source is a background presentation, not an object sprite or original source mesh. Runtime cylinder/water volume is authored.",
+      "Declared CHR tail remains unresolved (265 bytes); only 60 blocks using fully decoded tiles are shown. No unknown bytes are synthesized."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          69,
+          156,
+          157
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          199,
+          226,
+          312,
+          314,
+          355,
+          774
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignWorld.lua",
+        "lines": [
+          283,
+          289,
+          322
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/GameWorld.lua",
+        "lines": [
+          1024,
+          1039
+        ]
+      }
+    ],
+    "background": {
+      "sourceGfxFile": "gfx/surf_city_bkg.4",
+      "declaredTileCount": 224,
+      "decodedCompleteTileCount": 207,
+      "unknownDeclaredTailBytes": 265,
+      "followingSourceBlocks": [
+        "main.asm:29351-29358 RTI and six FF padding bytes"
+      ],
+      "sourceBlockTilesFile": "data/surf_city_blk_tiles.bin",
+      "sourceBlockAttributesFile": "data/surf_city_blk_attrib.bin",
+      "paletteLabel": "byte_6000_A3BD",
+      "paletteIndices": [
+        15,
+        7,
+        23,
+        39,
+        15,
+        2,
+        28,
+        44,
+        15,
+        7,
+        5,
+        20,
+        15,
+        7,
+        22,
+        39
+      ],
+      "decodedBlocks": 60,
+      "contactSheet": "water-background-blocks.png",
+      "scope": "Exact static source 32x32 background components; no level map reconstruction or live CHR animation."
+    },
+    "contactSheet": "water-background-blocks.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        8,
+        16,
+        144
+      ],
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        56,
+        180,
+        204
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.05500802506974742,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.0,
+          -0.24,
+          -2.0
+        ],
+        [
+          2.0,
+          0.0,
+          2.0
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.0,
+          -0.18499197493025257,
+          -2.0
+        ],
+        [
+          2.0,
+          0.05500802506974742,
+          2.0
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Water"
+    },
+    {
+      "name": "NearWaves",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.05500802506974742,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.815975126106384,
+          -0.05985933304814596,
+          -1.6543573899975117
+        ],
+        [
+          1.81695486120666,
+          0.12998394986050515,
+          1.5496559043159568
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.815975126106384,
+          -0.004851307978398542,
+          -1.6543573899975117
+        ],
+        [
+          1.81695486120666,
+          0.18499197493025257,
+          1.5496559043159568
+        ]
+      ],
+      "vertices": 318,
+      "authoringVertices": 318,
+      "paletteSplitTriangles": 0,
+      "triangles": 624,
+      "role": "Ribbon"
+    },
+    {
+      "name": "FarWaves",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.05500802506974742,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.815975126106384,
+          -0.05985933304814595,
+          -1.3043573899975118
+        ],
+        [
+          1.81695486120666,
+          0.12998394986050515,
+          1.8996559043159567
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.815975126106384,
+          -0.004851307978398535,
+          -1.3043573899975118
+        ],
+        [
+          1.81695486120666,
+          0.18499197493025257,
+          1.8996559043159567
+        ]
+      ],
+      "vertices": 318,
+      "authoringVertices": 318,
+      "paletteSplitTriangles": 0,
+      "triangles": 624,
+      "role": "Ribbon"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        8,
+        16,
+        144
+      ],
+      [
+        56,
+        180,
+        204
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 1280,
+    "vertices": 654,
+    "closedComponents": true,
+    "components": 7,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.001909188309203674
+  }
+}

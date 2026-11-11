@@ -4,6 +4,7 @@ local CampaignWorld={}
 CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
 local CourseAppearance=require(script.Parent.CourseAppearance)
+local CoursePropAppearance=require(script.Parent.CoursePropAppearance)
 local palettes={
     Rope={45,63,78},Speeder={106,75,47},Ice={133,185,206},Surf={42,124,141},
     Serpents={71,111,69},Jet={125,65,44},Ascent={76,88,107},Tubes={61,105,114},
@@ -325,6 +326,7 @@ function CampaignWorld:object(id,kind,point,size,metadata)
         end
     end
     CourseAppearance.update(row,self.world.geometry,metadata,waterSurfaceY)
+    CoursePropAppearance.update(row,self.world.geometry,metadata,self.now or 0)
     return row.part
 end
 function CampaignWorld:remove(id)
@@ -332,6 +334,7 @@ function CampaignWorld:remove(id)
     if not row then return end
     removeSerpent(row)
     CourseAppearance.remove(row)
+    CoursePropAppearance.remove(row)
     for _,floors in ipairs({self.world.allFloors,self.world.floors}) do
         for i=#floors,1,-1 do if floors[i]==row.part then table.remove(floors,i) end end
     end
@@ -344,7 +347,10 @@ function CampaignWorld:step(now)
         if row.expiresAt and now>=row.expiresAt then expired[#expired+1]=id end
     end
     for _,id in ipairs(expired) do self:remove(id) end
-    for _,row in pairs(self.objects)do if row.kind=='Serpent'then self:_serpent(row,now)end end
+    for _,row in pairs(self.objects)do
+        if row.kind=='Serpent'then self:_serpent(row,now)end
+        CoursePropAppearance.step(row,now)
+    end
 end
 function CampaignWorld:stage(name)
     self.world.stageName=name;self.world.folder:SetAttribute('Stage',name)

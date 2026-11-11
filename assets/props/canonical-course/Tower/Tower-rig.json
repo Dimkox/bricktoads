@@ -1,0 +1,420 @@
+{
+  "schema": 1,
+  "kind": "Tower",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Source background blocks show purple/magenta masonry courses with dark inset joints, alternating highlighted faces and vertical facets.', 'Cyan shapes in the background sheet belong to clouds/sky, not the tower masonry.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -3.509431395352574,
+      -8.0,
+      -3.509431395352574
+    ],
+    [
+      3.509431395352574,
+      8.0,
+      3.509431395352574
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Tower",
+    "sourceEvidence": [
+      {
+        "statement": "The Revolution source enum05 selects background gfxID16 and paletteID0E in the 9-byte level table; archive16 selects large_planet_gfx_set. The same stage selects revolution block tables.",
+        "cacheFile": "main.asm",
+        "lines": "38610-38632;22163-22196;22432-22436;22758-22761;30228-30351"
+      }
+    ],
+    "status": "source-background-adaptation",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "38610-38632",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L38610-L38632"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "22163-22196",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L22163-L22196"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "22432-22436",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L22432-L22436"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "22758-22761",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L22758-L22761"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "30228-30351",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L30228-L30351"
+      },
+      {
+        "cacheFile": "gfx/large_planet.4",
+        "lines": null,
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/gfx/large_planet.4"
+      },
+      {
+        "cacheFile": "data/revolution_blk_tiles.bin",
+        "lines": null,
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/data/revolution_blk_tiles.bin"
+      },
+      {
+        "cacheFile": "data/revolution_blk_attrib.bin",
+        "lines": null,
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/data/revolution_blk_attrib.bin"
+      }
+    ],
+    "sourceTypes": [],
+    "graphicsFrameIds": [],
+    "palette": {
+      "paletteIndices": [
+        15,
+        4,
+        20,
+        36,
+        15,
+        12,
+        28,
+        44,
+        15,
+        15,
+        4,
+        20,
+        15,
+        20,
+        36,
+        48
+      ],
+      "source": "byte_6000_A33D",
+      "rgbIsIllustrative": true,
+      "scope": "Source initial background palette, not sprite palette or live frame trace."
+    },
+    "rgbColors": [
+      [
+        68,
+        0,
+        100
+      ],
+      [
+        136,
+        20,
+        176
+      ],
+      [
+        228,
+        84,
+        236
+      ]
+    ],
+    "frames": [],
+    "appearanceCues": [
+      "Source background blocks show purple/magenta masonry courses with dark inset joints, alternating highlighted faces and vertical facets.",
+      "Cyan shapes in the background sheet belong to clouds/sky, not the tower masonry."
+    ],
+    "runtimeRole": "noncollidable scenery around logical core",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Source is a background presentation, not an object sprite or original source mesh. Runtime cylinder/water volume is authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          15
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          124,
+          182,
+          204,
+          231,
+          247,
+          267,
+          337,
+          649,
+          678,
+          766,
+          771,
+          851
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignWorld.lua",
+        "lines": [
+          71,
+          280,
+          285,
+          302
+        ]
+      }
+    ],
+    "background": {
+      "sourceGfxFile": "gfx/large_planet.4",
+      "declaredTileCount": 255,
+      "decodedCompleteTileCount": 255,
+      "unknownDeclaredTailBytes": 0,
+      "followingSourceBlocks": [
+        "gfx/byte_A6B2.4"
+      ],
+      "sourceBlockTilesFile": "data/revolution_blk_tiles.bin",
+      "sourceBlockAttributesFile": "data/revolution_blk_attrib.bin",
+      "paletteLabel": "byte_6000_A33D",
+      "paletteIndices": [
+        15,
+        4,
+        20,
+        36,
+        15,
+        12,
+        28,
+        44,
+        15,
+        15,
+        4,
+        20,
+        15,
+        20,
+        36,
+        48
+      ],
+      "decodedBlocks": 103,
+      "contactSheet": "tower-background-blocks.png",
+      "scope": "Exact static source 32x32 background components; no level map reconstruction or live CHR animation."
+    },
+    "contactSheet": "tower-background-blocks.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        68,
+        0,
+        100
+      ],
+      [
+        136,
+        20,
+        176
+      ],
+      [
+        228,
+        84,
+        236
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -3.4,
+          -8.0,
+          -3.4
+        ],
+        [
+          3.4,
+          8.0,
+          3.4
+        ]
+      ],
+      "globalBounds": [
+        [
+          -3.4,
+          -8.0,
+          -3.4
+        ],
+        [
+          3.4,
+          8.0,
+          3.4
+        ]
+      ],
+      "vertices": 96,
+      "authoringVertices": 96,
+      "paletteSplitTriangles": 0,
+      "triangles": 192,
+      "role": "Shell"
+    },
+    {
+      "name": "PurpleBricks",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -3.509431395352574,
+          -7.945,
+          -3.509431395352574
+        ],
+        [
+          3.509431395352574,
+          7.948,
+          3.509431395352574
+        ]
+      ],
+      "globalBounds": [
+        [
+          -3.509431395352574,
+          -7.945,
+          -3.509431395352574
+        ],
+        [
+          3.509431395352574,
+          7.948,
+          3.509431395352574
+        ]
+      ],
+      "vertices": 1632,
+      "authoringVertices": 1632,
+      "paletteSplitTriangles": 0,
+      "triangles": 3072,
+      "role": "Masonry"
+    },
+    {
+      "name": "MagentaBricks",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -3.509431395352574,
+          -7.945,
+          -3.509431395352574
+        ],
+        [
+          3.509431395352574,
+          7.948,
+          3.509431395352574
+        ]
+      ],
+      "globalBounds": [
+        [
+          -3.509431395352574,
+          -7.945,
+          -3.509431395352574
+        ],
+        [
+          3.509431395352574,
+          7.948,
+          3.509431395352574
+        ]
+      ],
+      "vertices": 1632,
+      "authoringVertices": 1632,
+      "paletteSplitTriangles": 0,
+      "triangles": 3072,
+      "role": "Masonry"
+    },
+    {
+      "name": "Rims",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -3.5,
+          -7.996602540378444,
+          -3.5
+        ],
+        [
+          3.5,
+          7.996602540378444,
+          3.5
+        ]
+      ],
+      "globalBounds": [
+        [
+          -3.5,
+          -7.996602540378444,
+          -3.5
+        ],
+        [
+          3.5,
+          7.996602540378444,
+          3.5
+        ]
+      ],
+      "vertices": 432,
+      "authoringVertices": 432,
+      "paletteSplitTriangles": 0,
+      "triangles": 864,
+      "role": "Rim"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        68,
+        0,
+        100
+      ],
+      [
+        136,
+        20,
+        176
+      ],
+      [
+        228,
+        84,
+        236
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 7200,
+    "vertices": 3792,
+    "closedComponents": true,
+    "components": 99,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.027128676495253433
+  }
+}

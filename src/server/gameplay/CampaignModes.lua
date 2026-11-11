@@ -818,7 +818,7 @@ function Modes:_projectiles(dt)
         local old=copy(shot.position);local p=shot.position
         p.x+=shot.velocity.x*dt;p.y+=shot.velocity.y*dt;p.z+=shot.velocity.z*dt
         local h={id=id,kind=shot.kind,x=p.x,y=p.y,z=p.z,w=1,h=1,d=1,previous=old}
-        self:_object(id,shot.kind,p,{w=1,h=1,d=1},{collidable=false,role='Projectile'})
+        self:_object(id,shot.kind,p,{w=1,h=1,d=1},{collidable=false,role='Projectile',visualVelocity=copy(shot.velocity)})
         for _,slot in ipairs(self.session.order) do local s=self.actors[slot]
             if s and not s.finished and self:_living(slot) and swept(s.previous,s.position,h,old) then
                 if not s.nextHit or self.now>=s.nextHit then

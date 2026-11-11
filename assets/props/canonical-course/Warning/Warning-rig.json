@@ -1,0 +1,447 @@
+{
+  "schema": 1,
+  "kind": "Warning",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['White exclamation mark with pink/dark-magenta edge and a separate dot.', 'Source toggles the camera-relative cue; runtime ground/air hazard footprint is authored.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.52,
+      -0.10250000000000001,
+      -1.31
+    ],
+    [
+      1.52,
+      0.10250000000000001,
+      1.31
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Warning",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "18762-18784"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "18762-18784",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L18762-L18784"
+      }
+    ],
+    "sourceTypes": [
+      "49"
+    ],
+    "graphicsFrameIds": [
+      "8A"
+    ],
+    "palette": {
+      "typeId": 73,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:221",
+      "trigger": [
+        204,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        5,
+        37,
+        32,
+        15,
+        15,
+        28,
+        44
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:123",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            39,
+            55
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs1.asm:135",
+          "trigger": [
+            5,
+            184
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            28,
+            44
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs1.asm:140",
+          "trigger": [
+            8,
+            0
+          ],
+          "paletteRamOffset": 24,
+          "colorCodes": [
+            5,
+            37,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        92,
+        0,
+        48
+      ],
+      [
+        236,
+        88,
+        180
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 138,
+        "frameHex": "8A",
+        "namespace": "object",
+        "metaspriteAddress": "B4E4",
+        "parts": [
+          {
+            "tile": 160,
+            "x": -2,
+            "y": -16,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 161,
+            "x": 6,
+            "y": -16,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 162,
+            "x": -4,
+            "y": -8,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 163,
+            "x": 0,
+            "y": -8,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 164,
+            "x": -5,
+            "y": 0,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 165,
+            "x": -8,
+            "y": 8,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": -16,
+          "maxX": 8,
+          "maxY": 15
+        },
+        "width": 17,
+        "height": 32,
+        "png": "frames/warning-8a.png"
+      }
+    ],
+    "appearanceCues": [
+      "White exclamation mark with pink/dark-magenta edge and a separate dot.",
+      "Source toggles the camera-relative cue; runtime ground/air hazard footprint is authored."
+    ],
+    "runtimeRole": "pre-hazard informational marker",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Source warning is a blinking camera-relative sprite. Runtime ground/air hazard marker position and footprint are original Roblox behavior."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          759
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignWorld.lua",
+        "lines": [
+          284
+        ]
+      }
+    ],
+    "sourceHandler": "object_turbo_tunnel_warning_sprite",
+    "bankRecipe": "Tunnel",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/turbotunnel_obj.4",
+        "firstTile": 42,
+        "tiles": 195,
+        "decodedCompleteTiles": 195,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "warning-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        92,
+        0,
+        48
+      ],
+      [
+        236,
+        88,
+        180
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.04250000000000001,
+        0.18999999999999995
+      ],
+      "localBounds": [
+        [
+          -1.52,
+          -0.06,
+          -1.5
+        ],
+        [
+          1.52,
+          0.06,
+          1.12
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.52,
+          -0.10250000000000001,
+          -1.31
+        ],
+        [
+          1.52,
+          0.017499999999999988,
+          1.31
+        ]
+      ],
+      "vertices": 14,
+      "authoringVertices": 14,
+      "paletteSplitTriangles": 0,
+      "triangles": 24,
+      "role": "Marker"
+    },
+    {
+      "name": "Border",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.04250000000000001,
+        0.18999999999999995
+      ],
+      "localBounds": [
+        [
+          -1.3561547595642371,
+          0.009999999999999995,
+          -1.2827359584903624
+        ],
+        [
+          1.3561547595642371,
+          0.14,
+          1.045
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.3561547595642371,
+          -0.032500000000000015,
+          -1.0927359584903624
+        ],
+        [
+          1.3561547595642371,
+          0.0975,
+          1.2349999999999999
+        ]
+      ],
+      "vertices": 54,
+      "authoringVertices": 54,
+      "paletteSplitTriangles": 0,
+      "triangles": 96,
+      "role": "Pattern"
+    },
+    {
+      "name": "Symbol",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.04250000000000001,
+        0.18999999999999995
+      ],
+      "localBounds": [
+        [
+          -0.13,
+          0.02500000000000001,
+          -0.62
+        ],
+        [
+          0.13,
+          0.14500000000000002,
+          0.81363734711837
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.13,
+          -0.0175,
+          -0.43000000000000005
+        ],
+        [
+          0.13,
+          0.10250000000000001,
+          1.00363734711837
+        ]
+      ],
+      "vertices": 70,
+      "authoringVertices": 70,
+      "paletteSplitTriangles": 0,
+      "triangles": 132,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        92,
+        0,
+        48
+      ],
+      [
+        236,
+        88,
+        180
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 252,
+    "vertices": 138,
+    "closedComponents": true,
+    "components": 6,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0020207340683082707
+  }
+}

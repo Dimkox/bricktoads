@@ -45,13 +45,14 @@ local function setup(mode,initial,contract)
         end
     end
     local function actor(id,mesh)
-        local course=contract=='Course'
-        local owner=node('Model','Actor_'..id,world);owner:setAttr(course and 'CourseAppearance' or 'CastAppearance',course and 'CanonicalCourseVehicle' or 'CanonicalNESCast')
-        local skin=node('Model','PigAppearance',owner);skin:setAttr(course and 'CanonicalCourseSkin' or 'CanonicalCastSkin',true);skin:setAttr(course and 'CourseSkinId' or 'CastSkinId',id)
-        local p=node('MeshPart','Body',skin);p.props.MeshId=mesh or 'rbxassetid://101';p.props.TextureID='rbxassetid://102';p.props.LocalTransparencyModifier=.25;p:setAttr(course and 'CourseVisibleTransparency' or 'CastVisibleTransparency',.2)
+        local prefix=contract=='Prop'and'CourseProp'or contract=='Course'and'Course'or'Cast'
+        local profile=contract=='Prop'and'CanonicalCourseProp'or contract=='Course'and'CanonicalCourseVehicle'or'CanonicalNESCast'
+        local owner=node('Model','Actor_'..id,world);owner:setAttr(prefix..'Appearance',profile)
+        local skin=node('Model','PigAppearance',owner);skin:setAttr('Canonical'..prefix..'Skin',true);skin:setAttr(prefix..'SkinId',id)
+        local p=node('MeshPart','Body',skin);p.props.MeshId=mesh or 'rbxassetid://101';p.props.TextureID='rbxassetid://102';p.props.LocalTransparencyModifier=.25;p:setAttr(prefix..'VisibleTransparency',.2)
         local surface=node('SurfaceAppearance','Surface',p);surface.props.ColorMap='rbxassetid://103'
-        local fallback=node('Part','Torso',owner);fallback.props.LocalTransparencyModifier=.1;fallback:setAttr(course and 'CourseFallbackOwner' or 'CastFallbackOwner',id);fallback:setAttr(course and 'CourseFallbackTransparency' or 'CastFallbackTransparency',.2)
-        local ref=node('ObjectValue',course and 'CourseFallbackTarget' or 'CastFallbackTarget',skin);ref.props.Value=fallback
+        local fallback=node('Part','Torso',owner);fallback.props.LocalTransparencyModifier=.1;fallback:setAttr(prefix..'FallbackOwner',id);fallback:setAttr(prefix..'FallbackTransparency',.2)
+        local ref=node('ObjectValue',prefix..'FallbackTarget',skin);ref.props.Value=fallback
         tagged[#tagged+1]=skin;added:Fire(skin)
         return {owner=owner,skin=skin,part=p,surface=surface,fallback=fallback,ref=ref}
     end
@@ -64,6 +65,16 @@ local function setup(mode,initial,contract)
 end
 local passed=0
 local function test(name,fn)fn();passed+=1;print('PASS cast visibility '..name)end
+test('props independently retain failed fallbacks then recover without changing physics',function()
+    local g,actor,run,provider,_,_,_,_,_,retry=setup('Failure',nil,'Prop');local a=actor('prop')
+    assert(a.part.LocalTransparencyModifier==1 and a.fallback.LocalTransparencyModifier==.1)
+    run();assert(g:diagnostics().failed==1 and a.fallback.LocalTransparencyModifier==.1)
+    provider.mode='Success';retry()
+    assert(g:diagnostics().ready==1 and a.fallback.LocalTransparencyModifier==1 and a.part.LocalTransparencyModifier==.25)
+    assert(a.fallback.CanCollide and a.part.Transparency==.2)
+    a.fallback:setAttr('CoursePropFallbackOwner','replacement');a.fallback.props.LocalTransparencyModifier=.7
+    g:destroy();assert(a.fallback.LocalTransparencyModifier==.7)
+end)
 test('course vehicles use their own typed-resource and fallback contract',function()
     local g,actor,run,provider=setup('Success',nil,'Course');local a=actor('vehicle')
     assert(a.part.LocalTransparencyModifier==1 and a.fallback.LocalTransparencyModifier==.1,

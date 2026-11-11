@@ -1,0 +1,571 @@
+{
+  "schema": 1,
+  "kind": "Rocket",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Long narrow pointed rocket with small fins, opposite up/down graphics variants and dark outline.', 'First source spawner snapshot makes it gray/white/black; red baseline coloring is not this selected context.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -0.96,
+      -0.96,
+      -1.9659807621135332
+    ],
+    [
+      0.96,
+      0.96,
+      1.9659807621135332
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Rocket",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "11457-11491"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "11457-11491",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L11457-L11491"
+      }
+    ],
+    "sourceTypes": [
+      "6A"
+    ],
+    "graphicsFrameIds": [
+      "CC",
+      "CD"
+    ],
+    "palette": {
+      "typeId": 106,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:500",
+      "trigger": [
+        39,
+        192
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        13,
+        16,
+        32
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:440",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            19,
+            16,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs1.asm:475",
+          "trigger": [
+            10,
+            48
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            13,
+            16,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "sourceSpawnerType": "68",
+      "actorFlagsEvidence": "main.asm:11304-11307",
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace.",
+      "rgbIsIllustrative": true
+    },
+    "rgbColors": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        152,
+        150,
+        152
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 204,
+        "frameHex": "CC",
+        "namespace": "object",
+        "metaspriteAddress": "C05C",
+        "parts": [
+          {
+            "tile": 183,
+            "x": -8,
+            "y": -4,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 184,
+            "x": 0,
+            "y": -4,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 185,
+            "x": -8,
+            "y": 4,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 186,
+            "x": 0,
+            "y": 4,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 187,
+            "x": -8,
+            "y": 12,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 188,
+            "x": 0,
+            "y": 12,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": -4,
+          "maxX": 7,
+          "maxY": 19
+        },
+        "width": 16,
+        "height": 24,
+        "png": "frames/rocket-cc.png"
+      },
+      {
+        "frameId": 205,
+        "frameHex": "CD",
+        "namespace": "object",
+        "metaspriteAddress": "C06D",
+        "parts": [
+          {
+            "tile": 183,
+            "x": -8,
+            "y": 12,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 184,
+            "x": 0,
+            "y": 12,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 185,
+            "x": -8,
+            "y": 4,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 186,
+            "x": 0,
+            "y": 4,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 187,
+            "x": -8,
+            "y": -4,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 188,
+            "x": 0,
+            "y": -4,
+            "attributes": 131,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": -4,
+          "maxX": 7,
+          "maxY": 19
+        },
+        "width": 16,
+        "height": 24,
+        "png": "frames/rocket-cd.png"
+      }
+    ],
+    "appearanceCues": [
+      "Long narrow pointed rocket with small fins, opposite up/down graphics variants and dark outline.",
+      "First source spawner snapshot makes it gray/white/black; red baseline coloring is not this selected context."
+    ],
+    "runtimeRole": "flight hazard and aimed projectile",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Source Volkmire inherits Tunnel sprite CHR while its separate $1000 bank changes background graphics. Runtime aimed emitter/projectile use is authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          75,
+          81
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          812
+        ]
+      }
+    ],
+    "sourceHandler": "object_level7_rockets",
+    "bankRecipe": "Tunnel",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/turbotunnel_obj.4",
+        "firstTile": 42,
+        "tiles": 195,
+        "decodedCompleteTiles": 195,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "rocket-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        152,
+        150,
+        152
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0840192378864667
+      ],
+      "localBounds": [
+        [
+          -0.48,
+          -0.48,
+          -0.85
+        ],
+        [
+          0.48,
+          0.48,
+          1.65
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.48,
+          -0.48,
+          -0.7659807621135333
+        ],
+        [
+          0.48,
+          0.48,
+          1.7340192378864665
+        ]
+      ],
+      "vertices": 102,
+      "authoringVertices": 102,
+      "paletteSplitTriangles": 0,
+      "triangles": 200,
+      "role": "Casing"
+    },
+    {
+      "name": "Nose",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0840192378864667
+      ],
+      "localBounds": [
+        [
+          -0.48,
+          -0.48,
+          -2.05
+        ],
+        [
+          0.48,
+          0.48,
+          -0.82
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.48,
+          -0.48,
+          -1.9659807621135332
+        ],
+        [
+          0.48,
+          0.48,
+          -0.7359807621135332
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Point"
+    },
+    {
+      "name": "Fins",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0840192378864667
+      ],
+      "localBounds": [
+        [
+          -0.96,
+          -0.96,
+          0.55
+        ],
+        [
+          0.96,
+          0.96,
+          1.7800000000000002
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.96,
+          -0.96,
+          0.6340192378864667
+        ],
+        [
+          0.96,
+          0.96,
+          1.8640192378864668
+        ]
+      ],
+      "vertices": 72,
+      "authoringVertices": 72,
+      "paletteSplitTriangles": 0,
+      "triangles": 128,
+      "role": "Fins"
+    },
+    {
+      "name": "Nozzle",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0840192378864667
+      ],
+      "localBounds": [
+        [
+          -0.36,
+          -0.36,
+          1.5300000000000002
+        ],
+        [
+          0.36,
+          0.36,
+          1.8819615242270666
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.36,
+          -0.36,
+          1.6140192378864668
+        ],
+        [
+          0.36,
+          0.36,
+          1.9659807621135332
+        ]
+      ],
+      "vertices": 154,
+      "authoringVertices": 154,
+      "paletteSplitTriangles": 0,
+      "triangles": 304,
+      "role": "Nozzle"
+    },
+    {
+      "name": "Band",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0840192378864667
+      ],
+      "localBounds": [
+        [
+          -0.525,
+          -0.525,
+          -0.4089711431702997
+        ],
+        [
+          0.525,
+          0.525,
+          -0.33102885682970024
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.525,
+          -0.525,
+          -0.324951905283833
+        ],
+        [
+          0.525,
+          0.525,
+          -0.24700961894323353
+        ]
+      ],
+      "vertices": 144,
+      "authoringVertices": 144,
+      "paletteSplitTriangles": 0,
+      "triangles": 288,
+      "role": "Band"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        152,
+        150,
+        152
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 952,
+    "vertices": 490,
+    "closedComponents": true,
+    "components": 9,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.004491509843845009
+  }
+}

@@ -1,0 +1,946 @@
+{
+  "schema": 1,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+  "scope": "28 closed source-informed authored3D course prop templates. System markers explicitly authored. No source sprites embedded.",
+  "families": {
+    "AirMine": {
+      "status": "PASS",
+      "triangles": 1720,
+      "vertices": 890,
+      "closedComponents": true,
+      "components": 16,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.003435007602893187,
+      "glb": "assets/props/canonical-course/AirMine/AirMine.glb",
+      "rig": "assets/props/canonical-course/AirMine/AirMine-rig.json",
+      "bytes": 42360,
+      "sha256": "7dae798739e91194b1a45e103f7873bc05e25ba34e8d388dadf6059921e019d3",
+      "segments": [
+        "Body",
+        "Sensors",
+        "Cap"
+      ],
+      "bounds": [
+        [
+          -1.5899999999999999,
+          -1.0699999999999998,
+          -1.3897350588938644
+        ],
+        [
+          1.5899999999999999,
+          1.0699999999999998,
+          1.3897350588938644
+        ]
+      ],
+      "sourceStatus": "authored-adaptation-unproved-source-identity"
+    },
+    "BoardingPad": {
+      "status": "PASS",
+      "triangles": 848,
+      "vertices": 434,
+      "closedComponents": true,
+      "components": 7,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.004311268011339595,
+      "glb": "assets/props/canonical-course/BoardingPad/BoardingPad.glb",
+      "rig": "assets/props/canonical-course/BoardingPad/BoardingPad-rig.json",
+      "bytes": 22404,
+      "sha256": "c1e6760dfb0328d4dda71bbaa03a0ee7a36c3fbb240d2260cb38a208428761d1",
+      "segments": [
+        "Body",
+        "Rim",
+        "Target"
+      ],
+      "bounds": [
+        [
+          -2.0,
+          -0.24696152422706633,
+          -2.0
+        ],
+        [
+          2.0,
+          0.2469615242270663,
+          2.0
+        ]
+      ],
+      "sourceStatus": "authored-system-marker"
+    },
+    "Bomb": {
+      "status": "PASS",
+      "triangles": 1224,
+      "vertices": 634,
+      "closedComponents": true,
+      "components": 12,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0017537014426634865,
+      "glb": "assets/props/canonical-course/Bomb/Bomb.glb",
+      "rig": "assets/props/canonical-course/Bomb/Bomb-rig.json",
+      "bytes": 32912,
+      "sha256": "b9544ba71e403d1967c84c4c918f271119dbee11aa1498b23b97d3f656fc7fe0",
+      "segments": [
+        "Body",
+        "LeftCanister",
+        "RightCanister",
+        "Strap",
+        "Emblem"
+      ],
+      "bounds": [
+        [
+          -0.9099999999999999,
+          -1.05,
+          -0.845
+        ],
+        [
+          0.9099999999999999,
+          1.05,
+          0.845
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Buzzball": {
+      "status": "PASS",
+      "triangles": 3912,
+      "vertices": 1960,
+      "closedComponents": true,
+      "components": 2,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 9.355832280477014e-06,
+      "glb": "assets/props/canonical-course/Buzzball/Buzzball.glb",
+      "rig": "assets/props/canonical-course/Buzzball/Buzzball-rig.json",
+      "bytes": 88872,
+      "sha256": "b56135035a5d0082701b5bf978deb217c59864c394b37e22b457d4994285593e",
+      "segments": [
+        "Body",
+        "Ribbon"
+      ],
+      "bounds": [
+        [
+          -1.375,
+          -1.375,
+          -1.4153588867618807
+        ],
+        [
+          1.375,
+          1.375,
+          1.4153588867618807
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "ElectricTrap": {
+      "status": "PASS",
+      "triangles": 920,
+      "vertices": 480,
+      "closedComponents": true,
+      "components": 10,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.002545584412271569,
+      "glb": "assets/props/canonical-course/ElectricTrap/ElectricTrap.glb",
+      "rig": "assets/props/canonical-course/ElectricTrap/ElectricTrap-rig.json",
+      "bytes": 24600,
+      "sha256": "815b89c163fa6b1f4c7bca7c20f4f6b939ae34dce94689788659e0e20c5dfb14",
+      "segments": [
+        "Body",
+        "Emitters",
+        "Arc"
+      ],
+      "bounds": [
+        [
+          -1.8,
+          -0.9344969767914595,
+          -0.56
+        ],
+        [
+          1.8,
+          0.9344969767914595,
+          0.56
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Fan": {
+      "status": "PASS",
+      "triangles": 1352,
+      "vertices": 706,
+      "closedComponents": true,
+      "components": 18,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0010210621920333696,
+      "glb": "assets/props/canonical-course/Fan/Fan.glb",
+      "rig": "assets/props/canonical-course/Fan/Fan-rig.json",
+      "bytes": 35144,
+      "sha256": "80a50baebba00e6cd68c0606c6457e280d0efce0bb929b937f0e8ca9f94aacfd",
+      "segments": [
+        "Body",
+        "Rotor",
+        "Grille",
+        "Bracket"
+      ],
+      "bounds": [
+        [
+          -1.65,
+          -1.7075,
+          -0.7
+        ],
+        [
+          1.65,
+          1.7075,
+          0.7
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Gas": {
+      "status": "PASS",
+      "triangles": 1416,
+      "vertices": 726,
+      "closedComponents": true,
+      "components": 9,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0006187184335382267,
+      "glb": "assets/props/canonical-course/Gas/Gas.glb",
+      "rig": "assets/props/canonical-course/Gas/Gas-rig.json",
+      "bytes": 36440,
+      "sha256": "630a6cacfbbc8efb5848b3e3ad90b23113d9de9162bd9c8c6b7b336e85deabcc",
+      "segments": [
+        "Body",
+        "UpperCloud",
+        "TrailingCloud",
+        "Contours"
+      ],
+      "bounds": [
+        [
+          -1.645,
+          -0.8578000000000001,
+          -0.5418238357402287
+        ],
+        [
+          1.645,
+          0.8578000000000001,
+          0.5418238357402287
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Gear": {
+      "status": "PASS",
+      "triangles": 704,
+      "vertices": 370,
+      "closedComponents": true,
+      "components": 9,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.007071067811865466,
+      "glb": "assets/props/canonical-course/Gear/Gear.glb",
+      "rig": "assets/props/canonical-course/Gear/Gear-rig.json",
+      "bytes": 19616,
+      "sha256": "69037d61a0ed30fffd25be5817c50d32623c3134dfb07eda499f1c9cd25cae0f",
+      "segments": [
+        "Body",
+        "Hub",
+        "Spokes"
+      ],
+      "bounds": [
+        [
+          -1.6906872221260645,
+          -1.6906872221260647,
+          -0.37
+        ],
+        [
+          1.6906872221260645,
+          1.6906872221260647,
+          0.37
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "IceBlock": {
+      "status": "PASS",
+      "triangles": 232,
+      "vertices": 128,
+      "closedComponents": true,
+      "components": 6,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0003897114317029893,
+      "glb": "assets/props/canonical-course/IceBlock/IceBlock.glb",
+      "rig": "assets/props/canonical-course/IceBlock/IceBlock-rig.json",
+      "bytes": 9216,
+      "sha256": "fdf3fa1504f30546ef3dcd5d150b09acc0575bf4cde78269f5276434578fc1d7",
+      "segments": [
+        "Body",
+        "Frost",
+        "Cracks"
+      ],
+      "bounds": [
+        [
+          -1.9,
+          -0.7608253175473054,
+          -1.6153445182314945
+        ],
+        [
+          1.9,
+          0.7608253175473054,
+          1.6153445182314945
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Icicle": {
+      "status": "PASS",
+      "triangles": 62,
+      "vertices": 41,
+      "closedComponents": true,
+      "components": 5,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.04988306325798365,
+      "glb": "assets/props/canonical-course/Icicle/Icicle.glb",
+      "rig": "assets/props/canonical-course/Icicle/Icicle-rig.json",
+      "bytes": 4492,
+      "sha256": "b799cbc1ff569df6bc94f96e1dfebabdcc7e11f9e6a8d0de554dd4e8e414abf8",
+      "segments": [
+        "Body",
+        "Crown"
+      ],
+      "bounds": [
+        [
+          -0.7237259549488559,
+          -1.4114627108062487,
+          -0.6823369137986398
+        ],
+        [
+          0.7237259549488559,
+          1.4114627108062487,
+          0.6823369137986398
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Lift": {
+      "status": "PASS",
+      "triangles": 352,
+      "vertices": 198,
+      "closedComponents": true,
+      "components": 11,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.005668839514397975,
+      "glb": "assets/props/canonical-course/Lift/Lift.glb",
+      "rig": "assets/props/canonical-course/Lift/Lift-rig.json",
+      "bytes": 12956,
+      "sha256": "7b055e73285f400bb1a657d7d3b1ec2544ed8d755e945acebb74afb5d5db45c4",
+      "segments": [
+        "Body",
+        "Deck",
+        "Brackets",
+        "EdgeMarks"
+      ],
+      "bounds": [
+        [
+          -2.3,
+          -0.7259729563877753,
+          -1.65
+        ],
+        [
+          2.3,
+          0.7259729563877754,
+          1.65
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Log": {
+      "status": "PASS",
+      "triangles": 2128,
+      "vertices": 1092,
+      "closedComponents": true,
+      "components": 20,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00041915629543166954,
+      "glb": "assets/props/canonical-course/Log/Log.glb",
+      "rig": "assets/props/canonical-course/Log/Log-rig.json",
+      "bytes": 52444,
+      "sha256": "a1f11a9e18f25f2d41a98b294895d2b7bfde91567be8390a7fdf26dddbb13bce",
+      "segments": [
+        "Body",
+        "EndGrain",
+        "Bark",
+        "Branch"
+      ],
+      "bounds": [
+        [
+          -0.963665631459995,
+          -0.7803244396316783,
+          -2.389052558883258
+        ],
+        [
+          0.963665631459995,
+          0.7803244396316783,
+          2.389052558883258
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Mine": {
+      "status": "PASS",
+      "triangles": 2308,
+      "vertices": 1198,
+      "closedComponents": true,
+      "components": 23,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0020805148456735523,
+      "glb": "assets/props/canonical-course/Mine/Mine.glb",
+      "rig": "assets/props/canonical-course/Mine/Mine-rig.json",
+      "bytes": 56572,
+      "sha256": "7f6d7a02694b1615799d6883ca2c1c6306f761b072e3480de88cfb4692c30957",
+      "segments": [
+        "Body",
+        "Prongs",
+        "Plate",
+        "ArmingStud"
+      ],
+      "bounds": [
+        [
+          -1.51,
+          -0.81,
+          -1.5016796077701762
+        ],
+        [
+          1.51,
+          0.81,
+          1.5016796077701762
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "MovingIcePlatform": {
+      "status": "PASS",
+      "triangles": 576,
+      "vertices": 328,
+      "closedComponents": true,
+      "components": 20,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00038971143170299496,
+      "glb": "assets/props/canonical-course/MovingIcePlatform/MovingIcePlatform.glb",
+      "rig": "assets/props/canonical-course/MovingIcePlatform/MovingIcePlatform-rig.json",
+      "bytes": 19640,
+      "sha256": "ccbaab311869e5b5e1331c3871c582568f58ad7895379d7db676aef49c29fdd9",
+      "segments": [
+        "Body",
+        "Frost",
+        "Cracks",
+        "Runner",
+        "HangingIce"
+      ],
+      "bounds": [
+        [
+          -1.9,
+          -0.9983253175473056,
+          -2.1653445182314943
+        ],
+        [
+          1.9,
+          0.9983253175473056,
+          2.1653445182314943
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Ramp": {
+      "status": "PASS",
+      "triangles": 248,
+      "vertices": 140,
+      "closedComponents": true,
+      "components": 8,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.001431891231902755,
+      "glb": "assets/props/canonical-course/Ramp/Ramp.glb",
+      "rig": "assets/props/canonical-course/Ramp/Ramp-rig.json",
+      "bytes": 9624,
+      "sha256": "c5dac199730441be7f50c93244b223f892c9f7fc1e656d51c82b50fdc8d5bb42",
+      "segments": [
+        "Body",
+        "Rails",
+        "Grip"
+      ],
+      "bounds": [
+        [
+          -2.0,
+          -0.680973369024904,
+          -2.4
+        ],
+        [
+          2.0,
+          0.680973369024904,
+          2.4
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Rocket": {
+      "status": "PASS",
+      "triangles": 952,
+      "vertices": 490,
+      "closedComponents": true,
+      "components": 9,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.004491509843845009,
+      "glb": "assets/props/canonical-course/Rocket/Rocket.glb",
+      "rig": "assets/props/canonical-course/Rocket/Rocket-rig.json",
+      "bytes": 26656,
+      "sha256": "c789cb4225335680b3b82cb7f98398b05af1a7e7aa89cd9ca0482fdbaeb634c0",
+      "segments": [
+        "Body",
+        "Nose",
+        "Fins",
+        "Nozzle",
+        "Band"
+      ],
+      "bounds": [
+        [
+          -0.96,
+          -0.96,
+          -1.9659807621135332
+        ],
+        [
+          0.96,
+          0.96,
+          1.9659807621135332
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "RocketLauncher": {
+      "status": "PASS",
+      "triangles": 672,
+      "vertices": 352,
+      "closedComponents": true,
+      "components": 10,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00524626921703412,
+      "glb": "assets/props/canonical-course/RocketLauncher/RocketLauncher.glb",
+      "rig": "assets/props/canonical-course/RocketLauncher/RocketLauncher-rig.json",
+      "bytes": 20920,
+      "sha256": "b0be1a12924246efcbbb46c2335e7293af162e6d7869b2abd3e15527be94f1bd",
+      "segments": [
+        "Body",
+        "Barrel",
+        "Muzzle",
+        "Stand",
+        "Breech"
+      ],
+      "bounds": [
+        [
+          -1.275,
+          -0.96,
+          -1.6799519052838328
+        ],
+        [
+          1.275,
+          0.96,
+          1.6799519052838328
+        ]
+      ],
+      "sourceStatus": "invisible-source-spawner-adaptation"
+    },
+    "Rope": {
+      "status": "PASS",
+      "triangles": 3680,
+      "vertices": 1850,
+      "closedComponents": true,
+      "components": 7,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0014318912319027529,
+      "glb": "assets/props/canonical-course/Rope/Rope.glb",
+      "rig": "assets/props/canonical-course/Rope/Rope-rig.json",
+      "bytes": 84920,
+      "sha256": "8e1b61104773654d1613aa0932ff92a00413147950041e90b21510d175fa93f6",
+      "segments": [
+        "Body",
+        "Twist",
+        "Knots"
+      ],
+      "bounds": [
+        [
+          -0.26,
+          -0.2534812571672742,
+          -3.0521690426072245
+        ],
+        [
+          0.26,
+          0.2534812571672742,
+          3.0521690426072245
+        ]
+      ],
+      "sourceStatus": "procedural-source-components"
+    },
+    "RotatingSpike": {
+      "status": "PASS",
+      "triangles": 624,
+      "vertices": 332,
+      "closedComponents": true,
+      "components": 11,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.004669546934508312,
+      "glb": "assets/props/canonical-course/RotatingSpike/RotatingSpike.glb",
+      "rig": "assets/props/canonical-course/RotatingSpike/RotatingSpike-rig.json",
+      "bytes": 17720,
+      "sha256": "670f408ca02e750e87da02cc7be78cea139f62a11f1b36fbc3b2729c87aef229",
+      "segments": [
+        "Body",
+        "Teeth",
+        "Axle"
+      ],
+      "bounds": [
+        [
+          -1.65,
+          -0.59,
+          -1.65
+        ],
+        [
+          1.65,
+          0.59,
+          1.65
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Snowball": {
+      "status": "PASS",
+      "triangles": 872,
+      "vertices": 444,
+      "closedComponents": true,
+      "components": 4,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0005412658773652733,
+      "glb": "assets/props/canonical-course/Snowball/Snowball.glb",
+      "rig": "assets/props/canonical-course/Snowball/Snowball-rig.json",
+      "bytes": 22108,
+      "sha256": "8075301af79c4264f949e9fbebda0333b6ef256efeb490c1a54347d6919aa43e",
+      "segments": [
+        "Body",
+        "PackedRidges"
+      ],
+      "bounds": [
+        [
+          -1.05,
+          -0.99,
+          -1.04
+        ],
+        [
+          1.05,
+          0.99,
+          1.04
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Spike": {
+      "status": "PASS",
+      "triangles": 676,
+      "vertices": 356,
+      "closedComponents": true,
+      "components": 10,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0005412658773652739,
+      "glb": "assets/props/canonical-course/Spike/Spike.glb",
+      "rig": "assets/props/canonical-course/Spike/Spike-rig.json",
+      "bytes": 19020,
+      "sha256": "df0dd378dbd09a01424a89b8f2ef4d3b13307aa768d540a017a0c9bb2656332d",
+      "segments": [
+        "Body",
+        "Socket",
+        "Edge"
+      ],
+      "bounds": [
+        [
+          -1.05,
+          -1.095,
+          -1.05
+        ],
+        [
+          1.05,
+          1.095,
+          1.05
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Spring": {
+      "status": "PASS",
+      "triangles": 1360,
+      "vertices": 694,
+      "closedComponents": true,
+      "components": 7,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0008662058069535185,
+      "glb": "assets/props/canonical-course/Spring/Spring.glb",
+      "rig": "assets/props/canonical-course/Spring/Spring-rig.json",
+      "bytes": 34960,
+      "sha256": "b40fe8c35855df302fb45ed2820bf40689dd721bbd6e957ec15c96b37a33c73f",
+      "segments": [
+        "Body",
+        "Coil",
+        "Deck",
+        "Grip"
+      ],
+      "bounds": [
+        [
+          -1.175,
+          -1.2125,
+          -1.175
+        ],
+        [
+          1.175,
+          1.2125,
+          1.175
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Telegraph": {
+      "status": "PASS",
+      "triangles": 720,
+      "vertices": 380,
+      "closedComponents": true,
+      "components": 11,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0017537014426634878,
+      "glb": "assets/props/canonical-course/Telegraph/Telegraph.glb",
+      "rig": "assets/props/canonical-course/Telegraph/Telegraph-rig.json",
+      "bytes": 19972,
+      "sha256": "7a105cd59da862ac55857a847d91168ea1a5527ae16caa4b2197ead4ff00f7a8",
+      "segments": [
+        "Body",
+        "Segments",
+        "Centre"
+      ],
+      "bounds": [
+        [
+          -1.6949999999999998,
+          -0.06131569860407206,
+          -1.6949999999999998
+        ],
+        [
+          1.6949999999999998,
+          0.06131569860407206,
+          1.6949999999999998
+        ]
+      ],
+      "sourceStatus": "authored-system-marker"
+    },
+    "Tower": {
+      "status": "PASS",
+      "triangles": 7200,
+      "vertices": 3792,
+      "closedComponents": true,
+      "components": 99,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.027128676495253433,
+      "glb": "assets/props/canonical-course/Tower/Tower.glb",
+      "rig": "assets/props/canonical-course/Tower/Tower-rig.json",
+      "bytes": 169124,
+      "sha256": "eeeb81472021b57d5297577e79a114ed44db1fb5572c4251e1b639d9d2fdf9a6",
+      "segments": [
+        "Body",
+        "PurpleBricks",
+        "MagentaBricks",
+        "Rims"
+      ],
+      "bounds": [
+        [
+          -3.509431395352574,
+          -8.0,
+          -3.509431395352574
+        ],
+        [
+          3.509431395352574,
+          8.0,
+          3.509431395352574
+        ]
+      ],
+      "sourceStatus": "source-background-adaptation"
+    },
+    "TowerPlatform": {
+      "status": "PASS",
+      "triangles": 384,
+      "vertices": 216,
+      "closedComponents": true,
+      "components": 12,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.004186074533497928,
+      "glb": "assets/props/canonical-course/TowerPlatform/TowerPlatform.glb",
+      "rig": "assets/props/canonical-course/TowerPlatform/TowerPlatform-rig.json",
+      "bytes": 13720,
+      "sha256": "6ea77110846f678f809fe24bae3b6db5b9d4c77812353b623b5aee52e40f2476",
+      "segments": [
+        "Body",
+        "Deck",
+        "Brackets",
+        "EdgeMarks"
+      ],
+      "bounds": [
+        [
+          -2.8,
+          -0.82375,
+          -1.3
+        ],
+        [
+          2.8,
+          0.82375,
+          1.3
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Warning": {
+      "status": "PASS",
+      "triangles": 252,
+      "vertices": 138,
+      "closedComponents": true,
+      "components": 6,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0020207340683082707,
+      "glb": "assets/props/canonical-course/Warning/Warning.glb",
+      "rig": "assets/props/canonical-course/Warning/Warning-rig.json",
+      "bytes": 9588,
+      "sha256": "9f1a5da39674c8ad55b8e02b76bcf7567f01f24f295b74f3e77060ef7e23e5cb",
+      "segments": [
+        "Body",
+        "Border",
+        "Symbol"
+      ],
+      "bounds": [
+        [
+          -1.52,
+          -0.10250000000000001,
+          -1.31
+        ],
+        [
+          1.52,
+          0.10250000000000001,
+          1.31
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    },
+    "Water": {
+      "status": "PASS",
+      "triangles": 1280,
+      "vertices": 654,
+      "closedComponents": true,
+      "components": 7,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.001909188309203674,
+      "glb": "assets/props/canonical-course/Water/Water.glb",
+      "rig": "assets/props/canonical-course/Water/Water-rig.json",
+      "bytes": 32292,
+      "sha256": "43349b20eefea40a11ff21dcb6c367200a0331be0d9876341fe94d6befbac7d3",
+      "segments": [
+        "Body",
+        "NearWaves",
+        "FarWaves"
+      ],
+      "bounds": [
+        [
+          -2.0,
+          -0.18499197493025257,
+          -2.0
+        ],
+        [
+          2.0,
+          0.18499197493025257,
+          2.0
+        ]
+      ],
+      "sourceStatus": "source-background-adaptation"
+    },
+    "Whirlpool": {
+      "status": "PASS",
+      "triangles": 2536,
+      "vertices": 1274,
+      "closedComponents": true,
+      "components": 4,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0008727353452115121,
+      "glb": "assets/props/canonical-course/Whirlpool/Whirlpool.glb",
+      "rig": "assets/props/canonical-course/Whirlpool/Whirlpool-rig.json",
+      "bytes": 60504,
+      "sha256": "6260ec0c008db74d4537a3b0b6665788e79911705e8549ff86008e80a316ffc4",
+      "segments": [
+        "Body",
+        "OuterFoam",
+        "Spiral",
+        "Eye"
+      ],
+      "bounds": [
+        [
+          -2.0,
+          -0.2631692628127138,
+          -2.0
+        ],
+        [
+          2.0,
+          0.2631692628127138,
+          2.0
+        ]
+      ],
+      "sourceStatus": "source-object-metasprite"
+    }
+  }
+}

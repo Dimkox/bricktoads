@@ -1,0 +1,257 @@
+{
+  "schema": 1,
+  "kind": "Telegraph",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Authored temporary boss danger footprint with DODGE prompt; a clear luminous ring/sector is suitable for its circular runtime radius.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.6949999999999998,
+      -0.06131569860407206,
+      -1.6949999999999998
+    ],
+    [
+      1.6949999999999998,
+      0.06131569860407206,
+      1.6949999999999998
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Telegraph",
+    "sourceEvidence": [
+      {
+        "statement": "This runtime marker is introduced by Roblox gameplay code. No exact NES object type, CHR frame or palette identity is claimed.",
+        "runtimeRefs": [
+          {
+            "localFile": "src/server/gameplay/CampaignWorld.lua",
+            "lines": [
+              284
+            ]
+          },
+          {
+            "localFile": "src/server/gameplay/GameWorld.lua",
+            "lines": [
+              780
+            ]
+          }
+        ]
+      }
+    ],
+    "status": "authored-system-marker",
+    "sourceRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignWorld.lua",
+        "lines": [
+          284
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/GameWorld.lua",
+        "lines": [
+          780
+        ]
+      }
+    ],
+    "sourceTypes": [],
+    "graphicsFrameIds": [],
+    "palette": null,
+    "rgbColors": [],
+    "frames": [],
+    "appearanceCues": [
+      "Authored temporary boss danger footprint with DODGE prompt; a clear luminous ring/sector is suitable for its circular runtime radius."
+    ],
+    "runtimeRole": "temporary boss danger footprint",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Typography, ring/pad silhouette, glow and colors are authored gameplay communication, not transferred source actor graphics."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignWorld.lua",
+        "lines": [
+          284
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/GameWorld.lua",
+        "lines": [
+          780
+        ]
+      }
+    ]
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.013684301395927936,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.6949999999999998,
+          -0.04763139720814412,
+          -1.6949999999999998
+        ],
+        [
+          1.6949999999999998,
+          0.04763139720814413,
+          1.6949999999999998
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.6949999999999998,
+          -0.06131569860407206,
+          -1.6949999999999998
+        ],
+        [
+          1.6949999999999998,
+          0.033947095812216194,
+          1.6949999999999998
+        ]
+      ],
+      "vertices": 240,
+      "authoringVertices": 240,
+      "paletteSplitTriangles": 0,
+      "triangles": 480,
+      "role": "Marker"
+    },
+    {
+      "name": "Segments",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.013684301395927936,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.4,
+          -0.035,
+          -1.4
+        ],
+        [
+          1.4,
+          0.075,
+          1.4
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.4,
+          -0.04868430139592794,
+          -1.4
+        ],
+        [
+          1.4,
+          0.06131569860407206,
+          1.4
+        ]
+      ],
+      "vertices": 112,
+      "authoringVertices": 112,
+      "paletteSplitTriangles": 0,
+      "triangles": 192,
+      "role": "Pattern"
+    },
+    {
+      "name": "Centre",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.013684301395927936,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.32,
+          -0.024999999999999998,
+          -0.32
+        ],
+        [
+          0.32,
+          0.065,
+          0.32
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.32,
+          -0.038684301395927934,
+          -0.32
+        ],
+        [
+          0.32,
+          0.05131569860407206,
+          0.32
+        ]
+      ],
+      "vertices": 28,
+      "authoringVertices": 28,
+      "paletteSplitTriangles": 0,
+      "triangles": 48,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 720,
+    "vertices": 380,
+    "closedComponents": true,
+    "components": 11,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0017537014426634878
+  }
+}

@@ -28,10 +28,11 @@ local combatFeedback = CombatFeedback.new()
 local gameAudio = GameAudio.new()
 local castAssetVisibility = CastAssetVisibility.new()
 local courseAssetVisibility = CastAssetVisibility.new(nil, 'Course')
+local coursePropVisibility = CastAssetVisibility.new(nil, 'Prop')
 local soundMuted, musicMuted = false, false
 local audioOpen = false
 gameAudio:setReducedFlash(true)
-script.Destroying:Connect(function() gameAudio:destroy(); castAssetVisibility:destroy(); courseAssetVisibility:destroy() end)
+script.Destroying:Connect(function() gameAudio:destroy(); castAssetVisibility:destroy(); courseAssetVisibility:destroy(); coursePropVisibility:destroy() end)
 local movementInput = MovementInput.new()
 local gameplayBindings
 local windowFocused = true

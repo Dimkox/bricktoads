@@ -8,6 +8,9 @@ local CONTRACTS={
     Course={tag='BrickToadsCourseSkin',skin='CanonicalCourseSkin',id='CourseSkinId',
         owner='CourseAppearance',profile='CanonicalCourseVehicle',alpha='CourseVisibleTransparency',
         reference='CourseFallbackTarget',backlink='CourseFallbackOwner',fallbackAlpha='CourseFallbackTransparency'},
+    Prop={tag='BrickToadsCoursePropSkin',skin='CanonicalCoursePropSkin',id='CoursePropSkinId',
+        owner='CoursePropAppearance',profile='CanonicalCourseProp',alpha='CoursePropVisibleTransparency',
+        reference='CoursePropFallbackTarget',backlink='CoursePropFallbackOwner',fallbackAlpha='CoursePropFallbackTransparency'},
 }
 local RETRY_DELAYS={1,3,10}
 local function finite(v)return type(v)=='number' and v==v and v>=0 and v<=1 end

@@ -1,0 +1,520 @@
+{
+  "schema": 1,
+  "kind": "Gear",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Gray/black toothed circular wheel; source renders two linked mirrored half-wheel sprites.', 'Two frames shift the teeth around the circumference.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.6906872221260645,
+      -1.6906872221260647,
+      -0.37
+    ],
+    [
+      1.6906872221260645,
+      1.6906872221260647,
+      0.37
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Gear",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "11626-11730"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "11626-11730",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L11626-L11730"
+      }
+    ],
+    "sourceTypes": [
+      "6B"
+    ],
+    "graphicsFrameIds": [
+      "D0",
+      "D1"
+    ],
+    "palette": {
+      "typeId": 107,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:240",
+      "trigger": [
+        1,
+        228
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        0,
+        16
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:229",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            0,
+            16
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        152,
+        150,
+        152
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 208,
+        "frameHex": "D0",
+        "namespace": "object",
+        "metaspriteAddress": "C0AC",
+        "parts": [
+          {
+            "tile": 82,
+            "x": -15,
+            "y": -16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 83,
+            "x": -7,
+            "y": -16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 84,
+            "x": -22,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 85,
+            "x": -14,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 86,
+            "x": -23,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 82,
+            "x": -15,
+            "y": 24,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 83,
+            "x": -7,
+            "y": 24,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 84,
+            "x": -22,
+            "y": 16,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 85,
+            "x": -14,
+            "y": 16,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 86,
+            "x": -23,
+            "y": 8,
+            "attributes": 131,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -23,
+          "minY": -16,
+          "maxX": 0,
+          "maxY": 31
+        },
+        "width": 24,
+        "height": 48,
+        "png": "frames/gear-d0.png"
+      },
+      {
+        "frameId": 209,
+        "frameHex": "D1",
+        "namespace": "object",
+        "metaspriteAddress": "C0D8",
+        "parts": [
+          {
+            "tile": 87,
+            "x": -15,
+            "y": -16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 88,
+            "x": -7,
+            "y": -16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 89,
+            "x": -22,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 90,
+            "x": -14,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 91,
+            "x": -23,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 87,
+            "x": -15,
+            "y": 24,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 88,
+            "x": -7,
+            "y": 24,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 89,
+            "x": -22,
+            "y": 16,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 90,
+            "x": -14,
+            "y": 16,
+            "attributes": 131,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 91,
+            "x": -23,
+            "y": 8,
+            "attributes": 131,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -23,
+          "minY": -16,
+          "maxX": 0,
+          "maxY": 31
+        },
+        "width": 24,
+        "height": 48,
+        "png": "frames/gear-d1.png"
+      }
+    ],
+    "appearanceCues": [
+      "Gray/black toothed circular wheel; source renders two linked mirrored half-wheel sprites.",
+      "Two frames shift the teeth around the circumference."
+    ],
+    "runtimeRole": "moving course hazard",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "D0/D1 each depict half a wheel; source spawns a second linked object with flags40 to mirror the other half (main.asm:11583-11589,11626-11636)."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          159
+        ]
+      }
+    ],
+    "sourceHandler": "object_shesterenka",
+    "bankRecipe": "Tubes",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 8,
+        "decodedCompleteTiles": 8,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/byte_85AA.1",
+        "firstTile": 41,
+        "tiles": 1,
+        "decodedCompleteTiles": 1,
+        "unknownTailBytes": 0,
+        "compression": 1
+      },
+      {
+        "file": "gfx/terratubes_obj.4",
+        "firstTile": 42,
+        "tiles": 195,
+        "decodedCompleteTiles": 195,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "gear-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        152,
+        150,
+        152
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.6906872221260645,
+          -1.6906872221260647,
+          -0.21
+        ],
+        [
+          1.6906872221260645,
+          1.6906872221260647,
+          0.21
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.6906872221260645,
+          -1.6906872221260647,
+          -0.21
+        ],
+        [
+          1.6906872221260645,
+          1.6906872221260647,
+          0.21
+        ]
+      ],
+      "vertices": 194,
+      "authoringVertices": 194,
+      "paletteSplitTriangles": 0,
+      "triangles": 384,
+      "role": "Teeth"
+    },
+    {
+      "name": "Hub",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.52,
+          -0.52,
+          -0.37
+        ],
+        [
+          0.52,
+          0.52,
+          0.37
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.52,
+          -0.52,
+          -0.37
+        ],
+        [
+          0.52,
+          0.52,
+          0.37
+        ]
+      ],
+      "vertices": 68,
+      "authoringVertices": 68,
+      "paletteSplitTriangles": 0,
+      "triangles": 128,
+      "role": "Hub"
+    },
+    {
+      "name": "Spokes",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.18,
+          -1.0719099764656377,
+          0.127
+        ],
+        [
+          1.18,
+          1.0719099764656375,
+          0.327
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.18,
+          -1.0719099764656377,
+          0.127
+        ],
+        [
+          1.18,
+          1.0719099764656375,
+          0.327
+        ]
+      ],
+      "vertices": 108,
+      "authoringVertices": 108,
+      "paletteSplitTriangles": 0,
+      "triangles": 192,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        152,
+        150,
+        152
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 704,
+    "vertices": 370,
+    "closedComponents": true,
+    "components": 9,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.007071067811865466
+  }
+}

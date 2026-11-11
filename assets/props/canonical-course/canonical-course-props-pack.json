@@ -1,0 +1,5170 @@
+{
+  "schema": 1,
+  "glb": "canonical-course-props.glb",
+  "sha256": "a5fc292cb0a58f82aee5b6d9bb16e3cfd3636ef3779ba99b424a661db8590157",
+  "bytes": 991060,
+  "familyCount": 28,
+  "meshCount": 98,
+  "triangles": 39210,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "meshNames": [
+    "AirMine__Body",
+    "AirMine__Sensors",
+    "AirMine__Cap",
+    "BoardingPad__Body",
+    "BoardingPad__Rim",
+    "BoardingPad__Target",
+    "Bomb__Body",
+    "Bomb__LeftCanister",
+    "Bomb__RightCanister",
+    "Bomb__Strap",
+    "Bomb__Emblem",
+    "Buzzball__Body",
+    "Buzzball__Ribbon",
+    "ElectricTrap__Body",
+    "ElectricTrap__Emitters",
+    "ElectricTrap__Arc",
+    "Fan__Body",
+    "Fan__Rotor",
+    "Fan__Grille",
+    "Fan__Bracket",
+    "Gas__Body",
+    "Gas__UpperCloud",
+    "Gas__TrailingCloud",
+    "Gas__Contours",
+    "Gear__Body",
+    "Gear__Hub",
+    "Gear__Spokes",
+    "IceBlock__Body",
+    "IceBlock__Frost",
+    "IceBlock__Cracks",
+    "Icicle__Body",
+    "Icicle__Crown",
+    "Lift__Body",
+    "Lift__Deck",
+    "Lift__Brackets",
+    "Lift__EdgeMarks",
+    "Log__Body",
+    "Log__EndGrain",
+    "Log__Bark",
+    "Log__Branch",
+    "Mine__Body",
+    "Mine__Prongs",
+    "Mine__Plate",
+    "Mine__ArmingStud",
+    "MovingIcePlatform__Body",
+    "MovingIcePlatform__Frost",
+    "MovingIcePlatform__Cracks",
+    "MovingIcePlatform__Runner",
+    "MovingIcePlatform__HangingIce",
+    "Ramp__Body",
+    "Ramp__Rails",
+    "Ramp__Grip",
+    "Rocket__Body",
+    "Rocket__Nose",
+    "Rocket__Fins",
+    "Rocket__Nozzle",
+    "Rocket__Band",
+    "RocketLauncher__Body",
+    "RocketLauncher__Barrel",
+    "RocketLauncher__Muzzle",
+    "RocketLauncher__Stand",
+    "RocketLauncher__Breech",
+    "Rope__Body",
+    "Rope__Twist",
+    "Rope__Knots",
+    "RotatingSpike__Body",
+    "RotatingSpike__Teeth",
+    "RotatingSpike__Axle",
+    "Snowball__Body",
+    "Snowball__PackedRidges",
+    "Spike__Body",
+    "Spike__Socket",
+    "Spike__Edge",
+    "Spring__Body",
+    "Spring__Coil",
+    "Spring__Deck",
+    "Spring__Grip",
+    "Telegraph__Body",
+    "Telegraph__Segments",
+    "Telegraph__Centre",
+    "Tower__Body",
+    "Tower__PurpleBricks",
+    "Tower__MagentaBricks",
+    "Tower__Rims",
+    "TowerPlatform__Body",
+    "TowerPlatform__Deck",
+    "TowerPlatform__Brackets",
+    "TowerPlatform__EdgeMarks",
+    "Warning__Body",
+    "Warning__Border",
+    "Warning__Symbol",
+    "Water__Body",
+    "Water__NearWaves",
+    "Water__FarWaves",
+    "Whirlpool__Body",
+    "Whirlpool__OuterFoam",
+    "Whirlpool__Spiral",
+    "Whirlpool__Eye"
+  ],
+  "templates": {
+    "AirMine": {
+      "referenceSize": [
+        3.18,
+        2.14,
+        2.77947
+      ],
+      "referenceSizeStuds": [
+        3.18,
+        2.14,
+        2.77947
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "TileZ",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "tileReferenceSizeStuds": [
+        3.18,
+        2.14,
+        2.77947
+      ],
+      "maxStretchRatio": 1.45,
+      "tileGapStuds": 0.25,
+      "globalBoundsStuds": [
+        [
+          -1.5899999999999999,
+          -1.0699999999999998,
+          -1.3897350588938644
+        ],
+        [
+          1.5899999999999999,
+          1.0699999999999998,
+          1.3897350588938644
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "authored-adaptation-unproved-source-identity",
+      "parts": [
+        {
+          "importedName": "AirMine__Body",
+          "name": "Body",
+          "role": "Casing",
+          "globalPivotStuds": [
+            0.0,
+            -0.24999999999999994,
+            -1.1102230246251565e-16
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.13,
+              -1.0699999999999998,
+              -1.13
+            ],
+            [
+              1.13,
+              0.5700000000000001,
+              1.13
+            ]
+          ],
+          "sizeStuds": [
+            2.26,
+            1.64,
+            2.26
+          ],
+          "centerStuds": [
+            0.0,
+            -0.25,
+            0.0
+          ],
+          "triangles": 728
+        },
+        {
+          "importedName": "AirMine__Sensors",
+          "name": "Sensors",
+          "role": "Prongs",
+          "globalPivotStuds": [
+            0.0,
+            -0.24999999999999994,
+            -1.1102230246251565e-16
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.5899999999999999,
+              -0.30702845693287795,
+              -1.3897350588938644
+            ],
+            [
+              1.5899999999999999,
+              5.551115123125783e-17,
+              1.3897350588938644
+            ]
+          ],
+          "sizeStuds": [
+            3.18,
+            0.3070285,
+            2.7794701
+          ],
+          "centerStuds": [
+            0.0,
+            -0.1535142,
+            0.0
+          ],
+          "triangles": 792
+        },
+        {
+          "importedName": "AirMine__Cap",
+          "name": "Cap",
+          "role": "Beacon",
+          "globalPivotStuds": [
+            0.0,
+            -0.24999999999999994,
+            -1.1102230246251565e-16
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.24,
+              0.4300000000000001,
+              -0.2400000000000001
+            ],
+            [
+              0.24,
+              1.0699999999999998,
+              0.23999999999999988
+            ]
+          ],
+          "sizeStuds": [
+            0.48,
+            0.64,
+            0.48
+          ],
+          "centerStuds": [
+            0.0,
+            0.75,
+            -0.0
+          ],
+          "triangles": 200
+        }
+      ]
+    },
+    "BoardingPad": {
+      "referenceSize": [
+        4.0,
+        0.493923,
+        4.0
+      ],
+      "referenceSizeStuds": [
+        4.0,
+        0.493923,
+        4.0
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.2469615242270663,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -2.0,
+          -0.24696152422706633,
+          -2.0
+        ],
+        [
+          2.0,
+          0.2469615242270663,
+          2.0
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "authored-system-marker",
+      "parts": [
+        {
+          "importedName": "BoardingPad__Body",
+          "name": "Body",
+          "role": "Deck",
+          "globalPivotStuds": [
+            0.0,
+            0.13303847577293368,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.0,
+              -0.24696152422706633,
+              -2.0
+            ],
+            [
+              2.0,
+              0.13303847577293368,
+              2.0
+            ]
+          ],
+          "sizeStuds": [
+            4.0,
+            0.38,
+            4.0
+          ],
+          "centerStuds": [
+            0.0,
+            -0.0569615,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "BoardingPad__Rim",
+          "name": "Rim",
+          "role": "Edge",
+          "globalPivotStuds": [
+            0.0,
+            0.13303847577293368,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.7999999999999998,
+              0.03911542731880105,
+              -1.7999999999999998
+            ],
+            [
+              1.7999999999999998,
+              0.2469615242270663,
+              1.7999999999999998
+            ]
+          ],
+          "sizeStuds": [
+            3.6,
+            0.2078461,
+            3.6
+          ],
+          "centerStuds": [
+            0.0,
+            0.1430385,
+            0.0
+          ],
+          "triangles": 384
+        },
+        {
+          "importedName": "BoardingPad__Target",
+          "name": "Target",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            0.13303847577293368,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.4,
+              0.12806733260263395,
+              -1.4
+            ],
+            [
+              1.4,
+              0.2060096189432334,
+              1.4
+            ]
+          ],
+          "sizeStuds": [
+            2.8,
+            0.0779423,
+            2.8
+          ],
+          "centerStuds": [
+            0.0,
+            0.1670385,
+            0.0
+          ],
+          "triangles": 432
+        }
+      ]
+    },
+    "Bomb": {
+      "referenceSize": [
+        1.82,
+        2.1,
+        1.69
+      ],
+      "referenceSizeStuds": [
+        1.82,
+        2.1,
+        1.69
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "TileZ",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "tileReferenceSizeStuds": [
+        1.82,
+        2.1,
+        1.69
+      ],
+      "maxStretchRatio": 1.45,
+      "tileGapStuds": 0.25,
+      "globalBoundsStuds": [
+        [
+          -0.9099999999999999,
+          -1.05,
+          -0.845
+        ],
+        [
+          0.9099999999999999,
+          1.05,
+          0.845
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Bomb__Body",
+          "name": "Body",
+          "role": "Casing",
+          "globalPivotStuds": [
+            0.0,
+            -0.2,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.43,
+              -1.05,
+              -0.28997116487272956
+            ],
+            [
+              0.43,
+              0.36000000000000004,
+              0.4899711648727295
+            ]
+          ],
+          "sizeStuds": [
+            0.86,
+            1.41,
+            0.7799423
+          ],
+          "centerStuds": [
+            0.0,
+            -0.345,
+            0.1
+          ],
+          "triangles": 56
+        },
+        {
+          "importedName": "Bomb__LeftCanister",
+          "name": "LeftCanister",
+          "role": "Casing",
+          "globalPivotStuds": [
+            0.0,
+            -0.2,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.9099999999999999,
+              -1.05,
+              -0.34
+            ],
+            [
+              -0.33,
+              0.96,
+              0.34
+            ]
+          ],
+          "sizeStuds": [
+            0.58,
+            2.01,
+            0.68
+          ],
+          "centerStuds": [
+            -0.62,
+            -0.045,
+            0.0
+          ],
+          "triangles": 312
+        },
+        {
+          "importedName": "Bomb__RightCanister",
+          "name": "RightCanister",
+          "role": "Casing",
+          "globalPivotStuds": [
+            0.0,
+            -0.2,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              0.33,
+              -1.05,
+              -0.34
+            ],
+            [
+              0.9099999999999999,
+              0.96,
+              0.34
+            ]
+          ],
+          "sizeStuds": [
+            0.58,
+            2.01,
+            0.68
+          ],
+          "centerStuds": [
+            0.62,
+            -0.045,
+            0.0
+          ],
+          "triangles": 312
+        },
+        {
+          "importedName": "Bomb__Strap",
+          "name": "Strap",
+          "role": "Band",
+          "globalPivotStuds": [
+            0.0,
+            -0.2,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.845,
+              -0.51,
+              -0.845
+            ],
+            [
+              0.845,
+              0.27,
+              0.845
+            ]
+          ],
+          "sizeStuds": [
+            1.69,
+            0.78,
+            1.69
+          ],
+          "centerStuds": [
+            0.0,
+            -0.12,
+            0.0
+          ],
+          "triangles": 320
+        },
+        {
+          "importedName": "Bomb__Emblem",
+          "name": "Emblem",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.2,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.5,
+              -0.32,
+              -0.4975
+            ],
+            [
+              0.5,
+              1.05,
+              0.19021130325903074
+            ]
+          ],
+          "sizeStuds": [
+            1.0,
+            1.37,
+            0.6877113
+          ],
+          "centerStuds": [
+            0.0,
+            0.365,
+            -0.1536443
+          ],
+          "triangles": 224
+        }
+      ]
+    },
+    "Buzzball": {
+      "referenceSize": [
+        2.75,
+        2.75,
+        2.830718
+      ],
+      "referenceSizeStuds": [
+        2.75,
+        2.75,
+        2.830718
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "spinAxis": [
+        0,
+        0,
+        1
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.375,
+          -1.375,
+          -1.4153588867618807
+        ],
+        [
+          1.375,
+          1.375,
+          1.4153588867618807
+        ]
+      ],
+      "motionParts": {
+        "Body": {
+          "kind": "SpinZ",
+          "pivot": [
+            0.0,
+            0.0,
+            0.04035888676188071
+          ],
+          "speed": 1.0
+        },
+        "Ribbon": {
+          "kind": "SpinZ",
+          "pivot": [
+            0.0,
+            0.0,
+            0.04035888676188071
+          ],
+          "speed": 1.0
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Buzzball__Body",
+          "name": "Body",
+          "role": "Casing",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.04035888676188071
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.375,
+              -1.375,
+              -1.3346411132381193
+            ],
+            [
+              1.375,
+              1.375,
+              1.4153588867618807
+            ]
+          ],
+          "sizeStuds": [
+            2.75,
+            2.75,
+            2.75
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0403589
+          ],
+          "triangles": 1512
+        },
+        {
+          "importedName": "Buzzball__Ribbon",
+          "name": "Ribbon",
+          "role": "Ribbon",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.04035888676188071
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.1702354635687042,
+              -1.32731600785699,
+              -1.4153588867618807
+            ],
+            [
+              0.84914137131072,
+              1.0103865210641048,
+              -0.42065871007801814
+            ]
+          ],
+          "sizeStuds": [
+            2.0193768,
+            2.3377025,
+            0.9947002
+          ],
+          "centerStuds": [
+            -0.160547,
+            -0.1584647,
+            -0.9180088
+          ],
+          "triangles": 2400
+        }
+      ]
+    },
+    "ElectricTrap": {
+      "referenceSize": [
+        3.6,
+        1.868994,
+        1.12
+      ],
+      "referenceSizeStuds": [
+        3.6,
+        1.868994,
+        1.12
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.8,
+          -0.9344969767914595,
+          -0.56
+        ],
+        [
+          1.8,
+          0.9344969767914595,
+          0.56
+        ]
+      ],
+      "motionParts": {
+        "Arc": {
+          "kind": "Pulse",
+          "pivot": [
+            0.0,
+            0.12550302320854062,
+            0.0
+          ],
+          "speed": 1.0
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "ElectricTrap__Body",
+          "name": "Body",
+          "role": "Mount",
+          "globalPivotStuds": [
+            0.0,
+            0.12550302320854062,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.8,
+              -0.9344969767914595,
+              -0.56
+            ],
+            [
+              1.8,
+              -0.6344969767914594,
+              0.56
+            ]
+          ],
+          "sizeStuds": [
+            3.6,
+            0.3,
+            1.12
+          ],
+          "centerStuds": [
+            0.0,
+            -0.784497,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "ElectricTrap__Emitters",
+          "name": "Emitters",
+          "role": "Electrodes",
+          "globalPivotStuds": [
+            0.0,
+            0.12550302320854062,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.5379143161765292,
+              -0.6834909303743781,
+              -0.305
+            ],
+            [
+              1.5379143161765292,
+              0.9344969767914595,
+              0.2377641290737884
+            ]
+          ],
+          "sizeStuds": [
+            3.0758286,
+            1.6179879,
+            0.5427641
+          ],
+          "centerStuds": [
+            0.0,
+            0.125503,
+            -0.0336179
+          ],
+          "triangles": 792
+        },
+        {
+          "importedName": "ElectricTrap__Arc",
+          "name": "Arc",
+          "role": "Ribbon",
+          "globalPivotStuds": [
+            0.0,
+            0.12550302320854062,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.932980901362026,
+              -0.11449067658668535,
+              -0.06
+            ],
+            [
+              0.9432820117735138,
+              0.46156059416823497,
+              0.06
+            ]
+          ],
+          "sizeStuds": [
+            1.8762629,
+            0.5760513,
+            0.12
+          ],
+          "centerStuds": [
+            0.0051506,
+            0.173535,
+            0.0
+          ],
+          "triangles": 96
+        }
+      ]
+    },
+    "Fan": {
+      "referenceSize": [
+        3.3,
+        3.415,
+        1.4
+      ],
+      "referenceSizeStuds": [
+        3.3,
+        3.415,
+        1.4
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "spinAxis": [
+        0,
+        0,
+        1
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.65,
+          -1.7075,
+          -0.7
+        ],
+        [
+          1.65,
+          1.7075,
+          0.7
+        ]
+      ],
+      "motionParts": {
+        "Rotor": {
+          "kind": "SpinZ",
+          "pivot": [
+            0.0,
+            0.057499999999999996,
+            0.0
+          ],
+          "speed": 2.0
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Fan__Body",
+          "name": "Body",
+          "role": "Housing",
+          "globalPivotStuds": [
+            0.0,
+            0.057499999999999996,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.65,
+              -1.5924999999999998,
+              -0.44
+            ],
+            [
+              1.65,
+              1.7075,
+              0.44
+            ]
+          ],
+          "sizeStuds": [
+            3.3,
+            3.3,
+            0.88
+          ],
+          "centerStuds": [
+            0.0,
+            0.0575,
+            0.0
+          ],
+          "triangles": 128
+        },
+        {
+          "importedName": "Fan__Rotor",
+          "name": "Rotor",
+          "role": "Rotor",
+          "globalPivotStuds": [
+            0.0,
+            0.057499999999999996,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.1420372161543035,
+              -1.1895537636367757,
+              -0.2
+            ],
+            [
+              1.23,
+              1.2225289577773677,
+              0.2
+            ]
+          ],
+          "sizeStuds": [
+            2.3720372,
+            2.4120827,
+            0.4
+          ],
+          "centerStuds": [
+            0.0439814,
+            0.0164876,
+            0.0
+          ],
+          "triangles": 264
+        },
+        {
+          "importedName": "Fan__Grille",
+          "name": "Grille",
+          "role": "Guard",
+          "globalPivotStuds": [
+            0.0,
+            0.057499999999999996,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.575,
+              -1.5175,
+              -0.518
+            ],
+            [
+              1.575,
+              1.6324999999999998,
+              -0.4023686027918559
+            ]
+          ],
+          "sizeStuds": [
+            3.15,
+            3.15,
+            0.1156314
+          ],
+          "centerStuds": [
+            0.0,
+            0.0575,
+            -0.4601843
+          ],
+          "triangles": 864
+        },
+        {
+          "importedName": "Fan__Bracket",
+          "name": "Bracket",
+          "role": "Bracket",
+          "globalPivotStuds": [
+            0.0,
+            0.057499999999999996,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.0,
+              -1.7075,
+              -0.7
+            ],
+            [
+              1.0,
+              -1.0924999999999998,
+              0.7
+            ]
+          ],
+          "sizeStuds": [
+            2.0,
+            0.615,
+            1.4
+          ],
+          "centerStuds": [
+            0.0,
+            -1.4,
+            0.0
+          ],
+          "triangles": 96
+        }
+      ]
+    },
+    "Gas": {
+      "referenceSize": [
+        3.29,
+        1.7156,
+        1.083648
+      ],
+      "referenceSizeStuds": [
+        3.29,
+        1.7156,
+        1.083648
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.645,
+          -0.8578000000000001,
+          -0.5418238357402287
+        ],
+        [
+          1.645,
+          0.8578000000000001,
+          0.5418238357402287
+        ]
+      ],
+      "motionParts": {
+        "Body": {
+          "kind": "Pulse",
+          "pivot": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "speed": 0.7
+        },
+        "UpperCloud": {
+          "kind": "Pulse",
+          "pivot": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "speed": 0.7
+        },
+        "TrailingCloud": {
+          "kind": "Pulse",
+          "pivot": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "speed": 0.7
+        },
+        "Contours": {
+          "kind": "Pulse",
+          "pivot": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "speed": 0.7
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Gas__Body",
+          "name": "Body",
+          "role": "CloudLobe",
+          "globalPivotStuds": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "baseTransparency": 0.3,
+          "globalBoundsStuds": [
+            [
+              -1.275,
+              -0.8578000000000001,
+              -0.5354715072206864
+            ],
+            [
+              1.025,
+              0.2982000000000001,
+              0.5418238357402287
+            ]
+          ],
+          "sizeStuds": [
+            2.3,
+            1.156,
+            1.0772953
+          ],
+          "centerStuds": [
+            -0.125,
+            -0.2798,
+            0.0031762
+          ],
+          "triangles": 392
+        },
+        {
+          "importedName": "Gas__UpperCloud",
+          "name": "UpperCloud",
+          "role": "CloudLobe",
+          "globalPivotStuds": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "baseTransparency": 0.3,
+          "globalBoundsStuds": [
+            [
+              -0.535,
+              -0.3562,
+              -0.4094271300705042
+            ],
+            [
+              1.3849999999999998,
+              0.8578000000000001,
+              0.5157794585900466
+            ]
+          ],
+          "sizeStuds": [
+            1.92,
+            1.214,
+            0.9252066
+          ],
+          "centerStuds": [
+            0.425,
+            0.2508,
+            0.0531762
+          ],
+          "triangles": 392
+        },
+        {
+          "importedName": "Gas__TrailingCloud",
+          "name": "TrailingCloud",
+          "role": "CloudLobe",
+          "globalPivotStuds": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "baseTransparency": 0.3,
+          "globalBoundsStuds": [
+            [
+              -1.645,
+              -0.579,
+              -0.3663494700576852
+            ],
+            [
+              1.645,
+              0.1538,
+              0.41200554714377285
+            ]
+          ],
+          "sizeStuds": [
+            3.29,
+            0.7328,
+            0.778355
+          ],
+          "centerStuds": [
+            0.0,
+            -0.2126,
+            0.022828
+          ],
+          "triangles": 392
+        },
+        {
+          "importedName": "Gas__Contours",
+          "name": "Contours",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.17499999999999993,
+            -0.17980000000000002,
+            0.0031761642597712414
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.8515739810827855,
+              -0.13257769807095893,
+              -0.5418238357402287
+            ],
+            [
+              1.0623477927287612,
+              0.363606799231226,
+              -0.33214829073125335
+            ]
+          ],
+          "sizeStuds": [
+            1.9139218,
+            0.4961845,
+            0.2096755
+          ],
+          "centerStuds": [
+            0.1053869,
+            0.1155146,
+            -0.4369861
+          ],
+          "triangles": 240
+        }
+      ]
+    },
+    "Gear": {
+      "referenceSize": [
+        3.381374,
+        3.381374,
+        0.74
+      ],
+      "referenceSizeStuds": [
+        3.381374,
+        3.381374,
+        0.74
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "spinAxis": [
+        0,
+        0,
+        1
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.6906872221260645,
+          -1.6906872221260647,
+          -0.37
+        ],
+        [
+          1.6906872221260645,
+          1.6906872221260647,
+          0.37
+        ]
+      ],
+      "motionParts": {
+        "Body": {
+          "kind": "SpinZ",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speed": 1.0
+        },
+        "Hub": {
+          "kind": "SpinZ",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speed": 1.0
+        },
+        "Spokes": {
+          "kind": "SpinZ",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speed": 1.0
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Gear__Body",
+          "name": "Body",
+          "role": "Teeth",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.6906872221260645,
+              -1.6906872221260647,
+              -0.21
+            ],
+            [
+              1.6906872221260645,
+              1.6906872221260647,
+              0.21
+            ]
+          ],
+          "sizeStuds": [
+            3.3813744,
+            3.3813744,
+            0.42
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 384
+        },
+        {
+          "importedName": "Gear__Hub",
+          "name": "Hub",
+          "role": "Hub",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.52,
+              -0.52,
+              -0.37
+            ],
+            [
+              0.52,
+              0.52,
+              0.37
+            ]
+          ],
+          "sizeStuds": [
+            1.04,
+            1.04,
+            0.74
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 128
+        },
+        {
+          "importedName": "Gear__Spokes",
+          "name": "Spokes",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.18,
+              -1.0719099764656377,
+              0.127
+            ],
+            [
+              1.18,
+              1.0719099764656375,
+              0.327
+            ]
+          ],
+          "sizeStuds": [
+            2.36,
+            2.14382,
+            0.2
+          ],
+          "centerStuds": [
+            0.0,
+            -0.0,
+            0.227
+          ],
+          "triangles": 192
+        }
+      ]
+    },
+    "IceBlock": {
+      "referenceSize": [
+        3.8,
+        1.521651,
+        3.230689
+      ],
+      "referenceSizeStuds": [
+        3.8,
+        1.521651,
+        3.230689
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.7608253175473054,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.9,
+          -0.7608253175473054,
+          -1.6153445182314945
+        ],
+        [
+          1.9,
+          0.7608253175473054,
+          1.6153445182314945
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "IceBlock__Body",
+          "name": "Body",
+          "role": "Ice",
+          "globalPivotStuds": [
+            0.0,
+            -0.0358253175473055,
+            0.01534451823149452
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.9,
+              -0.7608253175473054,
+              -1.5846554817685057
+            ],
+            [
+              1.9,
+              0.6891746824526945,
+              1.6153445182314945
+            ]
+          ],
+          "sizeStuds": [
+            3.8,
+            1.45,
+            3.2
+          ],
+          "centerStuds": [
+            0.0,
+            -0.0358253,
+            0.0153445
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "IceBlock__Frost",
+          "name": "Frost",
+          "role": "Crust",
+          "globalPivotStuds": [
+            0.0,
+            -0.0358253175473055,
+            0.01534451823149452
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.77,
+              0.6541746824526944,
+              -1.4246554817685055
+            ],
+            [
+              1.77,
+              0.7341746824526945,
+              1.4553445182314948
+            ]
+          ],
+          "sizeStuds": [
+            3.54,
+            0.08,
+            2.88
+          ],
+          "centerStuds": [
+            0.0,
+            0.6941747,
+            0.0153445
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "IceBlock__Cracks",
+          "name": "Cracks",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.0358253175473055,
+            0.01534451823149452
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.1162691864646472,
+              -0.575478063637149,
+              -1.6153445182314945
+            ],
+            [
+              0.8246598480958035,
+              0.7608253175473054,
+              0.6241226042712044
+            ]
+          ],
+          "sizeStuds": [
+            1.940929,
+            1.3363034,
+            2.2394671
+          ],
+          "centerStuds": [
+            -0.1458047,
+            0.0926736,
+            -0.495611
+          ],
+          "triangles": 168
+        }
+      ]
+    },
+    "Icicle": {
+      "referenceSize": [
+        1.447452,
+        2.822925,
+        1.364674
+      ],
+      "referenceSizeStuds": [
+        1.447452,
+        2.822925,
+        1.364674
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "TileZ",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "tileReferenceSizeStuds": [
+        1.447452,
+        2.822925,
+        1.364674
+      ],
+      "maxStretchRatio": 1.45,
+      "tileGapStuds": 0.25,
+      "globalBoundsStuds": [
+        [
+          -0.7237259549488559,
+          -1.4114627108062487,
+          -0.6823369137986398
+        ],
+        [
+          0.7237259549488559,
+          1.4114627108062487,
+          0.6823369137986398
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Icicle__Body",
+          "name": "Body",
+          "role": "Point",
+          "globalPivotStuds": [
+            0.034818494412330925,
+            0.4385372891937513,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.6647191541501716,
+              -1.4114627108062487,
+              -0.6823369137986398
+            ],
+            [
+              0.6652806451174789,
+              1.366969848582375,
+              0.6823369137986398
+            ]
+          ],
+          "sizeStuds": [
+            1.3299998,
+            2.7784326,
+            1.3646738
+          ],
+          "centerStuds": [
+            0.0002807,
+            -0.0222464,
+            0.0
+          ],
+          "triangles": 14
+        },
+        {
+          "importedName": "Icicle__Crown",
+          "name": "Crown",
+          "role": "Ice",
+          "globalPivotStuds": [
+            0.034818494412330925,
+            0.4385372891937513,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.7237259549488559,
+              -0.04146271080624869,
+              -0.6563740161744722
+            ],
+            [
+              0.7237259549488559,
+              1.4114627108062487,
+              0.4075553459938757
+            ]
+          ],
+          "sizeStuds": [
+            1.4474519,
+            1.4529254,
+            1.0639294
+          ],
+          "centerStuds": [
+            0.0,
+            0.685,
+            -0.1244093
+          ],
+          "triangles": 48
+        }
+      ]
+    },
+    "Lift": {
+      "referenceSize": [
+        4.6,
+        1.451946,
+        3.3
+      ],
+      "referenceSizeStuds": [
+        4.6,
+        1.451946,
+        3.3
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.7259729563877754,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -2.3,
+          -0.7259729563877753,
+          -1.65
+        ],
+        [
+          2.3,
+          0.7259729563877754,
+          1.65
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Lift__Body",
+          "name": "Body",
+          "role": "Deck",
+          "globalPivotStuds": [
+            0.0,
+            0.6084729563877753,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.3,
+              0.16847295638777532,
+              -1.65
+            ],
+            [
+              2.3,
+              0.6084729563877753,
+              1.65
+            ]
+          ],
+          "sizeStuds": [
+            4.6,
+            0.44,
+            3.3
+          ],
+          "centerStuds": [
+            0.0,
+            0.388473,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "Lift__Deck",
+          "name": "Deck",
+          "role": "Deck",
+          "globalPivotStuds": [
+            0.0,
+            0.6084729563877753,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.175,
+              0.5784729563877753,
+              -1.525
+            ],
+            [
+              2.175,
+              0.6984729563877753,
+              1.525
+            ]
+          ],
+          "sizeStuds": [
+            4.35,
+            0.12,
+            3.05
+          ],
+          "centerStuds": [
+            0.0,
+            0.638473,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "Lift__Brackets",
+          "name": "Brackets",
+          "role": "Bracket",
+          "globalPivotStuds": [
+            0.0,
+            0.6084729563877753,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.9300000000000002,
+              -0.7259729563877753,
+              -1.1974018817890242
+            ],
+            [
+              1.9300000000000002,
+              0.31291886916332595,
+              1.1974018817890242
+            ]
+          ],
+          "sizeStuds": [
+            3.86,
+            1.0388918,
+            2.3948038
+          ],
+          "centerStuds": [
+            0.0,
+            -0.206527,
+            0.0
+          ],
+          "triangles": 128
+        },
+        {
+          "importedName": "Lift__EdgeMarks",
+          "name": "EdgeMarks",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            0.6084729563877753,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.9,
+              0.6909729563877753,
+              -1.45
+            ],
+            [
+              2.07,
+              0.7259729563877754,
+              -1.14
+            ]
+          ],
+          "sizeStuds": [
+            3.97,
+            0.035,
+            0.31
+          ],
+          "centerStuds": [
+            0.085,
+            0.708473,
+            -1.295
+          ],
+          "triangles": 160
+        }
+      ]
+    },
+    "Log": {
+      "referenceSize": [
+        1.927331,
+        1.560649,
+        4.778105
+      ],
+      "referenceSizeStuds": [
+        1.927331,
+        1.560649,
+        4.778105
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "TileZ",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "tileReferenceSizeStuds": [
+        1.927331,
+        1.560649,
+        4.778105
+      ],
+      "maxStretchRatio": 1.45,
+      "tileGapStuds": 0.25,
+      "globalBoundsStuds": [
+        [
+          -0.963665631459995,
+          -0.7803244396316783,
+          -2.389052558883258
+        ],
+        [
+          0.963665631459995,
+          0.7803244396316783,
+          2.389052558883258
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Log__Body",
+          "name": "Body",
+          "role": "Wood",
+          "globalPivotStuds": [
+            -0.23366563145999497,
+            -0.10595945362573778,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.963665631459995,
+              -0.7591611547875597,
+              -2.3
+            ],
+            [
+              0.496334368540005,
+              0.5472422475360841,
+              2.3
+            ]
+          ],
+          "sizeStuds": [
+            1.46,
+            1.3064034,
+            4.6
+          ],
+          "centerStuds": [
+            -0.2336656,
+            -0.1059595,
+            0.0
+          ],
+          "triangles": 196
+        },
+        {
+          "importedName": "Log__EndGrain",
+          "name": "EndGrain",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            -0.23366563145999497,
+            -0.10595945362573778,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.793665631459995,
+              -0.6519190844475592,
+              -2.389052558883258
+            ],
+            [
+              0.3263343685400051,
+              0.44000017719608353,
+              2.389052558883258
+            ]
+          ],
+          "sizeStuds": [
+            1.12,
+            1.0919193,
+            4.7781051
+          ],
+          "centerStuds": [
+            -0.2336656,
+            -0.1059595,
+            0.0
+          ],
+          "triangles": 1456
+        },
+        {
+          "importedName": "Log__Bark",
+          "name": "Bark",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            -0.23366563145999497,
+            -0.10595945362573778,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.9116240710909544,
+              -0.7803244396316783,
+              -1.9804071725478125
+            ],
+            [
+              0.5151842152263516,
+              0.5684055323802027,
+              1.9001085927255321
+            ]
+          ],
+          "sizeStuds": [
+            1.4268083,
+            1.34873,
+            3.8805158
+          ],
+          "centerStuds": [
+            -0.1982199,
+            -0.1059595,
+            -0.0401493
+          ],
+          "triangles": 336
+        },
+        {
+          "importedName": "Log__Branch",
+          "name": "Branch",
+          "role": "Wood",
+          "globalPivotStuds": [
+            0.26633436854000503,
+            0.2440405463742622,
+            0.65
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              0.10088399687691951,
+              -0.01686306643353741,
+              0.4603321587181187
+            ],
+            [
+              0.963665631459995,
+              0.7803244396316783,
+              0.8396678412818813
+            ]
+          ],
+          "sizeStuds": [
+            0.8627816,
+            0.7971875,
+            0.3793357
+          ],
+          "centerStuds": [
+            0.5322748,
+            0.3817307,
+            0.65
+          ],
+          "triangles": 140
+        }
+      ]
+    },
+    "Mine": {
+      "referenceSize": [
+        3.02,
+        1.62,
+        3.003359
+      ],
+      "referenceSizeStuds": [
+        3.02,
+        1.62,
+        3.003359
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "TileZ",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "tileReferenceSizeStuds": [
+        3.02,
+        1.62,
+        3.003359
+      ],
+      "maxStretchRatio": 1.45,
+      "tileGapStuds": 0.25,
+      "globalBoundsStuds": [
+        [
+          -1.51,
+          -0.81,
+          -1.5016796077701762
+        ],
+        [
+          1.51,
+          0.81,
+          1.5016796077701762
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Mine__Body",
+          "name": "Body",
+          "role": "Casing",
+          "globalPivotStuds": [
+            0.0,
+            -0.14999999999999997,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.0,
+              -0.81,
+              -1.0
+            ],
+            [
+              1.0,
+              0.51,
+              1.0
+            ]
+          ],
+          "sizeStuds": [
+            2.0,
+            1.32,
+            2.0
+          ],
+          "centerStuds": [
+            0.0,
+            -0.15,
+            0.0
+          ],
+          "triangles": 440
+        },
+        {
+          "importedName": "Mine__Prongs",
+          "name": "Prongs",
+          "role": "Prongs",
+          "globalPivotStuds": [
+            0.0,
+            -0.14999999999999997,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.51,
+              -0.22999999999999998,
+              -1.5016796077701762
+            ],
+            [
+              1.51,
+              0.09000000000000002,
+              1.5016796077701762
+            ]
+          ],
+          "sizeStuds": [
+            3.02,
+            0.32,
+            3.0033592
+          ],
+          "centerStuds": [
+            0.0,
+            -0.07,
+            0.0
+          ],
+          "triangles": 1056
+        },
+        {
+          "importedName": "Mine__Plate",
+          "name": "Plate",
+          "role": "Band",
+          "globalPivotStuds": [
+            0.0,
+            -0.14999999999999997,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.03,
+              -0.15660254037844384,
+              -1.03
+            ],
+            [
+              1.03,
+              0.6799999999999999,
+              1.03
+            ]
+          ],
+          "sizeStuds": [
+            2.06,
+            0.8366025,
+            2.06
+          ],
+          "centerStuds": [
+            0.0,
+            0.2616987,
+            0.0
+          ],
+          "triangles": 644
+        },
+        {
+          "importedName": "Mine__ArmingStud",
+          "name": "ArmingStud",
+          "role": "Beacon",
+          "globalPivotStuds": [
+            0.0,
+            -0.14999999999999997,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.18,
+              0.6100000000000001,
+              -0.18
+            ],
+            [
+              0.18,
+              0.81,
+              0.18
+            ]
+          ],
+          "sizeStuds": [
+            0.36,
+            0.2,
+            0.36
+          ],
+          "centerStuds": [
+            0.0,
+            0.71,
+            0.0
+          ],
+          "triangles": 168
+        }
+      ]
+    },
+    "MovingIcePlatform": {
+      "referenceSize": [
+        3.8,
+        1.996651,
+        4.330689
+      ],
+      "referenceSizeStuds": [
+        3.8,
+        1.996651,
+        4.330689
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.9983253175473056,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.9,
+          -0.9983253175473056,
+          -2.1653445182314943
+        ],
+        [
+          1.9,
+          0.9983253175473056,
+          2.1653445182314943
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "MovingIcePlatform__Body",
+          "name": "Body",
+          "role": "Ice",
+          "globalPivotStuds": [
+            0.0,
+            0.2016746824526946,
+            0.01534451823149463
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.9,
+              -0.5233253175473054,
+              -2.1346554817685055
+            ],
+            [
+              1.9,
+              0.9266746824526946,
+              2.1653445182314943
+            ]
+          ],
+          "sizeStuds": [
+            3.8,
+            1.45,
+            4.3
+          ],
+          "centerStuds": [
+            0.0,
+            0.2016747,
+            0.0153445
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "MovingIcePlatform__Frost",
+          "name": "Frost",
+          "role": "Crust",
+          "globalPivotStuds": [
+            0.0,
+            0.2016746824526946,
+            0.01534451823149463
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.77,
+              0.8916746824526945,
+              -1.9196554817685054
+            ],
+            [
+              1.77,
+              0.9716746824526946,
+              1.9503445182314947
+            ]
+          ],
+          "sizeStuds": [
+            3.54,
+            0.08,
+            3.87
+          ],
+          "centerStuds": [
+            0.0,
+            0.9316747,
+            0.0153445
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "MovingIcePlatform__Cracks",
+          "name": "Cracks",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            0.2016746824526946,
+            0.01534451823149463
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.1162691864646472,
+              -0.3379780636371489,
+              -2.1653445182314943
+            ],
+            [
+              0.8246598480958035,
+              0.9983253175473056,
+              0.6241226042712045
+            ]
+          ],
+          "sizeStuds": [
+            1.940929,
+            1.3363034,
+            2.7894671
+          ],
+          "centerStuds": [
+            -0.1458047,
+            0.3301736,
+            -0.770611
+          ],
+          "triangles": 168
+        },
+        {
+          "importedName": "MovingIcePlatform__Runner",
+          "name": "Runner",
+          "role": "Bracket",
+          "globalPivotStuds": [
+            0.0,
+            0.2016746824526946,
+            0.01534451823149463
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.2799999999999998,
+              -0.8834309691768208,
+              -1.7140098794166752
+            ],
+            [
+              1.2799999999999998,
+              -0.5236808236952346,
+              1.7446989158796644
+            ]
+          ],
+          "sizeStuds": [
+            2.56,
+            0.3597501,
+            3.4587088
+          ],
+          "centerStuds": [
+            0.0,
+            -0.7035559,
+            0.0153445
+          ],
+          "triangles": 200
+        },
+        {
+          "importedName": "MovingIcePlatform__HangingIce",
+          "name": "HangingIce",
+          "role": "Point",
+          "globalPivotStuds": [
+            0.0,
+            0.2016746824526946,
+            0.01534451823149463
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.698355573326805,
+              -0.9983253175473056,
+              -2.006860562525393
+            ],
+            [
+              1.698355573326805,
+              -0.3467272173259708,
+              2.0375495989883827
+            ]
+          ],
+          "sizeStuds": [
+            3.3967111,
+            0.6515981,
+            4.0444102
+          ],
+          "centerStuds": [
+            0.0,
+            -0.6725263,
+            0.0153445
+          ],
+          "triangles": 144
+        }
+      ]
+    },
+    "Ramp": {
+      "referenceSize": [
+        4.0,
+        1.361947,
+        4.8
+      ],
+      "referenceSizeStuds": [
+        4.0,
+        1.361947,
+        4.8
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -2.0,
+          -0.680973369024904,
+          -2.4
+        ],
+        [
+          2.0,
+          0.680973369024904,
+          2.4
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Ramp__Body",
+          "name": "Body",
+          "role": "Wedge",
+          "globalPivotStuds": [
+            0.0,
+            -0.08000000000000002,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.0,
+              -0.6799999999999999,
+              -2.4
+            ],
+            [
+              2.0,
+              0.52,
+              2.4
+            ]
+          ],
+          "sizeStuds": [
+            4.0,
+            1.2,
+            4.8
+          ],
+          "centerStuds": [
+            0.0,
+            -0.08,
+            0.0
+          ],
+          "triangles": 8
+        },
+        {
+          "importedName": "Ramp__Rails",
+          "name": "Rails",
+          "role": "Edge",
+          "globalPivotStuds": [
+            0.0,
+            -0.08000000000000002,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.9300000000000002,
+              -0.680973369024904,
+              -2.1273666140347873
+            ],
+            [
+              1.9300000000000002,
+              0.680973369024904,
+              2.2073666140347874
+            ]
+          ],
+          "sizeStuds": [
+            3.86,
+            1.3619467,
+            4.3347332
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.04
+          ],
+          "triangles": 80
+        },
+        {
+          "importedName": "Ramp__Grip",
+          "name": "Grip",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.08000000000000002,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.5,
+              -0.44000000000000006,
+              -1.545
+            ],
+            [
+              1.5,
+              0.4499999999999999,
+              1.7449999999999999
+            ]
+          ],
+          "sizeStuds": [
+            3.0,
+            0.89,
+            3.29
+          ],
+          "centerStuds": [
+            0.0,
+            0.005,
+            0.1
+          ],
+          "triangles": 160
+        }
+      ]
+    },
+    "Rocket": {
+      "referenceSize": [
+        1.92,
+        1.92,
+        3.931962
+      ],
+      "referenceSizeStuds": [
+        1.92,
+        1.92,
+        3.931962
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -0.96,
+          -0.96,
+          -1.9659807621135332
+        ],
+        [
+          0.96,
+          0.96,
+          1.9659807621135332
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Rocket__Body",
+          "name": "Body",
+          "role": "Casing",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0840192378864667
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.48,
+              -0.48,
+              -0.7659807621135333
+            ],
+            [
+              0.48,
+              0.48,
+              1.7340192378864665
+            ]
+          ],
+          "sizeStuds": [
+            0.96,
+            0.96,
+            2.5
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.4840192
+          ],
+          "triangles": 200
+        },
+        {
+          "importedName": "Rocket__Nose",
+          "name": "Nose",
+          "role": "Point",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0840192378864667
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.48,
+              -0.48,
+              -1.9659807621135332
+            ],
+            [
+              0.48,
+              0.48,
+              -0.7359807621135332
+            ]
+          ],
+          "sizeStuds": [
+            0.96,
+            0.96,
+            1.23
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            -1.3509808
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "Rocket__Fins",
+          "name": "Fins",
+          "role": "Fins",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0840192378864667
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.96,
+              -0.96,
+              0.6340192378864667
+            ],
+            [
+              0.96,
+              0.96,
+              1.8640192378864668
+            ]
+          ],
+          "sizeStuds": [
+            1.92,
+            1.92,
+            1.23
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            1.2490192
+          ],
+          "triangles": 128
+        },
+        {
+          "importedName": "Rocket__Nozzle",
+          "name": "Nozzle",
+          "role": "Nozzle",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0840192378864667
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.36,
+              -0.36,
+              1.6140192378864668
+            ],
+            [
+              0.36,
+              0.36,
+              1.9659807621135332
+            ]
+          ],
+          "sizeStuds": [
+            0.72,
+            0.72,
+            0.3519615
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            1.79
+          ],
+          "triangles": 304
+        },
+        {
+          "importedName": "Rocket__Band",
+          "name": "Band",
+          "role": "Band",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0840192378864667
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.525,
+              -0.525,
+              -0.324951905283833
+            ],
+            [
+              0.525,
+              0.525,
+              -0.24700961894323353
+            ]
+          ],
+          "sizeStuds": [
+            1.05,
+            1.05,
+            0.0779423
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            -0.2859808
+          ],
+          "triangles": 288
+        }
+      ]
+    },
+    "RocketLauncher": {
+      "referenceSize": [
+        2.55,
+        1.92,
+        3.359904
+      ],
+      "referenceSizeStuds": [
+        2.55,
+        1.92,
+        3.359904
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.275,
+          -0.96,
+          -1.6799519052838328
+        ],
+        [
+          1.275,
+          0.96,
+          1.6799519052838328
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "invisible-source-spawner-adaptation",
+      "parts": [
+        {
+          "importedName": "RocketLauncher__Body",
+          "name": "Body",
+          "role": "Mount",
+          "globalPivotStuds": [
+            0.0,
+            -0.040000000000000036,
+            0.029951905283832958
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.275,
+              -0.96,
+              -1.2200480947161672
+            ],
+            [
+              1.275,
+              -0.56,
+              1.6799519052838328
+            ]
+          ],
+          "sizeStuds": [
+            2.55,
+            0.4,
+            2.9
+          ],
+          "centerStuds": [
+            0.0,
+            -0.76,
+            0.2299519
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "RocketLauncher__Barrel",
+          "name": "Barrel",
+          "role": "Barrel",
+          "globalPivotStuds": [
+            0.0,
+            0.05999999999999997,
+            0.029951905283832958
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.76,
+              -0.6000000000000001,
+              -1.540048094716167
+            ],
+            [
+              0.76,
+              0.9199999999999999,
+              1.5999519052838331
+            ]
+          ],
+          "sizeStuds": [
+            1.52,
+            1.52,
+            3.14
+          ],
+          "centerStuds": [
+            0.0,
+            0.16,
+            0.0299519
+          ],
+          "triangles": 128
+        },
+        {
+          "importedName": "RocketLauncher__Muzzle",
+          "name": "Muzzle",
+          "role": "Rim",
+          "globalPivotStuds": [
+            0.0,
+            -0.040000000000000036,
+            0.029951905283832958
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.8,
+              -0.6400000000000001,
+              -1.6799519052838328
+            ],
+            [
+              0.8,
+              0.96,
+              -1.4201442841485012
+            ]
+          ],
+          "sizeStuds": [
+            1.6,
+            1.6,
+            0.2598076
+          ],
+          "centerStuds": [
+            0.0,
+            0.16,
+            -1.5500481
+          ],
+          "triangles": 288
+        },
+        {
+          "importedName": "RocketLauncher__Stand",
+          "name": "Stand",
+          "role": "Bracket",
+          "globalPivotStuds": [
+            0.0,
+            -0.040000000000000036,
+            0.029951905283832958
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.907873280664162,
+              -0.7162929398595224,
+              -0.7657558611395
+            ],
+            [
+              0.907873280664162,
+              0.2662929398595223,
+              1.0376609619614223
+            ]
+          ],
+          "sizeStuds": [
+            1.8157466,
+            0.9825859,
+            1.8034168
+          ],
+          "centerStuds": [
+            0.0,
+            -0.225,
+            0.1359526
+          ],
+          "triangles": 128
+        },
+        {
+          "importedName": "RocketLauncher__Breech",
+          "name": "Breech",
+          "role": "Socket",
+          "globalPivotStuds": [
+            0.0,
+            -0.040000000000000036,
+            0.029951905283832958
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.74,
+              -0.46,
+              0.549951905283833
+            ],
+            [
+              0.74,
+              0.78,
+              1.6749519052838329
+            ]
+          ],
+          "sizeStuds": [
+            1.48,
+            1.24,
+            1.125
+          ],
+          "centerStuds": [
+            0.0,
+            0.16,
+            1.1124519
+          ],
+          "triangles": 96
+        }
+      ]
+    },
+    "Rope": {
+      "referenceSize": [
+        0.52,
+        0.506963,
+        6.104338
+      ],
+      "referenceSizeStuds": [
+        0.52,
+        0.506963,
+        6.104338
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Rope",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Z",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "radialAxes": [
+        "X",
+        "Y"
+      ],
+      "globalBoundsStuds": [
+        [
+          -0.26,
+          -0.2534812571672742,
+          -3.0521690426072245
+        ],
+        [
+          0.26,
+          0.2534812571672742,
+          3.0521690426072245
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "procedural-source-components",
+      "parts": [
+        {
+          "importedName": "Rope__Body",
+          "name": "Body",
+          "role": "Rope",
+          "globalPivotStuds": [
+            0.0,
+            2.7755575615628914e-17,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.13,
+              -0.12363734711836995,
+              -3.0
+            ],
+            [
+              0.13,
+              0.12363734711837,
+              3.0
+            ]
+          ],
+          "sizeStuds": [
+            0.26,
+            0.2472747,
+            6.0
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 40
+        },
+        {
+          "importedName": "Rope__Twist",
+          "name": "Twist",
+          "role": "Ribbon",
+          "globalPivotStuds": [
+            0.0,
+            2.7755575615628914e-17,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.17499993755590762,
+              -0.17497388462120902,
+              -3.032972362752001
+            ],
+            [
+              0.17499993755590762,
+              0.17497388462120908,
+              3.0325287803969108
+            ]
+          ],
+          "sizeStuds": [
+            0.3499999,
+            0.3499478,
+            6.0655011
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            -0.0002218
+          ],
+          "triangles": 3104
+        },
+        {
+          "importedName": "Rope__Knots",
+          "name": "Knots",
+          "role": "Knot",
+          "globalPivotStuds": [
+            0.0,
+            2.7755575615628914e-17,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.26,
+              -0.2534812571672742,
+              -3.0521690426072245
+            ],
+            [
+              0.26,
+              0.2534812571672742,
+              3.0521690426072245
+            ]
+          ],
+          "sizeStuds": [
+            0.52,
+            0.5069625,
+            6.1043381
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 536
+        }
+      ]
+    },
+    "RotatingSpike": {
+      "referenceSize": [
+        3.3,
+        1.18,
+        3.3
+      ],
+      "referenceSizeStuds": [
+        3.3,
+        1.18,
+        3.3
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "TileZ",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "tileReferenceSizeStuds": [
+        3.3,
+        1.18,
+        3.3
+      ],
+      "maxStretchRatio": 1.45,
+      "tileGapStuds": 0.25,
+      "spinAxis": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.65,
+          -0.59,
+          -1.65
+        ],
+        [
+          1.65,
+          0.59,
+          1.65
+        ]
+      ],
+      "motionParts": {
+        "Body": {
+          "kind": "SpinY",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speed": 1.0
+        },
+        "Teeth": {
+          "kind": "SpinY",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speed": 1.0
+        },
+        "Axle": {
+          "kind": "SpinY",
+          "pivot": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speed": 1.0
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "RotatingSpike__Body",
+          "name": "Body",
+          "role": "Hub",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.47,
+              -0.47,
+              -0.47
+            ],
+            [
+              0.47,
+              0.47,
+              0.47
+            ]
+          ],
+          "sizeStuds": [
+            0.94,
+            0.94,
+            0.94
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 288
+        },
+        {
+          "importedName": "RotatingSpike__Teeth",
+          "name": "Teeth",
+          "role": "Teeth",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.65,
+              -0.28,
+              -1.65
+            ],
+            [
+              1.65,
+              0.28,
+              1.65
+            ]
+          ],
+          "sizeStuds": [
+            3.3,
+            0.56,
+            3.3
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 96
+        },
+        {
+          "importedName": "RotatingSpike__Axle",
+          "name": "Axle",
+          "role": "Axle",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.315,
+              -0.59,
+              -0.315
+            ],
+            [
+              0.315,
+              0.59,
+              0.315
+            ]
+          ],
+          "sizeStuds": [
+            0.63,
+            1.18,
+            0.63
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 240
+        }
+      ]
+    },
+    "Snowball": {
+      "referenceSize": [
+        2.1,
+        1.98,
+        2.08
+      ],
+      "referenceSizeStuds": [
+        2.1,
+        1.98,
+        2.08
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.05,
+          -0.99,
+          -1.04
+        ],
+        [
+          1.05,
+          0.99,
+          1.04
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Snowball__Body",
+          "name": "Body",
+          "role": "Snow",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.05,
+              -0.99,
+              -1.04
+            ],
+            [
+              1.05,
+              0.99,
+              1.04
+            ]
+          ],
+          "sizeStuds": [
+            2.1,
+            1.98,
+            2.08
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 440
+        },
+        {
+          "importedName": "Snowball__PackedRidges",
+          "name": "PackedRidges",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.759675570360162,
+              -0.8410943132309223,
+              -1.037318802356845
+            ],
+            [
+              0.7593001450676997,
+              0.8410943132309223,
+              -0.2295168976298568
+            ]
+          ],
+          "sizeStuds": [
+            1.5189757,
+            1.6821886,
+            0.8078019
+          ],
+          "centerStuds": [
+            -0.0001877,
+            0.0,
+            -0.6334178
+          ],
+          "triangles": 432
+        }
+      ]
+    },
+    "Spike": {
+      "referenceSize": [
+        2.1,
+        2.19,
+        2.1
+      ],
+      "referenceSizeStuds": [
+        2.1,
+        2.19,
+        2.1
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "TileZ",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "tileReferenceSizeStuds": [
+        2.1,
+        2.19,
+        2.1
+      ],
+      "maxStretchRatio": 1.45,
+      "tileGapStuds": 0.25,
+      "globalBoundsStuds": [
+        [
+          -1.05,
+          -1.095,
+          -1.05
+        ],
+        [
+          1.05,
+          1.095,
+          1.05
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Spike__Body",
+          "name": "Body",
+          "role": "Point",
+          "globalPivotStuds": [
+            0.0,
+            -0.32499999999999996,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.8893117441682473,
+              -0.8285980295060952,
+              -0.7703157168069625
+            ],
+            [
+              0.8889667879189351,
+              1.095,
+              0.7703157168069625
+            ]
+          ],
+          "sizeStuds": [
+            1.7782785,
+            1.923598,
+            1.5406314
+          ],
+          "centerStuds": [
+            -0.0001725,
+            0.133201,
+            0.0
+          ],
+          "triangles": 84
+        },
+        {
+          "importedName": "Spike__Socket",
+          "name": "Socket",
+          "role": "Mount",
+          "globalPivotStuds": [
+            0.0,
+            -0.32499999999999996,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.05,
+              -1.095,
+              -1.05
+            ],
+            [
+              1.05,
+              -0.6949999999999998,
+              1.05
+            ]
+          ],
+          "sizeStuds": [
+            2.1,
+            0.4,
+            2.1
+          ],
+          "centerStuds": [
+            0.0,
+            -0.895,
+            0.0
+          ],
+          "triangles": 568
+        },
+        {
+          "importedName": "Spike__Edge",
+          "name": "Edge",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.32499999999999996,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.012930569909614411,
+              -0.6186082584271306,
+              -0.2314835296954479
+            ],
+            [
+              0.1549305699096144,
+              0.9686082584271307,
+              0.009483529695447902
+            ]
+          ],
+          "sizeStuds": [
+            0.1678611,
+            1.5872165,
+            0.2409671
+          ],
+          "centerStuds": [
+            0.071,
+            0.175,
+            -0.111
+          ],
+          "triangles": 24
+        }
+      ]
+    },
+    "Spring": {
+      "referenceSize": [
+        2.35,
+        2.425,
+        2.35
+      ],
+      "referenceSizeStuds": [
+        2.35,
+        2.425,
+        2.35
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.175,
+          -1.2125,
+          -1.175
+        ],
+        [
+          1.175,
+          1.2125,
+          1.175
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Spring__Body",
+          "name": "Body",
+          "role": "Mount",
+          "globalPivotStuds": [
+            0.0,
+            -0.0024999999999999467,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.175,
+              -1.2125,
+              -1.175
+            ],
+            [
+              1.175,
+              -0.9325,
+              1.175
+            ]
+          ],
+          "sizeStuds": [
+            2.35,
+            0.28,
+            2.35
+          ],
+          "centerStuds": [
+            0.0,
+            -1.0725,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "Spring__Coil",
+          "name": "Coil",
+          "role": "Coil",
+          "globalPivotStuds": [
+            0.0,
+            -0.0024999999999999467,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.7506593275147857,
+              -0.9319093220322934,
+              -0.7546557176154023
+            ],
+            [
+              0.7577789133283998,
+              0.9241688061752391,
+              0.7556181064634373
+            ]
+          ],
+          "sizeStuds": [
+            1.5084382,
+            1.8560781,
+            1.5102738
+          ],
+          "centerStuds": [
+            0.0035598,
+            -0.0038703,
+            0.0004812
+          ],
+          "triangles": 1168
+        },
+        {
+          "importedName": "Spring__Deck",
+          "name": "Deck",
+          "role": "Deck",
+          "globalPivotStuds": [
+            0.0,
+            0.9775,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.15,
+              0.8175,
+              -1.15
+            ],
+            [
+              1.15,
+              1.1575,
+              1.15
+            ]
+          ],
+          "sizeStuds": [
+            2.3,
+            0.34,
+            2.3
+          ],
+          "centerStuds": [
+            0.0,
+            0.9875,
+            0.0
+          ],
+          "triangles": 64
+        },
+        {
+          "importedName": "Spring__Grip",
+          "name": "Grip",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.0024999999999999467,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.65,
+              1.1425,
+              -0.5850000000000001
+            ],
+            [
+              0.65,
+              1.2125,
+              0.5850000000000001
+            ]
+          ],
+          "sizeStuds": [
+            1.3,
+            0.07,
+            1.17
+          ],
+          "centerStuds": [
+            0.0,
+            1.1775,
+            0.0
+          ],
+          "triangles": 96
+        }
+      ]
+    },
+    "Telegraph": {
+      "referenceSize": [
+        3.39,
+        0.122631,
+        3.39
+      ],
+      "referenceSizeStuds": [
+        3.39,
+        0.122631,
+        3.39
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.06131569860407206,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.6949999999999998,
+          -0.06131569860407206,
+          -1.6949999999999998
+        ],
+        [
+          1.6949999999999998,
+          0.06131569860407206,
+          1.6949999999999998
+        ]
+      ],
+      "motionParts": {
+        "Segments": {
+          "kind": "Pulse",
+          "pivot": [
+            0.0,
+            -0.013684301395927936,
+            0.0
+          ],
+          "speed": 1.0
+        },
+        "Centre": {
+          "kind": "Pulse",
+          "pivot": [
+            0.0,
+            -0.013684301395927936,
+            0.0
+          ],
+          "speed": 1.0
+        }
+      },
+      "sourceStatus": "authored-system-marker",
+      "parts": [
+        {
+          "importedName": "Telegraph__Body",
+          "name": "Body",
+          "role": "Marker",
+          "globalPivotStuds": [
+            0.0,
+            -0.013684301395927936,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.6949999999999998,
+              -0.06131569860407206,
+              -1.6949999999999998
+            ],
+            [
+              1.6949999999999998,
+              0.033947095812216194,
+              1.6949999999999998
+            ]
+          ],
+          "sizeStuds": [
+            3.39,
+            0.0952628,
+            3.39
+          ],
+          "centerStuds": [
+            0.0,
+            -0.0136843,
+            0.0
+          ],
+          "triangles": 480
+        },
+        {
+          "importedName": "Telegraph__Segments",
+          "name": "Segments",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.013684301395927936,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.4,
+              -0.04868430139592794,
+              -1.4
+            ],
+            [
+              1.4,
+              0.06131569860407206,
+              1.4
+            ]
+          ],
+          "sizeStuds": [
+            2.8,
+            0.11,
+            2.8
+          ],
+          "centerStuds": [
+            0.0,
+            0.0063157,
+            0.0
+          ],
+          "triangles": 192
+        },
+        {
+          "importedName": "Telegraph__Centre",
+          "name": "Centre",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.013684301395927936,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.32,
+              -0.038684301395927934,
+              -0.32
+            ],
+            [
+              0.32,
+              0.05131569860407206,
+              0.32
+            ]
+          ],
+          "sizeStuds": [
+            0.64,
+            0.09,
+            0.64
+          ],
+          "centerStuds": [
+            0.0,
+            0.0063157,
+            0.0
+          ],
+          "triangles": 48
+        }
+      ]
+    },
+    "Tower": {
+      "referenceSize": [
+        7.018863,
+        16.0,
+        7.018863
+      ],
+      "referenceSizeStuds": [
+        7.018863,
+        16.0,
+        7.018863
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Tower",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "colliderLengthAxis": "X",
+      "radialAxes": [
+        "X",
+        "Z"
+      ],
+      "authoredDescription": "Hollow purple/magenta cylindrical masonry with staggered brick courses; Y is the long axis.",
+      "globalBoundsStuds": [
+        [
+          -3.509431395352574,
+          -8.0,
+          -3.509431395352574
+        ],
+        [
+          3.509431395352574,
+          8.0,
+          3.509431395352574
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-background-adaptation",
+      "parts": [
+        {
+          "importedName": "Tower__Body",
+          "name": "Body",
+          "role": "Shell",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -3.4,
+              -8.0,
+              -3.4
+            ],
+            [
+              3.4,
+              8.0,
+              3.4
+            ]
+          ],
+          "sizeStuds": [
+            6.8,
+            16.0,
+            6.8
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 192
+        },
+        {
+          "importedName": "Tower__PurpleBricks",
+          "name": "PurpleBricks",
+          "role": "Masonry",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -3.509431395352574,
+              -7.945,
+              -3.509431395352574
+            ],
+            [
+              3.509431395352574,
+              7.948,
+              3.509431395352574
+            ]
+          ],
+          "sizeStuds": [
+            7.0188628,
+            15.893,
+            7.0188628
+          ],
+          "centerStuds": [
+            0.0,
+            0.0015,
+            0.0
+          ],
+          "triangles": 3072
+        },
+        {
+          "importedName": "Tower__MagentaBricks",
+          "name": "MagentaBricks",
+          "role": "Masonry",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -3.509431395352574,
+              -7.945,
+              -3.509431395352574
+            ],
+            [
+              3.509431395352574,
+              7.948,
+              3.509431395352574
+            ]
+          ],
+          "sizeStuds": [
+            7.0188628,
+            15.893,
+            7.0188628
+          ],
+          "centerStuds": [
+            0.0,
+            0.0015,
+            0.0
+          ],
+          "triangles": 3072
+        },
+        {
+          "importedName": "Tower__Rims",
+          "name": "Rims",
+          "role": "Rim",
+          "globalPivotStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -3.5,
+              -7.996602540378444,
+              -3.5
+            ],
+            [
+              3.5,
+              7.996602540378444,
+              3.5
+            ]
+          ],
+          "sizeStuds": [
+            7.0,
+            15.9932051,
+            7.0
+          ],
+          "centerStuds": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "triangles": 864
+        }
+      ]
+    },
+    "TowerPlatform": {
+      "referenceSize": [
+        5.6,
+        1.6475,
+        2.6
+      ],
+      "referenceSizeStuds": [
+        5.6,
+        1.6475,
+        2.6
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.82375,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -2.8,
+          -0.82375,
+          -1.3
+        ],
+        [
+          2.8,
+          0.82375,
+          1.3
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "TowerPlatform__Body",
+          "name": "Body",
+          "role": "Deck",
+          "globalPivotStuds": [
+            0.0,
+            0.7012499999999999,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.8,
+              0.3212499999999999,
+              -1.3
+            ],
+            [
+              2.8,
+              0.7012499999999999,
+              1.3
+            ]
+          ],
+          "sizeStuds": [
+            5.6,
+            0.38,
+            2.6
+          ],
+          "centerStuds": [
+            0.0,
+            0.51125,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "TowerPlatform__Deck",
+          "name": "Deck",
+          "role": "Deck",
+          "globalPivotStuds": [
+            0.0,
+            0.7012499999999999,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.6,
+              0.6962499999999999,
+              -1.15
+            ],
+            [
+              2.6,
+              0.7962499999999999,
+              1.15
+            ]
+          ],
+          "sizeStuds": [
+            5.2,
+            0.1,
+            2.3
+          ],
+          "centerStuds": [
+            0.0,
+            0.74625,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "TowerPlatform__Brackets",
+          "name": "Brackets",
+          "role": "Bracket",
+          "globalPivotStuds": [
+            0.0,
+            0.7012499999999999,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.2,
+              -0.82375,
+              -1.018784966170467
+            ],
+            [
+              2.2,
+              0.72625,
+              1.2200000000000002
+            ]
+          ],
+          "sizeStuds": [
+            4.4,
+            1.55,
+            2.238785
+          ],
+          "centerStuds": [
+            0.0,
+            -0.04875,
+            0.1006075
+          ],
+          "triangles": 128
+        },
+        {
+          "importedName": "TowerPlatform__EdgeMarks",
+          "name": "EdgeMarks",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            0.7012499999999999,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.1,
+              0.78875,
+              -1.24
+            ],
+            [
+              2.38,
+              0.82375,
+              -0.95
+            ]
+          ],
+          "sizeStuds": [
+            4.48,
+            0.035,
+            0.29
+          ],
+          "centerStuds": [
+            0.14,
+            0.80625,
+            -1.095
+          ],
+          "triangles": 192
+        }
+      ]
+    },
+    "Warning": {
+      "referenceSize": [
+        3.04,
+        0.205,
+        2.62
+      ],
+      "referenceSizeStuds": [
+        3.04,
+        0.205,
+        2.62
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.10250000000000001,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -1.52,
+          -0.10250000000000001,
+          -1.31
+        ],
+        [
+          1.52,
+          0.10250000000000001,
+          1.31
+        ]
+      ],
+      "motionParts": {
+        "Border": {
+          "kind": "Pulse",
+          "pivot": [
+            0.0,
+            -0.04250000000000001,
+            0.18999999999999995
+          ],
+          "speed": 1.0
+        },
+        "Symbol": {
+          "kind": "Pulse",
+          "pivot": [
+            0.0,
+            -0.04250000000000001,
+            0.18999999999999995
+          ],
+          "speed": 1.0
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Warning__Body",
+          "name": "Body",
+          "role": "Marker",
+          "globalPivotStuds": [
+            0.0,
+            -0.04250000000000001,
+            0.18999999999999995
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.52,
+              -0.10250000000000001,
+              -1.31
+            ],
+            [
+              1.52,
+              0.017499999999999988,
+              1.31
+            ]
+          ],
+          "sizeStuds": [
+            3.04,
+            0.12,
+            2.62
+          ],
+          "centerStuds": [
+            0.0,
+            -0.0425,
+            0.0
+          ],
+          "triangles": 24
+        },
+        {
+          "importedName": "Warning__Border",
+          "name": "Border",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.04250000000000001,
+            0.18999999999999995
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.3561547595642371,
+              -0.032500000000000015,
+              -1.0927359584903624
+            ],
+            [
+              1.3561547595642371,
+              0.0975,
+              1.2349999999999999
+            ]
+          ],
+          "sizeStuds": [
+            2.7123095,
+            0.13,
+            2.327736
+          ],
+          "centerStuds": [
+            0.0,
+            0.0325,
+            0.071132
+          ],
+          "triangles": 96
+        },
+        {
+          "importedName": "Warning__Symbol",
+          "name": "Symbol",
+          "role": "Pattern",
+          "globalPivotStuds": [
+            0.0,
+            -0.04250000000000001,
+            0.18999999999999995
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.13,
+              -0.0175,
+              -0.43000000000000005
+            ],
+            [
+              0.13,
+              0.10250000000000001,
+              1.00363734711837
+            ]
+          ],
+          "sizeStuds": [
+            0.26,
+            0.12,
+            1.4336373
+          ],
+          "centerStuds": [
+            0.0,
+            0.0425,
+            0.2868187
+          ],
+          "triangles": 132
+        }
+      ]
+    },
+    "Water": {
+      "referenceSize": [
+        4.0,
+        0.369984,
+        4.0
+      ],
+      "referenceSizeStuds": [
+        4.0,
+        0.369984,
+        4.0
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.18499197493025257,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -2.0,
+          -0.18499197493025257,
+          -2.0
+        ],
+        [
+          2.0,
+          0.18499197493025257,
+          2.0
+        ]
+      ],
+      "motionParts": {},
+      "sourceStatus": "source-background-adaptation",
+      "parts": [
+        {
+          "importedName": "Water__Body",
+          "name": "Body",
+          "role": "Water",
+          "globalPivotStuds": [
+            0.0,
+            0.05500802506974742,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.0,
+              -0.18499197493025257,
+              -2.0
+            ],
+            [
+              2.0,
+              0.05500802506974742,
+              2.0
+            ]
+          ],
+          "sizeStuds": [
+            4.0,
+            0.24,
+            4.0
+          ],
+          "centerStuds": [
+            0.0,
+            -0.064992,
+            0.0
+          ],
+          "triangles": 32
+        },
+        {
+          "importedName": "Water__NearWaves",
+          "name": "NearWaves",
+          "role": "Ribbon",
+          "globalPivotStuds": [
+            0.0,
+            0.05500802506974742,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.815975126106384,
+              -0.004851307978398542,
+              -1.6543573899975117
+            ],
+            [
+              1.81695486120666,
+              0.18499197493025257,
+              1.5496559043159568
+            ]
+          ],
+          "sizeStuds": [
+            3.63293,
+            0.1898433,
+            3.2040133
+          ],
+          "centerStuds": [
+            0.0004899,
+            0.0900703,
+            -0.0523507
+          ],
+          "triangles": 624
+        },
+        {
+          "importedName": "Water__FarWaves",
+          "name": "FarWaves",
+          "role": "Ribbon",
+          "globalPivotStuds": [
+            0.0,
+            0.05500802506974742,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.815975126106384,
+              -0.004851307978398535,
+              -1.3043573899975118
+            ],
+            [
+              1.81695486120666,
+              0.18499197493025257,
+              1.8996559043159567
+            ]
+          ],
+          "sizeStuds": [
+            3.63293,
+            0.1898433,
+            3.2040133
+          ],
+          "centerStuds": [
+            0.0004899,
+            0.0900703,
+            0.2976493
+          ],
+          "triangles": 624
+        }
+      ]
+    },
+    "Whirlpool": {
+      "referenceSize": [
+        4.0,
+        0.526339,
+        4.0
+      ],
+      "referenceSizeStuds": [
+        4.0,
+        0.526339,
+        4.0
+      ],
+      "referenceCenterStuds": [
+        0,
+        0,
+        0
+      ],
+      "fitMode": "Stretch",
+      "authoredUp": [
+        0,
+        1,
+        0
+      ],
+      "forward": [
+        0,
+        0,
+        -1
+      ],
+      "fitAxis": "Y",
+      "visualPivotStuds": [
+        0,
+        0,
+        0
+      ],
+      "deckTop": 0.2631692628127138,
+      "surfaceNormal": [
+        0,
+        1,
+        0
+      ],
+      "globalBoundsStuds": [
+        [
+          -2.0,
+          -0.2631692628127138,
+          -2.0
+        ],
+        [
+          2.0,
+          0.2631692628127138,
+          2.0
+        ]
+      ],
+      "motionParts": {
+        "Spiral": {
+          "kind": "SpinY",
+          "pivot": [
+            0.0,
+            0.11683073718728623,
+            0.0
+          ],
+          "speed": 1.2
+        }
+      },
+      "sourceStatus": "source-object-metasprite",
+      "parts": [
+        {
+          "importedName": "Whirlpool__Body",
+          "name": "Body",
+          "role": "Water",
+          "globalPivotStuds": [
+            0.0,
+            0.11683073718728623,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -2.0,
+              -0.2631692628127138,
+              -2.0
+            ],
+            [
+              2.0,
+              0.19683073718728625,
+              2.0
+            ]
+          ],
+          "sizeStuds": [
+            4.0,
+            0.46,
+            4.0
+          ],
+          "centerStuds": [
+            0.0,
+            -0.0331693,
+            0.0
+          ],
+          "triangles": 392
+        },
+        {
+          "importedName": "Whirlpool__OuterFoam",
+          "name": "OuterFoam",
+          "role": "Rim",
+          "globalPivotStuds": [
+            0.0,
+            0.11683073718728623,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.9600000000000002,
+              0.041567942770997984,
+              -1.9600000000000002
+            ],
+            [
+              1.9600000000000002,
+              0.2320935316035745,
+              1.9600000000000002
+            ]
+          ],
+          "sizeStuds": [
+            3.92,
+            0.1905256,
+            3.92
+          ],
+          "centerStuds": [
+            0.0,
+            0.1368307,
+            0.0
+          ],
+          "triangles": 480
+        },
+        {
+          "importedName": "Whirlpool__Spiral",
+          "name": "Spiral",
+          "role": "Ribbon",
+          "globalPivotStuds": [
+            0.0,
+            0.11683073718728623,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -1.7995020250441605,
+              0.07184940349322602,
+              -1.3376135479129498
+            ],
+            [
+              1.4899821874520154,
+              0.2631692628127138,
+              1.6432058481331473
+            ]
+          ],
+          "sizeStuds": [
+            3.2894842,
+            0.1913199,
+            2.9808194
+          ],
+          "centerStuds": [
+            -0.1547599,
+            0.1675093,
+            0.1527962
+          ],
+          "triangles": 1440
+        },
+        {
+          "importedName": "Whirlpool__Eye",
+          "name": "Eye",
+          "role": "Socket",
+          "globalPivotStuds": [
+            0.0,
+            0.11683073718728623,
+            0.0
+          ],
+          "baseTransparency": 0,
+          "globalBoundsStuds": [
+            [
+              -0.25,
+              0.046830737187286225,
+              -0.25
+            ],
+            [
+              0.25,
+              0.15683073718728624,
+              0.25
+            ]
+          ],
+          "sizeStuds": [
+            0.5,
+            0.11,
+            0.5
+          ],
+          "centerStuds": [
+            0.0,
+            0.1018307,
+            0.0
+          ],
+          "triangles": 224
+        }
+      ]
+    }
+  },
+  "contract": {
+    "folder": "ServerStorage.BrickToadsPropTemplates",
+    "modelMetadata": {
+      "AppearanceProfile": "CanonicalCourseProp",
+      "CourseKind": "<kind>",
+      "SourcePin": "f1a43b69577246850d136473700a333b3cdfe93f"
+    },
+    "axis": "Y-up; forward -Z. Tower long axis Y; Rope long axis Z. Every GLB node is a scene root; no joints or attachments.",
+    "reconstruction": "Match exact Kind__Part names. Recenter each native MeshPart with sizeStuds and centerStuds, applying observed native importer Y180 conversion as in existing vehicle protocol. Preserve actual MeshId/TextureID/SurfaceAppearance and raw imported MeshSize as InitialSize. Rotation uses globalPivotStuds, never inferred mesh centre.",
+    "physics": "Anchored true; CanCollide/CanTouch/CanQuery false; Massless true. Retain original gameplay collider dimensions, positions and actions.",
+    "fit": "Bound all visuals. Mine/Bomb/AirMine/Spike/Icicle runs use repeated uniformly scaled templates when collider aspect ratio exceeds maxStretchRatio; avoid stretching a round mine into an elongated strip. Decks fit footprint and reference top; Tower and Rope fit declared length axis. Roles are cosmetic only."
+  },
+  "nativeImportStatus": "PENDING"
+}

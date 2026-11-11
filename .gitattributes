@@ -8,6 +8,9 @@
 *.json text eol=lf
 # Preserve exact evidence bytes referenced by the campaign artifact manifest.
 reports/2026-11-11-full-campaign-cast-audio/*.json -text
+reports/2026-11-11-course-traps/*.json -text whitespace=cr-at-eol
+# Frozen source/reference manifests contain byte hashes of each other.
+assets/props/canonical-course/**/*.json -text whitespace=cr-at-eol
 *.txt text eol=lf
 # Keep the frozen mouth validator reproducible across checkouts.
 assets/characters/canonical-hero/validate_hero_fear_wide_mouth.cjs text eol=lf
