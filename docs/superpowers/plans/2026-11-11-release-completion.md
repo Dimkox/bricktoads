@@ -32,7 +32,8 @@
 - [x] Correct campaign/result/personal-menu policy, boss progress and touch target layout with production-code tests.
 - [x] Correct Queen Hair animation and avoid static cosmetic writes; validate deterministic lifecycle/cost changes.
 - [x] Upload/map all three existing hero portraits and verify actual native image loading.
-- [ ] Review each task; build, synchronize and perform native loading/UI/animation checks in the single Studio.
-- [ ] Run complete current-source campaign with finite lives and verify manual next-game flow; retain all actual evidence and restore exact sources/state.
-- [ ] Implement remaining accepted release code, instrument/measure as appropriate, and prepare the requested separate BrickToads experience.
-- [ ] Independent final review, relevant regression/CI, explicit owned commits/push and factual Jira synchronization.
+- [x] Review each task; build, synchronize and perform native loading/UI/animation checks in the single Studio.
+- [x] Run the complete campaign with finite lives and verify manual next-game flow; verify the final spawn-only correction separately in normal Play, and restore exact sources/state.
+- [x] Prepare and verify the final clean playable build for the requested separate BrickToads experience.
+- [x] Independent final review, relevant regression/CI, explicit owned commits/push and factual Jira synchronization.
+- [ ] Create the separate private BrickToads destination using Studio **Publish to Roblox As…**. The connected MCP cannot perform this publication; see the [release report](../../../reports/2026-11-11-release-completion/README.md).

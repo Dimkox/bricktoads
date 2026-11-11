@@ -1,0 +1,535 @@
+{
+  "schema": 1,
+  "scope": "Targeted regression replay after the canonical world spawn correction.",
+  "started": "2026-11-11T07:20:29.343198+00:00",
+  "sourceSha256": "d10b584ba65bb3a913af281921ab8e7d9a2db8123862cc69cd6f16ac3f1aac8a",
+  "prior_receipt": "reports/2026-11-11-release-completion/validation-after-native-fixes.json",
+  "files_before": {
+    "places/BrickToads.rbxlx": {
+      "bytes": 91334,
+      "sha256": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353"
+    },
+    "places/BrickToadsPlayable.rbxlx": {
+      "bytes": 2228161,
+      "sha256": "b5007ad29f58264437f06d279b5f4d81d36f6950c5cf5dc96c4735d87eb4f91f"
+    },
+    "reports/2026-11-11-course-traps/campaign-props-observer.client.luau": {
+      "bytes": 3847,
+      "sha256": "8731df2b4246a3a761c7b555d6273d7561e20d278ddfc99a5e12fcc37fd3357c"
+    },
+    "src/client/BossQueuePanel.luau": {
+      "bytes": 11639,
+      "sha256": "235d76ee1ca4485ef0381a7982ac717fbb523da65d2ced300a279cf51ea171cc"
+    },
+    "src/client/BrickToadsClient.client.luau": {
+      "bytes": 96175,
+      "sha256": "4a9dfcf178e9dac4e09a58cea2d5e7388d79a77c178a5d8bc1da0c2100af9cd0"
+    },
+    "src/client/CampaignPresentation.luau": {
+      "bytes": 4063,
+      "sha256": "1118504ee741aa65a67bdf3243a5d3b781a3b3673db3dab8f5323a58aa15138e"
+    },
+    "src/client/GroupPanel.luau": {
+      "bytes": 13389,
+      "sha256": "cf3ce2b6867cda2dad06fb586c4c7424a65444b3def74a7f1351bcc16072ce71"
+    },
+    "src/client/HeroAssetVisibility.luau": {
+      "bytes": 19049,
+      "sha256": "ea8414e20bc88e2c1faeeea62c2224dd09aba3cf86404096521c104b0e1e4d64"
+    },
+    "src/server/gameplay/CanonicalCastPresentation.lua": {
+      "bytes": 22214,
+      "sha256": "1d1ad4d4ce6ba24e7e699ae4093d1852dfe7019b021e01f246a5456a7e55ad0e"
+    },
+    "src/server/gameplay/CharacterAppearance.lua": {
+      "bytes": 27213,
+      "sha256": "f1ce60ba033824af45d08fb9be011b1a6ec734ba9a2689a95deaba665e8e368f"
+    },
+    "src/server/gameplay/CoursePropAppearance.lua": {
+      "bytes": 12676,
+      "sha256": "867ffd91f8b1f7b0245e7d8357766cb0b8a3c8ff993c3f246f9fd5b69eaf8d86"
+    },
+    "src/server/gameplay/GameWorld.lua": {
+      "bytes": 114303,
+      "sha256": "54d665984d851f6a4325c4ce81b3a8e7dc76e7c7bc45c994ff12fc1957beb6b5"
+    },
+    "src/shared/HeroPortraits.luau": {
+      "bytes": 293,
+      "sha256": "3595d0b836f9bcda213a2d46b0a29d22759984b719b6f6132b5f3b919ced1627"
+    },
+    "src/shared/TextCatalog.luau": {
+      "bytes": 89683,
+      "sha256": "983869b8d67eb035eb29ff1ccca59206a0ab4f4fae196f6ac8ff8c7d97ecf5ba"
+    },
+    "tests/ReleaseUI.fixture.luau": {
+      "bytes": 1705,
+      "sha256": "3dd7cfcac677cf4011f91c5280e40aed73b912f17cb82a407a12c5c536fbe408"
+    },
+    "tests/ReleaseUI.spec.luau": {
+      "bytes": 17282,
+      "sha256": "326c29eb3a014f6cce38247353b6d29e17ab86b01056fd1f3a90113987d4b810"
+    },
+    "tests/campaign_world/run.py": {
+      "bytes": 1583,
+      "sha256": "23c0ca200eb137e35d2c3a2aa90a679c814018f5129d52302345dd7357a1ce14"
+    },
+    "tests/canonical_cast_appearance/contracts.luau": {
+      "bytes": 11680,
+      "sha256": "d4d81687e3e9a81f0cb18bb2bf3ff37d2eae9925b733808b2a694d802d9995c3"
+    },
+    "tests/canonical_cast_appearance/queen_contracts.luau": {
+      "bytes": 5932,
+      "sha256": "33cb29cda56e92404b8ac5e123c5faf635e7fe4c6d0b043f8b19fce7d7d461d7"
+    },
+    "tests/canonical_hero_presentation/brown_contracts.luau": {
+      "bytes": 3701,
+      "sha256": "378034bafc8586154bb55bbf9cbf2816ba6cb2ebcc806c012a91270cc1a4df9a"
+    },
+    "tests/canonical_hero_presentation/fear_contracts.luau": {
+      "bytes": 4915,
+      "sha256": "b44940128423babf1ec2b229cf59a992dffa213b873193b4fc2de191a5b20520"
+    },
+    "tests/canonical_hero_presentation/morph_contracts.luau": {
+      "bytes": 14533,
+      "sha256": "ccd157dab0262eea772239b581e2c4b5fbf4f52bc8328fa4ec6dd232ae493d90"
+    },
+    "tests/canonical_hero_presentation/run.py": {
+      "bytes": 4781,
+      "sha256": "23ac5b0ae84546e9253af7b67bb8429b822823bd240f65d7a5ef9b9d16332962"
+    },
+    "tests/canonical_hero_presentation/world_contracts.luau": {
+      "bytes": 24874,
+      "sha256": "d1aef4e304f7072e4f23ccec0b345494646d0c033c454eb9ae2f5f1b19af6d67"
+    },
+    "tests/character_appearance/contracts.luau": {
+      "bytes": 21961,
+      "sha256": "8feaacf1e0b0bfbb89102b0b9360ea7f170c0c04d09f562915a8e933a23b060d"
+    },
+    "tests/course_props/contracts.luau": {
+      "bytes": 16306,
+      "sha256": "3e2cb3e771a701f33bcbbc929dacc9f8731d66193f1ad7275ccc78087fd8bad0"
+    },
+    "tests/group_world/run.py": {
+      "bytes": 1391,
+      "sha256": "8cb63804e973689ffead204868c884f1448ae796a38274f70ab44598f9d47790"
+    },
+    "tests/run_canonical_cast.luau": {
+      "bytes": 14460,
+      "sha256": "6a4339799f357568fae7e599c1b384b36e190be1f4a891912088a6ffb5f1d596"
+    },
+    "tests/run_hero_asset_visibility.luau": {
+      "bytes": 30579,
+      "sha256": "6650747acab95a585f97b5dbf48ff50bfce87946e0be09c1cc0c472eb18513a5"
+    },
+    "tools/build_bricktoads_place.py": {
+      "bytes": 30489,
+      "sha256": "2d4e196ec98f282996ce43553f7efb3c22140736915a29c649172a071a257719"
+    },
+    "tools/qa/campaign_combat_pilot.lua": {
+      "bytes": 43174,
+      "sha256": "bebdb12c47f7cefa1b079d8bec236f0a178de5bf5929a86476c769554f8ae85c"
+    },
+    "tools/qa/campaign_early_course_pilot.lua": {
+      "bytes": 31336,
+      "sha256": "1d5693ed7ed9089a7c645c8bf4f3b8b2578fe169dd758f316c47f9b51a280695"
+    },
+    "tools/qa/campaign_late_course_pilot.lua": {
+      "bytes": 6822,
+      "sha256": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8"
+    },
+    "tools/qa/campaign_tubes_arbitration.lua": {
+      "bytes": 5175,
+      "sha256": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013"
+    },
+    "tools/qa/full_campaign_av_observer.client.luau": {
+      "bytes": 31852,
+      "sha256": "dba1e9c16131c8c7af3c88faf2863c57cde05db1e94082aa14f79b061395dd86"
+    },
+    "tools/qa/full_campaign_bridge.server.luau": {
+      "bytes": 23058,
+      "sha256": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add"
+    },
+    "tools/qa/full_campaign_client_adapter.luau": {
+      "bytes": 2037,
+      "sha256": "b40c4b42d5a44d9f7561be8228204c5bae3f292292d9630eaf0fc21384544c65"
+    },
+    "tools/qa/full_campaign_heading_observer.server.luau": {
+      "bytes": 3108,
+      "sha256": "1f8890ba939abfb240eade403cb3a270265455753aa4413da13cf359a0def76b"
+    },
+    "tools/qa/full_campaign_mode_observer.server.luau": {
+      "bytes": 5036,
+      "sha256": "cb04b24e48bcc885fb7635643b2a6355373641fec5c5ea54267ffe8af49885a7"
+    },
+    "tools/qa/full_campaign_presentation_observer.server.luau": {
+      "bytes": 20926,
+      "sha256": "77e658c22686ace4a6dfba0bb99e481002becd9871afb54df19d3c89830c90f6"
+    },
+    "tools/qa/release_hero_loading.client.luau": {
+      "bytes": 14329,
+      "sha256": "da233b5a7e6692e54233c6b53edf31f6544d7023ca52b52c4dd94250fb7fb647"
+    },
+    "tools/qa/release_hero_loading.server.luau": {
+      "bytes": 21202,
+      "sha256": "08513868df3512d3c53dbce8d3f8167dc2df354e3d2cfb340be1fd050ea48c7b"
+    },
+    "tools/studio_level_route_driver.luau": {
+      "bytes": 29652,
+      "sha256": "d54c668e93b31a00644a42f828fdfc22955e963dea9bbf87e47aca6564764826"
+    },
+    "tools/test_bricktoads_place.py": {
+      "bytes": 63907,
+      "sha256": "9dbaeb860e80297740dababadc618ca72fd0c2867bb7915f24b6d8b6d13e7c29"
+    },
+    "tools/test_build.py": {
+      "bytes": 2388,
+      "sha256": "8d5f8e0fa0f5be5965dd54632ac31ea528bce65fb9074f6988be20620a5ee50b"
+    },
+    "tools/test_release_ui.py": {
+      "bytes": 4135,
+      "sha256": "59917c837b21115a0aca15196ed48f4f651d49fa8feada04e51b842cc243ccb4"
+    }
+  },
+  "commands": [
+    {
+      "label": "canonical-hero-presentation-and-world",
+      "args": [
+        ".tools/python-3.13.9/python.exe",
+        "tests/canonical_hero_presentation/run.py",
+        "--luau",
+        ".tools/luau-0.745/luau.exe"
+      ],
+      "exit_code": 0,
+      "seconds": 1.421,
+      "stdout": "PASS canonical attachment leaves the exact physical fallback alpha for client readiness\nPASS unreadable canonical map content rejects atomically and leaves the physical fallback intact\nPASS Green attaches the actual fifteen mesh template with PBR and no additional humanoid\nPASS Yellow Brown and missing templates retain their real fallback appearance\nPASS two Green actors have independent cloned parts joints and pose deltas\nPASS repeat attachment does not clone again and detach restores only saved original visibility\nPASS replaced actor model is never hidden restored or driven by stale cosmetic state\nPASS malformed source attachment rejects atomically before changing rig visibility\nPASS tagged canonical P1 and P2 select separate resources on the same R6 physical actor\nPASS canonical shoulders retain their authored neutral rotations without explorer45degree correction\nPASS untagged canonical P2 is unavailable while Brown clones only a validated canonical P1\nPASS unknown explicit profiles reject before detaching a valid canonical appearance\nPASS invalid profile value class and legacy explicit unknown profiles fail without hiding a body\nPASS malformed canonical replacement preserves the existing resource visibility and metadata atomically\nPASS canonical selection changes resource once and cleanup restores saved owner metadata\nPASS canonical replacement cleanup never restores attributes on a newer actor model\nPASS canonical cleanup cannot restore fallback or owner metadata claimed by a newer appearance\nCharacterAppearance: 17 passed\nPASS source punch drives real cosmetic C0 while preserving every physical R6 joint\nPASS source kick really changes thigh and lower-leg targets and finishes at neutral\nPASS priority fallback restores existing R6 pose and cannot resurrect a canceled source attack\nPASS new accepted action replaces actual source arm and leg joints in one presentation update\nPASS source presentation state belongs to each cosmetic attachment and detaches safely\nPASS legacy appearance continues its established retarget even with canonical action context\nSource-presentation appearance wiring: 6 passed\nPASS rigid transform fixture preserves noncommuting rotations and inverse translations\nPASS actual imported Y180 rest frames send the source jab forward along face minusZ\nPASS canonical fallback also uses authored attachment axes with actual imported rest frames\nPASS legacy profile retains the original pre-rest rotation and shoulder correction\nRotated-rest appearance contracts: 4 passed\nPASS two optional morphs are fully preassembled with local visibility metadata and inert physics\nPASS P1 and P2 morphs clone only their own approved hero resource and preserve its source material\nPASS missing and independently rejected morph resources leave their original skin visible without failing attachment\nMorph resource preparation: 3 passed\nPASS verified graphics frames publish exactly one morph intent without hiding nonzero neutral alpha\nPASS rerender and repeated attach reuse the preassembled geometry without replacing ownership-sensitive parts\nPASS each priority interruption restores exact skin visibility and cannot resume an old oversized limb\nPASS new action unknown disabled missing context and air clear morphs before restoring fallback\nPASS switching from fist to boot clears the former before the folded-leg windup and preserves independent player materials\nPASS missing or detached morph geometry never hides a normal limb and is never respawned by playback\nPASS detach resource swap and owner replacement restore saved originals without touching a newer body\nMorph source frame and lifetime: 7 passed\nPASS fear heads are preassembled at the native neck without new physical parts during playback\nPASS switching both fear forms on one head publishes intent while retaining exact neutral alpha\nPASS fear cancels attack morphology and interruptions restore only that actor\nPASS missing or detached fear resources leave the original head visible\nFear appearance contracts: 4 passed\nPASS Brown preassembles independent recolored Green morphs and preserves neutral limbs for local readiness\nPASS dedicated Brown resources retain their authored atlas and material while P1 remains available\nPASS invalid dedicated Brown cannot replace an existing hero or silently substitute another resource\nBrown appearance contracts: 3 passed\nPASS folded source1F visibly compresses and thickens its retracted leg then restores before the boot morph\nPASS both fear frames reshape torso and limbs while wide-mouth heads keep their exact dimensions\nPASS every interruption and rewind clears body geometry without resurrecting the old windup\nPASS detach and actor replacement restore captured sizes attachments and cosmetic motor rest frames\nPASS nonfinite zero negative and unknown geometry profiles fail atomically and restore the prior form\nHero source-silhouette geometry: 5 passed\nPASS all three actual hero palettes align posed Ride soles to the supplied world deck using cosmetic Root only\nPASS Ride alignment ignores stale cosmetic Part CFrames and repeats without accumulating an offset\nPASS only a current canonical Ride pose with a finite deck may change the cosmetic root offset\nPASS Ride deck alignment is independent across actors at different world elevations and clears on detach\nRide deck alignment: 4 groups passed; physical simulation and native pixel fit remain separate\nPASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls\nPASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped\nPASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup\nPASS camera selects one world, clears cross-group state and never falls back from an explicit missing world\nPASS boss intro camera follows only current party/run and releases after cut completion or free view\nPASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped\nPASS ordinary species and guardian projectile modes have distinct original readable presentation\nPASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership\nPASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements\nPASS narrow support cannot crash safe respawn search\nPASS modern delayed jump uses bounded server ground history and preserves horizontal momentum\nPASS jump consumption survives stale floor reports and midair input, then resets after actual landing\nPASS jump grace rejects expired, deep, dead, held and reacting requests\nPASS jump history belongs to one actual actor in one modern world and preserves legacy behavior\nPASS jump support follows actual rotated rig footprint and corners without extending beyond its box\nPASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards\nPASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing\nPASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards\nPASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata\nPASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds\nPASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle\nPASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion\nPASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release\nPASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups\nPASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority\nPASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry\nPASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing\nPASS carry drops and new-run cleanup retain old body references without crossing group or actor generations\nPASS ground clubs are independent noncolliding original item models with one group translation\nPASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing\nPASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset\nPASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation\nPASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption\nPASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority\nPASS Dragon headbutt has real finite neck poses and clears on reaction/death\nPASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat\nPASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses\nPASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup\nPASS accepted response snapshots stay bound to their own profile without a live config table\nPASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors\nPASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries\nPASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets\nPASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates\nPASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped\nPASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage\nPASS original wing motors move only for authoritative flight and return to rest\nPASS fire orders first contact and detects a thin wall before its projected muzzle\nPASS hero appearance integration restores server authority after cosmetics and updates only presentation\nPASS imported Guardian integration preserves authority and uses distinct shot health and update hooks\nPASS missing or rejected Guardian art retains the existing playable fallback\nPASS source presentation hook forwards accepted action identity clock movement and recovery per actor\nPASS actual unmounted airborne Clinger wires Ride pose and live deck together without gameplay writes\nPASS mounted presentation forwards only the current body live deck and clears stale interrupted or removed resources\nPASS actual campaign cast channels normalize modes and preserve accepted body/epoch identity\nPASS imported healing fly stays cosmetic and follows the collectible lifecycle\nPASS pending enemy and collectible assets keep a visible fallback and attach after resource readiness\nPASS source context gives death reaction carry club Dragon air and paused states priority without altering combat\nPASS fear context uses captured actor identity and never leaks to replaced bodies\nPASS canonical club welds every piece to the actual posed hand with palm position and corrected wrist axes\nPASS stale detached malformed and legacy cosmetics retain the established R6 club grip and authority cleanup\nPASS canonical world spawn retains six visible R6 fallbacks and pins ownership after appearance assembly\n",
+      "stderr": ""
+    },
+    {
+      "label": "campaign-world",
+      "args": [
+        ".tools/python-3.13.9/python.exe",
+        "tests/campaign_world/run.py",
+        "--luau",
+        ".tools/luau-0.745/luau.exe"
+      ],
+      "exit_code": 0,
+      "seconds": 1.088,
+      "stdout": "PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls\nPASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped\nPASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup\nPASS camera selects one world, clears cross-group state and never falls back from an explicit missing world\nPASS boss intro camera follows only current party/run and releases after cut completion or free view\nPASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped\nPASS ordinary species and guardian projectile modes have distinct original readable presentation\nPASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership\nPASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements\nPASS narrow support cannot crash safe respawn search\nPASS modern delayed jump uses bounded server ground history and preserves horizontal momentum\nPASS jump consumption survives stale floor reports and midair input, then resets after actual landing\nPASS jump grace rejects expired, deep, dead, held and reacting requests\nPASS jump history belongs to one actual actor in one modern world and preserves legacy behavior\nPASS jump support follows actual rotated rig footprint and corners without extending beyond its box\nPASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards\nPASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing\nPASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards\nPASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata\nPASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds\nPASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle\nPASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion\nPASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release\nPASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups\nPASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority\nPASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry\nPASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing\nPASS carry drops and new-run cleanup retain old body references without crossing group or actor generations\nPASS ground clubs are independent noncolliding original item models with one group translation\nPASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing\nPASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset\nPASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation\nPASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption\nPASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority\nPASS Dragon headbutt has real finite neck poses and clears on reaction/death\nPASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat\nPASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses\nPASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup\nPASS accepted response snapshots stay bound to their own profile without a live config table\nPASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors\nPASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries\nPASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets\nPASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates\nPASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped\nPASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage\nPASS original wing motors move only for authoritative flight and return to rest\nPASS fire orders first contact and detects a thin wall before its projected muzzle\nPASS hero appearance integration restores server authority after cosmetics and updates only presentation\nPASS campaign move/jump routing\nPASS same-body local poses, negative descent and release\nPASS accepted mode knockback preserves horizontal direction and vertical effect\nPASS kinematic grounded run qualification\nPASS Clinger cardinal presentation heading preserves zero velocity, gameplay mount state and release\nPASS ordinary actor placement\nPASS trusted campaign family movement budgets\nPASS vertical geometry, spawn, camera and dynamic support scope\nPASS boss action selection uses encounter profile\nCampaign world: 9 groups passed; engine physics is not emulated\nPASS serpent imported overlay scales before attachment, preserves support and cleans up movement\nPASS serpent kind replacement and course close destroy only owned visuals\nPASS serpent resize rebuilds cached geometry and failed imports preserve visible physical support\nPASS vehicle and volumetric structure lifecycle preserve exact colliders, floor membership and group coordinates\nPASS surf placement uses only covering actual route water and retains scoped collider physics\n",
+      "stderr": ""
+    },
+    {
+      "label": "group-world",
+      "args": [
+        ".tools/python-3.13.9/python.exe",
+        "tests/group_world/run.py",
+        "--luau",
+        ".tools/luau-0.745/luau.exe"
+      ],
+      "exit_code": 0,
+      "seconds": 1.091,
+      "stdout": "PASS group construction preserves worlds and offsets geometry, safe origins, camera bounds and falls\nPASS local enemies/projectiles, physical emergency spawns, exits and new-run origins stay scoped\nPASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup\nPASS camera selects one world, clears cross-group state and never falls back from an explicit missing world\nPASS boss intro camera follows only current party/run and releases after cut completion or free view\nPASS full district route keeps true gaps, elevated pickups, completed gates and safe supports scoped\nPASS ordinary species and guardian projectile modes have distinct original readable presentation\nPASS complete enemy assembly and same-body claim, carry and Dragon transitions retain checked server physics ownership\nPASS weapon attachment and removal restore server ownership on the saved same body and skip anchored replacements\nPASS narrow support cannot crash safe respawn search\nPASS modern delayed jump uses bounded server ground history and preserves horizontal momentum\nPASS jump consumption survives stale floor reports and midair input, then resets after actual landing\nPASS jump grace rejects expired, deep, dead, held and reacting requests\nPASS jump history belongs to one actual actor in one modern world and preserves legacy behavior\nPASS jump support follows actual rotated rig footprint and corners without extending beyond its box\nPASS footprint support preserves physical floor, upward-flight, surface, hazard and consumed-jump guards\nPASS supported Climbing edge dismount consumes one ordinary jump and never rearms from climbing\nPASS Climbing dismount rejects freefall, unsupported walls, foreign floors and all ordinary jump guards\nPASS empty-world rebuild replaces actual route geometry and resets scoped gates, origins, support and layout metadata\nPASS original cover stays a scoped flat collider with matching support identity and independent-group rebuilds\nPASS server run requires bounded intent, actual heading velocity, valid physical support and current lifecycle\nPASS jump freezes real walk or run air cap, preserves steering and impulses, and prevents midair promotion\nPASS locomotion cleanup is body-scoped and preserves ordinary enemy caps, hold and Dragon release\nPASS run grace, NPC edge safety and carry cleanup preserve physical motion and independent groups\nPASS trusted locomotion mode drives distinct finite gait below attack and carry pose priority\nPASS enemy grabs require actual same-world bodies, ground support, facing and clear geometry\nPASS enemy carry keeps identity and health, restores per-part collisions and launches once in current facing\nPASS carry drops and new-run cleanup retain old body references without crossing group or actor generations\nPASS ground clubs are independent noncolliding original item models with one group translation\nPASS club pickup validates live grounded current bodies, full reach and geometry without mandatory pre-facing\nPASS equipped clubs weld to one original owner, have visual-only finite swings and clean old bodies on drop/reset\nPASS Pig jab, finisher, rush, running and recovery poses are distinct finite presentation with safe cancellation\nPASS Walker light leg, heavy launch and finite recovery poses preserve Pig and clear on interruption\nPASS Pig and Walker running strikes use finite original telegraph and recovery without new combat authority\nPASS Dragon headbutt has real finite neck poses and clears on reaction/death\nPASS source hero uppercut and boot poses follow authoritative finite action state without affecting combat\nPASS Walker backstep shares three-ray edge safety, moves away at configured speed and preserves physical impulses\nPASS Dragon link and release discard stale hero movement before restoring physics on both modes and old-body cleanup\nPASS accepted response snapshots stay bound to their own profile without a live config table\nPASS actual world impulse uses accepted shot direction through turns, replacement and disappearance without rotating actors\nPASS impossible Dragon ascent removes active lift once and preserves gravity, flags and falling velocity on cold retries\nPASS Dragon ascent guard preserves clear goals, descent, noncolliding art and other-group geometry at nonzero offsets\nPASS Dragon physical flight and mounting restore gravity/authority/collisions and local coordinates\nPASS Dragon release protects replacement bodies, swept fire stops at geometry and cleanup stays scoped\nPASS Dragon fire volume checks initial obstruction and sphere radius before candidate damage\nPASS original wing motors move only for authoritative flight and return to rest\nPASS fire orders first contact and detects a thin wall before its projected muzzle\nPASS hero appearance integration restores server authority after cosmetics and updates only presentation\n",
+      "stderr": ""
+    },
+    {
+      "label": "playable-build-check",
+      "args": [
+        ".tools/python-3.13.9/python.exe",
+        "tools/build_bricktoads_place.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.792,
+      "stdout": "C:\\Users\\User\\Documents\\bricktoads\\places\\BrickToadsPlayable.rbxlx: 2228161 bytes; sha256=b5007ad29f58264437f06d279b5f4d81d36f6950c5cf5dc96c4735d87eb4f91f\n",
+      "stderr": ""
+    },
+    {
+      "label": "structural-build",
+      "args": [
+        ".tools/python-3.13.9/python.exe",
+        "tools/test_build.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.35,
+      "stdout": "",
+      "stderr": "test_build_is_deterministic (__main__.BuildTests.test_build_is_deterministic) ... ok\ntest_missing_source_fails_instead_of_empty_module (__main__.BuildTests.test_missing_source_fails_instead_of_empty_module) ... ok\ntest_sources_are_exact_and_server_only (__main__.BuildTests.test_sources_are_exact_and_server_only) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.038s\n\nOK\n"
+    },
+    {
+      "label": "development-place",
+      "args": [
+        ".tools/python-3.13.9/python.exe",
+        "tools/test_bricktoads_place.py"
+      ],
+      "exit_code": 0,
+      "seconds": 88.175,
+      "stdout": "",
+      "stderr": "test_attack_manifest_cannot_substitute_the_fear_family (__main__.BrickToadsPlaceTests.test_attack_manifest_cannot_substitute_the_fear_family) ... ok\ntest_attack_morphs_preserve_private_identity_origin_extents_and_pbr (__main__.BrickToadsPlaceTests.test_attack_morphs_preserve_private_identity_origin_extents_and_pbr) ... ok\ntest_attack_morphs_reject_wrong_palette_origin_and_missing_source (__main__.BrickToadsPlaceTests.test_attack_morphs_reject_wrong_palette_origin_and_missing_source) ... ok\ntest_boss_templates_preserve_private_resources_rest_frames_origins_and_pbr (__main__.BrickToadsPlaceTests.test_boss_templates_preserve_private_resources_rest_frames_origins_and_pbr) ... ok\ntest_boss_templates_reject_family_identity_missing_duplicate_and_extra_resources (__main__.BrickToadsPlaceTests.test_boss_templates_reject_family_identity_missing_duplicate_and_extra_resources) ... ok\ntest_boss_templates_reject_invalid_mesh_geometry_visibility_and_content (__main__.BrickToadsPlaceTests.test_boss_templates_reject_invalid_mesh_geometry_visibility_and_content) ... ok\ntest_boss_templates_reject_invalid_provenance_and_source_paths (__main__.BrickToadsPlaceTests.test_boss_templates_reject_invalid_provenance_and_source_paths) ... ok\ntest_boss_templates_reject_missing_extra_or_misaligned_mounts_and_muzzles (__main__.BrickToadsPlaceTests.test_boss_templates_reject_missing_extra_or_misaligned_mounts_and_muzzles) ... ok\ntest_brown_has_a_dedicated_canonical_skin_in_the_playable (__main__.BrickToadsPlaceTests.test_brown_has_a_dedicated_canonical_skin_in_the_playable) ... ok\ntest_brown_morph_receipt_and_its_selected_source_are_mandatory (__main__.BrickToadsPlaceTests.test_brown_morph_receipt_and_its_selected_source_are_mandatory) ... ok\ntest_brown_morphs_preserve_dedicated_uploaded_texture_and_all_four_identities (__main__.BrickToadsPlaceTests.test_brown_morphs_preserve_dedicated_uploaded_texture_and_all_four_identities) ... ok\ntest_brown_morphs_reject_green_substitution_missing_identity_and_bad_origin (__main__.BrickToadsPlaceTests.test_brown_morphs_reject_green_substitution_missing_identity_and_bad_origin) ... ok\ntest_canonical_glb_filename_rejects_paths_extensions_and_empty_values (__main__.BrickToadsPlaceTests.test_canonical_glb_filename_rejects_paths_extensions_and_empty_values) ... ok\ntest_canonical_player_templates_are_default_private_exact_uploaded_resources (__main__.BrickToadsPlaceTests.test_canonical_player_templates_are_default_private_exact_uploaded_resources) ... ok\ntest_canonical_surface_appearance_maps_are_preserved (__main__.BrickToadsPlaceTests.test_canonical_surface_appearance_maps_are_preserved) ... ok\ntest_conflicting_lua_and_luau_names_fail (__main__.BrickToadsPlaceTests.test_conflicting_lua_and_luau_names_fail) ... ok\ntest_course_props_are_mandatory_flat_private_exact_textured_resources (__main__.BrickToadsPlaceTests.test_course_props_are_mandatory_flat_private_exact_textured_resources) ... ok\ntest_course_vehicles_are_mandatory_flat_private_exact_textured_resources (__main__.BrickToadsPlaceTests.test_course_vehicles_are_mandatory_flat_private_exact_textured_resources) ... ok\ntest_explicit_canonical_glb_basename_replaces_only_the_default_source_file (__main__.BrickToadsPlaceTests.test_explicit_canonical_glb_basename_replaces_only_the_default_source_file) ... ok\ntest_explicit_canonical_glb_missing_or_wrong_hash_never_uses_the_default (__main__.BrickToadsPlaceTests.test_explicit_canonical_glb_missing_or_wrong_hash_never_uses_the_default) ... ok\ntest_fear_and_attack_morphs_share_one_private_folder_with_distinct_provenance (__main__.BrickToadsPlaceTests.test_fear_and_attack_morphs_share_one_private_folder_with_distinct_provenance) ... ok\ntest_fear_morphs_reject_family_mixups_identity_geometry_and_provenance (__main__.BrickToadsPlaceTests.test_fear_morphs_reject_family_mixups_identity_geometry_and_provenance) ... ok\ntest_green_mesh_template_is_serialized_privately_with_exact_pbr_and_attachments (__main__.BrickToadsPlaceTests.test_green_mesh_template_is_serialized_privately_with_exact_pbr_and_attachments) ... ok\ntest_invalid_canonical_geometry_content_profile_or_provenance_is_rejected (__main__.BrickToadsPlaceTests.test_invalid_canonical_geometry_content_profile_or_provenance_is_rejected) ... ok\ntest_missing_boss_manifest_and_selected_source_fail_closed (__main__.BrickToadsPlaceTests.test_missing_boss_manifest_and_selected_source_fail_closed) ... ok\ntest_missing_character_resource_fails_instead_of_silently_replacing_mesh_art (__main__.BrickToadsPlaceTests.test_missing_character_resource_fails_instead_of_silently_replacing_mesh_art) ... ok\ntest_missing_course_prop_registry_is_not_silently_omitted (__main__.BrickToadsPlaceTests.test_missing_course_prop_registry_is_not_silently_omitted) ... ok\ntest_missing_course_vehicle_registry_is_not_silently_omitted (__main__.BrickToadsPlaceTests.test_missing_course_vehicle_registry_is_not_silently_omitted) ... ok\ntest_missing_either_canonical_manifest_fails_closed (__main__.BrickToadsPlaceTests.test_missing_either_canonical_manifest_fails_closed) ... ok\ntest_missing_either_morph_family_fails_closed (__main__.BrickToadsPlaceTests.test_missing_either_morph_family_fails_closed) ... ok\ntest_missing_sources_fail_without_emitting_an_empty_place (__main__.BrickToadsPlaceTests.test_missing_sources_fail_without_emitting_an_empty_place) ... ok\ntest_playable_preserves_both_supported_screen_orientations (__main__.BrickToadsPlaceTests.test_playable_preserves_both_supported_screen_orientations) ... ok\ntest_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint (__main__.BrickToadsPlaceTests.test_playable_runtime_reuses_private_combat_sources_without_stand_entrypoint) ... ok\ntest_private_source_receipt_changes_when_an_embedded_source_changes (__main__.BrickToadsPlaceTests.test_private_source_receipt_changes_when_an_embedded_source_changes) ... ok\ntest_rebuild_is_deterministic (__main__.BrickToadsPlaceTests.test_rebuild_is_deterministic) ... ok\ntest_rejected_explorer_is_excluded_from_the_playable_by_default (__main__.BrickToadsPlaceTests.test_rejected_explorer_is_excluded_from_the_playable_by_default) ... ok\ntest_server_scripts_cannot_be_built_into_public_containers (__main__.BrickToadsPlaceTests.test_server_scripts_cannot_be_built_into_public_containers) ... ok\ntest_sources_are_current_and_server_code_is_private (__main__.BrickToadsPlaceTests.test_sources_are_current_and_server_code_is_private) ... ok\ntest_spawn_is_above_a_collidable_anchored_floor (__main__.BrickToadsPlaceTests.test_spawn_is_above_a_collidable_anchored_floor) ... ok\n\n----------------------------------------------------------------------\nRan 39 tests in 87.805s\n\nOK\n"
+    },
+    {
+      "label": "compile-changed-luau-and-qa-helpers",
+      "args": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "reports/2026-11-11-course-traps/campaign-props-observer.client.luau",
+        "src/client/BossQueuePanel.luau",
+        "src/client/BrickToadsClient.client.luau",
+        "src/client/CampaignPresentation.luau",
+        "src/client/GroupPanel.luau",
+        "src/client/HeroAssetVisibility.luau",
+        "src/server/gameplay/CanonicalCastPresentation.lua",
+        "src/server/gameplay/CharacterAppearance.lua",
+        "src/server/gameplay/CoursePropAppearance.lua",
+        "src/server/gameplay/GameWorld.lua",
+        "src/shared/HeroPortraits.luau",
+        "src/shared/TextCatalog.luau",
+        "tests/ReleaseUI.fixture.luau",
+        "tests/ReleaseUI.spec.luau",
+        "tests/canonical_cast_appearance/contracts.luau",
+        "tests/canonical_cast_appearance/queen_contracts.luau",
+        "tests/canonical_hero_presentation/brown_contracts.luau",
+        "tests/canonical_hero_presentation/fear_contracts.luau",
+        "tests/canonical_hero_presentation/morph_contracts.luau",
+        "tests/canonical_hero_presentation/world_contracts.luau",
+        "tests/character_appearance/contracts.luau",
+        "tests/course_props/contracts.luau",
+        "tests/run_canonical_cast.luau",
+        "tests/run_hero_asset_visibility.luau",
+        "tools/qa/campaign_combat_pilot.lua",
+        "tools/qa/campaign_early_course_pilot.lua",
+        "tools/qa/campaign_late_course_pilot.lua",
+        "tools/qa/campaign_tubes_arbitration.lua",
+        "tools/qa/full_campaign_av_observer.client.luau",
+        "tools/qa/full_campaign_bridge.server.luau",
+        "tools/qa/full_campaign_client_adapter.luau",
+        "tools/qa/full_campaign_heading_observer.server.luau",
+        "tools/qa/full_campaign_mode_observer.server.luau",
+        "tools/qa/full_campaign_presentation_observer.server.luau",
+        "tools/qa/release_hero_loading.client.luau",
+        "tools/qa/release_hero_loading.server.luau",
+        "tools/studio_level_route_driver.luau"
+      ],
+      "exit_code": 0,
+      "seconds": 0.114,
+      "stdout": "Compiled 12 KLOC into 826 KB bytecode (read 0.01s, parse 0.02s, compile 0.06s)\n",
+      "stderr": ""
+    },
+    {
+      "label": "compile-client-with-appended-qa",
+      "args": [
+        ".tools/luau-0.745/luau-compile.exe",
+        "--null",
+        "build/release-round2-kbbg9goj/client-instrumented.luau"
+      ],
+      "exit_code": 0,
+      "seconds": 0.023,
+      "stdout": "Compiled 2 KLOC into 127 KB bytecode (read 0.00s, parse 0.00s, compile 0.01s)\n",
+      "stderr": ""
+    }
+  ],
+  "limits": [
+    "Only affected checks were repeated on this source revision.",
+    "Studio and native acceptance are separate evidence."
+  ],
+  "combined_client": {
+    "inputs": [
+      "src/client/BrickToadsClient.client.luau",
+      "tools/qa/full_campaign_client_adapter.luau",
+      "tools/qa/full_campaign_av_observer.client.luau",
+      "reports/2026-11-11-course-traps/campaign-props-observer.client.luau",
+      "tools/qa/release_hero_loading.client.luau"
+    ],
+    "bytes": 146604,
+    "sha256": "2a3120c2a15e394d273747d650c29f415591887d62ac506bc2c46b667d06b621"
+  },
+  "files_after": {
+    "places/BrickToads.rbxlx": {
+      "bytes": 91334,
+      "sha256": "1974f25e1af043f3d4a1fe581b5ec9ac818394ac4bc7a747e6fe0ca1f7b5c353"
+    },
+    "places/BrickToadsPlayable.rbxlx": {
+      "bytes": 2228161,
+      "sha256": "b5007ad29f58264437f06d279b5f4d81d36f6950c5cf5dc96c4735d87eb4f91f"
+    },
+    "reports/2026-11-11-course-traps/campaign-props-observer.client.luau": {
+      "bytes": 3847,
+      "sha256": "8731df2b4246a3a761c7b555d6273d7561e20d278ddfc99a5e12fcc37fd3357c"
+    },
+    "src/client/BossQueuePanel.luau": {
+      "bytes": 11639,
+      "sha256": "235d76ee1ca4485ef0381a7982ac717fbb523da65d2ced300a279cf51ea171cc"
+    },
+    "src/client/BrickToadsClient.client.luau": {
+      "bytes": 96175,
+      "sha256": "4a9dfcf178e9dac4e09a58cea2d5e7388d79a77c178a5d8bc1da0c2100af9cd0"
+    },
+    "src/client/CampaignPresentation.luau": {
+      "bytes": 4063,
+      "sha256": "1118504ee741aa65a67bdf3243a5d3b781a3b3673db3dab8f5323a58aa15138e"
+    },
+    "src/client/GroupPanel.luau": {
+      "bytes": 13389,
+      "sha256": "cf3ce2b6867cda2dad06fb586c4c7424a65444b3def74a7f1351bcc16072ce71"
+    },
+    "src/client/HeroAssetVisibility.luau": {
+      "bytes": 19049,
+      "sha256": "ea8414e20bc88e2c1faeeea62c2224dd09aba3cf86404096521c104b0e1e4d64"
+    },
+    "src/server/gameplay/CanonicalCastPresentation.lua": {
+      "bytes": 22214,
+      "sha256": "1d1ad4d4ce6ba24e7e699ae4093d1852dfe7019b021e01f246a5456a7e55ad0e"
+    },
+    "src/server/gameplay/CharacterAppearance.lua": {
+      "bytes": 27213,
+      "sha256": "f1ce60ba033824af45d08fb9be011b1a6ec734ba9a2689a95deaba665e8e368f"
+    },
+    "src/server/gameplay/CoursePropAppearance.lua": {
+      "bytes": 12676,
+      "sha256": "867ffd91f8b1f7b0245e7d8357766cb0b8a3c8ff993c3f246f9fd5b69eaf8d86"
+    },
+    "src/server/gameplay/GameWorld.lua": {
+      "bytes": 114303,
+      "sha256": "54d665984d851f6a4325c4ce81b3a8e7dc76e7c7bc45c994ff12fc1957beb6b5"
+    },
+    "src/shared/HeroPortraits.luau": {
+      "bytes": 293,
+      "sha256": "3595d0b836f9bcda213a2d46b0a29d22759984b719b6f6132b5f3b919ced1627"
+    },
+    "src/shared/TextCatalog.luau": {
+      "bytes": 89683,
+      "sha256": "983869b8d67eb035eb29ff1ccca59206a0ab4f4fae196f6ac8ff8c7d97ecf5ba"
+    },
+    "tests/ReleaseUI.fixture.luau": {
+      "bytes": 1705,
+      "sha256": "3dd7cfcac677cf4011f91c5280e40aed73b912f17cb82a407a12c5c536fbe408"
+    },
+    "tests/ReleaseUI.spec.luau": {
+      "bytes": 17282,
+      "sha256": "326c29eb3a014f6cce38247353b6d29e17ab86b01056fd1f3a90113987d4b810"
+    },
+    "tests/campaign_world/run.py": {
+      "bytes": 1583,
+      "sha256": "23c0ca200eb137e35d2c3a2aa90a679c814018f5129d52302345dd7357a1ce14"
+    },
+    "tests/canonical_cast_appearance/contracts.luau": {
+      "bytes": 11680,
+      "sha256": "d4d81687e3e9a81f0cb18bb2bf3ff37d2eae9925b733808b2a694d802d9995c3"
+    },
+    "tests/canonical_cast_appearance/queen_contracts.luau": {
+      "bytes": 5932,
+      "sha256": "33cb29cda56e92404b8ac5e123c5faf635e7fe4c6d0b043f8b19fce7d7d461d7"
+    },
+    "tests/canonical_hero_presentation/brown_contracts.luau": {
+      "bytes": 3701,
+      "sha256": "378034bafc8586154bb55bbf9cbf2816ba6cb2ebcc806c012a91270cc1a4df9a"
+    },
+    "tests/canonical_hero_presentation/fear_contracts.luau": {
+      "bytes": 4915,
+      "sha256": "b44940128423babf1ec2b229cf59a992dffa213b873193b4fc2de191a5b20520"
+    },
+    "tests/canonical_hero_presentation/morph_contracts.luau": {
+      "bytes": 14533,
+      "sha256": "ccd157dab0262eea772239b581e2c4b5fbf4f52bc8328fa4ec6dd232ae493d90"
+    },
+    "tests/canonical_hero_presentation/run.py": {
+      "bytes": 4781,
+      "sha256": "23ac5b0ae84546e9253af7b67bb8429b822823bd240f65d7a5ef9b9d16332962"
+    },
+    "tests/canonical_hero_presentation/world_contracts.luau": {
+      "bytes": 24874,
+      "sha256": "d1aef4e304f7072e4f23ccec0b345494646d0c033c454eb9ae2f5f1b19af6d67"
+    },
+    "tests/character_appearance/contracts.luau": {
+      "bytes": 21961,
+      "sha256": "8feaacf1e0b0bfbb89102b0b9360ea7f170c0c04d09f562915a8e933a23b060d"
+    },
+    "tests/course_props/contracts.luau": {
+      "bytes": 16306,
+      "sha256": "3e2cb3e771a701f33bcbbc929dacc9f8731d66193f1ad7275ccc78087fd8bad0"
+    },
+    "tests/group_world/run.py": {
+      "bytes": 1391,
+      "sha256": "8cb63804e973689ffead204868c884f1448ae796a38274f70ab44598f9d47790"
+    },
+    "tests/run_canonical_cast.luau": {
+      "bytes": 14460,
+      "sha256": "6a4339799f357568fae7e599c1b384b36e190be1f4a891912088a6ffb5f1d596"
+    },
+    "tests/run_hero_asset_visibility.luau": {
+      "bytes": 30579,
+      "sha256": "6650747acab95a585f97b5dbf48ff50bfce87946e0be09c1cc0c472eb18513a5"
+    },
+    "tools/build_bricktoads_place.py": {
+      "bytes": 30489,
+      "sha256": "2d4e196ec98f282996ce43553f7efb3c22140736915a29c649172a071a257719"
+    },
+    "tools/qa/campaign_combat_pilot.lua": {
+      "bytes": 43174,
+      "sha256": "bebdb12c47f7cefa1b079d8bec236f0a178de5bf5929a86476c769554f8ae85c"
+    },
+    "tools/qa/campaign_early_course_pilot.lua": {
+      "bytes": 31336,
+      "sha256": "1d5693ed7ed9089a7c645c8bf4f3b8b2578fe169dd758f316c47f9b51a280695"
+    },
+    "tools/qa/campaign_late_course_pilot.lua": {
+      "bytes": 6822,
+      "sha256": "b786b7a9f9144331089180a28dc0a549c638038ee47c7b91a27e2d695bc800d8"
+    },
+    "tools/qa/campaign_tubes_arbitration.lua": {
+      "bytes": 5175,
+      "sha256": "e365d2ecf700511a25230f92d9387771c6071ca27be911297306569945ca4013"
+    },
+    "tools/qa/full_campaign_av_observer.client.luau": {
+      "bytes": 31852,
+      "sha256": "dba1e9c16131c8c7af3c88faf2863c57cde05db1e94082aa14f79b061395dd86"
+    },
+    "tools/qa/full_campaign_bridge.server.luau": {
+      "bytes": 23058,
+      "sha256": "97c32bcbcd8c9af1336875460273a2438972df2ca07a47c9473c144dc1f60add"
+    },
+    "tools/qa/full_campaign_client_adapter.luau": {
+      "bytes": 2037,
+      "sha256": "b40c4b42d5a44d9f7561be8228204c5bae3f292292d9630eaf0fc21384544c65"
+    },
+    "tools/qa/full_campaign_heading_observer.server.luau": {
+      "bytes": 3108,
+      "sha256": "1f8890ba939abfb240eade403cb3a270265455753aa4413da13cf359a0def76b"
+    },
+    "tools/qa/full_campaign_mode_observer.server.luau": {
+      "bytes": 5036,
+      "sha256": "cb04b24e48bcc885fb7635643b2a6355373641fec5c5ea54267ffe8af49885a7"
+    },
+    "tools/qa/full_campaign_presentation_observer.server.luau": {
+      "bytes": 20926,
+      "sha256": "77e658c22686ace4a6dfba0bb99e481002becd9871afb54df19d3c89830c90f6"
+    },
+    "tools/qa/release_hero_loading.client.luau": {
+      "bytes": 14329,
+      "sha256": "da233b5a7e6692e54233c6b53edf31f6544d7023ca52b52c4dd94250fb7fb647"
+    },
+    "tools/qa/release_hero_loading.server.luau": {
+      "bytes": 21202,
+      "sha256": "08513868df3512d3c53dbce8d3f8167dc2df354e3d2cfb340be1fd050ea48c7b"
+    },
+    "tools/studio_level_route_driver.luau": {
+      "bytes": 29652,
+      "sha256": "d54c668e93b31a00644a42f828fdfc22955e963dea9bbf87e47aca6564764826"
+    },
+    "tools/test_bricktoads_place.py": {
+      "bytes": 63907,
+      "sha256": "9dbaeb860e80297740dababadc618ca72fd0c2867bb7915f24b6d8b6d13e7c29"
+    },
+    "tools/test_build.py": {
+      "bytes": 2388,
+      "sha256": "8d5f8e0fa0f5be5965dd54632ac31ea528bce65fb9074f6988be20620a5ee50b"
+    },
+    "tools/test_release_ui.py": {
+      "bytes": 4135,
+      "sha256": "59917c837b21115a0aca15196ed48f4f651d49fa8feada04e51b842cc243ccb4"
+    }
+  },
+  "files_preserved": true,
+  "compiled_file_count": 37,
+  "total": 8,
+  "passed": 8,
+  "status": "Passed",
+  "finished": "2026-11-11T07:22:02.430283+00:00"
+}

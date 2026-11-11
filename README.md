@@ -10,6 +10,8 @@ Open `places/BrickToadsPlayable.rbxlx` in Roblox Studio and press Play. The leve
 
 The [recorded native25 run](reports/2026-11-10-full-campaign-playthrough/attempt-25-summary.json) completed all13 stages and all six boss encounters/phases in one ordinary solo Studio game, with **God Mode off**, one paid respawn and two remaining. This establishes the recorded solo campaign; device, real reconnect and release acceptance remain separate.
 
+The latest [release check](reports/2026-11-11-release-completion/README.md) records a second finite solo victory with all 13 stages, the manual **New game** flow, and a separate test of the corrected live hero spawn and phone HUD on the final build.
+
 Use **Groups** / **Choose team** to create an independent team or join another. Up to four local teams can play in separate arenas on one server. Joining an active team observes its existing run; it never adds a hero. A living or awaiting-respawn character keeps its role. After elimination you may create a new team or manually choose an eligible ordinary enemy in another group. Your old group's elimination/spent-life history stays intact when you return.
 
 - On ordinary ground, hold **WASD** to walk and face a direction. Press, release, then press the same direction again within 0.25 seconds and hold it to run. Heroes walk/run at 16/24 studs/s; a first-route run jump travels farther at the same JumpPower50. Release, interruption and context changes clear running. Later modes supply their own movement and jump budgets; the HUD shows the current controls.
