@@ -3,6 +3,8 @@
 local CampaignWorld={}
 CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
+local CourseAppearance=require(script.Parent.CourseAppearance)
+local CoursePropAppearance=require(script.Parent.CoursePropAppearance)
 local palettes={
     Rope={45,63,78},Speeder={106,75,47},Ice={133,185,206},Surf={42,124,141},
     Serpents={71,111,69},Jet={125,65,44},Ascent={76,88,107},Tubes={61,105,114},
@@ -98,6 +100,85 @@ end
 local surfaces={Serpent=true,Lift=true,TowerPlatform=true,Platform=true,IceBlock=true,Support=true}
 local vehicles={Speeder=true,Surfboard=true,Jet=true,Board=true,ClingerVehicle=true}
 local orbs={AirMine=true,Mine=true,Bomb=true,Buzzball=true,Orb=true,Snowball=true,Whirlpool=true}
+local function scaledFrame(frame,scale)
+    return CFrame.new(frame.Position*scale)*frame.Rotation
+end
+local function meshBounds(model)
+    local low,high=Vector3.new(math.huge,math.huge,math.huge),Vector3.new(-math.huge,-math.huge,-math.huge)
+    local bodyTop,count=-math.huge,0
+    for _,p in ipairs(model:GetChildren())do if p:IsA('MeshPart')then
+        count+=1
+        for _,x in ipairs({-1,1})do for _,y in ipairs({-1,1})do for _,z in ipairs({-1,1})do
+            local point=p.CFrame:PointToWorldSpace(Vector3.new(p.Size.X*x/2,p.Size.Y*y/2,p.Size.Z*z/2))
+            low=Vector3.new(math.min(low.X,point.X),math.min(low.Y,point.Y),math.min(low.Z,point.Z))
+            high=Vector3.new(math.max(high.X,point.X),math.max(high.Y,point.Y),math.max(high.Z,point.Z))
+            if p.Name=='Body'then bodyTop=math.max(bodyTop,point.Y)end
+        end end end
+    end end
+    assert(count>0 and high.X>low.X and high.Z>low.Z and bodyTop>-math.huge,'Invalid serpent mesh bounds')
+    return low,high,bodyTop
+end
+local function removeSerpent(row)
+    local skin=row.serpent;if not skin then return end
+    row.serpent=nil
+    if skin.actor.castAppearance then pcall(skin.appearance.detach,skin.actor)end
+    skin.proxy:Destroy();skin.temporary:Destroy()
+    if row.part.Parent then row.part.Transparency=skin.previousTransparency end
+end
+local function prepareSerpent(self,row)
+    local appearance=self.world.castAppearance
+    if not appearance or type(appearance.attach)~='function' or type(appearance.update)~='function'
+        or type(appearance.detach)~='function' then return end
+    local templates=game:GetService('ServerStorage'):FindFirstChild('BrickToadsCastTemplates')
+    local source=templates and templates:FindFirstChild('Snake')
+    if not source or not source:IsA('Model')then return end
+    local temporary,proxy,actor
+    local ok,skin=pcall(function()
+        temporary=Instance.new('Folder');temporary.Name='OwnedSerpentTemplate'
+        local template=assert(source:Clone(),'Uncloneable serpent template');template.Parent=temporary
+        local low,high,bodyTop=meshBounds(template)
+        local size=row.part.Size
+        local scale=math.min(size.X/(high.Z-low.Z),size.Z/(high.X-low.X))
+        assert(scale>0 and scale<math.huge,'Invalid serpent fit')
+        -- A caches immutable rest frames. Scale every mesh and pivot before it
+        -- assembles the cosmetic rig; shared ServerStorage assets stay intact.
+        for _,p in ipairs(template:GetDescendants())do
+            if p:IsA('MeshPart')then
+                p.Size=p.Size*scale;p.CFrame=scaledFrame(p.CFrame,scale)
+                p.Massless=true;p.CanCollide=false;p.CanTouch=false;p.CanQuery=false
+            elseif p:IsA('Attachment')then p.CFrame=scaledFrame(p.CFrame,scale)end
+        end
+        proxy=Instance.new('Model');proxy.Name='SerpentAppearance_'..tostring(row.id)
+        local torso=makePart(proxy,'Torso',Vector3.new(.05,.05,.05),CFrame.new(),self.color,false)
+        torso.Transparency=1;torso.Massless=true
+        actor={model=proxy,root=torso}
+        assert(appearance.attach(actor,'Snake',temporary),'Invalid serpent skin')
+        -- The NES body is a nametable path. This bounded3D support fit is an
+        -- authored adaptation of the decoded head/link references, not its trace.
+        proxy:SetAttribute('CosmeticAdaptation','SourceHeadLinkWithAuthored3DSerpentSupportFit')
+        proxy:SetAttribute('SourceBodyTrace','UNKNOWN_NAMETABLE_BODY')
+        local middle=(low.Z+high.Z)/2
+        local fit=CFrame.new(0,size.Y/2-bodyTop*scale,0)*CFrame.Angles(0,math.pi/2,0)*CFrame.new(0,0,-middle*scale)
+        return {actor=actor,proxy=proxy,temporary=temporary,appearance=appearance,fit=fit,size=size,
+            previousTransparency=row.part.Transparency or 0}
+    end)
+    if not ok then
+        if actor and actor.castAppearance then pcall(appearance.detach,actor)end
+        if proxy then proxy:Destroy()end;if temporary then temporary:Destroy()end
+        return
+    end
+    row.serpent=skin;skin.proxy.Parent=self.world.geometry
+    if appearance.addFallback then appearance.addFallback(skin.actor,row.part) end
+end
+function CampaignWorld:_serpent(row,now)
+    local skin=row.serpent;local size=row.part.Size
+    if skin and (skin.size.X~=size.X or skin.size.Y~=size.Y or skin.size.Z~=size.Z)then removeSerpent(row);skin=nil end
+    if not skin then prepareSerpent(self,row);skin=row.serpent end
+    if not skin then return end
+    skin.actor.root.CFrame=row.part.CFrame*skin.fit
+    skin.appearance.update(skin.actor,{kind='Snake',actorId=self.route.id..':serpent:'..tostring(row.id),
+        levelEpoch=self.route.campaignIndex,now=now or 0,dt=0,mode='Idle',speed=0})
+end
 CampaignWorld.bossNames={BigBlag='Big Blag',RoboManus='Robo-Manus',GeneralSlaughter='General Slaughter',
     Buzzball='Buzzball',DarkQueen='Dark Queen'}
 function CampaignWorld.decorateActor(actor,kind)
@@ -212,7 +293,7 @@ function CampaignWorld:object(id,kind,point,size,metadata)
             self.world.allFloors[#self.world.allFloors+1]=item
             self.world.floors[#self.world.floors+1]=item
         end
-        row={kind=kind,part=item};self.objects[id]=row
+        row={kind=kind,part=item,id=id};self.objects[id]=row
         if metadata.label then row.label=caption(item,metadata.label) end
     end
     local yaw=metadata.yaw or point.yaw or 0
@@ -234,22 +315,42 @@ function CampaignWorld:object(id,kind,point,size,metadata)
     if metadata.alpha then row.part.Transparency=metadata.alpha end
     if row.label and metadata.label then row.label.Text=metadata.label end
     row.expiresAt=metadata.expiresAt
+    if kind=='Serpent'then self:_serpent(row,self.now or 0)end
+    local waterSurfaceY
+    if kind=='Surfboard'or kind=='Board'then
+        for _,water in ipairs(self.route.course.media or{})do
+            if water.kind=='Water'and point.x>=water.minX and point.x<=water.maxX
+                and point.z>=water.minZ and point.z<=water.maxZ then
+                waterSurfaceY=math.max(waterSurfaceY or-math.huge,water.maxY+self.world.offset.Y)
+            end
+        end
+    end
+    CourseAppearance.update(row,self.world.geometry,metadata,waterSurfaceY)
+    CoursePropAppearance.update(row,self.world.geometry,metadata,self.now or 0)
     return row.part
 end
 function CampaignWorld:remove(id)
     local row=self.objects[id]
     if not row then return end
+    removeSerpent(row)
+    CourseAppearance.remove(row)
+    CoursePropAppearance.remove(row)
     for _,floors in ipairs({self.world.allFloors,self.world.floors}) do
         for i=#floors,1,-1 do if floors[i]==row.part then table.remove(floors,i) end end
     end
     row.part:Destroy();self.objects[id]=nil
 end
 function CampaignWorld:step(now)
+    self.now=now
     local expired={}
     for id,row in pairs(self.objects) do
         if row.expiresAt and now>=row.expiresAt then expired[#expired+1]=id end
     end
     for _,id in ipairs(expired) do self:remove(id) end
+    for _,row in pairs(self.objects)do
+        if row.kind=='Serpent'then self:_serpent(row,now)end
+        CoursePropAppearance.step(row,now)
+    end
 end
 function CampaignWorld:stage(name)
     self.world.stageName=name;self.world.folder:SetAttribute('Stage',name)

@@ -1,0 +1,435 @@
+{
+  "schema": 1,
+  "kind": "Icicle",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Long hanging white/lavender shard with black contour and pointed lower end; two authored lengths.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -0.7237259549488559,
+      -1.4114627108062487,
+      -0.6823369137986398
+    ],
+    [
+      0.7237259549488559,
+      1.4114627108062487,
+      0.6823369137986398
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Icicle",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "20722-20774"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "20722-20774",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L20722-L20774"
+      }
+    ],
+    "sourceTypes": [
+      "39"
+    ],
+    "graphicsFrameIds": [
+      "72",
+      "73"
+    ],
+    "palette": {
+      "typeId": 57,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:256",
+      "trigger": [
+        0,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        35,
+        32
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:258",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            35,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 114,
+        "frameHex": "72",
+        "namespace": "object",
+        "metaspriteAddress": "B620",
+        "parts": [
+          {
+            "tile": 154,
+            "x": -4,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 155,
+            "x": -4,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 156,
+            "x": -4,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -4,
+          "minY": -8,
+          "maxX": 3,
+          "maxY": 15
+        },
+        "width": 8,
+        "height": 24,
+        "png": "frames/icicle-72.png"
+      },
+      {
+        "frameId": 115,
+        "frameHex": "73",
+        "namespace": "object",
+        "metaspriteAddress": "B62B",
+        "parts": [
+          {
+            "tile": 157,
+            "x": -8,
+            "y": -20,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 158,
+            "x": 0,
+            "y": -20,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 159,
+            "x": -7,
+            "y": -12,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 160,
+            "x": 0,
+            "y": -12,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 161,
+            "x": -5,
+            "y": -4,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 162,
+            "x": -2,
+            "y": -4,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 163,
+            "x": -3,
+            "y": 4,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 164,
+            "x": -3,
+            "y": 12,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": -20,
+          "maxX": 7,
+          "maxY": 19
+        },
+        "width": 16,
+        "height": 40,
+        "png": "frames/icicle-73.png"
+      }
+    ],
+    "appearanceCues": [
+      "Long hanging white/lavender shard with black contour and pointed lower end; two authored lengths."
+    ],
+    "runtimeRole": "moving falling hazard",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          99
+        ]
+      }
+    ],
+    "sourceHandler": "object_sosulka / authored graphics parameter",
+    "bankRecipe": "Ice",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/snowman.4",
+        "firstTile": 42,
+        "tiles": 45,
+        "decodedCompleteTiles": 45,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/level4_obj.4",
+        "firstTile": 87,
+        "tiles": 95,
+        "decodedCompleteTiles": 95,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/level4_obj2.4",
+        "firstTile": 182,
+        "tiles": 55,
+        "decodedCompleteTiles": 47,
+        "unknownTailBytes": 126,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "icicle-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.034818494412330925,
+        0.4385372891937513,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.6995376485625024,
+          -1.85,
+          -0.6823369137986398
+        ],
+        [
+          0.630462150705148,
+          0.9284325593886236,
+          0.6823369137986398
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.6647191541501716,
+          -1.4114627108062487,
+          -0.6823369137986398
+        ],
+        [
+          0.6652806451174789,
+          1.366969848582375,
+          0.6823369137986398
+        ]
+      ],
+      "vertices": 9,
+      "authoringVertices": 9,
+      "paletteSplitTriangles": 0,
+      "triangles": 14,
+      "role": "Point"
+    },
+    {
+      "name": "Crown",
+      "parent": null,
+      "pivot": [
+        0.034818494412330925,
+        0.4385372891937513,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.7585444493611868,
+          -0.48,
+          -0.6563740161744722
+        ],
+        [
+          0.6889074605365251,
+          0.9729254216124974,
+          0.4075553459938757
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.7237259549488559,
+          -0.04146271080624869,
+          -0.6563740161744722
+        ],
+        [
+          0.7237259549488559,
+          1.4114627108062487,
+          0.4075553459938757
+        ]
+      ],
+      "vertices": 32,
+      "authoringVertices": 32,
+      "paletteSplitTriangles": 0,
+      "triangles": 48,
+      "role": "Ice"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 62,
+    "vertices": 41,
+    "closedComponents": true,
+    "components": 5,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.04988306325798365
+  }
+}

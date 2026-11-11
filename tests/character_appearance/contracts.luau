@@ -19,9 +19,17 @@ function Frame:Inverse()
 end
 function Frame:ToEulerAnglesXYZ()return self.rx,self.ry,self.rz end
 local cf={new=frame,Angles=function(x,y,z)local f=frame();f.rx,f.ry,f.rz=x,y,z;return f end}
+local SURFACE_MAPS={'ColorMap','NormalMap','RoughnessMap','MetalnessMap','EmissiveMask'}
+local RESTRICTED_MAPS={ColorMap=true,NormalMap=true,RoughnessMap=true,MetalnessMap=true,EmissiveMask=true}
+local function fixtureContent(id)
+    return type(id)=='string'and id~=''and{SourceType={Name='Uri'},Uri=id}or{SourceType={Name='None'}}
+end
 local Node={}
 Node.__index=function(a,k)
     if Node[k]then return Node[k]end
+    if a._props.ClassName=='SurfaceAppearance'and(RESTRICTED_MAPS[k]or a._props.DeniedRead==k)then
+        error('current thread cannot read '..k..' (lacking capability Plugin)')
+    end
     local v=a._props[k];if v~=nil then return v end
     return a:FindFirstChild(k)
 end
@@ -35,7 +43,9 @@ Node.__newindex=function(a,k,v)
     a._props[k]=v
 end
 local function node(class,name,parent)
-    local n=setmetatable({_props={ClassName=class,Name=name or class},_children={},_attributes={}},Node);n.Parent=parent;return n
+    local n=setmetatable({_props={ClassName=class,Name=name or class},_children={},_attributes={}},Node)
+    if class=='SurfaceAppearance'then for _,property in ipairs(SURFACE_MAPS)do n._props[property..'Content']=fixtureContent('')end end
+    n.Parent=parent;return n
 end
 function Node:IsA(class)return class==self.ClassName or class=='BasePart'and(self.ClassName=='Part'or self.ClassName=='MeshPart')end
 function Node:GetChildren()return table.clone(self._children)end
@@ -61,9 +71,19 @@ for _,row in ipairs(Manifest.parts)do
     p.Size=vector(table.unpack(row.size));p.CFrame=frame(table.unpack(row.cframe));p.Anchored=true
     p.CanCollide=false;p.CanTouch=false;p.CanQuery=false;p.Massless=true;p.Transparency=0
     for _,a in ipairs(row.attachments)do local child=node('Attachment',a.name,p);child.CFrame=frame(table.unpack(a.cframe))end
-    for _,a in ipairs(row.surfaceAppearances)do local child=node('SurfaceAppearance',a.name,p);child.ColorMap=a.colorMap end
+    for _,a in ipairs(row.surfaceAppearances)do local child=node('SurfaceAppearance',a.name,p);child._props.ColorMapContent=fixtureContent(a.colorMap)end
 end
-local env=setmetatable({game={GetService=function()return storage end},Instance={new=function(class)return node(class)end},CFrame=cf},{__index=getfenv()})
+local colors={fromRGB=function(r,g,b)return {R=r/255,G=g/255,B=b/255}end}
+local collection={AddTag=function(_,model,tag)
+    for _,part in ipairs(model:GetDescendants())do if part:IsA('MeshPart')then
+        assert(type(part:GetAttribute('HeroExpectedSurfaceCount'))=='number'and type(part:GetAttribute('HeroExpectedSurfaceMaps'))=='string',
+            'Base and morph expectations must be captured before tag publication')
+        assert(type(part:GetAttribute('HeroExpectedMeshId'))=='string'and type(part:GetAttribute('HeroExpectedTextureId'))=='string')
+    end end
+    model:SetAttribute('TestTag_'..tag,true)
+end,
+    RemoveTag=function(_,model,tag)model:SetAttribute('TestTag_'..tag,nil)end}
+local env=setmetatable({game={GetService=function(_,name)return name=='CollectionService'and collection or storage end},Instance={new=function(class)return node(class)end},CFrame=cf,Color3=colors},{__index=getfenv()})
 local loader=assert(loadstring(AppearanceSource));setfenv(loader,env);local Appearance=loader()
 local workspace=node('Workspace')
 local function actor(id)
@@ -86,16 +106,47 @@ local function canonicalTemplates()
     for i,name in ipairs({'CanonicalPlayer1','CanonicalPlayer2'})do
         local model=template:Clone();model.Name=name;model.AppearanceScale.Value=1;model.Parent=folder
         local profile=node('StringValue','AppearanceProfile',model);profile.Value='CanonicalNESHero'
-        model.Head.SurfaceAppearance.ColorMap='canonical-player-'..i
+        model.Head.SurfaceAppearance._props.ColorMapContent=fixtureContent('canonical-player-'..i)
     end
     return folder
 end
+test('canonical attachment leaves the exact physical fallback alpha for client readiness',function()
+    local a=actor('loading-fallback');a.model.Torso.Transparency=.34
+    local attached,reason=Appearance.attach(a,'Mr. Green',canonicalTemplates())
+    assert(attached,'Canonical appearance must attach with normal server Script permissions: '..tostring(reason))
+    assert(a.model.Torso.Transparency==.34,'Canonical attachment hid the physical body before resource availability')
+    assert(a.model.Head.Transparency==0 and a.humanoid.Health==100 and a.model.Torso.CanCollide)
+    local skin=a.appearance.model;local id=skin:GetAttribute('HeroSkinId')
+    assert(skin:GetAttribute('HeroExpectedBasePartCount')==15 and skin:GetAttribute('HeroExpectedFallbackCount')==6)
+    assert(skin.Head:GetAttribute('HeroExpectedMeshId')==skin.Head.MeshId)
+    assert(skin.Head:GetAttribute('HeroExpectedTextureId')==skin.Head.TextureID)
+    assert(skin.Head:GetAttribute('HeroExpectedSurfaceCount')==1)
+    assert(skin.Head:GetAttribute('HeroExpectedSurfaceMaps')=='86:ColorMap18:canonical-player-1|NormalMap0:|RoughnessMap0:|MetalnessMap0:|EmissiveMask0:',
+        'Prepared canonical resources must publish the exact raw PBR map manifest')
+    assert(type(id)=='string'and a.model:GetAttribute('HeroAppearanceOwner')==id)
+    assert(skin:GetAttribute('CanonicalHeroSkin')==true and a.model.Torso:GetAttribute('HeroFallbackOwner')==id)
+    local refs=0
+    for _,ref in ipairs(skin:GetChildren())do if ref:IsA('ObjectValue')and ref.Name=='HeroFallbackTarget'then
+        assert(ref.Value.Parent==a.model and ref.Value:GetAttribute('HeroFallbackOwner')==id);refs+=1
+    end end
+    assert(refs==6,'All six visible physical R6 parts need explicit fallback references')
+    Appearance.detach(a)
+    assert(a.model.Torso.Transparency==.34 and a.model:GetAttribute('HeroAppearanceOwner')==nil)
+    assert(a.model.Torso:GetAttribute('HeroFallbackOwner')==nil)
+end)
+test('unreadable canonical map content rejects atomically and leaves the physical fallback intact',function()
+    local a=actor('unreadable-content');a.model.Torso.Transparency=.34
+    local source=canonicalTemplates();source.CanonicalPlayer1.Head.SurfaceAppearance._props.DeniedRead='ColorMapContent'
+    local ok,reason=Appearance.attach(a,'Mr. Green',source)
+    assert(not ok and reason:find('ColorMap',1,true))
+    assert(not a.appearance and a.model.Torso.Transparency==.34 and a.model:GetAttribute('HeroAppearanceOwner')==nil)
+end)
 test('Green attaches the actual fifteen mesh template with PBR and no additional humanoid',function()
     local a=actor('first');assert(Appearance.attach(a,'Mr. Green'))
     local n,h,motors=0,0,0
     for _,p in ipairs(a.model:GetDescendants())do
         if p:IsA('MeshPart')then n+=1;assert(not p.CanCollide and not p.CanTouch and not p.CanQuery and p.Massless and not p.Anchored)
-            assert(p:FindFirstChild('SurfaceAppearance').ColorMap~='')end
+            assert(p:FindFirstChild('SurfaceAppearance').ColorMapContent.Uri)end
         if p:IsA('Humanoid')then h+=1 end
         if p:IsA('Motor6D')and string.sub(p.Name,1,10)=='Appearance'then motors+=1 end
     end
@@ -143,7 +194,7 @@ test('tagged canonical P1 and P2 select separate resources on the same R6 physic
         local a=actor('canonical-'..i)
         local model,root,humanoid=a.model,a.root,a.humanoid
         assert(Appearance.attach(a,name,source))
-        assert(a.appearance.model.Head.SurfaceAppearance.ColorMap=='canonical-player-'..i)
+        assert(a.appearance.model.Head.SurfaceAppearance.ColorMapContent.Uri=='canonical-player-'..i)
         assert(a.model==model and a.root==root and a.humanoid==humanoid and humanoid.Health==100)
         assert(a.model.Torso.CanCollide and a.model.Head.CanCollide and not a.root.Anchored)
         assert(a.model:GetAttribute('ActorId')=='canonical-'..i)
@@ -168,19 +219,28 @@ test('canonical shoulders retain their authored neutral rotations without explor
     assert(math.abs(legacy.appearance.joints.RightShoulder.motor.C0.rz+math.rad(45))<1e-6)
 end)
 
-test('untagged canonical P2 is unavailable and never borrows a Green resource or invents Brown',function()
+test('untagged canonical P2 is unavailable while Brown clones only a validated canonical P1',function()
     local source=canonicalTemplates()
     source.CanonicalPlayer2.AppearanceProfile:Destroy()
     local legacy=template:Clone();legacy.Parent=source
-    for _,name in ipairs({'Mr. Yellow','Mr. Brown'})do
+    for _,name in ipairs({'Mr. Yellow'})do
         local a=actor(name);a.model:SetAttribute('Template','original');a.model:SetAttribute('Appearance','original-art')
         local ok=Appearance.attach(a,name,source)
         assert(not ok and not a.appearance and a.model.Torso.Transparency==0)
         assert(a.model:GetAttribute('Template')=='original'and a.model:GetAttribute('Appearance')=='original-art')
     end
+    local brown=actor('approved-brown');assert(Appearance.attach(brown,'Mr. Brown',source))
+    assert(brown.appearance.model.Head.Size.X==source.CanonicalPlayer1.Head.Size.X)
+    assert(brown.model:GetAttribute('Template')=='Mr. Brown' and brown.appearance.profile=='CanonicalNESHero')
+    assert(brown.appearance.model:GetAttribute('PaletteAdaptation')=='ApprovedThirdHeroBrownPalette')
+    assert(brown.appearance.model.Head.Color.R==160/255 and brown.appearance.model.Head.Color.G==112/255)
+    assert(source.CanonicalPlayer1.Head.Color==nil and source.CanonicalPlayer1.Head.SurfaceAppearance.Color==nil)
+    local clone=brown.appearance.model;assert(Appearance.attach(brown,'Mr. Brown',source)and brown.appearance.model==clone)
     source.CanonicalPlayer1.AppearanceProfile:Destroy()
+    local unavailable=actor('brown-unavailable');assert(not Appearance.attach(unavailable,'Mr. Brown',source))
+    assert(unavailable.model.Torso.Transparency==0)
     local a=actor('explicit-legacy');assert(Appearance.attach(a,'Mr. Green',source))
-    assert(a.appearance.model.Head.SurfaceAppearance.ColorMap==template.Head.SurfaceAppearance.ColorMap)
+    assert(a.appearance.model.Head.SurfaceAppearance.ColorMapContent.Uri==template.Head.SurfaceAppearance.ColorMapContent.Uri)
     assert(a.model:GetAttribute('Appearance')=='LegacyGeneratedGreen','Untagged GreenToad must remain identifiable as the legacy study')
 end)
 
@@ -190,7 +250,7 @@ test('unknown explicit profiles reject before detaching a valid canonical appear
     source.CanonicalPlayer2.AppearanceProfile.Value='UnverifiedAvatar'
     local ok,reason=Appearance.attach(a,'Mr. Yellow',source)
     assert(not ok and reason=='UNKNOWN_APPEARANCE_PROFILE')
-    assert(a.appearance==previous and not previous.model.destroyed and a.model.Torso.Transparency==1)
+    assert(a.appearance==previous and not previous.model.destroyed and a.model.Torso.Transparency==0)
     assert(a.model:GetAttribute('Template')=='Mr. Green'and a.model:GetAttribute('Appearance')=='CanonicalNESHero')
     source.CanonicalPlayer1.AppearanceProfile.Value='UnverifiedAvatar'
     ok,reason=Appearance.attach(a,'Mr. Green',source)
@@ -213,7 +273,7 @@ test('malformed canonical replacement preserves the existing resource visibility
     source.CanonicalPlayer2.LeftHand.LeftWristRigAttachment:Destroy()
     local ok=Appearance.attach(a,'Mr. Yellow',source)
     assert(not ok and a.appearance==previous and not previous.model.destroyed)
-    assert(a.model.Torso.Transparency==1 and a.humanoid.Health==100)
+    assert(a.model.Torso.Transparency==0 and a.humanoid.Health==100)
     assert(a.model:GetAttribute('Template')=='Mr. Green'and a.model:GetAttribute('Appearance')=='CanonicalNESHero')
 end)
 
@@ -223,7 +283,7 @@ test('canonical selection changes resource once and cleanup restores saved owner
     assert(Appearance.attach(a,'Mr. Green',source));local first=a.appearance.model
     assert(Appearance.attach(a,'Mr. Green',source)and a.appearance.model==first)
     assert(Appearance.attach(a,'Mr. Yellow',source));local second=a.appearance.model
-    assert(second~=first and first.destroyed and second.Head.SurfaceAppearance.ColorMap=='canonical-player-2')
+    assert(second~=first and first.destroyed and second.Head.SurfaceAppearance.ColorMapContent.Uri=='canonical-player-2')
     assert(Appearance.attach(a,'Mr. Yellow',source)and a.appearance.model==second)
     Appearance.detach(a)
     assert(not a.appearance and second.destroyed and a.model.Torso.Transparency==0)
@@ -241,5 +301,15 @@ test('canonical replacement cleanup never restores attributes on a newer actor m
     assert(original:GetAttribute('Appearance')=='old-art'and original.Torso.Transparency==0)
     assert(replacement.model:GetAttribute('Template')=='new-template'and replacement.model:GetAttribute('Appearance')=='new-art')
     assert(replacement.model.Torso.Transparency==0 and replacement.humanoid.Health==100)
+end)
+test('canonical cleanup cannot restore fallback or owner metadata claimed by a newer appearance',function()
+    local a=actor('owner-handoff');assert(Appearance.attach(a,'Mr. Green',canonicalTemplates()))
+    a.model:SetAttribute('HeroAppearanceOwner','incoming');a.model:SetAttribute('Template','new-template');a.model:SetAttribute('Appearance','new-art')
+    a.model.Torso:SetAttribute('HeroFallbackOwner','incoming');a.model.Torso:SetAttribute('HeroFallbackTransparency',.71)
+    a.model.Torso.Transparency=.71
+    Appearance.detach(a)
+    assert(a.model:GetAttribute('HeroAppearanceOwner')=='incoming'and a.model:GetAttribute('Template')=='new-template')
+    assert(a.model:GetAttribute('Appearance')=='new-art'and a.model.Torso:GetAttribute('HeroFallbackOwner')=='incoming')
+    assert(a.model.Torso:GetAttribute('HeroFallbackTransparency')==.71 and a.model.Torso.Transparency==.71)
 end)
 print('CharacterAppearance: '..passed..' passed')

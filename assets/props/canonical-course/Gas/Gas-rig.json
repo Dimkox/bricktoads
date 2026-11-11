@@ -1,0 +1,643 @@
+{
+  "schema": 1,
+  "kind": "Gas",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Small pale yellow puff stretches into a lobed white/olive plume and disperses into separate ring fragments.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.645,
+      -0.8578000000000001,
+      -0.5418238357402287
+    ],
+    [
+      1.645,
+      0.8578000000000001,
+      0.5418238357402287
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Gas",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "19210-19270"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "19210-19270",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L19210-L19270"
+      }
+    ],
+    "sourceTypes": [
+      "53"
+    ],
+    "graphicsFrameIds": [
+      "A6",
+      "A7",
+      "A8",
+      "A9",
+      "AA"
+    ],
+    "palette": {
+      "typeId": 83,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:185",
+      "trigger": [
+        8,
+        12
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [],
+      "sourceSpawnerType": "52",
+      "actorFlagsEvidence": "main.asm:19188-19189",
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace.",
+      "rgbIsIllustrative": true
+    },
+    "rgbColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 166,
+        "frameHex": "A6",
+        "namespace": "object",
+        "metaspriteAddress": "BDB5",
+        "parts": [
+          {
+            "tile": 135,
+            "x": -6,
+            "y": 4,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 136,
+            "x": 2,
+            "y": 4,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -6,
+          "minY": 4,
+          "maxX": 5,
+          "maxY": 11
+        },
+        "width": 12,
+        "height": 8,
+        "png": "frames/gas-a6.png"
+      },
+      {
+        "frameId": 167,
+        "frameHex": "A7",
+        "namespace": "object",
+        "metaspriteAddress": "BDBE",
+        "parts": [
+          {
+            "tile": 137,
+            "x": -2,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 138,
+            "x": -10,
+            "y": 3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 139,
+            "x": 6,
+            "y": 3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 140,
+            "x": -2,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -10,
+          "minY": 2,
+          "maxX": 7,
+          "maxY": 12
+        },
+        "width": 18,
+        "height": 11,
+        "png": "frames/gas-a7.png"
+      },
+      {
+        "frameId": 168,
+        "frameHex": "A8",
+        "namespace": "object",
+        "metaspriteAddress": "BDCB",
+        "parts": [
+          {
+            "tile": 141,
+            "x": -6,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 142,
+            "x": 2,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 143,
+            "x": -14,
+            "y": 3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 144,
+            "x": -6,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 145,
+            "x": 2,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -14,
+          "minY": 0,
+          "maxX": 9,
+          "maxY": 14
+        },
+        "width": 24,
+        "height": 15,
+        "png": "frames/gas-a8.png"
+      },
+      {
+        "frameId": 169,
+        "frameHex": "A9",
+        "namespace": "object",
+        "metaspriteAddress": "BDDA",
+        "parts": [
+          {
+            "tile": 151,
+            "x": -11,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 152,
+            "x": -5,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 153,
+            "x": 3,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 154,
+            "x": -11,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 155,
+            "x": -5,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 156,
+            "x": 3,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -1,
+          "maxX": 9,
+          "maxY": 14
+        },
+        "width": 21,
+        "height": 16,
+        "png": "frames/gas-a9.png"
+      },
+      {
+        "frameId": 170,
+        "frameHex": "AA",
+        "namespace": "object",
+        "metaspriteAddress": "BDEB",
+        "parts": [
+          {
+            "tile": 146,
+            "x": -12,
+            "y": -2,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 147,
+            "x": 4,
+            "y": -2,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 148,
+            "x": -12,
+            "y": 6,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 149,
+            "x": 4,
+            "y": 6,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 150,
+            "x": -4,
+            "y": 14,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -12,
+          "minY": -2,
+          "maxX": 11,
+          "maxY": 19
+        },
+        "width": 24,
+        "height": 22,
+        "png": "frames/gas-aa.png"
+      }
+    ],
+    "appearanceCues": [
+      "Small pale yellow puff stretches into a lobed white/olive plume and disperses into separate ring fragments."
+    ],
+    "runtimeRole": "phased course hazard",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          142,
+          172
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          754
+        ]
+      }
+    ],
+    "sourceHandler": "object_gas",
+    "bankRecipe": "Race",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/ratrace_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "gas-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.17499999999999993,
+        -0.17980000000000002,
+        0.0031761642597712414
+      ],
+      "localBounds": [
+        [
+          -1.4499999999999997,
+          -0.6780000000000002,
+          -0.5386476714804576
+        ],
+        [
+          0.85,
+          0.4780000000000001,
+          0.5386476714804576
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.275,
+          -0.8578000000000001,
+          -0.5354715072206864
+        ],
+        [
+          1.025,
+          0.2982000000000001,
+          0.5418238357402287
+        ]
+      ],
+      "vertices": 200,
+      "authoringVertices": 200,
+      "paletteSplitTriangles": 0,
+      "triangles": 392,
+      "role": "CloudLobe"
+    },
+    {
+      "name": "UpperCloud",
+      "parent": null,
+      "pivot": [
+        0.17499999999999993,
+        -0.17980000000000002,
+        0.0031761642597712414
+      ],
+      "localBounds": [
+        [
+          -0.71,
+          -0.1764,
+          -0.4126032943302754
+        ],
+        [
+          1.21,
+          1.0376,
+          0.5126032943302754
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.535,
+          -0.3562,
+          -0.4094271300705042
+        ],
+        [
+          1.3849999999999998,
+          0.8578000000000001,
+          0.5157794585900466
+        ]
+      ],
+      "vertices": 200,
+      "authoringVertices": 200,
+      "paletteSplitTriangles": 0,
+      "triangles": 392,
+      "role": "CloudLobe"
+    },
+    {
+      "name": "TrailingCloud",
+      "parent": null,
+      "pivot": [
+        0.17499999999999993,
+        -0.17980000000000002,
+        0.0031761642597712414
+      ],
+      "localBounds": [
+        [
+          -1.8199999999999998,
+          -0.39919999999999994,
+          -0.36952563431745644
+        ],
+        [
+          1.4700000000000002,
+          0.3336,
+          0.4088293828840016
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.645,
+          -0.579,
+          -0.3663494700576852
+        ],
+        [
+          1.645,
+          0.1538,
+          0.41200554714377285
+        ]
+      ],
+      "vertices": 200,
+      "authoringVertices": 200,
+      "paletteSplitTriangles": 0,
+      "triangles": 392,
+      "role": "CloudLobe"
+    },
+    {
+      "name": "Contours",
+      "parent": null,
+      "pivot": [
+        0.17499999999999993,
+        -0.17980000000000002,
+        0.0031761642597712414
+      ],
+      "localBounds": [
+        [
+          -1.0265739810827854,
+          0.04722230192904109,
+          -0.5449999999999999
+        ],
+        [
+          0.8873477927287613,
+          0.543406799231226,
+          -0.3353244549910246
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.8515739810827855,
+          -0.13257769807095893,
+          -0.5418238357402287
+        ],
+        [
+          1.0623477927287612,
+          0.363606799231226,
+          -0.33214829073125335
+        ]
+      ],
+      "vertices": 126,
+      "authoringVertices": 126,
+      "paletteSplitTriangles": 0,
+      "triangles": 240,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 1416,
+    "vertices": 726,
+    "closedComponents": true,
+    "components": 9,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0006187184335382267
+  }
+}

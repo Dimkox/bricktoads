@@ -1,0 +1,858 @@
+{
+  "schema": 1,
+  "kind": "ClingerVehicle",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/vehicles/canonical-course/vehicle-source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "Source object74 upright Clinger: red/pink single circular wheel and red undulating handlebar silhouette.",
+    "frames_koleso74/76/78/7A and flags_koleso select track orientations; this asset is upright rest geometry for whole-vehicle rotation."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up forward-Z; deck top Y0 at XZ centre; cosmetic hull below deck, handlebars ahead of rider.",
+  "bounds": [
+    [
+      -1.164799830400509,
+      -1.89,
+      -0.9972420703400007
+    ],
+    [
+      1.164799830400509,
+      1.7252932570028472,
+      0.9899999999999999
+    ]
+  ],
+  "sourceTrace": {
+    "kind": "ClingerVehicle",
+    "level": 10,
+    "bankRecipe": "Clinger",
+    "sourceEvidence": "main.asm:9148-9208 object_bike and bike_frame_id; frames_koleso at main.asm:8955",
+    "paletteContext": {
+      "typeId": 24,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:221",
+      "trigger": [
+        0,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:223",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            22,
+            38
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/ratrace_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/clign_wing_obj.4",
+        "firstTile": 42,
+        "tiles": 64,
+        "decodedCompleteTiles": 64,
+        "unknownTailBytes": 0,
+        "compression": 4,
+        "override": true
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "frames": [
+      {
+        "frameId": 116,
+        "frameHex": "74",
+        "namespace": "object",
+        "metaspriteAddress": "B640",
+        "parts": [
+          {
+            "tile": 165,
+            "x": -8,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 165,
+            "x": 0,
+            "y": 0,
+            "attributes": 67,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 166,
+            "x": -8,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 166,
+            "x": 0,
+            "y": 8,
+            "attributes": 67,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": 0,
+          "maxX": 7,
+          "maxY": 15
+        },
+        "width": 16,
+        "height": 16,
+        "png": "references/clingervehicle-74.png"
+      },
+      {
+        "frameId": 117,
+        "frameHex": "75",
+        "namespace": "object",
+        "metaspriteAddress": "B654",
+        "parts": [
+          {
+            "tile": 172,
+            "x": -4,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 173,
+            "x": -2,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 174,
+            "x": -5,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 175,
+            "x": -1,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -5,
+          "minY": -3,
+          "maxX": 6,
+          "maxY": 12
+        },
+        "width": 12,
+        "height": 16,
+        "png": "references/clingervehicle-75.png"
+      },
+      {
+        "frameId": 118,
+        "frameHex": "76",
+        "namespace": "object",
+        "metaspriteAddress": "B6DD",
+        "parts": [
+          {
+            "tile": 167,
+            "x": -8,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 168,
+            "x": 0,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 169,
+            "x": 4,
+            "y": 2,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 170,
+            "x": -6,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 171,
+            "x": 2,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": 0,
+          "maxX": 11,
+          "maxY": 15
+        },
+        "width": 20,
+        "height": 16,
+        "png": "references/clingervehicle-76.png"
+      },
+      {
+        "frameId": 119,
+        "frameHex": "77",
+        "namespace": "object",
+        "metaspriteAddress": "B6EC",
+        "parts": [
+          {
+            "tile": 176,
+            "x": -11,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 177,
+            "x": -8,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 178,
+            "x": 0,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 179,
+            "x": -12,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 180,
+            "x": -4,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 181,
+            "x": 3,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -8,
+          "maxX": 9,
+          "maxY": 7
+        },
+        "width": 21,
+        "height": 16,
+        "png": "references/clingervehicle-77.png"
+      },
+      {
+        "frameId": 120,
+        "frameHex": "78",
+        "namespace": "object",
+        "metaspriteAddress": "B661",
+        "parts": [
+          {
+            "tile": 87,
+            "x": -3,
+            "y": 3,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -3,
+          "minY": 3,
+          "maxX": 4,
+          "maxY": 9
+        },
+        "width": 8,
+        "height": 7,
+        "png": "references/clingervehicle-78.png"
+      },
+      {
+        "frameId": 121,
+        "frameHex": "79",
+        "namespace": "object",
+        "metaspriteAddress": "B668",
+        "parts": [
+          {
+            "tile": 88,
+            "x": -3,
+            "y": 3,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -3,
+          "minY": 4,
+          "maxX": 4,
+          "maxY": 10
+        },
+        "width": 8,
+        "height": 7,
+        "png": "references/clingervehicle-79.png"
+      },
+      {
+        "frameId": 122,
+        "frameHex": "7A",
+        "namespace": "object",
+        "metaspriteAddress": "B66F",
+        "parts": [
+          {
+            "tile": 89,
+            "x": -2,
+            "y": 2,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 90,
+            "x": -4,
+            "y": 4,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -4,
+          "minY": 2,
+          "maxX": 5,
+          "maxY": 11
+        },
+        "width": 10,
+        "height": 10,
+        "png": "references/clingervehicle-7a.png"
+      },
+      {
+        "frameId": 123,
+        "frameHex": "7B",
+        "namespace": "object",
+        "metaspriteAddress": "B678",
+        "parts": [
+          {
+            "tile": 91,
+            "x": -6,
+            "y": -2,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 92,
+            "x": 0,
+            "y": -2,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 93,
+            "x": -6,
+            "y": 6,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 94,
+            "x": 0,
+            "y": 6,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -6,
+          "minY": -2,
+          "maxX": 7,
+          "maxY": 13
+        },
+        "width": 14,
+        "height": 16,
+        "png": "references/clingervehicle-7b.png"
+      }
+    ],
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "unknown": []
+  },
+  "sourcePalette": {
+    "colors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "scope": "Representative source vehicle palette; RGB illustrative; recurring palette loops not reproduced."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -0.4,
+          -0.7851364601553832,
+          -0.15935871659294948
+        ],
+        [
+          0.4,
+          -0.16802657810572066,
+          0.39935871659294947
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.4,
+          -0.7851364601553832,
+          -0.15935871659294948
+        ],
+        [
+          0.4,
+          -0.16802657810572066,
+          0.39935871659294947
+        ]
+      ],
+      "vertices": 142,
+      "authoringVertices": 142,
+      "paletteSplitTriangles": 0,
+      "triangles": 280
+    },
+    {
+      "name": "Wheel",
+      "parent": "Body",
+      "pivot": [
+        0,
+        -1.0,
+        0.1
+      ],
+      "localBounds": [
+        [
+          -0.33699999999999997,
+          -0.8899999999999999,
+          -0.8899999999999999
+        ],
+        [
+          0.33699999999999997,
+          0.8899999999999999,
+          0.8899999999999999
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.33699999999999997,
+          -1.89,
+          -0.7899999999999999
+        ],
+        [
+          0.33699999999999997,
+          -0.1100000000000001,
+          0.9899999999999999
+        ]
+      ],
+      "vertices": 1524,
+      "authoringVertices": 1524,
+      "paletteSplitTriangles": 0,
+      "triangles": 2992
+    },
+    {
+      "name": "Fork",
+      "parent": "Body",
+      "pivot": [
+        0,
+        -0.32,
+        -0.1
+      ],
+      "localBounds": [
+        [
+          -0.395,
+          -0.7074672275297784,
+          -0.16043973776577955
+        ],
+        [
+          0.395,
+          0.1674672275297784,
+          0.2804397377657796
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.395,
+          -1.0274672275297785,
+          -0.26043973776577956
+        ],
+        [
+          0.395,
+          -0.1525327724702216,
+          0.1804397377657796
+        ]
+      ],
+      "vertices": 76,
+      "authoringVertices": 76,
+      "paletteSplitTriangles": 0,
+      "triangles": 144
+    },
+    {
+      "name": "RiderDeck",
+      "parent": "Body",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "localBounds": [
+        [
+          -0.92,
+          -0.16,
+          -0.76
+        ],
+        [
+          0.92,
+          0.034999999999999996,
+          0.77
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.92,
+          -0.16,
+          -0.76
+        ],
+        [
+          0.92,
+          0.034999999999999996,
+          0.77
+        ]
+      ],
+      "vertices": 102,
+      "authoringVertices": 102,
+      "paletteSplitTriangles": 0,
+      "triangles": 192
+    },
+    {
+      "name": "HandleStem",
+      "parent": "Body",
+      "pivot": [
+        0,
+        0.25,
+        -0.78
+      ],
+      "localBounds": [
+        [
+          -0.105,
+          -0.3725949868215064,
+          -0.21074255092545513
+        ],
+        [
+          0.105,
+          1.01,
+          0.31769556110310143
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.105,
+          -0.12259498682150641,
+          -0.9907425509254552
+        ],
+        [
+          0.105,
+          1.26,
+          -0.4623044388968986
+        ]
+      ],
+      "vertices": 100,
+      "authoringVertices": 100,
+      "paletteSplitTriangles": 0,
+      "triangles": 196
+    },
+    {
+      "name": "Handlebar",
+      "parent": "Body",
+      "pivot": [
+        0,
+        1.26,
+        -0.89
+      ],
+      "localBounds": [
+        [
+          -1.164799830400509,
+          -0.19000000000000017,
+          -0.10724207034000066
+        ],
+        [
+          1.164799830400509,
+          0.4652932570028472,
+          0.10724207034000055
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.164799830400509,
+          1.0699999999999998,
+          -0.9972420703400007
+        ],
+        [
+          1.164799830400509,
+          1.7252932570028472,
+          -0.7827579296599995
+        ]
+      ],
+      "vertices": 428,
+      "authoringVertices": 428,
+      "paletteSplitTriangles": 0,
+      "triangles": 844
+    }
+  ],
+  "joints": [
+    {
+      "name": "Wheel",
+      "parent": "Body",
+      "child": "Wheel",
+      "parentAttachment": [
+        0,
+        -1.0,
+        0.1
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Fork",
+      "parent": "Body",
+      "child": "Fork",
+      "parentAttachment": [
+        0,
+        -0.32,
+        -0.1
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RiderDeck",
+      "parent": "Body",
+      "child": "RiderDeck",
+      "parentAttachment": [
+        0,
+        0,
+        0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "HandleStem",
+      "parent": "Body",
+      "child": "HandleStem",
+      "parentAttachment": [
+        0,
+        0.25,
+        -0.78
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Handlebar",
+      "parent": "Body",
+      "child": "Handlebar",
+      "parentAttachment": [
+        0,
+        1.26,
+        -0.89
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 4648,
+    "vertices": 2372,
+    "closedComponents": true,
+    "components": 26,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0005165604762118883
+  },
+  "deck": {
+    "top": 0,
+    "length": 2.6,
+    "width": 2.0
+  }
+}

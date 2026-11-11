@@ -1,0 +1,487 @@
+{
+  "schema": 1,
+  "kind": "Ramp",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['White slanted wedge/diamond face with pink/dark-magenta outline.', 'Source type24 enters a specific launch branch; runtime ascending stepped footprint is authored.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -2.0,
+      -0.680973369024904,
+      -2.4
+    ],
+    [
+      2.0,
+      0.680973369024904,
+      2.4
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Ramp",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "9747-9835;9846-9855;9945-9995"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "9747-9835",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L9747-L9835"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "9846-9855",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L9846-L9855"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "9945-9995",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L9945-L9995"
+      }
+    ],
+    "sourceTypes": [
+      "24"
+    ],
+    "graphicsFrameIds": [
+      "4B"
+    ],
+    "palette": {
+      "typeId": 36,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:161",
+      "trigger": [
+        55,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        5,
+        37,
+        32,
+        15,
+        15,
+        28,
+        44
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:123",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            39,
+            55
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs1.asm:135",
+          "trigger": [
+            5,
+            184
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            28,
+            44
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs1.asm:140",
+          "trigger": [
+            8,
+            0
+          ],
+          "paletteRamOffset": 24,
+          "colorCodes": [
+            5,
+            37,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        92,
+        0,
+        48
+      ],
+      [
+        236,
+        88,
+        180
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 75,
+        "frameHex": "4B",
+        "namespace": "object",
+        "metaspriteAddress": "B491",
+        "parts": [
+          {
+            "tile": 65,
+            "x": -3,
+            "y": -19,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 66,
+            "x": 5,
+            "y": -19,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 67,
+            "x": -11,
+            "y": -11,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 68,
+            "x": -3,
+            "y": -11,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 69,
+            "x": 5,
+            "y": -11,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 70,
+            "x": -11,
+            "y": -3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 71,
+            "x": -3,
+            "y": -3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 72,
+            "x": 5,
+            "y": -3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 73,
+            "x": -11,
+            "y": 5,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 74,
+            "x": -3,
+            "y": 5,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 75,
+            "x": 5,
+            "y": 5,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -18,
+          "maxX": 12,
+          "maxY": 12
+        },
+        "width": 24,
+        "height": 31,
+        "png": "frames/ramp-4b.png"
+      }
+    ],
+    "appearanceCues": [
+      "White slanted wedge/diamond face with pink/dark-magenta outline.",
+      "Source type24 enters a specific launch branch; runtime ascending stepped footprint is authored."
+    ],
+    "runtimeRole": "stepped launch surface",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Type24 is singled out for the launch branch and uses frame4B. Runtime three ascending steps/launch dimensions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          791,
+          792
+        ]
+      }
+    ],
+    "sourceHandler": "object_turbo_tunnel_obstacle / ramp launch branch",
+    "bankRecipe": "Tunnel",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/turbotunnel_obj.4",
+        "firstTile": 42,
+        "tiles": 195,
+        "decodedCompleteTiles": 195,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "ramp-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        92,
+        0,
+        48
+      ],
+      [
+        236,
+        88,
+        180
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.08000000000000002,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.0,
+          -0.5999999999999999,
+          -2.4
+        ],
+        [
+          2.0,
+          0.6000000000000001,
+          2.4
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.0,
+          -0.6799999999999999,
+          -2.4
+        ],
+        [
+          2.0,
+          0.52,
+          2.4
+        ]
+      ],
+      "vertices": 6,
+      "authoringVertices": 6,
+      "paletteSplitTriangles": 0,
+      "triangles": 8,
+      "role": "Wedge"
+    },
+    {
+      "name": "Rails",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.08000000000000002,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.9300000000000002,
+          -0.600973369024904,
+          -2.1273666140347873
+        ],
+        [
+          1.9300000000000002,
+          0.7609733690249041,
+          2.2073666140347874
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.9300000000000002,
+          -0.680973369024904,
+          -2.1273666140347873
+        ],
+        [
+          1.9300000000000002,
+          0.680973369024904,
+          2.2073666140347874
+        ]
+      ],
+      "vertices": 44,
+      "authoringVertices": 44,
+      "paletteSplitTriangles": 0,
+      "triangles": 80,
+      "role": "Edge"
+    },
+    {
+      "name": "Grip",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.08000000000000002,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.5,
+          -0.36000000000000004,
+          -1.545
+        ],
+        [
+          1.5,
+          0.5299999999999999,
+          1.7449999999999999
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.5,
+          -0.44000000000000006,
+          -1.545
+        ],
+        [
+          1.5,
+          0.4499999999999999,
+          1.7449999999999999
+        ]
+      ],
+      "vertices": 90,
+      "authoringVertices": 90,
+      "paletteSplitTriangles": 0,
+      "triangles": 160,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        92,
+        0,
+        48
+      ],
+      [
+        236,
+        88,
+        180
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 248,
+    "vertices": 140,
+    "closedComponents": true,
+    "components": 8,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.001431891231902755
+  }
+}

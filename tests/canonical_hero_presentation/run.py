@@ -39,17 +39,25 @@ manifest = json.loads((ROOT / 'assets/characters/green-toad.json').read_text(enc
 prefix += 'local Manifest=' + lua(manifest) + '\n'
 rotated_manifest = json.loads((ROOT / 'assets/characters/canonical-hero/roblox-player1.json').read_text(encoding='utf-8'))
 prefix += 'local RotatedRestManifest=' + lua(rotated_manifest) + '\n'
+ride_manifests = {
+    hero: json.loads((ROOT / f'assets/characters/canonical-hero/{name}').read_text(encoding='utf-8'))
+    for hero, name in [('Mr. Green', 'roblox-player1.json'), ('Mr. Yellow', 'roblox-player2.json'), ('Mr. Brown', 'roblox-brown.json')]
+}
+prefix += 'local RideRestManifests=' + lua(ride_manifests) + '\n'
 harness = (ROOT / 'tests/character_appearance/contracts.luau').read_text(encoding='utf-8')
 anchor = 'local env=setmetatable({game='
 assert harness.count(anchor) == 1, 'Appearance harness loader moved; review injection'
-harness = harness.replace(anchor, "local env=setmetatable({script={Parent={CanonicalHeroPresentation='hero-presentation'}},require=function(name)assert(name=='hero-presentation');return CanonicalPresentation end,game=", 1)
+harness = harness.replace(anchor, "local env=setmetatable({script={Parent={CanonicalHeroPresentation='hero-presentation'}},require=function(name)assert(name=='hero-presentation');return CanonicalPresentation end,Vector3={new=vector},game=", 1)
 contracts = Path(__file__).with_name('appearance_contracts.luau').read_text(encoding='utf-8')
 rotated_contracts = Path(__file__).with_name('rotated_rest_contracts.luau').read_text(encoding='utf-8')
 morph_contracts = Path(__file__).with_name('morph_contracts.luau').read_text(encoding='utf-8')
 fear_contracts = Path(__file__).with_name('fear_contracts.luau').read_text(encoding='utf-8')
+brown_contracts = Path(__file__).with_name('brown_contracts.luau').read_text(encoding='utf-8')
+geometry_contracts = Path(__file__).with_name('geometry_contracts.luau').read_text(encoding='utf-8')
+ride_contracts = Path(__file__).with_name('ride_contracts.luau').read_text(encoding='utf-8')
 with tempfile.TemporaryDirectory(prefix='bricktoads-source-presentation-') as directory:
     runner = Path(directory) / 'presentation_contracts.luau'
-    runner.write_text(prefix + harness + '\n' + contracts + '\n' + rotated_contracts + '\n' + morph_contracts + '\n' + fear_contracts, encoding='utf-8')
+    runner.write_text(prefix + harness + '\n' + contracts + '\n' + rotated_contracts + '\n' + morph_contracts + '\n' + fear_contracts + '\n' + brown_contracts + '\n' + geometry_contracts + '\n' + ride_contracts, encoding='utf-8')
     result = subprocess.run([args.luau, str(runner)], cwd=ROOT)
     if result.returncode:
         raise SystemExit(result.returncode)
@@ -59,7 +67,9 @@ with tempfile.TemporaryDirectory(prefix='bricktoads-source-presentation-') as di
         ('LevelSource', 'src/server/gameplay/LevelDefinition.lua'),
         ('BaseWorldSource', 'src/stand/server/RobloxWorld.lua'),
         ('DragonWorldSource', 'src/server/gameplay/DragonWorld.lua'),
+        ('WorldAppearanceSource', 'src/server/gameplay/CharacterAppearance.lua'),
     ))
+    world_prefix += 'local WorldHeroManifest=' + lua(rotated_manifest) + '\n'
     world_harness = (ROOT / 'tests/group_world/contracts.luau').read_text(encoding='utf-8')
     world_contracts = Path(__file__).with_name('world_contracts.luau').read_text(encoding='utf-8')
     runner.write_text(world_prefix + world_harness + '\n' + world_contracts, encoding='utf-8')

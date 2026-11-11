@@ -1,0 +1,327 @@
+{
+  "schema": 1,
+  "kind": "RocketLauncher",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Authored visible emitter housing; the proved type68 source counterpart is a logical mine/fire/rocket creator with no proved visible cannon sprite.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.275,
+      -0.96,
+      -1.6799519052838328
+    ],
+    [
+      1.275,
+      0.96,
+      1.6799519052838328
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "RocketLauncher",
+    "sourceEvidence": [
+      {
+        "statement": "Source type68 creates fire69, rocket6A and Surf mine78. No graphics assignment or visible cannon body is established for this creator.",
+        "cacheFile": "main.asm",
+        "lines": "5833-5835;11258-11384"
+      }
+    ],
+    "status": "invisible-source-spawner-adaptation",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "5833-5835",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L5833-L5835"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "11258-11384",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L11258-L11384"
+      }
+    ],
+    "sourceTypes": [
+      "68"
+    ],
+    "graphicsFrameIds": [],
+    "palette": null,
+    "rgbColors": [],
+    "frames": [],
+    "appearanceCues": [
+      "Authored visible emitter housing; the proved type68 source counterpart is a logical mine/fire/rocket creator with no proved visible cannon sprite."
+    ],
+    "runtimeRole": "aimed projectile emitter",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "A visible launcher barrel, housing, aim and 3D mount are wholly authored. Do not label it an NES launcher sprite or conflate it with Retro Blaster31."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          85
+        ]
+      }
+    ],
+    "sourceTypeRole": "behavior-only, not a source visible launcher",
+    "sourceHandler": "object_mines_rokets_creator"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.040000000000000036,
+        0.029951905283832958
+      ],
+      "localBounds": [
+        [
+          -1.275,
+          -0.9199999999999999,
+          -1.25
+        ],
+        [
+          1.275,
+          -0.52,
+          1.65
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.275,
+          -0.96,
+          -1.2200480947161672
+        ],
+        [
+          1.275,
+          -0.56,
+          1.6799519052838328
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Mount"
+    },
+    {
+      "name": "Barrel",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.05999999999999997,
+        0.029951905283832958
+      ],
+      "localBounds": [
+        [
+          -0.76,
+          -0.66,
+          -1.5699999999999998
+        ],
+        [
+          0.76,
+          0.86,
+          1.5700000000000003
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.76,
+          -0.6000000000000001,
+          -1.540048094716167
+        ],
+        [
+          0.76,
+          0.9199999999999999,
+          1.5999519052838331
+        ]
+      ],
+      "vertices": 64,
+      "authoringVertices": 64,
+      "paletteSplitTriangles": 0,
+      "triangles": 128,
+      "role": "Barrel"
+    },
+    {
+      "name": "Muzzle",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.040000000000000036,
+        0.029951905283832958
+      ],
+      "localBounds": [
+        [
+          -0.8,
+          -0.6000000000000001,
+          -1.7099038105676656
+        ],
+        [
+          0.8,
+          1.0,
+          -1.450096189432334
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.8,
+          -0.6400000000000001,
+          -1.6799519052838328
+        ],
+        [
+          0.8,
+          0.96,
+          -1.4201442841485012
+        ]
+      ],
+      "vertices": 144,
+      "authoringVertices": 144,
+      "paletteSplitTriangles": 0,
+      "triangles": 288,
+      "role": "Rim"
+    },
+    {
+      "name": "Stand",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.040000000000000036,
+        0.029951905283832958
+      ],
+      "localBounds": [
+        [
+          -0.907873280664162,
+          -0.6762929398595223,
+          -0.795707766423333
+        ],
+        [
+          0.907873280664162,
+          0.30629293985952233,
+          1.0077090566775895
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.907873280664162,
+          -0.7162929398595224,
+          -0.7657558611395
+        ],
+        [
+          0.907873280664162,
+          0.2662929398595223,
+          1.0376609619614223
+        ]
+      ],
+      "vertices": 72,
+      "authoringVertices": 72,
+      "paletteSplitTriangles": 0,
+      "triangles": 128,
+      "role": "Bracket"
+    },
+    {
+      "name": "Breech",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.040000000000000036,
+        0.029951905283832958
+      ],
+      "localBounds": [
+        [
+          -0.74,
+          -0.42,
+          0.52
+        ],
+        [
+          0.74,
+          0.8200000000000001,
+          1.645
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.74,
+          -0.46,
+          0.549951905283833
+        ],
+        [
+          0.74,
+          0.78,
+          1.6749519052838329
+        ]
+      ],
+      "vertices": 54,
+      "authoringVertices": 54,
+      "paletteSplitTriangles": 0,
+      "triangles": 96,
+      "role": "Socket"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        65,
+        79,
+        95
+      ],
+      [
+        145,
+        151,
+        157
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ]
+    ],
+    "atlasResolution": [
+      48,
+      48
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 672,
+    "vertices": 352,
+    "closedComponents": true,
+    "components": 10,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.00524626921703412
+  }
+}

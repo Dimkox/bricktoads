@@ -1,0 +1,880 @@
+{
+  "schema": 1,
+  "kind": "Buzzball",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Circular red orb with a broad coral/pink spiral covering the face.', 'Four source frames rotate/change the spiral; silhouette is smooth and round, without a radial spike crown.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.375,
+      -1.375,
+      -1.4153588867618807
+    ],
+    [
+      1.375,
+      1.375,
+      1.4153588867618807
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Buzzball",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "14783-14837;34116-34126"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "14783-14837",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L14783-L14837"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "34116-34126",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L34116-L34126"
+      }
+    ],
+    "sourceTypes": [
+      "7A",
+      "7B"
+    ],
+    "graphicsFrameIds": [
+      "7C",
+      "7D",
+      "7E",
+      "7F"
+    ],
+    "palette": {
+      "typeId": 122,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:224",
+      "trigger": [
+        0,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:223",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            22,
+            38
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 124,
+        "frameHex": "7C",
+        "namespace": "heroStatic",
+        "metaspriteAddress": "C477",
+        "parts": [
+          {
+            "tile": 72,
+            "x": -14,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 73,
+            "x": -6,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 74,
+            "x": 2,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 75,
+            "x": 6,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 76,
+            "x": -16,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 77,
+            "x": -8,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 78,
+            "x": 0,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 79,
+            "x": 8,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 80,
+            "x": -16,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 81,
+            "x": -8,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 82,
+            "x": 0,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 83,
+            "x": 8,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 84,
+            "x": -14,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 85,
+            "x": -10,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 86,
+            "x": -2,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 87,
+            "x": 6,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "width": 32,
+        "height": 32,
+        "png": "frames/buzzball-7c.png"
+      },
+      {
+        "frameId": 125,
+        "frameHex": "7D",
+        "namespace": "heroStatic",
+        "metaspriteAddress": "C49C",
+        "parts": [
+          {
+            "tile": 88,
+            "x": -14,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 89,
+            "x": -6,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 90,
+            "x": 2,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 91,
+            "x": 6,
+            "y": -8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 92,
+            "x": -16,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 93,
+            "x": -8,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 94,
+            "x": 0,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 95,
+            "x": 8,
+            "y": 0,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 96,
+            "x": -16,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 97,
+            "x": -8,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 98,
+            "x": 0,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 99,
+            "x": 8,
+            "y": 8,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 100,
+            "x": -14,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 101,
+            "x": -10,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 102,
+            "x": -2,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 103,
+            "x": 6,
+            "y": 16,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "width": 32,
+        "height": 32,
+        "png": "frames/buzzball-7d.png"
+      },
+      {
+        "frameId": 126,
+        "frameHex": "7E",
+        "namespace": "heroStatic",
+        "metaspriteAddress": "C4C1",
+        "parts": [
+          {
+            "tile": 72,
+            "x": 6,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 73,
+            "x": -2,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 74,
+            "x": -10,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 75,
+            "x": -14,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 76,
+            "x": 8,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 77,
+            "x": 0,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 78,
+            "x": -8,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 79,
+            "x": -16,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 80,
+            "x": 8,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 81,
+            "x": 0,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 82,
+            "x": -8,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 83,
+            "x": -16,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 84,
+            "x": 6,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 85,
+            "x": 2,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 86,
+            "x": -6,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 87,
+            "x": -14,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "width": 32,
+        "height": 32,
+        "png": "frames/buzzball-7e.png"
+      },
+      {
+        "frameId": 127,
+        "frameHex": "7F",
+        "namespace": "heroStatic",
+        "metaspriteAddress": "C4F6",
+        "parts": [
+          {
+            "tile": 88,
+            "x": 6,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 89,
+            "x": -2,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 90,
+            "x": -10,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 91,
+            "x": -14,
+            "y": 16,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 92,
+            "x": 8,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 93,
+            "x": 0,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 94,
+            "x": -8,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 95,
+            "x": -16,
+            "y": 8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 96,
+            "x": 8,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 97,
+            "x": 0,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 98,
+            "x": -8,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 99,
+            "x": -16,
+            "y": 0,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 100,
+            "x": 6,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 101,
+            "x": 2,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 102,
+            "x": -6,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 103,
+            "x": -14,
+            "y": -8,
+            "attributes": 195,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "width": 32,
+        "height": 32,
+        "png": "frames/buzzball-7f.png"
+      }
+    ],
+    "appearanceCues": [
+      "Circular red orb with a broad coral/pink spiral covering the face.",
+      "Four source frames rotate/change the spiral; silhouette is smooth and round, without a radial spike crown."
+    ],
+    "runtimeRole": "shared chaser and boss",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          4,
+          16
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          604
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignWorld.lua",
+        "lines": [
+          183,
+          211
+        ]
+      }
+    ],
+    "sourceHandler": "object_electroball / electroball_set_gfx",
+    "bankRecipe": "Clinger",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/ratrace_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/clign_wing_obj.4",
+        "firstTile": 42,
+        "tiles": 64,
+        "decodedCompleteTiles": 64,
+        "unknownTailBytes": 0,
+        "compression": 4,
+        "override": true
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "buzzball-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.04035888676188071
+      ],
+      "localBounds": [
+        [
+          -1.375,
+          -1.375,
+          -1.375
+        ],
+        [
+          1.375,
+          1.375,
+          1.375
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.375,
+          -1.375,
+          -1.3346411132381193
+        ],
+        [
+          1.375,
+          1.375,
+          1.4153588867618807
+        ]
+      ],
+      "vertices": 758,
+      "authoringVertices": 758,
+      "paletteSplitTriangles": 0,
+      "triangles": 1512,
+      "role": "Casing"
+    },
+    {
+      "name": "Ribbon",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.04035888676188071
+      ],
+      "localBounds": [
+        [
+          -1.1702354635687042,
+          -1.32731600785699,
+          -1.4557177735237614
+        ],
+        [
+          0.84914137131072,
+          1.0103865210641048,
+          -0.46101759683989885
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.1702354635687042,
+          -1.32731600785699,
+          -1.4153588867618807
+        ],
+        [
+          0.84914137131072,
+          1.0103865210641048,
+          -0.42065871007801814
+        ]
+      ],
+      "vertices": 1202,
+      "authoringVertices": 1202,
+      "paletteSplitTriangles": 0,
+      "triangles": 2400,
+      "role": "Ribbon"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 3912,
+    "vertices": 1960,
+    "closedComponents": true,
+    "components": 2,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 9.355832280477014e-06
+  }
+}

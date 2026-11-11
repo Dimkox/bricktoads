@@ -50,7 +50,10 @@ assert(sourceWorld:spawn(2,'source-context-p2',nil,false,'Mr. Yellow'))
 local sourceBody=sourceWorld.actors[1]
 local accepted={action='HeroBoot',actorId='source-context-p1',at=2.1,tuning={windup=.1}}
 local sourceState={attack=accepted,reactionEpoch=3,lastStrikeAction='HeroJab',strikeRecoveryUntil=1.8}
-local sourceSession={now=2,sourceCombat={},combat={[1]=sourceState,[2]={}}}
+local sourceSession={now=2,state={levelEpoch=2},sourceCombat={},combat={[1]=sourceState,[2]={}}}
+local dashResult={branch='DashLowLifeTail',profile=3,tuning=accepted.tuning,body=sourceBody.model,
+    actorId='source-context-p1',levelEpoch=2,at=2}
+sourceBody.dashPresentationResult=dashResult
 sourceBody.root.AssemblyLinearVelocity=vector(8,0,0)
 local function capture()
     sourceWorld:updatePresentation(sourceSession,.1,{})
@@ -59,13 +62,56 @@ end
 local ctx=capture()
 assert(ctx.attack==accepted and ctx.actorId=='source-context-p1' and ctx.now==2 and ctx.enabled==true,
     'Presentation must use the accepted server attack table and current body identity')
+assert(ctx.body==sourceBody.model and ctx.levelEpoch==2 and ctx.dashResult==dashResult,
+    'World must forward the actual body epoch and exact confirmed Dash result without reconstructing it')
 assert(ctx.reactionEpoch==3 and ctx.recoveryAction=='HeroJab' and ctx.recoveryUntil==1.8)
 assert(ctx.speed==8 and ctx.dt==.1 and ctx.grounded==true)
 assert(sourceContexts[sourceWorld.actors[2]].attack==nil,'The second actor must not borrow another hero attack')
 print('PASS source presentation hook forwards accepted action identity clock movement and recovery per actor')
+sourceBody.campaignControl=true
+sourceWorld.config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75}
+sourceWorld.campaignModes={mode='Ascent',actors={[1]={grounded=false}}}
+assert(capture().visualState=='Air' and capture().grounded==false,'Campaign jumps must reach the source air selector')
+sourceBody.campaignControl=nil;sourceWorld.campaignModes=nil;sourceWorld.config.Movement=nil
+
+-- A mounted cosmetic deck comes only from this body's live course resource.
+sourceBody.campaignControl=true
+sourceWorld.config.Movement={heroRunSpeed=24,enemyRunSpeed=16,runThresholdRatio=.75}
+local mountActor={mounted=true,actorId='source-context-p1',grounded=true,velocity={x=0,y=0,z=0}}
+sourceWorld.campaignModes={mode='Speeder',actors={[1]=mountActor}}
+local mountModel=node('Model','MountResource',sourceWorld.geometry)
+local mountSkin=node('Model','MountSkin',mountModel)
+local mountPart=node('Part','MountProxy',sourceWorld.geometry)
+local mountState={model=mountModel,skin=mountSkin,deckWorldY=4.25}
+local mountRow={part=mountPart,courseAppearance=mountState}
+sourceWorld.campaignWorld={world=sourceWorld,objects={['vehicle-1']=mountRow},step=function()end}
+assert(capture().rideDeckY==4.25,'Forward this mounted body live cosmetic deck plane')
+sourceState.reactionEnd=3;assert(capture().rideDeckY==nil,'A reaction cannot inherit mounted alignment');sourceState.reactionEnd=nil
+mountActor.actorId='old-body';assert(capture().rideDeckY==nil,'Reject the previous mounted actor');mountActor.actorId='source-context-p1'
+mountState.deckWorldY=0/0;assert(capture().rideDeckY==nil,'Reject a nonfinite deck plane');mountState.deckWorldY=4.25
+mountModel.Parent=nil;assert(capture().rideDeckY==nil,'Reject removed mounted cosmetics');mountModel.Parent=sourceWorld.geometry
+mountSkin.Parent=nil;assert(capture().rideDeckY==nil,'Reject replaced mounted skin');mountSkin.Parent=mountModel
+mountPart.Parent=nil;assert(capture().rideDeckY==nil,'Reject removed vehicle proxy');mountPart.Parent=sourceWorld.geometry
+sourceWorld.campaignWorld.objects={['clinger-1']=mountRow};assert(capture().rideDeckY==4.25,'Clinger uses the same cosmetic deck contract')
+sourceWorld.campaignModes.mode='Clinger'
+mountActor.mounted=false;mountActor.grounded=false;mountActor.velocity={x=0,y=0,z=0}
+local clingerContext=capture()
+assert(clingerContext.visualState=='Ride'and clingerContext.rideDeckY==4.25,
+    'Actual active unmounted Clinger must forward Ride and the same live cosmetic deck together')
+assert(mountActor.mounted==false and mountActor.velocity.x==0 and mountActor.velocity.z==0,
+    'Clinger presentation wiring cannot change gameplay mounting or velocity')
+print('PASS actual unmounted airborne Clinger wires Ride pose and live deck together without gameplay writes')
+sourceWorld.campaignWorld=nil;sourceWorld.campaignModes=nil;sourceBody.campaignControl=nil;sourceWorld.config.Movement=nil
+mountModel:Destroy();mountPart:Destroy();assert(capture().rideDeckY==nil,'Leaving a vehicle clears alignment context')
+print('PASS mounted presentation forwards only the current body live deck and clears stale interrupted or removed resources')
 
 local function blocked(reason)
-    assert(capture().blocked==reason,'Expected source fallback '..reason)
+    local context=capture()
+    if reason=='Paused' then assert(context.blocked==reason,'Paused collider must retain fallback')
+    else
+        local expected=reason=='Dragon' and 'DragonMounted' or reason=='Airborne' and 'Air' or reason
+        assert(context.blocked==nil and context.visualState==expected,'Expected rendered state '..expected)
+    end
 end
 sourceBody.humanoid.Health=0;blocked('Dead');sourceBody.humanoid.Health=100
 sourceState.reactionEnd=3;blocked('Reaction');sourceState.reactionEnd=nil
@@ -76,6 +122,8 @@ sourceWorld.equippedClubs['source-club']={owner=sourceBody};sourceBody.model:Set
 blocked('Club');sourceWorld.equippedClubs['source-club']=nil;sourceBody.model:SetAttribute('EquippedClub',nil)
 sourceBody.root.Anchored=true;blocked('Paused');sourceBody.root.Anchored=false
 sourceBody.humanoid.FloorMaterial=enum.Material.Air;blocked('Airborne');sourceBody.humanoid.FloorMaterial=enum.Material.Slate
+sourceBody.root.AssemblyLinearVelocity=vector(8,12,0);assert(capture().verticalSpeed==12)
+sourceBody.root.AssemblyLinearVelocity=vector(8,0,0)
 assert(capture().blocked==nil,'Removing priority must provide fresh locomotion context')
 sourceSession.sourceCombat=nil;assert(capture().enabled==false,'Stand/unsupported combat keeps its established retarget')
 assert(sourceState.attack==accepted and sourceBody.humanoid.Health==100 and sourceBody.root:GetNetworkOwner()==nil)
@@ -88,6 +136,68 @@ assert(sourceContexts[sourceWorld.actors[2]].fearIntro==nil,'A replacement canno
 sourceBody.model:SetAttribute('ActorId','replacement');assert(capture().fearIntro==nil)
 sourceBody.model:SetAttribute('ActorId','source-context-p1')
 sourceWorld.bossIntroState=nil;assert(capture().fearIntro==nil,'Ending intro removes its presentation context')
+local castContexts={}
+sourceWorld.castAppearance={attach=function(body,kind) body.castAppearance={kind=kind};return true end,
+    update=function(body,context) castContexts[body]=context end}
+assert(sourceWorld:spawnEnemy(-1,'Raven',{x=-20,y=3,z=0}))
+sourceWorld:enemyIdentity(-1,'real-raven')
+local raven=sourceWorld.actors[-1];raven.model:SetAttribute('CampaignMode','EnemyFly')
+raven.campaignVelocity=vector(9,0,0)
+sourceSession.state={levelEpoch=4}
+local enemies={[-1]={kind='Raven'}}
+local attack={name='Swoop',at=2.4,move={tell=.4}}
+local director={campaignEnemies={states={[-1]={mode='Tell',attack=attack}}}}
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+local rc=assert(castContexts[raven])
+assert(rc.mode=='Fly' and rc.actorId=='real-raven' and rc.levelEpoch==4,'Normalize the real campaign movement channel')
+assert(rc.attack.actorId==rc.actorId and rc.attack.levelEpoch==4 and rc.attack.start==2)
+assert(sourceWorld:spawnEnemy(-2,'Dragon',{x=-20,y=3,z=8}))
+sourceWorld:enemyIdentity(-2,'real-dragon');local dragon=sourceWorld.actors[-2]
+dragon.root.AssemblyLinearVelocity=vector(0,0,0);dragon.model:SetAttribute('DragonFlight',true)
+enemies[-2]={kind='Dragon'};director.dragons={states={[-2]={mode='Turn'}}}
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+assert(castContexts[dragon].mode=='Fly','Dragon flight must reach the verified object graphics cycle')
+director.dragons.states[-2].mode='Disabled'
+enemies[-2].reactionUntil=3;enemies[-2].heavyReaction=true
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+assert(castContexts[dragon].sourceState=='HeavyDisabled','Disabled Dragon has a distinct source selector')
+assert(castContexts[dragon].reactionHeavy==true and castContexts[dragon].reactionProgress==0,
+    'Forward the real heavy flag and clearly separate authored phase from a source timer byte')
+print('PASS actual campaign cast channels normalize modes and preserve accepted body/epoch identity')
+sourceWorld:healingFly('imported-fly',{x=-30,y=5,z=0})
+local fly=sourceWorld.healingFlyVisuals['imported-fly']
+assert(fly.castActor and fly.castActor.castAppearance.kind=='HealingFly','The collectible must use its imported family')
+sourceWorld:updatePresentation(sourceSession,.1,enemies,director)
+assert(castContexts[fly.castActor].kind=='HealingFly' and castContexts[fly.castActor].mode=='Fly')
+assert(sourceWorld:catchFly(1,'imported-fly'))
+assert(not sourceWorld.healingFlyVisuals['imported-fly'] and sourceBody.cosmeticActionEvent.action=='Tongue')
+local actionContext=capture();assert(actionContext.visualAction.action=='Tongue' and actionContext.visualAction.actorId=='source-context-p1')
+assert(capture().visualAction==actionContext.visualAction,'The same accepted effect must keep one immutable animation identity')
+print('PASS imported healing fly stays cosmetic and follows the collectible lifecycle')
+local pendingReady=false
+local pendingAdapter={attach=function(body,kind)
+    if not pendingReady then return false,'CAST_ASSETS_LOADING' end
+    body.castAppearance={kind=kind};return true
+end,update=function()end}
+local pendingWorld=World.new(ownershipBase,{FallY=-20,WalkSpeed=16,JumpPower=50},
+    {name='PendingCastFallback',castAppearance=pendingAdapter})
+assert(pendingWorld:spawnEnemy(-1,'Pig',{x=-20,y=3,z=0}))
+local pendingPig=pendingWorld.actors[-1]
+pendingWorld:healingFly('pending-fly',{x=-30,y=5,z=0})
+local pendingFly=pendingWorld.healingFlyVisuals['pending-fly']
+assert(not pendingPig.castAppearance,'A pending Pig cannot have an attached cast')
+local visibleFallback=false
+for _,p in ipairs(pendingPig.model:GetDescendants()) do
+    if p:IsA('BasePart') and (p.Transparency or 0)<1 then visibleFallback=true end
+end
+assert(visibleFallback,'The existing Pig builder must remain visible')
+assert(pendingFly.castActor and not pendingFly.castActor.castAppearance and pendingFly.root.Transparency~=1,
+    'A pending fly keeps its body visible and retains an actor for the retry')
+pendingReady=true;pendingWorld:updatePresentation({now=4,combat={},state={levelEpoch=1}},.1,{[-1]={kind='Pig'}})
+assert(pendingPig.castAppearance.kind=='Pig' and pendingFly.castActor.castAppearance.kind=='HealingFly')
+assert(pendingFly.root.Transparency~=1,'Client resource readiness owns fallback visibility')
+pendingWorld:clearActors()
+print('PASS pending enemy and collectible assets keep a visible fallback and attach after resource readiness')
 sourceWorld:clearActors()
 print('PASS source context gives death reaction carry club Dragon air and paused states priority without altering combat')
 print('PASS fear context uses captured actor identity and never leaks to replaced bodies')
@@ -145,3 +255,117 @@ assert(gripWorld:equipClub('canonical-grip',1));assertGrip(gripHero.model['Right
 assert(gripWorld:unequipClub('canonical-grip'))
 gripWorld:clearActors()
 print('PASS stale detached malformed and legacy cosmetics retain the established R6 club grip and authority cleanup')
+
+-- Run the real stand spawn, game spawn and appearance attachment together.
+-- Only Roblox Instances, rigid transforms and ownership are doubled here.
+do
+    local isA, frameIndex = Node.IsA, Frame.__index
+    function Node:IsA(class)
+        return isA(self, class) or class == 'BasePart' and self.ClassName == 'MeshPart'
+    end
+    Frame.__index = function(self, key)
+        if key == 'Rotation' then
+            return env.CFrame.Angles(self.rotationX or 0, self.rotationY or 0, self.rotationZ or 0)
+        end
+        return Frame[key]
+    end
+    function Frame:Inverse()
+        local inverse = frame(-self.Position)
+        inverse.rotationX, inverse.rotationY, inverse.rotationZ = -(self.rotationX or 0), -(self.rotationY or 0), -(self.rotationZ or 0)
+        return inverse
+    end
+    function Frame:ToEulerAnglesXYZ()
+        return self.rotationX or 0, self.rotationY or 0, self.rotationZ or 0
+    end
+
+    local function template(name, profile, parent)
+        local model = node('Model', name, parent)
+        node('StringValue', 'AppearanceProfile', model).Value = profile
+        node('NumberValue', 'AppearanceScale', model).Value = WorldHeroManifest.appearanceScale
+        for _, spec in ipairs(WorldHeroManifest.parts) do
+            local mesh = node('MeshPart', spec.name, model)
+            mesh.Size = vector(table.unpack(spec.size))
+            mesh.CFrame = frame(table.unpack(spec.cframe))
+            mesh.MeshId, mesh.TextureID, mesh.Transparency = spec.meshId, spec.textureId, spec.transparency or 0
+            for _, specAttachment in ipairs(spec.attachments) do
+                node('Attachment', specAttachment.name, mesh).CFrame = frame(table.unpack(specAttachment.cframe))
+            end
+        end
+        model.Clone = function() return template(name, profile) end
+        return model
+    end
+    local canonical, legacy, morphs = node('Folder'), node('Folder'), node('Folder')
+    template('CanonicalPlayer1', 'CanonicalNESHero', canonical)
+    template('GreenToad', 'LegacyGeneratedGreen', legacy)
+    local collection = {AddTag = function() end}
+    local loadAppearance = assert(loadstring(WorldAppearanceSource))
+    setfenv(loadAppearance, setmetatable({game = {GetService = function(_, name)
+        assert(name == 'CollectionService')
+        return collection
+    end}}, {__index = env}))
+    local actualAppearance = loadAppearance()
+
+    local base = table.clone(Base)
+    local originals = {}
+    local bodyNames = {'Torso', 'Head', 'Left Arm', 'Right Arm', 'Left Leg', 'Right Leg'}
+    function base.spawn(self, uid, ...)
+        if not actualBase.spawn(self, uid, ...) then return false end
+        local actor = self.actors[uid]
+        actor.root.simulateAssemblyOwnershipReset = true
+        actor.root.nearbyAutomaticOwner = 'nearby-client'
+        originals[uid] = {}
+        for _, name in ipairs(bodyNames) do
+            local part = actor.model[name]
+            -- These are BasePart engine defaults omitted by the stand builder.
+            part.Transparency = part.Transparency or 0
+            if part.CanCollide == nil then part.CanCollide = true end
+            part.CanTouch, part.CanQuery, part.Massless = true, true, false
+            originals[uid][name] = {part = part, collides = part.CanCollide}
+        end
+        return true
+    end
+    local adapter = {attach = function(actor, selected)
+        local templates = actor.model:GetAttribute('Slot') == 3 and legacy or canonical
+        return actualAppearance.attach(actor, selected, templates, morphs)
+    end}
+    local spawnWorld = World.new(base, {FallY = -20, WalkSpeed = 16, JumpPower = 50},
+        {name = 'HeroFallbackSpawn', characterAppearance = adapter})
+
+    assert(spawnWorld:spawn(1, 'canonical-spawn', nil, false, 'Mr. Green'))
+    local hero = spawnWorld.actors[1]
+    assert(hero.appearance and hero.appearance.profile == 'CanonicalNESHero')
+    local targets = {}
+    for _, ref in ipairs(hero.appearance.model:GetChildren()) do
+        if ref.Name == 'HeroFallbackTarget' then targets[ref.Value] = true end
+    end
+    for _, name in ipairs(bodyNames) do
+        local original = originals[1][name].part
+        assert(targets[original] and original.Transparency == 0 and original:GetAttribute('HeroFallbackTransparency') == 0,
+            'Canonical world spawn hid the physical fallback before readiness: ' .. name)
+        targets[original] = nil
+    end
+    assert(next(targets) == nil, 'Only the six physical R6 body parts may be fallback targets')
+
+    assert(spawnWorld:spawn(2, 'primitive-spawn', nil, false, 'Mr. Yellow'))
+    local primitive = spawnWorld.actors[2]
+    assert(not primitive.appearance and primitive.model:GetAttribute('Appearance') == 'OriginalToad')
+    assert(primitive.model.ToadBody.Transparency == nil or primitive.model.ToadBody.Transparency == 0)
+    assert(spawnWorld:spawn(3, 'legacy-spawn', nil, false, 'Mr. Green'))
+    assert(spawnWorld.actors[3].appearance.profile == 'LegacyGeneratedGreen')
+    for uid, actor in pairs(spawnWorld.actors) do
+        assert(not actor.model:FindFirstChild('Eye') and actor.root.Transparency == 1)
+        assert(actor.root.assemblyOwnershipResets > 0 and actor.root.networkOwnershipPins == 2
+            and actor.root:GetNetworkOwner() == nil and not actor.root:GetNetworkOwnershipAuto())
+        assert(not actor.root.Anchored and actor.root.CanCollide == false and actor.humanoid.Health == 100)
+        for _, name in ipairs(bodyNames) do
+            local original = originals[uid][name]
+            assert(actor.model[name] == original.part and original.part.Transparency == (uid == 1 and 0 or 1))
+            assert(original.part.CanCollide == original.collides and original.part.CanTouch and original.part.CanQuery
+                and not original.part.Anchored and not original.part.Massless)
+        end
+    end
+    spawnWorld:clearActors()
+    Node.IsA, Frame.__index = isA, frameIndex
+    Frame.Inverse, Frame.ToEulerAnglesXYZ = nil, nil
+    print('PASS canonical world spawn retains six visible R6 fallbacks and pins ownership after appearance assembly')
+end

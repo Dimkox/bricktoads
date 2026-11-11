@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "scope": "Four closed low-cost textured authored3D vehicles; source silhouette and source palettes; no runtime changes.",
+  "families": {
+    "Speeder": {
+      "status": "PASS",
+      "triangles": 3584,
+      "vertices": 1820,
+      "closedComponents": true,
+      "components": 14,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0011442778708983083,
+      "glb": "assets/vehicles/canonical-course/Speeder/Speeder.glb",
+      "rig": "assets/vehicles/canonical-course/Speeder/Speeder-rig.json",
+      "bytes": 90232,
+      "sha256": "2dc41d91a2366a33542925db45aedafca21bf26b409f0821b5e61f810759b940",
+      "segments": [
+        "Body",
+        "Nose",
+        "RiderDeck",
+        "Undercarriage",
+        "LeftEngine",
+        "LeftTailFin",
+        "LeftHandle",
+        "RightEngine",
+        "RightTailFin",
+        "RightHandle"
+      ],
+      "bounds": [
+        [
+          -1.1196235330324715,
+          -0.959975652037693,
+          -2.851258292024123
+        ],
+        [
+          1.1196235330324664,
+          1.485,
+          2.6579822812628526
+        ]
+      ],
+      "deckTop": 0,
+      "deckLength": 5.6,
+      "deckWidth": 2.4
+    },
+    "Surfboard": {
+      "status": "PASS",
+      "triangles": 792,
+      "vertices": 412,
+      "closedComponents": true,
+      "components": 8,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 7.13142115840088e-05,
+      "glb": "assets/vehicles/canonical-course/Surfboard/Surfboard.glb",
+      "rig": "assets/vehicles/canonical-course/Surfboard/Surfboard-rig.json",
+      "bytes": 26292,
+      "sha256": "c16e144d066273d66dd918f38cfbb594798f6d7f3097157d4013c5b2ff8203de",
+      "segments": [
+        "Body",
+        "UpperShell",
+        "Deck",
+        "CentreStripe",
+        "TailCrest",
+        "BottomKeel",
+        "LeftFin",
+        "RightFin"
+      ],
+      "bounds": [
+        [
+          -1.03,
+          -0.83,
+          -2.8
+        ],
+        [
+          1.03,
+          0.0025000000000000022,
+          2.8
+        ]
+      ],
+      "deckTop": 0,
+      "deckLength": 5.6,
+      "deckWidth": 2.1
+    },
+    "Jet": {
+      "status": "PASS",
+      "triangles": 2876,
+      "vertices": 1480,
+      "closedComponents": true,
+      "components": 21,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0006842326048891822,
+      "glb": "assets/vehicles/canonical-course/Jet/Jet.glb",
+      "rig": "assets/vehicles/canonical-course/Jet/Jet-rig.json",
+      "bytes": 77092,
+      "sha256": "0ba3e5aa8428bd7bc585c1cb1bbbad7656ef58e99f60affae9f4446f49fae378",
+      "segments": [
+        "Body",
+        "Nose",
+        "RiderDeck",
+        "CockpitRim",
+        "LeftWing",
+        "LeftIntake",
+        "LeftTailplane",
+        "RightWing",
+        "RightIntake",
+        "RightTailplane",
+        "TailFin",
+        "Exhaust"
+      ],
+      "bounds": [
+        [
+          -2.46,
+          -1.1199973797124236,
+          -3.127313478091512
+        ],
+        [
+          2.46,
+          1.4,
+          3.1037473660589097
+        ]
+      ],
+      "deckTop": 0,
+      "deckLength": 6.2,
+      "deckWidth": 4.6
+    },
+    "ClingerVehicle": {
+      "status": "PASS",
+      "triangles": 4648,
+      "vertices": 2372,
+      "closedComponents": true,
+      "components": 26,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0005165604762118883,
+      "glb": "assets/vehicles/canonical-course/ClingerVehicle/ClingerVehicle.glb",
+      "rig": "assets/vehicles/canonical-course/ClingerVehicle/ClingerVehicle-rig.json",
+      "bytes": 110224,
+      "sha256": "593bdb597052586edb32dd9ceacfe0220d598af02acebca47b8957e679792273",
+      "segments": [
+        "Body",
+        "Wheel",
+        "Fork",
+        "RiderDeck",
+        "HandleStem",
+        "Handlebar"
+      ],
+      "bounds": [
+        [
+          -1.164799830400509,
+          -1.89,
+          -0.9972420703400007
+        ],
+        [
+          1.164799830400509,
+          1.7252932570028472,
+          0.9899999999999999
+        ]
+      ],
+      "deckTop": 0,
+      "deckLength": 2.6,
+      "deckWidth": 2.0
+    }
+  }
+}

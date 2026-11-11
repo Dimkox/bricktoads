@@ -1,0 +1,488 @@
+{
+  "schema": 1,
+  "kind": "ElectricTrap",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Cyan semicircular mechanical endpoint with pale diagonal teeth/fins.', 'Paired mirrored endpoints surround a bright pale/yellow electrical arc component.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.8,
+      -0.9344969767914595,
+      -0.56
+    ],
+    [
+      1.8,
+      0.9344969767914595,
+      0.56
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "ElectricTrap",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "10396-10473;33321-33349"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "10396-10473",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L10396-L10473"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "33321-33349",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L33321-L33349"
+      }
+    ],
+    "sourceTypes": [
+      "2E"
+    ],
+    "graphicsFrameIds": [
+      "5A",
+      "5B"
+    ],
+    "palette": {
+      "typeId": 46,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:77",
+      "trigger": [
+        12,
+        192
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        28,
+        44
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:48",
+          "trigger": [
+            0,
+            32
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            28,
+            44
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        56,
+        180,
+        204
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 90,
+        "frameHex": "5A",
+        "namespace": "object",
+        "metaspriteAddress": "BBF4",
+        "parts": [
+          {
+            "tile": 108,
+            "x": 0,
+            "y": -16,
+            "attributes": 67,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 109,
+            "x": -8,
+            "y": -16,
+            "attributes": 67,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 110,
+            "x": 0,
+            "y": -8,
+            "attributes": 67,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 111,
+            "x": -8,
+            "y": -8,
+            "attributes": 67,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -7,
+          "minY": -16,
+          "maxX": 7,
+          "maxY": -1
+        },
+        "width": 15,
+        "height": 16,
+        "png": "frames/electrictrap-5a.png"
+      },
+      {
+        "frameId": 91,
+        "frameHex": "5B",
+        "namespace": "object",
+        "metaspriteAddress": "BC01",
+        "parts": [
+          {
+            "tile": 112,
+            "x": -8,
+            "y": -16,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 113,
+            "x": 0,
+            "y": -16,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 114,
+            "x": -8,
+            "y": -8,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 115,
+            "x": 0,
+            "y": -8,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": -16,
+          "maxX": 7,
+          "maxY": -1
+        },
+        "width": 16,
+        "height": 16,
+        "png": "frames/electrictrap-5b.png"
+      }
+    ],
+    "appearanceCues": [
+      "Cyan semicircular mechanical endpoint with pale diagonal teeth/fins.",
+      "Paired mirrored endpoints surround a bright pale/yellow electrical arc component."
+    ],
+    "runtimeRole": "phased course hazard",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "gfx5A is a mirrored endpoint pair; gfx5B is the electrical component placed along the source variable span. These decoded components are not a complete source trap placement."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          50,
+          144
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          754
+        ]
+      }
+    ],
+    "sourceHandler": "object_electro_trap",
+    "bankRecipe": "Wookie",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/level2_obj.4",
+        "firstTile": 42,
+        "tiles": 180,
+        "decodedCompleteTiles": 180,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "electrictrap-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        56,
+        180,
+        204
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.12550302320854062,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.8,
+          -1.06,
+          -0.56
+        ],
+        [
+          1.8,
+          -0.76,
+          0.56
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.8,
+          -0.9344969767914595,
+          -0.56
+        ],
+        [
+          1.8,
+          -0.6344969767914594,
+          0.56
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Mount"
+    },
+    {
+      "name": "Emitters",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.12550302320854062,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.5379143161765292,
+          -0.8089939535829187,
+          -0.305
+        ],
+        [
+          1.5379143161765292,
+          0.8089939535829189,
+          0.2377641290737884
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.5379143161765292,
+          -0.6834909303743781,
+          -0.305
+        ],
+        [
+          1.5379143161765292,
+          0.9344969767914595,
+          0.2377641290737884
+        ]
+      ],
+      "vertices": 412,
+      "authoringVertices": 412,
+      "paletteSplitTriangles": 0,
+      "triangles": 792,
+      "role": "Electrodes"
+    },
+    {
+      "name": "Arc",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.12550302320854062,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.932980901362026,
+          -0.23999369979522597,
+          -0.06
+        ],
+        [
+          0.9432820117735138,
+          0.33605757095969435,
+          0.06
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.932980901362026,
+          -0.11449067658668535,
+          -0.06
+        ],
+        [
+          0.9432820117735138,
+          0.46156059416823497,
+          0.06
+        ]
+      ],
+      "vertices": 50,
+      "authoringVertices": 50,
+      "paletteSplitTriangles": 0,
+      "triangles": 96,
+      "role": "Ribbon"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        0,
+        102,
+        120
+      ],
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        56,
+        180,
+        204
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 920,
+    "vertices": 480,
+    "closedComponents": true,
+    "components": 10,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.002545584412271569
+  }
+}

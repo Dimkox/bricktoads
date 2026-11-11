@@ -1,0 +1,487 @@
+{
+  "schema": 1,
+  "kind": "Buzzball",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/buzzball.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "Buzzball graphics7C-7F form a circular red/pink rotating spiral. Its spherical depth and raised spiral ribbon are authored adaptations."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -2.75,
+      -2.75,
+      -2.911435547047523
+    ],
+    [
+      2.75,
+      2.75,
+      2.75
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "heroStatic",
+    "bankRecipe": "Clinger",
+    "sourceEvidence": "main.asm:14783-14803;34116-34126 hero namespace override",
+    "frames": [
+      {
+        "frameId": 124,
+        "width": 32,
+        "height": 32,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "referencePng": "cast-frames/buzzball-7c.png"
+      },
+      {
+        "frameId": 125,
+        "width": 32,
+        "height": 32,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "referencePng": "cast-frames/buzzball-7d.png"
+      },
+      {
+        "frameId": 126,
+        "width": 32,
+        "height": 32,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "referencePng": "cast-frames/buzzball-7e.png"
+      },
+      {
+        "frameId": 127,
+        "width": 32,
+        "height": 32,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -8,
+          "maxX": 15,
+          "maxY": 23
+        },
+        "referencePng": "cast-frames/buzzball-7f.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      22,
+      38
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "typeId": 122,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:224",
+      "trigger": [
+        0,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:223",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            22,
+            38
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "sourceSlotPrimary": 3,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 22,
+        "effectiveRgb": [
+          180,
+          0,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 38,
+        "effectiveRgb": [
+          255,
+          100,
+          97
+        ]
+      }
+    ],
+    "variantCount": 1,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.75,
+          -2.75,
+          -2.75
+        ],
+        [
+          2.75,
+          2.75,
+          2.75
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.75,
+          -2.75,
+          -2.75
+        ],
+        [
+          2.75,
+          2.75,
+          2.75
+        ]
+      ],
+      "vertices": 758,
+      "authoringVertices": 758,
+      "paletteSplitTriangles": 0,
+      "triangles": 1512
+    },
+    {
+      "name": "Fin",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.3404709271374085,
+          -2.65463201571398,
+          -2.911435547047523
+        ],
+        [
+          1.69828274262144,
+          2.0207730421282095,
+          -0.9220351936797977
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.3404709271374085,
+          -2.65463201571398,
+          -2.911435547047523
+        ],
+        [
+          1.69828274262144,
+          2.0207730421282095,
+          -0.9220351936797977
+        ]
+      ],
+      "vertices": 1202,
+      "authoringVertices": 1202,
+      "paletteSplitTriangles": 0,
+      "triangles": 2400
+    }
+  ],
+  "joints": [
+    {
+      "name": "Fin",
+      "parent": "Body",
+      "child": "Fin",
+      "parentAttachment": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        180,
+        0,
+        0
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 3912,
+    "vertices": 1960,
+    "closedComponents": true,
+    "components": 2,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 3.7423329121908055e-05
+  }
+}

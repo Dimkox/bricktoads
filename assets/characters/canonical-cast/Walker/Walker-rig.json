@@ -1,0 +1,592 @@
+{
+  "schema": 1,
+  "kind": "Walker",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/tall-walker-source-verification.json",
+    "research/canonical-visuals/tall-walker-procedural-leg-reference.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "Verified type11 upperBody graphics19 is13x27 pixels; full neutral14x89 vs hero24x33. Each leg uses seven straight shaft sprites plus terminal D3 foot; no knees.",
+    "Palette0F182820; exact previously verified shallow source profile with visible holes reused."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -1.7378470601939726,
+      -3.0,
+      -0.63
+    ],
+    [
+      0.8231907127234607,
+      13.280882984975111,
+      0.63
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Canyon",
+    "sourceEvidence": "main.asm:4608-4818; research/canonical-visuals/TALL_WALKER_SOURCE.md",
+    "frames": [
+      {
+        "frameId": 25,
+        "width": 13,
+        "height": 27,
+        "visibleBounds": {
+          "minX": -9,
+          "minY": -27,
+          "maxX": 3,
+          "maxY": -1
+        },
+        "referencePng": "cast-frames/walker-19.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      22,
+      38
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "actorPaletteXor": 0,
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "source": "initial palette_chars"
+    },
+    "sourceSlotPrimary": 2,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 22,
+        "effectiveRgb": [
+          180,
+          0,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 38,
+        "effectiveRgb": [
+          255,
+          100,
+          97
+        ]
+      }
+    ],
+    "variantCount": 0,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0,
+        8.250273073887296,
+        0
+      ],
+      "localBounds": [
+        [
+          -1.7378470601939726,
+          0.09146563474705083,
+          -0.38
+        ],
+        [
+          0.6402594432293583,
+          5.030609911087815,
+          0.38
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.7378470601939726,
+          8.341738708634347,
+          -0.38
+        ],
+        [
+          0.6402594432293583,
+          13.280882984975111,
+          0.38
+        ]
+      ],
+      "vertices": 17010,
+      "authoringVertices": 9396,
+      "paletteSplitTriangles": 2538,
+      "triangles": 18792
+    },
+    {
+      "name": "LeftLeg",
+      "parent": "Body",
+      "pivot": [
+        0.09146563474705119,
+        3.219663162799481,
+        -0.18
+      ],
+      "localBounds": [
+        [
+          -0.3292762850893843,
+          -5.305006815328969,
+          -0.14999999999999997
+        ],
+        [
+          0.32927628508938434,
+          5.305006815328971,
+          0.15
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.2378106503423331,
+          -2.085343652529488,
+          -0.32999999999999996
+        ],
+        [
+          0.4207419198364355,
+          8.524669978128452,
+          -0.03
+        ]
+      ],
+      "vertices": 722,
+      "authoringVertices": 242,
+      "paletteSplitTriangles": 160,
+      "triangles": 480
+    },
+    {
+      "name": "LeftFoot",
+      "parent": "LeftLeg",
+      "pivot": [
+        0.09146563474705119,
+        -2.085343652529488,
+        -0.18
+      ],
+      "localBounds": [
+        [
+          -0.7317250779764095,
+          -0.9146563474705118,
+          -0.45
+        ],
+        [
+          0.7317250779764095,
+          0.0,
+          0.45
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.6402594432293583,
+          -3.0,
+          -0.63
+        ],
+        [
+          0.8231907127234607,
+          -2.085343652529488,
+          0.27
+        ]
+      ],
+      "vertices": 2995,
+      "authoringVertices": 1804,
+      "paletteSplitTriangles": 397,
+      "triangles": 3604
+    },
+    {
+      "name": "RightLeg",
+      "parent": "Body",
+      "pivot": [
+        0.09146563474705119,
+        3.219663162799481,
+        0.18
+      ],
+      "localBounds": [
+        [
+          -0.3292762850893843,
+          -5.305006815328969,
+          -0.15
+        ],
+        [
+          0.32927628508938434,
+          5.305006815328971,
+          0.14999999999999997
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.2378106503423331,
+          -2.085343652529488,
+          0.03
+        ],
+        [
+          0.4207419198364355,
+          8.524669978128452,
+          0.32999999999999996
+        ]
+      ],
+      "vertices": 722,
+      "authoringVertices": 242,
+      "paletteSplitTriangles": 160,
+      "triangles": 480
+    },
+    {
+      "name": "RightFoot",
+      "parent": "RightLeg",
+      "pivot": [
+        0.09146563474705119,
+        -2.085343652529488,
+        0.18
+      ],
+      "localBounds": [
+        [
+          -0.7317250779764095,
+          -0.9146563474705118,
+          -0.45
+        ],
+        [
+          0.7317250779764095,
+          0.0,
+          0.45
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.6402594432293583,
+          -3.0,
+          -0.27
+        ],
+        [
+          0.8231907127234607,
+          -2.085343652529488,
+          0.63
+        ]
+      ],
+      "vertices": 2995,
+      "authoringVertices": 1804,
+      "paletteSplitTriangles": 397,
+      "triangles": 3604
+    }
+  ],
+  "joints": [
+    {
+      "name": "LeftLeg",
+      "parent": "Body",
+      "child": "LeftLeg",
+      "parentAttachment": [
+        0.09146563474705119,
+        -5.030609911087815,
+        -0.18
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftFoot",
+      "parent": "LeftLeg",
+      "child": "LeftFoot",
+      "parentAttachment": [
+        0.0,
+        -5.305006815328969,
+        0.0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightLeg",
+      "parent": "Body",
+      "child": "RightLeg",
+      "parentAttachment": [
+        0.09146563474705119,
+        -5.030609911087815,
+        0.18
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightFoot",
+      "parent": "RightLeg",
+      "child": "RightFoot",
+      "parentAttachment": [
+        0.0,
+        -5.305006815328969,
+        0.0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 3652
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 26960,
+    "vertices": 13488,
+    "closedComponents": true,
+    "components": 5,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 2.2312213152048747e-08
+  }
+}

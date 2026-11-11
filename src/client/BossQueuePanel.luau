@@ -161,10 +161,10 @@ function BossQueuePanel:_draw()
     end
     if self.pending then primaryText = "Sending…" end
     enabled = enabled and not self.pending
-    self.primary.Text, self.primary.Active, self.primary.Selectable = primaryText, enabled, enabled
+    self.primary.Text, self.primary.Active, self.primary.Selectable = T(primaryText), enabled, enabled
     self.primary.BackgroundColor3 = enabled and colors.yellow or colors.card
     self.primary.TextColor3 = enabled and colors.ink or colors.muted
-    self.secondary.Text = "Decline"
+    self.secondary.Text = T("Decline")
     self.secondary.Active, self.secondary.Selectable = enabled, enabled
     self.secondary.TextColor3 = enabled and colors.text or colors.muted
 end
@@ -194,33 +194,33 @@ function BossQueuePanel:layout(width, compact, x, y)
     if not self.card.Visible then return 0 end
     self.compact = compact
     self.heading.Visible, self.note.Visible = not compact, not compact
-    local height = compact and 100 or (width < 420 and 202 or 178)
+    local height = compact and 140 or (width < 420 and 242 or 218)
     if compact then
         position(self.card, x or 0, y or 0, width, height)
-        position(self.name, 12, 6, width * 0.43, 23)
+        position(self.name, 12, 4, width - 24, 44)
         self.name.TextSize = width < 360 and 13 or 15
-        position(self.status, width * 0.43 + 12, 6, width * 0.57 - 24, 23)
+        position(self.status, 12, 48, width - 24, 18)
         self.status.TextSize = width < 360 and 11 or 12
-        position(self.detail, 12, 29, width - 24, 22)
+        position(self.detail, 12, 66, width - 24, 22)
         self.detail.TextSize = width < 360 and 11 or 12
     else
         self.card.Size = UDim2.new(1, 0, 0, height)
         position(self.heading, 14, 10, width - 28, 18)
-        position(self.name, 14, 31, width - 28, 25)
+        position(self.name, 14, 31, width - 28, 44)
         self.name.TextSize = 19
-        position(self.status, 14, 57, width - 28, 20)
+        position(self.status, 14, 77, width - 28, 20)
         self.status.TextSize = 13
         self.status.TextXAlignment = Enum.TextXAlignment.Left
-        position(self.detail, 14, 80, width - 28, width < 420 and 38 or 22)
+        position(self.detail, 14, 100, width - 28, width < 420 and 38 or 22)
         self.detail.TextSize = 13
-        position(self.note, 14, width < 420 and 120 or 104, width - 28, width < 420 and 30 or 20)
+        position(self.note, 14, width < 420 and 140 or 124, width - 28, width < 420 and 44 or 36)
     end
-    if compact then self.status.TextXAlignment = Enum.TextXAlignment.Right end
-    local inset, gap, buttonHeight = compact and 12 or 14, 8, compact and 40 or 42
+    self.status.TextXAlignment = Enum.TextXAlignment.Left
+    local inset, gap, buttonHeight = compact and 12 or 14, 8, 44
     local innerWidth = width - inset * 2
     local half = (innerWidth - gap) / 2
-    position(self.primary, inset, height - buttonHeight - 9, self.secondary.Visible and half or innerWidth, buttonHeight)
-    position(self.secondary, inset + half + gap, height - buttonHeight - 9, half, buttonHeight)
+    position(self.primary, inset, height - buttonHeight - 6, self.secondary.Visible and half or innerWidth, buttonHeight)
+    position(self.secondary, inset + half + gap, height - buttonHeight - 6, half, buttonHeight)
     self.primary.TextSize, self.secondary.TextSize = compact and 13 or 14, compact and 13 or 14
     return height
 end

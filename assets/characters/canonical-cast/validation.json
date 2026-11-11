@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "testCommand": "python -m unittest discover -s tests/canonical_cast_geometry -v",
+  "tests": 2,
+  "families": 29,
+  "segments": 166,
+  "triangles": 175584,
+  "authoringVertices": 89114,
+  "combinedGlbBytes": 4431080,
+  "combinedGlbSha256": "2845f02929ac9a76cbad6f78c84c8b28d2b7c6abf0bca897a8a2859e365050a9",
+  "allFinite": true,
+  "unitNormals": true,
+  "validIndices": true,
+  "nonzeroTriangleAreas": true,
+  "closedManifoldComponents": true,
+  "consistentWinding": true,
+  "safeConstantPaletteUVPerTriangle": true,
+  "decodedPivotScaleBoundsMatch": true,
+  "combinedArraysAndTransformsMatchIndividuals": true,
+  "nativeStudioImport": "PENDING root verification",
+  "limitations": [
+    "Authored3Ddepth and joint landmarks inferred from2Dsource",
+    "Representative source spawn palette; variants remain catalogued",
+    "Snake full nametable path not reconstructed",
+    "Runtime pose playback verified separately"
+  ]
+}

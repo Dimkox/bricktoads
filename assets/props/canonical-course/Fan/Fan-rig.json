@@ -1,0 +1,517 @@
+{
+  "schema": 1,
+  "kind": "Fan",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Side-on upright circular fan housing; pale rim, diagonal/curved internal blades, dark yellow/olive rim shading.', 'The world updraft volume is much taller than the fan hardware and is not a solid fan body.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.65,
+      -1.7075,
+      -0.7
+    ],
+    [
+      1.65,
+      1.7075,
+      0.7
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Fan",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "19279-19302"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "19279-19302",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L19279-L19302"
+      }
+    ],
+    "sourceTypes": [
+      "54",
+      "55"
+    ],
+    "graphicsFrameIds": [
+      "A3",
+      "A4"
+    ],
+    "palette": {
+      "typeId": 84,
+      "actorPaletteXor": 1,
+      "source": "levels_cfgs2.asm:189",
+      "trigger": [
+        7,
+        185
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 163,
+        "frameHex": "A3",
+        "namespace": "object",
+        "metaspriteAddress": "BD88",
+        "parts": [
+          {
+            "tile": 126,
+            "x": -11,
+            "y": -5,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 127,
+            "x": -3,
+            "y": -5,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 128,
+            "x": -11,
+            "y": 3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 129,
+            "x": -3,
+            "y": 3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 130,
+            "x": -11,
+            "y": 11,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 131,
+            "x": -3,
+            "y": 11,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -5,
+          "maxX": 4,
+          "maxY": 18
+        },
+        "width": 16,
+        "height": 24,
+        "png": "frames/fan-a3.png"
+      },
+      {
+        "frameId": 164,
+        "frameHex": "A4",
+        "namespace": "object",
+        "metaspriteAddress": "BD99",
+        "parts": [
+          {
+            "tile": 157,
+            "x": -11,
+            "y": -5,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 158,
+            "x": -3,
+            "y": -5,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 159,
+            "x": -11,
+            "y": 3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 160,
+            "x": -3,
+            "y": 3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 161,
+            "x": -11,
+            "y": 11,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 162,
+            "x": -3,
+            "y": 11,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -5,
+          "maxX": 4,
+          "maxY": 18
+        },
+        "width": 16,
+        "height": 24,
+        "png": "frames/fan-a4.png"
+      }
+    ],
+    "appearanceCues": [
+      "Side-on upright circular fan housing; pale rim, diagonal/curved internal blades, dark yellow/olive rim shading.",
+      "The world updraft volume is much taller than the fan hardware and is not a solid fan body."
+    ],
+    "runtimeRole": "updraft force volume",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          785
+        ]
+      }
+    ],
+    "sourceHandler": "object_ventilyator",
+    "bankRecipe": "Race",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/ratrace_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "fan-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.057499999999999996,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.65,
+          -1.65,
+          -0.44
+        ],
+        [
+          1.65,
+          1.65,
+          0.44
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.65,
+          -1.5924999999999998,
+          -0.44
+        ],
+        [
+          1.65,
+          1.7075,
+          0.44
+        ]
+      ],
+      "vertices": 64,
+      "authoringVertices": 64,
+      "paletteSplitTriangles": 0,
+      "triangles": 128,
+      "role": "Housing"
+    },
+    {
+      "name": "Rotor",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.057499999999999996,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.1420372161543035,
+          -1.2470537636367758,
+          -0.2
+        ],
+        [
+          1.23,
+          1.1650289577773676,
+          0.2
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.1420372161543035,
+          -1.1895537636367757,
+          -0.2
+        ],
+        [
+          1.23,
+          1.2225289577773677,
+          0.2
+        ]
+      ],
+      "vertices": 144,
+      "authoringVertices": 144,
+      "paletteSplitTriangles": 0,
+      "triangles": 264,
+      "role": "Rotor"
+    },
+    {
+      "name": "Grille",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.057499999999999996,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.575,
+          -1.5750000000000002,
+          -0.518
+        ],
+        [
+          1.575,
+          1.5749999999999997,
+          -0.4023686027918559
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.575,
+          -1.5175,
+          -0.518
+        ],
+        [
+          1.575,
+          1.6324999999999998,
+          -0.4023686027918559
+        ]
+      ],
+      "vertices": 444,
+      "authoringVertices": 444,
+      "paletteSplitTriangles": 0,
+      "triangles": 864,
+      "role": "Guard"
+    },
+    {
+      "name": "Bracket",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.057499999999999996,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.0,
+          -1.7650000000000001,
+          -0.7
+        ],
+        [
+          1.0,
+          -1.15,
+          0.7
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.0,
+          -1.7075,
+          -0.7
+        ],
+        [
+          1.0,
+          -1.0924999999999998,
+          0.7
+        ]
+      ],
+      "vertices": 54,
+      "authoringVertices": 54,
+      "paletteSplitTriangles": 0,
+      "triangles": 96,
+      "role": "Bracket"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 1352,
+    "vertices": 706,
+    "closedComponents": true,
+    "components": 18,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0010210621920333696
+  }
+}

@@ -372,7 +372,7 @@ function MatchHub:step(now,dt)
             self:_guard(group,function()
                 controller:step(now,dt)
                 if controller.current and group.world.updatePresentation then
-                    group.world:updatePresentation(controller.current,dt,controller.director.enemies)
+                    group.world:updatePresentation(controller.current,dt,controller.director.enemies,controller.director)
                 end
             end)
         end

@@ -428,6 +428,18 @@ function Director:hit(attacker,target,action,tuning)
     local before=e.rawLife or e.health
     local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,action)
     if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-damage) end
+    -- This cosmetic receipt comes from the actual successful effect result,
+    -- never a later target-Life read. Captured tuning identifies one accepted
+    -- server attack; body/actor/epoch prevent it crossing a replacement.
+    if action=='Dash' and source and source.profile==3 and type(tuning)=='table' then
+        local hero=self.session.state.heroes[attacker]
+        local actor=self.world.actors[attacker]
+        if hero and hero.status=='Alive' and actor and actor.model and actor.model.Parent
+            and actor.model:GetAttribute('ActorId')==hero.actorId then
+            actor.dashPresentationResult={branch='DashLowLifeTail',profile=source.profile,tuning=tuning,
+                body=actor.model,actorId=hero.actorId,levelEpoch=self.session.state.levelEpoch,at=self.now}
+        end
+    end
     self:_health(target,e)
     self.world:cue(target,false)
     self:_log('EnemyHit',target,{actorId=e.actorId,attacker=attacker,target=target,action=action,

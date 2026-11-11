@@ -15,6 +15,8 @@ sources = {
     'BaseWorldSource': 'src/stand/server/RobloxWorld.lua',
     'DragonWorldSource': 'src/server/gameplay/DragonWorld.lua',
     'CampaignWorldSource': 'src/server/gameplay/CampaignWorld.lua',
+    'CourseAppearanceSource': 'src/server/gameplay/CourseAppearance.lua',
+    'CoursePropAppearanceSource': 'src/server/gameplay/CoursePropAppearance.lua',
     'SourceCombatSource': 'src/server/gameplay/SourceCombat.lua',
 }
 prefix = '\n'.join(f'local {name} = [====[{(ROOT / path).read_text(encoding="utf-8")}]====]'

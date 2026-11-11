@@ -17,12 +17,25 @@ local intent = remotes:WaitForChild("Intent")
 local stateRemote = remotes:WaitForChild("State")
 local SpectatorCamera = require(script.Parent:WaitForChild("SpectatorCamera"))
 local BossQueuePanel = require(script.Parent:WaitForChild("BossQueuePanel"))
+local CampaignPresentation = require(script.Parent:WaitForChild("CampaignPresentation"))
 local GroupPanel = require(script.Parent:WaitForChild("GroupPanel"))
 local CombatFeedback = require(script.Parent:WaitForChild("CombatFeedback"))
+local GameAudio = require(script.Parent:WaitForChild("GameAudio"))
+local CastAssetVisibility = require(script.Parent:WaitForChild("CastAssetVisibility"))
+local HeroAssetVisibility = require(script.Parent:WaitForChild("HeroAssetVisibility"))
 local MovementInput = require(script.Parent:WaitForChild("MovementInput"))
 local RobloxInputBindings = require(script.Parent:WaitForChild("RobloxInputBindings"))
 local spectatorCamera = SpectatorCamera.new()
 local combatFeedback = CombatFeedback.new()
+local gameAudio = GameAudio.new()
+local castAssetVisibility = CastAssetVisibility.new()
+local heroAssetVisibility = HeroAssetVisibility.new()
+local courseAssetVisibility = CastAssetVisibility.new(nil, 'Course')
+local coursePropVisibility = CastAssetVisibility.new(nil, 'Prop')
+local soundMuted, musicMuted = false, false
+local audioOpen = false
+gameAudio:setReducedFlash(true)
+script.Destroying:Connect(function() gameAudio:destroy(); castAssetVisibility:destroy(); heroAssetVisibility:destroy(); courseAssetVisibility:destroy(); coursePropVisibility:destroy() end)
 local movementInput = MovementInput.new()
 local gameplayBindings
 local windowFocused = true
@@ -179,7 +192,7 @@ local cardsContainer = frame(scroll, "HeroCards")
 cardsContainer.LayoutOrder, cardsContainer.BackgroundTransparency = 5, 1
 local heroCards = {}
 
--- Local portraits cover loading/failure; loaded thumbnails show the real model.
+-- Keep the local portrait until the rendered image is ready.
 local function toadPortrait(parent, color, template)
     local art = frame(parent, "Portrait", C.ink)
     art.BackgroundTransparency, art.ClipsDescendants = 0.2, true
@@ -206,26 +219,21 @@ local function toadPortrait(parent, color, template)
         portrait.Name = "ModelPortrait"
         portrait.Size, portrait.BackgroundTransparency = UDim2.fromScale(1, 1), 1
         portrait.ScaleType, portrait.ZIndex = Enum.ScaleType.Fit, 2
-        portrait.Visible = false
-        portrait.Image = "rbxthumb://type=Asset&id=" .. assetId .. "&w=420&h=420"
+        portrait.Image = "rbxassetid://" .. assetId
         portrait.Parent = art
-        local function loaded()
-            if not portrait.Parent then return end
+        local function refreshPortrait()
+            if portrait.Parent ~= art then return end
             for _, child in ipairs(art:GetChildren()) do
-                if child:IsA("GuiObject") and child ~= portrait then child.Visible = false end
+                if child:IsA("GuiObject") and child ~= portrait then child.Visible = not portrait.IsLoaded end
             end
-            portrait.Visible = true
         end
+        portrait:GetPropertyChangedSignal("IsLoaded"):Connect(refreshPortrait)
+        refreshPortrait()
         task.spawn(function()
-            local fetched = false
-            local ok = pcall(function()
-                game:GetService("ContentProvider"):PreloadAsync({portrait.Image}, function(_, status)
-                    fetched = status == Enum.AssetFetchStatus.Success
-                end)
+            pcall(function()
+                game:GetService("ContentProvider"):PreloadAsync({portrait})
             end)
-            -- Hidden or scrolled-out images can keep IsLoaded=false despite a
-            -- successful fetch. Show the fetched image as a single replacement.
-            if ok and fetched then loaded() end
+            refreshPortrait()
         end)
     end
     return art
@@ -266,6 +274,14 @@ local function addPartyRow(i)
 end
 for i = 1, 3 do addPartyRow(i) end
 local partyNote = label(party, "PartyNote", "", 13, C.muted)
+local audioSettings = frame(scroll, "AudioSettings")
+audioSettings.BackgroundTransparency, audioSettings.LayoutOrder = 1, 8
+local soundToggle = button(audioSettings, "SoundToggle", "Sound: On", C.card, function()
+    soundMuted = not soundMuted; gameAudio:setMuted(soundMuted); render()
+end)
+local musicToggle = button(audioSettings, "MusicToggle", "Music: On", C.card, function()
+    musicMuted = not musicMuted; gameAudio:setMusicMuted(musicMuted); render()
+end)
 -- The primary action stays visible while the hero choices scroll on phones.
 local footer = frame(shell, "StartArea", C.ink)
 footer.AnchorPoint, footer.Position = Vector2.new(0, 1), UDim2.fromScale(0, 1)
@@ -288,6 +304,11 @@ menuNotice.TextXAlignment = Enum.TextXAlignment.Center
 local hud = frame(safe, "HUD")
 hud.BackgroundTransparency, hud.Size, hud.Visible = 1, UDim2.fromScale(1, 1), false
 local bossQueue = BossQueuePanel.new(scroll, hud, sendIntent, C, T, teamName)
+local queueHudScroll = make("ScrollingFrame", "QueueAndObservation", hud, {
+    BackgroundTransparency=1,BorderSizePixel=0,CanvasSize=UDim2.new(),
+    ScrollBarThickness=4,ScrollBarImageColor3=C.muted,ScrollingDirection=Enum.ScrollingDirection.Y,
+    ClipsDescendants=true,Visible=false,
+})
 local roster = frame(hud, "HeroRoster")
 roster.BackgroundTransparency = 1
 local heroRows = {}
@@ -326,6 +347,7 @@ local enemyOwner = label(enemyStatus, "Owner", "", 14, C.text, true)
 enemyOwner.AutoLocalize = false
 enemyOwner.TextWrapped, enemyOwner.TextTruncate = false, Enum.TextTruncate.AtEnd
 local enemyLife = label(enemyStatus, "OneLife", "One life", 12, C.muted)
+local enemyProgress = label(enemyStatus, "ReactionProgress", "", 12, C.yellow)
 local enemyHearts = {}
 for i = 1, 3 do
     local heart = label(enemyStatus, "Heart" .. i, "♥", 23, C.line)
@@ -383,6 +405,49 @@ local mobileDetailsScroll = make("ScrollingFrame", "Details", mobileDetails, {
     ScrollBarImageColor3 = C.muted, ScrollingDirection = Enum.ScrollingDirection.Y,
     CanvasSize = UDim2.new(), ClipsDescendants = true,
 })
+-- Audio controls: begin
+local audioButton = button(hud, "AudioButton", "Audio", C.card, function()
+    audioOpen = not audioOpen
+    if audioOpen then mobileExpanded = nil end
+    if render then render(); layout() end
+end)
+audioButton.TextSize, audioButton.ZIndex = 11, 20
+local audioPopup = frame(hud, "AudioPopup", C.ink)
+audioPopup.Visible, audioPopup.ZIndex = false, 30
+corner(audioPopup, 12)
+local audioTitle = label(audioPopup, "Heading", "Audio settings", 14, C.text, true)
+local audioClose = button(audioPopup, "Close", "Close", C.card, function()
+    audioOpen = false
+    if render then render(); layout() end
+end)
+audioClose.TextSize = 10
+local function syncAudioSettings(inGame)
+    if not inGame then audioOpen = false end
+    audioButton.Visible, audioPopup.Visible = inGame, inGame and audioOpen
+    audioButton.Text, audioTitle.Text, audioClose.Text = T("Audio"), T("Audio settings"), T("Close")
+    audioSettings.Parent = inGame and audioPopup or scroll
+    audioSettings.Visible = not inGame or audioOpen
+end
+local function layoutAudioSettings(viewWidth,viewHeight,touch,hudBottom,inset,objectiveHeight,contentWidth)
+    local edge = touch and (viewWidth < 500 and 8 or 12) or inset
+    local buttonY = touch and edge or inset + objectiveHeight + 8
+    position(audioButton, viewWidth-edge-44, buttonY, 44, 44)
+    local popupWidth = math.min(286,viewWidth-edge*2)
+    local popupY = math.min((touch and (hudBottom or edge+44) or buttonY+44)+8,viewHeight-edge-112)
+    position(audioPopup,viewWidth-edge-popupWidth,math.max(edge,popupY),popupWidth,112)
+    position(audioTitle,12,8,popupWidth-76,36)
+    position(audioClose,popupWidth-52,4,44,44)
+    if audioSettings.Parent == audioPopup then
+        position(audioSettings,8,60,popupWidth-16,44)
+        position(soundToggle,0,0,(popupWidth-24)/2,44)
+        position(musicToggle,(popupWidth-24)/2+8,0,(popupWidth-24)/2,44)
+    else
+        audioSettings.Position, audioSettings.Size = UDim2.new(), UDim2.new(1,0,0,44)
+        position(soundToggle,0,0,(contentWidth-10)/2,44)
+        position(musicToggle,(contentWidth+10)/2,0,(contentWidth-10)/2,44)
+    end
+end
+-- Audio controls: end
 local spectator = frame(hud, "Spectator", C.ink)
 spectator.BackgroundTransparency, spectator.AnchorPoint = 0.08, Vector2.new(0.5, 1)
 corner(spectator, 14)
@@ -601,9 +666,9 @@ local noticeMessages = {
     ENEMY_DEAD = "This guard has died. Choose another from the list.",
     UNKNOWN_ENEMY = "This guard is no longer available. Choose another from the list.",
     ENEMY_ALREADY_OWNED = "You already chose a guard. It has one life.",
-    INELIGIBLE = "The Guardian queue is unavailable for your current role.",
+    INELIGIBLE = "The queue is unavailable for your current role.",
     ROLE_ACTIVE = "You already control a living enemy.",
-    ROLE_RESERVED = "You accepted a Guardian invitation. Cancel it in the queue first.",
+    ROLE_RESERVED = "You accepted a boss invitation. Cancel it in the queue first.",
     STALE_OFFER = "This invitation is no longer available. Refreshing the queue.",
     HELD = "A hero is holding you. Control returns after release.",
     THROWN = "You were thrown. Wait until you recover.",
@@ -748,7 +813,9 @@ local function renderMobileSummary(level, enemy, isBoss)
             .. " · " .. T(shortZones[level.zoneIndex or 1] or level.zoneName or "Causeway")
     elseif level.stage == "Exit" then mobileGoalTitle.Text = "EXIT OPEN"
     else mobileGoalTitle.Text = isBoss and "CAUSEWAY GUARDIAN" or "FLOODED CAUSEWAY" end
-    if enemy then mobileGoalDetail.Text = T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot.heroes)})
+    local progressSource,progressArgs=CampaignPresentation.reactionProgress(enemy)
+    if progressSource then mobileGoalDetail.Text=T(progressSource,progressArgs)
+    elseif enemy then mobileGoalDetail.Text = T("Heroes: {count:int}", {count=CombatFeedback.aliveHeroes(snapshot.heroes)})
     elseif level.campaignIndex and level.campaignIndex>1 then mobileGoalDetail.Text=campaignDetail(level)
     elseif level.stage == "BossReady" then mobileGoalDetail.Text = "Waiting for Guardian"
     elseif level.stage == "Exit" then mobileGoalDetail.Text = "Reach the exit"
@@ -768,41 +835,26 @@ render = function()
     local level = snapshot and snapshot.level or {}
     local modern = level.bossMechanic == "PickupThrow"
     overlay.Visible, hud.Visible, controls.Visible = not active or personalMenu == true, active == true and not personalMenu, playable() == true
+    syncAudioSettings(active == true and not personalMenu)
     fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false and not stopped
     resultBanner.Visible = completed == true or stopped == true
-    if stopped then
-        resultTitle.Text, resultTitle.TextColor3 = "PARTY STOPPED", C.yellow
-        resultAccent.BackgroundColor3 = C.yellow
-        resultDetail.Text = "An error stopped this party. The host can start a new game manually."
-        intro.Text, chooseTitle.Text = "A new party starts only when you press “Start again”.", "NEW PARTY"
-    elseif completed then
-        local won = snapshot.status == "Won"
-        local enemyPerspective = snapshot.enemyRole ~= nil
-        local success = (enemyPerspective and not won) or (not enemyPerspective and won)
-        resultTitle.Text = enemyPerspective and (won and "HEROES CLEARED THE CAUSEWAY" or "HEROES STOPPED")
-            or (won and "CAUSEWAY CLEARED!" or "TEAM ELIMINATED")
-        resultTitle.TextColor3, resultAccent.BackgroundColor3 = success and C.lime or C.red, success and C.lime or C.red
-        if enemyPerspective then
-            resultDetail.Text = modern and (won and "The heroes crossed six districts, defeated the Guardian and opened the exit."
-                or "The heroes were stopped on the causeway. The next attempt starts in the first district.")
-                or (won and "The heroes defeated the Guardian and opened the gate. Choose a role for the next game."
-                    or "The heroes used all their respawns. The causeway is still guarded.")
-        else
-            resultDetail.Text = modern and (won and "Six districts cleared. The Guardian fell to heavy balls — the exit is open."
-                or "The team did not reach the exit. The districts and Guardian await another attempt.")
-                or (won and "The Guardian is defeated. The gate is open — the team reached the exit."
-                    or "The heroes have no respawns left. Choose roles and try the causeway again.")
-        end
-        intro.Text, chooseTitle.Text = "Press “New game” to start the next attempt.", "HERO FOR THE NEXT GAME"
-    elseif personalMenu then
-        intro.Text = snapshot.enemyRole and snapshot.enemyRole.status == "Dead"
-            and (snapshot.enemyRole.template == "Boss" and "The Guardian is defeated. You can keep watching this game."
-                or "Your only life is over. You can keep watching this game.")
-            or "You can return to watching this same game."
-    else
-        intro.Text, chooseTitle.Text = "Guard weapons, grabs and a Guardian. Cross the causeway together.", "CHOOSE YOUR HERO"
+    local presentation = CampaignPresentation.menu(snapshot)
+    local function translatedArgs(args)
+        if not args then return nil end
+        local result=table.clone(args)
+        if result.stage then result.stage=T(result.stage) end
+        if result.boss then result.boss=T(result.boss) end
+        return result
     end
-    title.Text = stopped and "Party stopped" or (personalMenu and "The team is still playing" or "Flooded Causeway")
+    title.Text=T(presentation.title)
+    intro.Text=T(presentation.intro,translatedArgs(presentation.introArgs))
+    chooseTitle.Text=T(presentation.chooseTitle)
+    if completed or stopped then
+        resultTitle.Text=T(presentation.resultTitle)
+        local color=presentation.stopped and C.yellow or (presentation.success and C.lime or C.red)
+        resultTitle.TextColor3,resultAccent.BackgroundColor3=color,color
+        resultDetail.Text=T(presentation.resultDetail,translatedArgs(presentation.resultArgs))
+    end
     renderSelection()
     bossQueue:update(snapshot, mine)
     groupPanel:update(snapshot, mine)
@@ -845,6 +897,8 @@ render = function()
             or T("Waiting for {host} to start a new party.", {host=hostName()})
     end
     menuNotice.Text = snapshot and (noticeMessages[snapshot.notice] or "") or ""
+    soundToggle.Text = T(soundMuted and "Sound: Off" or "Sound: On")
+    musicToggle.Text = T(musicMuted and "Music: Off" or "Music: On")
     for i, row in ipairs(heroRows) do
         local hero = snapshot and snapshot.heroes and snapshot.heroes[i]
         row.row.Visible = hero ~= nil
@@ -868,6 +922,9 @@ render = function()
     local enemy = snapshot and snapshot.enemyRole
     local controlledBoss = enemy and enemy.template == "Boss"
     roster.Visible, enemyStatus.Visible = enemy == nil, enemy ~= nil
+    local progressSource,progressArgs=CampaignPresentation.reactionProgress(enemy)
+    enemyProgress.Visible=progressSource~=nil
+    enemyProgress.Text=progressSource and T(progressSource,progressArgs) or ''
     if enemy then
         enemyOwner.Text = controlledBoss and (T(enemy.name or "Causeway Guardian") .. T(" · you")) or (player.DisplayName .. T(" · enemy"))
         enemyLife.Text = enemy.resourceKind=='CourseRival' and T('Rival · move and jump') or enemy.bossType and (enemy.status=='Dead' and 'Boss defeated' or
@@ -965,7 +1022,7 @@ render = function()
     chooseEnemyButton.Visible = canChoose == true and not choosingEnemy and not choice and not personalMenu
     if enemyDead then
         spectatorText.Text = snapshot.view == "Spectating" and "You are watching. Choose a new role before the next game."
-            or (controlledBoss and "The Guardian is defeated. You can watch the ongoing game." or noticeMessages.ENEMY_LIFE_SPENT)
+            or (controlledBoss and T("{boss} is defeated. You can watch the ongoing game.",{boss=T(CampaignPresentation.bossName(enemy))}) or noticeMessages.ENEMY_LIFE_SPENT)
     elseif choice then
         spectatorText.Text = "You are out. The team is still playing — watch or open the menu?"
     elseif mine then
@@ -973,7 +1030,7 @@ render = function()
             or (snapshot.view == "Spectating" and "You are watching the ongoing game."
                 or (noticeMessages[snapshot.enemyUnavailableReason] or noticeMessages.HERO_LOCKED))
     elseif enemy then
-        spectatorText.Text = controlledBoss and "Restoring the Guardian connection…" or "Restoring the guard connection…"
+        spectatorText.Text = controlledBoss and T("Restoring the {boss} connection…",{boss=T(CampaignPresentation.bossName(enemy))}) or "Restoring the guard connection…"
     elseif expanded then
         spectatorText.Text = "Three hearts · one life · no respawns"
     else
@@ -996,11 +1053,11 @@ layout = function()
     local contentWidth = shellWidth - 12
     scroll.Size = UDim2.new(1, 0, 1, shortLandscape and -92 or -116)
     menuLayout.Padding = UDim.new(0, shortLandscape and 8 or 14)
-    header.Size = UDim2.new(1, 0, 0, shortLandscape and 54 or (compact and 104 or 112))
+    header.Size = UDim2.new(1, 0, 0, shortLandscape and 54 or (compact and 144 or 112))
     position(brand, 0, 0, contentWidth, 22)
-    position(title, 0, 26, contentWidth, compact and 34 or 43)
+    position(title, 0, 26, contentWidth, compact and 60 or 43)
     title.TextSize = compact and 27 or 35
-    position(intro, 0, compact and 64 or 72, contentWidth, 38)
+    position(intro, 0, compact and 90 or 72, contentWidth, compact and 44 or 38)
     intro.TextSize = compact and 14 or 16
     intro.Visible = not shortLandscape
     if shortLandscape then
@@ -1008,20 +1065,20 @@ layout = function()
         position(title, 0, 19, contentWidth, 31)
         brand.TextSize, title.TextSize = 12, 27
     else brand.TextSize = 15 end
-    resultBanner.Size = UDim2.new(1, 0, 0, compact and 112 or 102)
-    position(resultAccent, 0, 14, 4, compact and 84 or 74)
-    position(resultTitle, 18, 10, contentWidth - 36, 34)
+    resultBanner.Size = UDim2.new(1, 0, 0, compact and 174 or 102)
+    position(resultAccent, 0, 14, 4, compact and 146 or 74)
+    position(resultTitle, 18, 10, contentWidth - 36, compact and 52 or 34)
     resultTitle.TextSize = compact and 21 or 23
-    position(resultDetail, 18, 47, contentWidth - 36, compact and 52 or 42)
-    rolePicker.Size = UDim2.new(1, 0, 0, shortLandscape and 104 or (compact and 132 or 116))
+    position(resultDetail, 18, compact and 68 or 47, contentWidth - 36, compact and 96 or 42)
+    rolePicker.Size = UDim2.new(1, 0, 0, shortLandscape and 116 or (compact and 140 or 124))
     position(roleTitle, 14, shortLandscape and 6 or 9, contentWidth - 28, 18)
     local roleWidth = (contentWidth - 40) / 3
     for i, choice in ipairs(roleButtons) do
         position(choice.button, 14 + (i - 1) * (roleWidth + 6), shortLandscape and 28 or 34,
-            roleWidth, shortLandscape and 34 or 40)
+            roleWidth, 44)
         choice.button.TextSize = width < 360 and 11 or (compact and 13 or 14)
     end
-    position(roleNote, 14, shortLandscape and 67 or 80, contentWidth - 28, shortLandscape and 30 or (compact and 44 or 28))
+    position(roleNote, 14, shortLandscape and 78 or 86, contentWidth - 28, shortLandscape and 30 or (compact and 44 or 28))
     roleNote.TextSize = shortLandscape and 12 or 13
     selectionHeading.Size = UDim2.new(1, 0, 0, shortLandscape and 34 or (compact and 64 or 49))
     position(chooseTitle, 0, 0, contentWidth, 20)
@@ -1107,7 +1164,7 @@ layout = function()
     mobileStatus.Visible, mobileGoal.Visible = isTouch, isTouch
     mobileDetails.Visible = isTouch and mobileExpanded ~= nil
     mobileStatusArrow.Visible, mobileGoalArrow.Visible = not queuePriority, not queuePriority
-    if queuePriority then mobileGoalDetail.Text = "Guardian queue · below" end
+    if queuePriority then mobileGoalDetail.Text = T("Boss queue · below") end
     local rosterWidth = portrait and (width - inset * 2) or math.min(292, width * 0.43)
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
@@ -1115,7 +1172,8 @@ layout = function()
     local controlledBoss = enemy and enemy.template == "Boss"
     local interaction = snapshot and snapshot.interaction
     local carrying = interaction and interaction.carrying == true
-    local enemyStatusHeight = short and 57 or 72
+    local hasBossProgress=CampaignPresentation.reactionProgress(enemy)~=nil
+    local enemyStatusHeight = (short and 57 or 72)+(hasBossProgress and 24 or 0)
     local rosterHeight = enemy and (enemyStatusHeight + gap) or count * (rowHeightHUD + gap)
     if not enemy and enemyChoiceAllowed() and choosingEnemy and height < 620 then
         roster.Visible, rosterHeight = false, 0
@@ -1138,6 +1196,8 @@ layout = function()
     position(enemyOwner, 11, short and 3 or 6, rosterWidth - 22, 20)
     enemyOwner.TextSize = short and 12 or 14
     position(enemyLife, 94, short and 28 or 35, rosterWidth - 106, 22)
+    position(enemyProgress, 11, enemyStatusHeight-24, rosterWidth-22, 22)
+    enemyProgress.TextSize=short and 11 or 12
     enemyLife.TextSize = short and 11 or 12
     for n, heart in ipairs(enemyHearts) do
         position(heart.heart, 10 + (n - 1) * 25, short and 26 or 32, 24, 27)
@@ -1189,10 +1249,10 @@ layout = function()
     if isTouch then
         local mobileInset, cardGap = width < 500 and 8 or 12, 8
         local statusWidth, goalWidth = math.min(172, width - mobileInset * 2), math.min(260, width - mobileInset * 2)
-        local twoRows = statusWidth + goalWidth + cardGap > width - mobileInset * 2
+        local twoRows = statusWidth + goalWidth + cardGap + 52 > width - mobileInset * 2
         local goalY = mobileInset + (twoRows and 52 or 0)
         position(mobileStatus, mobileInset, mobileInset, statusWidth, 44)
-        position(mobileGoal, width - mobileInset - goalWidth, goalY, goalWidth, 44)
+        position(mobileGoal, width - mobileInset - goalWidth - (twoRows and 0 or 52), goalY, goalWidth, 44)
         mobileHudBottom = goalY + 44
         position(mobileStatusTitle, 8, 1, statusWidth - 32, 21)
         position(mobileStatusDetail, 8, 23, statusWidth - 32, 17)
@@ -1205,7 +1265,7 @@ layout = function()
         local detailsWidth = math.min(344, width - mobileInset * 2)
         local detailsY = mobileHudBottom + 8
         local controlsTop = height - bottom - math.max(padSize, controlledBoss and topHeight or actionHeight)
-        local desiredHeight = mobileExpanded == "Goal" and 252 or (60 + count * 64 + (enemy and 72 or 0))
+        local desiredHeight = mobileExpanded == "Goal" and 252 or (60 + count * 64 + (enemy and (hasBossProgress and 96 or 72) or 0))
         local availableHeight = controlsTop - detailsY - 8
         local detailsHeight = math.max(52, math.min(desiredHeight, availableHeight))
         local detailsX = mobileExpanded == "Goal" and (width - mobileInset - detailsWidth) or mobileInset
@@ -1224,14 +1284,15 @@ layout = function()
         position(mobileDetailsTitle, 12, 0, detailsWidth - 144, 44)
         position(mobileCollapse, detailsWidth - 130, 0, 122, 44)
         position(mobileDetailsScroll, 8, 44, detailsWidth - 16, detailsHeight - 52)
-        local innerWidth, teamTop = detailsWidth - 16, enemy and 72 or 0
+        local innerWidth, teamTop = detailsWidth - 16, enemy and (hasBossProgress and 96 or 72) or 0
         roster.Visible, enemyStatus.Visible, objective.Visible = mobileExpanded == "Team",
             mobileExpanded == "Team" and enemy ~= nil, mobileExpanded == "Goal"
-        position(enemyStatus, 0, 0, innerWidth, 64)
+        position(enemyStatus, 0, 0, innerWidth, hasBossProgress and 88 or 64)
         position(enemyStripe, 0, 9, 3, 46)
         position(enemyOwner, 11, 3, innerWidth - 22, 20)
         enemyOwner.TextSize, enemyLife.TextSize = 14, 12
         position(enemyLife, 94, 30, innerWidth - 106, 24)
+        position(enemyProgress, 11, 62, innerWidth-22, 22)
         for n, heart in ipairs(enemyHearts) do position(heart.heart, 10 + (n - 1) * 25, 29, 24, 27) end
         position(roster, 0, teamTop, innerWidth, count * 64)
         for i, row in ipairs(heroRows) do
@@ -1262,35 +1323,57 @@ layout = function()
     local compactCameraPanel = not portrait and short and isTouch and cameraControls.Visible and hasCameraButtons and not expanded
     if compactCameraPanel then
         spectatorWidth = math.min(spectatorWidth, width - 2 * (inset + cameraPadSize + 12))
-        spectatorHeight = groupPanel.hudButton.Visible and 144 or 122
+        spectatorHeight = groupPanel.hudButton.Visible and 158 or 132
     end
     local cameraBottom = isTouch and cameraControls.Visible and not compactCameraPanel and (cameraPadSize + 12) or 0
+    local queueSideBySide = queuePriority and not portrait and short
+    local queueScrollStack = false
+    local queueHeight, queueY
+    queueHudScroll.Visible=false
+    spectator.Parent,spectator.AnchorPoint=hud,Vector2.new(0.5,1)
     if bossQueue.card.Visible then
         if bossQueue.compact then
+            bossQueue.card.Parent=hud
             local queueX = isTouch and mobileGoal.Position.X.Offset or objective.Position.X.Offset
-            local queueWidth = isTouch and mobileGoal.Size.X.Offset or objective.Size.X.Offset
-            local queueY = isTouch and (mobileHudBottom + 8) or (objective.Position.Y.Offset + objective.Size.Y.Offset + 8)
-            local spectatorTop = height - bottom - cameraBottom - spectatorHeight
-            if not isTouch and portrait and queueY + 108 > spectatorTop then
-                -- The observer queue replaces the tall roster when a phone needs that space.
-                roster.Visible = false
-                position(objective, inset, inset, width - inset * 2, short and 112 or 120)
-                queueY = inset + objective.Size.Y.Offset + 8
+            local queueWidth = isTouch and mobileGoal.Size.X.Offset or math.max(180,objective.Size.X.Offset-52)
+            queueY = isTouch and (mobileHudBottom + 8) or (objective.Position.Y.Offset + objective.Size.Y.Offset + 8)
+            if queueSideBySide then
+                queueWidth=math.min(260,(width-inset*3)/2)
+                queueX,queueY=inset,mobileHudBottom+4
+                spectatorWidth=width-queueWidth-inset*3
+                if hasCameraButtons and not expanded then spectatorHeight=140 end
             end
-            if queueY + 108 > spectatorTop then
-                -- On very shallow windows retain the queue and its invitation buttons above observation.
-                if not isTouch then objective.Visible = false end
-                queueY = isTouch and (mobileHudBottom + 8) or inset
-                local available = height - bottom - cameraBottom - queueY - 108
-                spectatorHeight = math.min(spectatorHeight, math.max(150, available))
+            queueHeight=bossQueue:layout(queueWidth,true,queueX,queueY)
+            local spectatorTop=height-bottom-cameraBottom-spectatorHeight
+            if isTouch and not queueSideBySide and queueY+queueHeight+8>spectatorTop then
+                -- Both complete cards remain reachable in a clipped scroll viewport,
+                -- above the native camera controls on a shallow portrait display.
+                queueScrollStack=true
+                local viewportWidth=width-inset*2
+                local cameraReserve=cameraControls.Visible and math.max(cameraPadSize,108)+8 or 0
+                local viewportHeight=math.max(44,height-bottom-cameraReserve-queueY)
+                position(queueHudScroll,inset,queueY,viewportWidth,viewportHeight)
+                queueHudScroll.Visible=true
+                bossQueue.card.Parent=queueHudScroll
+                queueHeight=bossQueue:layout(viewportWidth,true,0,0)
+                spectatorWidth=viewportWidth
+                spectator.Parent,spectator.AnchorPoint=queueHudScroll,Vector2.new(0,0)
+                position(spectator,0,queueHeight+8,spectatorWidth,spectatorHeight)
+                queueHudScroll.CanvasSize=UDim2.fromOffset(0,queueHeight+8+spectatorHeight)
+            elseif not isTouch and queueY+queueHeight+8>spectatorTop then
+                roster.Visible,objective.Visible=false,false
+                queueY=inset
+                bossQueue:layout(queueWidth,true,queueX,queueY)
             end
-            bossQueue:layout(queueWidth, true, queueX, queueY)
-        else
-            bossQueue:layout(contentWidth, false)
-        end
+        else bossQueue:layout(contentWidth,false) end
     end
-    spectator.Position = UDim2.new(0.5, 0, 1, -bottom - cameraBottom)
-    spectator.Size = UDim2.fromOffset(spectatorWidth, spectatorHeight)
+    if not queueScrollStack then
+        local observerX=queueSideBySide and (width-inset-spectatorWidth/2) or width/2
+        local observerBottom=height-bottom-cameraBottom
+        if queueSideBySide and hasCameraButtons and not expanded then observerBottom=queueY+queueHeight end
+        spectator.Position=UDim2.fromOffset(observerX,observerBottom)
+        spectator.Size=UDim2.fromOffset(spectatorWidth,spectatorHeight)
+    end
     cameraPad.Position, cameraPad.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(cameraPadSize, cameraPadSize)
     cameraPad.Visible, cameraAxes.Visible, cameraHint.Visible = isTouch, isTouch, not isTouch
     cameraAxes.Position, cameraAxes.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(108, 108)
@@ -1325,12 +1408,17 @@ layout = function()
         position(freeCameraButton, 14 + halfButton + gapButtons, 55, halfButton, 44)
         local paired = personalMenuButton.Visible and (watchButton.Visible or chooseEnemyButton.Visible)
         local viewButtonHeight = 44
-        if compactCameraPanel then
+        if queueSideBySide and hasCameraButtons then
+            spectatorText.Visible=false
+            position(nextHeroButton,14,48,halfButton,44)
+            position(freeCameraButton,14+halfButton+gapButtons,48,halfButton,44)
+            bottomRow,viewButtonHeight=96,44
+        elseif compactCameraPanel then
             position(spectatorText, 14, 7, spectatorWidth - 28, 18)
             local cameraRowY = groupPanel.hudButton.Visible and 51 or 29
             position(nextHeroButton, 14, cameraRowY, halfButton, 44)
             position(freeCameraButton, 14 + halfButton + gapButtons, cameraRowY, halfButton, 44)
-            bottomRow, viewButtonHeight = cameraRowY + 52, 34
+            bottomRow, viewButtonHeight = cameraRowY + 52, 44
         end
         position(watchButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
         position(chooseEnemyButton, 14, bottomRow, paired and halfButton or innerWidth, viewButtonHeight)
@@ -1349,7 +1437,11 @@ layout = function()
             if spectatorHeight < 200 then enemyChoiceNote.Size = UDim2.fromOffset(spectatorWidth - 140, 25) end
         end
     end
+    layoutAudioSettings(width,height,isTouch,mobileHudBottom,inset,short and 112 or 126,contentWidth)
     groupPanel:layout(contentWidth, width, height, spectatorWidth)
+    if queueSideBySide and hasCameraButtons and not expanded then
+        position(groupPanel.hudButton,spectatorWidth-114,0,100,44)
+    end
 end
 
 local function dragCameraTo(input)
@@ -1416,6 +1508,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     if type(data) ~= "table" then return end
     local confirmed, accepted = combatFeedback:sync(data, workspace:GetServerTimeNow())
     if accepted == false then return end
+    gameAudio:sync(data)
     local wasPlayable = playable()
     local previousStatus = snapshot and snapshot.status
     local previousGroupId = snapshot and snapshot.groupId

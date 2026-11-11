@@ -1,0 +1,533 @@
+{
+  "schema": 1,
+  "kind": "TowerPlatform",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Small orange/ochre rectangular projecting beam with bright end and dark patterned side; separate sparkle/disappearing component.', 'Runtime broad rotating surface and back/underside detail are authored.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -2.8,
+      -0.82375,
+      -1.3
+    ],
+    [
+      2.8,
+      0.82375,
+      1.3
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "TowerPlatform",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "18044-18087"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "18044-18087",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L18044-L18087"
+      }
+    ],
+    "sourceTypes": [
+      "34"
+    ],
+    "graphicsFrameIds": [
+      "65",
+      "66"
+    ],
+    "palette": {
+      "typeId": 52,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:333",
+      "trigger": [
+        23,
+        16
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 101,
+        "frameHex": "65",
+        "namespace": "object",
+        "metaspriteAddress": "B7FA",
+        "parts": [
+          {
+            "tile": 42,
+            "x": -12,
+            "y": 4,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 43,
+            "x": -4,
+            "y": 4,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 44,
+            "x": 4,
+            "y": 4,
+            "attributes": 1,
+            "paletteSlot": 1
+          }
+        ],
+        "visibleBounds": {
+          "minX": -12,
+          "minY": 4,
+          "maxX": 11,
+          "maxY": 11
+        },
+        "width": 24,
+        "height": 8,
+        "png": "frames/towerplatform-65.png"
+      },
+      {
+        "frameId": 102,
+        "frameHex": "66",
+        "namespace": "object",
+        "metaspriteAddress": "B861",
+        "parts": [
+          {
+            "tile": 64,
+            "x": -8,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 65,
+            "x": 0,
+            "y": -1,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 66,
+            "x": -8,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 67,
+            "x": 0,
+            "y": 7,
+            "attributes": 2,
+            "paletteSlot": 2
+          }
+        ],
+        "visibleBounds": {
+          "minX": -8,
+          "minY": -1,
+          "maxX": 6,
+          "maxY": 14
+        },
+        "width": 15,
+        "height": 16,
+        "png": "frames/towerplatform-66.png"
+      }
+    ],
+    "appearanceCues": [
+      "Small orange/ochre rectangular projecting beam with bright end and dark patterned side; separate sparkle/disappearing component.",
+      "Runtime broad rotating surface and back/underside detail are authored."
+    ],
+    "runtimeRole": "rotating solid support",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Tower source enum ID05 is Revolution, the original twelfth playable course. Internal source enum IDs and campaign ordinal stage numbers differ (main.asm:14643 Level_ID_Table)."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          768
+        ]
+      }
+    ],
+    "sourceHandler": "object_platform_last_level",
+    "bankRecipe": "Tower",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/revolution_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 6,
+        "decodedCompleteTiles": 6,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BDC5.chr",
+        "firstTile": 214,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 5,
+        "decodedCompleteTiles": 5,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BE25.chr",
+        "firstTile": 227,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "towerplatform-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.7012499999999999,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.8,
+          -0.38,
+          -1.3
+        ],
+        [
+          2.8,
+          0.0,
+          1.3
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.8,
+          0.3212499999999999,
+          -1.3
+        ],
+        [
+          2.8,
+          0.7012499999999999,
+          1.3
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Deck"
+    },
+    {
+      "name": "Deck",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.7012499999999999,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.6,
+          -0.0050000000000000044,
+          -1.15
+        ],
+        [
+          2.6,
+          0.09499999999999997,
+          1.15
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.6,
+          0.6962499999999999,
+          -1.15
+        ],
+        [
+          2.6,
+          0.7962499999999999,
+          1.15
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Deck"
+    },
+    {
+      "name": "Brackets",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.7012499999999999,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.2,
+          -1.525,
+          -1.018784966170467
+        ],
+        [
+          2.2,
+          0.025000000000000022,
+          1.2200000000000002
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.2,
+          -0.82375,
+          -1.018784966170467
+        ],
+        [
+          2.2,
+          0.72625,
+          1.2200000000000002
+        ]
+      ],
+      "vertices": 72,
+      "authoringVertices": 72,
+      "paletteSplitTriangles": 0,
+      "triangles": 128,
+      "role": "Bracket"
+    },
+    {
+      "name": "EdgeMarks",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.7012499999999999,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.1,
+          0.08750000000000002,
+          -1.24
+        ],
+        [
+          2.38,
+          0.12250000000000005,
+          -0.95
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.1,
+          0.78875,
+          -1.24
+        ],
+        [
+          2.38,
+          0.82375,
+          -0.95
+        ]
+      ],
+      "vertices": 108,
+      "authoringVertices": 108,
+      "paletteSplitTriangles": 0,
+      "triangles": 192,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 384,
+    "vertices": 216,
+    "closedComponents": true,
+    "components": 12,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.004186074533497928
+  }
+}

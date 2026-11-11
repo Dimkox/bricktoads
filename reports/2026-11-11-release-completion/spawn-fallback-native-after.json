@@ -1,0 +1,114 @@
+{
+  "source": "d10b584ba65bb3a913af281921ab8e7d9a2db8123862cc69cd6f16ac3f1aac8a",
+  "server": {
+    "players": 1,
+    "playerUserId": 11946162891,
+    "godMode": false,
+    "eyes": false,
+    "qaPresent": false,
+    "actorId": "bea85bf1-0754-4324-863b-361be13bb85a:actor:2",
+    "expected": 6,
+    "parts": [
+      {
+        "sourceAlpha": 0,
+        "sameRig": true,
+        "name": "Torso",
+        "declaredAlpha": 0
+      },
+      {
+        "sourceAlpha": 0,
+        "sameRig": true,
+        "name": "Head",
+        "declaredAlpha": 0
+      },
+      {
+        "sourceAlpha": 0,
+        "sameRig": true,
+        "name": "Left Arm",
+        "declaredAlpha": 0
+      },
+      {
+        "sourceAlpha": 0,
+        "sameRig": true,
+        "name": "Right Arm",
+        "declaredAlpha": 0
+      },
+      {
+        "sourceAlpha": 0,
+        "sameRig": true,
+        "name": "Left Leg",
+        "declaredAlpha": 0
+      },
+      {
+        "sourceAlpha": 0,
+        "sameRig": true,
+        "name": "Right Leg",
+        "declaredAlpha": 0
+      }
+    ],
+    "serverOwns": true,
+    "rootAlpha": 1,
+    "build": "d10b584ba65bb3a913af281921ab8e7d9a2db8123862cc69cd6f16ac3f1aac8a"
+  },
+  "clientPending": {
+    "players": 1,
+    "skins": [
+      {
+        "expected": 6,
+        "rootAlpha": 1,
+        "id": "hero-1",
+        "owner": "Actor_bea85bf1-0754-4324-863b-361be13bb85a:actor:2",
+        "visibleCanonical": 0,
+        "refs": [
+          {
+            "sourceAlpha": 0,
+            "localAlpha": 0,
+            "name": "Torso",
+            "declaredAlpha": 0
+          },
+          {
+            "sourceAlpha": 0,
+            "localAlpha": 0,
+            "name": "Head",
+            "declaredAlpha": 0
+          },
+          {
+            "sourceAlpha": 0,
+            "localAlpha": 0,
+            "name": "Left Arm",
+            "declaredAlpha": 0
+          },
+          {
+            "sourceAlpha": 0,
+            "localAlpha": 0,
+            "name": "Right Arm",
+            "declaredAlpha": 0
+          },
+          {
+            "sourceAlpha": 0,
+            "localAlpha": 0,
+            "name": "Left Leg",
+            "declaredAlpha": 0
+          },
+          {
+            "sourceAlpha": 0,
+            "localAlpha": 0,
+            "name": "Right Leg",
+            "declaredAlpha": 0
+          }
+        ]
+      }
+    ]
+  },
+  "clientReady": {
+    "skins": [
+      {
+        "actor": "bea85bf1-0754-4324-863b-361be13bb85a:actor:2",
+        "morph": 0,
+        "expected": 15,
+        "physical": 0,
+        "canonical": 15
+      }
+    ]
+  }
+}

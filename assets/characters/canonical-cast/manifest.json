@@ -1,0 +1,1014 @@
+{
+  "schema": 1,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "scope": "cosmetic authored3D, source facts distinguished from depth inference",
+  "families": {
+    "Pig": {
+      "status": "PASS",
+      "triangles": 10872,
+      "vertices": 5524,
+      "closedComponents": true,
+      "components": 44,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 4.111849786588428e-05,
+      "glb": "assets/characters/canonical-cast/Pig/Pig.glb",
+      "rig": "assets/characters/canonical-cast/Pig/Pig-rig.json",
+      "bytes": 249400,
+      "sha256": "63bbafa783698ebf8f2c0fcf31462f1c3bc4258ffa21cf29e60b3f9b2b5fd382",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg",
+        "Jaw"
+      ],
+      "bounds": [
+        [
+          -2.2566880215655942,
+          -2.57613213738788,
+          -1.227302559614964
+        ],
+        [
+          2.2566880215655942,
+          2.92386786261212,
+          0.7580103914344007
+        ]
+      ]
+    },
+    "Dragon": {
+      "status": "PASS",
+      "triangles": 9088,
+      "vertices": 4650,
+      "closedComponents": true,
+      "components": 53,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 5.5071542598203586e-05,
+      "glb": "assets/characters/canonical-cast/Dragon/Dragon.glb",
+      "rig": "assets/characters/canonical-cast/Dragon/Dragon-rig.json",
+      "bytes": 213664,
+      "sha256": "6df62cb2aae4967dfe97564f6d34b37d94aa6c8720c1549d167d91c2c90da3b6",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftWing",
+        "LeftLeg",
+        "LeftArm",
+        "RightWing",
+        "RightLeg",
+        "RightArm",
+        "Jaw",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -3.0456147720668567,
+          -2.2909757853393544,
+          -1.730033072031961
+        ],
+        [
+          3.0456147720668567,
+          3.4090242146606453,
+          2.9368897534649854
+        ]
+      ]
+    },
+    "Walker": {
+      "status": "PASS",
+      "triangles": 26960,
+      "vertices": 13488,
+      "closedComponents": true,
+      "components": 5,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 2.2312213152048747e-08,
+      "glb": "assets/characters/canonical-cast/Walker/Walker.glb",
+      "rig": "assets/characters/canonical-cast/Walker/Walker-rig.json",
+      "bytes": 949428,
+      "sha256": "d4cf4d66498d601fd4339eb53497c590e0194742c092def1e5f3e34b6500c4a6",
+      "segments": [
+        "Body",
+        "LeftLeg",
+        "LeftFoot",
+        "RightLeg",
+        "RightFoot"
+      ],
+      "bounds": [
+        [
+          -1.7378470601939726,
+          -3.0,
+          -0.63
+        ],
+        [
+          0.8231907127234607,
+          13.280882984975111,
+          0.63
+        ]
+      ]
+    },
+    "Raven": {
+      "status": "PASS",
+      "triangles": 6484,
+      "vertices": 3324,
+      "closedComponents": true,
+      "components": 41,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 4.814025302764261e-05,
+      "glb": "assets/characters/canonical-cast/Raven/Raven.glb",
+      "rig": "assets/characters/canonical-cast/Raven/Raven-rig.json",
+      "bytes": 153960,
+      "sha256": "ef4d1aa46cb9b4fbff66632f3fac769371e7d05615e60d093ccdf5f214fc334b",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "LeftWing",
+        "LeftLeg",
+        "RightWing",
+        "RightLeg",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -2.8715377778677946,
+          -1.4773040002877895,
+          -2.1106243981482047
+        ],
+        [
+          2.8715377778677946,
+          2.222695999712211,
+          2.0099768934225737
+        ]
+      ]
+    },
+    "LargeRaven": {
+      "status": "PASS",
+      "triangles": 6484,
+      "vertices": 3324,
+      "closedComponents": true,
+      "components": 41,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 6.501923144492899e-05,
+      "glb": "assets/characters/canonical-cast/LargeRaven/LargeRaven.glb",
+      "rig": "assets/characters/canonical-cast/LargeRaven/LargeRaven-rig.json",
+      "bytes": 153964,
+      "sha256": "5ed412fc5fb89ef09ff4eca7010c32e53786d5402eb132127c72d90b59b13efb",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "LeftWing",
+        "LeftLeg",
+        "RightWing",
+        "RightLeg",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -3.337192552657166,
+          -1.7168668111452687,
+          -3.7572044279823693
+        ],
+        [
+          3.337192552657166,
+          2.5831331888547315,
+          2.3359190923559643
+        ]
+      ]
+    },
+    "Invader": {
+      "status": "PASS",
+      "triangles": 1376,
+      "vertices": 710,
+      "closedComponents": true,
+      "components": 11,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0002645513262638888,
+      "glb": "assets/characters/canonical-cast/Invader/Invader.glb",
+      "rig": "assets/characters/canonical-cast/Invader/Invader-rig.json",
+      "bytes": 36584,
+      "sha256": "f436829c93ecfd1bd8d683f9d5eba11317ff56d452312ce92917cabac067d049",
+      "segments": [
+        "Body",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg"
+      ],
+      "bounds": [
+        [
+          -2.0028901734104045,
+          -1.4497109826589594,
+          -0.6500809248554913
+        ],
+        [
+          2.0028901734104045,
+          1.8502890173410402,
+          0.4578034682080924
+        ]
+      ]
+    },
+    "RocketRat": {
+      "status": "PASS",
+      "triangles": 7608,
+      "vertices": 3876,
+      "closedComponents": true,
+      "components": 36,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 1.9818112071892584e-05,
+      "glb": "assets/characters/canonical-cast/RocketRat/RocketRat.glb",
+      "rig": "assets/characters/canonical-cast/RocketRat/RocketRat-rig.json",
+      "bytes": 177144,
+      "sha256": "7c92dd2c62c93ac3029b5ee593f3182bd3373a15b4c8e1f323a4f5f073ddc201",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg",
+        "Weapon"
+      ],
+      "bounds": [
+        [
+          -1.2349397590361444,
+          -1.2801204819277108,
+          -2.1686746987951806
+        ],
+        [
+          1.2349397590361444,
+          2.1198795180722887,
+          1.6867469879518073
+        ]
+      ]
+    },
+    "Snowman": {
+      "status": "PASS",
+      "triangles": 6916,
+      "vertices": 3522,
+      "closedComponents": true,
+      "components": 32,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 6.924009892952891e-05,
+      "glb": "assets/characters/canonical-cast/Snowman/Snowman.glb",
+      "rig": "assets/characters/canonical-cast/Snowman/Snowman-rig.json",
+      "bytes": 160632,
+      "sha256": "c8b3863ae7fa967be58770dc9e4c3b0871fdd05ec1bbac0ca846628cb1814070",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg"
+      ],
+      "bounds": [
+        [
+          -1.7987224982256922,
+          -2.533356990773598,
+          -1.388417223582939
+        ],
+        [
+          1.7987224982256922,
+          2.9666430092264013,
+          1.1085876508161816
+        ]
+      ]
+    },
+    "SentryDrone": {
+      "status": "PASS",
+      "triangles": 2196,
+      "vertices": 1116,
+      "closedComponents": true,
+      "components": 9,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0005760682315650758,
+      "glb": "assets/characters/canonical-cast/SentryDrone/SentryDrone.glb",
+      "rig": "assets/characters/canonical-cast/SentryDrone/SentryDrone-rig.json",
+      "bytes": 52508,
+      "sha256": "a9a5923e8c47d21cb00326e373d10511633ca5d77a08c40443ff23ba3c64f3af",
+      "segments": [
+        "Body",
+        "Head",
+        "Weapon"
+      ],
+      "bounds": [
+        [
+          -1.5822222222222226,
+          -1.457777777777778,
+          -1.3548444444444447
+        ],
+        [
+          1.5822222222222226,
+          1.7422222222222226,
+          1.048888888888889
+        ]
+      ]
+    },
+    "GasTurret": {
+      "status": "PASS",
+      "triangles": 984,
+      "vertices": 500,
+      "closedComponents": true,
+      "components": 4,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00028594893125452505,
+      "glb": "assets/characters/canonical-cast/GasTurret/GasTurret.glb",
+      "rig": "assets/characters/canonical-cast/GasTurret/GasTurret-rig.json",
+      "bytes": 24600,
+      "sha256": "d8e4e21912cb6b4f5fe140cef856b9cec77792bc6511e3a879a4ff84a82551f0",
+      "segments": [
+        "Body",
+        "Weapon"
+      ],
+      "bounds": [
+        [
+          -1.12757761011326,
+          -1.2628869233268514,
+          -1.8305075414272327
+        ],
+        [
+          1.12757761011326,
+          1.5371130766731484,
+          1.4769253311112065
+        ]
+      ]
+    },
+    "RetroBlaster": {
+      "status": "PASS",
+      "triangles": 2932,
+      "vertices": 1492,
+      "closedComponents": true,
+      "components": 13,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00016556641523292136,
+      "glb": "assets/characters/canonical-cast/RetroBlaster/RetroBlaster.glb",
+      "rig": "assets/characters/canonical-cast/RetroBlaster/RetroBlaster-rig.json",
+      "bytes": 70868,
+      "sha256": "9a092fdd0e8fa4cee50d3bbdaa19cfd51cb247b84930274dca622ac34a290e6c",
+      "segments": [
+        "Body",
+        "Head",
+        "Weapon",
+        "Jaw",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -1.1794871794871795,
+          -2.0854700854700856,
+          -2.0205128205128204
+        ],
+        [
+          1.1794871794871795,
+          1.9145299145299148,
+          1.6666666666666667
+        ]
+      ]
+    },
+    "SaturnToadtrap": {
+      "status": "PASS",
+      "triangles": 2920,
+      "vertices": 1500,
+      "closedComponents": true,
+      "components": 20,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.000633438667049689,
+      "glb": "assets/characters/canonical-cast/SaturnToadtrap/SaturnToadtrap.glb",
+      "rig": "assets/characters/canonical-cast/SaturnToadtrap/SaturnToadtrap-rig.json",
+      "bytes": 69076,
+      "sha256": "48318062c19e3e8fe4dbe5add4c7ba6f1364db1e11235105828b18df09ebe4eb",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw"
+      ],
+      "bounds": [
+        [
+          -1.9220338983050849,
+          -1.4,
+          -2.016949152542373
+        ],
+        [
+          1.9220338983050849,
+          1.4,
+          1.6847457627118643
+        ]
+      ]
+    },
+    "Robot": {
+      "status": "PASS",
+      "triangles": 3356,
+      "vertices": 1706,
+      "closedComponents": true,
+      "components": 14,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00016556641523292136,
+      "glb": "assets/characters/canonical-cast/Robot/Robot.glb",
+      "rig": "assets/characters/canonical-cast/Robot/Robot-rig.json",
+      "bytes": 79264,
+      "sha256": "898249c26c68e966b11f76ce0c85693ade6015f8dbef880ac46ae4f31b2ef671",
+      "segments": [
+        "Body",
+        "Head",
+        "Weapon",
+        "Jaw"
+      ],
+      "bounds": [
+        [
+          -1.4017094017094018,
+          -2.0854700854700856,
+          -2.0205128205128204
+        ],
+        [
+          1.4017094017094018,
+          1.9145299145299148,
+          1.2478632478632479
+        ]
+      ]
+    },
+    "Slug": {
+      "status": "PASS",
+      "triangles": 2352,
+      "vertices": 1194,
+      "closedComponents": true,
+      "components": 9,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00019754832393915485,
+      "glb": "assets/characters/canonical-cast/Slug/Slug.glb",
+      "rig": "assets/characters/canonical-cast/Slug/Slug-rig.json",
+      "bytes": 57004,
+      "sha256": "0bbef41d1fc92cb2bf5d74b612f28a1dd8c98971a27d284af090fcd89e6d75f4",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -1.1508482846812116,
+          -0.7750257464557961,
+          -1.8212630063817428
+        ],
+        [
+          1.1508482846812116,
+          1.0249742535442041,
+          2.4473220716794892
+        ]
+      ]
+    },
+    "Electrofish": {
+      "status": "PASS",
+      "triangles": 2020,
+      "vertices": 1024,
+      "closedComponents": true,
+      "components": 7,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 5.049074484588179e-05,
+      "glb": "assets/characters/canonical-cast/Electrofish/Electrofish.glb",
+      "rig": "assets/characters/canonical-cast/Electrofish/Electrofish-rig.json",
+      "bytes": 48592,
+      "sha256": "ff533468d39b8c0f24d0c075881068865e6fbf20f818bb0fc1f2542272aba720",
+      "segments": [
+        "Body",
+        "Head",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -0.46,
+          -0.47998265615832786,
+          -2.38
+        ],
+        [
+          0.46,
+          0.731556333052157,
+          3.3114846520544576
+        ]
+      ]
+    },
+    "Hammerfish": {
+      "status": "PASS",
+      "triangles": 3216,
+      "vertices": 1636,
+      "closedComponents": true,
+      "components": 14,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 7.300993261429435e-05,
+      "glb": "assets/characters/canonical-cast/Hammerfish/Hammerfish.glb",
+      "rig": "assets/characters/canonical-cast/Hammerfish/Hammerfish-rig.json",
+      "bytes": 79060,
+      "sha256": "8de8bc40dc9ad5167155fcb96c3a68e1845cab034a561fa73785416809c42c1a",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "Fin",
+        "LeftFin",
+        "RightFin",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -1.554,
+          -0.925,
+          -2.35875
+        ],
+        [
+          1.554,
+          1.7020000000000002,
+          2.701
+        ]
+      ]
+    },
+    "Shark": {
+      "status": "PASS",
+      "triangles": 2712,
+      "vertices": 1390,
+      "closedComponents": true,
+      "components": 17,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 7.300993261429448e-05,
+      "glb": "assets/characters/canonical-cast/Shark/Shark.glb",
+      "rig": "assets/characters/canonical-cast/Shark/Shark-rig.json",
+      "bytes": 68164,
+      "sha256": "3da844e562a6eb12a85f39d55813fe140fc35062ccb9814be12fa5793d7bbd52",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "Fin",
+        "LeftFin",
+        "RightFin",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -1.554,
+          -0.8879999999999999,
+          -2.5282647275440895
+        ],
+        [
+          1.554,
+          1.7020000000000002,
+          2.701
+        ]
+      ]
+    },
+    "Duck": {
+      "status": "PASS",
+      "triangles": 4196,
+      "vertices": 2134,
+      "closedComponents": true,
+      "components": 18,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 8.089743225961152e-05,
+      "glb": "assets/characters/canonical-cast/Duck/Duck.glb",
+      "rig": "assets/characters/canonical-cast/Duck/Duck-rig.json",
+      "bytes": 99952,
+      "sha256": "b9f6778ab61db3640faa2eb54ff93d1ba3d174766b2aa0c83b5d172bceb73731",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftWing",
+        "RightWing",
+        "Tail",
+        "Jaw"
+      ],
+      "bounds": [
+        [
+          -1.254105263157895,
+          -1.285263157894737,
+          -2.8720463964680834
+        ],
+        [
+          1.254105263157895,
+          2.4147368421052633,
+          2.516173406741901
+        ]
+      ]
+    },
+    "Hordhead": {
+      "status": "PASS",
+      "triangles": 7764,
+      "vertices": 3950,
+      "closedComponents": true,
+      "components": 34,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 4.028736356800158e-05,
+      "glb": "assets/characters/canonical-cast/Hordhead/Hordhead.glb",
+      "rig": "assets/characters/canonical-cast/Hordhead/Hordhead-rig.json",
+      "bytes": 180416,
+      "sha256": "25596909636af11f2d2b4f49bf93d979360311e2ac6b3f7581281728442d6798",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -1.404453425938619,
+          -2.6371014680204357,
+          -1.6289612268453144
+        ],
+        [
+          1.404453425938619,
+          2.3628985319795635,
+          2.3380358493033544
+        ]
+      ]
+    },
+    "RacingRat": {
+      "status": "PASS",
+      "triangles": 7764,
+      "vertices": 3950,
+      "closedComponents": true,
+      "components": 34,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 4.028736356800158e-05,
+      "glb": "assets/characters/canonical-cast/RacingRat/RacingRat.glb",
+      "rig": "assets/characters/canonical-cast/RacingRat/RacingRat-rig.json",
+      "bytes": 180420,
+      "sha256": "dfa583df5e618b35b4cf4cf7061748476b261e35751d7e2f5b1da0a93e3b7bcd",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -1.404453425938619,
+          -2.6371014680204357,
+          -1.6289612268453144
+        ],
+        [
+          1.404453425938619,
+          2.3628985319795635,
+          2.3380358493033544
+        ]
+      ]
+    },
+    "FlyingHead": {
+      "status": "PASS",
+      "triangles": 3964,
+      "vertices": 2006,
+      "closedComponents": true,
+      "components": 12,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0002894427254248091,
+      "glb": "assets/characters/canonical-cast/FlyingHead/FlyingHead.glb",
+      "rig": "assets/characters/canonical-cast/FlyingHead/FlyingHead-rig.json",
+      "bytes": 93636,
+      "sha256": "4150e6d756e9789c537836413f7d0eb059481cb7ae5d42e5dd3b7d23ce0e8090",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftWing",
+        "RightWing",
+        "Jaw"
+      ],
+      "bounds": [
+        [
+          -2.7246122933380805,
+          -1.5454006630993533,
+          -1.5857371342216504
+        ],
+        [
+          2.7246122933380805,
+          1.8545993369006473,
+          1.3277385978740923
+        ]
+      ]
+    },
+    "Swellcheeks": {
+      "status": "PASS",
+      "triangles": 3964,
+      "vertices": 2006,
+      "closedComponents": true,
+      "components": 12,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00040061276875406426,
+      "glb": "assets/characters/canonical-cast/Swellcheeks/Swellcheeks.glb",
+      "rig": "assets/characters/canonical-cast/Swellcheeks/Swellcheeks-rig.json",
+      "bytes": 93600,
+      "sha256": "aa90f0e2f877984ab7845dcfc5a2b81d46511b983cbd7a55a693a4907734e070",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftWing",
+        "RightWing",
+        "Jaw"
+      ],
+      "bounds": [
+        [
+          -3.205426227456565,
+          -1.8181184271757096,
+          -1.8655730990842945
+        ],
+        [
+          3.205426227456565,
+          2.1818815728242904,
+          1.5620454092636378
+        ]
+      ]
+    },
+    "BigBlag": {
+      "status": "PASS",
+      "triangles": 9248,
+      "vertices": 4698,
+      "closedComponents": true,
+      "components": 37,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00010688500776213806,
+      "glb": "assets/characters/canonical-cast/BigBlag/BigBlag.glb",
+      "rig": "assets/characters/canonical-cast/BigBlag/BigBlag-rig.json",
+      "bytes": 213196,
+      "sha256": "1838ae597d53e08b34ba9186b04fe87a64c03482c7a5e1c438330e90301f24c2",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -3.1154605704551472,
+          -4.066693208430914,
+          -2.582767887299932
+        ],
+        [
+          4.06299627214999,
+          4.033306791569086,
+          2.7286052204396243
+        ]
+      ]
+    },
+    "RoboManus": {
+      "status": "PASS",
+      "triangles": 6904,
+      "vertices": 3512,
+      "closedComponents": true,
+      "components": 30,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00031996060367629194,
+      "glb": "assets/characters/canonical-cast/RoboManus/RoboManus.glb",
+      "rig": "assets/characters/canonical-cast/RoboManus/RoboManus-rig.json",
+      "bytes": 162116,
+      "sha256": "4a130f13072ae2aba70e6ed47fae19235052014e922dd20056c41f00ca921a92",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg",
+        "Weapon"
+      ],
+      "bounds": [
+        [
+          -3.300192539313742,
+          -4.756566303651505,
+          -2.606021780909673
+        ],
+        [
+          3.300192539313742,
+          4.243433696348495,
+          1.0364423851573679
+        ]
+      ]
+    },
+    "Buzzball": {
+      "status": "PASS",
+      "triangles": 3912,
+      "vertices": 1960,
+      "closedComponents": true,
+      "components": 2,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 3.7423329121908055e-05,
+      "glb": "assets/characters/canonical-cast/Buzzball/Buzzball.glb",
+      "rig": "assets/characters/canonical-cast/Buzzball/Buzzball-rig.json",
+      "bytes": 88852,
+      "sha256": "b562efafd5d810897a17a8e92f7ec73c8f5ce657dedd99d56bfdf8e76da88b90",
+      "segments": [
+        "Body",
+        "Fin"
+      ],
+      "bounds": [
+        [
+          -2.75,
+          -2.75,
+          -2.911435547047523
+        ],
+        [
+          2.75,
+          2.75,
+          2.75
+        ]
+      ]
+    },
+    "Snake": {
+      "status": "PASS",
+      "triangles": 4052,
+      "vertices": 2056,
+      "closedComponents": true,
+      "components": 15,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.0003519002952778651,
+      "glb": "assets/characters/canonical-cast/Snake/Snake.glb",
+      "rig": "assets/characters/canonical-cast/Snake/Snake-rig.json",
+      "bytes": 94616,
+      "sha256": "0dc8ce90e08353b321ad5b6ee760ab782cf663ac765181dbac3977071626eaa0",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -1.584,
+          -1.1132000000000002,
+          -3.8280000000000003
+        ],
+        [
+          1.584,
+          1.4300000000000002,
+          4.224
+        ]
+      ]
+    },
+    "GeneralSlaughter": {
+      "status": "PASS",
+      "triangles": 11392,
+      "vertices": 5778,
+      "closedComponents": true,
+      "components": 41,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 0.00014286619856188545,
+      "glb": "assets/characters/canonical-cast/GeneralSlaughter/GeneralSlaughter.glb",
+      "rig": "assets/characters/canonical-cast/GeneralSlaughter/GeneralSlaughter-rig.json",
+      "bytes": 260624,
+      "sha256": "d62f83ce3f339b70cdf89262d3c636235b999b7962914c0e3dc08dd322b6de9d",
+      "segments": [
+        "Body",
+        "Head",
+        "Jaw",
+        "LeftArm",
+        "LeftLeg",
+        "RightArm",
+        "RightLeg"
+      ],
+      "bounds": [
+        [
+          -3.401490687728231,
+          -3.6886082933062116,
+          -2.174868528518508
+        ],
+        [
+          3.401490687728231,
+          4.611391706693788,
+          1.2861940033307433
+        ]
+      ]
+    },
+    "DarkQueen": {
+      "status": "PASS",
+      "triangles": 11412,
+      "vertices": 5798,
+      "closedComponents": true,
+      "components": 46,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 2.441022887721126e-05,
+      "glb": "assets/characters/canonical-cast/DarkQueen/DarkQueen.glb",
+      "rig": "assets/characters/canonical-cast/DarkQueen/DarkQueen-rig.json",
+      "bytes": 263436,
+      "sha256": "3d9739531a01e8e30c75eab2184dfde24d944d451b70c3249b730e8fd7e34c3a",
+      "segments": [
+        "Body",
+        "Head",
+        "Hair",
+        "LeftArm",
+        "LeftLeg",
+        "LeftLowerLeg",
+        "RightArm",
+        "RightLeg",
+        "RightLowerLeg"
+      ],
+      "bounds": [
+        [
+          -1.7626171875,
+          -5.0583984375,
+          -0.8517578124999999
+        ],
+        [
+          1.7626171875,
+          3.8416015624999997,
+          0.7785510945404447
+        ]
+      ]
+    },
+    "HealingFly": {
+      "status": "PASS",
+      "triangles": 2536,
+      "vertices": 1290,
+      "closedComponents": true,
+      "components": 11,
+      "allFinite": true,
+      "unitNormals": true,
+      "validIndices": true,
+      "minimumDoubledTriangleArea": 2.1070595676104017e-05,
+      "glb": "assets/characters/canonical-cast/HealingFly/HealingFly.glb",
+      "rig": "assets/characters/canonical-cast/HealingFly/HealingFly-rig.json",
+      "bytes": 61908,
+      "sha256": "3c84c6a7099bed1bf9ba03e8094def1834a7f711b17b565b997275f99c6bfdaa",
+      "segments": [
+        "Body",
+        "Head",
+        "LeftWing",
+        "RightWing",
+        "Tail"
+      ],
+      "bounds": [
+        [
+          -0.9859999999999999,
+          -0.40786872390413237,
+          -0.7140000000000001
+        ],
+        [
+          0.9859999999999999,
+          0.4335,
+          0.7718117793619828
+        ]
+      ]
+    }
+  }
+}

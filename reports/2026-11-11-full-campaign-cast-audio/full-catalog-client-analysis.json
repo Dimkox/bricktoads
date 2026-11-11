@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "sourceSha256": "a2440cee9f81d4f6eddbd4425a72f8f4fe74a25a4939f9124df7ab2708bed836",
+  "scope": "Prepared actual client visibility; complements continuous29 bounded-retention evidence",
+  "fixturePolicy": {
+    "replication": "Only owned static gallery Models set Persistent because actual Workspace streaming is enabled",
+    "geometry": "Only synthetic gallery parts pinned/noncolliding for this visibility-only test",
+    "loading": "Unmodified production CastAssetVisibility requests typed assets; QA reader makes no preload or local visibility writes",
+    "input": "No Start/Move/Jump/Punch sent by this fixture"
+  },
+  "checks": {
+    "same29Families": true,
+    "all29Ready": true,
+    "all166Visible": true,
+    "fallbacksHidden": true
+  },
+  "walker": {
+    "state": "Ready",
+    "meshes": 5,
+    "fallbacks": 6,
+    "kind": "Walker",
+    "visibleFallbacks": 0,
+    "visibleMeshes": 5
+  },
+  "robot": {
+    "state": "Ready",
+    "meshes": 4,
+    "fallbacks": 6,
+    "kind": "Robot",
+    "visibleFallbacks": 0,
+    "visibleMeshes": 4
+  },
+  "coverageLimits": [
+    "Prepared persistent gallery does not establish default distance streaming or natural spawn timing",
+    "Anchored preview parts are visibility fixtures; physics and animation evidence are separate"
+  ]
+}

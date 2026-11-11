@@ -1,0 +1,768 @@
+{
+  "schema": 1,
+  "kind": "BigBlag",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/bigblag.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "BigBlag graphicsEF/F1 show an enormous black-clad rat with pale/red belly, long pointed muzzle, round ears, heavy arms, shorts, broad feet and long trailing tail."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -3.1154605704551472,
+      -4.066693208430914,
+      -2.582767887299932
+    ],
+    [
+      4.06299627214999,
+      4.033306791569086,
+      2.7286052204396243
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Surf",
+    "sourceEvidence": "main.asm:13055-13204;anim84 highbit caller",
+    "frames": [
+      {
+        "frameId": 239,
+        "width": 32,
+        "height": 48,
+        "visibleBounds": {
+          "minX": -16,
+          "minY": -36,
+          "maxX": 15,
+          "maxY": 11
+        },
+        "referencePng": "cast-frames/bigblag-ef.png"
+      },
+      {
+        "frameId": 241,
+        "width": 48,
+        "height": 50,
+        "visibleBounds": {
+          "minX": -13,
+          "minY": -37,
+          "maxX": 34,
+          "maxY": 12
+        },
+        "referencePng": "cast-frames/bigblag-f1.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      22,
+      38
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "typeId": 121,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:322",
+      "trigger": [
+        34,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs2.asm:291",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            34,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs2.asm:294",
+          "trigger": [
+            0,
+            48
+          ],
+          "paletteRamOffset": 4,
+          "colorCodes": [
+            2,
+            18,
+            50
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs2.asm:312",
+          "trigger": [
+            32,
+            128
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            22,
+            38
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        },
+        {
+          "source": "levels_cfgs2.asm:319",
+          "trigger": [
+            33,
+            128
+          ],
+          "paletteRamOffset": 8,
+          "colorCodes": [
+            12,
+            0,
+            16
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "sourceSlotPrimary": 3,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 22,
+        "effectiveRgb": [
+          180,
+          0,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 38,
+        "effectiveRgb": [
+          255,
+          100,
+          97
+        ]
+      }
+    ],
+    "variantCount": 1,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.0487119437939114,
+          -3.1868852459016392,
+          -1.6450955303217354
+        ],
+        [
+          2.0487119437939114,
+          2.5039812646370025,
+          1.8400468384074942
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.0487119437939114,
+          -3.1868852459016392,
+          -1.6450955303217354
+        ],
+        [
+          2.0487119437939114,
+          2.5039812646370025,
+          1.8400468384074942
+        ]
+      ],
+      "vertices": 1258,
+      "authoringVertices": 1258,
+      "paletteSplitTriangles": 0,
+      "triangles": 2496
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        2.0107728337236535,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.4325807962529273,
+          -0.4397142857142857,
+          -2.582767887299932
+        ],
+        [
+          1.4325807962529273,
+          2.022533957845433,
+          0.8167446378054195
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.4325807962529273,
+          1.5710585480093677,
+          -2.582767887299932
+        ],
+        [
+          1.4325807962529273,
+          4.033306791569086,
+          0.8167446378054195
+        ]
+      ],
+      "vertices": 1542,
+      "authoringVertices": 1542,
+      "paletteSplitTriangles": 0,
+      "triangles": 3032
+    },
+    {
+      "name": "LeftArm",
+      "parent": "Body",
+      "pivot": [
+        -1.5934426229508196,
+        1.4227166276346606,
+        0.11381733021077284
+      ],
+      "localBounds": [
+        [
+          -1.5220179475043276,
+          -3.093555035128806,
+          -1.716431042575087
+        ],
+        [
+          0.6772131147540984,
+          0.6772131147540983,
+          0.6772131147540985
+        ]
+      ],
+      "globalBounds": [
+        [
+          -3.1154605704551472,
+          -1.6708384074941454,
+          -1.6026137123643143
+        ],
+        [
+          -0.9162295081967212,
+          2.099929742388759,
+          0.7910304449648713
+        ]
+      ],
+      "vertices": 488,
+      "authoringVertices": 488,
+      "paletteSplitTriangles": 0,
+      "triangles": 952
+    },
+    {
+      "name": "LeftLeg",
+      "parent": "Body",
+      "pivot": [
+        -1.2140515222482438,
+        -2.0297423887587827,
+        0.17072599531615926
+      ],
+      "localBounds": [
+        [
+          -0.9619306702185728,
+          -2.0369508196721315,
+          -2.1779641288269564
+        ],
+        [
+          0.781545667447307,
+          0.6772131147540985,
+          0.7180363615786034
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.1759821924668166,
+          -4.066693208430914,
+          -2.007238133510797
+        ],
+        [
+          -0.43250585480093673,
+          -1.3525292740046841,
+          0.8887623568947627
+        ]
+      ],
+      "vertices": 356,
+      "authoringVertices": 356,
+      "paletteSplitTriangles": 0,
+      "triangles": 700
+    },
+    {
+      "name": "RightArm",
+      "parent": "Body",
+      "pivot": [
+        1.5934426229508196,
+        1.4227166276346606,
+        0.11381733021077284
+      ],
+      "localBounds": [
+        [
+          -0.6772131147540984,
+          -3.093555035128806,
+          -1.716431042575087
+        ],
+        [
+          1.5220179475043276,
+          0.6772131147540983,
+          0.6772131147540985
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.9162295081967212,
+          -1.6708384074941454,
+          -1.6026137123643143
+        ],
+        [
+          3.1154605704551472,
+          2.099929742388759,
+          0.7910304449648713
+        ]
+      ],
+      "vertices": 488,
+      "authoringVertices": 488,
+      "paletteSplitTriangles": 0,
+      "triangles": 952
+    },
+    {
+      "name": "RightLeg",
+      "parent": "Body",
+      "pivot": [
+        1.2140515222482438,
+        -2.0297423887587827,
+        0.17072599531615926
+      ],
+      "localBounds": [
+        [
+          -0.781545667447307,
+          -2.0369508196721315,
+          -2.1779641288269564
+        ],
+        [
+          0.9619306702185728,
+          0.6772131147540985,
+          0.7180363615786034
+        ]
+      ],
+      "globalBounds": [
+        [
+          0.43250585480093673,
+          -4.066693208430914,
+          -2.007238133510797
+        ],
+        [
+          2.1759821924668166,
+          -1.3525292740046841,
+          0.8887623568947627
+        ]
+      ],
+      "vertices": 356,
+      "authoringVertices": 356,
+      "paletteSplitTriangles": 0,
+      "triangles": 700
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        -1.8400468384074942,
+        1.365807962529274
+      ],
+      "localBounds": [
+        [
+          -0.17226100818587156,
+          -0.6058813889379477,
+          -0.2582866600988132
+        ],
+        [
+          4.06299627214999,
+          0.3133457352585485,
+          1.3627972579103502
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.17226100818587156,
+          -2.445928227345442,
+          1.1075213024304609
+        ],
+        [
+          4.06299627214999,
+          -1.5267011031489457,
+          2.7286052204396243
+        ]
+      ],
+      "vertices": 210,
+      "authoringVertices": 210,
+      "paletteSplitTriangles": 0,
+      "triangles": 416
+    }
+  ],
+  "joints": [
+    {
+      "name": "Head",
+      "parent": "Body",
+      "child": "Head",
+      "parentAttachment": [
+        0.0,
+        2.0107728337236535,
+        0.0
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftArm",
+      "parent": "Body",
+      "child": "LeftArm",
+      "parentAttachment": [
+        -1.5934426229508196,
+        1.4227166276346606,
+        0.11381733021077284
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "LeftLeg",
+      "parent": "Body",
+      "child": "LeftLeg",
+      "parentAttachment": [
+        -1.2140515222482438,
+        -2.0297423887587827,
+        0.17072599531615926
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightArm",
+      "parent": "Body",
+      "child": "RightArm",
+      "parentAttachment": [
+        1.5934426229508196,
+        1.4227166276346606,
+        0.11381733021077284
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "RightLeg",
+      "parent": "Body",
+      "child": "RightLeg",
+      "parentAttachment": [
+        1.2140515222482438,
+        -2.0297423887587827,
+        0.17072599531615926
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "child": "Tail",
+      "parentAttachment": [
+        0.0,
+        -1.8400468384074942,
+        1.365807962529274
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        255,
+        100,
+        97
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 9248,
+    "vertices": 4698,
+    "closedComponents": true,
+    "components": 37,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.00010688500776213806
+  }
+}

@@ -1,0 +1,13 @@
+# Canonical cast, animation and audiovisual completion
+
+The owner explicitly requests completion of every gameplay character from the original source, followed by sound/effects, with MCP-only Studio verification, Git push and Jira updates. Earlier choices fix the NES reference, proportions, exaggerated attacks and boss-appearance reactions. Continue execution without repeating already settled style/permission questions.
+
+Use the pinned public Battletoads USA NES source at f1a43b69577246850d136473700a333b3cdfe93f. Preserve exact decoded graphics/animation/caller facts and distinguish inferred 3D depth/joint angles from source facts. Trace missing families before assigning graphics namespaces; no claim of complete source fidelity from a dispatch label. The third hero uses the same source-derived anatomy with the already approved Brown palette, an explicit three-player adaptation.
+
+Extend the existing cosmetic mesh/attachment pipeline. Mesh surfaces and named articulated body segments replace generic creature blocks while keeping authoritative collider rigs, health, identity, physics, attack timing and ownership. Render real server states: locomotion, active attacks, reaction, death, carried/mounted/swimming/course poses and supported source intros. Imported resources have deterministic geometry/manifests, source provenance and native checks. Review source silhouettes alongside rendered contact sheets and native captures.
+
+Only after the cast/presentation pass, add original source-inspired chiptune sound/music and bounded effects connected to confirmed gameplay events. Source audio cues inform event placement; production audio is authored synthesis rather than ROM audio extraction. Prefer existing confirmed-event feed and contextual state; deduplicate old/sync events, cap effects/voices, clean up after lifecycle changes and expose compact localized audio settings. Never let audiovisual callbacks mutate gameplay.
+
+Existing Studio: private place117412694427208, one window and Roblox MCP only. Do not modify protected dirty places/BrickToads.rbxlx or another chat's assets/concept-art/uhd-cast-2026-11-09. Native25 finite all13 Won evidence stays historical; new visual/audio acceptance is recorded against its own build. Public publish is outside this pass.
+
+Approach ruling: reuse deterministic authored mesh generation and source-frame procedural joint playback rather than unrelated AI R15 motions; that preserves accepted physics and exact source frame/caller provenance. Keep a source-to-runtime cast matrix so missing traces/assets remain visible until actually completed.

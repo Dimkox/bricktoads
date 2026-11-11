@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "codeCommit": "102fdc1325a8c479f851d35fc9f4d299df2e29d1",
+  "comments": [
+    {
+      "issue": "BT-29",
+      "commentId": "10509",
+      "url": "https://ii-tonya.atlassian.net/browse/BT-29?focusedCommentId=10509",
+      "body": "Заменены оставшиеся28 примитивных типов элементов трасс: мины, бомбы, лёд, шестерни, вентиляторы, канат, платформы, башня, вода, водовороты и предупреждения.28 исходных3D моделей/98 загруженных секций; Studio Model97138816221562. Физические детали, размеры, столкновения, опоры и игровой урон сохранены.\n\nЧерез MCP в одном Studio:28/28 типов проходят native-проверки; настоящий клиент каталога —28 Ready,257 мешей видимы по локальным флагам,0 видимых примитивов. Полный обычный прогон13 уровней завершён Won с новыми моделями (God Mode включён явно).80/80 регрессий;232 Luau компилируются. Соло-проверка в Studio не закрывает критерии физических touch-устройств, дуо/трио и конечного запаса жизней.\n\n[Код](https://github.com/Dimkox/bricktoads/commit/102fdc1325a8c479f851d35fc9f4d299df2e29d1), [отчёт и исходные журналы](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-course-traps/README.md), [PR4](https://github.com/Dimkox/bricktoads/pull/4). CI кода: BrickToads42935602141 и Combat stand42935602130 — success."
+    },
+    {
+      "issue": "BT-27",
+      "commentId": "10510",
+      "url": "https://ii-tonya.atlassian.net/browse/BT-27?focusedCommentId=10510",
+      "body": "Проверена загрузка новых элементов на настоящем клиенте через MCP. Подготовленный каталог отдельно подтверждает28 Ready/257 видимых мешей и передачу анимации9 семейств. В полном прохождении при обычном дистанционном streaming наблюдались27 семейств Prop: у всех есть Ready, maxFailed0, ошибок наблюдателя0. Buzzball в этом маршруте использует настоящего cast-актора; его запасной Prop отдельно проверен в каталоге. Каталог только для теста был Persistent, обычная игра — без этого изменения.\n\nВсе13 уровней завершены Won с God Mode. Сохранены50 предупреждений Roblox о content representations; захваченных ScriptContext/Error нет.60 производственных скриптов восстановлены, тестовые объекты удалены. Сетевой тест нескольких реальных клиентов и физические мобильные устройства остаются отдельной приёмкой.\n\n[Код](https://github.com/Dimkox/bricktoads/commit/102fdc1325a8c479f851d35fc9f4d299df2e29d1), [отчёт и исходные журналы](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-course-traps/README.md), [PR4](https://github.com/Dimkox/bricktoads/pull/4). CI кода: BrickToads42935602141 и Combat stand42935602130 — success."
+    },
+    {
+      "issue": "BT-33",
+      "commentId": "10511",
+      "url": "https://ii-tonya.atlassian.net/browse/BT-33?focusedCommentId=10511",
+      "body": "Выполнено оформление оставшихся28 типов элементов по закреплённому Battletoads USA NES source pin f1a43b69577246850d136473700a333b3cdfe93f. Каталог содержит21 тип объектов/40 декодированных кадров, компоненты каната и фоны башни/воды,68 PNG и53 проверенных входных файла. Глубина3D и интерполяция явно авторские. Неопределённость AirMine, служебные BoardingPad/Telegraph, видимый адаптированный RocketLauncher и265 неразобранных хвостовых байтов воды сохранены явно.\n\nNative30:13 последовательных уровней, Won,791 наблюдение за828.3с. God Mode включён; два подтверждённых выбывания (Fall/CombatUnderflow), итог attempt3/stock3/Life47. Guardian получает3 попадания; все пять последующих боссов побеждены с записанными фазами. Ни позиции, ни HP, ни прогресс QA не переписывал; использовались обычные команды клиента. Путь игрока в производственной игре не менялся.\n\n[Код](https://github.com/Dimkox/bricktoads/commit/102fdc1325a8c479f851d35fc9f4d299df2e29d1), [отчёт и исходные журналы](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-course-traps/README.md), [PR4](https://github.com/Dimkox/bricktoads/pull/4). CI кода: BrickToads42935602141 и Combat stand42935602130 — success."
+    },
+    {
+      "issue": "BT-74",
+      "commentId": "10512",
+      "url": "https://ii-tonya.atlassian.net/browse/BT-74?focusedCommentId=10512",
+      "body": "Добавлены28 моделей опасных объектов, механизмов, опор и окружения курса по исследованным исходникам. Это98 flat MeshPart ресурсов,39 210 треугольников суммарно, максимум3 104 на секцию; GLB991 060байт, sha256 a5fc292cb0a58f82aee5b6d9bb16e3cfd3636ef3779ba99b424a661db8590157. Все29 GLB проходят Khronos без ошибок/предупреждений. Реальные MeshId/TextureID и typed motion сохранены в roblox-course-props.json.\n\nПроверены28 native-моделей, замена/изменение размеров/прозрачность/очистка и настоящий клиент;13 уровней пройдены с новым оформлением. В отчёте есть снимок28 нормализованных моделей непосредственно в Studio и отдельные реальные игровые кадры. Эта работа не заменяет широкую приёмку33 UHD-персонажей, PBR/LOD, слабых физических устройств и нескольких клиентов; их задачи автоматически не закрываются.\n\n[Код](https://github.com/Dimkox/bricktoads/commit/102fdc1325a8c479f851d35fc9f4d299df2e29d1), [отчёт и исходные журналы](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-course-traps/README.md), [PR4](https://github.com/Dimkox/bricktoads/pull/4). CI кода: BrickToads42935602141 и Combat stand42935602130 — success."
+    },
+    {
+      "issue": "BT-26",
+      "commentId": "10513",
+      "url": "https://ii-tonya.atlassian.net/browse/BT-26?focusedCommentId=10513",
+      "body": "Повторное полное прохождение с новым оформлением оставшихся28 типов: Native30 Won, все13 уровней по порядку, один настоящий аккаунт11946162891 в одном Studio, только MCP. SourceBuild0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c; God Mode=true.791 наблюдение, два подтверждённых выбывания, итог attempt3/stock3/Life47. Проверены Guardian3 попадания, BigBlag фазы1/2/3 и фазы1/2 RoboManus/GeneralSlaughter/Buzzball/DarkQueen.\n\nОшибок prop/presentation и захваченных native Lua ошибок0.220 движущихся наблюдений Clinger сохраняют Ride и верное направление героя/транспорта.80/80 регрессий,232 Luau компилируются. Сохранены исходные журналы и ограничения консоли. Это God Mode-приёмка, а проверка конечного запаса возрождений, нескольких клиентов и настоящего переподключения остаётся открытой.\n\n[Код](https://github.com/Dimkox/bricktoads/commit/102fdc1325a8c479f851d35fc9f4d299df2e29d1), [отчёт и исходные журналы](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-course-traps/README.md), [PR4](https://github.com/Dimkox/bricktoads/pull/4). CI кода: BrickToads42935602141 и Combat stand42935602130 — success."
+    }
+  ]
+}

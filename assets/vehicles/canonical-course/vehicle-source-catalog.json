@@ -1,0 +1,1103 @@
+{
+  "schema": 1,
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceUrl": "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads",
+  "method": "Exact source object metasprite tables plus source CHR recipes and representative authored actor palette; no ROM or emulator.",
+  "limitations": [
+    "Source is 2D. All 3D depth and unseen surfaces are authored.",
+    "Source RGB is illustrative 2C02 conversion.",
+    "Repeated Surf/Clinger palette loops and exact interpreter scheduling are not reproduced."
+  ],
+  "vehicles": [
+    {
+      "kind": "Speeder",
+      "level": 3,
+      "bankRecipe": "Tunnel",
+      "sourceEvidence": "main.asm:9148-9208 object_bike and bike_frame_id; frames_koleso at main.asm:8955",
+      "paletteContext": {
+        "typeId": 24,
+        "actorPaletteXor": 0,
+        "source": "levels_cfgs1.asm:136",
+        "trigger": [
+          5,
+          192
+        ],
+        "paletteIndices": [
+          15,
+          15,
+          10,
+          26,
+          15,
+          15,
+          23,
+          39,
+          15,
+          24,
+          40,
+          32,
+          15,
+          15,
+          28,
+          44
+        ],
+        "paletteWrites": [
+          {
+            "source": "levels_cfgs1.asm:123",
+            "trigger": [
+              0,
+              0
+            ],
+            "paletteRamOffset": 28,
+            "colorCodes": [
+              15,
+              39,
+              55
+            ],
+            "delayCounter": 0,
+            "sourceHandler": "main.asm:9213-9306"
+          },
+          {
+            "source": "levels_cfgs1.asm:135",
+            "trigger": [
+              5,
+              184
+            ],
+            "paletteRamOffset": 28,
+            "colorCodes": [
+              15,
+              28,
+              44
+            ],
+            "delayCounter": 0,
+            "sourceHandler": "main.asm:9213-9306"
+          }
+        ]
+      },
+      "bankLoads": [
+        {
+          "file": "gfx/sprite0.chr",
+          "firstTile": 0,
+          "tiles": 33,
+          "decodedCompleteTiles": 33,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/game_std.chr",
+          "firstTile": 33,
+          "tiles": 9,
+          "decodedCompleteTiles": 9,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/turbotunnel_obj.4",
+          "firstTile": 42,
+          "tiles": 195,
+          "decodedCompleteTiles": 195,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/byte_BC65.chr",
+          "firstTile": 234,
+          "tiles": 22,
+          "compression": 0,
+          "override": true
+        }
+      ],
+      "frames": [
+        {
+          "frameId": 42,
+          "frameHex": "2A",
+          "namespace": "object",
+          "metaspriteAddress": "B118",
+          "parts": [
+            {
+              "tile": 42,
+              "x": -11,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 43,
+              "x": -3,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 44,
+              "x": -7,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 45,
+              "x": 1,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 46,
+              "x": 5,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 47,
+              "x": 11,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 48,
+              "x": -15,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 49,
+              "x": 9,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 50,
+              "x": 15,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 51,
+              "x": -13,
+              "y": 7,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 52,
+              "x": -5,
+              "y": 7,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 53,
+              "x": 3,
+              "y": 7,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -15,
+            "minY": -9,
+            "maxX": 22,
+            "maxY": 10
+          },
+          "width": 38,
+          "height": 20,
+          "png": "references/speeder-2a.png"
+        }
+      ],
+      "rgbColors": [
+        [
+          0,
+          102,
+          120
+        ],
+        [
+          18,
+          19,
+          20
+        ],
+        [
+          56,
+          180,
+          204
+        ]
+      ],
+      "unknown": []
+    },
+    {
+      "kind": "Surfboard",
+      "level": 12,
+      "bankRecipe": "Surf",
+      "sourceEvidence": "main.asm:9148-9208 object_bike and bike_frame_id; frames_koleso at main.asm:8955",
+      "paletteContext": {
+        "typeId": 24,
+        "actorPaletteXor": 1,
+        "source": "levels_cfgs2.asm:292",
+        "trigger": [
+          0,
+          0
+        ],
+        "paletteIndices": [
+          15,
+          15,
+          10,
+          26,
+          15,
+          15,
+          23,
+          39,
+          15,
+          24,
+          40,
+          32,
+          15,
+          15,
+          34,
+          32
+        ],
+        "paletteWrites": [
+          {
+            "source": "levels_cfgs2.asm:291",
+            "trigger": [
+              0,
+              0
+            ],
+            "paletteRamOffset": 28,
+            "colorCodes": [
+              15,
+              34,
+              32
+            ],
+            "delayCounter": 0,
+            "sourceHandler": "main.asm:9213-9306"
+          }
+        ]
+      },
+      "bankLoads": [
+        {
+          "file": "gfx/sprite0.chr",
+          "firstTile": 0,
+          "tiles": 33,
+          "decodedCompleteTiles": 33,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/game_std.chr",
+          "firstTile": 33,
+          "tiles": 8,
+          "decodedCompleteTiles": 8,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/byte_CC32.chr",
+          "firstTile": 41,
+          "tiles": 1,
+          "decodedCompleteTiles": 1,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/surfcity_obj.4",
+          "firstTile": 42,
+          "tiles": 97,
+          "decodedCompleteTiles": 97,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/turbotunnel_obj.4",
+          "firstTile": 139,
+          "tiles": 34,
+          "decodedCompleteTiles": 34,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/levels1_5_obj.4",
+          "firstTile": 173,
+          "tiles": 35,
+          "decodedCompleteTiles": 35,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/tall_walker.4",
+          "firstTile": 208,
+          "tiles": 10,
+          "decodedCompleteTiles": 10,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/stick.4",
+          "firstTile": 218,
+          "tiles": 4,
+          "decodedCompleteTiles": 4,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/common.4",
+          "firstTile": 222,
+          "tiles": 14,
+          "decodedCompleteTiles": 14,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/byte_BC65.chr",
+          "firstTile": 234,
+          "tiles": 22,
+          "compression": 0,
+          "override": true
+        }
+      ],
+      "frames": [
+        {
+          "frameId": 210,
+          "frameHex": "D2",
+          "namespace": "object",
+          "metaspriteAddress": "C104",
+          "parts": [
+            {
+              "tile": 42,
+              "x": -12,
+              "y": 4,
+              "attributes": 2,
+              "paletteSlot": 2
+            },
+            {
+              "tile": 43,
+              "x": -4,
+              "y": 4,
+              "attributes": 2,
+              "paletteSlot": 2
+            },
+            {
+              "tile": 44,
+              "x": 4,
+              "y": 6,
+              "attributes": 2,
+              "paletteSlot": 2
+            },
+            {
+              "tile": 45,
+              "x": -12,
+              "y": 12,
+              "attributes": 2,
+              "paletteSlot": 2
+            },
+            {
+              "tile": 46,
+              "x": -4,
+              "y": 12,
+              "attributes": 2,
+              "paletteSlot": 2
+            }
+          ],
+          "visibleBounds": {
+            "minX": -12,
+            "minY": 4,
+            "maxX": 11,
+            "maxY": 17
+          },
+          "width": 24,
+          "height": 14,
+          "png": "references/surfboard-d2.png"
+        }
+      ],
+      "rgbColors": [
+        [
+          117,
+          118,
+          0
+        ],
+        [
+          205,
+          202,
+          62
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "unknown": []
+    },
+    {
+      "kind": "Jet",
+      "level": 7,
+      "bankRecipe": "Tunnel",
+      "sourceEvidence": "main.asm:9148-9208 object_bike and bike_frame_id; frames_koleso at main.asm:8955",
+      "paletteContext": {
+        "actorPaletteXor": 0,
+        "paletteIndices": [
+          15,
+          15,
+          10,
+          26,
+          15,
+          15,
+          23,
+          39,
+          15,
+          24,
+          40,
+          32,
+          15,
+          15,
+          22,
+          38
+        ],
+        "source": "palette_chars baseline; dynamic vehicle trace unresolved"
+      },
+      "bankLoads": [
+        {
+          "file": "gfx/sprite0.chr",
+          "firstTile": 0,
+          "tiles": 33,
+          "decodedCompleteTiles": 33,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/game_std.chr",
+          "firstTile": 33,
+          "tiles": 9,
+          "decodedCompleteTiles": 9,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/turbotunnel_obj.4",
+          "firstTile": 42,
+          "tiles": 195,
+          "decodedCompleteTiles": 195,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/byte_BC65.chr",
+          "firstTile": 234,
+          "tiles": 22,
+          "compression": 0,
+          "override": true
+        }
+      ],
+      "frames": [
+        {
+          "frameId": 139,
+          "frameHex": "8B",
+          "namespace": "object",
+          "metaspriteAddress": "B969",
+          "parts": [
+            {
+              "tile": 191,
+              "x": -17,
+              "y": -17,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 192,
+              "x": -18,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 193,
+              "x": -10,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 194,
+              "x": -2,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 195,
+              "x": 6,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 196,
+              "x": 10,
+              "y": -9,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 197,
+              "x": -22,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 198,
+              "x": -14,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 199,
+              "x": -6,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 200,
+              "x": 2,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 201,
+              "x": 10,
+              "y": -1,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 202,
+              "x": 17,
+              "y": -4,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 203,
+              "x": -11,
+              "y": 7,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 204,
+              "x": -3,
+              "y": 7,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -21,
+            "minY": -13,
+            "maxX": 24,
+            "maxY": 10
+          },
+          "width": 46,
+          "height": 24,
+          "png": "references/jet-8b.png"
+        }
+      ],
+      "rgbColors": [
+        [
+          18,
+          19,
+          20
+        ],
+        [
+          180,
+          0,
+          0
+        ],
+        [
+          255,
+          100,
+          97
+        ]
+      ],
+      "unknown": []
+    },
+    {
+      "kind": "ClingerVehicle",
+      "level": 10,
+      "bankRecipe": "Clinger",
+      "sourceEvidence": "main.asm:9148-9208 object_bike and bike_frame_id; frames_koleso at main.asm:8955",
+      "paletteContext": {
+        "typeId": 24,
+        "actorPaletteXor": 0,
+        "source": "levels_cfgs2.asm:221",
+        "trigger": [
+          0,
+          0
+        ],
+        "paletteIndices": [
+          15,
+          15,
+          10,
+          26,
+          15,
+          15,
+          23,
+          39,
+          15,
+          24,
+          40,
+          32,
+          15,
+          15,
+          22,
+          38
+        ],
+        "paletteWrites": [
+          {
+            "source": "levels_cfgs2.asm:223",
+            "trigger": [
+              0,
+              0
+            ],
+            "paletteRamOffset": 28,
+            "colorCodes": [
+              15,
+              22,
+              38
+            ],
+            "delayCounter": 0,
+            "sourceHandler": "main.asm:9213-9306"
+          }
+        ]
+      },
+      "bankLoads": [
+        {
+          "file": "gfx/sprite0.chr",
+          "firstTile": 0,
+          "tiles": 33,
+          "decodedCompleteTiles": 33,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/game_std.chr",
+          "firstTile": 33,
+          "tiles": 9,
+          "decodedCompleteTiles": 9,
+          "unknownTailBytes": 0,
+          "compression": 0
+        },
+        {
+          "file": "gfx/ratrace_obj.4",
+          "firstTile": 42,
+          "tiles": 166,
+          "decodedCompleteTiles": 166,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/tall_walker.4",
+          "firstTile": 208,
+          "tiles": 10,
+          "decodedCompleteTiles": 10,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/stick.4",
+          "firstTile": 218,
+          "tiles": 4,
+          "decodedCompleteTiles": 4,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/common.4",
+          "firstTile": 222,
+          "tiles": 15,
+          "decodedCompleteTiles": 15,
+          "unknownTailBytes": 0,
+          "compression": 4
+        },
+        {
+          "file": "gfx/clign_wing_obj.4",
+          "firstTile": 42,
+          "tiles": 64,
+          "decodedCompleteTiles": 64,
+          "unknownTailBytes": 0,
+          "compression": 4,
+          "override": true
+        },
+        {
+          "file": "gfx/byte_BC65.chr",
+          "firstTile": 234,
+          "tiles": 22,
+          "compression": 0,
+          "override": true
+        }
+      ],
+      "frames": [
+        {
+          "frameId": 116,
+          "frameHex": "74",
+          "namespace": "object",
+          "metaspriteAddress": "B640",
+          "parts": [
+            {
+              "tile": 165,
+              "x": -8,
+              "y": 0,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 165,
+              "x": 0,
+              "y": 0,
+              "attributes": 67,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 166,
+              "x": -8,
+              "y": 8,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 166,
+              "x": 0,
+              "y": 8,
+              "attributes": 67,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -8,
+            "minY": 0,
+            "maxX": 7,
+            "maxY": 15
+          },
+          "width": 16,
+          "height": 16,
+          "png": "references/clingervehicle-74.png"
+        },
+        {
+          "frameId": 117,
+          "frameHex": "75",
+          "namespace": "object",
+          "metaspriteAddress": "B654",
+          "parts": [
+            {
+              "tile": 172,
+              "x": -4,
+              "y": -3,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 173,
+              "x": -2,
+              "y": -3,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 174,
+              "x": -5,
+              "y": 5,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 175,
+              "x": -1,
+              "y": 5,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -5,
+            "minY": -3,
+            "maxX": 6,
+            "maxY": 12
+          },
+          "width": 12,
+          "height": 16,
+          "png": "references/clingervehicle-75.png"
+        },
+        {
+          "frameId": 118,
+          "frameHex": "76",
+          "namespace": "object",
+          "metaspriteAddress": "B6DD",
+          "parts": [
+            {
+              "tile": 167,
+              "x": -8,
+              "y": 0,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 168,
+              "x": 0,
+              "y": 0,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 169,
+              "x": 4,
+              "y": 2,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 170,
+              "x": -6,
+              "y": 8,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 171,
+              "x": 2,
+              "y": 8,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -8,
+            "minY": 0,
+            "maxX": 11,
+            "maxY": 15
+          },
+          "width": 20,
+          "height": 16,
+          "png": "references/clingervehicle-76.png"
+        },
+        {
+          "frameId": 119,
+          "frameHex": "77",
+          "namespace": "object",
+          "metaspriteAddress": "B6EC",
+          "parts": [
+            {
+              "tile": 176,
+              "x": -11,
+              "y": -8,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 177,
+              "x": -8,
+              "y": -8,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 178,
+              "x": 0,
+              "y": -8,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 179,
+              "x": -12,
+              "y": 0,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 180,
+              "x": -4,
+              "y": 0,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 181,
+              "x": 3,
+              "y": 0,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -11,
+            "minY": -8,
+            "maxX": 9,
+            "maxY": 7
+          },
+          "width": 21,
+          "height": 16,
+          "png": "references/clingervehicle-77.png"
+        },
+        {
+          "frameId": 120,
+          "frameHex": "78",
+          "namespace": "object",
+          "metaspriteAddress": "B661",
+          "parts": [
+            {
+              "tile": 87,
+              "x": -3,
+              "y": 3,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -3,
+            "minY": 3,
+            "maxX": 4,
+            "maxY": 9
+          },
+          "width": 8,
+          "height": 7,
+          "png": "references/clingervehicle-78.png"
+        },
+        {
+          "frameId": 121,
+          "frameHex": "79",
+          "namespace": "object",
+          "metaspriteAddress": "B668",
+          "parts": [
+            {
+              "tile": 88,
+              "x": -3,
+              "y": 3,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -3,
+            "minY": 4,
+            "maxX": 4,
+            "maxY": 10
+          },
+          "width": 8,
+          "height": 7,
+          "png": "references/clingervehicle-79.png"
+        },
+        {
+          "frameId": 122,
+          "frameHex": "7A",
+          "namespace": "object",
+          "metaspriteAddress": "B66F",
+          "parts": [
+            {
+              "tile": 89,
+              "x": -2,
+              "y": 2,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 90,
+              "x": -4,
+              "y": 4,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -4,
+            "minY": 2,
+            "maxX": 5,
+            "maxY": 11
+          },
+          "width": 10,
+          "height": 10,
+          "png": "references/clingervehicle-7a.png"
+        },
+        {
+          "frameId": 123,
+          "frameHex": "7B",
+          "namespace": "object",
+          "metaspriteAddress": "B678",
+          "parts": [
+            {
+              "tile": 91,
+              "x": -6,
+              "y": -2,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 92,
+              "x": 0,
+              "y": -2,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 93,
+              "x": -6,
+              "y": 6,
+              "attributes": 3,
+              "paletteSlot": 3
+            },
+            {
+              "tile": 94,
+              "x": 0,
+              "y": 6,
+              "attributes": 3,
+              "paletteSlot": 3
+            }
+          ],
+          "visibleBounds": {
+            "minX": -6,
+            "minY": -2,
+            "maxX": 7,
+            "maxY": 13
+          },
+          "width": 14,
+          "height": 16,
+          "png": "references/clingervehicle-7b.png"
+        }
+      ],
+      "rgbColors": [
+        [
+          18,
+          19,
+          20
+        ],
+        [
+          180,
+          0,
+          0
+        ],
+        [
+          255,
+          100,
+          97
+        ]
+      ],
+      "unknown": []
+    }
+  ],
+  "inputs": {
+    "main.asm": "71042cf2a4a8fad952e9eb3bcb591cece666c5a790d7ea177b1908d052fca074",
+    "source.lst": "ec5234cad3ad6db17c2e4f55673643521eaeffaddb6eeffbe14ba55169b35a57",
+    "levels_cfgs1.asm": "378eaf70e0865a25f42a40a9e0f0723941631f2ac740d38e8e9c47dec7e1c1db",
+    "levels_cfgs2.asm": "58f1ae597eaaf83eb1ec8796c54bdc0bc446b90d2d5fd5342706e877c5e98e36",
+    "data/spr_lists1.asm": "702cbcbd8a0b701e04453fa6e9f8c009513f7ebd29d76c8a4a505343d0ba1413",
+    "data/spr_lists2.asm": "09779dffdf37e100145723f447a8db325b823802157474be0dd5397e62adb9ed",
+    "gfx/turbotunnel_obj.4": "b084f241c0e3377f0ffecda20746d92eb13e730e0ba8d00abb13c0801df793ee",
+    "gfx/surfcity_obj.4": "f34258912a43e95883d6c43c512fdc30736a265be3ff923e3c9eda6f0e5c1b85",
+    "gfx/clign_wing_obj.4": "542b361e47a04617f0457a4909bd3756a3e50c66566bd61b77b76af191444283"
+  }
+}

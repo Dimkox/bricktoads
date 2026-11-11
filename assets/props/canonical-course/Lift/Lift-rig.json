@@ -1,0 +1,645 @@
+{
+  "schema": 1,
+  "kind": "Lift",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Narrow upright orange/ochre platform column with bright cap, thin pale stripe, dark lower face and stippled shadow.', 'Runtime broad horizontal support footprint is an authored 3D adaptation; electrical variant frames are research only.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -2.3,
+      -0.7259729563877753,
+      -1.65
+    ],
+    [
+      2.3,
+      0.7259729563877754,
+      1.65
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Lift",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "18804-18875;28103-28124"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "18804-18875",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L18804-L18875"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "28103-28124",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L28103-L28124"
+      }
+    ],
+    "sourceTypes": [
+      "4A"
+    ],
+    "graphicsFrameIds": [
+      "90",
+      "FA",
+      "AC"
+    ],
+    "palette": {
+      "typeId": 74,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:156",
+      "trigger": [
+        16,
+        0
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 144,
+        "frameHex": "90",
+        "namespace": "object",
+        "metaspriteAddress": "B86E",
+        "parts": [
+          {
+            "tile": 74,
+            "x": 0,
+            "y": -11,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 75,
+            "x": 0,
+            "y": -3,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 74,
+            "x": 32,
+            "y": -11,
+            "attributes": 65,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 75,
+            "x": 32,
+            "y": -3,
+            "attributes": 65,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 104,
+            "x": 0,
+            "y": 5,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 104,
+            "x": 32,
+            "y": 5,
+            "attributes": 0,
+            "paletteSlot": 0
+          }
+        ],
+        "visibleBounds": {
+          "minX": 0,
+          "minY": -11,
+          "maxX": 39,
+          "maxY": 12
+        },
+        "width": 40,
+        "height": 24,
+        "png": "frames/lift-90.png"
+      },
+      {
+        "frameId": 250,
+        "frameHex": "FA",
+        "namespace": "object",
+        "metaspriteAddress": "B8B2",
+        "parts": [
+          {
+            "tile": 74,
+            "x": 0,
+            "y": -11,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 75,
+            "x": 0,
+            "y": -3,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 74,
+            "x": 32,
+            "y": -11,
+            "attributes": 66,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 75,
+            "x": 32,
+            "y": -3,
+            "attributes": 66,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 104,
+            "x": 0,
+            "y": 5,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 104,
+            "x": 32,
+            "y": 5,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 165,
+            "x": 16,
+            "y": -7,
+            "attributes": 1,
+            "paletteSlot": 1
+          }
+        ],
+        "visibleBounds": {
+          "minX": 0,
+          "minY": -11,
+          "maxX": 39,
+          "maxY": 12
+        },
+        "width": 40,
+        "height": 24,
+        "png": "frames/lift-fa.png"
+      },
+      {
+        "frameId": 172,
+        "frameHex": "AC",
+        "namespace": "object",
+        "metaspriteAddress": "B88A",
+        "parts": [
+          {
+            "tile": 74,
+            "x": 0,
+            "y": -11,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 75,
+            "x": 0,
+            "y": -3,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 74,
+            "x": 32,
+            "y": -11,
+            "attributes": 65,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 75,
+            "x": 32,
+            "y": -3,
+            "attributes": 65,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 104,
+            "x": 0,
+            "y": 5,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 104,
+            "x": 32,
+            "y": 5,
+            "attributes": 0,
+            "paletteSlot": 0
+          },
+          {
+            "tile": 165,
+            "x": 8,
+            "y": -7,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 165,
+            "x": 16,
+            "y": -7,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 165,
+            "x": 24,
+            "y": -7,
+            "attributes": 1,
+            "paletteSlot": 1
+          }
+        ],
+        "visibleBounds": {
+          "minX": 0,
+          "minY": -11,
+          "maxX": 39,
+          "maxY": 12
+        },
+        "width": 40,
+        "height": 24,
+        "png": "frames/lift-ac.png"
+      }
+    ],
+    "appearanceCues": [
+      "Narrow upright orange/ochre platform column with bright cap, thin pale stripe, dark lower face and stippled shadow.",
+      "Runtime broad horizontal support footprint is an authored 3D adaptation; electrical variant frames are research only."
+    ],
+    "runtimeRole": "moving solid support",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "gfx90 is the normal elevator; FA/AC are its electrical variants. Runtime Lift should use the normal support appearance because it is not an electrical hazard."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          149
+        ]
+      }
+    ],
+    "sourceHandler": "object_elevator_platform / bank3 helper",
+    "bankRecipe": "Race",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/ratrace_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "lift-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.6084729563877753,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.3,
+          -0.44,
+          -1.65
+        ],
+        [
+          2.3,
+          0.0,
+          1.65
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.3,
+          0.16847295638777532,
+          -1.65
+        ],
+        [
+          2.3,
+          0.6084729563877753,
+          1.65
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Deck"
+    },
+    {
+      "name": "Deck",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.6084729563877753,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -2.175,
+          -0.030000000000000027,
+          -1.525
+        ],
+        [
+          2.175,
+          0.08999999999999997,
+          1.525
+        ]
+      ],
+      "globalBounds": [
+        [
+          -2.175,
+          0.5784729563877753,
+          -1.525
+        ],
+        [
+          2.175,
+          0.6984729563877753,
+          1.525
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Deck"
+    },
+    {
+      "name": "Brackets",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.6084729563877753,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.9300000000000002,
+          -1.3344459127755506,
+          -1.1974018817890242
+        ],
+        [
+          1.9300000000000002,
+          -0.29555408722444937,
+          1.1974018817890242
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.9300000000000002,
+          -0.7259729563877753,
+          -1.1974018817890242
+        ],
+        [
+          1.9300000000000002,
+          0.31291886916332595,
+          1.1974018817890242
+        ]
+      ],
+      "vertices": 72,
+      "authoringVertices": 72,
+      "paletteSplitTriangles": 0,
+      "triangles": 128,
+      "role": "Bracket"
+    },
+    {
+      "name": "EdgeMarks",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.6084729563877753,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.9,
+          0.08250000000000002,
+          -1.45
+        ],
+        [
+          2.07,
+          0.11750000000000005,
+          -1.14
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.9,
+          0.6909729563877753,
+          -1.45
+        ],
+        [
+          2.07,
+          0.7259729563877754,
+          -1.14
+        ]
+      ],
+      "vertices": 90,
+      "authoringVertices": 90,
+      "paletteSplitTriangles": 0,
+      "triangles": 160,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 352,
+    "vertices": 198,
+    "closedComponents": true,
+    "components": 11,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.005668839514397975
+  }
+}

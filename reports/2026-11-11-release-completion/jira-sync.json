@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "scope": "Factual progress synchronization; no issue transitions",
+  "comments": [
+    {
+      "key": "BT-26",
+      "commentId": "10514",
+      "isError": false,
+      "response": {
+        "data": {
+          "message": "Comment added to BT-26 successfully",
+          "commentId": "10514",
+          "body": "Проверка 11.11: в одном обычном окне Studio через MCP соло-прогон bricktoads-release31-0-l6uuca завершился Won, 13/13 уровней, God Mode выключен. 914 наблюдений; три падения, финальная попытка 4, запас 0, Life 47. Подтверждены три попадания по Стражу и все заявленные фазы пяти остальных боссов. Реальный клик New game создал новый забег с попыткой 1 и запасом 3. Непрерывный прогон на 7e8e037b; финальная правка видимости спавна отдельно проверена на d10b584. Реальный rejoin того же аккаунта, текущие дуо/трио и физический мультитач остаются отдельной приёмкой. [PR #4](https://github.com/Dimkox/bricktoads/pull/4), [отчёт и снимки Studio](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-release-completion/README.md).",
+          "appliedContentFormat": "markdown",
+          "jsmCommentType": "publicComment"
+        }
+      },
+      "link": "https://ii-tonya.atlassian.net/browse/BT-26?focusedCommentId=10514"
+    },
+    {
+      "key": "BT-61",
+      "commentId": "10515",
+      "isError": false,
+      "response": {
+        "data": {
+          "message": "Comment added to BT-61 successfully",
+          "commentId": "10515",
+          "body": "Проверена сборка BrickToadsPlayable.rbxlx, источник d10b584ba65bb3a913af281921ab8e7d9a2db8123862cc69cd6f16ac3f1aac8a, файл b5007ad29f58264437f06d279b5f4d81d36f6950c5cf5dc96c4735d87eb4f91f. Финальная сборка прошла проверку настоящего спавна и HUD, непрерывная конечная соло-кампания 13/13 подтверждена на предшествующем источнике 7e8e037b до правки запасного тела. Две проверки GitHub на коммите bc4590b успешны. Отдельная experience BrickToads ещё не создана: MCP вернул 404 на создание; для публикации с SurfaceAppearance нужен Studio Publish to Roblox As. Приватный Reconnect Test не переиспользован. [PR #4](https://github.com/Dimkox/bricktoads/pull/4), [отчёт и снимки Studio](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-release-completion/README.md).",
+          "appliedContentFormat": "markdown",
+          "jsmCommentType": "publicComment"
+        }
+      },
+      "link": "https://ii-tonya.atlassian.net/browse/BT-61?focusedCommentId=10515"
+    },
+    {
+      "key": "BT-64",
+      "commentId": "10516",
+      "isError": false,
+      "response": {
+        "data": {
+          "message": "Comment added to BT-64 successfully",
+          "commentId": "10516",
+          "body": "Исправлены контекст финала кампании, меню выбывшего босса, отображение прогресса реакции босса отдельно от raw Life, портреты трёх героев и компактные области нажатия. В iPhone 17 Pro Simulator итоговый HUD проверен в 401×778 и 750×381: статусы, цель, звук, направления, атака и прыжок имеют цели ≥44×44. Дефолт English, проверен нативный перевод строк старта/рестарта на русский. Реальный New game подтверждён. Эмуляция не заменяет физический телефон/планшет и одновременные касания. [PR #4](https://github.com/Dimkox/bricktoads/pull/4), [отчёт и снимки Studio](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-release-completion/README.md).",
+          "appliedContentFormat": "markdown",
+          "jsmCommentType": "publicComment"
+        }
+      },
+      "link": "https://ii-tonya.atlassian.net/browse/BT-64?focusedCommentId=10516"
+    },
+    {
+      "key": "BT-74",
+      "commentId": "10517",
+      "isError": false,
+      "response": {
+        "data": {
+          "message": "Comment added to BT-74 successfully",
+          "commentId": "10517",
+          "body": "Дополнительная приёмка текущего канонического набора: три портрета реально отрисованы, у каждой палитры загружены базовые 15 мешей и четыре спецформы. При отказе текстуры сохраняется видимое запасное тело или обычная конечность. В нативном импорте Dark Queen проверен реальный шарнир Hair в 0x81/0x82, вращении после конца клипа и сбросе. Это проверка текущей адаптации, а не приёмка всех отдельных UHD моделей или точного условия выбора кадра 0x83. [PR #4](https://github.com/Dimkox/bricktoads/pull/4), [отчёт и снимки Studio](https://github.com/Dimkox/bricktoads/blob/codex/canonical-cast-audio/reports/2026-11-11-release-completion/README.md).",
+          "appliedContentFormat": "markdown",
+          "jsmCommentType": "publicComment"
+        }
+      },
+      "link": "https://ii-tonya.atlassian.net/browse/BT-74?focusedCommentId=10517"
+    }
+  ]
+}

@@ -124,7 +124,7 @@ return function(Presentation,Animation)
     test('stale actor unknown attack and unverified airborne mapping use fallback atomically',function()
         local c=context();c.attack=attack('HeroJab');c.attack.actorId='old:hero'
         local p,reason=Presentation.sample(Presentation.new(),c);eq(p,nil);eq(reason,'StaleAttack')
-        c.attack=attack('Club');p,reason=Presentation.sample(Presentation.new(),c);eq(p,nil);eq(reason,'UnsupportedAttack')
+        c.attack=attack('UntracedAction');p,reason=Presentation.sample(Presentation.new(),c);eq(p,nil);eq(reason,'UnsupportedAttack')
         c.attack=nil;c.grounded=false;p,reason=Presentation.sample(Presentation.new(),c);eq(p,nil);eq(reason,'Airborne')
         c.grounded=true;c.enabled=false;p,reason=Presentation.sample(Presentation.new(),c);eq(p,nil);eq(reason,'Disabled')
     end)
@@ -183,6 +183,95 @@ return function(Presentation,Animation)
         eq(Presentation.sample(state,c).kind,'Fear')
         c.now=.7;c.fearIntro=nil;eq(Presentation.sample(state,c).kind,'Idle')
         c.now=.8;c.attack=attack('HeroJab',.8);eq(Presentation.sample(state,c).kind,'Attack')
+    end)
+    test('trusted air context selects source apex and held frames without reviving an interrupted boot',function()
+        local state=Presentation.new();local c=context(.5);c.attack=attack('HeroBoot')
+        eq(Presentation.sample(state,c).morphKind,'BigBoot')
+        c.now=.6;c.visualState='Air';c.grounded=false;c.sourceZSpeedRaw=0
+        local p=assert(Presentation.sample(state,c));eq(p.kind,'Air');eq(p.frameId,0x2D);eq(p.morphKind,nil)
+        c.sourceZSpeedRaw=-4;eq(Presentation.sample(state,c).frameId,0x05)
+        c.holding=true;eq(Presentation.sample(state,c).frameId,0x2E)
+        c.visualState=nil;c.grounded=true;c.holding=false;c.now=.7
+        eq(Presentation.sample(state,c).kind,'Idle')
+    end)
+    test('world velocity air selection states its authored mapping and invalid raw source input never guesses',function()
+        local c=context();c.grounded=false;c.visualState='Air';c.verticalSpeed=0
+        local p=assert(Presentation.sample(Presentation.new(),c));eq(p.frameId,0x2D);eq(p.frameBasis,'Authored3DVelocityMapping')
+        c.verticalSpeed=8;eq(Presentation.sample(Presentation.new(),c).frameId,0x05)
+        c.sourceZSpeedRaw=.5
+        local row,reason=Presentation.sample(Presentation.new(),c);eq(row,nil);eq(reason,'InvalidSourceZSpeed')
+    end)
+    test('carry and depth gait use distinct source frames and visible held-arm joints',function()
+        local c=context();c.visualState='Carrying';c.holding=true
+        local state=Presentation.new();local p=assert(Presentation.sample(state,c));eq(p.frameId,0x11)
+        assert(p.joints.LeftShoulder[1]>2 and p.joints.RightShoulder[1]>2)
+        c.speed=12.5;c.mode='Walk'
+        for phase,want in ipairs({0x11,0x12,0x11,0x10})do
+            c.dt=phase==1 and 0 or .1;c.now=phase*.1
+            eq(Presentation.sample(state,c).frameId,want)
+        end
+        state=Presentation.new();c.visualState='DepthWalk';c.holding=false
+        for phase,want in ipairs({1,9,1,10})do
+            c.dt=phase==1 and 0 or .1;c.now=phase*.1
+            eq(Presentation.sample(state,c).frameId,want)
+        end
+    end)
+    test('accepted club tongue pickup and throws consume their actual source clips once',function()
+        for _,case in ipairs({{'Club',0x1A,0x26},{'Tongue',0x18,0x29},{'PickupObject',8,0x0B},
+            {'PickupEnemy',0x0A,0x0B},{'Throw',0x0C,0x0E},{'BossBallThrow',0x70,0x0E},{'HeroJabB',4,0x1B}})do
+            local c=context();c.visualAction=attack(case[1]);local state=Presentation.new()
+            local p=assert(Presentation.sample(state,c));eq(p.kind,'Attack');eq(p.animationId,case[2]);eq(p.frameId,case[3])
+            c.now=.5;p=assert(Presentation.sample(state,c));assert(p.joints and #p.events>=0)
+            for _,event in ipairs(p.events)do eq(event.appliesDamage,false)end
+            c.now=4;eq(Presentation.sample(state,c).kind,'Idle')
+            c.now=5;eq(Presentation.sample(state,c).kind,'Idle')
+        end
+    end)
+    test('reaction source selectors distinguish rear stun rising falling and ground silhouettes',function()
+        for _,case in ipairs({{false,false,true,24,0,0x29},{false,true,true,24,0,0x16},
+            {false,false,true,23,0,2},{true,false,false,24,3,0x13},{true,false,false,24,-3,0x14},
+            {true,false,true,24,0,0x15}})do
+            local c=context();c.visualState='Reaction';c.verticalSpeed=case[5]
+            c.reaction={heavy=case[1],fromRear=case[2],grounded=case[3],timerRaw=case[4],startedAt=0}
+            local p=assert(Presentation.sample(Presentation.new(),c));eq(p.kind,'Reaction');eq(p.frameId,case[6]);eq(p.morphKind,nil)
+        end
+    end)
+    test('death carried mounted and course poses interrupt all limbs with explicit adaptation provenance',function()
+        for _,kind in ipairs({'Dead','Carried','DragonMounted','DragonCaptured','Swim','Ride','Rope'})do
+            local state=Presentation.new();local c=context(.5);c.attack=attack('HeroBoot')
+            eq(Presentation.sample(state,c).morphKind,'BigBoot')
+            c.now=.6;c.visualState=kind;c.verticalSpeed=0
+            c.fearIntro={id='intro',actorId=c.actorId,counter=1,frameId=0x32}
+            local p=assert(Presentation.sample(state,c));eq(p.kind,kind);eq(p.morphKind,nil)
+            eq(p.frameBasis,'Authored3DAdaptation');eq(p.namespace,'Authored3D');assert(table.isfrozen(p.joints))
+            c.visualState=nil;c.fearIntro=nil;c.now=.7;eq(Presentation.sample(state,c).kind,'Idle')
+        end
+    end)
+    test('course gait has visible animation and a replacement actor cannot inherit the phase or accepted action',function()
+        local state=Presentation.new();local c=context();c.visualState='Swim'
+        local p=assert(Presentation.sample(state,c));local first=p.joints.RightShoulder[1]
+        c.now=.2;p=assert(Presentation.sample(state,c));assert(math.abs(first-p.joints.RightShoulder[1])>.2)
+        c.actorId='replacement';c.visualAction=attack('Throw');c.visualState=nil
+        local row,reason=Presentation.sample(state,c);eq(row,nil);eq(reason,'StaleAttack')
+        c.visualAction=nil;eq(Presentation.sample(state,c).kind,'Idle')
+    end)
+    test('folded windup and both fear frames carry immutable positive whole-body geometry profiles',function()
+        local folded=context();folded.attack=attack('HeroBoot')
+        local before=context();before.fearIntro={id='fear',actorId=before.actorId,counter=1,frameId=0x32}
+        local after=context();after.fearIntro={id='fear',actorId=after.actorId,counter=0xE1,frameId=0x33}
+        local first=assert(Presentation.sample(Presentation.new(),folded))
+        local a=assert(Presentation.sample(Presentation.new(),before));local b=assert(Presentation.sample(Presentation.new(),after))
+        for _,p in ipairs({first,a,b})do
+            assert(p.geometry and table.isfrozen(p.geometry) and table.isfrozen(p.geometry.parts))
+            eq(p.geometry.adaptation,'Authored3DSourceSilhouetteMapping')
+            for _,scale in pairs(p.geometry.parts)do
+                assert(table.isfrozen(scale));for _,v in ipairs(scale)do assert(v==v and v>0 and v<=3)end
+            end
+        end
+        assert(first.geometry.parts.RightUpperLeg[2]<1 and first.geometry.parts.RightUpperLeg[1]>1)
+        assert(a.geometry.parts.UpperTorso[1]<1 and b.geometry.parts.UpperTorso[1]<a.geometry.parts.UpperTorso[1])
+        assert(b.geometry.parts.LeftLowerArm[2]>1 and b.geometry.parts.RightLowerLeg[2]>1)
+        eq(a.geometry.parts.Head,nil);eq(b.geometry.parts.Head,nil)
     end)
     print(string.format('Canonical hero presentation: %d passed, %d failed',passed,failed))
     assert(failed==0,'Canonical hero presentation contracts failed')

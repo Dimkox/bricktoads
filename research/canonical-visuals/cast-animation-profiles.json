@@ -1,0 +1,1347 @@
+{
+  "schema": 1,
+  "pin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "scope": "Verified source frame selectors and clip callers for runtime presentation; no combat effects, invented locomotion cycles or wall-clock parity.",
+  "sharedClocks": {
+    "SpeedCounter": {
+      "source": "main.asm:16862-16887",
+      "rule": "Obj_various_cnt += (Objects_X_speed >> 2), preserving 6502 carry; phase is the top two counter bits via ROL/ROL/ROL &3.",
+      "warning": "An elapsed-seconds gait is an explicit 3D adaptation, not this source selector."
+    },
+    "ClipClock": {
+      "source": "main.asm:15527-15620",
+      "rule": "start_read_anim advances byte pointer only when FrameCounter & callerMask ==0; command parameters are not graphics frames.",
+      "warning": "First-read phase and interruption remain caller state. Commands do not authorize cosmetic playback to apply damage."
+    },
+    "HighBitCaller": {
+      "source": "main.asm:12336-12425",
+      "rule": "callerMask=1; literal output graphics frame is ORed with0x80 after interpreter call."
+    }
+  },
+  "runtimeKinds": {
+    "Pig": {
+      "namespace": "object",
+      "neutralFrame": 3,
+      "locomotion": {
+        "frames": [
+          3,
+          4,
+          3,
+          2
+        ],
+        "clockBasis": "SpeedCounter",
+        "source": "main.asm:16794-16797;17143"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "LightReaction",
+          "frames": [
+            7,
+            4
+          ],
+          "rule": "When Obj_anims_timer active and state damaged-heavy is clear: gfx7 until timer<0x3B then gfx4.",
+          "source": "main.asm:16703-16713"
+        },
+        {
+          "state": "HeavyReaction",
+          "frames": [
+            5,
+            8
+          ],
+          "rule": "Heavy flag: gfx8; timer>=0x60 selects gfx5.",
+          "source": "main.asm:16695-16720"
+        },
+        {
+          "state": "CarriedOrDisabled",
+          "frames": [
+            8
+          ],
+          "rule": "Linked/disabled helper selects8; physics and deletion retain caller authority.",
+          "source": "main.asm:16638-16663"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            40,
+            42,
+            64
+          ],
+          "callerMask": 3,
+          "postprocess": "Identity",
+          "source": "main.asm:16783-16788"
+        }
+      ],
+      "reaction": {
+        "frames": [
+          7,
+          4,
+          5,
+          8
+        ],
+        "source": "main.asm:16672-16724"
+      },
+      "death": {
+        "frames": [
+          8
+        ],
+        "source": "main.asm:16650-16663",
+        "rule": "Only while source death timer is in its renderable branch, then object is deleted."
+      },
+      "unknown": []
+    },
+    "Walker": {
+      "namespace": "object",
+      "neutralFrame": 25,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "AllBodyStates",
+          "frames": [
+            25
+          ],
+          "rule": "Body frame19 remains fixed; source counters and sub_0_95BA place independent straight legs. Render through CanonicalWalker, not a full-body frame cycle.",
+          "source": "main.asm:4608-4818"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            58,
+            60
+          ],
+          "callerMask": 0,
+          "postprocess": "ProceduralWalkerLegDeltaMinus0x18; body stays0x19",
+          "source": "main.asm:4674-4677;4816"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Full gait needs actor leg counters and source geometry; no humanoid knee cycle."
+      ]
+    },
+    "Dragon": {
+      "namespace": "object",
+      "neutralFrame": 9,
+      "locomotion": {
+        "frames": [
+          9,
+          9,
+          10,
+          10
+        ],
+        "clockBasis": "Phase=(Obj_various_cnt ROL3)&3; caller overwrites shared helper graphics whenever AnimID==0.",
+        "source": "main.asm:3031-3056"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Approach",
+          "frames": [
+            9
+          ],
+          "rule": "Zspeed nonzero and objects_some_anim nonzero forces9.",
+          "source": "main.asm:3034-3039"
+        },
+        {
+          "state": "LightReaction",
+          "frames": [
+            12,
+            9,
+            10
+          ],
+          "rule": "Light reaction uses0C while Obj_anims_timer>=0x26, then normal table.",
+          "source": "main.asm:2974-3001"
+        },
+        {
+          "state": "HeavyDisabled",
+          "frames": [
+            10
+          ],
+          "rule": "Heavy or disabled branch selects0A.",
+          "source": "main.asm:3004-3022"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            50,
+            52
+          ],
+          "callerMask": 3,
+          "postprocess": "Identity",
+          "source": "main.asm:5358-5359"
+        }
+      ],
+      "reaction": {
+        "frames": [
+          12,
+          10
+        ],
+        "source": "main.asm:2974-3022"
+      },
+      "death": null,
+      "unknown": []
+    },
+    "Raven": {
+      "namespace": "object",
+      "neutralFrame": 32,
+      "locomotion": {
+        "frames": [
+          28,
+          29,
+          30,
+          29
+        ],
+        "clockBasis": "Shared SpeedCounter; stationary approach uses source screen-Y selector.",
+        "source": "main.asm:5004-5375;5393"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Approach",
+          "frames": [
+            32,
+            33
+          ],
+          "rule": "Screen Y window selects20 or21.",
+          "source": "main.asm:5014-5027"
+        },
+        {
+          "state": "DeadOrCarriedCorpse",
+          "frames": [
+            34,
+            35
+          ],
+          "rule": "Dead Raven22; Xspeed==FF linked/carry branch increments to23.",
+          "source": "main.asm:4869-4894"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            48
+          ],
+          "callerMask": 3,
+          "postprocess": "Identity",
+          "source": "main.asm:5214-5222;5358-5359"
+        }
+      ],
+      "reaction": null,
+      "death": {
+        "frames": [
+          34,
+          35
+        ],
+        "source": "main.asm:4869-4906"
+      },
+      "unknown": []
+    },
+    "LargeRaven": {
+      "namespace": "object",
+      "neutralFrame": 41,
+      "locomotion": {
+        "frames": [
+          38,
+          39,
+          40,
+          39
+        ],
+        "clockBasis": "Obj_various_cnt += Xspeed>>2; top-two-bit phase.",
+        "source": "main.asm:4974-4979;5395"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "StationaryApproach",
+          "frames": [
+            41
+          ],
+          "rule": "Large species selects29 in shared screen-Y approach branch.",
+          "source": "main.asm:5014-5027"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Death transforms into a separate Raven Claw object; full child/corpse pose mapping remains separate."
+      ]
+    },
+    "Invader": {
+      "namespace": "object",
+      "neutralFrame": 36,
+      "locomotion": {
+        "frames": [
+          36,
+          36,
+          37,
+          37
+        ],
+        "clockBasis": "Obj_various_cnt +=0x40>>2 or0x80>>2; top-two-bit phase.",
+        "source": "main.asm:5675-5690;5394"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "ReturningWithLife",
+          "frames": [
+            57,
+            57,
+            58,
+            58
+          ],
+          "rule": "If animation pointer is nonnegative, add0x15 to source24/25.",
+          "source": "main.asm:5682-5690"
+        },
+        {
+          "state": "LifeToken",
+          "frames": [
+            61
+          ],
+          "rule": "Transformation to flying life-bar object sets3D; token is not a walk pose.",
+          "source": "main.asm:5512-5522"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "No attack-pointer-table clip for source life theft established here."
+      ]
+    },
+    "RocketRat": {
+      "namespace": "object",
+      "neutralFrame": 85,
+      "locomotion": {
+        "frames": [
+          85
+        ],
+        "clockBasis": "Static object graphics while physical rocket state moves.",
+        "source": "main.asm:10099;11573"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [
+        {
+          "animationIds": [
+            110
+          ],
+          "callerMask": null,
+          "postprocess": "Command-only clip; preserve body55",
+          "source": "main.asm:11564;anims_moves.asm:168"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": []
+    },
+    "SaturnToadtrap": {
+      "namespace": "object",
+      "neutralFrame": 93,
+      "locomotion": {
+        "frames": [
+          93
+        ],
+        "clockBasis": "Static base frame; source attacks select their own streams.",
+        "source": "main.asm:10215-10217"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [
+        {
+          "animationIds": [
+            66,
+            76,
+            84,
+            86,
+            68
+          ],
+          "callerMask": 1,
+          "postprocess": "Identity",
+          "source": "main.asm:10295-10374"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": []
+    },
+    "RetroBlaster": {
+      "namespace": "object",
+      "neutralFrame": 97,
+      "locomotion": {
+        "frames": [
+          97
+        ],
+        "clockBasis": "Static nonattack base.",
+        "source": "main.asm:10885-10889"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Reaction",
+          "frames": [
+            96,
+            97
+          ],
+          "rule": "With Obj_anims_timer: moving Xspeed uses60, stopped uses61.",
+          "source": "main.asm:10792-10801"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            74
+          ],
+          "callerMask": 3,
+          "postprocess": "Identity",
+          "source": "main.asm:10843-10848;10882-10883"
+        }
+      ],
+      "reaction": {
+        "frames": [
+          96,
+          97
+        ],
+        "source": "main.asm:10792-10801"
+      },
+      "death": null,
+      "unknown": []
+    },
+    "Snowman": {
+      "namespace": "object",
+      "neutralFrame": 100,
+      "locomotion": {
+        "frames": [
+          100
+        ],
+        "clockBasis": "Static between entries of its source scripted action table.",
+        "source": "main.asm:20274-20276"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Reaction",
+          "frames": [
+            107
+          ],
+          "rule": "Reaction branch selects6B; source5E is command-only.",
+          "source": "main.asm:20185-20208"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            88,
+            92,
+            96,
+            98,
+            100
+          ],
+          "callerMask": 3,
+          "postprocess": "Identity",
+          "source": "main.asm:20236-20271;20315-20317"
+        }
+      ],
+      "reaction": {
+        "frames": [
+          107
+        ],
+        "source": "main.asm:20185-20208"
+      },
+      "death": {
+        "frames": [],
+        "source": "main.asm:20160-20170",
+        "rule": "Grounded terminal state transforms type into3B snow object; retain separate snow effect."
+      },
+      "unknown": []
+    },
+    "Snake": {
+      "namespace": "object",
+      "neutralFrame": 146,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "HeadDirection",
+          "frames": [
+            146,
+            151,
+            146,
+            150
+          ],
+          "rule": "Direction quadrants select first4 entries of byte_2000_F22F for type4C.",
+          "source": "main.asm:23907-23921;23969"
+        },
+        {
+          "state": "OtherComponentDirection",
+          "frames": [
+            147,
+            149,
+            147,
+            148
+          ],
+          "rule": "Non4C component adds4 before selecting table.",
+          "source": "main.asm:23912-23921;23969"
+        },
+        {
+          "state": "EmergenceOrHiddenHead",
+          "frames": [
+            152,
+            153,
+            154
+          ],
+          "rule": "Start98; x&1F==10 keeps98, below10 becomes99, above10 becomes9A.",
+          "source": "main.asm:23472-23485"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Full body is procedural nametable geometry, not these sprite frames."
+      ]
+    },
+    "SentryDrone": {
+      "namespace": "object",
+      "neutralFrame": 157,
+      "locomotion": {
+        "frames": [
+          157,
+          158
+        ],
+        "clockBasis": "FrameCounter_Even or FrameCounter, depending on cnt2 branch; ((counter&2)>>1)+9D.",
+        "source": "main.asm:19020-19038"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Source shoots through object_robot handler rather than a verified attack-pointer clip."
+      ]
+    },
+    "Slug": {
+      "namespace": "object",
+      "neutralFrame": 160,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "Linked",
+          "frames": [
+            161
+          ],
+          "rule": "Linker nonzero branch selectsA1.",
+          "source": "main.asm:19053-19067"
+        },
+        {
+          "state": "WallTransition",
+          "frames": [
+            162
+          ],
+          "rule": "cnt3==0A wall branch selectsA2.",
+          "source": "main.asm:19070-19083"
+        },
+        {
+          "state": "Transition",
+          "frames": [
+            159
+          ],
+          "rule": "Nonterminal cnt2 transition selects9F.",
+          "source": "main.asm:19086-19091"
+        },
+        {
+          "state": "MovingOrAirborne",
+          "frames": [
+            160
+          ],
+          "rule": "Default moving branch selectsA0.",
+          "source": "main.asm:19102-19131"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "No generic slug walk cycle or source attack stream established."
+      ]
+    },
+    "GasTurret": {
+      "namespace": "object",
+      "neutralFrame": 165,
+      "locomotion": {
+        "frames": [
+          165
+        ],
+        "clockBasis": "Static turret body; emitted gas is a distinct object.",
+        "source": "main.asm:19173-19177"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "GasProjectile",
+          "frames": [
+            166,
+            166,
+            167,
+            167,
+            168,
+            168,
+            169,
+            169,
+            169,
+            169,
+            170,
+            170
+          ],
+          "rule": "Child gas counter increments by1 per active source call; use table index counter>>2, then terminates on0. Never use this as the turret body cycle.",
+          "source": "main.asm:19239-19270"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Source emission timer has no verified attack-pointer clip."
+      ]
+    },
+    "Hordhead": {
+      "namespace": "object",
+      "neutralFrame": 183,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "ScriptedMovement",
+          "frames": [
+            183,
+            184,
+            183,
+            182
+          ],
+          "rule": "Four-byte records are frame,duration,Zspeed,Xspeed: B7/6/0/40, B8/10/2/C0, B7/6/0/40, B6/10/2/C0; zero frame follows script control. Do not treat records as uniform walk frames.",
+          "source": "main.asm:11085-11130"
+        },
+        {
+          "state": "Reaction",
+          "frames": [
+            183,
+            184,
+            187
+          ],
+          "rule": "Normal reaction flickersB7/B8 using FrameCounter_Even&2; heavy form usesBB.",
+          "source": "main.asm:10915-10956"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            106,
+            108
+          ],
+          "callerMask": 3,
+          "postprocess": "Identity",
+          "source": "main.asm:11070-11081;10984-10987"
+        }
+      ],
+      "reaction": {
+        "frames": [
+          183,
+          184,
+          187
+        ],
+        "source": "main.asm:10915-10956"
+      },
+      "death": null,
+      "unknown": []
+    },
+    "FlyingHead": {
+      "namespace": "object",
+      "neutralFrame": 189,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "LinkedFlight",
+          "frames": [
+            188,
+            189
+          ],
+          "rule": "When actor is linked transport, use ((FrameCounter_Even&4)>>2)+BC.",
+          "source": "main.asm:13843-13854"
+        },
+        {
+          "state": "Approach",
+          "frames": [
+            189,
+            188
+          ],
+          "rule": "DefaultBD, decrement toBC for Xspeed>=30 and objects_some_anim nonzero.",
+          "source": "main.asm:13858-13866"
+        },
+        {
+          "state": "SpecialRoute",
+          "frames": [
+            188,
+            189
+          ],
+          "rule": "((FrameCounter_Even+9)&10)>>4 +BC.",
+          "source": "main.asm:13869-13881"
+        },
+        {
+          "state": "HeadEmitter",
+          "frames": [
+            196
+          ],
+          "rule": "Distinct type60 head bodyC4.",
+          "source": "main.asm:13985-14014"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Source BC emission creates child wind/gas; no guessed pointer clip."
+      ]
+    },
+    "Swellcheeks": {
+      "namespace": "object",
+      "neutralFrame": 188,
+      "locomotion": {
+        "frames": [
+          188,
+          189
+        ],
+        "clockBasis": "Increment Obj_various_cnt; frameBC + ((counter&3F)>=20).",
+        "source": "main.asm:14079-14097"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "HeavyReaction",
+          "frames": [
+            189
+          ],
+          "rule": "Heavy reaction forcesBD.",
+          "source": "main.asm:14032-14052"
+        },
+        {
+          "state": "GasProjectile",
+          "frames": [
+            197
+          ],
+          "rule": "Revolution gas child usesC5 while child counter<30, then deletes; separate actor.",
+          "source": "main.asm:19210-19250"
+        }
+      ],
+      "attackClips": [],
+      "reaction": {
+        "frames": [
+          189
+        ],
+        "source": "main.asm:14032-14052"
+      },
+      "death": null,
+      "unknown": [
+        "Emission/source remaining route branches are state-driven; full source attack stream absent."
+      ]
+    },
+    "Robot": {
+      "namespace": "object",
+      "neutralFrame": 214,
+      "locomotion": {
+        "frames": [
+          214
+        ],
+        "clockBasis": "Static body; physical movement/emission state is separate.",
+        "source": "main.asm:11883-11890"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Reaction",
+          "frames": [
+            216
+          ],
+          "rule": "Reaction counter window selectsD8 before physics/recovery helper.",
+          "source": "main.asm:11827-11837"
+        }
+      ],
+      "attackClips": [],
+      "reaction": {
+        "frames": [
+          216
+        ],
+        "source": "main.asm:11827-11864"
+      },
+      "death": null,
+      "unknown": [
+        "Source bolt creation through timer, not a verified attack-pointer clip."
+      ]
+    },
+    "Electrofish": {
+      "namespace": "object",
+      "neutralFrame": 226,
+      "locomotion": {
+        "frames": [
+          226,
+          227,
+          226,
+          227
+        ],
+        "clockBasis": "SpeedCounter",
+        "source": "main.asm:12228-12238"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Shock",
+          "frames": [
+            228,
+            229
+          ],
+          "rule": "((FrameCounter_Even>>1)&1)|E4 while proximity/contact checks pass.",
+          "source": "main.asm:12187-12224"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Reaction/death physics can retain normal frame table; no separate canonical corpse frame established."
+      ]
+    },
+    "Hammerfish": {
+      "namespace": "object",
+      "neutralFrame": 217,
+      "locomotion": {
+        "frames": [
+          217,
+          218,
+          219,
+          218
+        ],
+        "clockBasis": "SpeedCounter",
+        "source": "main.asm:12299-12307"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [
+        {
+          "animationIds": [
+            126
+          ],
+          "callerMask": 1,
+          "postprocess": "OR0x80",
+          "source": "main.asm:12243-12254;12294-12296;12336-12425"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Helper probes7C then replaces it with7E for accepted Hammerfish attack; do not render source Shark7C as Hammerfish locomotion."
+      ]
+    },
+    "Shark": {
+      "namespace": "object",
+      "neutralFrame": 222,
+      "locomotion": {
+        "frames": [
+          222,
+          223,
+          224,
+          223
+        ],
+        "clockBasis": "Obj_various_cnt += Xspeed>>4 (two LSR before shared SpeedCounter), top-two-bit phase.",
+        "source": "main.asm:12405-12429"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [
+        {
+          "animationIds": [
+            124
+          ],
+          "callerMask": 1,
+          "postprocess": "OR0x80",
+          "source": "main.asm:12312-12325;12371-12425"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": []
+    },
+    "Duck": {
+      "namespace": "object",
+      "neutralFrame": 231,
+      "locomotion": {
+        "frames": [
+          231
+        ],
+        "clockBasis": "Static active body.",
+        "source": "main.asm:12107-12111"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Reaction",
+          "frames": [
+            233
+          ],
+          "rule": "Reaction helper selectsE9.",
+          "source": "main.asm:12030-12055"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            128
+          ],
+          "callerMask": 1,
+          "postprocess": "OR0x80",
+          "source": "main.asm:12105-12116;12336-12425"
+        }
+      ],
+      "reaction": {
+        "frames": [
+          233
+        ],
+        "source": "main.asm:12030-12055"
+      },
+      "death": null,
+      "unknown": []
+    },
+    "BigBlag": {
+      "namespace": "object",
+      "neutralFrame": 239,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "Grounded",
+          "frames": [
+            239
+          ],
+          "rule": "Zfloor<1 =>EF.",
+          "source": "main.asm:13187-13195"
+        },
+        {
+          "state": "Airborne",
+          "frames": [
+            241
+          ],
+          "rule": "Zfloor>=1 =>F1, unless attack stream overwrites.",
+          "source": "main.asm:13187-13199"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            132
+          ],
+          "callerMask": 1,
+          "postprocess": "OR0x80",
+          "source": "main.asm:13273-13280;13196-13199;12340-12425"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": []
+    },
+    "GeneralSlaughter": {
+      "namespace": "object",
+      "neutralFrame": 242,
+      "locomotion": {
+        "frames": [
+          242,
+          242,
+          246,
+          246
+        ],
+        "clockBasis": "SpeedCounter",
+        "source": "main.asm:13352-13355;13288"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "LinkedNegative",
+          "frames": [
+            245
+          ],
+          "rule": "Negative Objects_Linker_ID branch explicitly selectsF5.",
+          "source": "main.asm:13360-13365"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            134
+          ],
+          "callerMask": 1,
+          "postprocess": "OR0x80",
+          "source": "main.asm:13273-13280;13369-13386;12340-12425"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": []
+    },
+    "RoboManus": {
+      "namespace": "object",
+      "neutralFrame": 248,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "Airborne",
+          "frames": [
+            247
+          ],
+          "rule": "Nonzero Zfloor selectsF7.",
+          "source": "main.asm:13533-13535"
+        },
+        {
+          "state": "Grounded",
+          "frames": [
+            248
+          ],
+          "rule": "Ground branch ends atF8; clip88 also resolvesF8.",
+          "source": "main.asm:13568-13572"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            136
+          ],
+          "callerMask": 1,
+          "postprocess": "OR0x80",
+          "source": "main.asm:13538-13550;12340-12425"
+        }
+      ],
+      "reaction": null,
+      "death": null,
+      "unknown": []
+    },
+    "Buzzball": {
+      "namespace": "heroStatic",
+      "neutralFrame": 124,
+      "locomotion": {
+        "frames": [
+          124,
+          125,
+          126,
+          127
+        ],
+        "clockBasis": "Triangular FrameCounter-derived signed increment is added directly to Obj_various_cnt; top-two-bit phase selects7C+phase.",
+        "source": "main.asm:14783-14803"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "ChaseToCombatPulse",
+          "frames": [
+            0
+          ],
+          "rule": "At zero Xspeed, cnt3 transition pulses hidden gfx0 when FrameCounter&4==0, then changes type7A→7B without actor replacement.",
+          "source": "main.asm:14843-14866"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Combat movement/bounces are physics and shared BigBlag helper, not a distinct source attack-pointer clip."
+      ]
+    },
+    "DarkQueen": {
+      "namespace": "heroStatic",
+      "neutralFrame": 129,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "Grounded",
+          "frames": [
+            129
+          ],
+          "rule": "Zfloor<1 selects81.",
+          "source": "main.asm:14340-14345"
+        },
+        {
+          "state": "Airborne",
+          "frames": [
+            130
+          ],
+          "rule": "Zfloor>=1 selects82.",
+          "source": "main.asm:14340-14345"
+        },
+        {
+          "state": "Spin",
+          "frames": [
+            130,
+            131
+          ],
+          "rule": "Frame82+carry; Xspeed<70 produces82,70..8F considers FrameCounter bit0,>=90 produces83.",
+          "source": "main.asm:14433-14452"
+        },
+        {
+          "state": "FinalRetreat",
+          "frames": [
+            129
+          ],
+          "rule": "Terminal retreat branch displays81 before next scene.",
+          "source": "main.asm:14259-14275"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            138
+          ],
+          "callerMask": 1,
+          "postprocess": "OR0x80; use heroStatic configuration namespace",
+          "source": "main.asm:14327-14337;12340-12425"
+        }
+      ],
+      "reaction": null,
+      "death": {
+        "frames": [
+          130,
+          131,
+          129
+        ],
+        "source": "main.asm:14252-14300",
+        "rule": "Retreat sequence, not proof of a generic corpse animation."
+      },
+      "unknown": []
+    },
+    "RacingRat": {
+      "namespace": "object",
+      "neutralFrame": 130,
+      "locomotion": {
+        "frames": [
+          130,
+          131,
+          132,
+          131
+        ],
+        "clockBasis": "Obj_various_cnt += Xspeed>>3 (one LSR before shared SpeedCounter), top-two-bit phase.",
+        "source": "main.asm:18528-18537"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Dynamic type46 shares handler with dead Robo-Manus; family context must select race bank."
+      ]
+    },
+    "HealingFly": {
+      "namespace": "object",
+      "neutralFrame": 13,
+      "locomotion": {
+        "frames": [
+          13,
+          14
+        ],
+        "clockBasis": "((FrameCounter_Even&2)>>1)+0D.",
+        "source": "main.asm:9472-9477"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": []
+    },
+    "BossWalkerIntro": {
+      "namespace": "object",
+      "neutralFrame": 18,
+      "locomotion": {
+        "frames": [
+          18
+        ],
+        "clockBasis": "Intro counter>=50 permitsgfx12; finite intro phases/camera own its world motion.",
+        "source": "main.asm:4103-4137"
+      },
+      "sourceFrameSelectors": [],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Intro limb is separate from normal TallWalker."
+      ]
+    },
+    "BossWalker": {
+      "namespace": "object",
+      "neutralFrame": 16,
+      "locomotion": null,
+      "sourceFrameSelectors": [
+        {
+          "state": "Turrets",
+          "frames": [
+            16
+          ],
+          "rule": "Turret objects select10.",
+          "source": "main.asm:4281-4353"
+        },
+        {
+          "state": "ArenaOverlay",
+          "frames": [
+            17
+          ],
+          "rule": "Arena composite selects11; this is not a humanoid walk frame.",
+          "source": "main.asm:4401-4483"
+        },
+        {
+          "state": "DamagedGlass",
+          "frames": [
+            199
+          ],
+          "rule": "Separate source damage-glass component.",
+          "source": "research/canonical-visuals/boss-walker-arena-component-catalog.json"
+        }
+      ],
+      "attackClips": [],
+      "reaction": null,
+      "death": null,
+      "unknown": [
+        "Complete final nametable composition and unseen full robot remain separate."
+      ]
+    },
+    "Hero": {
+      "namespace": "hero",
+      "neutralFrame": 1,
+      "locomotion": {
+        "walkFrames": [
+          4,
+          5,
+          4,
+          8,
+          6,
+          7,
+          6,
+          3
+        ],
+        "runFrames": [
+          5,
+          5,
+          8,
+          8,
+          7,
+          7,
+          3,
+          3
+        ],
+        "carryWalkFrames": [
+          17,
+          18,
+          17,
+          16
+        ],
+        "depthFrames": [
+          1,
+          9,
+          1,
+          10
+        ],
+        "clockBasis": "Source speed/counter/direction selector, not fixed FPS.",
+        "source": "main.asm:8298-8346;13635-13638"
+      },
+      "sourceFrameSelectors": [
+        {
+          "state": "Idle",
+          "frames": [
+            1,
+            2
+          ],
+          "rule": "Idle frame1; source blink2.",
+          "source": "main.asm:8369-8385"
+        },
+        {
+          "state": "Airborne",
+          "frames": [
+            5,
+            45
+          ],
+          "rule": "Unsigned (Zspeed+2)&255 <5 selects2D near apex, otherwise05.",
+          "source": "main.asm:8190-8204"
+        },
+        {
+          "state": "HeldAirborne",
+          "frames": [
+            46
+          ],
+          "rule": "Carrying jump selects2E.",
+          "source": "main.asm:8190-8204"
+        },
+        {
+          "state": "HoldingStill",
+          "frames": [
+            17
+          ],
+          "rule": "Standing with linked object selects11.",
+          "source": "main.asm:8362-8365"
+        },
+        {
+          "state": "LightReaction",
+          "frames": [
+            2,
+            41,
+            22
+          ],
+          "rule": "Eyes-closed2; front29/rear16 selected by source context.",
+          "source": "main.asm:6581-6592"
+        },
+        {
+          "state": "HeavyReaction",
+          "frames": [
+            19,
+            20,
+            21,
+            48
+          ],
+          "rule": "Airborne13/14; grounded15/30 depend on source context.",
+          "source": "main.asm:6694-6724"
+        },
+        {
+          "state": "FirstBossFear",
+          "frames": [
+            50,
+            51
+          ],
+          "rule": "Boss intro beforecut32/postcut33, animation pointer masked7 by fear helper.",
+          "source": "main.asm:4143-4187"
+        }
+      ],
+      "attackClips": [
+        {
+          "animationIds": [
+            2,
+            4,
+            6,
+            14,
+            18,
+            20,
+            22,
+            24,
+            26,
+            54,
+            112
+          ],
+          "callerMask": 1,
+          "postprocess": "Identity; DashLowLifeTail is explicit alternate branch only",
+          "source": "main.asm:7268-7269;anims_moves.asm"
+        }
+      ],
+      "reaction": {
+        "frames": [
+          2,
+          41,
+          22,
+          19,
+          20,
+          21,
+          48
+        ],
+        "source": "main.asm:6581-6592;6694-6724"
+      },
+      "death": null,
+      "unknown": [
+        "Mode-specific death/respawn paths main6735-6857; do not substitute one claimed source cycle.",
+        "Rope/electric/gas/fan/flattened/vehicle states need separate source handlers.",
+        "Third player Brown anatomy reuses source hero as an approved adaptation."
+      ]
+    },
+    "Mr. Green": {
+      "profile": "Hero",
+      "adaptation": null
+    },
+    "Mr. Yellow": {
+      "profile": "Hero",
+      "adaptation": null
+    },
+    "Mr. Brown": {
+      "profile": "Hero",
+      "adaptation": "Approved third playable Brown palette; source has two slots."
+    }
+  }
+}

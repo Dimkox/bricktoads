@@ -1,0 +1,655 @@
+{
+  "schema": 1,
+  "kind": "IceBlock",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['White/lavender reflective block with a bright upper face, dark lower facets, and dotted specular highlights.', 'Rolling frames tilt its angular silhouette.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.9,
+      -0.7608253175473054,
+      -1.6153445182314945
+    ],
+    [
+      1.9,
+      0.7608253175473054,
+      1.6153445182314945
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "IceBlock",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "20333-20338;20652-20706"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "20333-20338",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L20333-L20338"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "20652-20706",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L20652-L20706"
+      }
+    ],
+    "sourceTypes": [
+      "38"
+    ],
+    "graphicsFrameIds": [
+      "6F",
+      "70",
+      "71"
+    ],
+    "palette": {
+      "typeId": 56,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:261",
+      "trigger": [
+        1,
+        16
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        35,
+        32
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:258",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            35,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 111,
+        "frameHex": "6F",
+        "namespace": "object",
+        "metaspriteAddress": "B5D1",
+        "parts": [
+          {
+            "tile": 122,
+            "x": -8,
+            "y": -13,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 123,
+            "x": 0,
+            "y": -13,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 124,
+            "x": 4,
+            "y": -13,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 125,
+            "x": -10,
+            "y": -5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 126,
+            "x": -2,
+            "y": -5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 127,
+            "x": 5,
+            "y": -5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 128,
+            "x": -10,
+            "y": 3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 129,
+            "x": -2,
+            "y": 3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 130,
+            "x": 5,
+            "y": 3,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -10,
+          "minY": -9,
+          "maxX": 12,
+          "maxY": 10
+        },
+        "width": 23,
+        "height": 20,
+        "png": "frames/iceblock-6f.png"
+      },
+      {
+        "frameId": 112,
+        "frameHex": "70",
+        "namespace": "object",
+        "metaspriteAddress": "B5E8",
+        "parts": [
+          {
+            "tile": 131,
+            "x": -12,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 132,
+            "x": -4,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 133,
+            "x": 4,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 134,
+            "x": 6,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 135,
+            "x": -13,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 136,
+            "x": -5,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 137,
+            "x": 3,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 138,
+            "x": 7,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 139,
+            "x": -10,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 140,
+            "x": -2,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 141,
+            "x": 6,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -13,
+          "minY": -10,
+          "maxX": 14,
+          "maxY": 12
+        },
+        "width": 28,
+        "height": 23,
+        "png": "frames/iceblock-70.png"
+      },
+      {
+        "frameId": 113,
+        "frameHex": "71",
+        "namespace": "object",
+        "metaspriteAddress": "B603",
+        "parts": [
+          {
+            "tile": 142,
+            "x": -13,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 143,
+            "x": -5,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 144,
+            "x": 3,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 145,
+            "x": 9,
+            "y": -11,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 146,
+            "x": -13,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 147,
+            "x": -5,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 148,
+            "x": 3,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 149,
+            "x": 9,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 150,
+            "x": -13,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 151,
+            "x": -5,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 152,
+            "x": 3,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 153,
+            "x": 8,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -13,
+          "minY": -10,
+          "maxX": 16,
+          "maxY": 12
+        },
+        "width": 30,
+        "height": 23,
+        "png": "frames/iceblock-71.png"
+      }
+    ],
+    "appearanceCues": [
+      "White/lavender reflective block with a bright upper face, dark lower facets, and dotted specular highlights.",
+      "Rolling frames tilt its angular silhouette."
+    ],
+    "runtimeRole": "pushable solid",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          105
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          878
+        ]
+      }
+    ],
+    "sourceHandler": "object_ice_cube / shared physics frame table",
+    "bankRecipe": "Ice",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/snowman.4",
+        "firstTile": 42,
+        "tiles": 45,
+        "decodedCompleteTiles": 45,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/level4_obj.4",
+        "firstTile": 87,
+        "tiles": 95,
+        "decodedCompleteTiles": 95,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/level4_obj2.4",
+        "firstTile": 182,
+        "tiles": 55,
+        "decodedCompleteTiles": 47,
+        "unknownTailBytes": 126,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "iceblock-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.0358253175473055,
+        0.01534451823149452
+      ],
+      "localBounds": [
+        [
+          -1.9,
+          -0.7249999999999999,
+          -1.6
+        ],
+        [
+          1.9,
+          0.7250000000000001,
+          1.6
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.9,
+          -0.7608253175473054,
+          -1.5846554817685057
+        ],
+        [
+          1.9,
+          0.6891746824526945,
+          1.6153445182314945
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Ice"
+    },
+    {
+      "name": "Frost",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.0358253175473055,
+        0.01534451823149452
+      ],
+      "localBounds": [
+        [
+          -1.77,
+          0.69,
+          -1.44
+        ],
+        [
+          1.77,
+          0.77,
+          1.4400000000000004
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.77,
+          0.6541746824526944,
+          -1.4246554817685055
+        ],
+        [
+          1.77,
+          0.7341746824526945,
+          1.4553445182314948
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Crust"
+    },
+    {
+      "name": "Cracks",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.0358253175473055,
+        0.01534451823149452
+      ],
+      "localBounds": [
+        [
+          -1.1162691864646472,
+          -0.5396527460898435,
+          -1.630689036462989
+        ],
+        [
+          0.8246598480958035,
+          0.796650635094611,
+          0.6087780860397098
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.1162691864646472,
+          -0.575478063637149,
+          -1.6153445182314945
+        ],
+        [
+          0.8246598480958035,
+          0.7608253175473054,
+          0.6241226042712044
+        ]
+      ],
+      "vertices": 92,
+      "authoringVertices": 92,
+      "paletteSplitTriangles": 0,
+      "triangles": 168,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 232,
+    "vertices": 128,
+    "closedComponents": true,
+    "components": 6,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0003897114317029893
+  }
+}

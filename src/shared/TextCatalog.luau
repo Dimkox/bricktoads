@@ -1,6 +1,12 @@
 -- English source strings and curated Russian translations. No user display names.
 -- Roblox LocalizationTable entries; add supported languages to Values here.
 local Catalog={entries={
+    {Key="Audio",Source="Audio",Values={["en-us"]="Audio",["ru"]="Звук"}},
+    {Key="Audio settings",Source="Audio settings",Values={["en-us"]="Audio settings",["ru"]="Настройки звука"}},
+    {Key="Sound: On",Source="Sound: On",Values={["en-us"]="Sound: On",["ru"]="Звук: вкл."}},
+    {Key="Sound: Off",Source="Sound: Off",Values={["en-us"]="Sound: Off",["ru"]="Звук: выкл."}},
+    {Key="Music: On",Source="Music: On",Values={["en-us"]="Music: On",["ru"]="Музыка: вкл."}},
+    {Key="Music: Off",Source="Music: Off",Values={["en-us"]="Music: Off",["ru"]="Музыка: выкл."}},
     {Key="∞ resp.",Source="∞ resp.",Values={["en-us"]="∞ resp.",["ru"]="∞ возр."}},
     {Key=" · God Mode",Source=" · God Mode",Values={["en-us"]=" · God Mode",["ru"]=" · Режим бога"}},
     {Key="The Guardian approaches",Source="The Guardian approaches",Values={["en-us"]="The Guardian approaches",["ru"]="Страж приближается"}},
@@ -491,5 +497,22 @@ local Catalog={entries={
     {Key="Hordhead",Source="Hordhead",Values={["en-us"]="Hordhead",["ru"]="Хордхед"}},
     {Key="Swellcheeks",Source="Swellcheeks",Values={["en-us"]="Swellcheeks",["ru"]="Надувные щёки"}},
     {Key="Flying Head",Source="Flying Head",Values={["en-us"]="Flying Head",["ru"]="Летающая голова"}},
+    {Key="Campaign complete",Source="Campaign complete",Values={["en-us"]="Campaign complete",["ru"]="Кампания пройдена"}},
+    {Key="CAMPAIGN COMPLETE!",Source="CAMPAIGN COMPLETE!",Values={["en-us"]="CAMPAIGN COMPLETE!",["ru"]="КАМПАНИЯ ПРОЙДЕНА!"}},
+    {Key="HEROES COMPLETED THE CAMPAIGN",Source="HEROES COMPLETED THE CAMPAIGN",Values={["en-us"]="HEROES COMPLETED THE CAMPAIGN",["ru"]="ГЕРОИ ПРОШЛИ КАМПАНИЮ"}},
+    {Key="All {count:int} stages cleared. The Dark Queen is defeated. Choose roles for a new game.",Source="All {count:int} stages cleared. The Dark Queen is defeated. Choose roles for a new game.",Values={["en-us"]="All {count:int} stages cleared. The Dark Queen is defeated. Choose roles for a new game.",["ru"]="Все {count:int} этапов пройдены. Тёмная королева побеждена. Выберите роли для новой игры."}},
+    {Key="HEROES CLEARED THE STAGE",Source="HEROES CLEARED THE STAGE",Values={["en-us"]="HEROES CLEARED THE STAGE",["ru"]="ГЕРОИ ПРОШЛИ ЭТАП"}},
+    {Key="STAGE CLEARED!",Source="STAGE CLEARED!",Values={["en-us"]="STAGE CLEARED!",["ru"]="ЭТАП ПРОЙДЕН!"}},
+    {Key="{stage} cleared. Choose roles for the next game.",Source="{stage} cleared. Choose roles for the next game.",Values={["en-us"]="{stage} cleared. Choose roles for the next game.",["ru"]="{stage}: этап пройден. Выберите роли для следующей игры."}},
+    {Key="The heroes were stopped at {stage}. A new game starts from the first stage.",Source="The heroes were stopped at {stage}. A new game starts from the first stage.",Values={["en-us"]="The heroes were stopped at {stage}. A new game starts from the first stage.",["ru"]="Герои остановлены на этапе «{stage}». Новая игра начнётся с первого этапа."}},
+    {Key="{boss} is defeated. You can keep watching this game.",Source="{boss} is defeated. You can keep watching this game.",Values={["en-us"]="{boss} is defeated. You can keep watching this game.",["ru"]="Босс побеждён: {boss}. Вы можете продолжать наблюдать за игрой."}},
+    {Key="{boss} is defeated. You can watch the ongoing game.",Source="{boss} is defeated. You can watch the ongoing game.",Values={["en-us"]="{boss} is defeated. You can watch the ongoing game.",["ru"]="Босс побеждён: {boss}. Вы можете наблюдать за текущей игрой."}},
+    {Key="Restoring the {boss} connection…",Source="Restoring the {boss} connection…",Values={["en-us"]="Restoring the {boss} connection…",["ru"]="Восстанавливаем связь: {boss}…"}},
+    {Key="Choose a role for this campaign.",Source="Choose a role for this campaign.",Values={["en-us"]="Choose a role for this campaign.",["ru"]="Выберите роль для этой кампании."}},
+    {Key="Reaction progress: {count:int}/{maximum:int}",Source="Reaction progress: {count:int}/{maximum:int}",Values={["en-us"]="Reaction progress: {count:int}/{maximum:int}",["ru"]="Прогресс реакции: {count:int}/{maximum:int}"}},
+    {Key="Boss queue · below",Source="Boss queue · below",Values={["en-us"]="Boss queue · below",["ru"]="Очередь к боссу · ниже"}},
+    {Key="Boss",Source="Boss",Values={["en-us"]="Boss",["ru"]="Босс"}},
+    {Key="Cancel your accepted boss invitation first.",Source="Cancel your accepted boss invitation first.",Values={["en-us"]="Cancel your accepted boss invitation first.",["ru"]="Сначала отмените принятое приглашение на роль босса."}},
+    {Key="You accepted a boss invitation. Cancel it in the queue first.",Source="You accepted a boss invitation. Cancel it in the queue first.",Values={["en-us"]="You accepted a boss invitation. Cancel it in the queue first.",["ru"]="Вы приняли приглашение на роль босса. Сначала отмените его в очереди."}},
 }}
 return Catalog

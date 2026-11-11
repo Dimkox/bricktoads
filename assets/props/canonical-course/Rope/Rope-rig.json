@@ -1,0 +1,387 @@
+{
+  "schema": 1,
+  "kind": "Rope",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Source rope is a narrow repeated gold/cream strand; three raw tile shapes support bend/tilt variation.', 'Source procedural sprite placement determines swing, so tile samples do not claim a full rope pose.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -0.26,
+      -0.2534812571672742,
+      -3.0521690426072245
+    ],
+    [
+      0.26,
+      0.2534812571672742,
+      3.0521690426072245
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Rope",
+    "sourceEvidence": [
+      {
+        "statement": "Source types06/07 render repeated raw CHR tiles chosen by a slope table; these are not object gfx frame IDs.",
+        "cacheFile": "main.asm",
+        "lines": "8876-8928;23024-23068;33219-33315"
+      }
+    ],
+    "status": "procedural-source-components",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "8876-8928",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L8876-L8928"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "23024-23068",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L23024-L23068"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "33219-33315",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L33219-L33315"
+      }
+    ],
+    "sourceTypes": [
+      "06",
+      "07"
+    ],
+    "graphicsFrameIds": [],
+    "palette": {
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "spriteAttributes": 2,
+      "source": "main.asm:36743 initial palette_chars; main.asm:33289-33295 procedural sprite attributes",
+      "rgbIsIllustrative": true
+    },
+    "rgbColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "namespace": "rawChrTile",
+        "chrTileIndex": "27",
+        "width": 8,
+        "height": 8,
+        "png": "frames/rope-tile-27.png"
+      },
+      {
+        "namespace": "rawChrTile",
+        "chrTileIndex": "28",
+        "width": 8,
+        "height": 8,
+        "png": "frames/rope-tile-28.png"
+      },
+      {
+        "namespace": "rawChrTile",
+        "chrTileIndex": "29",
+        "width": 8,
+        "height": 8,
+        "png": "frames/rope-tile-29.png"
+      }
+    ],
+    "appearanceCues": [
+      "Source rope is a narrow repeated gold/cream strand; three raw tile shapes support bend/tilt variation.",
+      "Source procedural sprite placement determines swing, so tile samples do not claim a full rope pose."
+    ],
+    "runtimeRole": "anchor-to-actor attachment",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Only raw rope tile shapes and initial palette are decoded. Full source procedural swing shape, gaps and live palette scheduling are separate."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          15
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          192,
+          227,
+          387,
+          388,
+          648,
+          682,
+          701,
+          843
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/CampaignWorld.lua",
+        "lines": [
+          66,
+          282,
+          290,
+          307
+        ]
+      },
+      {
+        "localFile": "src/server/gameplay/GameWorld.lua",
+        "lines": [
+          1024,
+          1040,
+          1919,
+          1951
+        ]
+      }
+    ],
+    "chrTileIndices": [
+      "27",
+      "28",
+      "29"
+    ],
+    "bankRecipe": "Wookie",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/level2_obj.4",
+        "firstTile": 42,
+        "tiles": 180,
+        "decodedCompleteTiles": 180,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 15,
+        "decodedCompleteTiles": 15,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "sourceHandler": "object_rope / rope_sprites / wookie_hole_ropes_gfx",
+    "contactSheet": "rope-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        2.7755575615628914e-17,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.13,
+          -0.12363734711836998,
+          -3.0
+        ],
+        [
+          0.13,
+          0.12363734711836998,
+          3.0
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.13,
+          -0.12363734711836995,
+          -3.0
+        ],
+        [
+          0.13,
+          0.12363734711837,
+          3.0
+        ]
+      ],
+      "vertices": 22,
+      "authoringVertices": 22,
+      "paletteSplitTriangles": 0,
+      "triangles": 40,
+      "role": "Rope"
+    },
+    {
+      "name": "Twist",
+      "parent": null,
+      "pivot": [
+        0.0,
+        2.7755575615628914e-17,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.17499993755590762,
+          -0.17497388462120905,
+          -3.032972362752001
+        ],
+        [
+          0.17499993755590762,
+          0.17497388462120905,
+          3.0325287803969108
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.17499993755590762,
+          -0.17497388462120902,
+          -3.032972362752001
+        ],
+        [
+          0.17499993755590762,
+          0.17497388462120908,
+          3.0325287803969108
+        ]
+      ],
+      "vertices": 1556,
+      "authoringVertices": 1556,
+      "paletteSplitTriangles": 0,
+      "triangles": 3104,
+      "role": "Ribbon"
+    },
+    {
+      "name": "Knots",
+      "parent": null,
+      "pivot": [
+        0.0,
+        2.7755575615628914e-17,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.26,
+          -0.2534812571672742,
+          -3.0521690426072245
+        ],
+        [
+          0.26,
+          0.2534812571672742,
+          3.0521690426072245
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.26,
+          -0.2534812571672742,
+          -3.0521690426072245
+        ],
+        [
+          0.26,
+          0.2534812571672742,
+          3.0521690426072245
+        ]
+      ],
+      "vertices": 272,
+      "authoringVertices": 272,
+      "paletteSplitTriangles": 0,
+      "triangles": 536,
+      "role": "Knot"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 3680,
+    "vertices": 1850,
+    "closedComponents": true,
+    "components": 7,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0014318912319027529
+  }
+}

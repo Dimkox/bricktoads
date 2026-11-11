@@ -32,6 +32,10 @@ jobs:
           done
       - name: Native Luau contract tests
         run: /tmp/bricktoads-luau/luau tests/run.luau
+      - name: Bootstrap SHA-verified source inputs for cast geometry
+        run: |
+          python3 tests/canonical_cast_geometry/test_source_bootstrap.py
+          python3 research/canonical-visuals/fetch_pinned_source.py --profile cast-geometry
       - name: Playable game contracts
         run: |
           /tmp/bricktoads-luau/luau tests/run_gameplay.luau
@@ -58,6 +62,12 @@ jobs:
           /tmp/bricktoads-luau/luau tests/run_canonical_animation.luau
           /tmp/bricktoads-luau/luau tests/run_canonical_walker.luau
           /tmp/bricktoads-luau/luau tests/run_canonical_hero_presentation.luau
+          /tmp/bricktoads-luau/luau tests/run_canonical_cast.luau
+          /tmp/bricktoads-luau/luau tests/run_cast_asset_visibility.luau
+          /tmp/bricktoads-luau/luau tests/run_hero_asset_visibility.luau
+          /tmp/bricktoads-luau/luau tests/canonical_cast_source/profiles.luau
+          /tmp/bricktoads-luau/luau tests/run_studio_god_mode.luau
+          /tmp/bricktoads-luau/luau tests/run_audio_fx.luau
           /tmp/bricktoads-luau/luau tests/run_boss_intro.luau
           /tmp/bricktoads-luau/luau tests/run_campaign_modes.luau
           /tmp/bricktoads-luau/luau tests/run_campaign_bosses.luau
@@ -70,9 +80,21 @@ jobs:
           python3 tests/group_world/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/character_appearance/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/canonical_hero_presentation/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/canonical_cast_appearance/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/canonical_cast_geometry/test_cast_geometry.py
+          python3 tests/canonical_cast_packaging/run.py
+          python3 tests/audio_fx/test_audio_assets.py
+          python3 tests/audio_fx/test_client_audio_controls.py --luau /tmp/bricktoads-luau/luau
           python3 tests/guardian_appearance/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/boss_intro_asset/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/campaign_world/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/course_appearance/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/course_props/run.py --luau /tmp/bricktoads-luau/luau
+          python3 tools/test_course_asset_packaging.py
+          python3 tools/test_course_prop_packaging.py
+          python3 tools/test_release_ui.py --luau /tmp/bricktoads-luau/luau
+          python3 tests/test_analyze_campaign_run.py
+          python3 tools/qa/check_full_campaign_av_observer.py --luau /tmp/bricktoads-luau/luau
           python3 tests/campaign_input/run.py --luau /tmp/bricktoads-luau/luau
           python3 tests/scooter_network/test_client_ready_order.py --luau /tmp/bricktoads-luau/luau
       - name: Compile Studio multiplayer acceptance tools
@@ -81,6 +103,16 @@ jobs:
           /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_network.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/studio_scooter_role_network_acceptance.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/studio_launch_scooter_role_network.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/course_elements_acceptance.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/course_props_acceptance.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_catalog_acceptance.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_catalog_visibility_observer.client.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_av_observer.client.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_presentation_observer.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_heading_observer.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/release_hero_loading.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/release_hero_loading.client.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/world_elements_acceptance.luau > /dev/null
       - name: Structural build tests
         run: python3 tools/test_build.py
       - name: English source and localization coverage

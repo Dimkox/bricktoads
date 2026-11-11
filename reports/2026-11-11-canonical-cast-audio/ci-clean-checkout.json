@@ -1,0 +1,87 @@
+{
+  "clean_checkout": "C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk",
+  "cache_initially_absent": true,
+  "commands": [
+    {
+      "args": [
+        "tests/canonical_cast_geometry/test_cast_geometry.py",
+        "-q"
+      ],
+      "exit_code": 1,
+      "seconds": 3.761,
+      "output": "======================================================================\nERROR: test_all_requested_families_have_distinct_articulated_closed_surfaces (__main__.CastContract.test_all_requested_families_have_distinct_articulated_closed_surfaces) (family='Walker')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk\\tests\\canonical_cast_geometry\\test_cast_geometry.py\", line 55, in test_all_requested_families_have_distinct_articulated_closed_surfaces\n    model=module.build(family)\n  File \"C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk\\assets\\characters\\canonical-cast\\build_cast.py\", line 524, in build\n    def build(kind):return apply_source_palette(BUILDERS[kind]())\n                                                ~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk\\assets\\characters\\canonical-cast\\build_cast.py\", line 189, in walker\n    source,pivots,_,_,_=module.geometry();o=Model('Walker')\n                        ~~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk\\assets\\characters\\tall-walker\\build_tall_walker.py\", line 207, in geometry\n    foot_profile=Profile(foot_pixels())\n                         ~~~~~~~~~~~^^\n  File \"C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk\\assets\\characters\\tall-walker\\build_tall_walker.py\", line 191, in foot_pixels\n    prefix=b''.join((CACHE/'gfx'/n).read_bytes() for n in ('sprite0.chr','game_std.chr','level1_obj.4'))\n  File \"C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk\\assets\\characters\\tall-walker\\build_tall_walker.py\", line 191, in <genexpr>\n    prefix=b''.join((CACHE/'gfx'/n).read_bytes() for n in ('sprite0.chr','game_std.chr','level1_obj.4'))\n                    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"pathlib\\_abc.py\", line 625, in read_bytes\n  File \"pathlib\\_local.py\", line 537, in open\nFileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\User\\\\Documents\\\\bricktoads\\\\build\\\\qa-archive\\\\clean-cast-bootstrap-rkcktkwk\\\\build\\\\canonical-source\\\\gfx\\\\sprite0.chr'\n\n----------------------------------------------------------------------\nRan 2 tests in 3.668s\n\nFAILED (errors=1)\n"
+    },
+    {
+      "args": [
+        "tests/canonical_cast_geometry/test_source_bootstrap.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "seconds": 0.141,
+      "output": "test_catalog_path_cannot_escape_the_owned_cache (__main__.SourceBootstrap.test_catalog_path_cannot_escape_the_owned_cache) ... ok\ntest_tampered_existing_cache_is_rejected_without_overwriting (__main__.SourceBootstrap.test_tampered_existing_cache_is_rejected_without_overwriting) ... ok\ntest_verified_bytes_are_cached_and_reused_without_network (__main__.SourceBootstrap.test_verified_bytes_are_cached_and_reused_without_network) ... ok\ntest_wrong_download_hash_is_never_published (__main__.SourceBootstrap.test_wrong_download_hash_is_never_published) ... ok\ntest_wrong_download_size_is_never_published (__main__.SourceBootstrap.test_wrong_download_size_is_never_published) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.007s\n\nOK\n"
+    },
+    {
+      "args": [
+        "research/canonical-visuals/fetch_pinned_source.py",
+        "--profile",
+        "cast-geometry"
+      ],
+      "exit_code": 0,
+      "seconds": 2.698,
+      "output": "Verified 5 pinned source inputs; 5 downloaded; pin f1a43b69577246850d136473700a333b3cdfe93f\n"
+    },
+    {
+      "args": [
+        "tests/canonical_cast_geometry/test_cast_geometry.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "seconds": 3.766,
+      "output": "test_all_requested_families_have_distinct_articulated_closed_surfaces (__main__.CastContract.test_all_requested_families_have_distinct_articulated_closed_surfaces) ... ok\ntest_combined_import_preserves_individual_triangles_transforms_and_palette_links (__main__.CastContract.test_combined_import_preserves_individual_triangles_transforms_and_palette_links) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 3.678s\n\nOK\n"
+    },
+    {
+      "args": [
+        "research/canonical-visuals/fetch_pinned_source.py",
+        "--profile",
+        "cast-geometry"
+      ],
+      "exit_code": 0,
+      "seconds": 0.099,
+      "output": "Verified 5 pinned source inputs; 0 downloaded; pin f1a43b69577246850d136473700a333b3cdfe93f\n"
+    },
+    {
+      "args": [
+        "tools/build_bricktoads_place.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.251,
+      "output": "C:\\Users\\User\\Documents\\bricktoads\\build\\qa-archive\\clean-cast-bootstrap-rkcktkwk\\places\\BrickToadsPlayable.rbxlx: 1850393 bytes; sha256=9e9692845e5a278d7426f7a4bd657ac3abfda94fa7d00eb899495492868541bd\n"
+    }
+  ],
+  "network_fetched_files": {
+    "gfx/game_std.chr": {
+      "bytes": 144,
+      "sha256": "b4f56bffd17b54155918fd9c3879a66c2709d1166507f857a6a5a70272d98ca9"
+    },
+    "gfx/level1_obj.4": {
+      "bytes": 1974,
+      "sha256": "e278be866b79bf086f77b10e15c7e2aa02e2272760a7c312ac58b4ef244f6781"
+    },
+    "gfx/levels1_5_obj.4": {
+      "bytes": 529,
+      "sha256": "2ea6cb5201a6da1765fa515cec49f9f45c73ccd69e8042699b2d7b9b0d88f851"
+    },
+    "gfx/sprite0.chr": {
+      "bytes": 16,
+      "sha256": "dfdf16f4813854325b80ed6b5279a2627ddbeaa395c1bd87d70ab5a15418808c"
+    },
+    "gfx/tall_walker.4": {
+      "bytes": 153,
+      "sha256": "555dcb0e43d3d9cf9316e503081aeed610949c5d447229b3e09038e610bdadf8"
+    }
+  },
+  "python_compile": "pass",
+  "geometry_test_unchanged": true,
+  "status": "pass"
+}

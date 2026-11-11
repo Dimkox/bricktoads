@@ -1,0 +1,580 @@
+{
+  "schema": 1,
+  "kind": "Slug",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/slug.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "Graphics9F-A2 show a low yellow slug/blob with pale facial spots, wide mouth and stretching lobes; limbs are absent in the resting silhouette."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -1.1508482846812116,
+      -0.7750257464557961,
+      -1.8212630063817428
+    ],
+    [
+      1.1508482846812116,
+      1.0249742535442041,
+      2.4473220716794892
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Race",
+    "sourceEvidence": "main.asm:19050-19140",
+    "frames": [
+      {
+        "frameId": 159,
+        "width": 23,
+        "height": 15,
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -4,
+          "maxX": 11,
+          "maxY": 10
+        },
+        "referencePng": "cast-frames/slug-9f.png"
+      },
+      {
+        "frameId": 160,
+        "width": 21,
+        "height": 21,
+        "visibleBounds": {
+          "minX": -10,
+          "minY": -9,
+          "maxX": 10,
+          "maxY": 11
+        },
+        "referencePng": "cast-frames/slug-a0.png"
+      },
+      {
+        "frameId": 161,
+        "width": 24,
+        "height": 21,
+        "visibleBounds": {
+          "minX": -11,
+          "minY": 0,
+          "maxX": 12,
+          "maxY": 20
+        },
+        "referencePng": "cast-frames/slug-a1.png"
+      },
+      {
+        "frameId": 162,
+        "width": 24,
+        "height": 21,
+        "visibleBounds": {
+          "minX": -11,
+          "minY": -13,
+          "maxX": 12,
+          "maxY": 7
+        },
+        "referencePng": "cast-frames/slug-a2.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      22,
+      38
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "typeId": 81,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs2.asm:176",
+      "trigger": [
+        10,
+        76
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": []
+    },
+    "sourceSlotPrimary": 2,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 22,
+        "effectiveRgb": [
+          180,
+          0,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 38,
+        "effectiveRgb": [
+          255,
+          100,
+          97
+        ]
+      }
+    ],
+    "variantCount": 1,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.1508482846812116,
+          -0.7750257464557961,
+          -1.2341912605268612
+        ],
+        [
+          1.1508482846812116,
+          0.7282616455016292,
+          1.4071630004722895
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.1508482846812116,
+          -0.7750257464557961,
+          -1.2341912605268612
+        ],
+        [
+          1.1508482846812116,
+          0.7282616455016292,
+          1.4071630004722895
+        ]
+      ],
+      "vertices": 242,
+      "authoringVertices": 242,
+      "paletteSplitTriangles": 0,
+      "triangles": 480
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.17982004448143932,
+        -0.8091902001664769
+      ],
+      "localBounds": [
+        [
+          -0.8631362135109086,
+          -0.48551412009988615,
+          -0.925893409034931
+        ],
+        [
+          0.8631362135109086,
+          0.8451542090627648,
+          0.15653014458948533
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.8631362135109086,
+          -0.3056940756184468,
+          -1.735083609201408
+        ],
+        [
+          0.8631362135109086,
+          1.0249742535442041,
+          -0.6526600555769916
+        ]
+      ],
+      "vertices": 644,
+      "authoringVertices": 644,
+      "paletteSplitTriangles": 0,
+      "triangles": 1268
+    },
+    {
+      "name": "Jaw",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        -0.05394601334443179,
+        -0.9350642313034845
+      ],
+      "localBounds": [
+        [
+          -0.5934061467887498,
+          -0.1978020489295833,
+          -0.8861987750782583
+        ],
+        [
+          0.5934061467887498,
+          0.16183804003329538,
+          -0.2741010595687472
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.5934061467887498,
+          -0.2517480622740151,
+          -1.8212630063817428
+        ],
+        [
+          0.5934061467887498,
+          0.1078920266888636,
+          -1.2091652908722317
+        ]
+      ],
+      "vertices": 180,
+      "authoringVertices": 180,
+      "paletteSplitTriangles": 0,
+      "triangles": 352
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        -0.32367608006659077,
+        1.0069922490960603
+      ],
+      "localBounds": [
+        [
+          -0.5394601334443179,
+          -0.35216078482347357,
+          -0.05571351710780181
+        ],
+        [
+          0.5394601334443179,
+          0.3521607848234736,
+          1.440329822583429
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.5394601334443179,
+          -0.6758368648900643,
+          0.9512787319882585
+        ],
+        [
+          0.5394601334443179,
+          0.028484704756882875,
+          2.4473220716794892
+        ]
+      ],
+      "vertices": 128,
+      "authoringVertices": 128,
+      "paletteSplitTriangles": 0,
+      "triangles": 252
+    }
+  ],
+  "joints": [
+    {
+      "name": "Head",
+      "parent": "Body",
+      "child": "Head",
+      "parentAttachment": [
+        0.0,
+        0.17982004448143932,
+        -0.8091902001664769
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Jaw",
+      "parent": "Body",
+      "child": "Jaw",
+      "parentAttachment": [
+        0.0,
+        -0.05394601334443179,
+        -0.9350642313034845
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Tail",
+      "parent": "Body",
+      "child": "Tail",
+      "parentAttachment": [
+        0.0,
+        -0.32367608006659077,
+        1.0069922490960603
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 2352,
+    "vertices": 1194,
+    "closedComponents": true,
+    "components": 9,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.00019754832393915485
+  }
+}

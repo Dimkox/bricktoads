@@ -1,0 +1,613 @@
+{
+  "schema": 1,
+  "kind": "Spring",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Orange lower block, pale yellow top block and crossed/coil-like middle connector; separate compressed and expanded frames.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.175,
+      -1.2125,
+      -1.175
+    ],
+    [
+      1.175,
+      1.2125,
+      1.175
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Spring",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "17765-17928"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "17765-17928",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L17765-L17928"
+      }
+    ],
+    "sourceTypes": [
+      "36"
+    ],
+    "graphicsFrameIds": [
+      "67",
+      "68",
+      "69"
+    ],
+    "palette": {
+      "typeId": 54,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:350",
+      "trigger": [
+        20,
+        144
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        22,
+        38
+      ],
+      "paletteWrites": [],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 103,
+        "frameHex": "67",
+        "namespace": "object",
+        "metaspriteAddress": "B805",
+        "parts": [
+          {
+            "tile": 45,
+            "x": -12,
+            "y": 4,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 46,
+            "x": -4,
+            "y": 4,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 47,
+            "x": 4,
+            "y": 4,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 48,
+            "x": -4,
+            "y": 12,
+            "attributes": 1,
+            "paletteSlot": 1
+          }
+        ],
+        "visibleBounds": {
+          "minX": -12,
+          "minY": 4,
+          "maxX": 11,
+          "maxY": 19
+        },
+        "width": 24,
+        "height": 16,
+        "png": "frames/spring-67.png"
+      },
+      {
+        "frameId": 104,
+        "frameHex": "68",
+        "namespace": "object",
+        "metaspriteAddress": "B812",
+        "parts": [
+          {
+            "tile": 58,
+            "x": -12,
+            "y": 4,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 59,
+            "x": -4,
+            "y": 4,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 58,
+            "x": 4,
+            "y": 4,
+            "attributes": 66,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 58,
+            "x": -12,
+            "y": 12,
+            "attributes": 129,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 59,
+            "x": -4,
+            "y": 12,
+            "attributes": 129,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 58,
+            "x": 4,
+            "y": 12,
+            "attributes": 193,
+            "paletteSlot": 1
+          }
+        ],
+        "visibleBounds": {
+          "minX": -12,
+          "minY": 4,
+          "maxX": 11,
+          "maxY": 19
+        },
+        "width": 24,
+        "height": 16,
+        "png": "frames/spring-68.png"
+      },
+      {
+        "frameId": 105,
+        "frameHex": "69",
+        "namespace": "object",
+        "metaspriteAddress": "B82E",
+        "parts": [
+          {
+            "tile": 60,
+            "x": -12,
+            "y": 2,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 61,
+            "x": -4,
+            "y": 2,
+            "attributes": 2,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 60,
+            "x": 4,
+            "y": 2,
+            "attributes": 66,
+            "paletteSlot": 2
+          },
+          {
+            "tile": 62,
+            "x": -12,
+            "y": 10,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 63,
+            "x": -4,
+            "y": 10,
+            "attributes": 1,
+            "paletteSlot": 1
+          },
+          {
+            "tile": 62,
+            "x": 4,
+            "y": 10,
+            "attributes": 65,
+            "paletteSlot": 1
+          }
+        ],
+        "visibleBounds": {
+          "minX": -12,
+          "minY": 7,
+          "maxX": 11,
+          "maxY": 17
+        },
+        "width": 24,
+        "height": 11,
+        "png": "frames/spring-69.png"
+      }
+    ],
+    "appearanceCues": [
+      "Orange lower block, pale yellow top block and crossed/coil-like middle connector; separate compressed and expanded frames."
+    ],
+    "runtimeRole": "jump boost surface",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored.",
+      "Tower source enum ID05 is Revolution, the original twelfth playable course. Internal source enum IDs and campaign ordinal stage numbers differ (main.asm:14643 Level_ID_Table)."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignModes.lua",
+        "lines": [
+          788
+        ]
+      }
+    ],
+    "sourceHandler": "object_prujina",
+    "bankRecipe": "Tower",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/revolution_obj.4",
+        "firstTile": 42,
+        "tiles": 166,
+        "decodedCompleteTiles": 166,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/tall_walker.4",
+        "firstTile": 208,
+        "tiles": 6,
+        "decodedCompleteTiles": 6,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BDC5.chr",
+        "firstTile": 214,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/stick.4",
+        "firstTile": 218,
+        "tiles": 4,
+        "decodedCompleteTiles": 4,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/common.4",
+        "firstTile": 222,
+        "tiles": 5,
+        "decodedCompleteTiles": 5,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BE25.chr",
+        "firstTile": 227,
+        "tiles": 10,
+        "decodedCompleteTiles": 10,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "spring-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        155,
+        83,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.0024999999999999467,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.175,
+          -1.21,
+          -1.175
+        ],
+        [
+          1.175,
+          -0.93,
+          1.175
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.175,
+          -1.2125,
+          -1.175
+        ],
+        [
+          1.175,
+          -0.9325,
+          1.175
+        ]
+      ],
+      "vertices": 18,
+      "authoringVertices": 18,
+      "paletteSplitTriangles": 0,
+      "triangles": 32,
+      "role": "Mount"
+    },
+    {
+      "name": "Coil",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.0024999999999999467,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.7506593275147857,
+          -0.9294093220322934,
+          -0.7546557176154023
+        ],
+        [
+          0.7577789133283998,
+          0.9266688061752391,
+          0.7556181064634373
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.7506593275147857,
+          -0.9319093220322934,
+          -0.7546557176154023
+        ],
+        [
+          0.7577789133283998,
+          0.9241688061752391,
+          0.7556181064634373
+        ]
+      ],
+      "vertices": 586,
+      "authoringVertices": 586,
+      "paletteSplitTriangles": 0,
+      "triangles": 1168,
+      "role": "Coil"
+    },
+    {
+      "name": "Deck",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.9775,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.15,
+          -0.16000000000000003,
+          -1.15
+        ],
+        [
+          1.15,
+          0.17999999999999994,
+          1.15
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.15,
+          0.8175,
+          -1.15
+        ],
+        [
+          1.15,
+          1.1575,
+          1.15
+        ]
+      ],
+      "vertices": 36,
+      "authoringVertices": 36,
+      "paletteSplitTriangles": 0,
+      "triangles": 64,
+      "role": "Deck"
+    },
+    {
+      "name": "Grip",
+      "parent": null,
+      "pivot": [
+        0.0,
+        -0.0024999999999999467,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.65,
+          1.145,
+          -0.5850000000000001
+        ],
+        [
+          0.65,
+          1.2149999999999999,
+          0.5850000000000001
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.65,
+          1.1425,
+          -0.5850000000000001
+        ],
+        [
+          0.65,
+          1.2125,
+          0.5850000000000001
+        ]
+      ],
+      "vertices": 54,
+      "authoringVertices": 54,
+      "paletteSplitTriangles": 0,
+      "triangles": 96,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        250,
+        160,
+        66
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 1360,
+    "vertices": 694,
+    "closedComponents": true,
+    "components": 7,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0008662058069535185
+  }
+}

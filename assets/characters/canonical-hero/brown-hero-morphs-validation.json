@@ -1,0 +1,423 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "file": "brown-hero-morphs.glb",
+  "bytes": 9618088,
+  "sha256": "4e3907a96bba1f3c4646da862922f0132548d1eb240c044733f6589a74a8eab2",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceGlbs": {
+    "hero-attack-morphs.glb": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+    "hero-fear-wide-mouth.glb": "e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1"
+  },
+  "heroTemplate": "Mr. Brown",
+  "paletteAdaptation": {
+    "shadow": [
+      160,
+      112,
+      86
+    ],
+    "highlight": [
+      224,
+      186,
+      129
+    ],
+    "sourcePaletteCodes": null,
+    "sourcePlayerSlot": null,
+    "meaning": "Owner-approved third-player Brown palette; not an original third NES playable slot"
+  },
+  "parts": [
+    {
+      "name": "BrownPowerFist",
+      "morphKind": "PowerFist",
+      "heroTemplate": "Mr. Brown",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -1.6800000000000002,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -6,
+        0,
+        0
+      ],
+      "layoutPurpose": "import orientation only; remove node layout offset before wrist/ankle binding",
+      "jointRootOrientation": "worldidentity",
+      "boundsStuds": [
+        [
+          -0.68,
+          -2.5771030577588445,
+          -1.8407878983991746
+        ],
+        [
+          0.68,
+          0.0,
+          0.7363151593596698
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.0,
+        -1.2885515288794223,
+        -0.5522363695197523
+      ],
+      "boundingBoxSizeStuds": [
+        1.36,
+        2.5771030577588445,
+        2.5771030577588445
+      ],
+      "triangles": 11390,
+      "authoringVertices": 5697,
+      "exportedVertices": 34170,
+      "sourceName": "GreenPowerFist",
+      "sourceGlb": "hero-attack-morphs.glb",
+      "sourceRig": "hero-attack-morphs-rig.json",
+      "sourceGlbSha256": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+      "geometryAndUVSha256": "ec3b951b4c44ea5a141d3b87df337f060f931cac1aafed1069c3dd48721d0552",
+      "sourceNodeTransform": {
+        "translation": [
+          -1.6800000000000002,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "name": "BrownBigBoot",
+      "morphKind": "BigBoot",
+      "heroTemplate": "Mr. Brown",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -0.56,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -2,
+        0,
+        0
+      ],
+      "layoutPurpose": "import orientation only; remove node layout offset before wrist/ankle binding",
+      "jointRootOrientation": "worldidentity",
+      "boundsStuds": [
+        [
+          -0.53,
+          -3.310532793683495,
+          -3.4946115835234126
+        ],
+        [
+          0.5300000000000001,
+          0.7334297359246507,
+          0.5493509460847332
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        5.551115123125783e-17,
+        -1.2885515288794223,
+        -1.4726303187193397
+      ],
+      "boundingBoxSizeStuds": [
+        1.06,
+        4.043962529608146,
+        4.043962529608146
+      ],
+      "triangles": 15028,
+      "authoringVertices": 7516,
+      "exportedVertices": 45084,
+      "sourceName": "GreenBigBoot",
+      "sourceGlb": "hero-attack-morphs.glb",
+      "sourceRig": "hero-attack-morphs-rig.json",
+      "sourceGlbSha256": "250a7dec19adba96c735b55164fc4d4e1fef9b5a595ce4fac59e8852dbc79f0e",
+      "geometryAndUVSha256": "53d7395533747e5b4cc81ccaa3dc79ac3d951765585cb0a42ed22bbe98d4a3e1",
+      "sourceNodeTransform": {
+        "translation": [
+          -0.56,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "name": "BrownFearBeforeCut",
+      "morphKind": "FearBeforeCut",
+      "heroTemplate": "Mr. Brown",
+      "attachmentName": "NeckRigAttachment",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -1.6800000000000002,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -6,
+        0,
+        0
+      ],
+      "layoutPurpose": "native import orientation only; subtract before neck binding",
+      "boundsStuds": [
+        [
+          -0.8017610517138093,
+          -4.243141598776,
+          -2.396964285508638
+        ],
+        [
+          0.9562026546639739,
+          1.803084654412088,
+          0.4261520233614544
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        0.07722080147508231,
+        -1.2200284721819559,
+        -0.9854061310735919
+      ],
+      "boundingBoxSizeStuds": [
+        1.757963706377783,
+        6.046226253188088,
+        2.823116308870093
+      ],
+      "heightStuds": 6.046226253188088,
+      "neckSpaceCenterStuds": [
+        0.07722080147508231,
+        -1.2200284721819559,
+        -0.9854061310735919
+      ],
+      "originAttachmentInIdentityBboxPartStuds": [
+        -0.07722080147508231,
+        1.2200284721819559,
+        0.9854061310735919
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "neckAxes": "identity"
+      },
+      "oldBoundsStuds": [
+        [
+          -0.816534215859359,
+          -0.19997041002392726,
+          -0.9950578377295201
+        ],
+        [
+          0.8613269618557594,
+          2.8815709378258716,
+          0.6387340281779424
+        ]
+      ],
+      "oldHeightStuds": 3.081541347849799,
+      "chinMinimumYChangeStuds": -4.043171188752073,
+      "upperMaximumYChangeStuds": -1.0784862834137836,
+      "closedConnectedOrientableComponents": 1,
+      "triangles": 16630,
+      "authoringVertices": 8311,
+      "exportedVertices": 49890,
+      "cavityNominalHeightStuds": 4.73,
+      "cavityNominalWidthStuds": 1.27,
+      "oldCavityNominalHeightStuds": 1.5670000000000002,
+      "oldCavityNominalWidthStuds": 0.79,
+      "cavityHeightRatioToOld": 3.018506700701978,
+      "cavityWidthRatioToOld": 1.6075949367088607,
+      "sourceName": "GreenFearBeforeCut",
+      "sourceGlb": "hero-fear-wide-mouth.glb",
+      "sourceRig": "hero-fear-wide-mouth-rig.json",
+      "sourceGlbSha256": "e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1",
+      "geometryAndUVSha256": "c0322d62f512ff161cb55c6788fd150f1ac01aa6292732c58c7a03a6f0bed46d",
+      "sourceNodeTransform": {
+        "translation": [
+          -1.6800000000000002,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "name": "BrownFearAfterCut",
+      "morphKind": "FearAfterCut",
+      "heroTemplate": "Mr. Brown",
+      "attachmentName": "NeckRigAttachment",
+      "attachmentOriginStuds": [
+        0,
+        0,
+        0
+      ],
+      "nodeTranslationMetres": [
+        -0.56,
+        0.0,
+        0.0
+      ],
+      "layoutOffsetStuds": [
+        -2,
+        0,
+        0
+      ],
+      "layoutPurpose": "native import orientation only; subtract before neck binding",
+      "boundsStuds": [
+        [
+          -1.0441784003928634,
+          -4.240071076807042,
+          -2.3953749286097543
+        ],
+        [
+          1.0441748388478447,
+          1.791374991010175,
+          0.4261520233614544
+        ]
+      ],
+      "boundingBoxCenterStuds": [
+        -1.7807725093410554e-06,
+        -1.2243480428984335,
+        -0.98461145262415
+      ],
+      "boundingBoxSizeStuds": [
+        2.088353239240708,
+        6.0314460678172175,
+        2.821526951971209
+      ],
+      "heightStuds": 6.0314460678172175,
+      "neckSpaceCenterStuds": [
+        -1.7807725093410554e-06,
+        -1.2243480428984335,
+        -0.98461145262415
+      ],
+      "originAttachmentInIdentityBboxPartStuds": [
+        1.7807725093410554e-06,
+        1.2243480428984335,
+        0.98461145262415
+      ],
+      "expectedOrientation": {
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ],
+        "neckAxes": "identity"
+      },
+      "oldBoundsStuds": [
+        [
+          -0.784073995528619,
+          -0.19997041002392726,
+          -0.9922109608339982
+        ],
+        [
+          0.784073995528619,
+          2.608411897858,
+          0.6399988710715444
+        ]
+      ],
+      "oldHeightStuds": 2.8083823078819274,
+      "chinMinimumYChangeStuds": -4.040100666783115,
+      "upperMaximumYChangeStuds": -0.8170369068478252,
+      "closedConnectedOrientableComponents": 1,
+      "triangles": 18066,
+      "authoringVertices": 9027,
+      "exportedVertices": 54198,
+      "cavityNominalHeightStuds": 4.73,
+      "cavityNominalWidthStuds": 1.65,
+      "oldCavityNominalHeightStuds": 1.36,
+      "oldCavityNominalWidthStuds": 0.98,
+      "cavityHeightRatioToOld": 3.4779411764705883,
+      "cavityWidthRatioToOld": 1.683673469387755,
+      "sourceName": "GreenFearAfterCut",
+      "sourceGlb": "hero-fear-wide-mouth.glb",
+      "sourceRig": "hero-fear-wide-mouth-rig.json",
+      "sourceGlbSha256": "e5dd859b9be454198046580a147f7d202fd5374502f0f860384d1590efa325c1",
+      "geometryAndUVSha256": "c876824a66410800b270f67577d588fb8bd1d8139a1ad7186a14235e53d08194",
+      "sourceNodeTransform": {
+        "translation": [
+          -0.56,
+          0.0,
+          0.0
+        ]
+      }
+    }
+  ],
+  "atlases": [
+    {
+      "sourceGlb": "hero-attack-morphs.glb",
+      "image": 0,
+      "size": [
+        2048,
+        2048
+      ],
+      "sourcePngSha256": "dde6ad8db658955e2c4dce98ba959523222a71d3307b0ffe47cc31ae6a575215",
+      "pngSha256": "b523db163d84fdebce808725f246ef9f21b91bb13231dbb306336455e1326028",
+      "brightGreenRemaining": 0,
+      "pixels": {
+        "changedPixels": 2188767,
+        "preservedPixels": 2005537,
+        "totalPixels": 4194304,
+        "method": "Selective green-hue linear tonal remap through source17/27 or approved Brown anchors",
+        "sourceGreenAnchors": [
+          110,
+          199
+        ],
+        "nonGreenTexelsByteIdentical": true,
+        "alphaByteIdentical": true
+      },
+      "redTongueDarkCavityTeethEyesPreserved": true
+    },
+    {
+      "sourceGlb": "hero-fear-wide-mouth.glb",
+      "image": 1,
+      "size": [
+        4096,
+        4096
+      ],
+      "sourcePngSha256": "e1bd20cc91aa3ac11fb0b8dec3f11a534bf87baa622b7ae498414dc05c27d3e6",
+      "pngSha256": "17592a60791db318d4af478d0f16b20adbdc826f9ea06cf99235435ec5484b6e",
+      "brightGreenRemaining": 0,
+      "pixels": {
+        "changedPixels": 13581956,
+        "preservedPixels": 3195260,
+        "totalPixels": 16777216,
+        "method": "Selective green-hue linear tonal remap through source17/27 or approved Brown anchors",
+        "sourceGreenAnchors": [
+          110,
+          199
+        ],
+        "nonGreenTexelsByteIdentical": true,
+        "alphaByteIdentical": true
+      },
+      "redTongueDarkCavityTeethEyesPreserved": true
+    }
+  ],
+  "units": {
+    "metadata": "Roblox studs",
+    "gltf": "metres",
+    "metresPerStud": 0.28
+  },
+  "validation": {
+    "oldGlbsPreserved": true,
+    "allFourGeometryUVsAndPivotsExact": true,
+    "nodes": 4,
+    "materials": 2,
+    "atlases": 2,
+    "COLOR_0": "absent",
+    "runtimeDimensionsOrAttachmentsChanged": false,
+    "nativeImport": "PENDING"
+  }
+}

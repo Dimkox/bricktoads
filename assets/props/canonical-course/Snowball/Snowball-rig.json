@@ -1,0 +1,373 @@
+{
+  "schema": 1,
+  "kind": "Snowball",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "assets/props/canonical-course/source/source-catalog.json",
+    "https://github.com/feos-tas/DisAssemble/tree/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads"
+  ],
+  "sourceFacts": [
+    "['Small round white ball with lavender shaded crescent/lower edge and dark contour.']"
+  ],
+  "inferred3D": [
+    "Source supplies only 2D contours, palette and identity; all depth, rear surfaces, mechanical thickness and rest pivots are authored.",
+    "System-only markers and environmental composition are explicitly identified in source catalog.",
+    "Cosmetic only. Existing physical colliders and gameplay actions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "Y-up, forward -Z. Flat closed segments. Model origin is authored reference pivot; see pack fit metadata.",
+  "bounds": [
+    [
+      -1.05,
+      -0.99,
+      -1.04
+    ],
+    [
+      1.05,
+      0.99,
+      1.04
+    ]
+  ],
+  "sourceTrace": {
+    "runtimeKind": "Snowball",
+    "sourceEvidence": [
+      {
+        "statement": "Handler and graphics assignments proved in pinned main.asm.",
+        "cacheFile": "main.asm",
+        "lines": "20837-20865;20993-21014"
+      }
+    ],
+    "status": "source-object-metasprite",
+    "sourceRefs": [
+      {
+        "cacheFile": "main.asm",
+        "lines": "20837-20865",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L20837-L20865"
+      },
+      {
+        "cacheFile": "main.asm",
+        "lines": "20993-21014",
+        "url": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/Battletoads%20%28U%29%20%5B%21%5D.asm#L20993-L21014"
+      }
+    ],
+    "sourceTypes": [
+      "3A"
+    ],
+    "graphicsFrameIds": [
+      "75"
+    ],
+    "palette": {
+      "typeId": 58,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:281",
+      "trigger": [
+        1,
+        108
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        35,
+        32
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:258",
+          "trigger": [
+            0,
+            0
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            35,
+            32
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ],
+      "rgbIsIllustrative": true,
+      "scope": "Representative authored trigger snapshot; not a complete live palette trace."
+    },
+    "rgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "frames": [
+      {
+        "frameId": 117,
+        "frameHex": "75",
+        "namespace": "object",
+        "metaspriteAddress": "B654",
+        "parts": [
+          {
+            "tile": 172,
+            "x": -4,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 173,
+            "x": -2,
+            "y": -3,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 174,
+            "x": -5,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          },
+          {
+            "tile": 175,
+            "x": -1,
+            "y": 5,
+            "attributes": 3,
+            "paletteSlot": 3
+          }
+        ],
+        "visibleBounds": {
+          "minX": -5,
+          "minY": 1,
+          "maxX": 6,
+          "maxY": 12
+        },
+        "width": 12,
+        "height": 12,
+        "png": "frames/snowball-75.png"
+      }
+    ],
+    "appearanceCues": [
+      "Small round white ball with lavender shaded crescent/lower edge and dark contour."
+    ],
+    "runtimeRole": "moving ice hazard",
+    "adaptationLimits": [
+      "All 3D depth, back faces and runtime proportions are authored."
+    ],
+    "runtimeRefs": [
+      {
+        "localFile": "src/server/gameplay/CampaignDefinition.lua",
+        "lines": [
+          99
+        ]
+      }
+    ],
+    "sourceHandler": "object_snowball / electro_or_snow_gfx",
+    "bankRecipe": "Ice",
+    "bankLoads": [
+      {
+        "file": "gfx/sprite0.chr",
+        "firstTile": 0,
+        "tiles": 33,
+        "decodedCompleteTiles": 33,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/game_std.chr",
+        "firstTile": 33,
+        "tiles": 9,
+        "decodedCompleteTiles": 9,
+        "unknownTailBytes": 0,
+        "compression": 0
+      },
+      {
+        "file": "gfx/snowman.4",
+        "firstTile": 42,
+        "tiles": 45,
+        "decodedCompleteTiles": 45,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/level4_obj.4",
+        "firstTile": 87,
+        "tiles": 95,
+        "decodedCompleteTiles": 95,
+        "unknownTailBytes": 0,
+        "compression": 4
+      },
+      {
+        "file": "gfx/level4_obj2.4",
+        "firstTile": 182,
+        "tiles": 55,
+        "decodedCompleteTiles": 47,
+        "unknownTailBytes": 126,
+        "compression": 4
+      },
+      {
+        "file": "gfx/byte_BC65.chr",
+        "firstTile": 234,
+        "tiles": 22,
+        "compression": 0,
+        "override": true
+      }
+    ],
+    "unknown": [],
+    "contactSheet": "snowball-source.png"
+  },
+  "sourcePalette": {
+    "scope": "Source-informed palette roles; authored3D surface atlas. Source records distinguish exact object, background and system adaptation.",
+    "sourceRgbColors": [
+      [
+        18,
+        19,
+        20
+      ],
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "sourceCatalogSha256": "171df6ec3eb594b43e7c9fd6879f2c0488fe28afa86c0c3f65f9325854f4aab7",
+    "mapping": "Authored material role RGB is mapped to nearest evidenced representative source RGB by squared RGB distance; Buzzball reuses the previously verified cast palette. The original palette atlas contains color swatches only; no source sprite image is embedded."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.05,
+          -0.99,
+          -1.04
+        ],
+        [
+          1.05,
+          0.99,
+          1.04
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.05,
+          -0.99,
+          -1.04
+        ],
+        [
+          1.05,
+          0.99,
+          1.04
+        ]
+      ],
+      "vertices": 222,
+      "authoringVertices": 222,
+      "paletteSplitTriangles": 0,
+      "triangles": 440,
+      "role": "Snow"
+    },
+    {
+      "name": "PackedRidges",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -0.759675570360162,
+          -0.8410943132309223,
+          -1.037318802356845
+        ],
+        [
+          0.7593001450676997,
+          0.8410943132309223,
+          -0.2295168976298568
+        ]
+      ],
+      "globalBounds": [
+        [
+          -0.759675570360162,
+          -0.8410943132309223,
+          -1.037318802356845
+        ],
+        [
+          0.7593001450676997,
+          0.8410943132309223,
+          -0.2295168976298568
+        ]
+      ],
+      "vertices": 222,
+      "authoringVertices": 222,
+      "paletteSplitTriangles": 0,
+      "triangles": 432,
+      "role": "Pattern"
+    }
+  ],
+  "joints": [],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        176,
+        98,
+        236
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 872,
+    "vertices": 444,
+    "closedComponents": true,
+    "components": 4,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.0005412658773652733
+  }
+}

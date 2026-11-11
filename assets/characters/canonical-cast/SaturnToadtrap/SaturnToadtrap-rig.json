@@ -1,0 +1,520 @@
+{
+  "schema": 1,
+  "kind": "SaturnToadtrap",
+  "status": "source-informed-authored3d-pending-native-review",
+  "sourcePin": "f1a43b69577246850d136473700a333b3cdfe93f",
+  "sourceReference": [
+    "research/canonical-visuals/cast-contact-sheets/saturntoadtrap.png",
+    "research/canonical-visuals/cast-source-catalog.json"
+  ],
+  "sourceFacts": [
+    "Graphics5D/5E show a yellow/white compact clamshell trap with two toothed jaws and a dark recessed mouth; no humanoid limbs."
+  ],
+  "inferred3D": [
+    "All depth, unseen rear surfaces, rest pivots and 3D joint angles are authored adaptations of2D source.",
+    "Neutral stance is for articulated runtime playback, not a claim of exact canonical3D anatomy.",
+    "Cosmetic only; collider health, physics and gameplay dimensions remain external."
+  ],
+  "metresPerStud": 0.28,
+  "coordinateSystem": "right-handed Y-up, forward -Z; root at existing torso collider centre",
+  "bounds": [
+    [
+      -1.9220338983050849,
+      -1.4,
+      -2.016949152542373
+    ],
+    [
+      1.9220338983050849,
+      1.4,
+      1.6847457627118643
+    ]
+  ],
+  "sourceTrace": {
+    "namespace": "object",
+    "bankRecipe": "Wookie",
+    "sourceEvidence": "main.asm:10191-10386;anims42/44/4C/54/56",
+    "frames": [
+      {
+        "frameId": 93,
+        "width": 19,
+        "height": 16,
+        "visibleBounds": {
+          "minX": -5,
+          "minY": -7,
+          "maxX": 13,
+          "maxY": 8
+        },
+        "referencePng": "cast-frames/saturntoadtrap-5d.png"
+      },
+      {
+        "frameId": 94,
+        "width": 18,
+        "height": 20,
+        "visibleBounds": {
+          "minX": -2,
+          "minY": -7,
+          "maxX": 15,
+          "maxY": 12
+        },
+        "referencePng": "cast-frames/saturntoadtrap-5e.png"
+      }
+    ]
+  },
+  "sourcePalette": {
+    "paletteIndices": [
+      15,
+      15,
+      10,
+      26,
+      15,
+      15,
+      23,
+      39,
+      15,
+      24,
+      40,
+      32,
+      15,
+      15,
+      28,
+      44
+    ],
+    "actorPaletteXor": 0,
+    "selectedPaletteContext": {
+      "typeId": 45,
+      "actorPaletteXor": 0,
+      "source": "levels_cfgs1.asm:53",
+      "trigger": [
+        2,
+        124
+      ],
+      "paletteIndices": [
+        15,
+        15,
+        10,
+        26,
+        15,
+        15,
+        23,
+        39,
+        15,
+        24,
+        40,
+        32,
+        15,
+        15,
+        28,
+        44
+      ],
+      "paletteWrites": [
+        {
+          "source": "levels_cfgs1.asm:48",
+          "trigger": [
+            0,
+            32
+          ],
+          "paletteRamOffset": 28,
+          "colorCodes": [
+            15,
+            28,
+            44
+          ],
+          "delayCounter": 0,
+          "sourceHandler": "main.asm:9213-9306"
+        }
+      ]
+    },
+    "sourceSlotPrimary": 2,
+    "initialToEffectivePaletteMap": [
+      {
+        "sourceSlot": 0,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 2,
+        "initialNesCode": 10,
+        "initialRgb": [
+          0,
+          102,
+          0
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 10,
+        "effectiveRgb": [
+          0,
+          102,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 0,
+        "pixelCode": 3,
+        "initialNesCode": 26,
+        "initialRgb": [
+          88,
+          184,
+          44
+        ],
+        "effectiveSlot": 0,
+        "effectiveNesCode": 26,
+        "effectiveRgb": [
+          88,
+          184,
+          44
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 2,
+        "initialNesCode": 23,
+        "initialRgb": [
+          155,
+          83,
+          0
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 23,
+        "effectiveRgb": [
+          155,
+          83,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 1,
+        "pixelCode": 3,
+        "initialNesCode": 39,
+        "initialRgb": [
+          250,
+          160,
+          66
+        ],
+        "effectiveSlot": 1,
+        "effectiveNesCode": 39,
+        "effectiveRgb": [
+          250,
+          160,
+          66
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 1,
+        "initialNesCode": 24,
+        "initialRgb": [
+          117,
+          118,
+          0
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 24,
+        "effectiveRgb": [
+          117,
+          118,
+          0
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 2,
+        "initialNesCode": 40,
+        "initialRgb": [
+          205,
+          202,
+          62
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 40,
+        "effectiveRgb": [
+          205,
+          202,
+          62
+        ]
+      },
+      {
+        "sourceSlot": 2,
+        "pixelCode": 3,
+        "initialNesCode": 32,
+        "initialRgb": [
+          255,
+          255,
+          255
+        ],
+        "effectiveSlot": 2,
+        "effectiveNesCode": 32,
+        "effectiveRgb": [
+          255,
+          255,
+          255
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 1,
+        "initialNesCode": 15,
+        "initialRgb": [
+          18,
+          19,
+          20
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 15,
+        "effectiveRgb": [
+          18,
+          19,
+          20
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 2,
+        "initialNesCode": 22,
+        "initialRgb": [
+          180,
+          0,
+          0
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 28,
+        "effectiveRgb": [
+          0,
+          102,
+          120
+        ]
+      },
+      {
+        "sourceSlot": 3,
+        "pixelCode": 3,
+        "initialNesCode": 38,
+        "initialRgb": [
+          255,
+          100,
+          97
+        ],
+        "effectiveSlot": 3,
+        "effectiveNesCode": 44,
+        "effectiveRgb": [
+          56,
+          180,
+          204
+        ]
+      }
+    ],
+    "variantCount": 4,
+    "limitation": "Representative authored spawn palette only; other source palette variants remain catalogued and are not claimed identical."
+  },
+  "parts": [
+    {
+      "name": "Body",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localBounds": [
+        [
+          -1.9220338983050849,
+          -1.4,
+          -1.0203389830508474
+        ],
+        [
+          1.9220338983050849,
+          1.4,
+          1.6847457627118643
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.9220338983050849,
+          -1.4,
+          -1.0203389830508474
+        ],
+        [
+          1.9220338983050849,
+          1.4,
+          1.6847457627118643
+        ]
+      ],
+      "vertices": 314,
+      "authoringVertices": 314,
+      "paletteSplitTriangles": 0,
+      "triangles": 624
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        0.5220338983050847,
+        -0.28474576271186436
+      ],
+      "localBounds": [
+        [
+          -1.8508474576271186,
+          -0.5457627118644067,
+          -1.7322033898305085
+        ],
+        [
+          1.8508474576271186,
+          0.7830508474576272,
+          0.6406779661016949
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.8508474576271186,
+          -0.023728813559322035,
+          -2.016949152542373
+        ],
+        [
+          1.8508474576271186,
+          1.305084745762712,
+          0.35593220338983056
+        ]
+      ],
+      "vertices": 522,
+      "authoringVertices": 522,
+      "paletteSplitTriangles": 0,
+      "triangles": 1008
+    },
+    {
+      "name": "Jaw",
+      "parent": "Body",
+      "pivot": [
+        0.0,
+        -0.09491525423728814,
+        0.04745762711864407
+      ],
+      "localBounds": [
+        [
+          -1.8508474576271186,
+          -0.9966101694915253,
+          -2.064406779661017
+        ],
+        [
+          1.8508474576271186,
+          0.20169491525423727,
+          0.30847457627118646
+        ]
+      ],
+      "globalBounds": [
+        [
+          -1.8508474576271186,
+          -1.0915254237288134,
+          -2.016949152542373
+        ],
+        [
+          1.8508474576271186,
+          0.10677966101694915,
+          0.35593220338983056
+        ]
+      ],
+      "vertices": 664,
+      "authoringVertices": 664,
+      "paletteSplitTriangles": 0,
+      "triangles": 1288
+    }
+  ],
+  "joints": [
+    {
+      "name": "Head",
+      "parent": "Body",
+      "child": "Head",
+      "parentAttachment": [
+        0.0,
+        0.5220338983050847,
+        -0.28474576271186436
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Jaw",
+      "parent": "Body",
+      "child": "Jaw",
+      "parentAttachment": [
+        0.0,
+        -0.09491525423728814,
+        0.04745762711864407
+      ],
+      "childAttachment": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "surface": {
+    "embeddedTexture": true,
+    "paletteColors": [
+      [
+        117,
+        118,
+        0
+      ],
+      [
+        205,
+        202,
+        62
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "atlasResolution": [
+      32,
+      32
+    ],
+    "COLOR_0": "omitted; source-inspired sRGB colour baked into palette texture",
+    "uvSafety": "Each triangle has a constant UV inside one16x16palette cell. Mixed-colour source-profile triangles are split and quantised to their majority colour; positions/normals unchanged.",
+    "paletteSplitTriangles": 0
+  },
+  "validation": {
+    "status": "PASS",
+    "triangles": 2920,
+    "vertices": 1500,
+    "closedComponents": true,
+    "components": 20,
+    "allFinite": true,
+    "unitNormals": true,
+    "validIndices": true,
+    "minimumDoubledTriangleArea": 0.000633438667049689
+  }
+}
