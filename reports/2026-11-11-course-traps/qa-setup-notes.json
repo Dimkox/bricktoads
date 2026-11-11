@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "scope": "Disposable QA setup issues, distinct from the final successful gameplay run",
+  "initialNavigationImport": {
+    "error": "Evaluate this helper on a client, route_navigation line236; bridge did not start",
+    "cause": "The complete client navigation utility was installed as a server ModuleScript",
+    "correction": "The pure Nav module prefix was extracted at its existing if-not-game guard and returned before all client side effects",
+    "productionSourceChanged": false,
+    "gameplayRunStarted": false
+  },
+  "preparedPortraitTextureWarmup": {
+    "initialFrame": "Some newly created Edit portraits initially showed grey unloaded textures",
+    "finalCheck": "All checked image resources reported Success, and a later native photograph showed the intended palettes",
+    "finalScreenshot": "native-portraits.jpg"
+  }
+}

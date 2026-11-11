@@ -1,0 +1,1384 @@
+{
+  "schema": 1,
+  "runId": "bricktoads-traps30-0-up4t2x",
+  "seed": 1158731273,
+  "sourceBuild": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+  "inputs": {
+    "terminal-archive": {
+      "file": "campaign30-terminal-archive.json",
+      "bytes": 1087995,
+      "sha256": "faa286d01c4148f1710fec95196226a0be155808407587e5b0791ffd80210a60"
+    },
+    "terminal-samples": {
+      "file": "campaign30-terminal-samples.json",
+      "bytes": 4228131,
+      "sha256": "66a65e35f82666293b1f6a4a60f6cc45f21d3cc3e3d36a88bd903a242e080b3b"
+    },
+    "client-props": {
+      "file": "campaign30-client-props.json",
+      "bytes": 86180,
+      "sha256": "7e3dfdfa87ad8e5bf88a3306484fe4613287620a155009d38e700b14c82a6265"
+    },
+    "client-av": {
+      "file": "campaign30-client-av.json",
+      "bytes": 1624967,
+      "sha256": "6091e5c2c38f215b0fc006b7bcbf920e6a69e0d64898f2c0ec295d4bfa37b47d"
+    },
+    "presentation": {
+      "file": "campaign30-presentation.json",
+      "bytes": 144815,
+      "sha256": "4968b22a5626f846d8b48f936689a009b5e9929d6edbedc3e745161940a724a1"
+    },
+    "heading": {
+      "file": "campaign30-heading.json",
+      "bytes": 49047,
+      "sha256": "466843b64796f515575621334558cf7d945b7dbc74bd3b1df77ea998cdea2619"
+    },
+    "console": {
+      "file": "campaign30-console.json",
+      "bytes": 20311,
+      "sha256": "ec931c084699299b288cc240e68709f29d512cab0bf452c76eae802d766a5082"
+    }
+  },
+  "terminal": {
+    "result": "Won",
+    "running": false,
+    "orderedStages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "sampleCount": 791,
+    "archiveSelectedSamples": 201,
+    "elapsedSeconds": 828.331405878067,
+    "attemptsByStage": {
+      "1": 1,
+      "2": 2,
+      "3": 2,
+      "4": 2,
+      "5": 2,
+      "6": 2,
+      "7": 2,
+      "8": 2,
+      "9": 2,
+      "10": 3,
+      "11": 3,
+      "12": 3,
+      "13": 3
+    },
+    "finalCohort": [
+      {
+        "ownerUserId": 11946162891,
+        "actorId": "bricktoads-traps30-0-up4t2x:actor:264",
+        "slot": 1,
+        "status": "Alive",
+        "rawLife": 47,
+        "stock": 3,
+        "attempt": 3
+      }
+    ],
+    "deathEvents": 2,
+    "commitSpawnEvents": 3,
+    "diagnosticErrors": [],
+    "policyLoads": 1,
+    "godMode": {
+      "allowed": true,
+      "configured": true,
+      "attribute": true,
+      "infiniteHeroes": 1
+    },
+    "scope": "Actual ordinary Play input-only automated single-player run with explicitly enabled God mode. Not a human or God-off acceptance run."
+  },
+  "props": {
+    "observerSamples": 1765,
+    "observedFamilies": 27,
+    "requiredFamilies": 28,
+    "naturalObservedKinds": [
+      "AirMine",
+      "BoardingPad",
+      "Bomb",
+      "ElectricTrap",
+      "Fan",
+      "Gas",
+      "Gear",
+      "IceBlock",
+      "Icicle",
+      "Lift",
+      "Log",
+      "Mine",
+      "MovingIcePlatform",
+      "Ramp",
+      "Rocket",
+      "RocketLauncher",
+      "Rope",
+      "RotatingSpike",
+      "Snowball",
+      "Spike",
+      "Spring",
+      "Telegraph",
+      "Tower",
+      "TowerPlatform",
+      "Warning",
+      "Water",
+      "Whirlpool"
+    ],
+    "readyKinds": [
+      "AirMine",
+      "BoardingPad",
+      "Bomb",
+      "ElectricTrap",
+      "Fan",
+      "Gas",
+      "Gear",
+      "IceBlock",
+      "Icicle",
+      "Lift",
+      "Log",
+      "Mine",
+      "MovingIcePlatform",
+      "Ramp",
+      "Rocket",
+      "RocketLauncher",
+      "Rope",
+      "RotatingSpike",
+      "Snowball",
+      "Spike",
+      "Spring",
+      "Telegraph",
+      "Tower",
+      "TowerPlatform",
+      "Warning",
+      "Water",
+      "Whirlpool"
+    ],
+    "unobservedPropKinds": [
+      "Buzzball"
+    ],
+    "maxFailed": 0,
+    "errors": [],
+    "families": {
+      "AirMine": {
+        "stages": [
+          7
+        ],
+        "observations": 38,
+        "readySamples": 32,
+        "maxReady": 4,
+        "maxPending": 4,
+        "maxFailed": 0,
+        "maxVisible": 504,
+        "maxMeshes": 504
+      },
+      "BoardingPad": {
+        "stages": [
+          3,
+          5,
+          7
+        ],
+        "observations": 245,
+        "readySamples": 238,
+        "maxReady": 1,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 3,
+        "maxMeshes": 3
+      },
+      "Bomb": {
+        "stages": [
+          10
+        ],
+        "observations": 301,
+        "readySamples": 295,
+        "maxReady": 3,
+        "maxPending": 3,
+        "maxFailed": 0,
+        "maxVisible": 15,
+        "maxMeshes": 15
+      },
+      "ElectricTrap": {
+        "stages": [
+          2,
+          8
+        ],
+        "observations": 210,
+        "readySamples": 204,
+        "maxReady": 3,
+        "maxPending": 3,
+        "maxFailed": 0,
+        "maxVisible": 9,
+        "maxMeshes": 9
+      },
+      "Fan": {
+        "stages": [
+          8
+        ],
+        "observations": 165,
+        "readySamples": 164,
+        "maxReady": 2,
+        "maxPending": 2,
+        "maxFailed": 0,
+        "maxVisible": 8,
+        "maxMeshes": 8
+      },
+      "Gas": {
+        "stages": [
+          8,
+          10
+        ],
+        "observations": 466,
+        "readySamples": 465,
+        "maxReady": 4,
+        "maxPending": 4,
+        "maxFailed": 0,
+        "maxVisible": 16,
+        "maxMeshes": 16
+      },
+      "Gear": {
+        "stages": [
+          9
+        ],
+        "observations": 71,
+        "readySamples": 65,
+        "maxReady": 3,
+        "maxPending": 3,
+        "maxFailed": 0,
+        "maxVisible": 9,
+        "maxMeshes": 9
+      },
+      "IceBlock": {
+        "stages": [
+          4
+        ],
+        "observations": 30,
+        "readySamples": 24,
+        "maxReady": 2,
+        "maxPending": 2,
+        "maxFailed": 0,
+        "maxVisible": 6,
+        "maxMeshes": 6
+      },
+      "Icicle": {
+        "stages": [
+          4
+        ],
+        "observations": 30,
+        "readySamples": 25,
+        "maxReady": 2,
+        "maxPending": 2,
+        "maxFailed": 0,
+        "maxVisible": 8,
+        "maxMeshes": 8
+      },
+      "Lift": {
+        "stages": [
+          8
+        ],
+        "observations": 165,
+        "readySamples": 159,
+        "maxReady": 1,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 4,
+        "maxMeshes": 4
+      },
+      "Log": {
+        "stages": [
+          5
+        ],
+        "observations": 168,
+        "readySamples": 162,
+        "maxReady": 4,
+        "maxPending": 4,
+        "maxFailed": 0,
+        "maxVisible": 80,
+        "maxMeshes": 80
+      },
+      "Mine": {
+        "stages": [
+          5
+        ],
+        "observations": 168,
+        "readySamples": 162,
+        "maxReady": 4,
+        "maxPending": 4,
+        "maxFailed": 0,
+        "maxVisible": 64,
+        "maxMeshes": 64
+      },
+      "MovingIcePlatform": {
+        "stages": [
+          4
+        ],
+        "observations": 30,
+        "readySamples": 29,
+        "maxReady": 1,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 5,
+        "maxMeshes": 5
+      },
+      "Ramp": {
+        "stages": [
+          3
+        ],
+        "observations": 39,
+        "readySamples": 33,
+        "maxReady": 6,
+        "maxPending": 6,
+        "maxFailed": 0,
+        "maxVisible": 18,
+        "maxMeshes": 18
+      },
+      "Rocket": {
+        "stages": [
+          5,
+          7
+        ],
+        "observations": 50,
+        "readySamples": 45,
+        "maxReady": 5,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 25,
+        "maxMeshes": 25
+      },
+      "RocketLauncher": {
+        "stages": [
+          5,
+          7
+        ],
+        "observations": 181,
+        "readySamples": 179,
+        "maxReady": 3,
+        "maxPending": 3,
+        "maxFailed": 0,
+        "maxVisible": 15,
+        "maxMeshes": 15
+      },
+      "Rope": {
+        "stages": [
+          2
+        ],
+        "observations": 45,
+        "readySamples": 38,
+        "maxReady": 1,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 3,
+        "maxMeshes": 3
+      },
+      "RotatingSpike": {
+        "stages": [
+          12
+        ],
+        "observations": 39,
+        "readySamples": 37,
+        "maxReady": 3,
+        "maxPending": 3,
+        "maxFailed": 0,
+        "maxVisible": 27,
+        "maxMeshes": 27
+      },
+      "Snowball": {
+        "stages": [
+          4
+        ],
+        "observations": 30,
+        "readySamples": 25,
+        "maxReady": 2,
+        "maxPending": 2,
+        "maxFailed": 0,
+        "maxVisible": 4,
+        "maxMeshes": 4
+      },
+      "Spike": {
+        "stages": [
+          4,
+          5,
+          6
+        ],
+        "observations": 96,
+        "readySamples": 94,
+        "maxReady": 4,
+        "maxPending": 4,
+        "maxFailed": 0,
+        "maxVisible": 12,
+        "maxMeshes": 12
+      },
+      "Spring": {
+        "stages": [
+          8,
+          12
+        ],
+        "observations": 204,
+        "readySamples": 198,
+        "maxReady": 2,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 8,
+        "maxMeshes": 8
+      },
+      "Telegraph": {
+        "stages": [
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "observations": 209,
+        "readySamples": 205,
+        "maxReady": 2,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 6,
+        "maxMeshes": 6
+      },
+      "Tower": {
+        "stages": [
+          12
+        ],
+        "observations": 39,
+        "readySamples": 33,
+        "maxReady": 1,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 4,
+        "maxMeshes": 4
+      },
+      "TowerPlatform": {
+        "stages": [
+          12
+        ],
+        "observations": 39,
+        "readySamples": 33,
+        "maxReady": 19,
+        "maxPending": 19,
+        "maxFailed": 0,
+        "maxVisible": 76,
+        "maxMeshes": 76
+      },
+      "Warning": {
+        "stages": [
+          3,
+          5,
+          7
+        ],
+        "observations": 246,
+        "readySamples": 240,
+        "maxReady": 12,
+        "maxPending": 12,
+        "maxFailed": 0,
+        "maxVisible": 36,
+        "maxMeshes": 36
+      },
+      "Water": {
+        "stages": [
+          5,
+          9
+        ],
+        "observations": 239,
+        "readySamples": 233,
+        "maxReady": 2,
+        "maxPending": 1,
+        "maxFailed": 0,
+        "maxVisible": 6,
+        "maxMeshes": 6
+      },
+      "Whirlpool": {
+        "stages": [
+          5
+        ],
+        "observations": 168,
+        "readySamples": 167,
+        "maxReady": 4,
+        "maxPending": 4,
+        "maxFailed": 0,
+        "maxVisible": 16,
+        "maxMeshes": 16
+      }
+    },
+    "stages": [
+      {
+        "index": 1,
+        "samples": 337,
+        "maxMeshes": 0,
+        "maxSkins": 0,
+        "kinds": [],
+        "pendingFamilies": {},
+        "failedFamilies": {}
+      },
+      {
+        "index": 2,
+        "samples": 45,
+        "maxMeshes": 18,
+        "maxSkins": 6,
+        "kinds": [
+          "ElectricTrap",
+          "Rope",
+          "Telegraph"
+        ],
+        "pendingFamilies": {
+          "Telegraph": 1,
+          "ElectricTrap": 3,
+          "Rope": 1
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 3,
+        "samples": 40,
+        "maxMeshes": 60,
+        "maxSkins": 20,
+        "kinds": [
+          "BoardingPad",
+          "Ramp",
+          "Telegraph",
+          "Warning"
+        ],
+        "pendingFamilies": {
+          "Warning": 12,
+          "Ramp": 6,
+          "BoardingPad": 1
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 4,
+        "samples": 30,
+        "maxMeshes": 32,
+        "maxSkins": 10,
+        "kinds": [
+          "IceBlock",
+          "Icicle",
+          "MovingIcePlatform",
+          "Snowball",
+          "Spike",
+          "Telegraph"
+        ],
+        "pendingFamilies": {
+          "Icicle": 2,
+          "IceBlock": 2,
+          "Snowball": 2,
+          "Spike": 2,
+          "MovingIcePlatform": 1
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 5,
+        "samples": 169,
+        "maxMeshes": 222,
+        "maxSkins": 30,
+        "kinds": [
+          "BoardingPad",
+          "Log",
+          "Mine",
+          "Rocket",
+          "RocketLauncher",
+          "Spike",
+          "Telegraph",
+          "Warning",
+          "Water",
+          "Whirlpool"
+        ],
+        "pendingFamilies": {
+          "Rocket": 1,
+          "RocketLauncher": 3,
+          "Water": 1,
+          "Telegraph": 1,
+          "Log": 4,
+          "Whirlpool": 4,
+          "Spike": 4,
+          "Mine": 4
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 6,
+        "samples": 65,
+        "maxMeshes": 12,
+        "maxSkins": 4,
+        "kinds": [
+          "Spike"
+        ],
+        "pendingFamilies": {},
+        "failedFamilies": {}
+      },
+      {
+        "index": 7,
+        "samples": 38,
+        "maxMeshes": 583,
+        "maxSkins": 25,
+        "kinds": [
+          "AirMine",
+          "BoardingPad",
+          "Rocket",
+          "RocketLauncher",
+          "Telegraph",
+          "Warning"
+        ],
+        "pendingFamilies": {
+          "Rocket": 1,
+          "AirMine": 4
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 8,
+        "samples": 165,
+        "maxMeshes": 41,
+        "maxSkins": 11,
+        "kinds": [
+          "ElectricTrap",
+          "Fan",
+          "Gas",
+          "Lift",
+          "Spring",
+          "Telegraph"
+        ],
+        "pendingFamilies": {
+          "Spring": 1,
+          "Lift": 1,
+          "Fan": 2,
+          "Gas": 4
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 9,
+        "samples": 71,
+        "maxMeshes": 18,
+        "maxSkins": 6,
+        "kinds": [
+          "Gear",
+          "Telegraph",
+          "Water"
+        ],
+        "pendingFamilies": {
+          "Gear": 3
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 10,
+        "samples": 302,
+        "maxMeshes": 33,
+        "maxSkins": 8,
+        "kinds": [
+          "Bomb",
+          "Gas",
+          "Telegraph"
+        ],
+        "pendingFamilies": {
+          "Telegraph": 1,
+          "Bomb": 3
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 11,
+        "samples": 188,
+        "maxMeshes": 3,
+        "maxSkins": 1,
+        "kinds": [
+          "Telegraph"
+        ],
+        "pendingFamilies": {},
+        "failedFamilies": {}
+      },
+      {
+        "index": 12,
+        "samples": 39,
+        "maxMeshes": 121,
+        "maxSkins": 27,
+        "kinds": [
+          "RotatingSpike",
+          "Spring",
+          "Telegraph",
+          "Tower",
+          "TowerPlatform"
+        ],
+        "pendingFamilies": {
+          "RotatingSpike": 3,
+          "TowerPlatform": 19,
+          "Tower": 1
+        },
+        "failedFamilies": {}
+      },
+      {
+        "index": 13,
+        "samples": 276,
+        "maxMeshes": 3,
+        "maxSkins": 1,
+        "kinds": [
+          "Telegraph"
+        ],
+        "pendingFamilies": {},
+        "failedFamilies": {}
+      }
+    ],
+    "preparedCatalog": {
+      "input": "prepared-client-after-motion.json",
+      "scope": "Prepared persistent catalog, actual production client gate",
+      "families": 28,
+      "readyFamilies": 28,
+      "visibleMeshes": 257,
+      "visibleFallbacks": 0,
+      "gate": {
+        "tracked": 28,
+        "destroyed": false,
+        "pending": 0,
+        "failed": 0,
+        "ready": 28
+      },
+      "interpretation": "Prepared persistent catalog evidence; this is separate from actual course-created streaming samples."
+    },
+    "buzzballContext": {
+      "propKindObserved": false,
+      "actualBossCastObserved": true,
+      "sourcePoseObservations": 877,
+      "namespace": [
+        "heroStatic:Clinger"
+      ],
+      "states": {
+        "Reaction": 351,
+        "Active": 119,
+        "Tell": 64,
+        "Recovery": 83,
+        "Ready": 39,
+        "Chase": 221
+      }
+    },
+    "readinessLimits": [
+      "Every observed family has Ready samples; this does not prove that every individual short-lived instance loaded before despawn.",
+      "Stage kind maxima retain the full observation period; detailed frame history retains only the last 12 frames per stage.",
+      "Prepared catalog timestamps predate the run; a cold-cache asset-loading test is not established.",
+      "Gate Ready and effective local visibility are resource/alpha evidence, not a pixel-level proof of every texture representation."
+    ]
+  },
+  "bossPhases": {
+    "from": "campaign30-terminal-archive.json selected observations; phase transitions are retained by archive selection",
+    "families": {
+      "BigBlag": {
+        "stage": 5,
+        "phases": [
+          1,
+          2,
+          3
+        ],
+        "states": [
+          "Active",
+          "Reaction",
+          "Ready",
+          "Recovery",
+          "Tell"
+        ],
+        "attacks": [
+          "BellyDrop"
+        ],
+        "archiveSamples": 16,
+        "defeatedEventCount": 1,
+        "attackEventCount": 16,
+        "attackEventPhaseCounts": {
+          "1": 4,
+          "2": 4,
+          "3": 8
+        },
+        "attackEventKinds": {
+          "BellyDrop": 6,
+          "Hop": 10
+        }
+      },
+      "RoboManus": {
+        "stage": 8,
+        "phases": [
+          1,
+          2
+        ],
+        "states": [
+          "Active",
+          "Reaction",
+          "Ready",
+          "Recovery",
+          "Tell"
+        ],
+        "attacks": [
+          "Burst",
+          "Jump"
+        ],
+        "archiveSamples": 16,
+        "defeatedEventCount": 1,
+        "attackEventCount": 21,
+        "attackEventPhaseCounts": {
+          "1": 10,
+          "2": 11
+        },
+        "attackEventKinds": {
+          "Burst": 11,
+          "Jump": 10
+        }
+      },
+      "GeneralSlaughter": {
+        "stage": 10,
+        "phases": [
+          1,
+          2
+        ],
+        "states": [
+          "Active",
+          "Reaction",
+          "Ready",
+          "Recovery",
+          "Tell"
+        ],
+        "attacks": [
+          "Charge",
+          "Headbutt"
+        ],
+        "archiveSamples": 28,
+        "defeatedEventCount": 1,
+        "attackEventCount": 60,
+        "attackEventPhaseCounts": {
+          "1": 38,
+          "2": 22
+        },
+        "attackEventKinds": {
+          "Charge": 30,
+          "Headbutt": 30
+        }
+      },
+      "Buzzball": {
+        "stage": 11,
+        "phases": [
+          1,
+          2
+        ],
+        "states": [
+          "Active",
+          "Chase",
+          "Reaction",
+          "Tell"
+        ],
+        "attacks": [
+          "Bounce"
+        ],
+        "archiveSamples": 21,
+        "defeatedEventCount": 1,
+        "attackEventCount": 14,
+        "attackEventPhaseCounts": {
+          "1": 5,
+          "2": 9
+        },
+        "attackEventKinds": {
+          "Bounce": 7,
+          "Roll": 7
+        }
+      },
+      "DarkQueen": {
+        "stage": 13,
+        "phases": [
+          1,
+          2
+        ],
+        "states": [
+          "Active",
+          "Reaction",
+          "Ready",
+          "Recovery",
+          "Tell"
+        ],
+        "attacks": [
+          "Spin",
+          "Sweep"
+        ],
+        "archiveSamples": 38,
+        "defeatedEventCount": 1,
+        "attackEventCount": 23,
+        "attackEventPhaseCounts": {
+          "1": 12,
+          "2": 11
+        },
+        "attackEventKinds": {
+          "Spin": 11,
+          "Sweep": 12
+        }
+      }
+    },
+    "guardian": {
+      "stage": 1,
+      "maxObservedBallHits": 3,
+      "ballPickedUp": 3,
+      "ballThrown": 3,
+      "bossHitEvents": 3,
+      "limit": "Causeway Guardian uses guardianHits instead of the campaign bossPhase sample field.",
+      "completionEvidence": "Three GuardianBallPickedUp, three GuardianBallThrown, three BossHit, and stage1 CampaignStageCompleted event.",
+      "stageCompletedEventCount": 1
+    }
+  },
+  "presentation": {
+    "samples": 8188,
+    "sourceMatches": true,
+    "expectedSource": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+    "observedSource": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+    "errors": [],
+    "anomalies": [],
+    "dropped": {
+      "histogramKeys": 6163,
+      "details": 2166
+    },
+    "mounts": [
+      {
+        "stage": 3,
+        "slot": "1",
+        "kind": "Speeder",
+        "observations": 109,
+        "flatObservations": 79,
+        "minGap": -3.325939177400983e-07,
+        "maxGap": 6.210803995543301e-07,
+        "flatMinGap": -4.76837147544984e-09,
+        "flatMaxGap": 2.3365020762611266e-07
+      },
+      {
+        "stage": 5,
+        "slot": "1",
+        "kind": "Surfboard",
+        "observations": 119,
+        "flatObservations": 59,
+        "minGap": -1.928955315477765e-07,
+        "maxGap": 8.799880752974332e-07,
+        "flatMinGap": -9.536743172944284e-08,
+        "flatMaxGap": 3.8146972647368216e-07
+      },
+      {
+        "stage": 7,
+        "slot": "1",
+        "kind": "Jet",
+        "observations": 97,
+        "flatObservations": 7,
+        "minGap": -8.615851392335117e-07,
+        "maxGap": 1.9994378064325247e-06,
+        "flatMinGap": 5.689263344876849e-07,
+        "flatMaxGap": 1.04576349269081e-06
+      },
+      {
+        "stage": 11,
+        "slot": "1",
+        "kind": "ClingerVehicle",
+        "observations": 218,
+        "flatObservations": 218,
+        "minGap": 5.632638933050771e-08,
+        "maxGap": 5.632638933050771e-08,
+        "flatMinGap": 5.632638933050771e-08,
+        "flatMaxGap": 5.632638933050771e-08
+      }
+    ],
+    "coverageLimit": "Sampled at most10Hz; missing states are unobserved, not failures; native client asset visibility/audio require separate client evidence"
+  },
+  "clingerHeading": {
+    "observations": 220,
+    "savedSamples": 220,
+    "dropped": 0,
+    "sourceSha256": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+    "runId": "bricktoads-traps30-0-up4t2x",
+    "minHeroDot": 0.9999999403953552,
+    "minVehicleDot": 1,
+    "modeCounts": {
+      "Ride": 220
+    },
+    "sourcePoseKindCounts": {
+      "Ride": 220
+    },
+    "scope": "Actual nonzero Clinger movement deltas and same-body facing/cosmetic forward during the live run."
+  },
+  "clientAV": {
+    "observedStageCount": 13,
+    "lastStatus": "Won",
+    "observerStillRunningAtExport": true,
+    "gameRunningAtTerminal": false,
+    "stages": [
+      {
+        "index": 1,
+        "sampleCount": 337,
+        "observed": true,
+        "maxTaggedCast": 15,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Pending": 7,
+          "Ready": 3387
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 12,
+        "consoleCount": 4,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 127,
+          "playingSamples": 391,
+          "loudSamples": 389,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 2,
+        "sampleCount": 46,
+        "observed": true,
+        "maxTaggedCast": 10,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Pending": 45,
+          "Ready": 382
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 4,
+        "consoleCount": 3,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 8,
+          "playingSamples": 46,
+          "loudSamples": 46,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 3,
+        "sampleCount": 39,
+        "observed": true,
+        "maxTaggedCast": 2,
+        "maxCourseTagged": 1,
+        "castGateStates": {
+          "Pending": 12,
+          "Ready": 45
+        },
+        "vehicleGateStates": {
+          "Pending": 1,
+          "Ready": 22
+        },
+        "vehicles": {
+          "Speeder": {
+            "maxInstances": 1,
+            "readySamples": 22,
+            "pendingSamples": 1,
+            "failedSamples": 0,
+            "canonicalVisibleSamples": 22,
+            "fallbackVisibleSamples": 1
+          }
+        },
+        "maxParticles": 13,
+        "consoleCount": 4,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 9,
+          "playingSamples": 44,
+          "loudSamples": 44,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 4,
+        "sampleCount": 30,
+        "observed": true,
+        "maxTaggedCast": 2,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Pending": 12,
+          "Ready": 48
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 0,
+        "consoleCount": 3,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 1,
+          "playingSamples": 30,
+          "loudSamples": 30,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 5,
+        "sampleCount": 169,
+        "observed": true,
+        "maxTaggedCast": 2,
+        "maxCourseTagged": 1,
+        "castGateStates": {
+          "Ready": 299,
+          "Pending": 5
+        },
+        "vehicleGateStates": {
+          "Pending": 1,
+          "Ready": 160
+        },
+        "vehicles": {
+          "Surfboard": {
+            "maxInstances": 1,
+            "readySamples": 160,
+            "pendingSamples": 1,
+            "failedSamples": 0,
+            "canonicalVisibleSamples": 160,
+            "fallbackVisibleSamples": 1
+          }
+        },
+        "maxParticles": 8,
+        "consoleCount": 5,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 75,
+          "playingSamples": 231,
+          "loudSamples": 226,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 6,
+        "sampleCount": 66,
+        "observed": true,
+        "maxTaggedCast": 16,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Pending": 96,
+          "Ready": 960
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 0,
+        "consoleCount": 1,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 1,
+          "playingSamples": 66,
+          "loudSamples": 66,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 7,
+        "sampleCount": 37,
+        "observed": true,
+        "maxTaggedCast": 2,
+        "maxCourseTagged": 1,
+        "castGateStates": {
+          "Ready": 50
+        },
+        "vehicleGateStates": {
+          "Pending": 6,
+          "Ready": 15
+        },
+        "vehicles": {
+          "Jet": {
+            "maxInstances": 1,
+            "readySamples": 15,
+            "pendingSamples": 6,
+            "failedSamples": 0,
+            "canonicalVisibleSamples": 15,
+            "fallbackVisibleSamples": 6
+          }
+        },
+        "maxParticles": 8,
+        "consoleCount": 2,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 9,
+          "playingSamples": 43,
+          "loudSamples": 43,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 8,
+        "sampleCount": 166,
+        "observed": true,
+        "maxTaggedCast": 4,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Pending": 10,
+          "Ready": 629
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 6,
+        "consoleCount": 15,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 79,
+          "playingSamples": 238,
+          "loudSamples": 231,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 9,
+        "sampleCount": 70,
+        "observed": true,
+        "maxTaggedCast": 5,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Pending": 23,
+          "Ready": 327
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 8,
+        "consoleCount": 5,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 23,
+          "playingSamples": 79,
+          "loudSamples": 79,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 10,
+        "sampleCount": 302,
+        "observed": true,
+        "maxTaggedCast": 4,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Ready": 1177,
+          "Pending": 6
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 8,
+        "consoleCount": 3,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 103,
+          "playingSamples": 408,
+          "loudSamples": 404,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 11,
+        "sampleCount": 189,
+        "observed": true,
+        "maxTaggedCast": 1,
+        "maxCourseTagged": 1,
+        "castGateStates": {
+          "Pending": 6,
+          "Ready": 183
+        },
+        "vehicleGateStates": {
+          "Pending": 6,
+          "Ready": 183
+        },
+        "vehicles": {
+          "ClingerVehicle": {
+            "maxInstances": 1,
+            "readySamples": 183,
+            "pendingSamples": 6,
+            "failedSamples": 0,
+            "canonicalVisibleSamples": 183,
+            "fallbackVisibleSamples": 6
+          }
+        },
+        "maxParticles": 6,
+        "consoleCount": 1,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 70,
+          "playingSamples": 255,
+          "loudSamples": 252,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 12,
+        "sampleCount": 38,
+        "observed": true,
+        "maxTaggedCast": 6,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Ready": 215,
+          "Pending": 1
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 4,
+        "consoleCount": 3,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 3,
+          "playingSamples": 39,
+          "loudSamples": 39,
+          "invalidPlayingRegionSamples": 0
+        }
+      },
+      {
+        "index": 13,
+        "sampleCount": 280,
+        "observed": true,
+        "maxTaggedCast": 1,
+        "maxCourseTagged": 0,
+        "castGateStates": {
+          "Pending": 6,
+          "Ready": 269
+        },
+        "vehicleGateStates": [],
+        "vehicles": {},
+        "maxParticles": 8,
+        "consoleCount": 1,
+        "audio": {
+          "soundInstances": 9,
+          "playedEvents": 48,
+          "playingSamples": 324,
+          "loudSamples": 323,
+          "invalidPlayingRegionSamples": 0
+        }
+      }
+    ],
+    "nativeErrorCount": 0,
+    "nativeErrors": [],
+    "knownAssetRepresentationWarningCount": 50,
+    "otherConsoleCount": 0,
+    "consoleCount": 50,
+    "actualAudioRegionErrors": 0,
+    "terminalTransition": {
+      "view": "Menu",
+      "snapshotSeq": 7985,
+      "index": 13,
+      "status": "Won",
+      "epoch": 13,
+      "stage": "Won",
+      "at": 1794359228.121524
+    }
+  },
+  "console": {
+    "file": "campaign30-console.json",
+    "toolOutputTruncated": true,
+    "interpretation": "Saved exact console tool response, including its truncation marker. Full-run client AV captures the warning/error observer records separately."
+  },
+  "collector": {
+    "notes": "campaign30-collector-notes.json",
+    "withdrawnFiles": [
+      "campaign30-archive-periodic-001.json",
+      "campaign30-archive-periodic-002.json"
+    ],
+    "verifiedPeriodicArchive": "campaign30-archive-periodic-003.json",
+    "terminalExportsVerified": true,
+    "ownedDiagnosticExportFoldersRemainingAtHandoff": {
+      "Server": 0,
+      "Client": 0
+    }
+  }
+}

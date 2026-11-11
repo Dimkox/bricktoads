@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "runId": "bricktoads-traps30-0-up4t2x",
+  "build": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+  "collectorIssues": [
+    {
+      "files": [
+        "campaign30-archive-periodic-001.json",
+        "campaign30-archive-periodic-002.json"
+      ],
+      "issue": "Oversized one-shot Node write arguments returned tool errors, but the first collector helper did not inspect the error results before removing its owned frozen export folders.",
+      "claimStatus": "Earlier archive-file claims withdrawn. These two files were never created.",
+      "gameplayFailure": false
+    }
+  ],
+  "correction": "Write each fetched UTF-8 chunk separately (maximum 20 KB), inspect tool errors, parse JSON and verify exact byte count plus SHA-256 through both Node and a standalone workspace command before removing each owned export folder.",
+  "currentVerifiedArchive": {
+    "file": "campaign30-archive-periodic-003.json",
+    "bytes": 1028032,
+    "sha256": "3a5addb7f64bd2ef6554b573da594e4ef71ab80c6ddd1e30c658051867d4f870",
+    "runIdMatches": true,
+    "buildMatches": true,
+    "orderedStages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "shellVerified": true
+  },
+  "limits": "Collector failures are separate from game diagnostic errors. Play, input, authoritative runtime, templates, camera and players were not changed by the collector.",
+  "terminalFiles": [
+    {
+      "file": "campaign30-terminal-archive.json",
+      "bytes": 1087995,
+      "sha256": "faa286d01c4148f1710fec95196226a0be155808407587e5b0791ffd80210a60"
+    },
+    {
+      "file": "campaign30-terminal-samples.json",
+      "bytes": 4228131,
+      "sha256": "66a65e35f82666293b1f6a4a60f6cc45f21d3cc3e3d36a88bd903a242e080b3b"
+    },
+    {
+      "file": "campaign30-client-props.json",
+      "bytes": 86180,
+      "sha256": "7e3dfdfa87ad8e5bf88a3306484fe4613287620a155009d38e700b14c82a6265"
+    },
+    {
+      "file": "campaign30-client-av.json",
+      "bytes": 1624967,
+      "sha256": "6091e5c2c38f215b0fc006b7bcbf920e6a69e0d64898f2c0ec295d4bfa37b47d"
+    },
+    {
+      "file": "campaign30-presentation.json",
+      "bytes": 144815,
+      "sha256": "4968b22a5626f846d8b48f936689a009b5e9929d6edbedc3e745161940a724a1"
+    },
+    {
+      "file": "campaign30-heading.json",
+      "bytes": 49047,
+      "sha256": "466843b64796f515575621334558cf7d945b7dbc74bd3b1df77ea998cdea2619"
+    },
+    {
+      "file": "campaign30-console.json",
+      "bytes": 20311,
+      "sha256": "ec931c084699299b288cc240e68709f29d512cab0bf452c76eae802d766a5082"
+    }
+  ],
+  "terminalGuard": {
+    "result": "Won",
+    "running": false,
+    "orderedStages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "sourceGuardMatches": true
+  }
+}

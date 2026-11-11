@@ -60,9 +60,12 @@ Gas lobes have baseTransparency
 When reconstructing native imports, preserve actual MeshId, TextureID,
 SurfaceAppearance and the raw imported MeshSize independently of the desired
 Size. The established native importer Y180 conversion must be applied as in
-the vehicle protocol. This source pack does not fabricate Roblox IDs or
-claim native import completion; native receipts and Studio review belong to
-the integrating workflow.
+the vehicle protocol. Native import is complete in model asset97138816221562;
+`roblox-course-props.json` contains all98 actual uploaded resources. The
+[integration report](../../../reports/2026-11-11-course-traps/README.md) covers
+all28 native families, real-client loading/motion and the13-stage God Mode
+playthrough. Per-kind rig status describes the generation phase before this
+separate native acceptance; it does not replace the integration receipt.
 
 The existing physical volumes, damage, triggers, timing, movement and level
 layout remain external. MeshParts are cosmetic and must be anchored,

@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "checkpoint": 1,
+  "observedAtUtc": "2026-11-11 00:55:33 UTC",
+  "sourceGuard": {
+    "expectedRunId": "bricktoads-traps30-0-up4t2x",
+    "expectedSeed": 1158731273,
+    "expectedBuild": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+    "actualRunId": "bricktoads-traps30-0-up4t2x",
+    "actualSeed": 1158731273,
+    "actualBuild": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+    "matches": true
+  },
+  "current": {
+    "slot": 1,
+    "index": 1,
+    "rawLife": 47,
+    "attempt": 2,
+    "epoch": 1,
+    "plan": {
+      "aimX": 0.9871190820523761,
+      "x": -0.04339599609375,
+      "z": -0.36193444722225276,
+      "aimZ": -0.15998724276664772,
+      "primary": false,
+      "run": false,
+      "jump": false
+    },
+    "guardianHits": 0,
+    "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+    "position": {
+      "y": 3,
+      "x": 608.8048706054688,
+      "z": 3.7222981452941895
+    },
+    "target": -99,
+    "stock": 3,
+    "stage": "Boss",
+    "runId": "bricktoads-traps30-0-up4t2x"
+  },
+  "errors": [],
+  "expectedPlayers": 1,
+  "seed": 1158731273,
+  "navigation": {
+    "phase": "Walk",
+    "target": {
+      "y": 2.999999761581421,
+      "x": 632.761474609375,
+      "z": -0.16046644747257233
+    }
+  },
+  "cohort": [
+    {
+      "ownerUserId": 11946162891,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "slot": 1,
+      "status": "Alive",
+      "rawLife": 47,
+      "stock": 3,
+      "attempt": 2
+    }
+  ],
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794358399.694358,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:3",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:3",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Archaicus14",
+      "userId": 11946162891
+    }
+  ],
+  "policyLoads": 1,
+  "sampleCount": 128,
+  "build": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c"
+}

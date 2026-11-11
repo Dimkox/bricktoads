@@ -1,0 +1,228 @@
+{
+  "schema": 1,
+  "checkpoint": 3,
+  "observedAtUtc": "2026-11-11 00:59:14 UTC",
+  "sourceGuard": {
+    "expectedRunId": "bricktoads-traps30-0-up4t2x",
+    "expectedSeed": 1158731273,
+    "expectedBuild": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+    "actualRunId": "bricktoads-traps30-0-up4t2x",
+    "actualSeed": 1158731273,
+    "actualBuild": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c",
+    "matches": true
+  },
+  "current": {
+    "slot": 1,
+    "index": 7,
+    "rawLife": 47,
+    "attempt": 2,
+    "epoch": 7,
+    "plan": {
+      "aimX": 0.9899604295980615,
+      "x": 0.9899604295980615,
+      "z": -0.14134478352603466,
+      "aimZ": -0.14134478352603466,
+      "primary": false,
+      "run": true,
+      "jump": false
+    },
+    "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+    "position": {
+      "y": 2.999938488006592,
+      "x": 12.405921936035156,
+      "z": -7.820267200469971
+    },
+    "target": -1,
+    "stock": 3,
+    "stage": "Jet",
+    "runId": "bricktoads-traps30-0-up4t2x"
+  },
+  "errors": [],
+  "expectedPlayers": 1,
+  "seed": 1158731273,
+  "navigation": {
+    "phase": "Walk",
+    "target": {
+      "y": 3,
+      "x": 684,
+      "z": 0
+    }
+  },
+  "cohort": [
+    {
+      "ownerUserId": 11946162891,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "slot": 1,
+      "status": "Alive",
+      "rawLife": 47,
+      "stock": 3,
+      "attempt": 2
+    }
+  ],
+  "running": true,
+  "stages": [
+    {
+      "index": 1,
+      "rawLife": 47,
+      "attempt": 1,
+      "epoch": 1,
+      "at": 1794358399.694358,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:3",
+      "source": "causeway-1",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:3",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 1
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    },
+    {
+      "index": 2,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 2,
+      "at": 1794358571.217727,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "source": "campaign-2",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 2
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    },
+    {
+      "index": 3,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 3,
+      "at": 1794358594.609198,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "source": "campaign-3",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 2
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    },
+    {
+      "index": 4,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 4,
+      "at": 1794358614.577033,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "source": "campaign-4",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 2
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    },
+    {
+      "index": 5,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 5,
+      "at": 1794358629.975771,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "source": "campaign-5",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 2
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    },
+    {
+      "index": 6,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 6,
+      "at": 1794358715.938812,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "source": "campaign-6",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 2
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    },
+    {
+      "index": 7,
+      "rawLife": 47,
+      "attempt": 2,
+      "epoch": 7,
+      "at": 1794358749.488239,
+      "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+      "source": "campaign-7",
+      "cohort": [
+        {
+          "ownerUserId": 11946162891,
+          "actorId": "bricktoads-traps30-0-up4t2x:actor:67",
+          "slot": 1,
+          "status": "Alive",
+          "rawLife": 47,
+          "stock": 3,
+          "attempt": 2
+        }
+      ],
+      "runId": "bricktoads-traps30-0-up4t2x",
+      "stock": 3
+    }
+  ],
+  "registeredPlayers": [
+    {
+      "name": "Archaicus14",
+      "userId": 11946162891
+    }
+  ],
+  "policyLoads": 1,
+  "sampleCount": 338,
+  "build": "0612e150a84f3ee8d5fa52191f210e0434e8ee0f6f5b08b894bc12c4b614af6c"
+}
