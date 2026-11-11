@@ -29,12 +29,14 @@ test('fear heads are preassembled at the native neck without new physical parts 
     for _,kind in ipairs({'FearBeforeCut','FearAfterCut'})do
         local r=assert(a.appearance.morphs[kind]);assert(r.originalPart==a.appearance.model.Head)
         sameFrame(r.joint.C0,r.originalPart.NeckRigAttachment.CFrame*r.template.Morph.CFrame)
-        assert(r.part.Transparency==1 and r.part.Massless and not r.part.CanCollide and not r.part.CanQuery)
+        assert(r.part.Transparency==0 and r.part:GetAttribute('HeroVisibleTransparency')==0 and r.part.Massless and not r.part.CanCollide and not r.part.CanQuery)
+        assert(r.part:GetAttribute('HeroExpectedSurfaceCount')==0 and r.part:GetAttribute('HeroExpectedSurfaceMaps')=='',
+            'A source without SurfaceAppearance must explicitly publish zero surfaces')
     end
     Appearance.update(a,fearContext('fear-preload',1))
     local _,after=morphMeshCount(a);assert(after==count and a.appearance.activeMorph=='FearBeforeCut')
 end)
-test('switching both fear forms on one head restores exactly once regardless of table iteration order',function()
+test('switching both fear forms on one head publishes intent while retaining exact neutral alpha',function()
     local a=fearActor('fear-shared-head');local head=a.appearance.model.Head;head.Transparency=.41
     for _,counter in ipairs({1,0xE1,1,0xE1})do
         -- A fresh finite intro identity lets both transition directions be tested.
@@ -42,9 +44,10 @@ test('switching both fear forms on one head restores exactly once regardless of 
         a.appearance.presentation=nil
         Appearance.update(a,c)
         local expected=counter==1 and'FearBeforeCut'or'FearAfterCut'
-        assert(a.appearance.activeMorph==expected and head.Transparency==1,'The active head must hide its original')
+        assert(a.appearance.activeMorph==expected and head.Transparency==.41,'Unavailable fear resources must retain the neutral head')
+        assert(a.appearance.model:GetAttribute('HeroActiveMorph')==expected)
         for _,kind in ipairs({'FearBeforeCut','FearAfterCut'})do
-            assert(a.appearance.morphs[kind].part.Transparency==(kind==expected and 0 or 1))
+            assert(a.appearance.morphs[kind].part.Transparency==0,'Only the client may compose morph visibility')
         end
     end
     Appearance.update(a,nil);assert(head.Transparency==.41,'Do not cache an already hidden head as the original value')
@@ -58,7 +61,7 @@ test('fear cancels attack morphology and interruptions restore only that actor',
     Appearance.update(b,fearContext('fear-b',0xE1));assert(b.appearance.activeMorph=='FearAfterCut')
     c.blocked='Reaction';c.now=2;Appearance.update(a,c)
     assert(a.appearance.activeMorph==nil and a.appearance.model.Head.Transparency==0)
-    assert(b.appearance.activeMorph=='FearAfterCut' and b.appearance.model.Head.Transparency==1)
+    assert(b.appearance.activeMorph=='FearAfterCut' and b.appearance.model.Head.Transparency==0)
     Appearance.detach(b);assert(b.appearance==nil and a.humanoid.Health==100)
 end)
 test('missing or detached fear resources leave the original head visible',function()

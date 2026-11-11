@@ -202,5 +202,19 @@ check('light Dragon reactions without source timer bytes return from0C to the so
     assert(measured.frameId==0xC and measured.frameBasis=='SourceReactionTimer',
         'A supplied source timer takes precedence over authored progress')
 end)
+check('an authored Queen Spin validates its accepted identity after source playback ends',function()
+    for _,field in ipairs({'name','start'})do
+        local s=P.new();local attack=accepted('Spin')
+        P.sample(s,context('DarkQueen',{attack=attack,phase='Tell'}))
+        local active=P.sample(s,context('DarkQueen',{now=12,attack=attack,phase='Active'}))
+        assert(active.actionBinding=='Authored3DSpin'and not active.animationId)
+        attack[field]=field=='name'and'Sweep'or 11
+        local changed,reason=P.sample(s,context('DarkQueen',{now=12.1,attack=attack,phase='Active'}))
+        assert(not changed and reason=='ATTACK_CHANGED','Expired source playback allowed the accepted Spin to mutate')
+        attack[field]=field=='name'and'Spin'or 10
+        local nextRow=P.sample(s,context('DarkQueen',{now=12.2,attack=attack,phase='Active'}))
+        assert(not nextRow.actionBinding and not nextRow.animationId,'A canceled Spin identity restarted')
+    end
+end)
 print('CanonicalCast: '..passed..' passed; '..failed..' failed')
 assert(failed==0,'Canonical cast contracts failed')

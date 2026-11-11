@@ -67,7 +67,9 @@ with tempfile.TemporaryDirectory(prefix='bricktoads-source-presentation-') as di
         ('LevelSource', 'src/server/gameplay/LevelDefinition.lua'),
         ('BaseWorldSource', 'src/stand/server/RobloxWorld.lua'),
         ('DragonWorldSource', 'src/server/gameplay/DragonWorld.lua'),
+        ('WorldAppearanceSource', 'src/server/gameplay/CharacterAppearance.lua'),
     ))
+    world_prefix += 'local WorldHeroManifest=' + lua(rotated_manifest) + '\n'
     world_harness = (ROOT / 'tests/group_world/contracts.luau').read_text(encoding='utf-8')
     world_contracts = Path(__file__).with_name('world_contracts.luau').read_text(encoding='utf-8')
     runner.write_text(world_prefix + world_harness + '\n' + world_contracts, encoding='utf-8')

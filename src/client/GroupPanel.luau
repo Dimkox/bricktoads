@@ -9,7 +9,7 @@ local statusNames = {Lobby = "Forming team", Active = "Playing", Won = "Victory"
 local reasons = {
     ROLE_ACTIVE = "Finish playing your living character first.",
     ACTIVE_ROLE = "Finish playing your living character first.",
-    ROLE_RESERVED = "Cancel your accepted Guardian invitation first.",
+    ROLE_RESERVED = "Cancel your accepted boss invitation first.",
     GROUP_FULL = "This team has no free places.",
     GROUP_LIMIT = "The team limit has been reached.",
     UNKNOWN_GROUP = "This team is no longer available.",
@@ -216,23 +216,23 @@ function GroupPanel:step()
 end
 
 function GroupPanel:layout(menuWidth, width, height, spectatorWidth)
-    self.menuCard.Size = UDim2.new(1, 0, 0, menuWidth < 420 and 168 or 150)
+    self.menuCard.Size = UDim2.new(1, 0, 0, menuWidth < 420 and 170 or 152)
     position(self.menuHeading, 14, 10, menuWidth - 28, 18)
     position(self.menuCurrent, 14, 32, menuWidth - 28, 24)
     position(self.menuHelp, 14, 60, menuWidth - 28, menuWidth < 420 and 49 or 31)
-    position(self.menuButton, 14, menuWidth < 420 and 116 or 98, menuWidth - 28, 42)
-    position(self.hudButton, spectatorWidth - 114, 9, 100, 36)
+    position(self.menuButton, 14, menuWidth < 420 and 116 or 98, menuWidth - 28, 44)
+    position(self.hudButton, spectatorWidth - 114, 5, 100, 44)
     local margin = width < 500 and 12 or 18
     local shellWidth, shellHeight = math.min(640, width - margin * 2), math.min(590, height - margin * 2)
     position(self.shell, (width - shellWidth) / 2, (height - shellHeight) / 2, shellWidth, shellHeight)
     local shallow = shellHeight < 380
     position(self.title, 14, 10, shellWidth - 126, 28)
-    position(self.close, shellWidth - 104, 10, 90, 42)
+    position(self.close, shellWidth - 104, 10, 90, 44)
     position(self.current, 14, 42, shellWidth - 126, shallow and 23 or 27)
     position(self.help, 14, shallow and 68 or 77, shellWidth - 28, shallow and 30 or 42)
     local listY = shallow and 104 or 128
     position(self.list, 14, listY, shellWidth - 28, math.max(42, shellHeight - listY - 83))
-    position(self.create, 14, shellHeight - 74, shellWidth - 28, 42)
+    position(self.create, 14, shellHeight - 76, shellWidth - 28, 44)
     position(self.notice, 14, shellHeight - 29, shellWidth - 28, 23)
 end
 

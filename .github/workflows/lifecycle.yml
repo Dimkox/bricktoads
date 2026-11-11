@@ -64,6 +64,7 @@ jobs:
           /tmp/bricktoads-luau/luau tests/run_canonical_hero_presentation.luau
           /tmp/bricktoads-luau/luau tests/run_canonical_cast.luau
           /tmp/bricktoads-luau/luau tests/run_cast_asset_visibility.luau
+          /tmp/bricktoads-luau/luau tests/run_hero_asset_visibility.luau
           /tmp/bricktoads-luau/luau tests/canonical_cast_source/profiles.luau
           /tmp/bricktoads-luau/luau tests/run_studio_god_mode.luau
           /tmp/bricktoads-luau/luau tests/run_audio_fx.luau
@@ -91,6 +92,7 @@ jobs:
           python3 tests/course_props/run.py --luau /tmp/bricktoads-luau/luau
           python3 tools/test_course_asset_packaging.py
           python3 tools/test_course_prop_packaging.py
+          python3 tools/test_release_ui.py --luau /tmp/bricktoads-luau/luau
           python3 tests/test_analyze_campaign_run.py
           python3 tools/qa/check_full_campaign_av_observer.py --luau /tmp/bricktoads-luau/luau
           python3 tests/campaign_input/run.py --luau /tmp/bricktoads-luau/luau
@@ -108,6 +110,8 @@ jobs:
           /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_av_observer.client.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_presentation_observer.server.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/qa/full_campaign_heading_observer.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/release_hero_loading.server.luau > /dev/null
+          /tmp/bricktoads-luau/luau-compile tools/qa/release_hero_loading.client.luau > /dev/null
           /tmp/bricktoads-luau/luau-compile tools/qa/world_elements_acceptance.luau > /dev/null
       - name: Structural build tests
         run: python3 tools/test_build.py

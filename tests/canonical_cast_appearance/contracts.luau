@@ -166,5 +166,3 @@ check('client preload owns visibility while server keeps explicit fallback refer
     A.detach(a);assert(external.Transparency==.15 and external:GetAttribute('CastFallbackOwner')==nil)
     assert(t:GetAttribute('CastFallbackOwner')==nil and old.Transparency==.3)
 end)
-print('CanonicalCastAppearance: '..passed..' passed; '..failed..' failed')
-assert(failed==0,'Canonical cast appearance contracts failed')

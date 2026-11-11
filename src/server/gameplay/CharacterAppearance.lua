@@ -5,6 +5,7 @@
 -- Never replaces the R6 physical rig.
 -- Caller must pin server network ownership AFTER all cosmetic parts are attached.
 local Appearance={}
+local skinSerial=0
 local HeroPresentation=script and require(script.Parent.CanonicalHeroPresentation)
 local JOINTS={
     {'Waist','LowerTorso','UpperTorso'}, {'Neck','UpperTorso','Head','Neck'},
@@ -25,6 +26,40 @@ local MORPHS={PowerFist={part='RightHand',attachment='RightWristRigAttachment'},
     FearBeforeCut={part='Head',attachment='NeckRigAttachment'},
     FearAfterCut={part='Head',attachment='NeckRigAttachment'}}
 local MORPH_PREFIX={['Mr. Green']='Green',['Mr. Yellow']='PlayerTwo',['Mr. Brown']='Brown'}
+local RESOURCE_MAPS={'ColorMap','NormalMap','RoughnessMap','MetalnessMap','EmissiveMask'}
+local function rawId(value)return type(value)=='string'and value or''end
+local function mapUri(surface,property)
+    -- Legacy map string properties are PluginSecurity, even for reads. The
+    -- corresponding Content getters are available to normal server Scripts.
+    local ok,id=pcall(function()
+        local content=surface[property..'Content'];local source=content.SourceType.Name
+        if source=='None'then return '' end
+        if source=='Uri'then
+            local uri=content.Uri;if type(uri)=='string'and uri~=''then return uri end
+        end
+    end)
+    return ok and id or nil
+end
+local function captureResources(part)
+    -- Capture the prepared resource, including explicit zero/empty values,
+    -- before it enters Workspace. The client must not infer completeness from
+    -- whichever children/properties have arrived in a replication packet.
+    local surfaces={}
+    for _,surface in ipairs(part:GetChildren())do if surface:IsA('SurfaceAppearance')then
+        local maps={}
+        for _,property in ipairs(RESOURCE_MAPS)do
+            local id=assert(mapUri(surface,property),'Unreadable or unsupported '..property..'Content')
+            maps[#maps+1]=property..#id..':'..id
+        end
+        surfaces[#surfaces+1]=table.concat(maps,'|')
+    end end
+    table.sort(surfaces)
+    local tuples={};for _,surface in ipairs(surfaces)do tuples[#tuples+1]=#surface..':'..surface end
+    part:SetAttribute('HeroExpectedSurfaceCount',#surfaces)
+    part:SetAttribute('HeroExpectedSurfaceMaps',table.concat(tuples,';'))
+    part:SetAttribute('HeroExpectedMeshId',rawId(part.MeshId))
+    part:SetAttribute('HeroExpectedTextureId',rawId(part.TextureID))
+end
 local function resource(templates,heroTemplate)
     local name=CANONICAL[heroTemplate]
     if not name then return nil,'NO_CHARACTER_RESOURCE' end
@@ -122,7 +157,13 @@ local function prepareMorph(skin,template,heroTemplate,kind,spec,sourceHero)
         local c0=attachment.CFrame*part.CFrame
         local visible=part.Transparency
         part.CFrame=original.CFrame*c0
-        part.Anchored=false;part.CanCollide=false;part.CanTouch=false;part.CanQuery=false;part.Massless=true;part.Transparency=1
+        part.Anchored=false;part.CanCollide=false;part.CanTouch=false;part.CanQuery=false;part.Massless=true
+        -- The client composes base/morph availability in one local visibility
+        -- coordinator. Server alpha must remain renderable even while loading.
+        part:SetAttribute('HeroVisibleTransparency',visible)
+        captureResources(part)
+        clone:SetAttribute('HeroMorphKind',kind)
+        local reference=Instance.new('ObjectValue');reference.Name='HeroMorphOriginal';reference.Value=original;reference.Parent=clone
         local joint=motor('Morph'..kind,part,original,part,c0,CFrame.new())
         clone.PrimaryPart=part
         return {part=part,model=clone,template=template,joint=joint,originalPart=original,
@@ -146,13 +187,6 @@ local function prepareMorphs(skin,heroTemplate,templates)
     end end
     return rows,folder
 end
-local function restoreMorph(state,row)
-    if row.originalTransparency~=nil then
-        if row.originalPart.Parent==state.model then row.originalPart.Transparency=row.originalTransparency end
-        row.originalTransparency=nil
-    end
-    if row.part.Parent==row.model then row.part.Transparency=1 end
-end
 local function updateMorphs(state,sourcePose)
     local requested=sourcePose and sourcePose.morphKind
     local active=state.morphs and state.morphs[requested]
@@ -161,16 +195,12 @@ local function updateMorphs(state,sourcePose)
         and active.joint.Parent==active.part and active.joint.Part0==active.originalPart and active.joint.Part1==active.part
         and tag(active.model,'AppearanceProfile','CanonicalNESHeroMorph') and tag(active.model,'HeroTemplate',state.heroTemplate)
         and tag(active.model,'MorphKind',requested)) then active=nil end
-    -- Two fear forms share the same original Head. Restore the old form before
-    -- capturing/hiding the new one; pairs() order cannot decide skin visibility.
-    for _,row in pairs(state.morphs or {}) do if row~=active then restoreMorph(state,row) end end
-    if active then
-        -- Capture at entry, not every render: an already hidden limb's1
-        -- must never overwrite its exact original (possibly nonzero) value.
-        if active.originalTransparency==nil then active.originalTransparency=active.originalPart.Transparency end
-        active.part.Transparency=active.visibleTransparency;active.originalPart.Transparency=1
-    end
     state.activeMorph=active and requested or nil
+    -- Playback publishes intent only. All fifteen base parts and four optional
+    -- morph assemblies already exist before network ownership is pinned.
+    if state.skinId and state.model:GetAttribute('HeroActiveMorph')~=state.activeMorph then
+        state.model:SetAttribute('HeroActiveMorph',state.activeMorph)
+    end
 end
 local function restoreGeometry(state)
     for _,row in pairs(state.geometryParts or {})do
@@ -250,13 +280,24 @@ function Appearance.detach(actor)
     updateMorphs(state,nil)
     restoreGeometry(state)
     state.presentation=nil;state.sourcePose=nil
+    if state.skinId then
+        game:GetService('CollectionService'):RemoveTag(state.model,'BrickToadsHeroSkin')
+        for part,metadata in pairs(state.fallbackMetadata)do
+            if part.Parent and part:GetAttribute('HeroFallbackOwner')==state.skinId then
+                part:SetAttribute('HeroFallbackOwner',metadata.owner)
+                part:SetAttribute('HeroFallbackTransparency',metadata.alpha)
+            end
+        end
+    end
     state.model:Destroy()
     for part,transparency in pairs(state.hidden) do
         if part.Parent and part:IsDescendantOf(state.ownerModel) then part.Transparency=transparency end
     end
-    if state.metadataCaptured and state.ownerModel.Parent then
+    if state.metadataCaptured and state.ownerModel.Parent
+        and (not state.skinId or state.ownerModel:GetAttribute('HeroAppearanceOwner')==state.skinId)then
         state.ownerModel:SetAttribute('Template',state.previousTemplate)
         state.ownerModel:SetAttribute('Appearance',state.previousAppearance)
+        if state.skinId then state.ownerModel:SetAttribute('HeroAppearanceOwner',state.previousHeroOwner)end
     end
 end
 
@@ -379,9 +420,20 @@ function Appearance.attach(actor,heroTemplate,templates,morphTemplates)
         for _,part in ipairs(clone:GetChildren()) do if part:IsA('MeshPart') then part.CFrame=torso.CFrame*part.CFrame end end
         local morphs,morphFolder
         if profile=='CanonicalNESHero' then morphs,morphFolder=prepareMorphs(clone,heroTemplate,morphTemplates) end
+        local skinId
+        if profile=='CanonicalNESHero' then
+            skinSerial+=1;skinId='hero-'..skinSerial
+            clone:SetAttribute('CanonicalHeroSkin',true);clone:SetAttribute('HeroSkinId',skinId)
+            clone:SetAttribute('HeroExpectedBasePartCount',15)
+            for _,part in ipairs(clone:GetChildren())do if part:IsA('MeshPart')then
+                assert(finite(part.Transparency)and part.Transparency>=0 and part.Transparency<1,'Invisible base resource')
+                part:SetAttribute('HeroVisibleTransparency',part.Transparency)
+                captureResources(part)
+            end end
+        end
         return {model=clone,ownerModel=actor.model,sourceTemplate=template,heroTemplate=heroTemplate,
             profile=profile,shoulderRoll=shoulderRoll,rig=rig,joints=joints,rootJoint=rootJoint,geometryParts=geometryParts,
-            hidden={},morphs=morphs,morphFolder=morphFolder}
+            hidden={},morphs=morphs,morphFolder=morphFolder,skinId=skinId,fallbackMetadata={}}
     end)
     if not ok then clone:Destroy();return false,'INVALID_CHARACTER_RESOURCE: '..tostring(state) end
     -- Preparation touches only the clone. An invalid replacement must leave an
@@ -389,14 +441,29 @@ function Appearance.attach(actor,heroTemplate,templates,morphTemplates)
     if previous then Appearance.detach(actor) end
     state.previousTemplate=actor.model:GetAttribute('Template')
     state.previousAppearance=actor.model:GetAttribute('Appearance')
+    state.previousHeroOwner=actor.model:GetAttribute('HeroAppearanceOwner')
     state.metadataCaptured=true
     clone.Parent=actor.model
     actor.appearance=state
+    local fallbackCount=0
     for _,part in ipairs(actor.model:GetChildren()) do if part:IsA('BasePart') and HIDDEN[part.Name] then
-        state.hidden[part]=part.Transparency;part.Transparency=1
+        if state.skinId then
+            fallbackCount+=1
+            state.fallbackMetadata[part]={owner=part:GetAttribute('HeroFallbackOwner'),alpha=part:GetAttribute('HeroFallbackTransparency')}
+            part:SetAttribute('HeroFallbackOwner',state.skinId);part:SetAttribute('HeroFallbackTransparency',part.Transparency)
+            local reference=Instance.new('ObjectValue');reference.Name='HeroFallbackTarget';reference.Value=part;reference.Parent=clone
+        else
+            -- The old generated study keeps its explicit legacy behavior.
+            state.hidden[part]=part.Transparency;part.Transparency=1
+        end
     end end
     actor.model:SetAttribute('Template',heroTemplate)
     actor.model:SetAttribute('Appearance',profile)
+    if state.skinId then
+        clone:SetAttribute('HeroExpectedFallbackCount',fallbackCount)
+        actor.model:SetAttribute('HeroAppearanceOwner',state.skinId)
+        game:GetService('CollectionService'):AddTag(clone,'BrickToadsHeroSkin')
+    end
     Appearance.update(actor)
     return true
 end

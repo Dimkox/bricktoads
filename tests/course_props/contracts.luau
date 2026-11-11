@@ -1,5 +1,20 @@
 local clone=Node.Clone
 function Node:Clone()local n=clone(self);n._attributes=table.clone(self._attributes);return n end
+-- Count attempted engine-bound writes, including assigning an unchanged value.
+local writeCounts=setmetatable({},{__mode='k'})
+local setProperty,setAttribute=Node.__newindex,Node.SetAttribute
+Node.__newindex=function(n,key,value)
+    local counts=writeCounts[n];if counts then counts[key]=(counts[key]or 0)+1 end
+    setProperty(n,key,value)
+end
+function Node:SetAttribute(key,value)
+    local counts=writeCounts[self];if counts then counts['@'..key]=(counts['@'..key]or 0)+1 end
+    setAttribute(self,key,value)
+end
+function Frame.__eq(a,b)
+    return a.Position.X==b.Position.X and a.Position.Y==b.Position.Y and a.Position.Z==b.Position.Z
+        and a.rx==b.rx and a.ry==b.ry and a.rz==b.rz
+end
 local raw=cf.new
 cf.new=function(...)
     local n=select('#',...);assert(n==0 or n==1 and type((...))=='table'or n==3 or n==12,'Invalid CFrame.new arity')
@@ -124,5 +139,80 @@ test('projectile nose follows actual velocity without rotating the physical hit 
     A.update(row,geometry,{role='Projectile',visualVelocity={x=0,y=0,z=0}},.1)
     assert(math.abs(state.rows[1].part.CFrame.ry+math.pi/2)<1e-6,'Stationary frame lost last heading')
     preserved(row,before)
+end)
+local function watch(row)
+    writeCounts[row.part]={}
+    for _,r in ipairs(row.coursePropAppearance.rows)do writeCounts[r.part]={}end
+end
+local function writes(part,key)return(writeCounts[part]or{})[key]or 0 end
+local function cosmeticWrites(row,key)
+    local n=0;for _,r in ipairs(row.coursePropAppearance.rows)do n+=writes(r.part,key)end;return n
+end
+test('unchanged static steps and metadata updates perform no cosmetic or fallback writes',function()
+    local row=object('Bomb');A.update(row,geometry,{alpha=.2},0);watch(row)
+    for i=1,5 do A.step(row,i);A.update(row,geometry,{alpha=.2},i)end
+    assert(cosmeticWrites(row,'CFrame')==0,'Unchanged static transforms were reassigned')
+    assert(cosmeticWrites(row,'Transparency')==0,'Unchanged static alpha was reassigned')
+    assert(cosmeticWrites(row,'@CoursePropVisibleTransparency')==0)
+    assert(writes(row.part,'@CoursePropFallbackTransparency')==0,'Unchanged fallback metadata was reassigned')
+end)
+test('static cache independently invalidates actual transform and visible alpha',function()
+    local row=object('Bomb');A.update(row,geometry,{alpha=.2},0);watch(row)
+    row.part.CFrame=frame(24,8,10)*cf.Angles(0,.5,0);A.step(row,1)
+    assert(cosmeticWrites(row,'CFrame')==1 and cosmeticWrites(row,'Transparency')==0)
+    local cosmetic=row.coursePropAppearance.rows[1].part
+    assert(cosmetic.CFrame.Position.X==24 and cosmetic.CFrame.ry==.5)
+    watch(row);A.update(row,geometry,{alpha=.75},2)
+    assert(cosmeticWrites(row,'CFrame')==0 and cosmeticWrites(row,'Transparency')==1)
+    assert(math.abs(cosmetic.Transparency-.775)<1e-6 and cosmetic:GetAttribute('CoursePropVisibleTransparency')==cosmetic.Transparency)
+    watch(row);row.part.Transparency=.6;A.update(row,geometry,{},3)
+    assert(cosmeticWrites(row,'CFrame')==0 and cosmeticWrites(row,'Transparency')==1)
+    assert(writes(row.part,'@CoursePropFallbackTransparency')==1 and row.part:GetAttribute('CoursePropFallbackTransparency')==.6)
+end)
+test('only animated segments advance and stopping or resuming invalidates their transform',function()
+    local trim=templates.Gear.Core:Clone();trim.Name='Trim';trim.Parent=templates.Gear
+    local row=object('Gear');A.update(row,geometry,{},0);watch(row)
+    local byName={};for _,r in ipairs(row.coursePropAppearance.rows)do byName[r.part.Name]=r.part end
+    A.step(row,.4)
+    assert(writes(byName.Core,'CFrame')==1 and writes(byName.Trim,'CFrame')==0,'Static segment followed the animation clock')
+    assert(cosmeticWrites(row,'Transparency')==0)
+    watch(row);A.step(row,.4);assert(cosmeticWrites(row,'CFrame')==0,'Repeated phase was reassigned')
+    A.update(row,geometry,{hazard=false},.4);assert(writes(byName.Core,'CFrame')==1 and byName.Core.CFrame.ry==0)
+    watch(row);A.step(row,.8);assert(cosmeticWrites(row,'CFrame')==0)
+    A.update(row,geometry,{role='Defused'},.8);A.update(row,geometry,{role='Exploded'},.8)
+    assert(cosmeticWrites(row,'CFrame')==0)
+    A.update(row,geometry,{hazard=true},.8);assert(writes(byName.Core,'CFrame')==1 and math.abs(byName.Core.CFrame.ry)>1)
+    trim:Destroy()
+end)
+test('replacement physical part gets a fresh skin and old owned metadata is restored',function()
+    local row=object('Bomb');local original=row.part
+    original:SetAttribute('CoursePropFallbackOwner','prior');original:SetAttribute('CoursePropFallbackTransparency',.4)
+    A.update(row,geometry,{},0);local old=row.coursePropAppearance
+    row.part=object('Bomb').part;local before=snapshot(row);A.update(row,geometry,{},1)
+    local fresh=assert(row.coursePropAppearance)
+    assert(fresh~=old and old.model.destroyed,'Same-size replacement retained the previous resource state')
+    assert(fresh.skin.CoursePropFallbackTarget.Value==row.part and row.part:GetAttribute('CoursePropFallbackOwner')==fresh.id)
+    assert(original:GetAttribute('CoursePropFallbackOwner')=='prior'and original:GetAttribute('CoursePropFallbackTransparency')==.4)
+    preserved(row,before);watch(row);A.step(row,2);assert(cosmeticWrites(row,'CFrame')==0)
+    A.remove(row);assert(fresh.model.destroyed and row.part:GetAttribute('CoursePropFallbackOwner')==nil)
+end)
+test('resize skin removal and projectile heading changes invalidate cached resource state',function()
+    local row=object('Rocket',vector(1,1,1));A.update(row,geometry,{role='Projectile',visualVelocity={x=12,y=0,z=0}},0)
+    watch(row);A.update(row,geometry,{role='Projectile',visualVelocity={x=12,y=0,z=0}},1)
+    assert(cosmeticWrites(row,'CFrame')==0)
+    A.update(row,geometry,{role='Projectile',visualVelocity={x=0,y=0,z=-12}},2)
+    assert(cosmeticWrites(row,'CFrame')==1 and math.abs(row.coursePropAppearance.rows[1].part.CFrame.ry)<1e-6)
+    local old=row.coursePropAppearance;row.part.Size=vector(2,2,2);A.update(row,geometry,{},3)
+    assert(old.model.destroyed and row.coursePropAppearance~=old)
+    old=row.coursePropAppearance;old.skin:Destroy();A.update(row,geometry,{},4)
+    assert(old.model.destroyed and row.coursePropAppearance~=old,'A removed skin retained stale cache entries')
+end)
+test('Fan Updraft keeps its deliberately opaque cosmetic until the volume is hidden',function()
+    local row=object('Fan');A.update(row,geometry,{role='Updraft',alpha=.6},0)
+    local part=row.coursePropAppearance.rows[1].part;assert(part.Transparency==.1)
+    watch(row);A.update(row,geometry,{role='Updraft',alpha=.8},0)
+    assert(cosmeticWrites(row,'Transparency')==0)
+    A.update(row,geometry,{role='Updraft',alpha=1},0);assert(part.Transparency==1)
+    A.update(row,geometry,{alpha=.6},0);assert(math.abs(part.Transparency-.64)<1e-6)
 end)
 print('Course prop lifecycle contracts: '..count..' passed; rendering/axes remain native checks')

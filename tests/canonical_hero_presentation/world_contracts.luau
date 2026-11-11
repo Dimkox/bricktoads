@@ -255,3 +255,117 @@ assert(gripWorld:equipClub('canonical-grip',1));assertGrip(gripHero.model['Right
 assert(gripWorld:unequipClub('canonical-grip'))
 gripWorld:clearActors()
 print('PASS stale detached malformed and legacy cosmetics retain the established R6 club grip and authority cleanup')
+
+-- Run the real stand spawn, game spawn and appearance attachment together.
+-- Only Roblox Instances, rigid transforms and ownership are doubled here.
+do
+    local isA, frameIndex = Node.IsA, Frame.__index
+    function Node:IsA(class)
+        return isA(self, class) or class == 'BasePart' and self.ClassName == 'MeshPart'
+    end
+    Frame.__index = function(self, key)
+        if key == 'Rotation' then
+            return env.CFrame.Angles(self.rotationX or 0, self.rotationY or 0, self.rotationZ or 0)
+        end
+        return Frame[key]
+    end
+    function Frame:Inverse()
+        local inverse = frame(-self.Position)
+        inverse.rotationX, inverse.rotationY, inverse.rotationZ = -(self.rotationX or 0), -(self.rotationY or 0), -(self.rotationZ or 0)
+        return inverse
+    end
+    function Frame:ToEulerAnglesXYZ()
+        return self.rotationX or 0, self.rotationY or 0, self.rotationZ or 0
+    end
+
+    local function template(name, profile, parent)
+        local model = node('Model', name, parent)
+        node('StringValue', 'AppearanceProfile', model).Value = profile
+        node('NumberValue', 'AppearanceScale', model).Value = WorldHeroManifest.appearanceScale
+        for _, spec in ipairs(WorldHeroManifest.parts) do
+            local mesh = node('MeshPart', spec.name, model)
+            mesh.Size = vector(table.unpack(spec.size))
+            mesh.CFrame = frame(table.unpack(spec.cframe))
+            mesh.MeshId, mesh.TextureID, mesh.Transparency = spec.meshId, spec.textureId, spec.transparency or 0
+            for _, specAttachment in ipairs(spec.attachments) do
+                node('Attachment', specAttachment.name, mesh).CFrame = frame(table.unpack(specAttachment.cframe))
+            end
+        end
+        model.Clone = function() return template(name, profile) end
+        return model
+    end
+    local canonical, legacy, morphs = node('Folder'), node('Folder'), node('Folder')
+    template('CanonicalPlayer1', 'CanonicalNESHero', canonical)
+    template('GreenToad', 'LegacyGeneratedGreen', legacy)
+    local collection = {AddTag = function() end}
+    local loadAppearance = assert(loadstring(WorldAppearanceSource))
+    setfenv(loadAppearance, setmetatable({game = {GetService = function(_, name)
+        assert(name == 'CollectionService')
+        return collection
+    end}}, {__index = env}))
+    local actualAppearance = loadAppearance()
+
+    local base = table.clone(Base)
+    local originals = {}
+    local bodyNames = {'Torso', 'Head', 'Left Arm', 'Right Arm', 'Left Leg', 'Right Leg'}
+    function base.spawn(self, uid, ...)
+        if not actualBase.spawn(self, uid, ...) then return false end
+        local actor = self.actors[uid]
+        actor.root.simulateAssemblyOwnershipReset = true
+        actor.root.nearbyAutomaticOwner = 'nearby-client'
+        originals[uid] = {}
+        for _, name in ipairs(bodyNames) do
+            local part = actor.model[name]
+            -- These are BasePart engine defaults omitted by the stand builder.
+            part.Transparency = part.Transparency or 0
+            if part.CanCollide == nil then part.CanCollide = true end
+            part.CanTouch, part.CanQuery, part.Massless = true, true, false
+            originals[uid][name] = {part = part, collides = part.CanCollide}
+        end
+        return true
+    end
+    local adapter = {attach = function(actor, selected)
+        local templates = actor.model:GetAttribute('Slot') == 3 and legacy or canonical
+        return actualAppearance.attach(actor, selected, templates, morphs)
+    end}
+    local spawnWorld = World.new(base, {FallY = -20, WalkSpeed = 16, JumpPower = 50},
+        {name = 'HeroFallbackSpawn', characterAppearance = adapter})
+
+    assert(spawnWorld:spawn(1, 'canonical-spawn', nil, false, 'Mr. Green'))
+    local hero = spawnWorld.actors[1]
+    assert(hero.appearance and hero.appearance.profile == 'CanonicalNESHero')
+    local targets = {}
+    for _, ref in ipairs(hero.appearance.model:GetChildren()) do
+        if ref.Name == 'HeroFallbackTarget' then targets[ref.Value] = true end
+    end
+    for _, name in ipairs(bodyNames) do
+        local original = originals[1][name].part
+        assert(targets[original] and original.Transparency == 0 and original:GetAttribute('HeroFallbackTransparency') == 0,
+            'Canonical world spawn hid the physical fallback before readiness: ' .. name)
+        targets[original] = nil
+    end
+    assert(next(targets) == nil, 'Only the six physical R6 body parts may be fallback targets')
+
+    assert(spawnWorld:spawn(2, 'primitive-spawn', nil, false, 'Mr. Yellow'))
+    local primitive = spawnWorld.actors[2]
+    assert(not primitive.appearance and primitive.model:GetAttribute('Appearance') == 'OriginalToad')
+    assert(primitive.model.ToadBody.Transparency == nil or primitive.model.ToadBody.Transparency == 0)
+    assert(spawnWorld:spawn(3, 'legacy-spawn', nil, false, 'Mr. Green'))
+    assert(spawnWorld.actors[3].appearance.profile == 'LegacyGeneratedGreen')
+    for uid, actor in pairs(spawnWorld.actors) do
+        assert(not actor.model:FindFirstChild('Eye') and actor.root.Transparency == 1)
+        assert(actor.root.assemblyOwnershipResets > 0 and actor.root.networkOwnershipPins == 2
+            and actor.root:GetNetworkOwner() == nil and not actor.root:GetNetworkOwnershipAuto())
+        assert(not actor.root.Anchored and actor.root.CanCollide == false and actor.humanoid.Health == 100)
+        for _, name in ipairs(bodyNames) do
+            local original = originals[uid][name]
+            assert(actor.model[name] == original.part and original.part.Transparency == (uid == 1 and 0 or 1))
+            assert(original.part.CanCollide == original.collides and original.part.CanTouch and original.part.CanQuery
+                and not original.part.Anchored and not original.part.Massless)
+        end
+    end
+    spawnWorld:clearActors()
+    Node.IsA, Frame.__index = isA, frameIndex
+    Frame.Inverse, Frame.ToEulerAnglesXYZ = nil, nil
+    print('PASS canonical world spawn retains six visible R6 fallbacks and pins ownership after appearance assembly')
+end

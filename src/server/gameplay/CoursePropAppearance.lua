@@ -26,7 +26,7 @@ local function product(a,b)return Vector3.new(a.X*b.X,a.Y*b.Y,a.Z*b.Z)end
 function Appearance.remove(row)
     local state=row.coursePropAppearance;if not state then return end
     row.coursePropAppearance=nil;state.model:Destroy()
-    local p=row.part
+    local p=state.part
     if p and p.Parent and p:GetAttribute('CoursePropFallbackOwner')==state.id then
         p:SetAttribute('CoursePropFallbackOwner',state.previousOwner)
         p:SetAttribute('CoursePropFallbackTransparency',state.previousFallbackAlpha)
@@ -122,7 +122,7 @@ local function create(row,parent)
         resource:Destroy();resource=nil
         local refValue=Instance.new('ObjectValue');refValue.Name='CoursePropFallbackTarget';refValue.Value=row.part;refValue.Parent=skin
         skin.Parent=model
-        return {model=model,skin=skin,id=id,rows=rows,kind=row.kind,size=size,fit=fit,fitMode=mode,
+        return {model=model,skin=skin,id=id,rows=rows,part=row.part,kind=row.kind,size=size,fit=fit,fitMode=mode,
             previousOwner=row.part:GetAttribute('CoursePropFallbackOwner'),
             previousFallbackAlpha=row.part:GetAttribute('CoursePropFallbackTransparency')}
     end)
@@ -135,33 +135,45 @@ local function create(row,parent)
 end
 function Appearance.step(row,now)
     local state=row.coursePropAppearance;if not state then return end
-    if not row.part or not row.part.Parent or not state.model.Parent then Appearance.remove(row);return end
+    if not row.part or row.part~=state.part or not row.part.Parent or not state.model.Parent
+        or state.skin.Parent~=state.model then Appearance.remove(row);return end
     if not finite(now)then return end
     local metadata=state.metadata or{}
     local alpha=finite(metadata.alpha)and math.clamp(metadata.alpha,0,1)or row.part.Transparency
+    -- The translucent Updraft volume is a physical indicator; its solid fan
+    -- cosmetic deliberately stays opaque until that volume is fully hidden.
     if row.kind=='Fan'and metadata.role=='Updraft'and alpha<1 then alpha=0 end
     local moving=metadata.hazard~=false and metadata.role~='Defused'and metadata.role~='Exploded'
     local anchor=state.projectileRotation and CFrame.new(row.part.CFrame.Position)*state.projectileRotation or row.part.CFrame
     for _,r in ipairs(state.rows)do
-        local motion=CFrame.new()
-        if r.motion and moving then
-            local phase=(now*(r.speed or 1))%(math.pi*2)
-            if r.motion=='SpinX'then motion=CFrame.Angles(phase,0,0)
-            elseif r.motion=='SpinY'or r.motion=='Orbit'then motion=CFrame.Angles(0,phase,0)
-            elseif r.motion=='SpinZ'then motion=CFrame.Angles(0,0,phase)
-            elseif r.motion=='Pulse'then motion=CFrame.new(0,math.sin(phase)*math.min(state.size.Y*.035,.2),0)end
+        local phase=r.motion and moving and(now*(r.speed or 1))%(math.pi*2)or nil
+        -- Rest transforms/fit/pivots are immutable for this skin. Only a real
+        -- anchor or animation-phase change needs another CFrame calculation.
+        if r.lastAnchor~=anchor or r.lastPhase~=phase then
+            local motion=CFrame.new()
+            if phase then
+                if r.motion=='SpinX'then motion=CFrame.Angles(phase,0,0)
+                elseif r.motion=='SpinY'or r.motion=='Orbit'then motion=CFrame.Angles(0,phase,0)
+                elseif r.motion=='SpinZ'then motion=CFrame.Angles(0,0,phase)
+                elseif r.motion=='Pulse'then motion=CFrame.new(0,math.sin(phase)*math.min(state.size.Y*.035,.2),0)end
+            end
+            r.part.CFrame=anchor*state.fit*r.pivot*motion*r.pivot:Inverse()*r.frame
+            r.lastAnchor=anchor;r.lastPhase=phase
         end
-        r.part.CFrame=anchor*state.fit*r.pivot*motion*r.pivot:Inverse()*r.frame
         local visible=r.baselineAlpha+(1-r.baselineAlpha)*alpha
-        r.part.Transparency=visible
-        if r.part:GetAttribute('CoursePropVisibleTransparency')~=visible then r.part:SetAttribute('CoursePropVisibleTransparency',visible)end
+        if r.lastVisible~=visible then
+            r.part.Transparency=visible
+            r.part:SetAttribute('CoursePropVisibleTransparency',visible)
+            r.lastVisible=visible
+        end
     end
 end
 function Appearance.update(row,parent,metadata,now)
     if not row then return end
     if not row.part or not row.part.Parent then Appearance.remove(row);return end
     local state=row.coursePropAppearance
-    if state and(state.kind~=row.kind or not same(state.size,row.part.Size)or state.model.Parent~=parent)then Appearance.remove(row);state=nil end
+    if state and(state.part~=row.part or state.kind~=row.kind or not same(state.size,row.part.Size)
+        or state.model.Parent~=parent or state.skin.Parent~=state.model)then Appearance.remove(row);state=nil end
     if not state and KINDS[row.kind]then state=create(row,parent);row.coursePropAppearance=state end
     if not state then return end
     state.metadata=metadata or{}
@@ -175,7 +187,8 @@ function Appearance.update(row,parent,metadata,now)
             state.projectileRotation=CFrame.lookAt(Vector3.new(),direction,up).Rotation
         end
     elseif state.metadata.role~='Projectile'then state.projectileRotation=nil end
-    if row.part:GetAttribute('CoursePropFallbackOwner')==state.id then
+    if row.part:GetAttribute('CoursePropFallbackOwner')==state.id
+        and row.part:GetAttribute('CoursePropFallbackTransparency')~=row.part.Transparency then
         row.part:SetAttribute('CoursePropFallbackTransparency',row.part.Transparency)
     end
     Appearance.step(row,finite(now)and now or 0)

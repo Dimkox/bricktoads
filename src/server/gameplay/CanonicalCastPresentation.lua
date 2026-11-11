@@ -62,9 +62,11 @@ local FRAME_POSES={
         [0xF8]={Head={0},LeftArm={1.1},RightArm={1.1},Weapon={-.15}},
     },
     DarkQueen={
-        [0x81]={Body={.05},Head={.05},LeftArm={.3,0,-.3},RightArm={-.6,0,.35},Cape={.1}},
-        [0x82]={Body={-.15},Head={-.1},LeftArm={.65,0,-.4},RightArm={1.5,0,.3},RightLeg={1.1},Cape={.4}},
-        [0x83]={Body={.12},Head={.1},LeftArm={0,0,-1.3},RightArm={0,0,1.3},LeftLeg={.5},RightLeg={.5},Cape={.6}},
+        [0x81]={Body={.05},Head={.05},LeftArm={.3,0,-.3},RightArm={-.6,0,.35},Hair={.1}},
+        [0x82]={Body={-.15},Head={-.1},LeftArm={.65,0,-.4},RightArm={1.5,0,.3},RightLeg={1.1},Hair={.4}},
+        -- main.asm14433-14452 selects83 from raw NES Xspeed/counter bits.
+        -- Those bytes have no runtime producer here; world speed is not a byte.
+        [0x83]={Body={.12},Head={.1},LeftArm={0,0,-1.3},RightArm={0,0,1.3},LeftLeg={.5},RightLeg={.5},Hair={.6}},
     },
 }
 local function birdPose(wing,head,jaw)
@@ -144,7 +146,17 @@ function P.kinds() return names end
 function P.new() return {} end
 function P.cancel(state)
     if state.sequence and state.seen then state.seen[state.sequence.attack]=true end
-    state.sequence=nil
+    state.sequence=nil;state.spinAttack=nil
+end
+local function queenSpin(result,state,c,authored)
+    if c.kind=='DarkQueen'and c.phase=='Active'and state.spinAttack and state.spinAttack==c.attack then
+        -- The accepted gameplay Spin can outlast its decoded81/82 clip.
+        -- Keep the authored spin on the imported Hair/body instead of letting
+        -- the representative neutral source frame replace the whole action.
+        for _,name in ipairs({'Body','LeftArm','RightArm','Hair'})do result.joints[name]=authored[name]end
+        result.actionBinding='Authored3DSpin'
+    end
+    return result
 end
 local function articulation(group,c,state)
     local t=c.now-state.started;local speed=math.clamp(c.speed or 0,0,40)
@@ -171,7 +183,7 @@ local function articulation(group,c,state)
     elseif group=='Orb' then
         j.Body=joint(0,t*.7,t*1.7);j.Spikes=joint(0,0,-t*.4)
     elseif group=='Queen' then
-        j.Cape=joint(.1+math.sin(t*4)*.08);j.LeftArm=joint(-stride*.5,0,-.1)
+        j.Hair=joint(.1+math.sin(t*4)*.08);j.LeftArm=joint(-stride*.5,0,-.1)
         j.RightArm=joint(stride*.5,0,.1);j.Head=joint(0,cycle*.04)
     elseif group=='Trap' then
         j.Jaw=joint(.08);j.Tongue=joint();j.Body=joint()
@@ -205,23 +217,27 @@ function P.sample(state,c)
         table.clear(state);state.actorId=c.actorId;state.levelEpoch=c.levelEpoch;state.kind=c.kind;state.started=c.now
         state.seen=setmetatable({},{__mode='k'})
     end
-    if state.lastNow and c.now<state.lastNow then state.sequence=nil;return nil,'CLOCK_REWIND' end
+    if state.lastNow and c.now<state.lastNow then P.cancel(state);return nil,'CLOCK_REWIND' end
     state.lastNow=c.now
     local attack=c.attack
     if attack~=nil and (type(attack)~='table' or attack.actorId~=c.actorId or attack.levelEpoch~=c.levelEpoch) then
-        state.sequence=nil;return nil,'STALE_ATTACK'
+        P.cancel(state);return nil,'STALE_ATTACK'
     end
     if state.sequence and state.sequence.attack==attack and (attack.name~=state.sequence.name or attack.start~=state.sequence.acceptedStart) then
-        state.sequence=nil;return nil,'ATTACK_CHANGED'
+        P.cancel(state);return nil,'ATTACK_CHANGED'
+    end
+    if state.spinAttack and state.spinAttack==attack and(attack.name~='Spin'or attack.start~=state.spinStart)then
+        P.cancel(state);return nil,'ATTACK_CHANGED'
     end
     local priority=c.dead and 'Dead' or c.reacting and 'Reaction' or c.carried and 'Carried' or nil
     local profile=Profiles.get(c.kind)
     local result={kind=c.kind,appliesDamage=false,state=priority or c.phase or c.mode or 'Idle',
         adaptation='Authored3DJointAngles',namespace=profile.namespace,spriteNamespace=profile.spriteNamespace,bankRecipe=profile.bankRecipe,
         joints=priority and priorityPose(priority) or articulation(groups[c.kind],c,state),events={}}
+    local authored=result.joints
     local phase=math.floor(math.max(0,c.now-state.started)*8)
     if priority then
-        if attack then state.seen[attack]=true end;state.sequence=nil
+        if attack then state.seen[attack]=true end;state.sequence=nil;state.spinAttack=nil
         local selector=priority=='Dead' and 'Dead' or priority=='Carried' and (c.kind=='Raven' and 'CarriedCorpse' or 'CarriedOrDisabled')
             or (c.reactionHeavy and 'HeavyReaction' or 'LightReaction')
         local selected=Profiles.sample(c.kind,{state=selector,phase=phase,timerRaw=c.reactionTimerRaw,speed=c.speed})
@@ -248,12 +264,15 @@ function P.sample(state,c)
     local clip=attack and clips[c.kind] and clips[c.kind][attack.name]
     if attack and (not state.sequence or state.sequence.attack~=attack) then
         state.sequence=nil
+        if state.spinAttack~=attack then state.spinAttack=nil end
         if clip and not state.seen[attack] then
             state.seen[attack]=true
+            if c.kind=='DarkQueen'and attack.name=='Spin'then state.spinAttack=attack;state.spinStart=attack.start end
             state.sequence={attack=attack,name=attack.name,acceptedStart=attack.start,id=clip,
                 start=finite(attack.start) and math.min(attack.start,c.now) or c.now,lastCall=-1}
         end
     elseif not attack and c.phase~='Recovery' then state.sequence=nil end
+    if not attack then state.spinAttack=nil end
     local sequence=state.sequence
     if sequence then
         local calls=math.clamp(math.floor((c.now-sequence.start)*60+1e-7),0,4096)
@@ -274,7 +293,7 @@ function P.sample(state,c)
                 if offsets then result.components=Walker.pose(c.sourceObjectType or 0x11,offsets.firstDelta,offsets.secondDelta) end
             elseif high[c.kind] then result.frameId=bit32.bor(result.frameId,0x80) end
             result.frameBasis='SourceClipWithAuthored3DJointAngles';framePose(result,result.frameId)
-            return result
+            return queenSpin(result,state,c,authored)
         end
         state.sequence=nil
     end
@@ -307,7 +326,7 @@ function P.sample(state,c)
             end
         end
     end
-    return result
+    return queenSpin(result,state,c,authored)
 end
 P.provenance=table.freeze({sourceCommit=Animation.provenance.commit,sourceCatalogSha256=Animation.provenance.sourceCatalogSha256,
     knownAttackCallers='Pig3;Walker0;Dragon3;BigBlag1;GeneralSlaughter1;RoboManus1;DarkQueen1',

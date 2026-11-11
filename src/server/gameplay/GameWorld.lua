@@ -95,6 +95,9 @@ local function hideRig(actor)
     for _,p in ipairs(actor.model:GetChildren()) do
         if p:IsA("BasePart") then p.Transparency = 1 end
     end
+end
+
+local function removeStandEyes(actor)
     -- The stand's small eye parts are also cosmetic and can be replaced safely.
     for _,p in ipairs(actor.model:GetChildren()) do
         if p.Name == "Eye" then p:Destroy() end
@@ -102,8 +105,10 @@ local function hideRig(actor)
 end
 
 local function toad(actor, template, appearance)
-    hideRig(actor)
+    removeStandEyes(actor)
+    -- Canonical readiness uses the physical rig's original visible alpha.
     if appearance and appearance.attach(actor, template) then return end
+    hideRig(actor)
     local palettes = {
         ["Mr. Green"] = {Color3.fromRGB(94, 159, 102), Color3.fromRGB(188, 209, 122), Color3.fromRGB(41, 85, 65)},
         ["Mr. Yellow"] = {Color3.fromRGB(210, 169, 61), Color3.fromRGB(246, 224, 143), Color3.fromRGB(118, 83, 41)},
@@ -146,6 +151,7 @@ end
 
 local function drone(actor, kind)
     hideRig(actor)
+    removeStandEyes(actor)
     local m = actor.model
     cosmetic(m, m.Torso, "RustHull", Vector3.new(2.35, 1.85, 1.55), CFrame.new(), COLORS.rust)
     cosmetic(m, m.Torso, "ChestGrille", Vector3.new(1.4, 0.95, 0.15), CFrame.new(0, -0.15, -0.84), COLORS.dark)
@@ -191,6 +197,7 @@ end
 
 local function boss(actor)
     hideRig(actor)
+    removeStandEyes(actor)
     local m, root = actor.model, actor.root
     local function c(name, size, offset, color, shape, material)
         return cosmetic(m, root, name, size, offset, color, shape, material)

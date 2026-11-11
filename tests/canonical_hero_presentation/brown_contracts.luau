@@ -1,4 +1,4 @@
-test('Brown preloads independent recolored Green morph clones and restores every hidden limb',function()
+test('Brown preassembles independent recolored Green morphs and preserves neutral limbs for local readiness',function()
     local resources=fearTemplates();local base=morphBaseTemplates();local a=actor('brown-morphs')
     assert(Appearance.attach(a,'Mr. Brown',base,resources))
     local state=a.appearance;local _,count=morphMeshCount(a);assert(count==19)
@@ -8,11 +8,11 @@ test('Brown preloads independent recolored Green morph clones and restores every
         assert(row.template.HeroTemplate.Value=='Mr. Green' and row.template.Morph.Color==nil)
     end
     local c=heroContext('brown-morphs',.5);c.attack=heroAttack(c.actorId,'HeroPowerPunch')
-    Appearance.update(a,c);assert(state.activeMorph=='PowerFist' and state.model.RightHand.Transparency==1)
+    Appearance.update(a,c);assert(state.activeMorph=='PowerFist' and state.model.RightHand.Transparency==0)
     c.now=.6;c.visualState='Reaction';c.reaction={heavy=true,grounded=true}
     Appearance.update(a,c);assert(state.activeMorph==nil and state.model.RightHand.Transparency==0)
     c.now=.7;c.visualState=nil;c.fearIntro={id='brown-intro',actorId=c.actorId,counter=1,frameId=0x32}
-    Appearance.update(a,c);assert(state.activeMorph=='FearBeforeCut' and state.model.Head.Transparency==1)
+    Appearance.update(a,c);assert(state.activeMorph=='FearBeforeCut' and state.model.Head.Transparency==0)
     c.now=.8;c.visualState='Dead';Appearance.update(a,c)
     assert(state.activeMorph==nil and state.model.Head.Transparency==0)
     local _,after=morphMeshCount(a);assert(after==count and a.humanoid.Health==100 and a.model.Torso.CanCollide)
@@ -22,16 +22,16 @@ test('dedicated Brown resources retain their authored atlas and material while P
     local base=morphBaseTemplates();local native=base.CanonicalPlayer1:Clone()
     native.Name='CanonicalPlayerBrown';native.Parent=base
     native.Head.Color=colors.fromRGB(180,130,90);native.Head.SurfaceAppearance.Color=colors.fromRGB(255,255,255)
-    native.Head.SurfaceAppearance.ColorMap='dedicated-brown-atlas'
+    native.Head.SurfaceAppearance._props.ColorMapContent=fixtureContent('dedicated-brown-atlas')
     local resources=fearTemplates();local fist=resources.GreenPowerFist:Clone()
     fist.Name='BrownPowerFist';fist.HeroTemplate.Value='Mr. Brown';fist.Parent=resources
     fist.Morph.Color=colors.fromRGB(180,130,90);fist.Morph.SurfaceAppearance.Color=colors.fromRGB(255,255,255)
-    fist.Morph.SurfaceAppearance.ColorMap='dedicated-brown-fist-atlas'
+    fist.Morph.SurfaceAppearance._props.ColorMapContent=fixtureContent('dedicated-brown-fist-atlas')
     local a=actor('brown-native');assert(Appearance.attach(a,'Mr. Brown',base,resources))
-    assert(a.appearance.sourceTemplate==native and a.appearance.model.Head.SurfaceAppearance.ColorMap=='dedicated-brown-atlas')
+    assert(a.appearance.sourceTemplate==native and a.appearance.model.Head.SurfaceAppearance.ColorMapContent.Uri=='dedicated-brown-atlas')
     assert(a.appearance.model.Head.Color.R==180/255,'A native palette must not receive the fallback tint')
     local row=a.appearance.morphs.PowerFist
-    assert(row.template==fist and row.part.SurfaceAppearance.ColorMap=='dedicated-brown-fist-atlas')
+    assert(row.template==fist and row.part.SurfaceAppearance.ColorMapContent.Uri=='dedicated-brown-fist-atlas')
     assert(row.part.Color.R==180/255 and row.part.SurfaceAppearance.Color.R==1)
     assert(base.CanonicalPlayer1.Head.Color==nil and resources.GreenPowerFist.HeroTemplate.Value=='Mr. Green')
 end)
