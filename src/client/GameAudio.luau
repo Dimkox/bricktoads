@@ -98,6 +98,14 @@ function Audio:_music(data)
     elseif data.status=='Active' and data.view~='Menu' then
         key=(level.stage=='Boss' or level.stage=='Chase' or level.stage=='BossReady'
             or level.bossType and boss.bossDefeated~=true) and 'Boss' or 'Level'
+        local index=level.campaignIndex
+        if integer(index) and index>=1 and index<=13 then
+            -- Magnetic Circuit's chase is its course. The Buzzball duel follows it.
+            local battle=level.stage=='Boss' or level.stage=='BossIntro'
+                or level.stage=='BossReady' and level.mode~='Clinger'
+            local cue=(battle and 'Boss' or 'Level')..tostring(index)
+            if self.catalog.music and self.catalog.music[cue] then key=cue end
+        end
     end
     if self.muted or self.musicMuted then key=nil end
     if key~=self.musicKey then

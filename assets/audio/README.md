@@ -87,3 +87,19 @@ in CLI Luau without pretending that a fake engine establishes native playback.
 Run both policy and PCM checks cross-platform with
 `python tests/audio_fx/run.py --luau /path/to/luau`, or the policy alone with
 `.tools/luau-0.745/luau.exe tests/run_audio_fx.luau`.
+
+## Personal Studio campaign soundtrack
+
+The [campaign cue sheet](suno-campaign.json) identifies the selected Suno takes,
+their alternate recordings, and each level and boss excerpt in seconds. Supply
+the six selected MP3 downloads under their listed filenames. The lobby and result
+use the original Back Alley Bounce download from the first preview.
+
+```
+python tools/build_suno_music_preview.py "Back-Alley-Bounce.mp3" STUDIO_CONTENT_SOUNDS PREVIEW_FOLDER --campaign SUITE_FOLDER
+```
+
+Open `BrickToads-Suno-Preview.rbxlx` from the preview folder in that Studio
+installation. The locally installed stereo Ogg holds 13 course and six battle
+themes. During Magnetic Circuit the chase plays the course theme until Buzzball
+starts the duel. The downloaded recordings are for personal, non-commercial use.

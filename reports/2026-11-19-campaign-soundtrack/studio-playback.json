@@ -1,0 +1,259 @@
+{
+  "scope": "One local Studio Play client via MCP. Normal lobby and start button. Other contexts supplied to an isolated instance of the shipped audio controller via sync in the same native client. Not a full campaign playthrough.",
+  "audioSeconds": 301.346825,
+  "previewPlaceSha256": "cf70fb2e59fa00b4862839afe30c44d96b5ccfeec3ae626dd143e89e92d114f4",
+  "lobby": {
+    "id": "rbxasset://sounds/bricktoads-campaign-score-preview.ogg",
+    "loaded": true,
+    "playing": true
+  },
+  "startButton": {
+    "level1": true,
+    "peak": 130.1727518439293,
+    "playing": true
+  },
+  "checks": [
+    {
+      "key": "Lobby",
+      "pass": true,
+      "selected": "Lobby",
+      "peak": 140,
+      "wrapped": true
+    },
+    {
+      "key": "Level1",
+      "pass": true,
+      "selected": "Level1",
+      "peak": 133,
+      "wrapped": true
+    },
+    {
+      "key": "Boss1",
+      "pass": false,
+      "selected": "Boss1",
+      "peak": 190,
+      "wrapped": false
+    },
+    {
+      "key": "Level2",
+      "pass": true,
+      "selected": "Level2",
+      "peak": 238,
+      "wrapped": true
+    },
+    {
+      "key": "Level3",
+      "pass": true,
+      "selected": "Level3",
+      "peak": 127,
+      "wrapped": true
+    },
+    {
+      "key": "Level4",
+      "pass": false,
+      "selected": "Level4",
+      "peak": 121,
+      "wrapped": false
+    },
+    {
+      "key": "Level5",
+      "pass": true,
+      "selected": "Level5",
+      "peak": 166,
+      "wrapped": true
+    },
+    {
+      "key": "Boss5",
+      "pass": true,
+      "selected": "Boss5",
+      "peak": 195,
+      "wrapped": true
+    },
+    {
+      "key": "Level6",
+      "pass": true,
+      "selected": "Level6",
+      "peak": 87,
+      "wrapped": true
+    },
+    {
+      "key": "Level7",
+      "pass": true,
+      "selected": "Level7",
+      "peak": 127,
+      "wrapped": true
+    },
+    {
+      "key": "Level8",
+      "pass": true,
+      "selected": "Level8",
+      "peak": 186,
+      "wrapped": true
+    },
+    {
+      "key": "Boss8",
+      "pass": true,
+      "selected": "Boss8",
+      "peak": 227,
+      "wrapped": true
+    },
+    {
+      "key": "Level9",
+      "pass": true,
+      "selected": "Level9",
+      "peak": 154,
+      "wrapped": true
+    },
+    {
+      "key": "Level10",
+      "pass": true,
+      "selected": "Level10",
+      "peak": 180,
+      "wrapped": true
+    },
+    {
+      "key": "Boss10",
+      "pass": true,
+      "selected": "Boss10",
+      "peak": 310,
+      "wrapped": true
+    },
+    {
+      "key": "Level11",
+      "pass": true,
+      "selected": "Level11",
+      "peak": 230,
+      "wrapped": true
+    },
+    {
+      "key": "Boss11",
+      "pass": true,
+      "selected": "Boss11",
+      "peak": 472,
+      "wrapped": true
+    },
+    {
+      "key": "Level12",
+      "pass": true,
+      "selected": "Level12",
+      "peak": 154,
+      "wrapped": true
+    },
+    {
+      "key": "Level13",
+      "pass": true,
+      "selected": "Level13",
+      "peak": 158,
+      "wrapped": true
+    },
+    {
+      "key": "Boss13",
+      "pass": true,
+      "selected": "Boss13",
+      "peak": 153,
+      "wrapped": true
+    },
+    {
+      "key": "Result",
+      "pass": true,
+      "selected": "Result",
+      "peak": 185,
+      "wrapped": true
+    }
+  ],
+  "loopSeekRetest": [
+    {
+      "traces": [
+        {
+          "pass": true,
+          "points": [
+            18.14,
+            18.14,
+            18.14,
+            18.14,
+            18.18,
+            18.24,
+            18.31,
+            18.37,
+            0.07
+          ]
+        },
+        {
+          "pass": true,
+          "points": [
+            18.14,
+            18.14,
+            18.14,
+            18.14,
+            18.2,
+            18.27,
+            18.33,
+            0.01
+          ]
+        },
+        {
+          "pass": true,
+          "points": [
+            18.14,
+            18.14,
+            18.14,
+            18.14,
+            18.18,
+            18.24,
+            18.31,
+            18.37,
+            0.03
+          ]
+        }
+      ],
+      "hi": 78.84687042236328,
+      "key": "Boss1",
+      "lo": 60.458980560302734
+    },
+    {
+      "traces": [
+        {
+          "pass": true,
+          "points": [
+            11.15,
+            11.15,
+            11.15,
+            11.22,
+            11.28,
+            11.35,
+            0.01
+          ]
+        },
+        {
+          "pass": true,
+          "points": [
+            11.15,
+            11.15,
+            11.15,
+            11.22,
+            11.26,
+            11.32,
+            11.39,
+            0.05
+          ]
+        },
+        {
+          "pass": true,
+          "points": [
+            11.15,
+            11.15,
+            11.15,
+            11.22,
+            11.28,
+            11.35,
+            0.01
+          ]
+        }
+      ],
+      "hi": 101.78058624267578,
+      "key": "Level4",
+      "lo": 90.37653350830078
+    }
+  ],
+  "retestMethod": "After seeking near the end, observe the position on both sides of the boundary. The first single sample after 0.38s missed two wraps during seek latency."
+}

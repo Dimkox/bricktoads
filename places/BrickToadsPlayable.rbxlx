@@ -13477,7 +13477,7 @@ return World
       <Item class="ModuleScript" referent="BT76">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='d10b584ba65bb3a913af281921ab8e7d9a2db8123862cc69cd6f16ac3f1aac8a'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='b642bb7a184f6f22169331bf4c2d6f56246da79b57fb7b04bfd833856ffa8d60'})
 </ProtectedString>
         </Properties>
       </Item>
@@ -16790,6 +16790,14 @@ function Audio:_music(data)
     elseif data.status=='Active' and data.view~='Menu' then
         key=(level.stage=='Boss' or level.stage=='Chase' or level.stage=='BossReady'
             or level.bossType and boss.bossDefeated~=true) and 'Boss' or 'Level'
+        local index=level.campaignIndex
+        if integer(index) and index&gt;=1 and index&lt;=13 then
+            -- Magnetic Circuit's chase is its course. The Buzzball duel follows it.
+            local battle=level.stage=='Boss' or level.stage=='BossIntro'
+                or level.stage=='BossReady' and level.mode~='Clinger'
+            local cue=(battle and 'Boss' or 'Level')..tostring(index)
+            if self.catalog.music and self.catalog.music[cue] then key=cue end
+        end
     end
     if self.muted or self.musicMuted then key=nil end
     if key~=self.musicKey then

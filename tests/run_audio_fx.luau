@@ -167,5 +167,33 @@ check('effects require a resolvable actor in the selected group',function()
     local created=0;local e=Effects.new({resolvePosition=function() return nil end,createParticle=function() created+=1 end})
     e:emit('hit',event(1,'Hit'),snapshot(1));assert(created==0)
 end)
+check('all campaign themes switch on stage boundaries and keep playing across normal snapshots',function()
+    local audio,_,_,_,catalog=setup()
+    local bosses={[1]=true,[5]=true,[8]=true,[10]=true,[11]=true,[13]=true}
+    local seq=0
+    local function send(index,stage,expected)
+        seq+=1
+        local data=snapshot(seq)
+        data.levelEpoch=index
+        data.level={campaignIndex=index,stage=stage,mode=index==11 and 'Clinger' or nil}
+        assert(audio:sync(data))
+        assert(audio.musicKey==expected,stage..' selected '..tostring(audio.musicKey))
+    end
+    for index=1,13 do
+        local level='Level'..index
+        catalog.music[level]={start=index,finish=index+.5}
+        send(index,index==11 and 'Chase' or 'Route',level)
+        local plays=audio.music.plays
+        send(index,index==11 and 'Chase' or 'Route',level)
+        assert(audio.music.plays==plays)
+        if bosses[index] then
+            local boss='Boss'..index
+            catalog.music[boss]={start=20+index,finish=20.5+index}
+            send(index,'BossReady',index==11 and level or boss)
+            if index==1 then send(index,'BossIntro',boss) end
+            send(index,'Boss',boss)
+        end
+    end
+end)
 print(string.format('Audio/FX contracts: %d passed, %d failed',passed,failed))
 assert(failed==0,'audio/FX policy regression')

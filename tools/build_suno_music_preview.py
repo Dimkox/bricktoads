@@ -5,6 +5,7 @@ Requires FFmpeg. The Suno Free recording is for personal, non-commercial use.
 """
 import argparse
 import hashlib
+import json
 from pathlib import Path
 import re
 import shutil
@@ -25,14 +26,15 @@ CUES = {
 }
 RATE = 44100
 ASSET = "bricktoads-back-alley-bounce-preview.ogg"
+CAMPAIGN_ASSET = "bricktoads-campaign-score-preview.ogg"
 
 
-def render(song, output):
+def render(cuts, output, asset):
     regions = {}
-    atlas = output / "Back-Alley-Bounce-Loops.wav"
+    atlas = output / Path(asset).with_suffix(".wav")
     with wave.open(str(atlas), "wb") as writer:
         writer.setparams((2, 2, RATE, 0, "NONE", "not compressed"))
-        for name, (start, stop) in CUES.items():
+        for name, (song, start, stop) in cuts.items():
             duration = stop - start
             fades = f"afade=t=in:d=0.008,afade=t=out:st={duration - .008:.6f}:d=0.008"
             pcm = subprocess.check_output([
@@ -48,22 +50,25 @@ def render(song, output):
             regions[name] = (first, writer.getnframes() / RATE)
         writer.writeframes(bytes(4 * round(.18 * RATE)))
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(atlas),
-                    "-c:a", "libvorbis", "-q:a", "6", str(output / ASSET)], check=True)
+                    "-c:a", "libvorbis", "-q:a", "6", str(output / asset)], check=True)
+    if max(end for _, end in regions.values()) >= 420:
+        raise ValueError("Music regions exceed the client's supported duration")
     return regions
 
 
-def preview_sources(regions):
+def preview_sources(regions, asset):
     catalog_file = Path("src/shared/AudioCatalog.luau")
     catalog = (ROOT / catalog_file).read_text(encoding="utf-8")
-    uri = "rbxasset://sounds/" + ASSET
+    uri = "rbxasset://sounds/" + asset
     catalog, count = re.subn(r"music='rbxassetid://\d+'", f"music='{uri}'", catalog)
     if count != 1:
         raise ValueError("Expected one music asset")
-    for name, (start, end) in regions.items():
-        catalog, count = re.subn(name + r"=\{start=[\d.]+,finish=[\d.]+,",
-                                 f"{name}={{start={start:.9f},finish={end:.9f},", catalog)
-        if count != 1:
-            raise ValueError(f"Expected one music entry for {name}")
+    rows = [f"        {name}={{start={start:.9f},finish={end:.9f},volume=.22}},"
+            for name, (start, end) in regions.items()]
+    catalog, count = re.subn(r"    music=\{\n.*?\n    \},", "    music={\n" +
+                             "\n".join(rows) + "\n    },", catalog, flags=re.DOTALL)
+    if count != 1:
+        raise ValueError("Expected one music region table")
     audio_file = Path("src/client/GameAudio.luau")
     audio = (ROOT / audio_file).read_text(encoding="utf-8")
     marker = "local function asset(v) return "
@@ -77,6 +82,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for arg in ("song", "studio_content_sounds", "output_dir"):
         parser.add_argument(arg, type=Path)
+    parser.add_argument("--campaign", type=Path, metavar="SONG_FOLDER",
+                        help="Add 13 level and six boss cues from the six downloaded Suno suites")
     args = parser.parse_args()
     if hashlib.sha256(args.song.read_bytes()).hexdigest() != (
             "df70a0b5573ad7dac394a61a121901e9fa666e2c7ada3e1bf794121a0fdceb2b"):
@@ -84,9 +91,23 @@ def main():
     if not args.studio_content_sounds.is_dir():
         raise ValueError("Supply the installed Studio content/sounds directory")
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    regions = render(args.song, args.output_dir)
-    place = build(ROOT, source_overrides=preview_sources(regions))
-    shutil.copyfile(args.output_dir / ASSET, args.studio_content_sounds / ASSET)
+    cuts = {name: (args.song, start, end) for name, (start, end) in CUES.items()}
+    asset = ASSET
+    if args.campaign:
+        asset = CAMPAIGN_ASSET
+        cuts = {name: cuts[name] for name in ("Lobby", "Result")}
+        manifest = json.loads((ROOT / "assets/audio/suno-campaign.json").read_text(encoding="utf-8"))
+        for suite in manifest["suites"]:
+            song = args.campaign / suite["file"]
+            if hashlib.sha256(song.read_bytes()).hexdigest() != suite["sha256"]:
+                raise ValueError(f"Incorrect audio source: {song.name}")
+            for cue in suite["cues"]:
+                cuts[cue["key"]] = (song, cue["start"], cue["end"])
+    regions = render(cuts, args.output_dir, asset)
+    if args.campaign:
+        regions.update(Level=regions["Level1"], Boss=regions["Boss1"])
+    place = build(ROOT, source_overrides=preview_sources(regions, asset))
+    shutil.copyfile(args.output_dir / asset, args.studio_content_sounds / asset)
     (args.output_dir / "BrickToads-Suno-Preview.rbxlx").write_bytes(place)
 
 
