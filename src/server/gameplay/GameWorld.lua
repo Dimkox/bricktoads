@@ -456,12 +456,13 @@ local function buildRoute(self, level)
         pointLight(light, COLORS.mint, 24, 2)
     end
     local bounds = level.bounds
-    local marsh = part(g, "RouteMarsh", Vector3.new(bounds.maxX - bounds.minX + 100, .4, bounds.maxZ - bounds.minZ + 60),
+    local marsh = part(g, "RouteMarsh", Vector3.new(bounds.maxX - bounds.minX + 640, .4, 430),
         CFrame.new((bounds.minX + bounds.maxX) / 2, -9, (bounds.minZ + bounds.maxZ) / 2), Color3.fromRGB(34, 101, 96), Enum.Material.Glass)
     marsh.Transparency, marsh.Reflectance = .34, .25
-    local depth = part(g, "MarshDepth", Vector3.new(bounds.maxX - bounds.minX + 100, 9, bounds.maxZ - bounds.minZ + 60),
+    local depth = part(g, "MarshDepth", Vector3.new(bounds.maxX - bounds.minX + 640, 9, 430),
         CFrame.new((bounds.minX + bounds.maxX) / 2, -15, (bounds.minZ + bounds.maxZ) / 2), COLORS.dark)
     depth.Transparency = .22
+    marsh.CanQuery=false;depth.CanQuery=false
     self:progress(1, false)
 end
 
@@ -496,6 +497,166 @@ local function layoutAttributes(self)
     self.folder:SetAttribute('LayoutVersion', variation and variation.version)
 end
 
+-- Coordinates and edge openings are derived from the generated supports of this group.
+local function buildSceneEdges(self,route)
+    local g,offset=self.geometry,self.offset
+    local course=route.course
+    local surfaces={}
+    for _,zone in ipairs(route.zones) do
+        for _,p in ipairs(zone.platforms) do table.insert(surfaces,p) end
+    end
+    local arena=route.boss.platform
+    table.insert(surfaces,arena)
+    local function block(name,x,y,z,w,h,d,color,material,solid)
+        local p=part(g,name,Vector3.new(w,h,d),CFrame.new(x,y,z)+offset,color,material,solid)
+        p.CanQuery=solid
+        return p
+    end
+    -- Keep the horizon inside this party's 512-stud lane, even with four groups.
+    local bounds=route.bounds
+    local midZ=(bounds.minZ+bounds.maxZ)/2
+    local midX=(bounds.minX+bounds.maxX)/2
+    local base=course and (bounds.minY or -40)-12 or -12
+    if course then
+        block("ValleyFloor",midX,base-3,midZ,bounds.maxX-bounds.minX+640,4,430,
+            route.mode=="Ice" and Color3.fromRGB(96,143,161) or COLORS.dark,Enum.Material.Slate,false)
+    end
+    for n=0,math.ceil((bounds.maxX-bounds.minX+320)/72) do
+        local x=bounds.minX-160+n*72
+        for _,side in ipairs({-1,1}) do
+            local wave=math.sin(n*2.13+side)
+            local z=midZ+side*(151+9*wave)
+            local h=48+24*wave
+            local island=block("DistantRidgeline",x,base+4,z,128,h,74,
+                route.mode=="Ice" and Color3.fromRGB(123,163,169) or Color3.fromRGB(73,99,91),
+                Enum.Material.Rock,false)
+            island.Shape=Enum.PartType.Ball
+            island.CFrame*=CFrame.Angles(0,.17*wave,.09*wave)
+            island.CastShadow=false
+        end
+    end
+    for _,side in ipairs({-1,1}) do
+        local x=side<0 and bounds.minX-95 or bounds.maxX+95
+        for n=-1,1 do
+            local hill=block("FarBank",x+12*math.cos(n*2),base+3,midZ+n*87,64,42+n*6,128,
+                Color3.fromRGB(77,105,96),Enum.Material.Rock,false)
+            hill.Shape=Enum.PartType.Ball;hill.CastShadow=false
+        end
+    end
+    local function cliff(p,color)
+        local bottom=p.y-p.h/2
+        block("ExposedRockFace",p.x,bottom-2,p.z,p.w-.2,4,p.d-.2,color,Enum.Material.Rock,false)
+        block("LowerRockShelf",p.x,bottom-5.75,p.z,p.w*.92,3.5,p.d*.86,COLORS.dark,Enum.Material.Slate,false)
+    end
+    local function crest(x,top,z,length,width,height,surfaceId,zone,material,color)
+        for _,side in ipairs({-1,1}) do
+            local p=Instance.new("WedgePart")
+            p.Name="WalkableCrest";p.Anchored=true;p.CanTouch=false
+            p.Material=material;p.Color=color
+            p.Size=Vector3.new(width,height,length)
+            p.CFrame=CFrame.new(x+side*length/2,top+height/2,z)*CFrame.Angles(0,-side*math.pi/2,0)+offset
+            p:SetAttribute("SurfaceId",surfaceId);p:SetAttribute("ZoneIndex",zone)
+            p.Parent=g
+        end
+    end
+    -- Subtract every adjoining floor from this edge before erecting its wall.
+    -- A narrower link leaves an actual doorway instead of a wall across the route.
+    local function closeEdge(p,axis,sign)
+        local along=axis=="x" and "z" or "x"
+        local depth=axis=="x" and "w" or "d"
+        local width=axis=="x" and "d" or "w"
+        local edge=p[axis]+sign*p[depth]/2
+        local lo,hi=p[along]-p[width]/2,p[along]+p[width]/2
+        local openings={}
+        for _,q in ipairs(surfaces) do
+            if q~=p and math.abs(q.y+q.h/2-p.y-p.h/2)<=3
+                and math.abs(edge+sign*.1-q[axis])<=q[depth]/2 then
+                local a,b=math.max(lo,q[along]-q[width]/2),math.min(hi,q[along]+q[width]/2)
+                if b>a then table.insert(openings,{a,b}) end
+            end
+        end
+        table.sort(openings,function(a,b)return a[1]<b[1] end)
+        local function wall(a,b)
+            if b-a<.2 then return end
+            local mid=(a+b)/2
+            local x=axis=="x" and edge+sign*.4 or mid
+            local z=axis=="z" and edge+sign*.4 or mid
+            local w=axis=="x" and .8 or b-a
+            local d=axis=="z" and .8 or b-a
+            local top=p.y+p.h/2
+            block("BoundaryMasonry",x,top+.9,z,w,3.8,d,COLORS.stone,Enum.Material.Slate,true)
+            block("BoundaryCoping",x,top+2.85,z,w+.12,.25,d+.12,COLORS.pale,Enum.Material.Concrete,false)
+            -- Low visible parapets keep the near side legible from the follow camera.
+            local stop=block("ArenaBoundary",x,top+15,z,w,30,d,COLORS.stone,Enum.Material.Slate,true)
+            stop.Transparency=1
+        end
+        local cursor=lo
+        for _,opening in ipairs(openings) do
+            wall(cursor,opening[1]);cursor=math.max(cursor,opening[2])
+        end
+        wall(cursor,hi)
+    end
+    local function enclosure(p)
+        for _,axis in ipairs({"x","z"}) do
+            closeEdge(p,axis,-1);closeEdge(p,axis,1)
+        end
+    end
+    if not course then
+        for index,zone in ipairs(route.zones) do
+            for _,p in ipairs(zone.platforms) do
+                cliff(p,COLORS.stone)
+                if index==1 or index==3 or index==5 then
+                    enclosure(p)
+                    crest(p.x,p.y+p.h/2,p.z-p.d*.26,12,p.d*.38,2.8,zone.id,index,Enum.Material.Grass,COLORS.moss)
+                end
+            end
+        end
+    elseif route.mode=="Speeder" then
+        for _,p in ipairs(course.platforms) do
+            if p.w>course.finishDistance*.8 then
+                cliff(p,COLORS.rust)
+                closeEdge(p,"z",-1);closeEdge(p,"z",1)
+                for _,rise in ipairs(course.roadCrests or {}) do
+                    crest(rise.x,p.y+p.h/2,p.z,rise.halfLength,p.d,rise.height,route.id,1,Enum.Material.Concrete,COLORS.stone)
+                end
+            end
+        end
+    elseif route.mode=="Surf" or route.mode=="Jet" then
+        local dock=course.platforms[1]
+        cliff(dock,COLORS.stone)
+        closeEdge(dock,"x",-1)
+        closeEdge(dock,"z",-1);closeEdge(dock,"z",1)
+        -- The far end opens onto water or air for boarding.
+        for _,side in ipairs({-1,1}) do
+            for x=60,course.finishPoint.x-24,50 do
+                local height=10+4*math.sin(x*.08+side)
+                block("DistantBluff",x,-13+height/2,side*(course.laneLimit+24),40,height,10,
+                    route.mode=="Surf" and COLORS.moss or COLORS.rust,Enum.Material.Rock,false)
+            end
+        end
+    elseif route.mode=="Tubes" then
+        for _,p in ipairs(course.platforms) do
+            cliff(p,COLORS.stone)
+            closeEdge(p,"z",-1);closeEdge(p,"z",1)
+        end
+    elseif route.mode=="Ice" or route.mode=="Finale" then
+        for _,p in ipairs(course.platforms) do
+            cliff(p,route.mode=="Ice" and Color3.fromRGB(96,161,181) or COLORS.dark)
+            if route.mode=="Finale" then enclosure(p) end
+        end
+        if route.mode=="Finale" then
+            local p=course.platforms[1]
+            crest(p.x,p.y+p.h/2,p.z-p.d*.24,14,p.d*.35,3,route.id..":1",1,Enum.Material.Slate,COLORS.stone)
+        end
+    end
+    if not course or route.boss.kind then
+        cliff(arena,COLORS.dark)
+        enclosure(arena)
+        crest(arena.x,arena.y+arena.h/2,arena.z+arena.d*.31,12,arena.d*.18,2.5,
+            course and route.id..":Arena" or "GuardianCourt",course and 1 or #route.zones+1,Enum.Material.Slate,COLORS.stone)
+    end
+end
+
 local function buildLevelGeometry(self,route)
     if self.campaignWorld then self.campaignWorld:close();self.campaignWorld=nil end
     if route and route.campaignIndex and route.campaignIndex>1 then
@@ -506,6 +667,7 @@ local function buildLevelGeometry(self,route)
         if route then buildRoute(self,route) else buildGeometry(self) end
         translateGeometry(self)
     end
+    if route then buildSceneEdges(self,route) end
 end
 
 function World.new(BaseWorld, config, options)

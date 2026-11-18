@@ -49,6 +49,31 @@ return function(Definition,Modes)
         assert(s.deaths==1 and not m.complete,'crash must be swept through intermediate geometry')
         assert(m:snapshot().discardedSeconds>=1.4)
     end)
+    test('mounted speeder follows both slopes of the native road crest',function()
+        local d,s,w,m,step=fixture(3)
+        w.points[101]=table.clone(d.course.mount);step(1/60)
+        assert(m:interact(101,s.now,'Punch')=='OK')
+        local a=m.actors[101]
+        local ridge=d.course.roadCrests[1]
+        a.position={x=ridge.x-ridge.halfLength,y=3,z=0};a.grounded=true
+        local peak=0
+        for _=1,120 do
+            if a.position.x>=ridge.x+ridge.halfLength then break end
+            step(1/60)
+            assert(s.state.heroes[101].status=='Alive' and a.grounded)
+            local height=ridge.height*math.max(0,1-math.abs(a.position.x-ridge.x)/ridge.halfLength)
+            assert(math.abs(a.position.y-3-height)<.001)
+            peak=math.max(peak,height)
+        end
+        assert(peak>ridge.height-.2 and a.position.x>=ridge.x+ridge.halfLength)
+    end)
+    test('dry pipe stops an outward run and allows the player to turn back',function()
+        local _,s,_,m,step=fixture(9)
+        for _=1,100 do assert(m:move(101,0,1,true));step(1/60) end
+        local a=m.actors[101]
+        assert(math.abs(a.position.z-13.8)<.01 and s.state.heroes[101].status=='Alive')
+        m:move(101,0,-1,false);step(.1);assert(a.position.z<13)
+    end)
     test('ice accelerates and retains momentum after release while jump requires support',function()
         local _,_,w,m,step=fixture(4)
         assert(m:move(101,1,0,false))

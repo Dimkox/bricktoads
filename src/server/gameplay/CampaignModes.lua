@@ -350,6 +350,19 @@ function Modes:_platforming(s,dt)
         end
     end
     s.position.x+=s.velocity.x*dt;s.position.y+=s.velocity.y*dt;s.position.z+=s.velocity.z*dt
+    if self.mode=='Tubes' then
+        local low,high=math.huge,-math.huge
+        for _,p in ipairs(c.platforms) do
+            if math.abs(s.position.x-p.x)<=p.w/2 then
+                low=math.min(low,p.z-p.d/2+BODY.z)
+                high=math.max(high,p.z+p.d/2-BODY.z)
+            end
+        end
+        if low<=high then
+            local z=clamp(s.position.z,low,high)
+            if z~=s.position.z then s.position.z=z;s.velocity.z=0 end
+        end
+    end
     self:_blockCollision(s,old,input)
     self:_wallCollision(s,old)
     if medium=='Water' then
@@ -412,7 +425,14 @@ function Modes:_vehicle(s,dt)
             end
         end
         s.velocity.y-=100*dt;s.position.y+=s.velocity.y*dt
-        if s.position.y<=3 then s.position.y=3;s.velocity.y=0;s.grounded=true else s.grounded=false end
+        local roadY=3
+        for _,crest in ipairs(c.roadCrests or {}) do
+            local fraction=1-math.abs(s.position.x-crest.x)/crest.halfLength
+            if fraction>0 then roadY+=crest.height*fraction end
+        end
+        if s.grounded or s.position.y<=roadY then
+            s.position.y=roadY;s.velocity.y=0;s.grounded=true
+        end
         if self.mode=='Surf' then s.position.z=clamp(s.position.z+math.sin(self.elapsed*.9)*2*dt,-c.laneLimit,c.laneLimit) end
     end
     s.progress=s.position.x-c.mount.x

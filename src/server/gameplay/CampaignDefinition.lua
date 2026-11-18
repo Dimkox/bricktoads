@@ -85,9 +85,12 @@ function Definition.build(index,seed)
         if surf or jet then for n=1,3 do c.emitters[n]={id='ride-launcher-'..n,kind='RocketLauncher',position=point(100+n*85,jet and 20 or 4,23),interval=3,speed=18,life=2} end end
         addFloor(439,0,0,62,48);finish=point(434,3,0);d.bounds.maxX=495;c.axis='x'
         if index==3 then
-            -- The logical speeder floor is y=0 across every steering lane.
-            -- Render that same solid road, overlapping both arrival and finish
-            -- ledges; water and flight retain their distinct support geometry.
+            c.roadCrests={}
+            for _,after in ipairs({2,5,9}) do
+                local x=(c.hazards[after].x+c.hazards[after+1].x)/2
+                table.insert(c.roadCrests,{x=x,halfLength=9,height=2+(after%3)*.25})
+            end
+            -- Continuous roadbed under the crests and both boarding ledges.
             addFloor((c.mount.x+finish.x)/2,0,0,finish.x-c.mount.x+24,c.laneLimit*2+10)
         end
     elseif index==4 then

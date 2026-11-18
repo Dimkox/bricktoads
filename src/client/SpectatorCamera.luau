@@ -8,6 +8,16 @@ function SpectatorCamera.clampAxes(x, y, z, bounds)
         math.clamp(z, bounds.minZ, bounds.maxZ)
 end
 
+local function framedView(eye,focus,bounds)
+    if bounds then
+        local x,y,z=SpectatorCamera.clampAxes(eye.X,eye.Y,eye.Z,bounds)
+        local clipped=Vector3.new(x,y,z)
+        focus+=clipped-eye
+        eye=clipped
+    end
+    return CFrame.lookAt(eye,focus)
+end
+
 function SpectatorCamera.followTargets(heroes, models)
     local targets = {}
     for _, hero in ipairs(heroes or {}) do
@@ -151,7 +161,7 @@ function SpectatorCamera:stepIntro(dt,camera)
     -- Camera distance, short shake and perspective are authored3D adaptation.
     -- The server's source counter determines the two impacts and the E0 cut.
     local shake=math.sin((.16-self.introShake)*100)*self.introShake*1.25
-    camera.CFrame=CFrame.lookAt(target+offset+Vector3.new(shake,0,0),target)
+    camera.CFrame=framedView(target+offset+Vector3.new(shake,0,0),target,self.bounds)
     camera:SetAttribute('BossIntroId',id)
     return true
 end
@@ -221,12 +231,12 @@ function SpectatorCamera:step(dt, camera)
                 offset=Vector3.new(10,16,43);focus=self.point+Vector3.new(12,0,0)
             elseif mode.mode=='Tubes' or mode.mode=='Race' or mode.mode=='Ascent' then offset=Vector3.new(0,15,40) end
         end
-        camera.CFrame = CFrame.lookAt(self.point + offset, focus)
+        camera.CFrame = framedView(self.point + offset, focus, self.bounds)
     elseif not self.point then
         if self.worldName and self.bounds then
             local bounds = self.bounds
             local target = Vector3.new((bounds.minX + bounds.maxX) / 2, bounds.minY - 5, (bounds.minZ + bounds.maxZ) / 2)
-            camera.CFrame = CFrame.lookAt(target + Vector3.new(0, 23, 30), target)
+            camera.CFrame = framedView(target + Vector3.new(0, 23, 30), target, bounds)
         else
             camera.CFrame = CFrame.lookAt(Vector3.new(-55, 30, 36), Vector3.new(-45, 2, 0))
         end
