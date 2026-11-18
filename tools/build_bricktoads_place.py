@@ -14,7 +14,8 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
+def build(root_path: Path, *, include_character_study: bool = False,
+          source_overrides: dict[Path, str] | None = None) -> bytes:
     # Fail rather than silently dropping the existing private lifecycle module.
     (root_path / "src/server/RunLifecycle.lua").read_text(encoding="utf-8")
     root = ET.Element("roblox", {"version": "4"})
@@ -74,7 +75,10 @@ def build(root_path: Path, *, include_character_study: bool = False) -> bytes:
             if path.is_dir():
                 sources(child, path, server_only=server_only)
             else:
-                prop(child, "ProtectedString", "Source", path.read_text(encoding="utf-8"))
+                source = path.read_text(encoding="utf-8")
+                if source_overrides:
+                    source = source_overrides.get(path.relative_to(root_path), source)
+                prop(child, "ProtectedString", "Source", source)
 
     workspace = item(root, "Workspace", "Workspace")
     part(workspace, "Part", "Baseplate", (256, 1, 256), -0.5)
