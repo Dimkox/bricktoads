@@ -1,0 +1,976 @@
+{
+  "scope": "One continuous single-player Studio Play of the personal Suno preview. The input pilot used normal Move, Jump and Attack intents, a fixed first run ID for a reproducible layout, and Studio infinite lives. Observations were taken after the shipped music controller handled each accepted real remote snapshot. No level, health, boss state or music was set by the test. Boss receive delays are measured from a server Heartbeat stage observation to the corresponding client snapshot callback, not acoustic output latency.",
+  "placeAndAudio": [
+    {
+      "Hash": "CF70FB2E59FA00B4862839AFE30C44D96B5CCFEEC3AE626DD143E89E92D114F4",
+      "Name": "BrickToads-Suno-Preview.rbxlx"
+    },
+    {
+      "Hash": "F3703A053E5CDBE22F763540A762377712659E4DD398506977211DC0BF78108A",
+      "Name": "bricktoads-campaign-score-preview.ogg"
+    }
+  ],
+  "server": {
+    "players": 1,
+    "errors": [],
+    "final": {
+      "attempt": 6,
+      "rawLife": 47
+    },
+    "observations": 860,
+    "stages": [
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 1,
+        "index": 1,
+        "entered": 1795041638.231824
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 2,
+        "index": 2,
+        "entered": 1795041883.094862
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 3,
+        "index": 3,
+        "entered": 1795041906.477757
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 4,
+        "index": 4,
+        "entered": 1795041922.441022
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 5,
+        "index": 5,
+        "entered": 1795041937.902574
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 6,
+        "index": 6,
+        "entered": 1795042025.891498
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 7,
+        "index": 7,
+        "entered": 1795042059.480248
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 8,
+        "index": 8,
+        "entered": 1795042079.7347
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 9,
+        "index": 9,
+        "entered": 1795042170.815423
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 10,
+        "index": 10,
+        "entered": 1795042212.963716
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 11,
+        "index": 11,
+        "entered": 1795042358.718183
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 12,
+        "index": 12,
+        "entered": 1795042456.48357
+      },
+      {
+        "runId": "bricktoads-release31-0-l6uuca",
+        "epoch": 13,
+        "index": 13,
+        "entered": 1795042475.933181
+      }
+    ],
+    "seed": 1158731273,
+    "god": true,
+    "events": [
+      {
+        "at": 1795041857.607227,
+        "kind": "BossHit",
+        "epoch": 1
+      },
+      {
+        "at": 1795041865.258835,
+        "kind": "BossHit",
+        "epoch": 1
+      },
+      {
+        "at": 1795041873.557826,
+        "kind": "BossHit",
+        "epoch": 1
+      },
+      {
+        "at": 1795041882.943108,
+        "kind": "CampaignStageCompleted",
+        "epoch": 1
+      },
+      {
+        "at": 1795041906.354706,
+        "kind": "CampaignStageCompleted",
+        "epoch": 2
+      },
+      {
+        "at": 1795041922.335906,
+        "kind": "CampaignStageCompleted",
+        "epoch": 3
+      },
+      {
+        "at": 1795041937.8033,
+        "kind": "CampaignStageCompleted",
+        "epoch": 4
+      },
+      {
+        "at": 1795042025.782149,
+        "kind": "CampaignBossDefeated",
+        "epoch": 5
+      },
+      {
+        "at": 1795042025.782149,
+        "kind": "CampaignStageCompleted",
+        "epoch": 5
+      },
+      {
+        "at": 1795042059.249259,
+        "kind": "CampaignStageCompleted",
+        "epoch": 6
+      },
+      {
+        "at": 1795042079.648782,
+        "kind": "CampaignStageCompleted",
+        "epoch": 7
+      },
+      {
+        "at": 1795042170.563517,
+        "kind": "CampaignBossDefeated",
+        "epoch": 8
+      },
+      {
+        "at": 1795042170.563517,
+        "kind": "CampaignStageCompleted",
+        "epoch": 8
+      },
+      {
+        "at": 1795042212.776434,
+        "kind": "CampaignStageCompleted",
+        "epoch": 9
+      },
+      {
+        "at": 1795042358.687554,
+        "kind": "CampaignBossDefeated",
+        "epoch": 10
+      },
+      {
+        "at": 1795042358.687554,
+        "kind": "CampaignStageCompleted",
+        "epoch": 10
+      },
+      {
+        "at": 1795042456.400786,
+        "kind": "CampaignBossDefeated",
+        "epoch": 11
+      },
+      {
+        "at": 1795042456.400786,
+        "kind": "CampaignStageCompleted",
+        "epoch": 11
+      },
+      {
+        "at": 1795042475.850825,
+        "kind": "CampaignStageCompleted",
+        "epoch": 12
+      },
+      {
+        "at": 1795042549.815778,
+        "kind": "CampaignBossDefeated",
+        "epoch": 13
+      },
+      {
+        "at": 1795042549.815778,
+        "kind": "RunResult",
+        "epoch": 13
+      }
+    ],
+    "result": "Won",
+    "build": "77876651f82eb2ee96dc7b47db9933a595a5e14f17117e18320e0d85ae31e690"
+  },
+  "bossTiming": [
+    {
+      "boss": "Causeway Guardian",
+      "level": 1,
+      "stage": "BossIntro",
+      "serverObserved": 1795041841.174537,
+      "snapshotSent": 1795041841.268839,
+      "clientReceived": 1795041841.294726,
+      "receiveDelayMs": 120,
+      "seq": 1922
+    },
+    {
+      "boss": "Big Blag",
+      "level": 5,
+      "stage": "Boss",
+      "serverObserved": 1795041956.990008,
+      "snapshotSent": 1795041957.053795,
+      "clientReceived": 1795041957.057005,
+      "receiveDelayMs": 67,
+      "seq": 3005
+    },
+    {
+      "boss": "Robo-Manus",
+      "level": 8,
+      "stage": "Boss",
+      "serverObserved": 1795042090.564074,
+      "snapshotSent": 1795042090.557973,
+      "clientReceived": 1795042090.704426,
+      "receiveDelayMs": 140,
+      "seq": 4258
+    },
+    {
+      "boss": "General Slaughter",
+      "level": 10,
+      "stage": "Boss",
+      "serverObserved": 1795042225.299239,
+      "snapshotSent": 1795042225.366294,
+      "clientReceived": 1795042225.451983,
+      "receiveDelayMs": 153,
+      "seq": 5561
+    },
+    {
+      "boss": "Buzzball",
+      "level": 11,
+      "stage": "Boss",
+      "serverObserved": 1795042382.252631,
+      "snapshotSent": 1795042382.321778,
+      "clientReceived": 1795042382.352014,
+      "receiveDelayMs": 99,
+      "seq": 7038
+    },
+    {
+      "boss": "Dark Queen",
+      "level": 13,
+      "stage": "Boss",
+      "serverObserved": 1795042478.114577,
+      "snapshotSent": 1795042478.10277,
+      "clientReceived": 1795042478.239738,
+      "receiveDelayMs": 125,
+      "seq": 7995
+    }
+  ],
+  "client": {
+    "cues": {
+      "Boss8": {
+        "peak": 259.6190273761749,
+        "start": 196.896190476,
+        "samples": 791,
+        "correct": 791,
+        "finish": 215.182312925
+      },
+      "Level1": {
+        "peak": 310.4889243841171,
+        "start": 24.613265306,
+        "samples": 2002,
+        "correct": 2002,
+        "finish": 42.014013605
+      },
+      "Boss11": {
+        "peak": 613.8187944889069,
+        "start": 248.800566893,
+        "samples": 733,
+        "correct": 733,
+        "finish": 261.964852608
+      },
+      "Level9": {
+        "peak": 215.63007682561874,
+        "start": 178.43047619,
+        "samples": 394,
+        "correct": 394,
+        "finish": 196.716190476
+      },
+      "Level2": {
+        "peak": 269.8124796152115,
+        "start": 42.194013605,
+        "samples": 212,
+        "correct": 212,
+        "finish": 60.278979592
+      },
+      "Level7": {
+        "peak": 224.2424190044403,
+        "start": 134.609115646,
+        "samples": 155,
+        "correct": 155,
+        "finish": 146.969455782
+      },
+      "Level5": {
+        "peak": 191.90102815628052,
+        "start": 101.960589569,
+        "samples": 179,
+        "correct": 179,
+        "finish": 113.487301587
+      },
+      "Level4": {
+        "peak": 143.8741236925125,
+        "start": 90.376530612,
+        "samples": 150,
+        "correct": 150,
+        "finish": 101.780589569
+      },
+      "Boss5": {
+        "peak": 296.02570831775665,
+        "start": 147.149455782,
+        "samples": 663,
+        "correct": 663,
+        "finish": 159.787505669
+      },
+      "Level8": {
+        "peak": 230.64464330673218,
+        "start": 159.967505669,
+        "samples": 123,
+        "correct": 123,
+        "finish": 178.25047619
+      },
+      "Level13": {
+        "peak": 189.30862843990326,
+        "start": 275.218344671,
+        "samples": 20,
+        "correct": 20,
+        "finish": 288.102063492
+      },
+      "Boss13": {
+        "peak": 335.35170555114746,
+        "start": 288.282063492,
+        "samples": 682,
+        "correct": 682,
+        "finish": 301.166825397
+      },
+      "Boss10": {
+        "peak": 520.5642282962799,
+        "start": 235.455736961,
+        "samples": 1261,
+        "correct": 1261,
+        "finish": 248.620566893
+      },
+      "Level6": {
+        "peak": 224.89386051893234,
+        "start": 113.667301587,
+        "samples": 312,
+        "correct": 312,
+        "finish": 134.429115646
+      },
+      "Result": {
+        "peak": 240.09235948324203,
+        "start": 16.235963719,
+        "samples": 167,
+        "correct": 167,
+        "finish": 24.433265306
+      },
+      "Level12": {
+        "peak": 193.20224225521088,
+        "start": 262.144852608,
+        "samples": 204,
+        "correct": 204,
+        "finish": 275.038344671
+      },
+      "Boss1": {
+        "peak": 336.82043850421906,
+        "start": 60.458979592,
+        "samples": 301,
+        "correct": 301,
+        "finish": 78.846870748
+      },
+      "Level3": {
+        "peak": 135.32128185033798,
+        "start": 79.026870748,
+        "samples": 153,
+        "correct": 153,
+        "finish": 90.196530612
+      },
+      "Level10": {
+        "peak": 302.0281344652176,
+        "start": 215.362312925,
+        "samples": 118,
+        "correct": 118,
+        "finish": 221.934353741
+      },
+      "Lobby": {
+        "peak": 108.34472998976707,
+        "start": 0.18,
+        "samples": 7,
+        "correct": 7,
+        "finish": 16.055963719
+      },
+      "Level11": {
+        "peak": 368.12521517276764,
+        "start": 222.114353741,
+        "samples": 216,
+        "correct": 216,
+        "finish": 235.275736961
+      }
+    },
+    "events": [
+      {
+        "t": 0.00032782554626464844,
+        "age": 0.676318883895874,
+        "firstSnapshotMatched": true,
+        "key": "Lobby",
+        "seq": 1,
+        "expected": "Lobby",
+        "stage": "Lobby",
+        "pos": 0.18000000715255737
+      },
+      {
+        "index": 1,
+        "t": 6.434241056442261,
+        "age": 0.46183204650878906,
+        "firstSnapshotMatched": true,
+        "key": "Level1",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 8,
+        "expected": "Level1",
+        "stage": "Route",
+        "pos": 24.613265991210938
+      },
+      {
+        "index": 1,
+        "t": 209.1184060573578,
+        "age": 0.026258230209350586,
+        "firstSnapshotMatched": true,
+        "key": "Boss1",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 1922,
+        "expected": "Boss1",
+        "stage": "BossIntro",
+        "pos": 60.458980560302734
+      },
+      {
+        "index": 1,
+        "t": 213.34959983825684,
+        "age": 0.09362292289733887,
+        "firstSnapshotMatched": true,
+        "key": "Boss1",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 1960,
+        "expected": "Boss1",
+        "stage": "Boss",
+        "pos": 64.557
+      },
+      {
+        "index": 1,
+        "t": 241.48279786109924,
+        "age": 0.023941993713378906,
+        "firstSnapshotMatched": true,
+        "key": "Level1",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 2223,
+        "expected": "Level1",
+        "stage": "Exit",
+        "pos": 24.613265991210938
+      },
+      {
+        "index": 2,
+        "t": 251.2969000339508,
+        "age": 0.3255941867828369,
+        "firstSnapshotMatched": true,
+        "key": "Level2",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 2311,
+        "expected": "Level2",
+        "stage": "Rope",
+        "pos": 42.19401550292969
+      },
+      {
+        "index": 3,
+        "t": 274.323264837265,
+        "age": 0.06491589546203613,
+        "firstSnapshotMatched": true,
+        "key": "Level3",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 2523,
+        "expected": "Level3",
+        "stage": "Speeder",
+        "pos": 79.02687072753906
+      },
+      {
+        "index": 4,
+        "t": 290.31314992904663,
+        "age": 0.036375999450683594,
+        "firstSnapshotMatched": true,
+        "key": "Level4",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 2676,
+        "expected": "Level4",
+        "stage": "Ice",
+        "pos": 90.37653350830078
+      },
+      {
+        "index": 5,
+        "t": 306.2029368877411,
+        "age": 0.467134952545166,
+        "firstSnapshotMatched": true,
+        "key": "Level5",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 2826,
+        "expected": "Level5",
+        "stage": "Surf",
+        "pos": 101.96058654785156
+      },
+      {
+        "index": 5,
+        "t": 324.8809769153595,
+        "age": 0.0038728713989257812,
+        "firstSnapshotMatched": true,
+        "key": "Boss5",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 3005,
+        "expected": "Boss5",
+        "stage": "Boss",
+        "pos": 147.1494598388672
+      },
+      {
+        "index": 6,
+        "t": 393.9100568294525,
+        "age": 0.19836187362670898,
+        "firstSnapshotMatched": true,
+        "key": "Level6",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 3668,
+        "expected": "Level6",
+        "stage": "Serpents",
+        "pos": 113.66730499267578
+      },
+      {
+        "index": 7,
+        "t": 429.9341039657593,
+        "age": 2.7705769538879395,
+        "firstSnapshotMatched": true,
+        "key": "Level7",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 3980,
+        "expected": "Level7",
+        "stage": "Jet",
+        "pos": 134.60911560058594
+      },
+      {
+        "index": 8,
+        "t": 447.67290687561035,
+        "age": 0.11776185035705566,
+        "firstSnapshotMatched": true,
+        "key": "Level8",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 4135,
+        "expected": "Level8",
+        "stage": "Ascent",
+        "pos": 159.96749877929688
+      },
+      {
+        "index": 8,
+        "t": 458.5284249782562,
+        "age": 0.14714312553405762,
+        "firstSnapshotMatched": true,
+        "key": "Boss8",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 4258,
+        "expected": "Boss8",
+        "stage": "Boss",
+        "pos": 196.8961944580078
+      },
+      {
+        "index": 9,
+        "t": 538.5903038978577,
+        "age": 0.10038995742797852,
+        "firstSnapshotMatched": true,
+        "key": "Level9",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 5049,
+        "expected": "Level9",
+        "stage": "Tubes",
+        "pos": 178.43048095703125
+      },
+      {
+        "index": 10,
+        "t": 580.8124868869781,
+        "age": 0.1314859390258789,
+        "firstSnapshotMatched": true,
+        "key": "Level10",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 5443,
+        "expected": "Level10",
+        "stage": "Race",
+        "pos": 215.36231994628906
+      },
+      {
+        "index": 10,
+        "t": 593.2758350372314,
+        "age": 0.08623218536376953,
+        "firstSnapshotMatched": true,
+        "key": "Boss10",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 5561,
+        "expected": "Boss10",
+        "stage": "Boss",
+        "pos": 235.4557342529297
+      },
+      {
+        "index": 11,
+        "t": 726.6750919818878,
+        "age": 0.10980010032653809,
+        "firstSnapshotMatched": true,
+        "key": "Level11",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 6822,
+        "expected": "Level11",
+        "stage": "Chase",
+        "pos": 222.11434936523438
+      },
+      {
+        "index": 11,
+        "t": 750.1761789321899,
+        "age": 0.031091928482055664,
+        "firstSnapshotMatched": true,
+        "key": "Boss11",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 7038,
+        "expected": "Boss11",
+        "stage": "Boss",
+        "pos": 248.80056762695312
+      },
+      {
+        "index": 12,
+        "t": 824.5023028850555,
+        "age": 0.2259058952331543,
+        "firstSnapshotMatched": true,
+        "key": "Level12",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 7771,
+        "expected": "Level12",
+        "stage": "Tower",
+        "pos": 262.1448669433594
+      },
+      {
+        "index": 13,
+        "t": 843.7442739009857,
+        "age": 0.025281906127929688,
+        "firstSnapshotMatched": true,
+        "key": "Level13",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 7975,
+        "expected": "Level13",
+        "stage": "Finale",
+        "pos": 275.2183532714844
+      },
+      {
+        "index": 13,
+        "t": 846.0635080337524,
+        "age": 0.13742899894714355,
+        "firstSnapshotMatched": true,
+        "key": "Boss13",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 7995,
+        "expected": "Boss13",
+        "stage": "Boss",
+        "pos": 288.2820739746094
+      },
+      {
+        "index": 13,
+        "t": 917.7641520500183,
+        "age": 0.03639507293701172,
+        "firstSnapshotMatched": true,
+        "key": "Result",
+        "runId": "bricktoads-release31-0-l6uuca",
+        "seq": 8677,
+        "expected": "Result",
+        "stage": "Won",
+        "pos": 16.235963821411133
+      }
+    ],
+    "mismatches": []
+  },
+  "serverStages": [
+    {
+      "at": 1795041708.346501,
+      "index": 1,
+      "stage": "Route"
+    },
+    {
+      "at": 1795041841.174537,
+      "index": 1,
+      "stage": "BossIntro"
+    },
+    {
+      "at": 1795041845.429759,
+      "index": 1,
+      "stage": "Boss"
+    },
+    {
+      "at": 1795041873.575774,
+      "index": 1,
+      "stage": "Exit"
+    },
+    {
+      "at": 1795041883.102817,
+      "index": 2,
+      "stage": "Rope"
+    },
+    {
+      "at": 1795041906.423809,
+      "index": 3,
+      "stage": "Speeder"
+    },
+    {
+      "at": 1795041922.381193,
+      "index": 4,
+      "stage": "Ice"
+    },
+    {
+      "at": 1795041937.906554,
+      "index": 5,
+      "stage": "Surf"
+    },
+    {
+      "at": 1795041956.990008,
+      "index": 5,
+      "stage": "Boss"
+    },
+    {
+      "at": 1795042025.875995,
+      "index": 6,
+      "stage": "Serpents"
+    },
+    {
+      "at": 1795042059.37165,
+      "index": 7,
+      "stage": "Jet"
+    },
+    {
+      "at": 1795042079.718474,
+      "index": 8,
+      "stage": "Ascent"
+    },
+    {
+      "at": 1795042090.564074,
+      "index": 8,
+      "stage": "Boss"
+    },
+    {
+      "at": 1795042170.645003,
+      "index": 9,
+      "stage": "Tubes"
+    },
+    {
+      "at": 1795042212.874335,
+      "index": 10,
+      "stage": "Race"
+    },
+    {
+      "at": 1795042225.299239,
+      "index": 10,
+      "stage": "Boss"
+    },
+    {
+      "at": 1795042358.708017,
+      "index": 11,
+      "stage": "Clinger"
+    },
+    {
+      "at": 1795042358.719278,
+      "index": 11,
+      "stage": "Chase"
+    },
+    {
+      "at": 1795042382.252631,
+      "index": 11,
+      "stage": "Boss"
+    },
+    {
+      "at": 1795042456.467963,
+      "index": 12,
+      "stage": "Tower"
+    },
+    {
+      "at": 1795042475.89424,
+      "index": 13,
+      "stage": "Finale"
+    },
+    {
+      "at": 1795042478.114577,
+      "index": 13,
+      "stage": "Boss"
+    },
+    {
+      "at": 1795042549.835034,
+      "index": 13,
+      "stage": "Won"
+    }
+  ],
+  "clientStageMessages": [
+    {
+      "at": 1795041708.693756,
+      "index": 1,
+      "sent": 1795041708.667635,
+      "stage": "Route",
+      "seq": 673
+    },
+    {
+      "at": 1795041841.294726,
+      "index": 1,
+      "sent": 1795041841.268839,
+      "stage": "BossIntro",
+      "seq": 1922
+    },
+    {
+      "at": 1795041845.525912,
+      "index": 1,
+      "sent": 1795041845.432668,
+      "stage": "Boss",
+      "seq": 1960
+    },
+    {
+      "at": 1795041873.654863,
+      "index": 1,
+      "sent": 1795041873.635547,
+      "stage": "Exit",
+      "seq": 2223
+    },
+    {
+      "at": 1795041883.472712,
+      "index": 2,
+      "sent": 1795041883.147997,
+      "stage": "Rope",
+      "seq": 2311
+    },
+    {
+      "at": 1795041906.499335,
+      "index": 3,
+      "sent": 1795041906.43504,
+      "stage": "Speeder",
+      "seq": 2523
+    },
+    {
+      "at": 1795041922.489248,
+      "index": 4,
+      "sent": 1795041922.453465,
+      "stage": "Ice",
+      "seq": 2676
+    },
+    {
+      "at": 1795041938.378974,
+      "index": 5,
+      "sent": 1795041937.912493,
+      "stage": "Surf",
+      "seq": 2826
+    },
+    {
+      "at": 1795041957.057005,
+      "index": 5,
+      "sent": 1795041957.053795,
+      "stage": "Boss",
+      "seq": 3005
+    },
+    {
+      "at": 1795042026.086439,
+      "index": 6,
+      "sent": 1795042025.888386,
+      "stage": "Serpents",
+      "seq": 3668
+    },
+    {
+      "at": 1795042062.110271,
+      "index": 7,
+      "sent": 1795042059.340218,
+      "stage": "Jet",
+      "seq": 3980
+    },
+    {
+      "at": 1795042079.849108,
+      "index": 8,
+      "sent": 1795042079.731836,
+      "stage": "Ascent",
+      "seq": 4135
+    },
+    {
+      "at": 1795042090.704426,
+      "index": 8,
+      "sent": 1795042090.557973,
+      "stage": "Boss",
+      "seq": 4258
+    },
+    {
+      "at": 1795042170.766408,
+      "index": 9,
+      "sent": 1795042170.666605,
+      "stage": "Tubes",
+      "seq": 5049
+    },
+    {
+      "at": 1795042212.988303,
+      "index": 10,
+      "sent": 1795042212.857692,
+      "stage": "Race",
+      "seq": 5443
+    },
+    {
+      "at": 1795042225.451983,
+      "index": 10,
+      "sent": 1795042225.366294,
+      "stage": "Boss",
+      "seq": 5561
+    },
+    {
+      "at": 1795042358.851309,
+      "index": 11,
+      "sent": 1795042358.741983,
+      "stage": "Chase",
+      "seq": 6822
+    },
+    {
+      "at": 1795042382.352014,
+      "index": 11,
+      "sent": 1795042382.321778,
+      "stage": "Boss",
+      "seq": 7038
+    },
+    {
+      "at": 1795042456.678098,
+      "index": 12,
+      "sent": 1795042456.453088,
+      "stage": "Tower",
+      "seq": 7771
+    },
+    {
+      "at": 1795042475.91999,
+      "index": 13,
+      "sent": 1795042475.895683,
+      "stage": "Finale",
+      "seq": 7975
+    },
+    {
+      "at": 1795042478.239738,
+      "index": 13,
+      "sent": 1795042478.10277,
+      "stage": "Boss",
+      "seq": 7995
+    },
+    {
+      "at": 1795042549.937451,
+      "index": 13,
+      "sent": 1795042549.904448,
+      "stage": "Won",
+      "seq": 8677
+    }
+  ]
+}
