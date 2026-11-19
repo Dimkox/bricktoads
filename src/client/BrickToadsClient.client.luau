@@ -1626,7 +1626,7 @@ RunService.RenderStepped:Connect(function(dt)
         if actionPending and os.clock() - actionAt > 4 then actionPending = false; render() end
     end
     local camera = workspace.CurrentCamera
-    spectatorCamera:step(dt, camera)
+    spectatorCamera:step(dt, camera, UserInputService.TouchEnabled)
     if moveElapsed >= 0.1 then
         moveElapsed = 0
         if playable() then

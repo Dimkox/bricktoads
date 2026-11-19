@@ -166,7 +166,13 @@ function SpectatorCamera:stepIntro(dt,camera)
     return true
 end
 
-function SpectatorCamera:step(dt, camera)
+-- Use the short edge so rotating a phone keeps the same gameplay zoom.
+function SpectatorCamera.phoneFramingWeight(touchEnabled, viewport)
+    if not touchEnabled or not viewport or math.min(viewport.X, viewport.Y) <= 1 then return 0 end
+    return math.clamp((720 - math.min(viewport.X, viewport.Y)) / 180, 0, 1)
+end
+
+function SpectatorCamera:step(dt, camera, touchEnabled)
     if not camera then return end
     self.refreshElapsed += dt
     if self.refreshElapsed >= 0.2 then self.refreshElapsed = 0; self:refreshTargets() end
@@ -206,8 +212,10 @@ function SpectatorCamera:step(dt, camera)
     end
     local root = targetModel and targetModel.Parent and targetModel:FindFirstChild("HumanoidRootPart")
     if root then
-        local target = root.Position + Vector3.new(0, 2, 0)
-        self.point = self.point and self.point:Lerp(target, 1 - math.exp(-dt * 7)) or target
+        local viewport = camera.ViewportSize
+        local phone = SpectatorCamera.phoneFramingWeight(touchEnabled, viewport)
+        local target = root.Position + Vector3.new(0, 2 - phone, 0)
+        self.point = self.point and self.point:Lerp(target, 1 - math.exp(-dt * (7 + 6 * phone))) or target
         local level=self.snapshot and self.snapshot.level
         local mode=level and level.modeState
         local actor
@@ -215,6 +223,7 @@ function SpectatorCamera:step(dt, camera)
             if candidate.actorId==targetModel:GetAttribute('ActorId') then actor=candidate;break end
         end
         local offset,focus=Vector3.new(0,23,30),self.point
+        local distanceScale = 1 - .42 * phone
         if actor and not actor.finished then
             if mode.mode=='Tower' then
                 local world=workspace:FindFirstChild(self.worldName)
@@ -228,10 +237,14 @@ function SpectatorCamera:step(dt, camera)
             elseif mode.mode=='Clinger' then offset=Vector3.new(0,46,5)
             elseif mode.mode=='Rope' then offset=Vector3.new(0,8,43);focus=self.point+Vector3.new(0,-5,0)
             elseif mode.mode=='Speeder' or mode.mode=='Surf' or mode.mode=='Jet' then
-                offset=Vector3.new(10,16,43);focus=self.point+Vector3.new(12,0,0)
+                local narrow = phone > 0 and phone * math.clamp((1.1 - viewport.X / viewport.Y) / .55, 0, 1) or 0
+                -- In portrait, look along the road so approaching hazards stay in view.
+                offset=Vector3.new(10-39*narrow,16,43-15*narrow)
+                focus=self.point+Vector3.new(12-5*narrow,0,0)
+                distanceScale = 1 - .26 * phone
             elseif mode.mode=='Tubes' or mode.mode=='Race' or mode.mode=='Ascent' then offset=Vector3.new(0,15,40) end
         end
-        camera.CFrame = framedView(self.point + offset, focus, self.bounds)
+        camera.CFrame = framedView(self.point + offset * distanceScale, focus, self.bounds)
     elseif not self.point then
         if self.worldName and self.bounds then
             local bounds = self.bounds

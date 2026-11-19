@@ -1,4 +1,10 @@
 return function(Camera)
+    assert(Camera.phoneFramingWeight(true, {X=390,Y=844}) == 1)
+    assert(Camera.phoneFramingWeight(true, {X=844,Y=390}) == 1)
+    assert(Camera.phoneFramingWeight(false, {X=844,Y=390}) == 0)
+    assert(Camera.phoneFramingWeight(true, {X=1024,Y=768}) == 0)
+    assert(Camera.phoneFramingWeight(true, {X=900,Y=630}) == .5)
+    assert(Camera.phoneFramingWeight(true, {X=1,Y=1}) == 0)
     local heroes={
         {actorId='zero',status='Alive',hearts=0,dying=false,connected=true},
         {actorId='offline',status='Alive',hearts=3,dying=false,connected=false},
