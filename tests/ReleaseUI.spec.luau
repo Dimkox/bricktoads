@@ -68,55 +68,33 @@ return function(Catalog,Localization,BossQueuePanel,GroupPanel)
         snapshot={status='Active',view='Menu',enemyRole={template='Boss',status='Dead'}}
         productionMenu();assert(intro.Text:find('Causeway Guardian',1,true),'legacy Guardian snapshots retain their known boss')
     end)
-    test('portrait image readiness keeps fallback during pending failure and stale completion',function()
-        local pending={}
-        Enum.ScaleType={Fit=1};Enum.AssetFetchStatus={Success='success',Failure='failure'}
-        Color3={fromRGB=function() return 1 end}
-        heroPortraitAssets={['Mr. Green']='123456'}
-        frame=function(parent,name)
-            local item=node(name);item.children={};item.Parent=parent
-            if parent then parent.children[#parent.children+1]=item end
-            function item:GetChildren() return self.children end
-            function item:IsA(kind) return kind=='GuiObject' end
-            return item
+    test('embedded portrait follows the active tile and clears when the image loads',function()
+        local image = {IsLoaded=false,ImageColor3=1,attrs={}}
+        local layer
+        function image:FindFirstChild() return layer end
+        function image:GetAttribute(key) return self.attrs[key] end
+        function image:SetAttribute(key,value) self.attrs[key]=value end
+        function image:GetPropertyChangedSignal(key)
+            assert(key=='IsLoaded')
+            return {Connect=function(_,fn) self.changed=fn end}
         end
-        corner=function() end
-        Instance={new=function(class)
-            local item=node('');item.class=class;item.IsLoaded=false
-            function item:IsA(kind) return kind=='GuiObject' or kind==self.class end
-            function item:GetPropertyChangedSignal(key)
-                assert(key=='IsLoaded')
-                return {Connect=function(_,callback) self.changed=callback end}
-            end
-            return setmetatable(item,{__newindex=function(t,k,v)
+        Instance={new=function()
+            local obj={attrs={}}
+            function obj:SetAttribute(k,v) self.attrs[k]=v end
+            function obj:GetAttribute(k) return self.attrs[k] end
+            function obj:Destroy() if self==layer then layer=nil end end
+            return setmetatable(obj,{__newindex=function(t,k,v)
                 rawset(t,k,v)
-                if k=='Parent' and v then v.children[#v.children+1]=t end
+                if k=='Parent' and v==image then layer=t end
             end})
         end}
-        task={spawn=function(fn) pending[#pending+1]=fn end}
-        local provider={}
-        function provider:PreloadAsync(items,callback)
-            assert(#items==1 and items[1].class=='ImageLabel','preload the typed ImageLabel')
-            if callback then callback(items[1].Image,self.status) end
-        end
-        game={GetService=function() return provider end}
-        for _,outcome in ipairs({'pending','failure','success','removed'}) do
-            local art=toadPortrait(nil,1,'Mr. Green')
-            local portrait=art.children[#art.children]
-            eq(portrait.Image,'rbxassetid://123456')
-            for _,child in ipairs(art.children) do if child~=portrait then assert(child.Visible) end end
-            if outcome=='removed' then portrait.Parent=nil end
-            if outcome~='pending' then
-                provider.status=outcome=='failure' and 'failure' or 'success'
-                table.remove(pending)()
-            else table.remove(pending) end
-            -- Native preload can succeed well before the renderer has the image.
-            for _,child in ipairs(art.children) do if child~=portrait then assert(child.Visible,'fetch alone must not blank the portrait') end end
-            if outcome=='success' or outcome=='removed' then
-                portrait.IsLoaded=true;portrait.changed()
-                for _,child in ipairs(art.children) do if child~=portrait then eq(child.Visible,outcome=='removed') end end
-            end
-        end
+        local fallback=testFallback()
+        fallback.bind(image,1)
+        assert(layer and layer:GetAttribute('Tile')==1)
+        fallback.bind(image,2)
+        assert(layer and layer:GetAttribute('Tile')==2)
+        image.IsLoaded=true;image.changed();assert(layer==nil)
+        image.IsLoaded=false;image.changed();assert(layer:GetAttribute('Tile')==2)
     end)
     test('boss reaction progress stays separate from cycling raw Life in owner and compact HUD',function()
         for _,locale in ipairs({'en-us','ru-ru','xx-zz'}) do
@@ -137,7 +115,7 @@ return function(Catalog,Localization,BossQueuePanel,GroupPanel)
     end)
     localize('en-us')
     local function panel(klass)
-        local p=setmetatable({colors=C,translate=T,selectedBoss=1,sendIntent=function() end,rows={}},klass)
+        local p=setmetatable({art=ArcadeArt,portrait=node("CharacterPortrait"),colors=C,translate=T,selectedBoss=1,sendIntent=function() end,rows={}},klass)
         for _,name in ipairs({'card','heading','note','name','status','detail','primary','secondary','menuCard','hudButton','menuHeading',
             'menuCurrent','menuHelp','menuButton','shell','title','close','current','help','list','create','notice','empty'}) do p[name]=node(name) end
         return p

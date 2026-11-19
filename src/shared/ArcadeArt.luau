@@ -3,11 +3,18 @@ local Art = {
     splash = "rbxassetid://127656873971587",
     icon = "rbxassetid://123865642729026",
 }
+local fallback = require(script.Parent:WaitForChild("ArcadeFallback"))
 local tiles = {}
+Art.cast = {}
+function Art.backdrop(image)
+    image.Image = Art.splash
+    fallback.bind(image, "splash")
+end
 local function atlas(image, names)
     for index, name in ipairs(names) do
         local cell = index - 1
-        tiles[name] = {image, Vector2.new(cell % 4 * 256, math.floor(cell / 4) * 256)}
+        table.insert(Art.cast, name)
+        tiles[name] = {image, Vector2.new(cell % 4 * 256, math.floor(cell / 4) * 256), #Art.cast}
     end
 end
 atlas("rbxassetid://128231984612533", {
@@ -28,6 +35,7 @@ function Art.setPortrait(image, key)
     if image.Image ~= tile[1] then image.Image = tile[1] end
     image.ImageRectOffset = tile[2]
     image.ImageRectSize = Vector2.new(256, 256)
+    fallback.bind(image, tile[3])
 end
 
 function Art.portrait(parent, key)

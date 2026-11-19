@@ -37,12 +37,18 @@ def bundle(client_source=None):
     prelude = (ROOT / 'tests/ReleaseUI.fixture.luau').read_text(encoding='utf8')
     return '\n'.join([
         prelude,
+        'function testFallback()\nlocal script={Parent={}};local require=function() return {"a","b"} end;'
+        'local game={GetService=function() return {Base64Decode=function() return buffer.create(3072) end} end};'
+        'local Color3={fromRGB=function()return 0 end};local ColorSequenceKeypoint={new=function() return 0 end};'
+        'local ColorSequence={new=function()return 0 end};\n'
+        + (ROOT / 'src/shared/ArcadeFallback.luau').read_text(encoding='utf8') + '\nend',
         'local Catalog=' + module('src/shared/TextCatalog.luau'),
         'local Localization=' + module('src/shared/TextLocalization.luau'),
         'local BossQueuePanel=' + module('src/client/BossQueuePanel.luau'),
         'local GroupPanel=' + module('src/client/GroupPanel.luau'),
         'CampaignPresentation=' + (module('src/client/CampaignPresentation.luau') if policy.exists() else '{}'),
         '\n'.join(name + '=node("' + name + '")' for name in sorted(set(names))),
+        'enemyStatus.CharacterPortrait=node("CharacterPortrait")',
         '\n'.join(anchors),
         'noticeMessages={' + notices + '\n}',
         'function productionMenu()\n' + menu + '\nend',

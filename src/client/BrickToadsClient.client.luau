@@ -140,10 +140,10 @@ overlay.Size, overlay.BackgroundTransparency = UDim2.fromScale(1, 1), 0.18
 make("UIGradient", "Atmosphere", overlay, {
     Color = ColorSequence.new(Color3.fromRGB(27, 49, 59), C.ink), Rotation = 110,
 })
-make("ImageLabel", "CausewayBackdrop", overlay, {
+ArcadeArt.backdrop(make("ImageLabel", "CausewayBackdrop", overlay, {
     Image = ArcadeArt.splash, Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
-    ImageColor3 = Color3.fromRGB(120, 148, 147), ScaleType = Enum.ScaleType.Crop,
-})
+    ImageColor3 = Color3.fromRGB(136, 153, 148), ScaleType = Enum.ScaleType.Crop,
+}))
 local shell = frame(overlay, "Shell", C.ink)
 shell.BackgroundTransparency, shell.AnchorPoint = 1, Vector2.new(0.5, 0.5)
 shell.Position = UDim2.fromScale(0.5, 0.5)
@@ -167,6 +167,7 @@ do
         Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
         Image = ArcadeArt.splash, ScaleType = Enum.ScaleType.Crop,
     })
+    ArcadeArt.backdrop(shot)
     make("UIGradient", "TitleScrim", shot, {
         Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, .98), NumberSequenceKeypoint.new(.54, .80),
@@ -177,7 +178,10 @@ end
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Flooded Causeway", 35, C.text, true)
 local intro = label(header, "Intro", "Guard weapons, grabs and a Guardian. Cross the causeway together.", 16, C.muted)
-brand.Font, title.Font = Enum.Font.Arcade, Enum.Font.GothamBlack
+brand.Font, title.Font = Enum.Font.Arcade, Enum.Font.Arcade
+brand.TextColor3 = C.yellow
+title.TextStrokeTransparency = .25
+require(script.Parent:WaitForChild("CastGallery")).attach(shell, header, ArcadeArt, C, T, button, label, frame)
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -209,38 +213,13 @@ local cardsContainer = frame(scroll, "HeroCards")
 cardsContainer.LayoutOrder, cardsContainer.BackgroundTransparency = 5, 1
 local heroCards = {}
 
--- Keep the local portrait until the rendered image is ready.
 local function toadPortrait(parent, color, template)
     local art = frame(parent, "Portrait", C.ink)
-    art.BackgroundTransparency, art.ClipsDescendants = 0.2, true
-    corner(art, 18)
-    local function shape(name, x, y, w, h, tint, radius)
-        local item = frame(art, name, tint)
-        item.Position, item.Size = UDim2.fromScale(x, y), UDim2.fromScale(w, h)
-        corner(item, radius or 8)
-    end
-    shape("LeftArm", 0.1, 0.55, 0.18, 0.32, color)
-    shape("RightArm", 0.72, 0.55, 0.18, 0.32, color)
-    shape("Body", 0.25, 0.48, 0.5, 0.46, color, 14)
-    shape("Belly", 0.35, 0.58, 0.3, 0.24, Color3.fromRGB(233, 221, 165))
-    shape("Head", 0.19, 0.22, 0.62, 0.39, color, 18)
-    for _, x in ipairs({0.26, 0.58}) do
-        shape("Eye", x, 0.14, 0.17, 0.23, C.text, 10)
-        shape("Pupil", x + 0.058, 0.2, 0.075, 0.105, C.ink, 8)
-    end
-    shape("Mouth", 0.36, 0.47, 0.28, 0.025, C.ink, 2)
-    shape("Belt", 0.25, 0.81, 0.5, 0.06, C.ink, 2)
+    art.ClipsDescendants = true
+    stroke(art, color, 2)
     local portrait = ArcadeArt.portrait(art, template)
     portrait.Name = "ModelPortrait"
     portrait.Size = UDim2.fromScale(1, 1)
-    portrait.ZIndex = 2
-    local function refreshPortrait()
-        for _, child in art:GetChildren() do
-            if child:IsA("GuiObject") and child ~= portrait then child.Visible = not portrait.IsLoaded end
-        end
-    end
-    portrait:GetPropertyChangedSignal("IsLoaded"):Connect(refreshPortrait)
-    refreshPortrait()
     return art
 end
 for i, template in ipairs(templates) do
@@ -299,7 +278,7 @@ local startButton = button(footer, "Start", "Connecting…", C.line, function()
     actionPending, actionAt = true, os.clock()
     sendIntent({kind = "Start"})
 end)
-startButton.TextSize = 19
+startButton.TextSize, startButton.Font = 19, Enum.Font.Arcade
 local returnToWatch = button(footer, "ReturnToObservation", "Return to watching", C.green, function()
     choosingEnemy = false
     chooseView("Spectating")
@@ -1081,7 +1060,7 @@ layout = function()
     intro.Visible = not shortLandscape
     if shortLandscape then
         position(brand, 12, 0, contentWidth - 24, 17)
-        position(title, 12, 19, contentWidth - 24, 31)
+        position(title, 12, 19, contentWidth - 128, 31)
         brand.TextSize, title.TextSize = 12, 27
     else brand.TextSize = 15 end
     resultBanner.Size = UDim2.new(1, 0, 0, compact and 174 or 102)
@@ -1107,25 +1086,24 @@ layout = function()
         position(chooseNote, 0, 18, contentWidth, 16)
     end
     chooseNote.TextSize = shortLandscape and 12 or 14
-    local cardHeight = shortLandscape and 100 or (compact and 104 or 222)
-    cardsContainer.Size = UDim2.new(1, 0, 0, compact and (cardHeight * 3 + 20) or cardHeight)
-    local cardWidth = compact and contentWidth or (contentWidth - 24) / 3
+    local cardHeight = shortLandscape and 100 or (compact and 150 or 222)
+    cardsContainer.Size = UDim2.new(1, 0, 0, cardHeight)
+    local cardWidth = (contentWidth - 12) / 3
     for i, card in ipairs(heroCards) do
-        position(card.button, compact and 0 or (i - 1) * (cardWidth + 12), compact and (i - 1) * (cardHeight + 10) or 0, cardWidth, cardHeight)
+        position(card.button, (i - 1) * (cardWidth + 6), 0, cardWidth, cardHeight)
         position(card.accent, 0, 0, 4, cardHeight)
-        card.detail.Visible = not shortLandscape
+        card.detail.Visible = not shortLandscape and not compact
         if shortLandscape then
             position(card.art, 13, 14, 50, 56)
             position(card.name, 75, 13, cardWidth - 85, 26)
             card.name.TextSize = width < 760 and 16 or 19
             position(card.choice, 75, 48, cardWidth - 85, 20)
         elseif compact then
-            position(card.art, 14, 12, 76, 80)
-            position(card.name, 104, 13, cardWidth - 115, 28)
-            card.name.TextSize = width < 350 and 17 or 20
-            position(card.detail, 104, 44, cardWidth - 115, 23)
-            card.detail.TextSize = width < 350 and 11 or 12
-            position(card.choice, 104, 73, cardWidth - 115, 19)
+            position(card.art, 5, 5, cardWidth - 10, 91)
+            position(card.name, 4, 98, cardWidth - 8, 24)
+            position(card.choice, 3, 124, cardWidth - 6, 23)
+            card.name.TextSize, card.choice.TextSize = 14, 10
+            card.name.TextXAlignment, card.choice.TextXAlignment = Enum.TextXAlignment.Center, Enum.TextXAlignment.Center
         else
             position(card.art, 16, 15, cardWidth - 32, 119)
             position(card.name, 16, 144, cardWidth - 32, 28)

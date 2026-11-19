@@ -25,3 +25,5 @@ function playable() return false end
 function syncAudioSettings() end
 soundMuted=false;musicMuted=false;actionPending=false
 width=640;height=360;choosingEnemy=false;feedbackUntil=0
+
+ArcadeArt={setPortrait=function() end,enemyKey=function(e) return e.kind end}

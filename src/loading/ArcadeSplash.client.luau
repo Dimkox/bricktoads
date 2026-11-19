@@ -33,7 +33,7 @@ local started = os.clock()
 task.spawn(function()
     local shared = game:GetService("ReplicatedStorage"):WaitForChild("BrickToads", 8)
     local module = shared and shared:WaitForChild("ArcadeArt", 4)
-    if module and screen.Parent then shot.Image = require(module).splash end
+    if module and screen.Parent then require(module).backdrop(shot) end
 end)
 repeat
     task.wait(.08)

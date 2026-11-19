@@ -1,6 +1,15 @@
 -- English source strings and curated Russian translations. No user display names.
 -- Roblox LocalizationTable entries; add supported languages to Values here.
 local Catalog={entries={
+    {Key="Snake",Source="Snake",Values={["en-us"]="Snake",["ru"]="Змея"}},
+    {Key="Walker",Source="Walker",Values={["en-us"]="Walker",["ru"]="Шагоход"}},
+    {Key="Dragon",Source="Dragon",Values={["en-us"]="Dragon",["ru"]="Дракон"}},
+    {Key="Pig",Source="Pig",Values={["en-us"]="Pig",["ru"]="Кабан"}},
+    {Key="Mr. Brown",Source="Mr. Brown",Values={["en-us"]="Mr. Brown",["ru"]="Мистер Браун"}},
+    {Key="Mr. Yellow",Source="Mr. Yellow",Values={["en-us"]="Mr. Yellow",["ru"]="Мистер Йеллоу"}},
+    {Key="Mr. Green",Source="Mr. Green",Values={["en-us"]="Mr. Green",["ru"]="Мистер Грин"}},
+    {Key="Character gallery",Source="Character gallery",Values={["en-us"]="Character gallery",["ru"]="Галерея персонажей"}},
+    {Key="Cast",Source="Cast",Values={["en-us"]="Cast",["ru"]="Персонажи"}},
     {Key="Audio",Source="Audio",Values={["en-us"]="Audio",["ru"]="Звук"}},
     {Key="Audio settings",Source="Audio settings",Values={["en-us"]="Audio settings",["ru"]="Настройки звука"}},
     {Key="Sound: On",Source="Sound: On",Values={["en-us"]="Sound: On",["ru"]="Звук: вкл."}},
