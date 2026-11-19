@@ -38,6 +38,6 @@ end)
 repeat
     task.wait(.08)
     local menu = playerGui:FindFirstChild("BrickToadsGameUI")
-    if menu and menu:GetAttribute("MenuReady") and os.clock()-started >= 1.1 and shot.IsLoaded then break end
+    if menu and menu:GetAttribute("MenuReady") and os.clock()-started >= 1.1 then break end
 until os.clock()-started >= 5
 screen:Destroy()

@@ -136,13 +136,13 @@ localization:bind(gui)
 localization:bindWorld(workspace)
 local safe = make("Frame", "SafeArea", gui, {BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1)})
 local overlay = frame(safe, "Menu", C.ink)
-overlay.Size, overlay.BackgroundTransparency = UDim2.fromScale(1, 1), 0.18
+overlay.Size, overlay.BackgroundTransparency = UDim2.fromScale(1, 1), 0
 make("UIGradient", "Atmosphere", overlay, {
     Color = ColorSequence.new(Color3.fromRGB(27, 49, 59), C.ink), Rotation = 110,
 })
 ArcadeArt.backdrop(make("ImageLabel", "CausewayBackdrop", overlay, {
     Image = ArcadeArt.splash, Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
-    ImageColor3 = Color3.fromRGB(136, 153, 148), ScaleType = Enum.ScaleType.Crop,
+    ImageColor3 = Color3.fromRGB(44, 59, 61), ScaleType = Enum.ScaleType.Crop,
 }))
 local shell = frame(overlay, "Shell", C.ink)
 shell.BackgroundTransparency, shell.AnchorPoint = 1, Vector2.new(0.5, 0.5)
@@ -168,10 +168,13 @@ do
         Image = ArcadeArt.splash, ScaleType = Enum.ScaleType.Crop,
     })
     ArcadeArt.backdrop(shot)
-    make("UIGradient", "TitleScrim", shot, {
+    local scrim = frame(header, "TitleScrim", Color3.fromRGB(7, 17, 24))
+    scrim.Size = UDim2.fromScale(1, 1)
+    make("UIGradient", "Shade", scrim, {
+        Rotation = 90,
         Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, .98), NumberSequenceKeypoint.new(.54, .80),
-            NumberSequenceKeypoint.new(1, .04),
+            NumberSequenceKeypoint.new(0, .58), NumberSequenceKeypoint.new(.5, .32),
+            NumberSequenceKeypoint.new(1, .08),
         }),
     })
 end

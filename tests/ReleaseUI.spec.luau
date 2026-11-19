@@ -69,7 +69,7 @@ return function(Catalog,Localization,BossQueuePanel,GroupPanel)
         productionMenu();assert(intro.Text:find('Causeway Guardian',1,true),'legacy Guardian snapshots retain their known boss')
     end)
     test('embedded portrait follows the active tile and clears when the image loads',function()
-        local image = {IsLoaded=false,ImageColor3=1,attrs={}}
+        local image = {IsLoaded=false,ImageColor3=1,attrs={},Parent=true}
         local layer
         function image:FindFirstChild() return layer end
         function image:GetAttribute(key) return self.attrs[key] end

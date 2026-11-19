@@ -8,7 +8,21 @@ local tiles = {}
 Art.cast = {}
 function Art.backdrop(image)
     image.Image = Art.splash
-    fallback.bind(image, "splash")
+    -- The public experience cover is also published independently of the in-game splash.
+    if image.IsLoaded then return end
+    local cover = Instance.new("ImageLabel")
+    cover.Name = "ExperienceCover"
+    cover.BackgroundTransparency = 1
+    cover.ImageColor3 = image.ImageColor3
+    cover.ScaleType = image.ScaleType
+    cover.Size = UDim2.fromScale(1,1)
+    cover.Image = "rbxthumb://type=GameThumbnail&id=10777822493&w=768&h=432"
+    cover.Parent = image
+    local function sync()
+        cover.Visible = not image.IsLoaded
+    end
+    image:GetPropertyChangedSignal("IsLoaded"):Connect(sync)
+    sync()
 end
 local function atlas(image, names)
     for index, name in ipairs(names) do

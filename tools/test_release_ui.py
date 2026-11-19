@@ -37,8 +37,8 @@ def bundle(client_source=None):
     prelude = (ROOT / 'tests/ReleaseUI.fixture.luau').read_text(encoding='utf8')
     return '\n'.join([
         prelude,
-        'function testFallback()\nlocal script={Parent={}};local require=function() return {"a","b"} end;'
-        'local game={GetService=function() return {Base64Decode=function() return buffer.create(3072) end} end};'
+        'function testFallback()\nlocal script={Parent={}};local require=function() return {size=96,palette="palette","a","b"} end;local task={delay=function(_,fn) fn() end};'
+        'local game={GetService=function() return {Base64Decode=function() return buffer.create(9216) end} end};'
         'local Color3={fromRGB=function()return 0 end};local ColorSequenceKeypoint={new=function() return 0 end};'
         'local ColorSequence={new=function()return 0 end};\n'
         + (ROOT / 'src/shared/ArcadeFallback.luau').read_text(encoding='utf8') + '\nend',
