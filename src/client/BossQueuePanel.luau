@@ -44,6 +44,8 @@ function BossQueuePanel.new(menuParent, hudParent, sendIntent, colors, translate
         TextXAlignment=Enum.TextXAlignment.Left,TextWrapped=true,AutoButtonColor=false,
     })
     self.name.Text = "Causeway Guardian"
+    self.art = require(game:GetService("ReplicatedStorage").BrickToads.ArcadeArt)
+    self.portrait = self.art.portrait(self.card, bosses[1].id)
     self.selectedBoss=1
     self.name.Activated:Connect(function()
         if not self.pending and self.queue and self.queue.state=='None' then
@@ -120,6 +122,7 @@ function BossQueuePanel:_draw()
     local T=self.translate or sourceText
     local selected=bosses[self.selectedBoss]
     for _,boss in ipairs(bosses) do if queue.bossId==boss.id then selected=boss end end
+    self.art.setPortrait(self.portrait, selected.id)
     self.name.Text=T(selected.name)..(state=='None' and '  ›' or '')
     self.name.Active=state=='None' and not self.pending
     self.name.Selectable=self.name.Active
@@ -197,7 +200,8 @@ function BossQueuePanel:layout(width, compact, x, y)
     local height = compact and 140 or (width < 420 and 242 or 218)
     if compact then
         position(self.card, x or 0, y or 0, width, height)
-        position(self.name, 12, 4, width - 24, 44)
+        position(self.portrait, 12, 7, 36, 36)
+        position(self.name, 56, 4, width - 68, 44)
         self.name.TextSize = width < 360 and 13 or 15
         position(self.status, 12, 48, width - 24, 18)
         self.status.TextSize = width < 360 and 11 or 12
@@ -206,7 +210,8 @@ function BossQueuePanel:layout(width, compact, x, y)
     else
         self.card.Size = UDim2.new(1, 0, 0, height)
         position(self.heading, 14, 10, width - 28, 18)
-        position(self.name, 14, 31, width - 28, 44)
+        position(self.portrait, 14, 31, 44, 44)
+        position(self.name, 66, 31, width - 80, 44)
         self.name.TextSize = 19
         position(self.status, 14, 77, width - 28, 20)
         self.status.TextSize = 13

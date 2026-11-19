@@ -188,7 +188,7 @@ function Director:controlled(userId)
     return {enemyId=id,actorId=e.actorId,attempt=1,connectionEpoch=e.connectionEpoch,
         connected=e.connected,status=e.dead and 'Dead' or 'Alive',hearts=e.health,
         maxHearts=e.boss and self.config.Boss.hits or self.config.Enemy.hearts,
-        template=e.boss and 'Boss' or 'Sentry',name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode,
+        template=e.boss and 'Boss' or 'Sentry',kind=e.kind,name=e.name,carryState=self.carry and self.carry:stateFor(id),dragonMode=self.dragons and self.dragons.states[id] and self.dragons.states[id].mode,
         movementKind=self.campaignEnemies and self.campaignEnemies:movementKind(id,e) or nil,
         reactionEpoch=e.reactionEpoch or 0,movementMode=self.world.movementMode and self.world:movementMode(id) or nil}
 end
@@ -197,7 +197,7 @@ function Director:available(userId)
     if self.byUserId[userId] or self.result or self.session.state.status~='Active' then return offers end
     for id,e in pairs(self.enemies) do
         if not e.boss and not e.dead and not e.engaged and not e.ownerUserId and not self.world:hazard(id) then
-            offers[#offers+1]={enemyId=id,actorId=e.actorId,name=e.name,hearts=e.health,maxHearts=self.config.Enemy.hearts}
+            offers[#offers+1]={enemyId=id,actorId=e.actorId,kind=e.kind,name=e.name,hearts=e.health,maxHearts=self.config.Enemy.hearts}
         end
     end
     table.sort(offers,function(a,b) return a.enemyId>b.enemyId end)

@@ -98,6 +98,7 @@ def build(root_path: Path, *, include_character_study: bool = False,
         child = item(runtime, "ModuleScript", name)
         prop(child, "ProtectedString", "Source",
              (root_path / "src/stand/server" / (name + ".lua")).read_text(encoding="utf-8"))
+    sources(item(root, "ReplicatedFirst", "ReplicatedFirst"), root_path / "src/loading")
     replicated = item(root, "ReplicatedStorage", "ReplicatedStorage")
     sources(item(replicated, "Folder", "BrickToads"), root_path / "src/shared")
     starter_gui = item(root, "StarterGui", "StarterGui")

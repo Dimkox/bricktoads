@@ -6,7 +6,7 @@ local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
 local sharedText = ReplicatedStorage:WaitForChild("BrickToads")
-local heroPortraitAssets = require(sharedText:WaitForChild("HeroPortraits"))
+local ArcadeArt = require(sharedText:WaitForChild("ArcadeArt"))
 local localizationService = game:GetService("LocalizationService")
 local localization = require(sharedText:WaitForChild("TextLocalization")).new(
     require(sharedText:WaitForChild("TextCatalog")), localizationService, Instance.new)
@@ -140,6 +140,10 @@ overlay.Size, overlay.BackgroundTransparency = UDim2.fromScale(1, 1), 0.18
 make("UIGradient", "Atmosphere", overlay, {
     Color = ColorSequence.new(Color3.fromRGB(27, 49, 59), C.ink), Rotation = 110,
 })
+make("ImageLabel", "CausewayBackdrop", overlay, {
+    Image = ArcadeArt.splash, Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
+    ImageColor3 = Color3.fromRGB(120, 148, 147), ScaleType = Enum.ScaleType.Crop,
+})
 local shell = frame(overlay, "Shell", C.ink)
 shell.BackgroundTransparency, shell.AnchorPoint = 1, Vector2.new(0.5, 0.5)
 shell.Position = UDim2.fromScale(0.5, 0.5)
@@ -157,10 +161,23 @@ local menuLayout = make("UIListLayout", "MenuLayout", scroll, {
     Padding = UDim.new(0, 14),
 })
 local header = frame(scroll, "Header")
-header.BackgroundTransparency, header.LayoutOrder = 1, 1
+header.BackgroundColor3, header.LayoutOrder, header.ClipsDescendants = C.ink, 1, true
+do
+    local shot = make("ImageLabel", "CausewayBanner", header, {
+        Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
+        Image = ArcadeArt.splash, ScaleType = Enum.ScaleType.Crop,
+    })
+    make("UIGradient", "TitleScrim", shot, {
+        Transparency = NumberSequence.new({
+            NumberSequenceKeypoint.new(0, .98), NumberSequenceKeypoint.new(.54, .80),
+            NumberSequenceKeypoint.new(1, .04),
+        }),
+    })
+end
 local brand = label(header, "Brand", "BRICK TOADS", 15, C.lime, true)
 local title = label(header, "Title", "Flooded Causeway", 35, C.text, true)
 local intro = label(header, "Intro", "Guard weapons, grabs and a Guardian. Cross the causeway together.", 16, C.muted)
+brand.Font, title.Font = Enum.Font.Arcade, Enum.Font.GothamBlack
 local resultBanner = frame(scroll, "Result", C.card)
 resultBanner.LayoutOrder, resultBanner.Visible = 2, false
 corner(resultBanner, 16)
@@ -213,29 +230,17 @@ local function toadPortrait(parent, color, template)
     end
     shape("Mouth", 0.36, 0.47, 0.28, 0.025, C.ink, 2)
     shape("Belt", 0.25, 0.81, 0.5, 0.06, C.ink, 2)
-    local assetId = heroPortraitAssets[template]
-    if assetId then
-        local portrait = Instance.new("ImageLabel")
-        portrait.Name = "ModelPortrait"
-        portrait.Size, portrait.BackgroundTransparency = UDim2.fromScale(1, 1), 1
-        portrait.ScaleType, portrait.ZIndex = Enum.ScaleType.Fit, 2
-        portrait.Image = "rbxassetid://" .. assetId
-        portrait.Parent = art
-        local function refreshPortrait()
-            if portrait.Parent ~= art then return end
-            for _, child in ipairs(art:GetChildren()) do
-                if child:IsA("GuiObject") and child ~= portrait then child.Visible = not portrait.IsLoaded end
-            end
+    local portrait = ArcadeArt.portrait(art, template)
+    portrait.Name = "ModelPortrait"
+    portrait.Size = UDim2.fromScale(1, 1)
+    portrait.ZIndex = 2
+    local function refreshPortrait()
+        for _, child in art:GetChildren() do
+            if child:IsA("GuiObject") and child ~= portrait then child.Visible = not portrait.IsLoaded end
         end
-        portrait:GetPropertyChangedSignal("IsLoaded"):Connect(refreshPortrait)
-        refreshPortrait()
-        task.spawn(function()
-            pcall(function()
-                game:GetService("ContentProvider"):PreloadAsync({portrait})
-            end)
-            refreshPortrait()
-        end)
     end
+    portrait:GetPropertyChangedSignal("IsLoaded"):Connect(refreshPortrait)
+    refreshPortrait()
     return art
 end
 for i, template in ipairs(templates) do
@@ -270,7 +275,11 @@ local function addPartyRow(i)
     owner.TextWrapped, owner.TextTruncate = false, Enum.TextTruncate.AtEnd
     local choice = label(party, "Template" .. i, "", 13, C.muted)
     choice.TextWrapped, choice.TextTruncate = false, Enum.TextTruncate.AtEnd
-    partyRows[i] = {dot = dot, owner = owner, choice = choice}
+    local avatar = make("ImageLabel", "PlayerAvatar" .. i, party, {
+        BackgroundColor3 = C.card, BorderSizePixel = 0, ScaleType = Enum.ScaleType.Fit,
+    })
+    corner(avatar, 5)
+    partyRows[i] = {dot = dot, avatar = avatar, owner = owner, choice = choice}
 end
 for i = 1, 3 do addPartyRow(i) end
 local partyNote = label(party, "PartyNote", "", 13, C.muted)
@@ -335,12 +344,13 @@ for slot = 1, 3 do
         fill.Size = UDim2.fromOffset(22, 25)
         fills[i] = {heart = heart, clip = clip, fill = fill}
     end
-    heroRows[slot] = {row = row, stripe = stripe, owner = owner, status = status,
+    heroRows[slot] = {portrait = ArcadeArt.portrait(row, templates[slot]), row = row, stripe = stripe, owner = owner, status = status,
         returns = returns, fills = fills}
 end
 local enemyStatus = frame(hud, "EnemyStatus", C.ink)
 enemyStatus.BackgroundTransparency, enemyStatus.Visible = 0.12, false
 corner(enemyStatus, 12)
+ArcadeArt.portrait(enemyStatus, "Pig")
 local enemyStripe = frame(enemyStatus, "EnemyColor", C.red)
 corner(enemyStripe, 3)
 local enemyOwner = label(enemyStatus, "Owner", "", 14, C.text, true)
@@ -704,13 +714,17 @@ local function renderOffers()
             end)
             item.TextSize = 14
             item.Size = UDim2.new(1, 0, 0, 44)
+            local face = ArcadeArt.portrait(item, ArcadeArt.enemyKey(offer))
+            position(face, 4, 4, 36, 36)
+            local caption = label(item, "OfferCaption", "", 14, C.text, true)
+            caption.Position, caption.Size = UDim2.fromOffset(47, 0), UDim2.new(1, -52, 1, 0)
             offerButtons[key] = item
         end
         item.LayoutOrder = i
         local resource=offer.resourceKind=='CourseRival' and T('Rival') or
             (tostring(offer.hearts or 0)..'/'..tostring(offer.maxHearts or 3)..' ♥')
-        item.Text = T(offer.name or "Guard") .. " · " .. resource .. " · " .. T(pendingEnemy == id and "Selecting…" or "Select")
-        item.TextColor3 = pendingEnemy and C.muted or C.text
+        item.OfferCaption.Text = T(offer.name or "Guard") .. " · " .. resource .. " · " .. T(pendingEnemy == id and "Selecting…" or "Select")
+        item.OfferCaption.TextColor3 = pendingEnemy and C.muted or C.text
         item.Selectable = enemyChoiceAllowed() == true and not snapshot.enemyUnavailableReason and not pendingEnemy
     end
     for key, item in pairs(offerButtons) do
@@ -867,7 +881,10 @@ render = function()
     for i, row in ipairs(partyRows) do
         local owner = owners[i]
         row.dot.Visible, row.owner.Visible, row.choice.Visible = owner ~= nil, owner ~= nil, owner ~= nil
+        row.avatar.Visible = owner ~= nil
         if owner then
+            local thumbnail = "rbxthumb://type=AvatarHeadShot&id=" .. tostring(owner.userId) .. "&w=150&h=150"
+            if row.avatar.Image ~= thumbnail then row.avatar.Image = thumbnail end
             local preference = owner.preference or "Hero"
             row.dot.BackgroundColor3 = preference == "Enemy" and C.red
                 or (preference == "Spectator" and C.muted or heroColors[owner.template] or C.green)
@@ -905,6 +922,7 @@ render = function()
         if hero then
             row.owner.Text = heroName(hero) .. (hero.slot == snapshot.mine and T(" · you") or "")
             row.owner.TextColor3 = hero.slot == snapshot.mine and C.lime or C.text
+            ArcadeArt.setPortrait(row.portrait, hero.template or templates[1])
             row.stripe.BackgroundColor3 = heroColors[hero.template] or C.green
             row.returns.Text = "↻ " .. (hero.infiniteLives and "∞" or tostring(hero.respawns or 0))
             local detail = T(hero.template or "Mr. Green")
@@ -926,6 +944,7 @@ render = function()
     enemyProgress.Visible=progressSource~=nil
     enemyProgress.Text=progressSource and T(progressSource,progressArgs) or ''
     if enemy then
+        ArcadeArt.setPortrait(enemyStatus.CharacterPortrait, ArcadeArt.enemyKey(enemy))
         enemyOwner.Text = controlledBoss and (T(enemy.name or "Causeway Guardian") .. T(" · you")) or (player.DisplayName .. T(" · enemy"))
         enemyLife.Text = enemy.resourceKind=='CourseRival' and T('Rival · move and jump') or enemy.bossType and (enemy.status=='Dead' and 'Boss defeated' or
             T("Phase {phase:int} · Life {count:int}/{maximum:int}",
@@ -1054,15 +1073,15 @@ layout = function()
     scroll.Size = UDim2.new(1, 0, 1, shortLandscape and -92 or -116)
     menuLayout.Padding = UDim.new(0, shortLandscape and 8 or 14)
     header.Size = UDim2.new(1, 0, 0, shortLandscape and 54 or (compact and 144 or 112))
-    position(brand, 0, 0, contentWidth, 22)
-    position(title, 0, 26, contentWidth, compact and 60 or 43)
+    position(brand, 12, 0, contentWidth - 24, 22)
+    position(title, 12, 26, contentWidth - 24, compact and 60 or 43)
     title.TextSize = compact and 27 or 35
-    position(intro, 0, compact and 90 or 72, contentWidth, compact and 44 or 38)
+    position(intro, 12, compact and 90 or 72, contentWidth - 24, compact and 44 or 38)
     intro.TextSize = compact and 14 or 16
     intro.Visible = not shortLandscape
     if shortLandscape then
-        position(brand, 0, 0, contentWidth, 17)
-        position(title, 0, 19, contentWidth, 31)
+        position(brand, 12, 0, contentWidth - 24, 17)
+        position(title, 12, 19, contentWidth - 24, 31)
         brand.TextSize, title.TextSize = 12, 27
     else brand.TextSize = 15 end
     resultBanner.Size = UDim2.new(1, 0, 0, compact and 174 or 102)
@@ -1123,12 +1142,13 @@ layout = function()
     position(partyCount, contentWidth - 136, 12, 120, 20)
     for i, row in ipairs(partyRows) do
         local y = 42 + (i - 1) * rowHeight
-        position(row.dot, 16, y + 7, 8, 8)
+        position(row.avatar, 12, y + 1, 30, 30)
+        position(row.dot, 40, y + 22, 7, 7)
         if compact then
-            position(row.owner, 34, y, contentWidth - 50, 20)
-            position(row.choice, 34, y + 20, contentWidth - 50, 17)
+            position(row.owner, 54, y, contentWidth - 70, 20)
+            position(row.choice, 54, y + 20, contentWidth - 70, 17)
         else
-            position(row.owner, 34, y, contentWidth - 260, 24)
+            position(row.owner, 54, y, contentWidth - 280, 24)
             position(row.choice, contentWidth - 222, y, 206, 24)
         end
         row.choice.TextXAlignment = compact and Enum.TextXAlignment.Left or Enum.TextXAlignment.Right
@@ -1182,7 +1202,8 @@ layout = function()
     for i, row in ipairs(heroRows) do
         position(row.row, 0, (i - 1) * (rowHeightHUD + gap), rosterWidth, rowHeightHUD)
         position(row.stripe, 0, 9, 3, rowHeightHUD - 18)
-        position(row.owner, 11, short and 2 or 5, rosterWidth - 63, 20)
+        position(row.portrait, 7, 2, 23, 23)
+        position(row.owner, 36, short and 2 or 5, rosterWidth - 88, 20)
         row.owner.TextSize = short and 12 or 14
         position(row.status, 126, short and 23 or 34, rosterWidth - 137, 17)
         position(row.returns, rosterWidth - 45, short and 3 or 6, 34, 17)
@@ -1193,7 +1214,8 @@ layout = function()
     end
     position(enemyStatus, inset, inset, rosterWidth, enemyStatusHeight)
     position(enemyStripe, 0, 9, 3, enemyStatusHeight - 18)
-    position(enemyOwner, 11, short and 3 or 6, rosterWidth - 22, 20)
+    position(enemyStatus.CharacterPortrait, 7, 2, 24, 24)
+    position(enemyOwner, 37, short and 3 or 6, rosterWidth - 48, 20)
     enemyOwner.TextSize = short and 12 or 14
     position(enemyLife, 94, short and 28 or 35, rosterWidth - 106, 22)
     position(enemyProgress, 11, enemyStatusHeight-24, rosterWidth-22, 22)
@@ -1289,7 +1311,8 @@ layout = function()
             mobileExpanded == "Team" and enemy ~= nil, mobileExpanded == "Goal"
         position(enemyStatus, 0, 0, innerWidth, hasBossProgress and 88 or 64)
         position(enemyStripe, 0, 9, 3, 46)
-        position(enemyOwner, 11, 3, innerWidth - 22, 20)
+        position(enemyStatus.CharacterPortrait, 7, 2, 24, 24)
+        position(enemyOwner, 37, 3, innerWidth - 48, 20)
         enemyOwner.TextSize, enemyLife.TextSize = 14, 12
         position(enemyLife, 94, 30, innerWidth - 106, 24)
         position(enemyProgress, 11, 62, innerWidth-22, 22)
@@ -1298,7 +1321,8 @@ layout = function()
         for i, row in ipairs(heroRows) do
             position(row.row, 0, (i - 1) * 64, innerWidth, 58)
             position(row.stripe, 0, 9, 3, 40)
-            position(row.owner, 11, 3, innerWidth - 63, 20)
+            position(row.portrait, 7, 2, 24, 24)
+            position(row.owner, 37, 3, innerWidth - 89, 20)
             row.owner.TextSize = 14
             position(row.status, 126, 32, innerWidth - 137, 18)
             position(row.returns, innerWidth - 45, 4, 34, 18)
@@ -1636,4 +1660,5 @@ RunService.RenderStepped:Connect(function(dt)
 end)
 render()
 layout()
+gui:SetAttribute("MenuReady", true)
 sendIntent({kind = "Sync"})
