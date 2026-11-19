@@ -103,3 +103,16 @@ Open `BrickToads-Suno-Preview.rbxlx` from the preview folder in that Studio
 installation. The locally installed stereo Ogg holds 13 course and six battle
 themes. During Magnetic Circuit the chase plays the course theme until Buzzball
 starts the duel. The downloaded recordings are for personal, non-commercial use.
+
+## Tester build with Roblox-hosted music
+
+For recordings licensed for Roblox, upload the rendered campaign Ogg and give
+the tester experience permission to use its audio asset. Supply its actual
+Roblox URI as the playback target:
+
+```
+python tools/build_suno_music_preview.py "Back-Alley-Bounce.mp3" rbxassetid://ASSET_ID PLAYTEST_FOLDER --campaign SUITE_FOLDER
+```
+
+Publish `BrickToads-Playtest.rbxlx` from the output folder. The Roblox client
+streams the atlas and uses the same loop boundaries as the Studio preview.

@@ -1,7 +1,8 @@
-"""Build a personal Studio preview from the owner's downloaded Back Alley Bounce MP3.
+"""Build a Studio preview or a tester place using an uploaded campaign soundtrack.
 
-Usage: python tools/build_suno_music_preview.py SONG.mp3 STUDIO_CONTENT_SOUNDS OUTPUT_DIR
-Requires FFmpeg. The Suno Free recording is for personal, non-commercial use.
+Usage: python tools/build_suno_music_preview.py SONG.mp3 PLAYBACK_TARGET OUTPUT_DIR [--campaign SUITE_FOLDER]
+PLAYBACK_TARGET accepts a Studio sounds directory or the Roblox URI of the licensed campaign atlas.
+Requires FFmpeg.
 """
 import argparse
 import hashlib
@@ -56,10 +57,9 @@ def render(cuts, output, asset):
     return regions
 
 
-def preview_sources(regions, asset):
+def soundtrack_sources(regions, uri, studio_only):
     catalog_file = Path("src/shared/AudioCatalog.luau")
     catalog = (ROOT / catalog_file).read_text(encoding="utf-8")
-    uri = "rbxasset://sounds/" + asset
     catalog, count = re.subn(r"music='rbxassetid://\d+'", f"music='{uri}'", catalog)
     if count != 1:
         raise ValueError("Expected one music asset")
@@ -69,26 +69,34 @@ def preview_sources(regions, asset):
                              "\n".join(rows) + "\n    },", catalog, flags=re.DOTALL)
     if count != 1:
         raise ValueError("Expected one music region table")
+    if not studio_only:
+        if not re.fullmatch(r"rbxassetid://[1-9][0-9]*", uri):
+            raise ValueError("Expected the uploaded Roblox soundtrack asset ID")
+        return {catalog_file: catalog}
     audio_file = Path("src/client/GameAudio.luau")
     audio = (ROOT / audio_file).read_text(encoding="utf-8")
     marker = "local function asset(v) return "
     if audio.count(marker) != 1:
         raise ValueError("Expected the client asset validator")
-    studio_only = f"(v=='{uri}' and game:GetService('RunService'):IsStudio()) or "
-    return {catalog_file: catalog, audio_file: audio.replace(marker, marker + studio_only)}
+    local_audio = f"(v=='{uri}' and game:GetService('RunService'):IsStudio()) or "
+    return {catalog_file: catalog, audio_file: audio.replace(marker, marker + local_audio)}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for arg in ("song", "studio_content_sounds", "output_dir"):
-        parser.add_argument(arg, type=Path)
+    parser.add_argument("song", type=Path)
+    parser.add_argument("playback_target", help="Studio content/sounds directory or rbxassetid://ID of the uploaded atlas")
+    parser.add_argument("output_dir", type=Path)
     parser.add_argument("--campaign", type=Path, metavar="SONG_FOLDER",
                         help="Add 13 level and six boss cues from the six downloaded Suno suites")
     args = parser.parse_args()
     if hashlib.sha256(args.song.read_bytes()).hexdigest() != (
             "df70a0b5573ad7dac394a61a121901e9fa666e2c7ada3e1bf794121a0fdceb2b"):
         raise ValueError("This arrangement requires the first Back Alley Bounce MP3 download")
-    if not args.studio_content_sounds.is_dir():
+    cloud = re.fullmatch(r"rbxassetid://[1-9][0-9]*", args.playback_target) is not None
+    if cloud and not args.campaign:
+        parser.error("The tester build requires --campaign and its 13 level and six boss cues")
+    if not cloud and not Path(args.playback_target).is_dir():
         raise ValueError("Supply the installed Studio content/sounds directory")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     cuts = {name: (args.song, start, end) for name, (start, end) in CUES.items()}
@@ -106,9 +114,12 @@ def main():
     regions = render(cuts, args.output_dir, asset)
     if args.campaign:
         regions.update(Level=regions["Level1"], Boss=regions["Boss1"])
-    place = build(ROOT, source_overrides=preview_sources(regions, asset))
-    shutil.copyfile(args.output_dir / asset, args.studio_content_sounds / asset)
-    (args.output_dir / "BrickToads-Suno-Preview.rbxlx").write_bytes(place)
+    uri = args.playback_target if cloud else "rbxasset://sounds/" + asset
+    place = build(ROOT, source_overrides=soundtrack_sources(regions, uri, studio_only=not cloud))
+    if not cloud:
+        shutil.copyfile(args.output_dir / asset, Path(args.playback_target) / asset)
+    filename = "BrickToads-Playtest.rbxlx" if cloud else "BrickToads-Suno-Preview.rbxlx"
+    (args.output_dir / filename).write_bytes(place)
 
 
 if __name__ == "__main__":

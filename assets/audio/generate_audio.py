@@ -160,7 +160,7 @@ def generate(output_dir):
         "sfx": atlas(output_dir, "sfx", sfx()),
         "music": atlas(output_dir, "music", {name: music(name) for name in ("Level", "Boss", "Result", "Lobby")}),
     }
-    (output_dir / "atlas.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    (output_dir / "atlas.json").write_bytes((json.dumps(manifest, indent=2) + "\n").encode("utf-8"))
     return manifest
 
 
