@@ -9,6 +9,7 @@ local function sourceModule(name)
     if script then return require(script.Parent[name]) end
     return require('./'..name)
 end
+local Definition=sourceModule('CampaignDefinition')
 local function copy(t) if type(t)~='table' then return t end;local r={};for k,v in pairs(t) do r[k]=copy(v) end;return r end
 local function clamp(v,a,b) return math.max(a,math.min(b,v)) end
 local function finite(v) return type(v)=='number' and v==v and v>-math.huge and v<math.huge end
@@ -143,7 +144,8 @@ function Modes:_syncActors()
                 local before=s;local target=before and self:respawnPosition(slot) or self.world:position(slot) or self.definition.spawn
                 s={slot=slot,actorId=h.actorId,attempt=h.attempt,position=copy(target),previous=copy(target),
                     velocity=point(0,0,0),input={x=0,z=0,run=false,at=-math.huge},checkpoint=before and before.checkpoint or 1,
-                    grounded=false,mounted=before and before.mounted or false,progress=before and before.savedProgress or 0,finished=before and before.finished or false,
+                    grounded=false,mounted=before and before.mounted and self.vehicleGroup.phase~='AwaitingEntryView' or false,
+                    progress=before and before.savedProgress or 0,finished=before and before.finished or false,
                     segment=1,segmentProgress=0,chaser=-(self.course.chaseGap or 32),oxygen=self.course.oxygenSeconds or 18,medium='Dry'}
                 if self.mode=='Clinger' then s.chaser=-(self.course.chaseGap or 32) end
                 self.actors[slot]=s
@@ -165,6 +167,9 @@ function Modes:_syncActors()
                 s.emergencyHeld=nil;s.position=copy(self.world:position(slot));s.previous=copy(s.position)
                 s.velocity=point(0,0,0);s.external=nil;s.input={x=0,z=0,run=false,at=-math.huge}
                 self:_ground(s,s.position,0)
+            end
+            if self.definition.speederEntry and not s.mounted and self:_controlled(slot) then
+                self:_board(s)
             end
         end
     end
@@ -425,11 +430,7 @@ function Modes:_vehicle(s,dt)
             end
         end
         s.velocity.y-=100*dt;s.position.y+=s.velocity.y*dt
-        local roadY=3
-        for _,crest in ipairs(c.roadCrests or {}) do
-            local fraction=1-math.abs(s.position.x-crest.x)/crest.halfLength
-            if fraction>0 then roadY+=crest.height*fraction end
-        end
+        local roadY=3+Definition.roadHeight(c,s.position.x)
         if s.grounded or s.position.y<=roadY then
             s.position.y=roadY;s.velocity.y=0;s.grounded=true
         end
@@ -653,6 +654,7 @@ function Modes:_hazards(s,old)
     if s.mounted and self.vehicleGroup and self.vehicleGroup.phase~='Riding' then return end
     for _,h in ipairs(self.hazards) do
         if h.active~=false and swept(old,s.position,h,h.previous) then
+            if self.definition.speederEntry and h.id==self.course.hazards[1].id then s.touchedFirstWall=true end
             if self.mode=='Speeder' or self.mode=='Surf' or self.mode=='Jet' or h.kind=='Spike' or h.kind=='RotatingSpike' or h.kind=='PipeCrusher' or h.kind=='MechanicalCrusher' then
                 self:_die(s,'CampaignCrash')
             elseif not s.nextHit or self.now>=s.nextHit then
@@ -721,6 +723,32 @@ function Modes:interaction(slot)
     if self.mode=='Rope' then return {available=true,action='Rope kick',kind='CampaignKick'} end
     return {available=false}
 end
+function Modes:_board(s)
+    local position=copy(self.course.mount)
+    position.z+=self:_slotOffset(s.slot)
+    local velocity=point(0,0,0)
+    if self.definition.speederEntry then
+        -- Keep the automatic entry pending until the native body accepts the ride pose.
+        if not self.world.campaignPose or self.world:campaignPose(s.slot,position,self.mode,velocity)~=true then return false end
+    end
+    s.mounted=true;s.position=position;s.previous=copy(position);s.velocity=velocity;s.grounded=true
+    if self.vehicleGroup.phase=='Mounting' then
+        if self.definition.speederEntry then self.vehicleGroup.phase='AwaitingEntryView'
+        else self.vehicleGroup.phase='Riding';self.vehicleGroup.speed=self.course.speed end
+    end
+    if self.definition.speederEntry then self:_vehicle(s,0) end
+    self:_log('CampaignMounted',s.slot,{mode=self.mode})
+    if not self.definition.speederEntry and self.world.campaignPose then self.world:campaignPose(s.slot,position,self.mode,velocity) end
+    return true
+end
+function Modes:releaseSpeederEntry(slot)
+    local rider=self.actors[slot]
+    if self.closed or self.session.state.status~='Active' or not self.definition.speederEntry
+        or self.vehicleGroup.phase~='AwaitingEntryView' or not rider or not rider.mounted
+        or not self:_controlled(slot) or rider.actorId~=self.session.state.heroes[slot].actorId then return false end
+    self.vehicleGroup.phase='Riding';self.vehicleGroup.speed=self.course.speed
+    return true
+end
 function Modes:interact(slot,now,action)
     local s=self.actors[slot]
     if self.mode=='Race' then
@@ -739,11 +767,7 @@ function Modes:interact(slot,now,action)
     if action~='Punch' then return 'NO_INTERACTION' end
     local interaction=self:interaction(slot);if not interaction.available then return 'NO_INTERACTION' end
     if interaction.kind=='CampaignMount' then
-        s.mounted=true;s.position=copy(self.course.mount);s.previous=copy(s.position);s.velocity=point(0,0,0);s.grounded=true
-        s.position.z+=self:_slotOffset(slot);s.previous.z=s.position.z
-        if self.vehicleGroup.phase=='Mounting' then self.vehicleGroup.phase='Riding';self.vehicleGroup.speed=self.course.speed end
-        self:_log('CampaignMounted',slot,{mode=self.mode})
-        if self.world.campaignPose then self.world:campaignPose(slot,s.position,self.mode,s.velocity) end
+        if not self:_board(s) then return 'NO_INTERACTION' end
     elseif interaction.kind=='CampaignKick' then
         if s.nextAction and self.now<s.nextAction then return 'COOLDOWN' end
         s.nextAction=self.now+.4
@@ -808,7 +832,7 @@ function Modes:_objects(dt)
         self:_object('spring-'..n,'Spring',p,size(spring),{collidable=false,yaw=yaw,role='Spring'})
     end
     for _,ramp in ipairs(self.course.ramps or {}) do
-        for step=1,3 do self:_object(ramp.id..'-'..step,'Ramp',point(ramp.x-6+step*3,step*.5,ramp.z),
+        for step=1,3 do self:_object(ramp.id..'-'..step,'Ramp',point(ramp.x-6+step*3,Definition.roadHeight(self.course,ramp.x-6+step*3)+step*.5,ramp.z),
             {w=3,h=step,d=ramp.d},{collidable=false,role='Ramp'}) end
     end
 end
@@ -890,8 +914,18 @@ function Modes:_slice(dt)
                     if self.world.campaignPose and self.mode~='Finale' then self.world:campaignPose(slot,s.position,self.mode,s.velocity,
                         self.mode=='Clinger'and s.presentationHeading or nil) end
                     if self.world.campaignRelease then self.world:campaignRelease(slot) end
-                elseif self:_special(s) and self.world.campaignPose then self.world:campaignPose(slot,s.position,self.mode,s.velocity,
-                    self.mode=='Clinger'and s.presentationHeading or nil) end
+                elseif self:_special(s) and self.world.campaignPose then
+                    local posed=self.world:campaignPose(slot,s.position,self.mode,s.velocity,self.mode=='Clinger'and s.presentationHeading or nil)
+                    if self.definition.speederEntry and posed==true and s.mounted and not s.touchedFirstWall
+                        and not self.firstWallPassed and self.vehicleGroup.phase=='Riding' then
+                        local wall=self.course.hazards[1]
+                        local farEdge=wall.x+wall.w/2+BODY.x
+                        if old.x<=farEdge and s.position.x>farEdge then
+                            self.firstWallPassed=true
+                            self:_log('SpeederFirstWallPassed',slot,{hazard=wall.id})
+                        end
+                    end
+                end
             end
         end
     end
@@ -902,7 +936,12 @@ end
 function Modes:step(now,dt)
     if self.closed or self.session.state.status~='Active' then return end
     if not finite(now) or not finite(dt) or dt<0 or now<self.now then return end
-    self.now=now;self:_vehicleDeaths();self:_syncActors()
+    self.now=now
+    if self.definition.speederEntry and (self.vehicleGroup.phase=='Mounting' or self.vehicleGroup.phase=='AwaitingEntryView') then
+        self:_syncActors()
+        return
+    end
+    self:_vehicleDeaths();self:_syncActors()
     local accepted=math.min(dt,.5);self.discardedSeconds+=dt-accepted
     local remaining=accepted
     while remaining>1e-8 do local slice=math.min(FIXED,remaining);self:_slice(slice);remaining-=slice end

@@ -16,6 +16,7 @@ return function(MatchHub,Controller,Core,Combat,Session,Registry,Config,FakeWorl
                 self.config.Level=route;self.rebuilds+=1;return true
             end
             world.folder={Name='ActualWorld_'..id}; world.factoryIndex=index
+            function world.folder:Destroy() self.destroyed=true end
             local originalSpawn=world.spawn
             function world:spawn(slot,actorId,...)
                 local ok=originalSpawn(self,slot,actorId,...)
@@ -47,9 +48,9 @@ return function(MatchHub,Controller,Core,Combat,Session,Registry,Config,FakeWorl
             clock=function() return now end,guid=function() serial+=1; return 'group-run-'..serial end}
         for key,value in pairs(overrides or {}) do if key~='Config' then deps[key]=value end end
         local hub=MatchHub.new(deps,factory)
-        local function add(id)
+        local function add(id,entryRoute)
             local p={UserId=id,Name='User'..id,DisplayName='Player'..id,Parent='Players'}
-            players[#players+1]=p; hub:join(p); return p
+            players[#players+1]=p; hub:join(p,entryRoute); return p
         end
         local function send(p,payload,groupId)
             now+=.1
@@ -76,6 +77,142 @@ return function(MatchHub,Controller,Core,Combat,Session,Registry,Config,FakeWorl
         end
         eq(g.controller.current.state.heroes[slot].status,'Eliminated')
     end
+
+    -- A regular controller stands in for the entry-specific course here; the Hub owns routing,
+    -- occupancy and cleanup, while the course tests exercise the actual bike.
+    local function entryController()
+        local instrumented=table.clone(Controller)
+        function instrumented.new(deps,world)
+            local c=Controller.new(deps,world)
+            function c:startSpeederEntry(player,players)
+                eq(#players,1);eq(players[1],player)
+                self.entryStarts=(self.entryStarts or 0)+1
+                return self:_begin(player,players)
+            end
+            return c
+        end
+        return instrumented
+    end
+
+    test('tagged arrivals get isolated rides even when all four ordinary groups are occupied',function()
+        local h,list,add,send,tick=fixture(nil,{Controller=entryController()})
+        local a=add(20);local home=h:selected(a)
+        eq(send(a,{kind='Start'}),'OK')
+        for i=1,3 do
+            local p=add(20+i);create(h,send,p,'ordinary-'..i);eq(send(p,{kind='Start'}),'OK')
+        end
+        local first,second=add(51,'speeder'),add(52,'speeder')
+        local one,two=h:selected(first),h:selected(second)
+        assert(one~=two and one~=home and two~=home and one.world.factoryIndex~=two.world.factoryIndex)
+        assert(h:snapshot(first,list).entryPending);eq(one.controller.current,nil)
+        eq(send(first,{kind='Start'}),'ENTRY_PENDING')
+        eq(send(first,{kind='EntryReady'},false),'OK')
+        eq(send(first,{kind='EntryReady'},false),'OK')
+        eq(send(second,{kind='EntryReady'},false),'OK')
+        assert(not h:snapshot(first,list).entryPending)
+        eq(one.controller.current.order[1],1);eq(one.controller.owners[1].userId,51)
+        eq(two.controller.current.order[1],1);eq(two.controller.owners[1].userId,52)
+        eq(#h.order,4);eq(one.controller.entryStarts,1);eq(two.controller.entryStarts,1)
+        eq(#h:snapshot(a,list).groups,4);eq(h:snapshot(first,list).canCreateGroup,false)
+        local spectator=add(24)
+        eq(send(spectator,{kind='EntryReady'},false),'OK')
+        eq(h:selected(spectator),home);eq(join(send,spectator,one.id),'UNKNOWN_GROUP')
+        assert(not h:_queueEligible(spectator.UserId,{groupId=one.id}))
+        local previous=one.controller.current.now; tick(.1)
+        assert(one.controller.current.now>previous);eq(home.controller.owners[1].userId,a.UserId)
+        assert(h:selected(add(53,'unknown'))==home)
+    end)
+
+    test('reconnect ownership wins over tags and disposable entry slots are reclaimed independently',function()
+        local h,list,add,send=fixture(nil,{Controller=entryController()})
+        local n=add(11);eq(send(n,{kind='Start'}),'OK')
+        local normal=h:selected(n);local previous=normal.controller.current
+        h:leave(n)
+        local normalBack=add(11,'speeder')
+        eq(h:selected(normalBack),normal);eq(normal.controller.current,previous)
+        local p=add(41,'speeder');local ride=h:selected(p);local run=ride.controller.current
+        eq(send(p,{kind='EntryReady'},false),'OK');run=ride.controller.current
+        local replacement=add(41)
+        eq(h:selected(replacement),ride);eq(ride.controller.current,run);eq(ride.controller.entryStarts,1)
+        eq(h:leave(p),false);eq(h.groups[ride.id],ride)
+        eq(h:leave(replacement),true);eq(h.groups[ride.id],nil);assert(ride.world.folder.destroyed)
+        local nextRider=add(42,'speeder');local fresh=h:selected(nextRider)
+        eq(fresh.world.factoryIndex,ride.world.factoryIndex);assert(fresh.id~=ride.id)
+        eq(h:selected(add(41)),normal);eq(#h.order,1)
+    end)
+
+    test('early readiness belongs to one Player and cannot grant a route or restart a reconnect',function()
+        local h,list,add,send=fixture(nil,{Controller=entryController()})
+        local p={UserId=7,Name='Early',DisplayName='Early',Parent='Players'}
+        list[#list+1]=p
+        eq(h:handle(p,{kind='EntryReady',entryRoute='speeder'},list),'INVALID_INTENT')
+        eq(h:handle(p,{kind='EntryReady'},list),'OK')
+        eq(h:join(p,'speeder'),true)
+        local group=h:selected(p);eq(group.controller.entryStarts,1)
+        local oldRun=group.controller.current
+        local replacement=add(7,'speeder');eq(h:selected(replacement),group)
+        eq(send(replacement,{kind='EntryReady'},false),'OK');eq(group.controller.current,oldRun)
+        eq(group.controller.entryStarts,1);eq(h:join(p,'speeder'),false)
+    end)
+
+    test('ride release validates the exact private group, owner and run after bootstrap',function()
+        local h,list,add,send=fixture(nil,{Controller=entryController()})
+        local a,b,ordinary=add(71,'speeder'),add(72,'speeder'),add(73)
+        eq(send(a,{kind='EntryReady'},false),'OK')
+        eq(send(b,{kind='EntryReady'},false),'OK')
+        local group=h:selected(a);local run=group.controller.current.state.runId
+        function group.controller:releaseSpeederEntry(player,runId)
+            eq(player,a);eq(runId,run);self.released=true;return 'OK'
+        end
+        eq(send(b,{kind='RideReady',runId=run},group.id),'WRONG_GROUP')
+        eq(send(ordinary,{kind='RideReady',runId=run}),'INVALID_INTENT')
+        eq(send(a,{kind='RideReady',runId=run,owner=71}),'INVALID_INTENT')
+        eq(send(a,{kind='RideReady',runId='old-run'}),'STALE_RUN')
+        eq(group.controller.released,nil)
+        eq(send(a,{kind='RideReady',runId=run}),'OK')
+        eq(send(a,{kind='RideReady',runId=run}),'OK');eq(group.controller.released,true)
+    end)
+
+    test('temporary entry refusal retries and a quarantined entry offers a fresh private ride',function()
+        local h,list,add,send,tick=fixture(nil,{Controller=entryController(),warn=function() end})
+        local a=add(31,'speeder');local group=h:selected(a)
+        local start=group.controller.startSpeederEntry;local attempts=0
+        function group.controller:startSpeederEntry(player,players)
+            attempts+=1
+            if attempts==1 then return 'NO_HERO' end
+            return start(self,player,players)
+        end
+        eq(send(a,{kind='EntryReady'},false),'NO_HERO');assert(h:snapshot(a,list).entryPending)
+        send(a,{kind='EntryReady'},false);eq(attempts,1)
+        tick(1.1);eq(send(a,{kind='EntryReady'},false),'OK');eq(attempts,2)
+        assert(not h:snapshot(a,list).entryPending)
+        local b=add(32,'speeder');local broken=h:selected(b)
+        function broken.controller:startSpeederEntry() error('source world unavailable') end
+        eq(send(b,{kind='EntryReady'},false),'PARTY_FAULTED')
+        local fault=h:snapshot(b,list);assert(fault.status=='Faulted' and not fault.entryPending)
+        eq(send(b,{kind='Start'}),'OK')
+        local fresh=h:selected(b);assert(fresh~=broken and broken.world.folder.destroyed)
+        eq(fresh.entryOwner,b.UserId);eq(fresh.controller.entryStarts,1)
+    end)
+
+    test('a superseded private allocation cannot overwrite the replacement connection',function()
+        local suited=entryController();local make=suited.new
+        function suited.new(deps,world)
+            if deps.GroupId=='speeder-1' then coroutine.yield() end
+            return make(deps,world)
+        end
+        local h,list,add,send=fixture(nil,{Controller=suited})
+        local waiting={UserId=81,Name='Old',DisplayName='Old',Parent='Players'}
+        list[#list+1]=waiting
+        local work=coroutine.create(function() eq(h:join(waiting,'speeder'),false) end)
+        assert(coroutine.resume(work));eq(coroutine.status(work),'suspended')
+        eq(h:handle(waiting,{kind='Sync'},list),'MISSING_GROUP')
+        local replacement=add(81,'speeder');eq(send(replacement,{kind='EntryReady'},false),'OK')
+        local fresh=h:selected(replacement)
+        local resumed,err=coroutine.resume(work);assert(resumed,err)
+        eq(h:selected(replacement),fresh);eq(h.groups['speeder-1'],nil)
+        eq(h.entryLanes[h.maxGroups+1],nil);eq(fresh.controller.entryStarts,1)
+    end)
 
     -- Reusing one controller/world or stepping only the selected group breaks this test.
     test('independent real controllers keep group B alive when group A loses',function()

@@ -49,23 +49,22 @@ return function(Definition,Modes)
         assert(s.deaths==1 and not m.complete,'crash must be swept through intermediate geometry')
         assert(m:snapshot().discardedSeconds>=1.4)
     end)
-    test('mounted speeder follows both slopes of the native road crest',function()
+    test('grounded speeder follows the hill and the bottom of the hollow at riding speed',function()
         local d,s,w,m,step=fixture(3)
         w.points[101]=table.clone(d.course.mount);step(1/60)
         assert(m:interact(101,s.now,'Punch')=='OK')
         local a=m.actors[101]
-        local ridge=d.course.roadCrests[1]
-        a.position={x=ridge.x-ridge.halfLength,y=3,z=0};a.grounded=true
-        local peak=0
-        for _=1,120 do
-            if a.position.x>=ridge.x+ridge.halfLength then break end
+        -- Isolate continuous ground contact from collisions and spring launches.
+        table.clear(d.course.hazards);table.clear(d.course.ramps)
+        local peak,trough=-math.huge,math.huge
+        for _=1,360 do
             step(1/60)
             assert(s.state.heroes[101].status=='Alive' and a.grounded)
-            local height=ridge.height*math.max(0,1-math.abs(a.position.x-ridge.x)/ridge.halfLength)
+            local height=Definition.roadHeight(d.course,a.position.x)
             assert(math.abs(a.position.y-3-height)<.001)
-            peak=math.max(peak,height)
+            peak=math.max(peak,height);trough=math.min(trough,height)
         end
-        assert(peak>ridge.height-.2 and a.position.x>=ridge.x+ridge.halfLength)
+        assert(peak>10 and trough< -6)
     end)
     test('dry pipe stops an outward run and allows the player to turn back',function()
         local _,s,_,m,step=fixture(9)
@@ -208,7 +207,7 @@ return function(Definition,Modes)
         local d,s,w,m,step=fixture(3)
         d.course.hazards={};d.course.ramps={{id='ramp-probe',x=60,y=1,z=0,w=8,h=2,d=12,launchSpeed=48}}
         w.points[101]=table.clone(d.course.mount);step(1/60);m:interact(101,s.now,'Punch')
-        m.actors[101].position={x=59.8,y=3,z=0};step(1/60)
+        m.actors[101].position={x=59.8,y=3+Definition.roadHeight(d.course,59.8),z=0};step(1/60)
         assert(m.actors[101].velocity.y>40 and w.points[101].y>3)
         local vy=m.actors[101].velocity.y;m:jump(101);assert(m.actors[101].velocity.y==vy)
     end)

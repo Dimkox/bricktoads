@@ -23,6 +23,14 @@ local function sourceModule(name)
     if script then return require(script.Parent[name]) end
     return require('./'..name)
 end
+-- All heights use the same piecewise-linear profile as the physical road panels.
+function Definition.roadHeight(course,x)
+    local profile=course.roadProfile
+    if not profile then return 0 end
+    local u=math.clamp((x-profile.startX)/profile.spacing,0,#profile.heights-1)
+    local i=math.min(math.floor(u)+1,#profile.heights-1)
+    return profile.heights[i]+(profile.heights[i+1]-profile.heights[i])*(u-i+1)
+end
 function Definition.build(index,seed)
     assert(type(index)=='number' and index%1==0 and index>=1 and index<=13,'Invalid campaign index')
     assert(type(seed)=='number' and seed==seed and seed%1==0 and seed>=1 and seed<MOD,'Invalid campaign seed')
@@ -70,29 +78,47 @@ function Definition.build(index,seed)
         if jet then c.altitudeMin=5;c.altitudeMax=31;c.mount.y=8 end
         c.ramps={};c.emitters={}
         cp(24,c.mount.y,0,0)
+        local sectors=index==3 and 4 or 1
+        local extension=(sectors-1)*410
+        finish=point(434+extension,3,0)
+        if index==3 then
+            c.finishDistance=finish.x-c.mount.x
+            local heights={0}
+            local shape={0,3,8,11,8,3,-2,-6,-7,-4,0,4,6,4,0,-3,-6,-4,-1,0,0}
+            for sector=1,sectors do
+                for sample=2,#shape do
+                    local h=sector%2==1 and shape[sample] or -shape[#shape-sample+1]
+                    table.insert(heights,h*(1+(sector-1)*.08))
+                end
+            end
+            local startX=34
+            local spacing=(finish.x-26-startX)/(#heights-1)
+            c.roadProfile={startX=startX,spacing=spacing,heights=heights}
+            for i=1,#heights-1 do
+                local h1,h2=heights[i],heights[i+1]
+                local slab=addFloor(startX+(i-.5)*spacing,(h1+h2)/2,0,spacing,46)
+                slab.roadRise=h2-h1
+            end
+            local t=c.encounters[1].trajectory
+            t.dropGroundY=3+Definition.roadHeight(c,t.from.x+(t.to.x-t.from.x)*t.dropAt/t.duration)
+        end
         local sectionX=54
-        for n=1,12 do local v=choose();sectionX+=25+v;local x=sectionX
+        for n=1,12*sectors do
+            local section=(n-1)%12+1
+            if section==1 then sectionX=54+410*math.floor((n-1)/12) end
+            local v=choose();sectionX+=25+v;local x=sectionX
             local kind=jet and ({'AirMine','ElectricGate','Rocket'})[(n-1)%3+1] or
                 (surf and ({'Mine','Log','Whirlpool'})[(n-1)%3+1] or ({'Wall','LowBarrier','Overhead'})[(n-1)%3+1])
             local y=jet and (8+(v-1)*9) or (kind=='Overhead' and 10 or 3)
             local h=jet and 9 or (kind=='Overhead' and 5 or (kind=='Wall' and 18 or 3))
             local z=jet and 0 or (v-2)*12;local depth=(jet or kind=='LowBarrier' or kind=='Log') and 44 or 12
-            c.hazards[#c.hazards+1]=hazard('ride-'..n,kind,x,y,z,3,h,depth,
+            c.hazards[#c.hazards+1]=hazard('ride-'..n,kind,x,y+Definition.roadHeight(c,x),z,3,h,depth,
                 kind=='Rocket' and {axis='z',amplitude=8,period=2.4,phase=n} or nil)
-            if n==4 or n==8 then cp(x+12,c.mount.y,0,x+12-c.mount.x) end
-            if index==3 and (n==2 or n==8) then c.ramps[#c.ramps+1]={id='ramp-'..n,x=x-10,y=1,z=0,w=10,h=2,d=12,launchSpeed=50} end
+            if section==4 or section==8 or (section==12 and n<12*sectors) then cp(x+12,c.mount.y+Definition.roadHeight(c,x+12),0,x+12-c.mount.x) end
+            if index==3 and (section==2 or section==8) then c.ramps[#c.ramps+1]={id='ramp-'..n,x=x-10,y=1,z=0,w=10,h=2,d=12,launchSpeed=50} end
         end
         if surf or jet then for n=1,3 do c.emitters[n]={id='ride-launcher-'..n,kind='RocketLauncher',position=point(100+n*85,jet and 20 or 4,23),interval=3,speed=18,life=2} end end
-        addFloor(439,0,0,62,48);finish=point(434,3,0);d.bounds.maxX=495;c.axis='x'
-        if index==3 then
-            c.roadCrests={}
-            for _,after in ipairs({2,5,9}) do
-                local x=(c.hazards[after].x+c.hazards[after+1].x)/2
-                table.insert(c.roadCrests,{x=x,halfLength=9,height=2+(after%3)*.25})
-            end
-            -- Continuous roadbed under the crests and both boarding ledges.
-            addFloor((c.mount.x+finish.x)/2,0,0,finish.x-c.mount.x+24,c.laneLimit*2+10)
-        end
+        addFloor(439+extension,0,0,62,48);d.bounds.maxX=495+extension;c.axis='x'
     elseif index==4 then
         c.acceleration=19;c.friction=2.4;c.maxSpeed=25;c.gravity=150;c.jumpSpeed=51
         local cursor=-12
@@ -207,7 +233,7 @@ function Definition.build(index,seed)
     end
     if #c.checkpoints==0 then cp(d.spawn.x,d.spawn.y,d.spawn.z,0) end
     table.sort(c.checkpoints,function(a,b) return a.progress<b.progress end)
-    if index==2 or index==3 or index==5 or index==7 then
+    if index==2 or index==5 or index==7 then
         for n,p in ipairs(c.checkpoints) do if n>1 then addFloor(p.position.x,p.position.y-3,p.position.z,16,20) end end
     end
     c.finishPoint=finish;c.finish=volume(finish.x,finish.y,finish.z,12,10,18);c.platforms=copy(platforms)

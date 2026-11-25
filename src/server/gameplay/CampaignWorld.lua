@@ -5,6 +5,7 @@ CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
 local CourseAppearance=require(script.Parent.CourseAppearance)
 local CoursePropAppearance=require(script.Parent.CoursePropAppearance)
+local Definition=require(script.Parent.CampaignDefinition)
 local palettes={
     Rope={45,63,78},Speeder={106,75,47},Ice={133,185,206},Surf={42,124,141},
     Serpents={71,111,69},Jet={125,65,44},Ascent={76,88,107},Tubes={61,105,114},
@@ -42,6 +43,31 @@ function CampaignWorld.new(world,route)
         local material=route.mode=='Ice' and Enum.Material.Ice or Enum.Material.Metal
         local p=makePart(world.geometry,'CourseSupport_'..index,Vector3.new(data.w,data.h,data.d),
             CFrame.new(data.x,data.y,data.z)+world.offset,self.color,true,material)
+        if route.mode=='Speeder' then
+            local rise=data.roadRise or 0
+            local angle=math.atan2(rise,data.w)
+            local length=math.sqrt(data.w^2+rise^2)
+            local top=CFrame.new(data.x,data.y+data.h/2,data.z)*CFrame.Angles(0,0,angle)+world.offset
+            p.Size=Vector3.new(length,data.h,data.d)
+            p.CFrame=top*CFrame.new(0,-data.h/2,0)
+            p.Material=Enum.Material.Asphalt
+            p.Color=Color3.fromRGB(121,107,87)
+            -- Arrival overlaps the boarding pad. Keep only one textured top there.
+            if index~='Arrival' then
+                local grit=Instance.new('Texture')
+                grit.Name='RoadAggregate';grit.Face=Enum.NormalId.Top
+                grit.Texture='rbxasset://textures/ui/LegacyRbxGui/Asphalt.png'
+                grit.StudsPerTileU=5;grit.StudsPerTileV=5;grit.Transparency=.48;grit.Parent=p
+            end
+            if data.roadRise then
+                for _,side in ipairs({-1,1}) do
+                    makePart(world.geometry,'CopperShoulder',Vector3.new(length,.08,.55),
+                        top*CFrame.new(0,.035,side*(data.d/2-1)),Color3.fromRGB(191,132,65),false,Enum.Material.Concrete)
+                    makePart(world.geometry,'WornLaneMark',Vector3.new(length*.38,.045,.24),
+                        top*CFrame.new(0,.025,side*7.5),Color3.fromRGB(205,183,137),false,Enum.Material.Concrete)
+                end
+            end
+        end
         p:SetAttribute('SurfaceId',route.id..':'..index);p:SetAttribute('ZoneIndex',1)
         world.allFloors[#world.allFloors+1]=p;world.floors[#world.floors+1]=p
         return p
@@ -76,7 +102,7 @@ function CampaignWorld.new(world,route)
         for x=40,course.finishDistance or 420,28 do
             for _,side in ipairs({-1,1}) do
                 makePart(world.geometry,'CourseLaneBeacon',Vector3.new(.5,3,.5),
-                    CFrame.new(x,1,side*25)+world.offset,Color3.fromRGB(245,192,76),false,Enum.Material.Neon)
+                    CFrame.new(x,1+Definition.roadHeight(course,x),side*23)+world.offset,Color3.fromRGB(245,192,76),false,Enum.Material.Neon)
             end
         end
     elseif route.mode=='Clinger' then

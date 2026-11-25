@@ -213,16 +213,49 @@ function Controller:_feedbackSnapshot(player,view)
     return {id=row.id,code=row.code,kind=row.kind,groupId=row.groupId,runId=row.runId,
         actorId=row.actorId,expiresAt=row.expiresAt}
 end
-function Controller:_begin(player,players)
+function Controller:startSpeederEntry(player,players)
+    if not player.Parent or not self.connections:isCurrent(player) then return 'STALE_CONNECTION' end
+    local online=self.connections:online(players)
+    if #online~=1 or online[1]~=player then return 'NOT_ISOLATED' end
+    for _,other in pairs(self.players) do
+        if other~=player then return 'NOT_ISOLATED' end
+    end
+    if self.current then return 'RUN_ACTIVE' end
+    if not self.deps.CampaignDefinition or not self.deps.CampaignDirector or not self.deps.CampaignModes then return 'UNAVAILABLE' end
+    return self:_begin(player,players,true)
+end
+function Controller:releaseSpeederEntry(player,runId)
+    if not player.Parent or not self.connections:isCurrent(player) then return 'STALE_CONNECTION' end
+    if not self.current or self.current.state.runId~=runId then return 'WRONG_RUN' end
+    local slot=self.ownerSlots[player.UserId]
+    if not slot then return 'NOT_OWNER' end
+    if self.releasedSpeederRunId==runId then return 'OK' end
+    local modes=self.director and self.director.modes
+    if not modes or not modes.definition.speederEntry then return 'NOT_SPEEDER_ENTRY' end
+    if not modes:releaseSpeederEntry(slot) then return 'ENTRY_NOT_BOARDED' end
+    self.releasedSpeederRunId=runId
+    return 'OK'
+end
+function Controller:_begin(player,players,speederEntry)
     local online=self:_heroes(players)
     if #online==0 then return 'NO_HERO' end
     if online[1]~=player then return 'HOST_ONLY' end
     if not self:_open() then return 'RUN_ACTIVE' end
+    local firstMinute=self.deps.FirstMinute
+    if firstMinute and not speederEntry then firstMinute:startPressed(player) end
     local at=self.deps.clock()
     local runId=self.deps.guid()
+    self.releasedSpeederRunId=nil
     local route
-    if self.deps.LevelVariation and self.baseLevel then
-        route=self.deps.LevelVariation.build(self.baseLevel,self.deps.LevelVariation.seedFromId(runId))
+    local seed=self.deps.LevelVariation and self.deps.LevelVariation.seedFromId(runId) or campaignSeed(runId)
+    if speederEntry then
+        route=self.deps.CampaignDefinition.build(3,seed)
+        route.speederEntry=true
+        route.spawn=table.clone(route.course.mount)
+        route.spawns={route.spawn}
+        route.zones[1].enemies={}
+    elseif self.deps.LevelVariation and self.baseLevel then
+        route=self.deps.LevelVariation.build(self.baseLevel,seed)
     end
     if self.bossQueue and self.bossSlot then self.bossQueue:close(self.bossSlot,at) end
     self:_closeDirector('RunReplaced')
@@ -248,8 +281,38 @@ function Controller:_begin(player,players)
         build=self.deps.BuildId or 'unknown',rules='D01-D10-source-combat-v1'}) or nil
     self.current=self.deps.Session.new(self.deps.Core,self.deps.Combat,self.deps.Config,roster,runId,self.world,function(row)
         if self.journal then self.journal:record(row) end
+        local spawned=row.kind=='CommitSpawn' and row.data.code=='OK'
+        local boarded=speederEntry and row.kind=='CampaignMounted' and row.data.mode=='Speeder'
+        local passedWall=speederEntry and row.kind=='SpeederFirstWallPassed'
+        if firstMinute and (spawned or boarded or passedWall) then
+            local owner=self.owners[row.userId]
+            local p=owner and self.players[owner.userId]
+            if p and self.connections:isCurrent(p) then
+                if spawned then firstMinute:spawned(p)
+                elseif boarded then firstMinute:boarded(p)
+                else firstMinute:passedFirstWall(p) end
+            end
+        end
         if row.kind=='Hit' then self.world:cue(row.userId,row.data.blocked) end
-    end,self.deps.GroupId and {groupId=self.deps.GroupId,levelId='causeway'} or nil)
+    end,{groupId=self.deps.GroupId,levelId=speederEntry and route.id or (self.deps.GroupId and 'causeway')})
+    if firstMinute then
+        local session=self.current
+        local function connectedHero(slot)
+            if self.current~=session then return nil end
+            local hero=session.state.heroes[slot]
+            local owner=self.owners[slot]
+            local p=owner and self.players[owner.userId]
+            if hero and hero.connected and p and self.connections:isCurrent(p) then return p end
+        end
+        session.onHeroEnemyHit=function(slot,defeated)
+            local p=connectedHero(slot)
+            if p then firstMinute:enemyHit(p,defeated) end
+        end
+        session.onHeroEnemyDefeated=function(slot)
+            local p=connectedHero(slot)
+            if p then firstMinute:enemyDefeated(p) end
+        end
+    end
     local actorOwners={}
     for slot,owner in ipairs(self.owners) do actorOwners[slot]=owner.userId end
     self.current:_record('RunStarted',nil,{heroCount=#roster,owners=actorOwners,variation=variationMetadata(self.deps.Config.Level)})
@@ -258,8 +321,8 @@ function Controller:_begin(player,players)
         assert(self.current:setInfiniteLives(true)=='OK','Cannot enable trusted Studio infinite lives')
     end
     self.current:step(self.deps.clock())
-    self.campaignIndex=self.deps.CampaignDefinition and self.deps.CampaignDirector and 1 or nil
-    self.campaignSeed=self.deps.LevelVariation and self.deps.LevelVariation.seedFromId(runId) or campaignSeed(runId)
+    self.campaignIndex=self.deps.CampaignDefinition and self.deps.CampaignDirector and (speederEntry and 3 or 1) or nil
+    self.campaignSeed=seed
     self.baseSessionHooks={}
     for _,key in ipairs(levelHooks) do self.baseSessionHooks[key]=self.current[key] end
     local originalHit=self.current._hit

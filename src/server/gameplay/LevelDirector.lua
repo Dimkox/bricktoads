@@ -389,6 +389,11 @@ function Director:_kill(id,cause)
         self.stage='Exit'; self.world:stage('Exit')
     end
 end
+local function reportHeroEnemyHit(session,slot,enemy,damaged)
+    if session.onHeroEnemyHit and session.state.heroes[slot] and (damaged or enemy.dead) then
+        session.onHeroEnemyHit(slot,enemy.dead==true)
+    end
+end
 function Director:hit(attacker,target,action,tuning)
     if self.result then return false end
     if self.guardian and (self.projectiles[target] or target==-99) then return self.guardian:hit(attacker,target,action) end
@@ -426,8 +431,9 @@ function Director:hit(attacker,target,action,tuning)
     local damage=(runStrike and self.config.Enemy.dashDamage) or (family and family.npcDamage[action]) or (action=='Club' and self.config.WalkerClub.npcDamage
         or (action=='Dash' and self.config.Enemy.dashDamage or self.config.Enemy.punchDamage))
     local before=e.rawLife or e.health
-    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,action)
-    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-damage) end
+    local npc=not e.ownerUserId and not e.boss
+    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,action,npc)
+    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-(npc and math.max(2,damage) or damage)) end
     -- This cosmetic receipt comes from the actual successful effect result,
     -- never a later target-Life read. Captured tuning identifies one accepted
     -- server attack; body/actor/epoch prevent it crossing a replacement.
@@ -445,9 +451,9 @@ function Director:hit(attacker,target,action,tuning)
     self:_log('EnemyHit',target,{actorId=e.actorId,attacker=attacker,target=target,action=action,
         before=before,after=e.rawLife or e.health,sourceRaw=source~=false and source~=nil,
         profile=source and source.profile or nil,dying=source and source.dying,position=self.world:position(target)})
-    if self.campaignEnemies and self.campaignEnemies.afterHit and self.campaignEnemies:afterHit(target,e,attacker,action) then return true end
-    if (source and source.dying) or (not source and e.health==0) then self:_kill(target,'Combat')
-    else
+    local handled=self.campaignEnemies and self.campaignEnemies.afterHit and self.campaignEnemies:afterHit(target,e,attacker,action)
+    if not handled and ((source and source.dying) or (not source and e.health==0)) then self:_kill(target,'Combat')
+    elseif not handled then
         local policy=tuning and tuning.sourceCombat or self.config.SourceCombat
         local reaction=source and (source.heavyReaction and policy.npcHeavyReaction
             or policy.npcLightReaction) or ((tuning and tuning.reaction) or (family and self.config.Attacks[action].reaction)
@@ -463,19 +469,23 @@ function Director:hit(attacker,target,action,tuning)
         local impulse=responses and responses[profile]
         if impulse then self.world:impulse(target,attacker,impulse,profile,tuning and tuning.impulseDirection) end
     end
+    reportHeroEnemyHit(self.session,attacker,e,(e.rawLife or e.health)<before)
     return true
 end
 function Director:applyThrowDamage(id,heroSlot)
     local e=self.enemies[id]
     if self.result or self.session.state.status~='Active' or not e or e.dead or e.kind~='Pig' then return false end
     local before=e.health
-    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,'EnemyThrow')
-    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-self.config.EnemyCarry.throwDamage) end
+    local npc=not e.ownerUserId and not e.boss
+    local source=e.rawLife~=nil and self.Combat.hitEnemy(e.rawLife,'EnemyThrow',npc)
+    local damage=self.config.EnemyCarry.throwDamage
+    if source then e.rawLife=source.rawLife else e.health=math.max(0,e.health-(npc and math.max(2,damage) or damage)) end
     e.reactionEpoch=(e.reactionEpoch or 0)+1
     self:_health(id,e);self.world:cue(id,false)
     self.session:_record('EnemyThrowDamage',heroSlot,{enemyId=id,before=before,after=e.health,
         sourceProfile=self.config.EnemyCarry.sourceProfile,sourceRawDamage=self.config.EnemyCarry.sourceRawDamage})
     if (source and source.dying) or (not source and e.health==0) then self:_kill(id,'Combat') end
+    reportHeroEnemyHit(self.session,heroSlot,e,e.health<before)
     return true
 end
 function Director:_nearest(position,standingEligibility)

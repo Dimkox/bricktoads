@@ -40,9 +40,37 @@ function RobloxInputBindings.new(parent,buttons,callbacks,engine)
     end
     return self
 end
+function RobloxInputBindings:bindPad(surface,inputs,update)
+    local function sample(input,begin)
+        local size,origin=surface.AbsoluteSize,surface.AbsolutePosition
+        if size.X>0 and size.Y>0 then
+            update(2*(input.Position.X-origin.X)/size.X-1,2*(input.Position.Y-origin.Y)/size.Y-1,begin)
+        end
+    end
+    table.insert(self.connections,surface.InputBegan:Connect(function(input)
+        if not self.enabled or self.padPointer then return end
+        if input.UserInputType~=Enum.UserInputType.Touch and input.UserInputType~=Enum.UserInputType.MouseButton1 then return end
+        self.padPointer=input
+        sample(input,true)
+    end))
+    table.insert(self.connections,inputs.InputChanged:Connect(function(input)
+        local pointer=self.padPointer
+        if pointer and (input==pointer or (pointer.UserInputType==Enum.UserInputType.MouseButton1
+            and input.UserInputType==Enum.UserInputType.MouseMovement)) then sample(input,false) end
+    end))
+    table.insert(self.connections,inputs.InputEnded:Connect(function(input)
+        local pointer=self.padPointer
+        if pointer and (input==pointer or (pointer.UserInputType==Enum.UserInputType.MouseButton1
+            and input.UserInputType==Enum.UserInputType.MouseButton1)) then
+            self.padPointer=nil
+            update(0,0,false)
+        end
+    end))
+end
 function RobloxInputBindings:setEnabled(enabled)
     enabled=enabled==true
     if self.enabled==enabled then return false end
+    if not enabled then self.padPointer=nil end
     self.enabled=enabled;self.context.Enabled=enabled
     return true
 end

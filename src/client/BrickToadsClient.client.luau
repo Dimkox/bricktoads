@@ -520,6 +520,9 @@ for _, definition in ipairs({{"Forward", "↑"}, {"Left", "←"}, {"Backward", "
     directionButtons[definition[1]] = item
 end
 local runHint = label(pad, "RunHint", "2×\nRUN", 11, C.muted, true)
+local padSurface=make("TextButton","TouchSurface",pad,{
+    Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Text="",AutoButtonColor=false,Selectable=false,ZIndex=2,
+})
 runHint.TextXAlignment = Enum.TextXAlignment.Center
 local keyboardHint = label(controls, "KeyboardHint", "W A S D  ·  move", 13, C.text)
 keyboardHint.AnchorPoint = Vector2.new(0, 1)
@@ -605,8 +608,7 @@ syncGameplayContext = function()
 end
 local localInputs = make("Folder", "BrickToadsInputs", player:WaitForChild("PlayerScripts"))
 gameplayBindings = RobloxInputBindings.new(localInputs, {
-    Forward = directionButtons.Forward, Backward = directionButtons.Backward,
-    Left = directionButtons.Left, Right = directionButtons.Right, Jump = jump, Attack = punch, Mega = dash,
+    Jump = jump, Attack = punch, Mega = dash,
 }, {
     press = function(direction)
         if movementInput:press(direction, os.clock()) then
@@ -626,6 +628,15 @@ gameplayBindings = RobloxInputBindings.new(localInputs, {
         else send("Attack", {attack = action == "Mega" and "Dash" or "Punch"}) end
     end,
 })
+gameplayBindings:bindPad(padSurface,UserInputService,function(x,z,begin)
+    if not movementInput:setPad(x,z,begin,os.clock()) then return end
+    local px,pz=movementInput.padX,movementInput.padZ
+    local lit={Right=px>0,Left=px<0,Forward=pz<0,Backward=pz>0}
+    for name,item in pairs(directionButtons) do
+        item.BackgroundColor3=(lit[name] or movementInput.down[name]) and C.line or C.card
+    end
+    sendMovement()
+end)
 script.Destroying:Connect(function()
     gameplayBindings:destroy()
     localInputs:Destroy()
@@ -830,7 +841,8 @@ render = function()
     local personalMenu = active and snapshot.view == "Menu"
     local level = snapshot and snapshot.level or {}
     local modern = level.bossMechanic == "PickupThrow"
-    overlay.Visible, hud.Visible, controls.Visible = not active or personalMenu == true, active == true and not personalMenu, playable() == true
+    overlay.Visible = snapshot ~= nil and not snapshot.entryPending and (not active or personalMenu == true)
+    hud.Visible, controls.Visible = active == true and not personalMenu, playable() == true
     syncAudioSettings(active == true and not personalMenu)
     fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false and not stopped
     resultBanner.Visible = completed == true or stopped == true
@@ -1528,7 +1540,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     local serial=rewind and rewind.rewindSerial
     if previousGroupId~=data.groupId or previousRunId~=data.runId or previousLevelEpoch~=data.levelEpoch then vehicleRewindSerial=nil end
     if serial~=nil and vehicleRewindSerial~=nil and serial~=vehicleRewindSerial and controlled then
-        movementInput:reset(gameplayBindings and gameplayBindings:heldDirections() or {})
+        movementInput:reset(gameplayBindings and gameplayBindings:heldDirections() or {},true)
         sendMovement()
     end
     vehicleRewindSerial=serial
@@ -1543,7 +1555,7 @@ stateRemote.OnClientEvent:Connect(function(data)
     elseif wasPlayable and not playable() then resetInput()
     elseif controlled and ((lastReactionEpoch ~= nil and controlled.reactionEpoch ~= lastReactionEpoch)
         or (lastHeldContext ~= nil and nextHeldContext ~= lastHeldContext)) then
-        movementInput:reset(gameplayBindings:heldDirections())
+        movementInput:reset(gameplayBindings:heldDirections(),true)
         sendMovement()
     end
     lastReactionEpoch = controlled and controlled.reactionEpoch
@@ -1596,8 +1608,36 @@ task.spawn(function()
     pcall(function() StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false) end)
 end)
 local moveElapsed, syncElapsed = 0, 0
+local lastEntryReady = -math.huge
+local lastRideReady = -math.huge
+local function speederInView(camera)
+    if not camera or not playable() or not mine then return false end
+    local mode = snapshot.level and snapshot.level.modeState
+    if not mode or not mode.vehicleGroup or mode.vehicleGroup.phase ~= "AwaitingEntryView" then return false end
+    local model = spectatorCamera.models and spectatorCamera.models[mine.actorId]
+    local root = model and model:FindFirstChild("HumanoidRootPart")
+    if not root or model:GetAttribute("CampaignMode") ~= "Speeder" then return false end
+    local _, onScreen = camera:WorldToViewportPoint(root.Position)
+    if not onScreen then return false end
+    local world = workspace:FindFirstChild(snapshot.worldName)
+    local geometry = world and world:FindFirstChild("Geometry")
+    if not geometry or not geometry:FindFirstChild("CourseSupport_Arrival") then return false end
+    local id = "vehicle-" .. snapshot.mine
+    local plate = geometry:FindFirstChild("Campaign_Speeder_" .. id)
+    if not plate or (plate.Position - root.Position).Magnitude > 12 then return false end
+    if plate.Transparency < 1 and plate.LocalTransparencyModifier < 1 then return true end
+    local skin = geometry:FindFirstChild("CourseVehicle_" .. id)
+    local deck = skin and skin:FindFirstChild("RiderDeck", true)
+    return deck and deck:IsA("BasePart") and deck.Transparency < 1 and deck.LocalTransparencyModifier < 1
+end
 RunService.RenderStepped:Connect(function(dt)
     syncGameplayContext()
+    -- Wait for both an authoritative entry route and an unobscured, bound HUD.
+    if snapshot and snapshot.entryPending and os.clock() - lastEntryReady >= 2
+        and not gui.Parent:FindFirstChild("BrickToadsSplash") then
+        lastEntryReady = os.clock()
+        intent:FireServer({kind="EntryReady"})
+    end
     if feedbackUntil > 0 and os.clock() >= feedbackUntil then
         feedbackUntil = 0
         feedbackLabel.Text, feedbackLabel.TextColor3 = T(CombatFeedback.hint(snapshot,T)), C.muted
@@ -1632,6 +1672,10 @@ RunService.RenderStepped:Connect(function(dt)
     end
     local camera = workspace.CurrentCamera
     spectatorCamera:step(dt, camera, UserInputService.TouchEnabled)
+    if snapshot and os.clock() - lastRideReady >= 2 and speederInView(camera) then
+        lastRideReady = os.clock()
+        sendIntent({kind="RideReady", runId=snapshot.runId})
+    end
     if moveElapsed >= 0.1 then
         moveElapsed = 0
         if playable() then

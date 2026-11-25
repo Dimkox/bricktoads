@@ -119,10 +119,12 @@ return function(Localization,Catalog,GroupPanel,BossQueuePanel)
         local localizer=fixture('ru-ru')
         local panel=setmetatable({queue={state='Invited',groupId='group-3',groupName='Team 3'},colors={},
             secondary={},primary={},status={},detail={},name={},selectedBoss=1,compact=true,
+            portrait={},art={setPortrait=function(portrait,bossId) portrait.bossId=bossId end},
             translate=function(source,args) return localizer:text(source,args) end,
             groupName=function(name,id) return localizer:groupName(name,id) end},BossQueuePanel)
         function panel:_remaining() return 7 end
         panel:_draw()
+        eq(panel.portrait.bossId,'CausewayGuardian')
         eq(panel.status.Text,'Приглашение · 7 с')
         eq(panel.detail.Text,'Команда 3 · Примите до конца таймера.')
     end)

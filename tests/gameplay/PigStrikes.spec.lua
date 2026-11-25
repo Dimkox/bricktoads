@@ -99,7 +99,7 @@ return function(Director,Session,Core,Combat,Config,FakeWorld)
     test('Pig hits another ordinary enemy with explicit prototype damage and source profile',function()
         for _,action in ipairs({'PigJab','PigHeavy','PigRush'}) do
             local d,s,w=fixture();assert(d:hit(-1,-2,action))
-            assert(d.enemies[-2].health==(action=='PigJab' and 2 or 1))
+            assert(d.enemies[-2].health==1)
             assert(w.lastProfile==({PigJab=0,PigHeavy=2,PigRush=4})[action])
             assert(d.enemies[-2].reactionUntil==Config.Attacks[action].reaction)
         end

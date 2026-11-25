@@ -21,6 +21,8 @@ def named(parent, name):
 
 class BrickToadsPlaceTests(unittest.TestCase):
     def course_fixture(self, source):
+        registry = Path('assets/characters/field-texture-assets.json')
+        shutil.copyfile(ROOT / registry, source / registry)
         spec = importlib.util.spec_from_file_location('course_packaging_fixture', ROOT / 'tools/test_course_asset_packaging.py')
         helper = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(helper)
@@ -424,10 +426,10 @@ class BrickToadsPlaceTests(unittest.TestCase):
         self.root = Path(temporary.name)
         self.morph_fixture(self.root)
 
-    def test_playable_preserves_both_supported_screen_orientations(self):
+    def test_mobile_playable_requires_landscape_and_allows_both_sides(self):
         root = ET.fromstring(self.builder.build(self.root))
         starter = named(root, "StarterGui")
-        self.assertEqual(starter.findtext("Properties/token[@name='ScreenOrientation']"), "4")
+        self.assertEqual(starter.findtext("Properties/token[@name='ScreenOrientation']"), "2")
 
     def test_course_vehicles_are_mandatory_flat_private_exact_textured_resources(self):
         path = self.root / 'assets/vehicles/canonical-course/roblox-course-vehicles.json'

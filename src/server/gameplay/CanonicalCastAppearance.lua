@@ -1,5 +1,6 @@
 -- Imported cast surfaces articulate on an unchanged authoritative collider rig.
 local Presentation=if script then require(script.Parent.CanonicalCastPresentation) else require('./CanonicalCastPresentation')
+local Walker=if script then require(script.Parent.CanonicalWalker) else require('./CanonicalWalker')
 local A={}
 local PIN='f1a43b69577246850d136473700a333b3cdfe93f'
 local attachmentSequence=0
@@ -16,7 +17,9 @@ function A.detach(actor)
     local s=actor.castAppearance;if not s then return end
     actor.castAppearance=nil;s.model:Destroy()
     for p,alpha in pairs(s.hidden) do
-        if p.Parent and p:GetAttribute('CastFallbackOwner')==s.skinId then
+        if s.walkerRig then
+            if p:IsDescendantOf(s.ownerModel) then p.Transparency=alpha end
+        elseif p.Parent and p:GetAttribute('CastFallbackOwner')==s.skinId then
             local prior=s.fallbackMetadata[p]
             p:SetAttribute('CastFallbackOwner',prior.owner);p:SetAttribute('CastFallbackTransparency',prior.alpha)
             -- Visibility is selected locally after typed client preloading;
@@ -30,12 +33,28 @@ function A.addFallback(actor,part)
     local s=actor.castAppearance
     if not s or not part or not part:IsA('BasePart') or s.hidden[part]~=nil then return false end
     s.hidden[part]=part.Transparency
+    if s.walkerRig then part.Transparency=1;return true end
     s.fallbackMetadata[part]={owner=part:GetAttribute('CastFallbackOwner'),alpha=part:GetAttribute('CastFallbackTransparency')}
     part:SetAttribute('CastFallbackOwner',s.skinId);part:SetAttribute('CastFallbackTransparency',part.Transparency)
     local reference=Instance.new('ObjectValue');reference.Name='CastFallbackTarget';reference.Value=part;reference.Parent=s.model
     return true
 end
 function A.attach(actor,kind,templates)
+    if kind=='Walker' and not templates then
+        local previous=actor.castAppearance
+        if previous and previous.walkerRig and previous.ownerModel==actor.model and previous.model.Parent==actor.model then return true end
+        local rig=Walker.buildRig(actor.root)
+        Walker.animateRig(rig,nil,nil)
+        if previous then A.detach(actor) end
+        actor.castAppearance={walkerRig=rig,model=rig.model,ownerModel=actor.model,kind=kind,hidden={},
+            presentation=Presentation.new(),previousTag=actor.model:GetAttribute('CastAppearance')}
+        for _,part in ipairs(actor.model:GetDescendants()) do
+            if part:IsA('BasePart') and part~=actor.root then A.addFallback(actor,part) end
+        end
+        rig.model.Parent=actor.model
+        actor.model:SetAttribute('CastAppearance','ArticulatedWalker')
+        return true
+    end
     templates=templates or game:GetService('ServerStorage'):FindFirstChild('BrickToadsCastTemplates')
     local t=templates and templates:FindFirstChild(kind)
     if not t or not t:IsA('Model') or not tagged(t,'AppearanceProfile','CanonicalNESCast')
@@ -154,6 +173,15 @@ end
 function A.update(actor,context)
     local s=actor.castAppearance;if not s then return end
     if actor.model~=s.ownerModel or s.model.Parent~=s.ownerModel then A.detach(actor);return end
+    if s.walkerRig then
+        local pose
+        if type(context)=='table' and context.kind==s.kind then pose=Presentation.sample(s.presentation,context) end
+        if not pose then Presentation.cancel(s.presentation) end
+        s.pose=pose
+        Walker.animateRig(s.walkerRig,pose,context)
+        s.model:SetAttribute('VisualState',pose and pose.state)
+        return
+    end
     for _,j in pairs(s.joints) do
         if j.motor.Parent~=j.part or j.part.Parent~=s.model or j.motor.Part0~=j.parentPart or j.motor.Part1~=j.part then A.detach(actor);return end
     end

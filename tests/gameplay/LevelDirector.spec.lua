@@ -54,7 +54,7 @@ return function(Director,Session,Core,Combat,baseConfig,FakeWorld)
     test('ordinary enemies are weaker and die once without respawning',function()
         local d,w=fixture(); local id=-1
         assert(w.actors[id].health==3)
-        d:hit(1,id,'Dash'); assert(d.enemies[id].health==1)
+        d:hit(1,id,'Punch'); assert(d.enemies[id].health==1)
         d:step(.4,.1); d:hit(1,id,'Punch')
         assert(d.enemies[id].dead and w.actors[id].dead)
         assert(d:hit(1,id,'Dash')==false)

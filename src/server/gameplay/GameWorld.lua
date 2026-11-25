@@ -497,6 +497,89 @@ local function layoutAttributes(self)
     self.folder:SetAttribute('LayoutVersion', variation and variation.version)
 end
 
+-- The radii enclose the entire plant at maximum scale, including tilted blades.
+local grassRadius, treeRadius = 2, 4.6
+local bladeColors = {Color3.fromRGB(117,187,61), Color3.fromRGB(161,205,75), Color3.fromRGB(74,151,65)}
+local function growPlants(parent, root, rng, tree)
+    local scale = rng:NextNumber(.9, 1.05)
+    local function piece(name, size, x, y, z, color, material, round, tilt)
+        local frame = root * CFrame.new(x*scale,y*scale,z*scale) * CFrame.Angles(0,0,tilt or 0)
+        local p = part(parent,name,size*scale,frame,color,material,false)
+        if round then p.Shape=Enum.PartType.Ball end
+        p.CanQuery=false
+        p.CastShadow=false
+    end
+    -- A patch of moss and a fan of contrasting leaves read as grass from above.
+    piece("GrassPatch",Vector3.new(3,.38,2),0,.14,0,Color3.fromRGB(83,141,57),Enum.Material.Grass,true)
+    local patch = root
+    for n=1,5 do
+        root = patch * CFrame.Angles(0,n*math.pi*2/5,0)
+        local height=rng:NextNumber(2.5,3.35)
+        piece("GroundLeaf",Vector3.new(.60,height,.88),.74,height*.46,0,
+            bladeColors[(n-1)%3+1],Enum.Material.SmoothPlastic,true,-.38)
+    end
+    if tree then
+        root=patch
+        piece("MarshTrunk",Vector3.new(1.05,5.6,1.15),0,2.7,0,Color3.fromRGB(119,80,47),Enum.Material.Wood,false,-.08)
+        piece("MarshBough",Vector3.new(.62,2.8,.68),-.58,4.4,0,Color3.fromRGB(133,89,48),Enum.Material.Wood,false,.54)
+        piece("MarshCrown",Vector3.new(4.5,3.6,4.15),-1.35,6,.15,Color3.fromRGB(65,139,69),Enum.Material.Grass,true)
+        piece("MarshCrown",Vector3.new(4.45,4.55,4.65),.83,7.5,-.25,Color3.fromRGB(94,168,67),Enum.Material.Grass,true)
+        piece("MarshCrown",Vector3.new(3.75,3.25,3.8),.48,8.9,.08,Color3.fromRGB(150,190,81),Enum.Material.Grass,true)
+    end
+end
+
+function World:scatterPlants(route)
+    local mode = route.mode or "Causeway"
+    if mode ~= "Causeway" and mode ~= "Speeder" and mode ~= "Tubes" and mode ~= "Finale" then return end
+    local rng = Random.new(route.variation and route.variation.seed or 1)
+    local halfPassage = mode == "Speeder" and route.course.laneLimit or 8
+    for zoneIndex,zone in ipairs(route.zones) do
+        for _, floor in ipairs(zone.platforms) do
+            local top = floor.y + floor.h / 2
+            local road = mode == "Speeder"
+            if (not road or floor.roadRise ~= nil) and (mode ~= "Tubes" or top >= 0) then
+                local spans = math.floor(floor.w / 14)
+                for i=1,spans do
+                    -- Trees occupy the far half so their crowns cannot hide the hero.
+                    local side = i%2==1 and -1 or 1
+                    local edge = side*floor.z + floor.d/2
+                    local inner = math.max(halfPassage,side*floor.z+halfPassage)
+                    local tree = side==-1 and not road and edge-inner >= treeRadius*2+.5
+                    local radius = tree and treeRadius or grassRadius
+                    local low, high = inner+radius+.15, edge-radius-.15
+                    if high >= low then
+                        local slotWidth=floor.w/spans
+                        local x=floor.x-floor.w/2+(i-.5+rng:NextNumber(-.10,.10))*slotWidth
+                        x=math.clamp(x,floor.x-floor.w/2+radius+2,floor.x+floor.w/2-radius-2)
+                        local z=side*rng:NextNumber(low,math.min(high,low+3.5))
+                        local clear=true
+                        -- Keep vegetation off the sloped masonry and its landing.
+                        local slope = 0
+                        if mode=="Causeway" and zoneIndex%2==1 then slope=12 end
+                        if mode=="Finale" and floor==zone.platforms[1] then slope=14 end
+                        if slope>0 and side==-1 and math.abs(x-floor.x)<=slope+radius then clear=false end
+                        if clear then
+                            local surfaceY=top+(floor.roadRise or 0)*(x-floor.x)/floor.w
+                            local root=(CFrame.new(x,surfaceY+.10,z)+self.offset)*CFrame.Angles(0,rng:NextNumber(0,2*math.pi),0)
+                            growPlants(self.geometry,root,rng,tree)
+                            -- A separate tuft beside each tree stays visible below its canopy.
+                            if tree then
+                                local dx = x < floor.x and 6 or -6
+                                local gx = x + dx
+                                if math.abs(gx-floor.x)+grassRadius <= floor.w/2-2
+                                    and (slope==0 or math.abs(gx-floor.x)>slope+grassRadius) then
+                                    local tuft = CFrame.new(gx,top+.10,-(inner+grassRadius+.25))+self.offset
+                                    growPlants(self.geometry,tuft*CFrame.Angles(0,rng:NextNumber(0,2*math.pi),0),rng,false)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 -- Coordinates and edge openings are derived from the generated supports of this group.
 local function buildSceneEdges(self,route)
     local g,offset=self.geometry,self.offset
@@ -612,13 +695,11 @@ local function buildSceneEdges(self,route)
             end
         end
     elseif route.mode=="Speeder" then
+        -- Keep the rock foundation beneath the lowest edge of each sloping panel.
         for _,p in ipairs(course.platforms) do
-            if p.w>course.finishDistance*.8 then
-                cliff(p,COLORS.rust)
-                closeEdge(p,"z",-1);closeEdge(p,"z",1)
-                for _,rise in ipairs(course.roadCrests or {}) do
-                    crest(rise.x,p.y+p.h/2,p.z,rise.halfLength,p.d,rise.height,route.id,1,Enum.Material.Concrete,COLORS.stone)
-                end
+            if p.roadRise then
+                local bottom=p.y-p.h/2-math.abs(p.roadRise)/2
+                block("RoadFoundation",p.x,bottom-5,p.z,p.w,10,p.d-.4,COLORS.rust,Enum.Material.Rock,false)
             end
         end
     elseif route.mode=="Surf" or route.mode=="Jet" then
@@ -667,7 +748,10 @@ local function buildLevelGeometry(self,route)
         if route then buildRoute(self,route) else buildGeometry(self) end
         translateGeometry(self)
     end
-    if route then buildSceneEdges(self,route) end
+    if route then
+        buildSceneEdges(self,route)
+        self:scatterPlants(route)
+    end
 end
 
 function World.new(BaseWorld, config, options)
@@ -1032,7 +1116,8 @@ function World:spawnEnemy(id, kind, positionTable)
         local imported=self.guardianAppearance and self.guardianAppearance.attach(actor)
         if not imported then boss(actor) end
     else drone(actor, kind) end
-    actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0, isBoss and 7.6 or 4.5, 0))
+    local labelHeight=kind=="Walker" and 8.2 or (isBoss and 7.6 or 4.5)
+    actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
     -- The species art changes the assembly after BaseWorld pinned its basic rig.

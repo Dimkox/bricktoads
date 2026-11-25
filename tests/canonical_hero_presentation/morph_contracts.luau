@@ -46,7 +46,8 @@ test('two optional morphs are fully preassembled with local visibility metadata 
     assert(a.appearance.morphs and a.appearance.morphFolder.Parent==a.appearance.model)
     for kind,row in pairs(a.appearance.morphs)do
         assert(kind=='PowerFist'or kind=='BigBoot')
-        assert(row.part.Transparency==row.visibleTransparency and not row.part.Anchored and row.part.Massless)
+        assert(row.part.Transparency==1 and not row.part.Anchored and row.part.Massless)
+        assert(math.abs(math.max(row.part.Size.X,row.part.Size.Y,row.part.Size.Z)-5.5)<.0001)
         assert(row.part:GetAttribute('HeroVisibleTransparency')==row.visibleTransparency)
         assert(row.part:GetAttribute('HeroExpectedSurfaceCount')==1 and type(row.part:GetAttribute('HeroExpectedSurfaceMaps'))=='string')
         assert(row.part:GetAttribute('HeroExpectedMeshId')==row.part.MeshId and row.part:GetAttribute('HeroExpectedTextureId')=='')
@@ -54,7 +55,7 @@ test('two optional morphs are fully preassembled with local visibility metadata 
         assert(not row.part.CanCollide and not row.part.CanTouch and not row.part.CanQuery)
         assert(row.joint.Part0==row.originalPart and row.joint.Part1==row.part)
         local name=kind=='PowerFist'and'RightWristRigAttachment'or'RightAnkleRigAttachment'
-        sameFrame(row.joint.C0,row.originalPart[name].CFrame*row.template.Morph.CFrame)
+        sameFrame(row.joint.C0*row.part.MorphOriginRigAttachment.CFrame,row.originalPart[name].CFrame)
         sameFrame(row.joint.C1,matrixCF.new())
         assert(row.originalPart.Transparency==0)
     end
@@ -95,7 +96,9 @@ print('Morph resource preparation: 3 passed')
 
 local function noRequestedMorphs(a)
     assert(a.appearance.activeMorph==nil and a.appearance.model:GetAttribute('HeroActiveMorph')==nil,'Inactive intent must be cleared')
-    for _,row in pairs(a.appearance.morphs or{})do assert(row.part.Transparency==row.visibleTransparency,'Playback must not change server alpha')end
+    for _,row in pairs(a.appearance.morphs or{})do
+        assert(row.part.Transparency==(row.spec.attackSize and 1 or row.visibleTransparency))
+    end
 end
 test('verified graphics frames publish exactly one morph intent without hiding nonzero neutral alpha',function()
     local a=morphActor('morph-frames');local hand,foot=a.appearance.model.RightHand,a.appearance.model.RightFoot
@@ -105,14 +108,14 @@ test('verified graphics frames publish exactly one morph intent without hiding n
     c.now=.5;Appearance.update(a,c)
     local fist,boot=a.appearance.morphs.PowerFist,a.appearance.morphs.BigBoot
     assert(a.appearance.sourcePose.frameId==0x1C and a.appearance.activeMorph=='PowerFist'and hand.Transparency==.36)
-    assert(a.appearance.model:GetAttribute('HeroActiveMorph')=='PowerFist'and boot.part.Transparency==.27 and foot.Transparency==.47)
+    assert(a.appearance.model:GetAttribute('HeroActiveMorph')=='PowerFist'and fist.part.Transparency==.17 and boot.part.Transparency==1 and foot.Transparency==.47)
     c.now=65/60;Appearance.update(a,c)
     assert(a.appearance.sourcePose.frameId==0x1D and hand.Transparency==.36);noRequestedMorphs(a)
     c.now=1.2;c.attack=heroAttack(c.actorId,'HeroBoot',1.2);Appearance.update(a,c)
     assert(a.appearance.sourcePose.frameId==0x1F,'The folded source windup must remain distinct');noRequestedMorphs(a)
     c.now=1.7;Appearance.update(a,c)
     assert(a.appearance.sourcePose.frameId==0x1E and a.appearance.activeMorph=='BigBoot'and foot.Transparency==.47)
-    assert(a.appearance.model:GetAttribute('HeroActiveMorph')=='BigBoot'and fist.part.Transparency==.17 and hand.Transparency==.36)
+    assert(a.appearance.model:GetAttribute('HeroActiveMorph')=='BigBoot'and boot.part.Transparency==.27 and fist.part.Transparency==1 and hand.Transparency==.36)
     c.now=3;Appearance.update(a,c);noRequestedMorphs(a);assert(hand.Transparency==.36 and foot.Transparency==.47)
 end)
 test('rerender and repeated attach reuse the preassembled geometry without replacing ownership-sensitive parts',function()

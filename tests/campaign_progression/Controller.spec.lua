@@ -29,6 +29,7 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,BossQue
         clock=function() return clock end,guid=function() return 'same-run' end},world)
     local player={UserId=20,DisplayName='Green owner',Name='GreenOwner',Parent=true}
     c:join(player);assert(c:handle(player,{kind='Start'},{player})=='OK')
+    assert(c:releaseSpeederEntry(player,'same-run')=='NOT_SPEEDER_ENTRY')
     local actor=c.current.state.heroes[1].actorId
     c.current.combat[1].rawLife=15;c.current:_event('SetHealth',1,{health=2})
     for level=1,12 do

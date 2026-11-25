@@ -76,35 +76,27 @@ return function(Definition)
             assert(rat.kind=='RocketRat' and rat.rawLife==15 and rat.trajectory.duration>0 and rat.allowedDrop)
         end
     end)
-    test('speeder has native flat support across the full riding distance and both steering edges',function()
-        local function covered(d)
-            local c=d.course
-            for z=-c.laneLimit,c.laneLimit,3 do
-                local spans={}
-                for _,p in ipairs(c.platforms) do
-                    if math.abs(p.y+p.h/2)<.001 and p.z-p.d/2<=z-1.2 and p.z+p.d/2>=z+1.2 then
-                        spans[#spans+1]={left=p.x-p.w/2+1.6,right=p.x+p.w/2-1.6}
+    test('speeder road is continuous and four sectors long, with hazards and respawns on the surface',function()
+        for _,seed in ipairs({1,2,7,41,8125}) do
+            local c=Definition.build(3,seed).course
+            assert(c.finishPoint.x-c.mount.x==1640 and c.finishDistance==1640)
+            assert(#c.hazards==48 and #c.checkpoints==12 and #c.ramps==8)
+            local edge=c.platforms[1].x+c.platforms[1].w/2
+            for _,p in ipairs(c.platforms) do
+                if p.roadRise then
+                    assert(math.abs(p.x-p.w/2-edge)<.001 and p.d/2>=c.laneLimit+1.2)
+                    edge=p.x+p.w/2
+                    for _,frac in ipairs({-.5,0,.5}) do
+                        assert(math.abs(Definition.roadHeight(c,p.x+p.w*frac)-(p.y+p.h/2+p.roadRise*frac))<.001)
                     end
                 end
-                table.sort(spans,function(a,b) return a.left<b.left end)
-                local edge=c.mount.x
-                for _,span in ipairs(spans) do
-                    if span.left<=edge then edge=math.max(edge,span.right) end
-                end
-                if edge<c.finishPoint.x then return false,z,edge end
             end
-            return true
+            local last=c.platforms[#c.platforms]
+            assert(math.abs(edge-(last.x-last.w/2))<.001 and edge<c.finishPoint.x)
+            for _,cp in ipairs(c.checkpoints) do assert(math.abs(cp.position.y-3-Definition.roadHeight(c,cp.position.x))<.001) end
+            for _,h in ipairs(c.hazards) do assert(math.abs(h.y-Definition.roadHeight(c,h.x)-(h.kind=='Overhead' and 10 or 3))<.001) end
+            for _,index in ipairs({5,7}) do assert(#Definition.build(index,seed).course.hazards==12) end
         end
-        for _,seed in ipairs({1,2,7,41,8125}) do
-            local d=Definition.build(3,seed);local ok,z,edge=covered(d)
-            assert(ok,'logical grounded ride needs physical road: seed='..seed..', lane='..tostring(z)..', support ends='..tostring(edge))
-            assert(d.course.mount and #d.course.hazards==12 and d.requiresClearAtExit==false)
-            assert(d.course.platforms[1].x+d.course.platforms[1].w/2>d.course.mount.x)
-            assert(d.course.finish.minX<d.course.finishPoint.x and d.course.finish.maxX>d.course.finishPoint.x)
-            for _,index in ipairs({5,7}) do assert(not covered(Definition.build(index,seed)),'surf/jet must retain their distinct course support') end
-        end
-        local a,b=Definition.build(3,1),Definition.build(3,41)
-        assert(fingerprint(a.course.hazards)~=fingerprint(b.course.hazards),'physical road must retain seed-varied obstacles')
     end)
     print('CampaignDefinition: '..passed..' passed')
 end

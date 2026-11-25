@@ -41,6 +41,19 @@ return function(Source,Director,Session,Core,Combat,Config,Level,FakeWorld,Carry
         assert(n==13)
         local d=fixture(47,'Dragon');assert(d.enemies[-1].rawLife==47 and d.enemies[-1].health==3)
     end)
+    test('four spaced jabs defeat an NPC Walker while an owned Walker survives',function()
+        for _,npc in ipairs({true,false}) do
+            local d=fixture(31,'Walker')
+            local e=d.enemies[-1]
+            if npc then e.ownerUserId=nil end
+            for n=1,4 do
+                assert(d:hit(1,-1,'HeroJab'))
+                assert((e.dead==true)==(npc and n==4))
+                if not e.dead then d.now=e.reactionUntil;d:_finishReaction(-1,e) end
+            end
+            assert((e.dead==true)==npc)
+        end
+    end)
     test('source NPC arithmetic distinguishes exact zero, underflow and nibble rounding',function()
         local r=Combat.hitEnemy(2,'HeroJab');assert(r.rawLife==0 and not r.dying and r.profile==0 and r.rawDamage==2)
         r=Combat.hitEnemy(1,'HeroJab');assert(r.rawLife==0 and r.dying)
@@ -72,12 +85,49 @@ return function(Source,Director,Session,Core,Combat,Config,Level,FakeWorld,Carry
         end
         assert(e.dead and e.health==0 and w.kills==1)
     end)
+    test('four primary attacks defeat the same unclaimed Walker',function()
+        local d,s,w,tick,punch=fixture()
+        local e=d.enemies[-1]
+        e.ownerUserId=nil
+        e.nextAttack=math.huge
+        w.targetsFor[1]={-1}
+        for i,remaining in ipairs({23,15,7,0}) do
+            assert(punch(.1+(i-1)*.6)=='OK')
+            tick(s.combat[1].attack.at)
+            assert(e.rawLife==remaining and (e.dead==true)==(i==4))
+        end
+        assert(w.kills==1)
+    end)
     test('NPC reaction recovery is real and rawzero remains alive before OR7',function()
         local d,s,w,tick=fixture(2);assert(d:hit(1,-1,'HeroJab'))
         assert(d.enemies[-1].rawLife==0 and not d.enemies[-1].dead)
         tick(d.enemies[-1].reactionUntil);assert(d.enemies[-1].rawLife==7 and not d.enemies[-1].dead)
         local d2,s2,w2,tick2=fixture();assert(d2:hit(1,-1,'HeroJab'));tick2(d2.enemies[-1].reactionUntil)
         assert(d2.enemies[-1].rawLife==31)
+    end)
+    test('only damage to a hostile body by a hero reports a hit and confirmed defeat',function()
+        local d,s=fixture(4)
+        local hits={}
+        s.onHeroEnemyHit=function(slot,defeated) table.insert(hits,{slot=slot,defeated=defeated}) end
+        assert(not d:hit(1,-78,'HeroJab'))
+        assert(s:_hit(1,2,'HeroJab'))
+        assert(d:hit(-2,-1,'PigJab'))
+        assert(#hits==0)
+        assert(d:hit(1,-1,'HeroJab'))
+        assert(d.enemies[-1].rawLife==0 and not d.enemies[-1].dead)
+        assert(d:hit(2,-1,'HeroJab') and d.enemies[-1].dead)
+        assert(not d:hit(1,-1,'HeroJab'))
+        assert(#hits==2 and hits[1].slot==1 and hits[1].defeated==false)
+        assert(hits[2].slot==2 and hits[2].defeated==true)
+    end)
+    test('ordinary throw damage reports its hero and the actual underflow',function()
+        local d,s=fixture(4,'Pig')
+        local hits={}
+        s.onHeroEnemyHit=function(slot,defeated) assert(slot==2);table.insert(hits,defeated) end
+        assert(d:applyThrowDamage(-1,2) and not d.enemies[-1].dead)
+        assert(d:applyThrowDamage(-1,2) and d.enemies[-1].dead)
+        assert(not d:applyThrowDamage(-1,2))
+        assert(#hits==2 and hits[1]==false and hits[2]==true)
     end)
     test('frozen animation hits the new actual body with its victim-specific profile',function()
         local d,s,w,tick,punch=fixture(19);w.targetsFor[1]={-1};assert(punch(.1)=='OK')

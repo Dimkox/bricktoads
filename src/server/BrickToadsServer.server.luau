@@ -6,6 +6,19 @@ local HttpService=game:GetService('HttpService')
 Players.CharacterAutoLoads=false
 local runtime=script.Parent:WaitForChild('CombatRuntime')
 local gameplay=script.Parent:WaitForChild('gameplay')
+local analytics=game:GetService('AnalyticsService')
+local firstMinute=require(gameplay.FirstMinute).new(os.clock,function()
+    return HttpService:GenerateGUID(false)
+end,function(player,funnel,sessionId,step,label,route)
+    if not RunService:IsStudio() then
+        analytics:LogFunnelStepEvent(player,funnel,sessionId,step,label,{
+            [Enum.AnalyticsCustomFieldKeys.CustomField01.Name]=route,
+        })
+    end
+end,nil,task.delay)
+Players.PlayerAdded:Connect(function(player) firstMinute:join(player) end)
+Players.PlayerRemoving:Connect(function(player) firstMinute:leave(player) end)
+for _,player in ipairs(Players:GetPlayers()) do firstMinute:join(player) end
 local worldType=require(gameplay.GameWorld)
 require(gameplay.DragonWorld)(worldType)
 require(gameplay.BossIntroWorld)(worldType)
@@ -25,7 +38,7 @@ local controller=require(gameplay.MatchHub).new({Core=require(script.Parent.RunL
     CampaignDefinition=require(gameplay.CampaignDefinition),CampaignDirector=require(gameplay.CampaignDirector),
     CampaignModes=require(gameplay.CampaignModes),CampaignBoss=require(gameplay.CampaignBoss),
     CampaignEnemies=require(gameplay.CampaignEnemies),
-    RunJournal=require(gameplay.RunJournal),BuildId=buildId,
+    RunJournal=require(gameplay.RunJournal),BuildId=buildId,FirstMinute=firstMinute,
     clock=function() return workspace:GetServerTimeNow() end,guid=function() return HttpService:GenerateGUID(false) end},
     function(index,groupId)
         -- Migrate this runtime's older saved preview once; its unscoped floor
@@ -91,7 +104,8 @@ end
 local function joined(player)
     if player.Parent~=Players then return end
     if player.Character then player.Character:Destroy(); player.Character=nil end
-    controller:join(player); replicationFocus(player); broadcast(player)
+    local entryRoute=firstMinute:join(player)
+    controller:join(player,entryRoute); replicationFocus(player); broadcast(player)
 end
 Players.PlayerAdded:Connect(joined)
 Players.PlayerRemoving:Connect(function(player) controller:leave(player) end)

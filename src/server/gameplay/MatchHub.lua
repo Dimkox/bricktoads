@@ -52,6 +52,7 @@ function MatchHub.new(deps,worldFactory)
     assert(type(configured)=='number' and configured>=1 and configured%1==0,'Invalid group capacity')
     local self=setmetatable({deps=deps,worldFactory=worldFactory,maxGroups=math.min(4,configured),
         connections=deps.Registry.new(),groups={},order={},routes={},requests={},
+        entryLanes={},entrySerial=0,readyPlayers=setmetatable({},{__mode='k'}),
         buckets=setmetatable({},{__mode='k'}),notices=setmetatable({},{__mode='k'}),
         envelopes=setmetatable({},{__mode='k'}),snapshotSeq=setmetatable({},{__mode='k'}),
         actionSerial=setmetatable({},{__mode='k'}),queueDepth=0,pendingQuarantines={}},MatchHub)
@@ -81,8 +82,7 @@ function MatchHub:setInfiniteLives(enabled)
     local development=self.deps.Config.Development
     if not development or development.allowInfiniteLives~=true then return 'DEVELOPMENT_ONLY' end
     development.infiniteLives=enabled
-    for _,id in ipairs(self.order) do
-        local group=self.groups[id]
+    for _,group in pairs(self.groups) do
         self:_guard(group,function()
             local c=group.controller
             c.deps.Config.Development.infiniteLives=enabled
@@ -116,27 +116,78 @@ function MatchHub:_guard(group,callback)
     return 'PARTY_FAULTED',false
 end
 
-function MatchHub:_create()
+function MatchHub:_create(entryOwner)
     local index=#self.order+1; local id='group-'..index
+    if entryOwner then
+        index=self.maxGroups+1
+        while self.entryLanes[index] do index+=1 end
+        self.entrySerial+=1; id='speeder-'..self.entrySerial
+        self.entryLanes[index]=true
+    end
     local world=self.worldFactory(index,id)
     local controllerDeps=table.clone(self.deps)
-    controllerDeps.GroupId=id; controllerDeps.SharedBossQueue=self.queue
+    controllerDeps.GroupId=id
+    if entryOwner then
+        -- No human boss can transfer into someone else's private ride.
+        controllerDeps.BossQueue=nil; controllerDeps.SharedBossQueue=nil
+    else controllerDeps.SharedBossQueue=self.queue end
     controllerDeps.Registry={new=function() return groupRegistry(self,id) end}
     controllerDeps.nextActionFeedbackId=function(player)
         self.actionSerial[player]=(self.actionSerial[player] or 0)+1
         return self.actionSerial[player]
     end
-    local group={id=id,name="Team "..index,world=world}
+    local group={id=id,name=entryOwner and "Copper Rush" or ("Team "..index),world=world,
+        entryOwner=entryOwner,entryPending=entryOwner~=nil,worldIndex=index}
     group.controller=self.deps.Controller.new(controllerDeps,world)
-    self.groups[id]=group; self.order[#self.order+1]=id
+    self.groups[id]=group
+    if entryOwner then self.entryLanes[index]=group else self.order[#self.order+1]=id end
     return group
+end
+
+-- Each private world lasts for its owner's visit. Group IDs stay unique even
+-- when another rider reuses the same physical lane.
+function MatchHub:_releaseEntry(group)
+    if not group or not group.entryOwner or self.groups[group.id]~=group then return end
+    if self.routes[group.entryOwner]==group.id then self.routes[group.entryOwner]=nil end
+    self.groups[group.id]=nil
+    self:_guard(group,function()
+        group.controller:_closeDirector('EntryClosed')
+        group.world:clearActors()
+        if group.world.campaignWorld then group.world.campaignWorld:close() end
+    end)
+    group.world.folder:Destroy()
+    self.entryLanes[group.worldIndex]=nil
+end
+
+function MatchHub:_startEntry(player,group)
+    if not group or not group.entryPending or group.startingEntry or group.entryOwner~=player.UserId
+        or not self.readyPlayers[player] or not group.controller.connections:isCurrent(player) then
+        return 'OK'
+    end
+    local now=self.deps.clock()
+    if group.entryRetryAt and now<group.entryRetryAt then return 'ENTRY_PENDING' end
+    group.startingEntry=true
+    local code,ok=self:_guard(group,function()
+        local result=group.controller:startSpeederEntry(player,{player})
+        assert(result~='UNAVAILABLE','Speeder entry has no campaign configuration')
+        return result
+    end)
+    group.startingEntry=nil
+    if code=='OK' or not ok then
+        group.entryPending=false
+        group.entryStartFault=not ok
+    else
+        group.entryRetryAt=now+1
+    end
+    self.notices[player]=code~='OK' and code or nil
+    return code
 end
 
 -- A queued boss may already own its matching active guardian. That existing
 -- assignment is the only living-role exception when validating its own slot.
 function MatchHub:_livingRole(userId,context)
-    for _,id in ipairs(self.order) do
-        local group=self.groups[id]; local c=group.controller
+    local function hasRole(group)
+        local c=group.controller
         local living,ok=self:_guard(group,function()
             if active(c) then
                 local slot=c.ownerSlots[userId]
@@ -144,19 +195,25 @@ function MatchHub:_livingRole(userId,context)
                 if hero and hero.status~='Eliminated' then return true end
                 local role=c.director:controlled(userId)
                 if role and role.status=='Alive' then
-                    local matchingBoss=role.template=='Boss' and context and context.groupId==id
+                    local matchingBoss=role.template=='Boss' and context and context.groupId==group.id
                         and context.runId==c.current.state.runId and context.levelEpoch==c.current.state.levelEpoch
                     if not matchingBoss then return true end
                 end
             end
             return false
         end)
-        if ok and living then return group end
+        return ok and living
+    end
+    local own=self.groups[self.routes[userId]]
+    if own and own.entryOwner==userId and hasRole(own) then return own end
+    for _,id in ipairs(self.order) do
+        if hasRole(self.groups[id]) then return self.groups[id] end
     end
 end
 
 function MatchHub:_queueEligible(userId,context)
     local target=context and self.groups[context.groupId]
+    if target and target.entryOwner then return false end
     if target then
         local ownsHero,ok=self:_guard(target,function()
             return active(target.controller) and target.controller.ownerSlots[userId]~=nil
@@ -183,14 +240,34 @@ function MatchHub:selected(player)
     return self.groups[self.routes[player.UserId]]
 end
 
-function MatchHub:join(player)
+function MatchHub:join(player,entryRoute)
     local joined,previous=self.connections:join(player)
     if not joined then return false end
-    local id=self.routes[player.UserId] or self.order[1]
-    self.routes[player.UserId]=id
-    local group=self.groups[id]
-    if previous then self:_guard(group,function() group.controller:leave(previous) end) end
+    local userId=player.UserId
+    local group=self.groups[self.routes[userId]]
+    local createdEntry
+    if previous and group then self:_guard(group,function() group.controller:leave(previous) end) end
+    if entryRoute=='speeder' and not (group and group.entryPending) then
+        -- Preserve heroes and human boss reservations on reconnect. An idle
+        -- lobby or a spectator preference does not override a new ad entry.
+        local living=self:_livingRole(userId,nil)
+        local queue=self.queue:view(userId,self.deps.clock())
+        if living then group=living
+        elseif queue.state~='Accepted' and queue.state~='Ready' and queue.state~='Active' then
+            if queue.state~='None' then self.queue:cancel(userId,self.deps.clock()) end
+            self:_releaseEntry(group)
+            group=self:_create(userId)
+            createdEntry=group
+        end
+    end
+    if not self.connections:isCurrent(player) then
+        self:_releaseEntry(createdEntry)
+        return false
+    end
+    group=group or self.groups[self.order[1]]
+    self.routes[userId]=group.id
     self:_guard(group,function() group.controller:join(player) end)
+    self:_startEntry(player,group)
     return true
 end
 
@@ -198,6 +275,8 @@ function MatchHub:leave(player)
     if not self.connections:remove(player) then return false end
     local group=self.groups[self.routes[player.UserId]]
     if group then self:_guard(group,function() group.controller:leave(player) end) end
+    self:_releaseEntry(group)
+    self.readyPlayers[player]=nil
     if self.deps.Transfer then self.deps.Transfer:remove(player) end
     self.actionSerial[player]=nil;self.snapshotSeq[player]=nil;self.envelopes[player]=nil
     self.buckets[player]=nil; self.notices[player]=nil
@@ -215,6 +294,7 @@ function MatchHub:_move(player,target,now)
     local previous=self.groups[self.routes[player.UserId]]
     if previous==target then return end
     if previous then self:_guard(previous,function() previous.controller:leave(player) end) end
+    self:_releaseEntry(previous)
     self.routes[player.UserId]=target.id
     local queue=self.queue:view(player.UserId,now)
     if queue.state~='None' then
@@ -244,6 +324,13 @@ function MatchHub:_offerGroup(userId,offerId,now)
 end
 
 function MatchHub:handle(player,payload,players)
+    if player.Parent and type(payload)=='table' and payload.kind=='EntryReady' then
+        if not exact(payload,{kind=true}) then return 'INVALID_INTENT' end
+        -- PlayerAdded may still be routing this exact instance, so retain a
+        -- readiness signal that arrives before the initial snapshot.
+        self.readyPlayers[player]=true
+        return self:_startEntry(player,self:selected(player))
+    end
     if not player.Parent or not self.connections:isCurrent(player) then return 'STALE_CONNECTION' end
     local function done(code)
         self.notices[player]=code~='OK' and code or nil
@@ -253,13 +340,31 @@ function MatchHub:handle(player,payload,players)
     if not self:_rate(player,now) then return done('RATE_LIMIT') end
     if type(payload)~='table' or type(payload.kind)~='string' then return done('INVALID_INTENT') end
     local selected=self:selected(player)
+    if not selected then return done('MISSING_GROUP') end
     if payload.groupId==nil then
         if payload.kind~='Sync' or self.envelopes[player] then return done('MISSING_GROUP') end
     elseif not identifier(payload.groupId) then return done('INVALID_INTENT')
     elseif payload.groupId~=selected.id then return done('WRONG_GROUP') end
     self.envelopes[player]=true
+    if selected.entryPending and payload.kind~='Sync' then return done('ENTRY_PENDING') end
 
-    if payload.kind=='CreateGroup' then
+    if payload.kind=='RideReady' then
+        if not exact(payload,{kind=true,groupId=true,runId=true}) or not identifier(payload.runId)
+            or selected.entryOwner~=player.UserId then return done('INVALID_INTENT') end
+        local c=selected.controller
+        if c.faulted then return done('PARTY_FAULTED') end
+        if not c.current or c.current.state.runId~=payload.runId then return done('STALE_RUN') end
+        return done(self:_guard(selected,function() return c:releaseSpeederEntry(player,payload.runId) end))
+    elseif payload.kind=='Start' and selected.entryStartFault then
+        if not exact(payload,{kind=true,groupId=true}) then return done('INVALID_INTENT') end
+        local fresh=self:_create(player.UserId)
+        if not self.connections:isCurrent(player) or self:selected(player)~=selected then
+            self:_releaseEntry(fresh)
+            return 'STALE_CONNECTION'
+        end
+        self:_move(player,fresh,now)
+        return done(self:_startEntry(player,fresh))
+    elseif payload.kind=='CreateGroup' then
         if not exact(payload,{kind=true,groupId=true,requestId=true}) or not identifier(payload.requestId) then return done('INVALID_INTENT') end
         local requests=self.requests[player.UserId]
         if requests and requests[payload.requestId] then return done('OK') end
@@ -276,7 +381,7 @@ function MatchHub:handle(player,payload,players)
     elseif payload.kind=='JoinGroup' then
         if not exact(payload,{kind=true,groupId=true,targetGroupId=true}) or not identifier(payload.targetGroupId) then return done('INVALID_INTENT') end
         local target=self.groups[payload.targetGroupId]
-        if not target then return done('UNKNOWN_GROUP') end
+        if not target or (target.entryOwner and target.entryOwner~=player.UserId) then return done('UNKNOWN_GROUP') end
         local reason=self:_switchReason(player.UserId,target.id,now)
         if reason then return done(reason) end
         self:_move(player,target,now)
@@ -327,6 +432,7 @@ function MatchHub:snapshot(player,players)
     if not data then return nil end
     local now=self.deps.clock()
     data.groupId=selected.id; data.groupName=selected.name
+    if selected.entryPending then data.entryPending=true end
     data.worldName=selected.world.folder and selected.world.folder.Name or selected.world.name
     data.groups={}
     for _,id in ipairs(self.order) do
@@ -366,8 +472,8 @@ end
 
 function MatchHub:step(now,dt)
     self.queue:step(now)
-    for _,id in ipairs(self.order) do
-        local group=self.groups[id];local controller=group.controller
+    local function tick(group)
+        local controller=group.controller
         if not controller.faulted then
             self:_guard(group,function()
                 controller:step(now,dt)
@@ -376,6 +482,10 @@ function MatchHub:step(now,dt)
                 end
             end)
         end
+    end
+    for _,id in ipairs(self.order) do tick(self.groups[id]) end
+    for _,group in pairs(self.entryLanes) do
+        if group~=true then tick(group) end
     end
 end
 

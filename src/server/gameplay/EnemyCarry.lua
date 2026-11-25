@@ -104,6 +104,7 @@ function EnemyCarry:_throw(row,now)
     self.world:hold(row.slot,false)
     if not self.world:releaseEnemy(row.id,row.slot,self.config) then return 'CARRY_RELEASE_FAILED' end
     row.mode='Thrown';row.untilTime=now+self.config.reaction
+    row.throwConnectionEpoch=h.connectionEpoch
     self.holders[row.slot]=nil
     local e=row.enemy
     e.windup=nil;e.lastMove=nil;e.reactionUntil=row.untilTime
@@ -175,8 +176,18 @@ function EnemyCarry:step(now)
     for _,id in ipairs(active) do
         local row=self.states[id]
         if row then
-            if not self:_sameEnemy(row) then self:_remove(row,'EnemyChanged')
-            elseif self.world:hazard(id) then self.director:_kill(id);self:forgetEnemy(id)
+            local sameEnemy=self:_sameEnemy(row)
+            local hazard=sameEnemy and self.world:hazard(id)
+            if not sameEnemy then self:_remove(row,'EnemyChanged')
+            elseif hazard then
+                self.director:_kill(id);self:forgetEnemy(id)
+                local hero=self.session.state.heroes[row.slot]
+                if self.session.onHeroEnemyDefeated and row.mode=='Thrown' and now<=row.untilTime
+                    and (hazard=='Fall' or hazard=='Surface') and row.enemy.dead
+                    and (row.enemy.reactionEpoch or 0)==row.enemyReactionEpoch
+                    and hero and hero.connected and hero.connectionEpoch==row.throwConnectionEpoch then
+                    self.session.onHeroEnemyDefeated(row.slot)
+                end
             elseif row.mode=='Carried' then
                 if not self:_sameHero(row,true) or (row.enemy.reactionEpoch or 0)~=row.enemyReactionEpoch then
                     self:_remove(row,'Interrupted')

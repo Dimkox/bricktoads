@@ -8,3 +8,4 @@ require('./gameplay/GameController.spec')(Controller,require('../src/server/RunL
     require('../src/server/gameplay/BossQueue'),require('../src/server/gameplay/RunJournal'),
     require('../src/server/gameplay/LevelVariation'),require('../src/server/gameplay/LevelDefinition'))
 require('./SpectatorCamera.spec')(require('../src/client/SpectatorCamera'))
+require('./FirstMinute.spec')(require('../src/server/gameplay/FirstMinute'))

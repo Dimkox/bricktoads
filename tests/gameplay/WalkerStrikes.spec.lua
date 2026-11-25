@@ -119,7 +119,7 @@ return function(Director,Session,Core,Combat,Config,FakeWorld,Clubs)
     test('NPC friendly fire uses explicit prototype damage and source0/2 impulses',function()
         for _,action in ipairs({'WalkerLight','WalkerHeavy'}) do
             local d,s,w=fixture();assert(d:hit(-1,-2,action))
-            assert(d.enemies[-2].health==(action=='WalkerLight' and 2 or 1))
+            assert(d.enemies[-2].health==1)
             assert(w.lastProfile==(action=='WalkerLight' and 0 or 2))
             assert(d.enemies[-2].reactionUntil==Config.Attacks[action].reaction)
         end

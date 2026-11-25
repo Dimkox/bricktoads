@@ -56,14 +56,20 @@ local ok, why = xpcall(function()
             check(d.boss.kind.." arena entrance is open",not block or block.Instance.Name~="ArenaBoundary")
         end
         if index==3 then
-            for i,rise in ipairs(d.course.roadCrests) do
-                for _,frac in ipairs({-.5,0.05,.5}) do
-                    local hit=ray(rise.x+rise.halfLength*frac,12,0,0,-18,0)
-                    local y=rise.height*(1-math.abs(frac))
-                    check("Copper Rush crest "..i.." fraction "..frac,
-                        hit and hit.Instance.Name=="WalkableCrest" and math.abs(hit.Position.Y-world.offset.Y-y)<.02)
+            for _,panel in ipairs(d.course.platforms) do
+                if panel.roadRise then
+                    for _,frac in ipairs({-.499,0,.499}) do
+                        local x=panel.x+panel.w*frac
+                        for _,lane in ipairs({-18,0,18}) do
+                            local hit=ray(x,30,lane,0,-60,0)
+                            local y=definition.roadHeight(d.course,x)
+                            assert(hit and hit.Instance.Material==Enum.Material.Asphalt and hit.Instance:FindFirstChild("RoadAggregate"))
+                            assert(math.abs(hit.Position.Y-world.offset.Y-y)<.025)
+                        end
+                    end
                 end
             end
+            check("Copper Rush textured physical road matches riding height across all lanes",true)
         elseif index==4 then
             local p,q=d.course.platforms[1],d.course.platforms[2]
             check("Frostworks gap has no new collision",not ray((p.x+p.w/2+q.x-q.w/2)/2,8,0,0,-60,0))

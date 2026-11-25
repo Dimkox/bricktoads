@@ -46,6 +46,36 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
         local function send(p,data) clock+=.05; return c:handle(p,data,list) end
         return c,list,player,send,function(dt) clock+=dt; c:step(clock,dt) end
     end
+    test('start is personal and the funnel waits for successful hero spawns',function()
+        local events={}
+        local first={
+            startPressed=function(_,p) table.insert(events,'start '..p.UserId) end,
+            spawned=function(_,p) table.insert(events,'spawn '..p.UserId) end,
+            enemyHit=function(_,p,dead) table.insert(events,'hit '..p.UserId..' '..tostring(dead)) end,
+            enemyDefeated=function(_,p) table.insert(events,'defeat '..p.UserId) end,
+        }
+        local c,list,add,send,advance=fixture(false,{FirstMinute=first})
+        local a,b=add(100),add(200)
+        assert(send(b,{kind='Start'})=='HOST_ONLY' and #events==0)
+        c.world.spawnFails=true
+        assert(send(a,{kind='Start'})=='OK')
+        assert(table.concat(events,',')=='start 100')
+        c.world.spawnFails=false
+        advance(2)
+        assert(table.concat(events,',')=='start 100,spawn 100,spawn 200')
+        local run=c.current
+        run.onHeroEnemyHit(2,true)
+        run.onHeroEnemyDefeated(2)
+        assert(events[4]=='hit 200 true' and events[5]=='defeat 200')
+        c:leave(b)
+        run.onHeroEnemyHit(2,true)
+        assert(#events==5)
+        c.director.result='Won'
+        assert(send(a,{kind='Start'})=='OK')
+        local count=#events
+        run.onHeroEnemyHit(1,true)
+        assert(#events==count)
+    end)
     test('selection is owned by the real sender and duplicate trio templates are allowed',function()
         local c,list,add,send=fixture(); local a,b,d=add(10),add(20),add(30)
         for _,p in ipairs(list) do assert(send(p,{kind='SelectHero',template='Mr. Brown'})=='OK') end

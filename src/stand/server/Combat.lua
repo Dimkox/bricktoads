@@ -41,12 +41,16 @@ function Combat.hit(old, action, shield)
     }
 end
 
-function Combat.hitEnemy(old,action)
+function Combat.hitEnemy(old,action,computerControlled)
     life(old,255)
     local profile=ordinaryProfiles[action]
     if action=='Dash' then profile=old<16 and 3 or 4 end
     assert(profile~=nil,'unsupported ordinary-target action')
     local damage=ordinaryDamage[profile]
+    if computerControlled then
+        -- One life band is 16 units. Even a spaced jab removes half a band.
+        damage=math.max(8,damage)
+    end
     local raw,dying=Combat.damage(old,damage)
     return {rawLife=raw,dying=dying,profile=profile,rawDamage=damage,
         heavyReaction=profile~=0,recover=not dying}

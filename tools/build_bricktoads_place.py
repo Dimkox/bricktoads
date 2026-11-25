@@ -102,7 +102,7 @@ def build(root_path: Path, *, include_character_study: bool = False,
     replicated = item(root, "ReplicatedStorage", "ReplicatedStorage")
     sources(item(replicated, "Folder", "BrickToads"), root_path / "src/shared")
     starter_gui = item(root, "StarterGui", "StarterGui")
-    prop(starter_gui, "token", "ScreenOrientation", 4)  # Enum.ScreenOrientation.Sensor
+    prop(starter_gui, "token", "ScreenOrientation", 2)  # Enum.ScreenOrientation.LandscapeSensor
     starter = item(root, "StarterPlayer", "StarterPlayer")
     scripts = item(starter, "StarterPlayerScripts", "StarterPlayerScripts")
     sources(item(scripts, "Folder", "BrickToads"), root_path / "src/client")
@@ -188,7 +188,20 @@ def build(root_path: Path, *, include_character_study: bool = False,
     storage = item(root, "ServerStorage", "ServerStorage")
     templates = item(storage, "Folder", "BrickToadsCharacterTemplates")
 
+    field_textures = json.loads((root_path / "assets/characters/field-texture-assets.json").read_text(encoding="utf-8"))
+
     def mesh_resource(parent, row, *, require_mesh_size=True):
+        template_name = parent.findtext("Properties/string[@name='Name']")
+        paint = field_textures["parts"].get(template_name, {}).get(row["name"])
+        # Some course props share a character and segment name but use different meshes.
+        if paint and (row["meshId"], row["textureId"]) == (paint["originalMeshId"], paint["originalTextureId"]):
+            row = {**row, **paint}
+        if template_name in ("CanonicalPlayer1", "CanonicalPlayer2", "CanonicalPlayerBrown"):
+            hero_maps = field_textures["heroColorMaps"]
+            row = {**row, "surfaceAppearances": [
+                {**surface, "colorMap": hero_maps.get(surface["colorMap"], surface["colorMap"])}
+                for surface in row["surfaceAppearances"]
+            ]}
         mesh = item(parent, "MeshPart", row["name"])
         content(mesh, "MeshId", row["meshId"], allow_empty=False)
         content(mesh, "TextureID", row["textureId"])

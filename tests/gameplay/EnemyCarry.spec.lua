@@ -201,6 +201,23 @@ return function(Carry,Session,Core,Combat,Config,FakeWorld)
             assert(d.enemies[-1].ownerUserId==20)
         end
     end)
+    test('only an active throw into a hazard credits the connected thrower with the defeat',function()
+        for _,case in ipairs({'thrown','carried','expired','reconnected','missing'}) do
+            local d,s,w,c,p,step,capture=fixture(true)
+            local defeats={}
+            s.onHeroEnemyDefeated=function(slot) table.insert(defeats,slot) end
+            capture(2)
+            if case~='carried' then assert(s:intent(2,p(2),.7)=='OK') end
+            if case=='reconnected' then
+                assert(s:connection(2,false,.72)=='OK' and s:connection(2,true,.73)=='OK')
+            end
+            w.hazards[-1]=case=='missing' and 'ActorMissing' or 'Fall'
+            step(case=='expired' and 2 or .8)
+            step(2.1)
+            assert(d.enemies[-1].dead and #defeats==(case=='thrown' and 1 or 0),case)
+            if case=='thrown' then assert(defeats[1]==2) end
+        end
+    end)
     test('failed BeginAttack creates no pending link or takeover engagement',function()
         local d,s,w,c,p=fixture();local event=s._event
         s._event=function(self,kind,...)

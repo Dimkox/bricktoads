@@ -21,8 +21,9 @@ local JOINTS={
 local RIG_NAMES={'Neck','Left Shoulder','Right Shoulder','Left Hip','Right Hip'}
 local HIDDEN={Torso=true,Head=true,['Left Arm']=true,['Right Arm']=true,['Left Leg']=true,['Right Leg']=true,Eye=true}
 local CANONICAL={['Mr. Green']='CanonicalPlayer1',['Mr. Yellow']='CanonicalPlayer2',['Mr. Brown']='CanonicalPlayerBrown'}
-local MORPHS={PowerFist={part='RightHand',attachment='RightWristRigAttachment'},
-    BigBoot={part='RightFoot',attachment='RightAnkleRigAttachment'},
+-- The three canonical toads stand 6.07 studs tall in their authored rest pose.
+local MORPHS={PowerFist={part='RightHand',attachment='RightWristRigAttachment',attackSize=5.5},
+    BigBoot={part='RightFoot',attachment='RightAnkleRigAttachment',attackSize=5.5},
     FearBeforeCut={part='Head',attachment='NeckRigAttachment'},
     FearAfterCut={part='Head',attachment='NeckRigAttachment'}}
 local MORPH_PREFIX={['Mr. Green']='Green',['Mr. Yellow']='PlayerTwo',['Mr. Brown']='Brown'}
@@ -154,12 +155,18 @@ local function prepareMorph(skin,template,heroTemplate,kind,spec,sourceHero)
         local original=assert(skin:FindFirstChild(spec.part),'Missing original morph limb')
         local attachment=assert(original:FindFirstChild(spec.attachment),'Missing original morph joint')
         assert(original:IsA('MeshPart') and attachment:IsA('Attachment'),'Invalid original morph joint')
-        local c0=attachment.CFrame*part.CFrame
         local visible=part.Transparency
+        if spec.attackSize then
+            local factor=spec.attackSize/math.max(part.Size.X,part.Size.Y,part.Size.Z)
+            part.Size=part.Size*factor
+            part.CFrame=scaled(part.CFrame,factor)
+            origin.CFrame=scaled(origin.CFrame,factor)
+            part.Transparency=1
+        end
+        local c0=attachment.CFrame*part.CFrame
         part.CFrame=original.CFrame*c0
         part.Anchored=false;part.CanCollide=false;part.CanTouch=false;part.CanQuery=false;part.Massless=true
-        -- The client composes base/morph availability in one local visibility
-        -- coordinator. Server alpha must remain renderable even while loading.
+        -- The client uses the authored alpha after the active mesh is loaded.
         part:SetAttribute('HeroVisibleTransparency',visible)
         captureResources(part)
         clone:SetAttribute('HeroMorphKind',kind)
@@ -195,9 +202,13 @@ local function updateMorphs(state,sourcePose)
         and active.joint.Parent==active.part and active.joint.Part0==active.originalPart and active.joint.Part1==active.part
         and tag(active.model,'AppearanceProfile','CanonicalNESHeroMorph') and tag(active.model,'HeroTemplate',state.heroTemplate)
         and tag(active.model,'MorphKind',requested)) then active=nil end
-    state.activeMorph=active and requested or nil
-    -- Playback publishes intent only. All fifteen base parts and four optional
-    -- morph assemblies already exist before network ownership is pinned.
+    local nextKind=active and requested or nil
+    if state.activeMorph~=nextKind then
+        local previous=state.morphs and state.morphs[state.activeMorph]
+        if previous and previous.spec.attackSize and previous.part.Parent then previous.part.Transparency=1 end
+        if active and active.spec.attackSize then active.part.Transparency=active.visibleTransparency end
+        state.activeMorph=nextKind
+    end
     if state.skinId and state.model:GetAttribute('HeroActiveMorph')~=state.activeMorph then
         state.model:SetAttribute('HeroActiveMorph',state.activeMorph)
     end
