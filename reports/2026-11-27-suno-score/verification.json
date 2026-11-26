@@ -1,0 +1,241 @@
+{
+  "jira": "BT-123",
+  "date_moscow": "2026-11-27",
+  "edition": "BrickToads — NES Sessions",
+  "original_soundtrack": "Battletoads (NES, 1991)",
+  "original_album_reference": "https://iam8bit.jp/en/products/battletoads-vinyl-soundtrack",
+  "reference_method": "Stage-specific composition briefs based on the original NES cue names, their game usage and 2A03 instrumentation.",
+  "original_stage_music_source": "https://github.com/feos-tas/DisAssemble/blob/f1a43b69577246850d136473700a333b3cdfe93f/Battletoads/main.asm#L1900",
+  "theme_count": 13,
+  "verification": "Suno returned 13 distinct completed songs with the expected titles in campaign order. The four paired briefs have two different songs assigned to different levels.",
+  "duration_seconds": 2259.64,
+  "music_generation": {
+    "nes_batches": 9,
+    "nes_songs": 18,
+    "additional_nes_takes": 5,
+    "credits_for_nes": 90,
+    "credits_for_earlier_sketch": 10,
+    "final_song_credits": 0
+  },
+  "machine_ascent_listening_note": "The automatic tags include a female voice. In a separate targeted listen the Suno audio agent identified a vowel-like synth lead with no clear words; a vocal sample cannot be ruled out.",
+  "playlist_visibility": "private",
+  "playlist_verified_count": 13,
+  "tracks": [
+    {
+      "level": 1,
+      "level_name": "Flooded Causeway",
+      "track": "Breakwater Knuckles",
+      "suno_status": "complete",
+      "duration_s": 157.2,
+      "nes_reference": "Ragnarok's Canyon",
+      "nes_music_ids_hex": "03",
+      "reference_group": [
+        1
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 150,
+      "detected_key": "C minor",
+      "alternate_count": 1
+    },
+    {
+      "level": 2,
+      "level_name": "Echo Shaft",
+      "track": "Rope in the Dark",
+      "suno_status": "complete",
+      "duration_s": 174.36,
+      "nes_reference": "Wookie Hole",
+      "nes_music_ids_hex": "04",
+      "reference_group": [
+        2
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 219.3,
+      "detected_key": "D minor",
+      "alternate_count": 1
+    },
+    {
+      "level": 3,
+      "level_name": "Copper Rush",
+      "track": "Copper Overdrive",
+      "suno_status": "complete",
+      "duration_s": 136.04,
+      "nes_reference": "Turbo Tunnel",
+      "nes_music_ids_hex": "01/05",
+      "reference_group": [
+        3
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 151.9,
+      "detected_key": "D minor",
+      "alternate_count": 1
+    },
+    {
+      "level": 4,
+      "level_name": "Frostworks",
+      "track": "Thin Ice Relay",
+      "suno_status": "complete",
+      "duration_s": 187.08,
+      "nes_reference": "Arctic Caverns",
+      "nes_music_ids_hex": "0E",
+      "reference_group": [
+        4
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 166.2,
+      "detected_key": "A minor",
+      "alternate_count": 1
+    },
+    {
+      "level": 5,
+      "level_name": "Tidal Foundry",
+      "track": "Riptide Rivets",
+      "suno_status": "complete",
+      "duration_s": 179.72,
+      "nes_reference": "Surf City / Terra Tubes",
+      "nes_music_ids_hex": "0D",
+      "reference_group": [
+        5,
+        9
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 179.7,
+      "detected_key": "D minor",
+      "alternate_count": 0
+    },
+    {
+      "level": 6,
+      "level_name": "Four Coil Vaults",
+      "track": "Coil by Coil",
+      "suno_status": "complete",
+      "duration_s": 159.96,
+      "nes_reference": "Karnath's Lair",
+      "nes_music_ids_hex": "09",
+      "reference_group": [
+        6,
+        11
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 119.9,
+      "detected_key": "D minor",
+      "alternate_count": 0
+    },
+    {
+      "level": 7,
+      "level_name": "Ember Airway",
+      "track": "Afterburner Alley",
+      "suno_status": "complete",
+      "duration_s": 167.56,
+      "nes_reference": "Volkmire's Inferno",
+      "nes_music_ids_hex": "0F/06",
+      "reference_group": [
+        7,
+        10
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 119.5,
+      "detected_key": "F major",
+      "alternate_count": 0
+    },
+    {
+      "level": 8,
+      "level_name": "Machine Ascent",
+      "track": "Ratchet Lift",
+      "suno_status": "complete",
+      "duration_s": 194.08,
+      "nes_reference": "Intruder Excluder",
+      "nes_music_ids_hex": "08",
+      "reference_group": [
+        8,
+        12
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 112.8,
+      "detected_key": "A minor",
+      "alternate_count": 0
+    },
+    {
+      "level": 9,
+      "level_name": "Pressure Pipes",
+      "track": "Underpipe Current",
+      "suno_status": "complete",
+      "duration_s": 169.84,
+      "nes_reference": "Surf City / Terra Tubes",
+      "nes_music_ids_hex": "0D",
+      "reference_group": [
+        5,
+        9
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 151.6,
+      "detected_key": "C minor",
+      "alternate_count": 0
+    },
+    {
+      "level": 10,
+      "level_name": "Fuse Pursuit",
+      "track": "Fuse at Both Ends",
+      "suno_status": "complete",
+      "duration_s": 153.64,
+      "nes_reference": "Rat Race",
+      "nes_music_ids_hex": "11",
+      "reference_group": [
+        7,
+        10
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 187.5,
+      "detected_key": "C major",
+      "alternate_count": 0
+    },
+    {
+      "level": 11,
+      "level_name": "Magnetic Circuit",
+      "track": "Polarity Switch",
+      "suno_status": "complete",
+      "duration_s": 176.92,
+      "nes_reference": "Clinger-Winger",
+      "nes_music_ids_hex": "13",
+      "reference_group": [
+        6,
+        11
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 119.9,
+      "detected_key": "C minor",
+      "alternate_count": 0
+    },
+    {
+      "level": 12,
+      "level_name": "Turning Spire",
+      "track": "Orbit the Spire",
+      "suno_status": "complete",
+      "duration_s": 193.24,
+      "nes_reference": "The Revolution",
+      "nes_music_ids_hex": "0C",
+      "reference_group": [
+        8,
+        12
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 129.3,
+      "detected_key": "D minor",
+      "alternate_count": 0
+    },
+    {
+      "level": 13,
+      "level_name": "Last Eclipse",
+      "track": "Black Crown Showdown",
+      "suno_status": "complete",
+      "duration_s": 210,
+      "nes_reference": "Boss Battle",
+      "nes_music_ids_hex": "0B",
+      "reference_group": [
+        13
+      ],
+      "model": "v6-mini",
+      "detected_bpm": 143.4,
+      "detected_key": "D minor",
+      "alternate_count": 1
+    }
+  ]
+}
