@@ -8195,7 +8195,7 @@ function Controller:_heroes(players)
 end
 function Controller:_enemyName(player)
     self.director.ownerNames=self.director.ownerNames or {}
-    self.director.ownerNames[player.UserId]=player.DisplayName..' @'..player.Name
+    self.director.ownerNames[player.UserId]='@'..player.Name
     self.director.ownerConnections=self.director.ownerConnections or {}
     self.director.ownerConnections[player.UserId]=true
     local role=self.director:controlled(player.UserId)
@@ -8412,7 +8412,7 @@ function Controller:_begin(player,players,speederEntry)
         local template=self.choices[owner.UserId] or 'Mr. Green'
         self.ownerSlots[owner.UserId]=index
         self.owners[index]={userId=owner.UserId,displayName=owner.DisplayName,username=owner.Name,template=template}
-        self.world.names[index]=owner.DisplayName..' @'..owner.Name
+        self.world.names[index]='@'..owner.Name
         roster[index]={userId=index,template=template}
     end
     self.previousJournal=self.journal
@@ -9848,7 +9848,7 @@ function World:spawnEnemy(id, kind, positionTable)
         if not imported then boss(actor) end
     else drone(actor, kind) end
     local labelHeight=kind=="Walker" and 8.2 or (isBoss and 7.6 or 4.5)
-    actor.healthLabel = label(actor.root, "РІв„ўТђ РІв„ўТђ РІв„ўТђ", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
+    actor.healthLabel = label(actor.root, "", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
     -- The species art changes the assembly after BaseWorld pinned its basic rig.
@@ -10229,8 +10229,8 @@ function World:enemyHealth(id, raw, maximum)
             return
         end
         local symbols = {}
-        for n = 1, 3 do symbols[n] = n &lt;= hearts and "РІв„ўТђ" or "РІв„ўРЋ" end
-        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  Р’В·  " or "") .. table.concat(symbols, " ")
+        for n = 1, 3 do symbols[n] = n &lt;= hearts and "\u{2665}" or "\u{2661}" end
+        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  \u{b7}  " or "") .. table.concat(symbols, " ")
     end
 end
 
@@ -15619,7 +15619,7 @@ return World
       <Item class="ModuleScript" referent="BT85">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='2a3e4a27b4cc91ee4383b6f0e1556a09be781956a7acb131b6da1969e50201dc'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='4a4c440bfcbec257a9332866f6f6d055dfef54bf4530493f624602aecdd20733'})
 </ProtectedString>
         </Properties>
       </Item>

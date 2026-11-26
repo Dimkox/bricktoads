@@ -1155,7 +1155,7 @@ function World:spawnEnemy(id, kind, positionTable)
         if not imported then boss(actor) end
     else drone(actor, kind) end
     local labelHeight=kind=="Walker" and 8.2 or (isBoss and 7.6 or 4.5)
-    actor.healthLabel = label(actor.root, "РІв„ўТђ РІв„ўТђ РІв„ўТђ", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
+    actor.healthLabel = label(actor.root, "", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
     -- The species art changes the assembly after BaseWorld pinned its basic rig.
@@ -1536,8 +1536,8 @@ function World:enemyHealth(id, raw, maximum)
             return
         end
         local symbols = {}
-        for n = 1, 3 do symbols[n] = n <= hearts and "РІв„ўТђ" or "РІв„ўРЋ" end
-        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  Р’В·  " or "") .. table.concat(symbols, " ")
+        for n = 1, 3 do symbols[n] = n <= hearts and "\u{2665}" or "\u{2661}" end
+        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  \u{b7}  " or "") .. table.concat(symbols, " ")
     end
 end
 

@@ -56,7 +56,7 @@ function Controller:_heroes(players)
 end
 function Controller:_enemyName(player)
     self.director.ownerNames=self.director.ownerNames or {}
-    self.director.ownerNames[player.UserId]=player.DisplayName..' @'..player.Name
+    self.director.ownerNames[player.UserId]='@'..player.Name
     self.director.ownerConnections=self.director.ownerConnections or {}
     self.director.ownerConnections[player.UserId]=true
     local role=self.director:controlled(player.UserId)
@@ -273,7 +273,7 @@ function Controller:_begin(player,players,speederEntry)
         local template=self.choices[owner.UserId] or 'Mr. Green'
         self.ownerSlots[owner.UserId]=index
         self.owners[index]={userId=owner.UserId,displayName=owner.DisplayName,username=owner.Name,template=template}
-        self.world.names[index]=owner.DisplayName..' @'..owner.Name
+        self.world.names[index]='@'..owner.Name
         roster[index]={userId=index,template=template}
     end
     self.previousJournal=self.journal

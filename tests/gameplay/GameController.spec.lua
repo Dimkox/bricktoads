@@ -81,6 +81,7 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
         for _,p in ipairs(list) do assert(send(p,{kind='SelectHero',template='Mr. Brown'})=='OK') end
         assert(send(a,{kind='Start'})=='OK')
         for i=1,3 do assert(c.current.state.heroes[i].template=='Mr. Brown') end
+        assert(c.world.names[1]=='@User10' and c.world.names[2]=='@User20' and c.world.names[3]=='@User30')
         assert(c:snapshot(b,list).mine==2 and c:snapshot(d,list).mine==3)
     end)
     test('malformed and owner-spoofed choices cannot change selection',function()
@@ -439,7 +440,7 @@ return function(Controller,Core,Combat,Session,Registry,Config,FakeWorld,Directo
             accept(c,list,send,boss); c.director:_boss()
             assert(c:snapshot(boss,list).bossQueue.state=='Active')
             assert(c:snapshot(boss,list).enemyRole.template=='Boss' and c:controlledSlot(boss.UserId)==-99)
-            assert(c.world.actors[-99].ownerName=='Hero20 @User20','New director must retain the assigned owner name')
+            assert(c.world.actors[-99].ownerName=='@User20','New director must retain the assigned owner name')
         end)
         test('boss wait rejects active or eliminated same-run heroes and living ordinary enemies',function()
             local c,list,add,send,_,hero,enemy=enemyFixture()
