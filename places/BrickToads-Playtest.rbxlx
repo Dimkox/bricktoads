@@ -1586,6 +1586,15 @@ function Definition.build(index,seed)
             local z=jet and 0 or (v-2)*12;local depth=(jet or kind=='LowBarrier' or kind=='Log') and 44 or 12
             c.hazards[#c.hazards+1]=hazard('ride-'..n,kind,x,y+Definition.roadHeight(c,x),z,3,h,depth,
                 kind=='Rocket' and {axis='z',amplitude=8,period=2.4,phase=n} or nil)
+            if (index==3 and n==6) or (jet and section==7) then
+                local pod=index==3
+                local air=c.hazards[#c.hazards]
+                air.kind=pod and 'RatPod' or 'Meteorite'
+                air.w,air.h,air.d=pod and 3.8 or 2.5, pod and 2.8 or 2.5, pod and 5.2 or 2.5
+                air.z=0
+                air.y=(pod and 3 or 18)+Definition.roadHeight(c,x)
+                air.crossingDirection=n%2==0 and 1 or -1
+            end
             if section==4 or section==8 or (section==12 and n&lt;12*sectors) then cp(x+12,c.mount.y+Definition.roadHeight(c,x+12),0,x+12-c.mount.x) end
             if index==3 and (section==2 or section==8) then c.ramps[#c.ramps+1]={id='ramp-'..n,x=x-10,y=1,z=0,w=10,h=2,d=12,launchSpeed=50} end
         end
@@ -1672,6 +1681,9 @@ function Definition.build(index,seed)
             if race&lt;3 then cp(x,y+3,0,race) end
             c.hazards[#c.hazards+1]=hazard('race-gas-'..race,'Gas',-x,y+17,9,6,6,6)
         end
+        -- Authored group on the race landings; Giblet keeps his separate race body.
+        foe('Scuzz',-5,93,9)
+        foe('Scuzz',5,93,-9)
         foe('SentryDrone',0,75,7);foe('GasTurret',0,45,8);finish=point(c.bombs[3].position.x,3,0)
         d.bounds.minX=-60;d.bounds.maxX=60;d.bounds.maxY=140
     elseif index==11 then
@@ -2057,6 +2069,7 @@ local families={
     Raven={mode='Fly',attack='Swoop',range=28,speed=10},LargeRaven={mode='Fly',attack='Swoop',range=30,speed=8},
     Invader={mode='Ground',attack='StealLife',range=16,speed=9},
     RocketRat={mode='Ride',attack='DropObstacle',range=35,speed=14},
+    Scuzz={mode='Ground',attack='Attack66',range=10,speed=9},
     Snowman={mode='Ground',attack='Snowball',range=38,speed=4},
     SentryDrone={mode='Ground',attack='TwinBolt',range=40,speed=0},
     GasTurret={mode='Ground',attack='Gas',range=30,speed=0},
@@ -2073,6 +2086,8 @@ local families={
     FlyingHead={mode='Fly',attack='Swoop',range=25,speed=11},
 }
 local actions={
+    Attack66={tell=.4,active=.32,recovery=.55,reach=5,width=2.5,height=3,damage='PigJab'},
+    Attack68={tell=.55,active=.55,recovery=.7,lift=3,radius=2.2,damage='PigRush'},
     Swoop={tell=.4,active=.75,recovery=.6,lift=-3,radius=2.6,damage='DragonHeadbutt'},
     Leap={tell=.35,active=.7,recovery=.6,lift=5,radius=2.8,damage='PigRush'},
     StealLife={tell=.35,active=.7,recovery=.6,lift=5,radius=2.8},
@@ -2249,6 +2264,7 @@ function Enemies:_begin(id,e,name,direction,target)
     target=target or self:_nearest(id,dir)
     local q=target and self.world:position(target)
     if not q then q={x=p.x+dir.x*10,y=p.y,z=p.z+dir.z*10} end
+    if e.kind=='Scuzz' and name=='Attack66' and distance(p,q)&gt;5 then name='Attack68' end
     local family=families[e.kind];local m=actions[name]
     if distance(p,q)&gt;family.range then q={x=p.x+dir.x*family.range,y=p.y,z=p.z+dir.z*family.range};target=nil end
     if family.mode=='Ground' then q={x=q.x,y=p.y,z=q.z} end
@@ -2306,7 +2322,8 @@ function Enemies:_spawn(id,e,a,direction)
     local p={owner=id,actorId=e.actorId,mode=mode,position=origin,direction=dir,lastAt=a.at,created=a.at,
         expiresAt=a.at+(mode=='Obstacle' and 4 or mode=='GasCloud' and 2.5 or 2),
         speed=m.speed or 0,action=m.damage,hits={},groundY=a.destination.y}
-    self.projectiles[key]=p;self.world:projectile(key,origin,false,mode)
+    self.projectiles[key]=p
+    self.world:projectile(key,origin,false,mode,id)
 end
 function Enemies:_steal(id,e,s,target,hits)
     if hits[target] then return end;hits[target]=true
@@ -2717,7 +2734,7 @@ function Modes.new(session,world,definition)
         actors={},supports={},blocks={},hazards={},objects={},now=session.now or 0,elapsed=0,discardedSeconds=0,
         complete=false,closed=false,room=1,bombIndex=1,race=definition.mode=='Race' and {elapsed=0} or nil,rotation=0,chaseLife=definition.course.chaseLife or 207,
         broken={},chaseProgress=-(definition.course.chaseGap or 32),projectiles={},emitterNext={},projectileSerial=0,
-        encounterFired={},vehicleGroup=definition.course.mount and {phase='Mounting',checkpoint=1,elapsed=0,speed=0,serial=0} or nil},Modes)
+        encounterFired={},airPasses={},vehicleGroup=definition.course.mount and {phase='Mounting',checkpoint=1,elapsed=0,speed=0,serial=0} or nil},Modes)
     for _,support in ipairs(self.course.supports or {}) do
         self.supports[#self.supports+1]={id=support.id,definition=support,position=pathPosition(support,0),previous=pathPosition(support,0)}
         for segment=2,support.segments or 1 do
@@ -3306,6 +3323,9 @@ function Modes:_hazards(s,old)
     if s.mounted and self.vehicleGroup and self.vehicleGroup.phase~='Riding' then return end
     for _,h in ipairs(self.hazards) do
         if h.active~=false and swept(old,s.position,h,h.previous) then
+            if (h.kind=='RatPod' or h.kind=='Meteorite') and self.world.campaignAirImpact then
+                self.world:campaignAirImpact(h.id)
+            end
             if self.definition.speederEntry and h.id==self.course.hazards[1].id then s.touchedFirstWall=true end
             if self.mode=='Speeder' or self.mode=='Surf' or self.mode=='Jet' or h.kind=='Spike' or h.kind=='RotatingSpike' or h.kind=='PipeCrusher' or h.kind=='MechanicalCrusher' then
                 self:_die(s,'CampaignCrash')
@@ -3436,6 +3456,49 @@ function Modes:interact(slot,now,action)
     end
     return 'OK'
 end
+-- One crossing per vehicle attempt. Retries recreate the visual and its trail.
+function Modes:_airPass(h,dt)
+    local group=self.vehicleGroup
+    local pass=self.airPasses[h.id]
+    if pass and (pass.serial~=group.serial or group.phase~='Riding') then
+        if self.objects[pass.id] and self.world.campaignRemove then self.world:campaignRemove(pass.id) end
+        self.objects[pass.id]=nil
+        self.airPasses[h.id]=nil
+        pass=nil
+    end
+    if group.phase~='Riding' then return end
+    if not pass then
+        for _,s in pairs(self.actors) do
+            if s.mounted and not s.finished and s.position.x&gt;=h.x-46 and s.position.x&lt;h.x+12 then
+                pass={start=self.elapsed,serial=group.serial,id=h.id..':'..group.serial}
+                self.airPasses[h.id]=pass
+                break
+            end
+        end
+    end
+    if not pass then return end
+    local t=(self.elapsed-pass.start)/2.4
+    if t&gt;=1 then
+        if self.objects[pass.id] and self.world.campaignRemove then self.world:campaignRemove(pass.id) end
+        self.objects[pass.id]=nil
+        return
+    end
+    local function location(u)
+        local sign=h.crossingDirection
+        local pod=h.kind=='RatPod'
+        return point(h.x+(pod and 2*math.sin(2*math.pi*u) or 0),h.y,sign*(24-48*u))
+    end
+    local p=location(t)
+    local prev=location(math.max(0,t-dt/2.4))
+    local nextPoint=location(t+.001)
+    local row=copy(h)
+    row.id=pass.id
+    row.previous=prev
+    row.x,row.y,row.z=p.x,p.y,p.z
+    self.hazards[#self.hazards+1]=row
+    self:_object(pass.id,h.kind,p,size(h),{role='Hazard',hazard=true,
+        velocity={x=nextPoint.x-p.x,y=nextPoint.y-p.y,z=nextPoint.z-p.z}})
+end
 function Modes:_objects(dt)
     self.hazards={}
     self.walls={}
@@ -3445,6 +3508,10 @@ function Modes:_objects(dt)
         self:_object(wall.id,wall.kind,p,size(wall),{collidable=true,role='MovingWall'})
     end
     for _,h in ipairs(self.course.hazards or {}) do
+        if h.kind=='RatPod' or h.kind=='Meteorite' then
+            self:_airPass(h,dt)
+            continue
+        end
         local p=motionPosition(h,self.elapsed);local previous=motionPosition(h,self.elapsed-dt)
         local row=copy(h);row.x,row.y,row.z=p.x,p.y,p.z;row.previous=previous
         if h.kind=='Gas' or h.kind=='ElectricTrap' or h.kind=='ElectricGate' then row.active=math.sin(self.elapsed*2+(h.motion and h.motion.phase or 0))&gt;.1 end
@@ -4038,6 +4105,7 @@ Roster.profiles={
     Invader=profile({},'levels_cfgs1.asm',{126,127,128},{loaderLife=255,lifeMode='LinkedLife',runtimeLife=15,
         adaptation='Ordinary one-life body; linked raw-eight theft and recoverable token, not linear sentinel HP',handler='main.asm:5472-5723'}),
     RocketRat=profile({15},'levels_cfgs1.asm',{196,197},{handler='main.asm:10088-10124'}),
+    Scuzz=profile({31,47},'levels_cfgs1.asm',{124,129},{handler='main.asm:18542-18715'}),
     Snowman=profile({15,31},'levels_cfgs1.asm',{263,271}),
     SentryDrone=profile({15},'levels_cfgs2.asm',{158}),
     Slug=profile({15},'levels_cfgs2.asm',{176}),
@@ -4115,6 +4183,8 @@ CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
 local CourseAppearance=require(script.Parent.CourseAppearance)
 local CoursePropAppearance=require(script.Parent.CoursePropAppearance)
+local ImportedSkin=require(script.Parent.ImportedModelSkin)
+local AirHazardModels=require(script.Parent.AirHazardModels)
 local Definition=require(script.Parent.CampaignDefinition)
 local palettes={
     Rope={45,63,78},Speeder={106,75,47},Ice={133,185,206},Surf={42,124,141},
@@ -4218,8 +4288,8 @@ function CampaignWorld.new(world,route)
     elseif route.mode=='Clinger' then
         for n,segment in ipairs(route.course.path or {}) do
             local p=segment.from
-            local arrow=segment.direction.x&gt;0 and '→' or segment.direction.x&lt;0 and '←'
-                or segment.direction.z&gt;0 and '↓' or '↑'
+            local arrow=segment.direction.x&gt;0 and 'в†’' or segment.direction.x&lt;0 and 'в†ђ'
+                or segment.direction.z&gt;0 and 'в†“' or 'в†‘'
             local marker=makePart(world.geometry,'CircuitDirection_'..n,Vector3.new(.3,.3,.3),
                 CFrame.new(p.x+segment.direction.x*5,p.y+.5,p.z+segment.direction.z*5)+world.offset,
                 Color3.fromRGB(221,230,114),false)
@@ -4448,7 +4518,14 @@ function CampaignWorld:object(id,kind,point,size,metadata)
             row.part.CFrame=CFrame.lookAt((a+b)/2,b)
         end
     end
-    if metadata.alpha then row.part.Transparency=metadata.alpha end
+    if kind=='RatPod' or kind=='Meteorite' then
+        if not row.airModel then
+            row.airModel=AirHazardModels.attach(kind,row.part,row.part)
+            ImportedSkin.attach(kind,row.airModel,row.airModel.PrimaryPart)
+        end
+        if metadata.velocity then AirHazardModels.face(row.airModel,vec(metadata.velocity,0)) end
+        row.part.Transparency=1
+    elseif metadata.alpha then row.part.Transparency=metadata.alpha end
     if row.label and metadata.label then row.label.Text=metadata.label end
     row.expiresAt=metadata.expiresAt
     if kind=='Serpent'then self:_serpent(row,self.now or 0)end
@@ -4464,6 +4541,10 @@ function CampaignWorld:object(id,kind,point,size,metadata)
     CourseAppearance.update(row,self.world.geometry,metadata,waterSurfaceY)
     CoursePropAppearance.update(row,self.world.geometry,metadata,self.now or 0)
     return row.part
+end
+function CampaignWorld:airImpact(id)
+    local row=self.objects[id]
+    if row and row.airModel then AirHazardModels.impact(row.airModel) end
 end
 function CampaignWorld:remove(id)
     local row=self.objects[id]
@@ -8524,6 +8605,19 @@ local World = {}
 
 local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
+local ImportedSkin=require(script.Parent.ImportedModelSkin)
+local ScuzzModel=require(script.Parent.ScuzzModel)
+local ShadowCloudModel=require(script.Parent.ShadowCloudModel)
+
+local function shadowPlacement(level,id,kind)
+    if kind~='Swellcheeks' or not level then return false end
+    for _,zone in ipairs(level.zones or {}) do
+        for _,spawn in ipairs(zone.enemies) do
+            if spawn.id==id and spawn.kind==kind and spawn.sourceVariant==3 then return true end
+        end
+    end
+    return false
+end
 
 local function ownCompletedRig(actor)
     local root=actor.root
@@ -8836,7 +8930,7 @@ local function buildGeometry(self)
     local start = part(g, "StartSign", Vector3.new(1, 0.5, 1), CFrame.new(-63, 4.6, -15), COLORS.dark)
     start.Transparency = 1
     label(start, "FLOODED CAUSEWAY", 310, Vector3.new(0, 2.8, 0)).TextSize = 23
-    label(start, "FORWARD  →", 200, Vector3.new(0, 0.8, 0)).TextColor3 = COLORS.mint
+    label(start, "FORWARD  РІвЂ вЂ™", 200, Vector3.new(0, 0.8, 0)).TextColor3 = COLORS.mint
 
     self.gates = {}
     local function gate(x, title)
@@ -8849,9 +8943,9 @@ local function buildGeometry(self)
         self.gates[#self.gates + 1] = record
         return record
     end
-    gate(2, "I  ·  CLEAR THE CAUSEWAY")
-    gate(52, "II  ·  FLOODED COURTYARD")
-    self.exitGate = gate(108, "III  ·  CAUSEWAY GUARDIAN")
+    gate(2, "I  Р’В·  CLEAR THE CAUSEWAY")
+    gate(52, "II  Р’В·  FLOODED COURTYARD")
+    self.exitGate = gate(108, "III  Р’В·  CAUSEWAY GUARDIAN")
     local exitPad = part(g, "ExitPad", Vector3.new(12, 0.13, 20), CFrame.new(115, 0.09, 0), COLORS.mint, Enum.Material.Neon)
     exitPad.Transparency = 0.6
     self.exitPad = exitPad
@@ -8921,7 +9015,7 @@ local function buildRoute(self, level)
         local first, last = zone.platforms[1], zone.platforms[#zone.platforms]
         local x, y, z = first.x - first.w / 2 + 8, first.y + first.h / 2, first.z
         local sign = part(g, "DistrictSign", Vector3.new(0.8, 6, 0.8), CFrame.new(x, y + 3, z - first.d / 2 - 2), COLORS.dark, Enum.Material.Wood)
-        label(sign, tostring(index) .. "  ·  " .. string.upper(zone.name), 350, Vector3.new(0, 5, 0)).TextSize = 21
+        label(sign, tostring(index) .. "  Р’В·  " .. string.upper(zone.name), 350, Vector3.new(0, 5, 0)).TextSize = 21
         -- Large silhouettes identify districts from the moving camera without blocking jumps.
         for _,side in ipairs({-1, 1}) do
             local depth = z + side * (first.d / 2 + 4)
@@ -8958,11 +9052,11 @@ local function buildRoute(self, level)
                     local top = data.y + data.h / 2
                     part(g, "JumpEdge", Vector3.new(.45, .13, data.d - 1), CFrame.new(edge.x, top + .12, data.z), COLORS.amber, Enum.Material.Neon)
                     local marker = part(g, "JumpMarker", Vector3.new(1, .1, 1), CFrame.new(edge.x - 1, top + .15, data.z), COLORS.mint, Enum.Material.Neon)
-                    label(marker, "JUMP  →", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
+                    label(marker, "JUMP  РІвЂ вЂ™", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
                 end
             end
         end
-        self.gates[index] = gate(zone.gateX, last.z, last.y + last.h / 2, last.d, tostring(index) .. "  ·  " .. zone.name)
+        self.gates[index] = gate(zone.gateX, last.z, last.y + last.h / 2, last.d, tostring(index) .. "  Р’В·  " .. zone.name)
     end
     local boss = level.boss
     platform(boss.platform, #level.zones + 1, "GuardianCourt")
@@ -9627,8 +9721,26 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.humanoid.WalkSpeed = isBoss and 0 or 8
     self.enemyKinds[id] = isBoss and "Boss" or "Drone"
     actor.castRequestedKind=kind~='Boss' and kind or nil
+    local shadow=shadowPlacement(self.config.Level,id,kind)
+    if kind=='Scuzz' or shadow then
+        for _,part in ipairs(actor.model:GetDescendants()) do
+            if part:IsA('BasePart') then part.Transparency=1 end
+        end
+        actor.castRequestedKind=nil
+        if shadow then
+            actor.shadowCloud=ShadowCloudModel.attach(actor.model,actor.root)
+            ImportedSkin.attach('ShadowCloud',actor.shadowCloud,actor.root)
+            actor.model:SetAttribute('VisualName','ShadowCloud')
+            actor.model:SetAttribute('SourceType',0x62)
+            actor.model:SetAttribute('SourceGfx',0xBD)
+        else
+            actor.scuzz=ScuzzModel.attach(actor.model,actor.root,3)
+            ImportedSkin.attach('Scuzz',actor.scuzz.model,actor.root,CFrame.new(0,-3,0))
+            actor.model:SetAttribute('SourceType',0x47)
+        end
+    end
     local importedCast=self.castAppearance and actor.castRequestedKind and self.castAppearance.attach(actor,kind)
-    if importedCast then
+    if importedCast or actor.scuzz or actor.shadowCloud then
         actor.model:SetAttribute('BossKind',campaignBoss and kind or nil)
     elseif self.campaignWorld and self.campaignWorldType.decorateActor and (campaignBoss or not speciesNames[kind]) then
         self.campaignWorldType.decorateActor(actor,kind)
@@ -9638,7 +9750,7 @@ function World:spawnEnemy(id, kind, positionTable)
         if not imported then boss(actor) end
     else drone(actor, kind) end
     local labelHeight=kind=="Walker" and 8.2 or (isBoss and 7.6 or 4.5)
-    actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
+    actor.healthLabel = label(actor.root, "РІв„ўТђ РІв„ўТђ РІв„ўТђ", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
     -- The species art changes the assembly after BaseWorld pinned its basic rig.
@@ -10019,8 +10131,8 @@ function World:enemyHealth(id, raw, maximum)
             return
         end
         local symbols = {}
-        for n = 1, 3 do symbols[n] = n &lt;= hearts and "♥" or "♡" end
-        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  ·  " or "") .. table.concat(symbols, " ")
+        for n = 1, 3 do symbols[n] = n &lt;= hearts and "РІв„ўТђ" or "РІв„ўРЋ" end
+        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  Р’В·  " or "") .. table.concat(symbols, " ")
     end
 end
 
@@ -10080,7 +10192,7 @@ function World:stage(name)
     if self.config.Level then
         local open = name == "Exit" or name == "Won"
         gateState(self.exitGate, open)
-        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or (open and "EXIT  →  STAND ON THE SEAL" or "CAUSEWAY GUARDIAN")
+        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or (open and "EXIT  РІвЂ вЂ™  STAND ON THE SEAL" or "CAUSEWAY GUARDIAN")
         self.exitGate.label.TextColor3 = open and COLORS.mint or COLORS.amber
         self.exitPad.Transparency = open and .12 or .78
         return
@@ -10097,11 +10209,11 @@ function World:stage(name)
         gate.label.TextTransparency = open and 0.65 or 0
     end
     if name == "Exit" or name == "Won" then
-        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or "EXIT  →  STAND ON THE SEAL"
+        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or "EXIT  РІвЂ вЂ™  STAND ON THE SEAL"
         self.exitGate.label.TextColor3 = COLORS.mint
         self.exitGate.label.TextTransparency = 0
     else
-        self.exitGate.label.Text = "III  ·  CAUSEWAY GUARDIAN"
+        self.exitGate.label.Text = "III  Р’В·  CAUSEWAY GUARDIAN"
         self.exitGate.label.TextColor3 = Color3.fromRGB(226, 244, 211)
     end
     self.exitPad.Transparency = progress &gt;= 3 and 0.12 or 0.78
@@ -10115,7 +10227,11 @@ function World:atExit(heroId)
         and p.X &gt;= 108 and math.abs(p.Z) &lt;= 10
 end
 
-function World:projectile(id, positionTable, reflected, mode)
+function World:campaignAirImpact(id)
+    if self.campaignWorld then self.campaignWorld:airImpact(id) end
+end
+
+function World:projectile(id, positionTable, reflected, mode, shadowGas)
     if type(id) ~= "number" or id &gt; -1000 or not positionTable then return false end
     local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z) + self.offset
     local a = self.actors[id]
@@ -10149,6 +10265,11 @@ function World:projectile(id, positionTable, reflected, mode)
     if mode=='StolenLife' or mode=='ReturningLife' then color,size=COLORS.mint,1.2
     elseif mode=='RavenClaw' then color,size=Color3.fromRGB(230,218,176),1.3
     elseif mode=='DeadRaven' then color,size=Color3.fromRGB(40,43,68),2 end
+    if mode=='GasCloud' and shadowGas and self.actors[shadowGas] and self.actors[shadowGas].shadowCloud and not a.shadowGas then
+        a.shadowGas=ShadowCloudModel.attachGas(a.model,a.root)
+        a.root.Transparency=1
+        a.halo.Transparency=1
+    end
     a.root.CFrame = CFrame.new(p)
     a.halo.CFrame = CFrame.new(p)
     a.root.Size = Vector3.new(size, size, size)
@@ -10165,7 +10286,7 @@ function World:projectile(id, positionTable, reflected, mode)
     a.model:SetAttribute("Pickup", mode == "Ground")
     a.model:SetAttribute("Carried", mode == "Carried")
     if mode == "Ground" and not a.pickupLabel then
-        a.pickupLabel = label(a.root, "BALL  ·  PICK UP", 190, Vector3.new(0, 2.7, 0))
+        a.pickupLabel = label(a.root, "BALL  Р’В·  PICK UP", 190, Vector3.new(0, 2.7, 0))
         a.pickupLabel.TextColor3 = Color3.fromRGB(255, 220, 71)
     end
     if a.pickupLabel then a.pickupLabel.Parent.Enabled = mode == "Ground" end
@@ -10338,7 +10459,7 @@ function World:clubItem(id, position)
     if not item then
         item = clubArt(self.clubItemFolder,'ClubItem_'..tostring(id),frame)
         item.model:SetAttribute('ClubId',id)
-        local text=label(item.root,"CLUB  ·  PICK UP",190,Vector3.new(0,1.4,0))
+        local text=label(item.root,"CLUB  Р’В·  PICK UP",190,Vector3.new(0,1.4,0))
         text.TextColor3,text.TextSize,text.Parent.MaxDistance=COLORS.mint,14,45
         pointLight(item.root,COLORS.mint,7,.4)
         self.clubItems[id]=item
@@ -10458,7 +10579,7 @@ function World:healingFly(id, position)
             Enum.PartType.Ball, Enum.Material.ForceField)
         aura.Transparency = .84
         pointLight(fly.root, COLORS.mint, 7, .55)
-        local text = label(fly.root, "FLY  ·  HEAL", 170, Vector3.new(0,1.6,0))
+        local text = label(fly.root, "FLY  Р’В·  HEAL", 170, Vector3.new(0,1.6,0))
         text.TextSize = 13
         text.TextColor3 = COLORS.mint
         text.Parent.MaxDistance = 38
@@ -10775,6 +10896,45 @@ function World:updatePresentation(session, dt, enemies, director)
     if self.guardianAppearance then
         for id,actor in pairs(self.actors) do
             if self.enemyKinds[id]=='Boss' then self.guardianAppearance.update(actor,self.presentationTime) end
+        end
+    end
+    for id,actor in pairs(self.actors) do
+        if actor.scuzz or actor.shadowCloud then
+            local machine=director and director.campaignEnemies
+            local state=machine and machine.states[id]
+            local attack=state and state.attack
+            local enemy=enemies and enemies[id]
+            local now=session.now
+            local clip=actor.shadowCloud and 'HoverIdle' or 'IdleAlert'
+            local phase=(now+math.abs(id)*.17)%1
+            if enemy and enemy.dead then
+                actor.modelDefeatedAt=actor.modelDefeatedAt or now
+                phase=math.clamp((now-actor.modelDefeatedAt)/.6,0,1)
+                clip=actor.shadowCloud and 'Defeat' or 'DeathGround'
+            elseif enemy and enemy.reactionUntil then
+                clip=enemy.heavyReaction and (actor.shadowCloud and 'HitHeavy' or 'ReactHeavyGround') or (actor.shadowCloud and 'HitLight' or 'ReactLight')
+                phase=math.clamp(1-(enemy.reactionUntil-now)/.5,0,1)
+            elseif attack and state.mode~='Ready' then
+                if state.mode=='Recovery' then
+                    clip=actor.shadowCloud and 'GasRecover' or 'Recover'
+                    phase=math.clamp((now-attack.untilAt)/attack.move.recovery,0,1)
+                elseif state.mode=='Tell' then
+                    clip=actor.shadowCloud and 'GasTell' or attack.name
+                    phase=math.clamp(1-(attack.at-now)/attack.move.tell,0,1)
+                    if actor.scuzz then phase*=.45 end
+                else
+                    clip=actor.shadowCloud and 'GasRelease' or attack.name
+                    phase=math.clamp((now-attack.at)/attack.move.active,0,1)
+                    if actor.scuzz then phase=.45+.55*phase end
+                end
+            elseif actor.scuzz and actor.root.AssemblyLinearVelocity.Magnitude&gt;1 then
+                clip='GroupAdvance'
+            end
+            if actor.shadowCloud then ShadowCloudModel.pose(actor.shadowCloud,clip,phase)
+            else
+                actor.scuzz.pose(clip,phase)
+                ImportedSkin.poseScuzz(actor.scuzz.model)
+            end
         end
     end
     if self.castAppearance then
@@ -13384,7 +13544,751 @@ return WalkerClubs
 </ProtectedString>
           </Properties>
         </Item>
-      </Item>
+      <Item class="ModuleScript" referent="BTModelImportedModelSkin"><Properties><string name="Name">ImportedModelSkin</string><ProtectedString name="Source">-- Approved imported geometry follows the existing cosmetic rig. The native visual
+-- is available immediately, including when Roblox cannot deliver an asset.
+local Skin={}
+local ids={RatPod=138389972582010,Meteorite=85366635220573,ShadowCloud=112664563553810,Scuzz=71192236028656}
+-- The importer exposes these texture IDs to Studio. Client scripts use replicated
+-- attributes because SurfaceAppearance map properties require plugin capability.
+local maps={
+    Meteorite={ColorMap='rbxassetid://133369040010732',NormalMap='rbxassetid://76136314086327',RoughnessMap='rbxassetid://126733848963981',MetalnessMap='rbxassetid://100717397125338'},
+    ShadowCloud={ColorMap='rbxassetid://137907337698025',NormalMap='rbxassetid://73205988271170',RoughnessMap='rbxassetid://121490698526750',MetalnessMap='rbxassetid://103765965764002'},
+    RatPod={ColorMap='rbxassetid://135968660458783',NormalMap='rbxassetid://127500140879129',RoughnessMap='rbxassetid://104217843500156',MetalnessMap='rbxassetid://106011624259326'},
+    Scuzz={ColorMap='rbxassetid://114193305944650',NormalMap='rbxassetid://87325461063443',RoughnessMap='rbxassetid://117514331356982',MetalnessMap='rbxassetid://103765965764002'},
+}
+local cache,loading={},{}
+local function load(kind)
+    if cache[kind] then return cache[kind] end
+    if loading[kind] then
+        loading[kind].Event:Wait()
+        return cache[kind]
+    end
+    local signal=Instance.new('BindableEvent')
+    loading[kind]=signal
+    local ok,asset=pcall(function() return game:GetService('InsertService'):LoadAsset(ids[kind]) end)
+    if ok then cache[kind]=asset end
+    loading[kind]=nil
+    signal:Fire()
+    task.defer(function() signal:Destroy() end)
+    return cache[kind]
+end
+
+local flip=CFrame.Angles(0,math.pi,0)
+function Skin.attach(kind,visual,anchor,origin)
+    task.spawn(function()
+        local source=load(kind)
+        if not source or not visual.Parent or not anchor.Parent then return end
+        local expected=({RatPod=4,Meteorite=2,Scuzz=1,ShadowCloud=10})[kind]
+        local pieces={}
+        for _,v in ipairs(source:GetDescendants()) do
+            if v:IsA('MeshPart') then table.insert(pieces,v) end
+        end
+        if #pieces~=expected then return end
+        local imported=Instance.new('Model')
+        imported.Name='ImportedGeometry'
+        local scale=(kind=='RatPod' or kind=='Meteorite') and 1/.28 or 1
+        local basis=(origin or CFrame.identity)*flip
+        local boneRows={}
+        for _,ref in ipairs(pieces) do
+            local target=kind=='ShadowCloud' and visual:FindFirstChild(ref.Name) or anchor
+            if not target then imported:Destroy();return end
+            local part=ref:Clone()
+            for _,v in ipairs(part:GetDescendants()) do
+                if v:IsA('JointInstance') or v:IsA('Constraint') or v:IsA('BaseScript') then v:Destroy() end
+            end
+            part.Size=ref.Size*scale
+            local point=ref.CFrame
+            local localFrame=basis*CFrame.new(point.Position*scale)*point.Rotation
+            part.CFrame=anchor.CFrame*localFrame
+            part.Anchored=false;part.Massless=true
+            part.CanQuery=false;part.CanCollide=false;part.CanTouch=false
+            if kind=='Scuzz' then
+                for _,bone in ipairs(part:GetDescendants()) do
+                    if bone:IsA('Bone') then
+                        local rest=bone.CFrame
+                        bone.CFrame=CFrame.new(rest.Position*scale)*rest.Rotation
+                        local hub=visual:FindFirstChild(bone.Name)
+                        local motor=hub and hub:FindFirstChild(bone.Name..'Motor')
+                        if motor then
+                            table.insert(boneRows,{bone=bone,rest=bone.CFrame,motor=motor,neutral=motor:GetAttribute('SkinNeutral') or motor.C0,
+                                axes=basis.Rotation*ref:FindFirstChild(bone.Name,true).WorldCFrame.Rotation})
+                        end
+                    end
+                end
+            end
+            local joint=Instance.new('Weld');joint.Part0=target;joint.Part1=part
+            if kind=='ShadowCloud' then
+                local frame=CFrame.identity
+                local driver=target
+                while driver~=anchor do
+                    local motor=driver:FindFirstChild(driver.Name..'Joint')
+                    if not motor then imported:Destroy();return end
+                    frame=(motor:GetAttribute('Rest') or motor.C0)*frame
+                    driver=motor.Part0
+                end
+                joint.C0=frame:ToObjectSpace(localFrame)
+            else
+                joint.C0=localFrame
+            end
+            joint.Parent=part
+            part.Parent=imported
+        end
+        if kind=='Scuzz' and #boneRows~=14 then imported:Destroy();return end
+        local skinId=game:GetService('HttpService'):GenerateGUID(false)
+        visual:SetAttribute('CastAppearance','CanonicalNESCast')
+        imported:SetAttribute('CanonicalCastSkin',true)
+        imported:SetAttribute('CastSkinId',skinId)
+        imported:SetAttribute('PreloadMaterialMaps',true)
+        for name,content in pairs(maps[kind]) do imported:SetAttribute(name,content) end
+        for _,mesh in ipairs(imported:GetChildren()) do
+            mesh:SetAttribute('CastVisibleTransparency',mesh.Transparency)
+        end
+        for _,part in ipairs(visual:GetDescendants()) do
+            if part:IsA('BasePart') and part.Transparency&lt;1 then
+                part:SetAttribute('CastFallbackOwner',skinId)
+                part:SetAttribute('CastFallbackTransparency',part.Transparency)
+                local ref=Instance.new('ObjectValue')
+                ref.Name='CastFallbackTarget';ref.Value=part;ref.Parent=imported
+            end
+        end
+        imported.Parent=visual
+        game:GetService('CollectionService'):AddTag(imported,'BrickToadsCastSkin')
+        visual:SetAttribute('ImportedModelId',ids[kind])
+        if kind=='Scuzz' then Skin.bones[visual]=boneRows end
+    end)
+end
+
+Skin.bones=setmetatable({},{__mode='k'})
+function Skin.poseScuzz(visual)
+    for _,row in ipairs(Skin.bones[visual] or {}) do
+        local delta=row.neutral:ToObjectSpace(row.motor.C0)
+        row.bone.CFrame=row.rest*row.axes:Inverse()*delta*row.axes
+    end
+end
+return Skin
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="BTModelScuzzModel"><Properties><string name="Name">ScuzzModel</string><ProtectedString name="Source">-- BT-88. Articulated local-asset fallback for the common group rat.
+-- Regenerate these tables with assets/models/Scuzz/runtime_data.py.
+local V = Vector3.new
+local colors = {
+    ember = Color3.fromRGB(183, 83, 26),
+    gold = Color3.fromRGB(223, 126, 43),
+    cream = Color3.fromRGB(250, 181, 84),
+    shade = Color3.fromRGB(126, 56, 29),
+    mane = Color3.fromRGB(37, 29, 28),
+    black = Color3.fromRGB(22, 22, 25),
+    inner = Color3.fromRGB(173, 86, 64),
+    tooth = Color3.fromRGB(254, 225, 166),
+    eye = Color3.fromRGB(248, 190, 70),
+}
+local pivots = {
+    {"Pelvis", "", V(0, 1.28, 0.23)},
+    {"Chest", "Pelvis", V(0, 1.94, 0.18)},
+    {"Head", "Chest", V(0, 2.97, 0.09)},
+    {"Jaw", "Head", V(0, 3.28, -0.34)},
+    {"Arm_L", "Chest", V(-0.4, 2.71, 0.13)},
+    {"Elbow_L", "Arm_L", V(-0.78, 2.23, 0.24)},
+    {"Hand_L", "Elbow_L", V(-0.77, 2.29, -0.34)},
+    {"Leg_L", "Pelvis", V(-0.37, 1.53, 0.23)},
+    {"Foot_L", "Leg_L", V(-0.63, 0.33, 0.48)},
+    {"Arm_R", "Chest", V(0.4, 2.71, 0.13)},
+    {"Elbow_R", "Arm_R", V(0.78, 2.23, 0.24)},
+    {"Hand_R", "Elbow_R", V(0.77, 2.29, -0.34)},
+    {"Leg_R", "Pelvis", V(0.37, 1.53, 0.23)},
+    {"Foot_R", "Leg_R", V(0.63, 0.33, 0.48)},
+}
+local sockets = {
+    {"MuzzleAim", "Head", V(0, 3.32, -1.56)},
+    {"StrikeOrigin", "Hand_R", V(0.78, 1.99, -0.58)},
+    {"JumpCenter", "Pelvis", V(0, 1.45, 0.21)},
+    {"VfxHit", "Chest", V(0, 2.49, 0.08)},
+    {"Ground_L", "Foot_L", V(-0.62, 0.015, -0.32)},
+    {"Ground_R", "Foot_R", V(0.62, 0.015, -0.32)},
+}
+-- Each section spans a start and end point with a transverse width and depth.
+local shapes = {
+    {"Haunch", "Pelvis", "ember", V(0, 0.76, 0.22), V(0, 2.15, 0.21), 1.24, 0.94, false},
+    {"Mantle", "Chest", "gold", V(0, 1.65, 0.23), V(0, 3.08, 0.03), 1.06, 0.78, false},
+    {"Bib", "Chest", "cream", V(0, 1.6855, -0.0406), V(0, 2.7789, -0.1599), 0.64, 0.34, false},
+    {"Skull", "Head", "gold", V(0, 2.994, 0.1892), V(0, 3.7792, 0.0302), 0.98, 0.86, false},
+    {"Bridge", "Head", "gold", V(0, 3.48, -0.13), V(0, 3.31, -1.1), 0.9, 0.62, false},
+    {"Snout", "Head", "gold", V(0, 3.39, -0.78), V(0, 3.31, -1.38), 0.7, 0.4, false},
+    {"Nose", "Head", "black", V(0, 3.3002, -1.3511), V(0, 3.35, -1.5698), 0.29, 0.214, false},
+    {"Mouth", "Jaw", "shade", V(0, 3.23, -0.3345), V(0, 3.23, -1.2191), 0.62, 0.22, false},
+    {"Chin", "Jaw", "cream", V(0, 3.1502, -0.3439), V(0, 3.2, -1.1192), 0.56, 0.2, false},
+    {"Crown0", "Head", "mane", V(-0.2, 3.69, 0.03), V(-0.12, 4.46, 0.59), 0.28, 0.32, true},
+    {"Crown1", "Head", "mane", V(-0.1, 3.69, 0.03), V(-0.06, 4.31, 0.87), 0.34, 0.32, true},
+    {"Crown2", "Head", "mane", V(0.04, 3.69, 0.03), V(0.07, 4.14, 0.96), 0.32, 0.32, true},
+    {"Crown3", "Head", "mane", V(0.19, 3.69, 0.03), V(0.28, 4.28, 0.66), 0.24, 0.32, true},
+    {"Crown4", "Head", "mane", V(0.27, 3.69, 0.03), V(0.41, 4.09, 0.53), 0.2, 0.32, true},
+    {"Spine0", "Chest", "shade", V(0, 2.76, 0.39), V(0, 2.4, 0.73), 0.34, 0.24, true},
+    {"Spine1", "Chest", "shade", V(0, 2.48, 0.39), V(0, 2.12, 0.73), 0.34, 0.24, true},
+    {"Spine2", "Chest", "shade", V(0, 2.2, 0.39), V(0, 1.84, 0.73), 0.34, 0.24, true},
+    {"Spine3", "Chest", "shade", V(0, 1.92, 0.39), V(0, 1.56, 0.73), 0.34, 0.24, true},
+    {"ThighL", "Leg_L", "gold", V(-0.3915, 1.5256, 0.2983), V(-0.6797, 0.6609, -0.0496), 0.76, 0.76, false},
+    {"HockL", "Leg_L", "ember", V(-0.6599, 0.8275, -0.0076), V(-0.63, 0.3305, 0.4795), 0.48, 0.44, false},
+    {"FootL", "Foot_L", "gold", V(-0.6102, 0.2695, 0.5345), V(-0.65, 0.1701, -0.5689), 0.62, 0.368, false},
+    {"ToeL0", "Foot_L", "cream", V(-0.4702, 0.1697, -0.2423), V(-0.505, 0.1081, -0.7095), 0.202, 0.184, false},
+    {"ToeL1", "Foot_L", "cream", V(-0.6402, 0.1697, -0.2428), V(-0.675, 0.1081, -0.7994), 0.202, 0.184, false},
+    {"ToeL2", "Foot_L", "cream", V(-0.8102, 0.1697, -0.2423), V(-0.845, 0.1081, -0.7095), 0.202, 0.184, false},
+    {"ShoulderL", "Arm_L", "gold", V(-0.4019, 2.7076, 0.1305), V(-0.7796, 2.2305, 0.2399), 0.5, 0.49, false},
+    {"ForearmL", "Elbow_L", "ember", V(-0.78, 2.2303, 0.2371), V(-0.77, 2.2899, -0.3394), 0.332, 0.36, false},
+    {"KnucklesL", "Hand_L", "gold", V(-0.7701, 2.2895, -0.3411), V(-0.79, 2.1901, -0.5498), 0.316, 0.28, false},
+    {"DigitL0", "Hand_L", "cream", V(-0.68, 2.24, -0.44), V(-0.708, 1.99, -0.5), 0.104, 0.11, true},
+    {"DigitL1", "Hand_L", "cream", V(-0.77, 2.24, -0.44), V(-0.798, 2.004, -0.5), 0.104, 0.11, true},
+    {"DigitL2", "Hand_L", "cream", V(-0.86, 2.24, -0.44), V(-0.888, 2.018, -0.5), 0.104, 0.11, true},
+    {"EarL", "Head", "ember", V(-0.3807, 3.4121, 0.1703), V(-0.5199, 3.8296, 0.2299), 0.32, 0.28, false},
+    {"EarCupL", "Head", "inner", V(-0.4805, 3.5112, 0.1103), V(-0.5749, 3.7597, 0.16), 0.184, 0.15, false},
+    {"EyeRimL", "Head", "shade", V(-0.3253, 3.4408, -0.6387), V(-0.3829, 3.5998, -0.3803), 0.254, 0.224, false},
+    {"EyeL", "Head", "eye", V(-0.3523, 3.4606, -0.629), V(-0.4069, 3.5699, -0.4302), 0.216, 0.174, false},
+    {"PupilL", "Head", "black", V(-0.4101, 3.4705, -0.5898), V(-0.425, 3.5699, -0.55), 0.098, 0.102, false},
+    {"BrowL", "Head", "mane", V(-0.31, 3.52, -0.74), V(-0.5, 3.76, -0.14), 0.188, 0.156, true},
+    {"CheekL0", "Head", "ember", V(-0.33, 3.55, -0.06), V(-0.53, 3.42, 0.47), 0.18, 0.28, true},
+    {"CheekL2", "Head", "ember", V(-0.33, 3.29, -0.06), V(-0.53, 3.16, 0.47), 0.18, 0.28, true},
+    {"WhiskerL1", "Head", "mane", V(-0.11, 3.31, -1.3), V(-0.53, 3.294, -1.185), 0.024, 0.024, false},
+    {"RuffL1", "Chest", "ember", V(-0.34, 2.49, 0.13), V(-0.55, 2.21, 0.41), 0.21, 0.2, true},
+    {"ThighR", "Leg_R", "gold", V(0.3915, 1.5256, 0.2983), V(0.6797, 0.6609, -0.0496), 0.76, 0.76, false},
+    {"HockR", "Leg_R", "ember", V(0.6599, 0.8275, -0.0076), V(0.63, 0.3305, 0.4795), 0.48, 0.44, false},
+    {"FootR", "Foot_R", "gold", V(0.6102, 0.2695, 0.5345), V(0.65, 0.1701, -0.5689), 0.62, 0.368, false},
+    {"ToeR0", "Foot_R", "cream", V(0.4702, 0.1697, -0.2423), V(0.505, 0.1081, -0.7095), 0.202, 0.184, false},
+    {"ToeR1", "Foot_R", "cream", V(0.6402, 0.1697, -0.2428), V(0.675, 0.1081, -0.7994), 0.202, 0.184, false},
+    {"ToeR2", "Foot_R", "cream", V(0.8102, 0.1697, -0.2423), V(0.845, 0.1081, -0.7095), 0.202, 0.184, false},
+    {"ShoulderR", "Arm_R", "gold", V(0.4019, 2.7076, 0.1305), V(0.7796, 2.2305, 0.2399), 0.5, 0.49, false},
+    {"ForearmR", "Elbow_R", "ember", V(0.78, 2.2303, 0.2371), V(0.77, 2.2899, -0.3394), 0.332, 0.36, false},
+    {"KnucklesR", "Hand_R", "gold", V(0.7701, 2.2895, -0.3411), V(0.79, 2.1901, -0.5498), 0.316, 0.28, false},
+    {"DigitR0", "Hand_R", "cream", V(0.68, 2.24, -0.44), V(0.708, 1.99, -0.5), 0.104, 0.11, true},
+    {"DigitR1", "Hand_R", "cream", V(0.77, 2.24, -0.44), V(0.798, 2.004, -0.5), 0.104, 0.11, true},
+    {"DigitR2", "Hand_R", "cream", V(0.86, 2.24, -0.44), V(0.888, 2.018, -0.5), 0.104, 0.11, true},
+    {"EarR", "Head", "ember", V(0.3807, 3.4121, 0.1703), V(0.5199, 3.8296, 0.2299), 0.32, 0.28, false},
+    {"EarCupR", "Head", "inner", V(0.4805, 3.5112, 0.1103), V(0.5749, 3.7597, 0.16), 0.184, 0.15, false},
+    {"EyeRimR", "Head", "shade", V(0.3253, 3.4408, -0.6387), V(0.3829, 3.5998, -0.3803), 0.254, 0.224, false},
+    {"EyeR", "Head", "eye", V(0.3523, 3.4606, -0.629), V(0.4069, 3.5699, -0.4302), 0.216, 0.174, false},
+    {"PupilR", "Head", "black", V(0.4101, 3.4705, -0.5898), V(0.425, 3.5699, -0.55), 0.098, 0.102, false},
+    {"BrowR", "Head", "mane", V(0.31, 3.52, -0.74), V(0.5, 3.76, -0.14), 0.188, 0.156, true},
+    {"CheekR0", "Head", "ember", V(0.33, 3.55, -0.06), V(0.53, 3.42, 0.47), 0.18, 0.28, true},
+    {"CheekR2", "Head", "ember", V(0.33, 3.29, -0.06), V(0.53, 3.16, 0.47), 0.18, 0.28, true},
+    {"WhiskerR1", "Head", "mane", V(0.11, 3.31, -1.3), V(0.53, 3.294, -1.185), 0.024, 0.024, false},
+    {"RuffR1", "Chest", "ember", V(0.34, 2.49, 0.13), V(0.55, 2.21, 0.41), 0.21, 0.2, true},
+}
+local poses = {
+    Appear = {Pelvis = V(-12, 0, 0), Head = V(12, 13, 0), Arm_L = V(-31, 0, -20)},
+    IdleAlert = {Chest = V(-4, 0, 0), Head = V(4, 10, -4), Jaw = V(5, 0, 0)},
+    Step = {Leg_L = V(22, 0, 0), Leg_R = V(-22, 0, 0), Arm_L = V(-20, 0, 0), Arm_R = V(20, 0, 0), Foot_L = V(-12, 0, 0), Foot_R = V(12, 0, 0)},
+    GroupAdvance = {Chest = V(-10, 0, 0), Leg_L = V(28, 0, 0), Leg_R = V(-28, 0, 0), Arm_L = V(-26, 0, 0), Arm_R = V(26, 0, 0), Head = V(4, -12, 0)},
+    Turn = {Pelvis = V(0, 16, 0), Chest = V(0, 20, 0), Head = V(0, 19, 0), Leg_R = V(12, 0, 0)},
+    Hop = {Chest = V(-14, 0, 0), Leg_L = V(-32, 0, 0), Leg_R = V(-32, 0, 0), Arm_L = V(-31, 0, -12), Arm_R = V(-31, 0, 12)},
+    Fall = {Head = V(14, 0, 0), Arm_L = V(8, 0, -41), Arm_R = V(8, 0, 41), Leg_L = V(20, 0, 0), Leg_R = V(-12, 0, 0)},
+    Land = {Chest = V(-26, 0, 0), Leg_L = V(-27, 0, 0), Leg_R = V(-27, 0, 0), Head = V(19, 0, 0)},
+    Attack66 = {Chest = V(-19, -24, 0), Arm_R = V(64, -12, 14), Elbow_R = V(31, 0, 0), Arm_L = V(-30, 0, 0), Head = V(13, 18, 0), Jaw = V(15, 0, 0)},
+    Attack68 = {Chest = V(-24, 8, 0), Arm_L = V(47, 0, -24), Arm_R = V(47, 0, 24), Leg_L = V(-30, 0, 0), Leg_R = V(-42, 0, 0), Head = V(16, 0, 0), Jaw = V(21, 0, 0)},
+    Recover = {Chest = V(10, 11, 0), Arm_R = V(-20, 0, 0), Head = V(-8, -7, 0)},
+    ReactLight = {Head = V(19, 12, -9), Chest = V(12, 0, 0), Arm_L = V(-15, 0, -22)},
+    ReactHeavyGround = {Pelvis = V(-85, 0, -8), Chest = V(-5, 0, 0), Head = V(59, 0, 0), Arm_L = V(29, 0, -24), Arm_R = V(29, 0, 24)},
+    HeavyRecover = {Pelvis = V(-85, 0, -8), Chest = V(-5, 0, 0), Head = V(59, 0, 0), Arm_L = V(29, 0, -24), Arm_R = V(29, 0, 24)},
+    DeathAir = {Pelvis = V(24, 9, 30), Chest = V(19, 0, 0), Arm_L = V(-26, 0, -48), Arm_R = V(23, 0, 37)},
+    DeathGround = {Pelvis = V(2, 0, 77), Chest = V(21, 0, 0), Head = V(-13, 0, -7), Leg_R = V(21, 0, 0)},
+    Remove = {Pelvis = V(2, 0, 77), Chest = V(21, 0, 0), Head = V(-13, 0, -7), Leg_R = V(21, 0, 0)},
+}
+local envelopes = {
+    Appear = {{0, 0}, {0.5, 1}, {1, 0}},
+    IdleAlert = {{0, 0}, {0.25, 1}, {0.5, 0}, {0.75, -1}, {1, 0}},
+    Step = {{0, 0}, {0.25, 1}, {0.5, 0}, {0.75, -1}, {1, 0}},
+    GroupAdvance = {{0, 0}, {0.25, 1}, {0.5, 0}, {0.75, -1}, {1, 0}},
+    Turn = {{0, 0}, {0.5, 1}, {1, 0}},
+    Hop = {{0, 0}, {0.5, 1}, {1, 0}},
+    Fall = {{0, 0}, {0.5, 1}, {1, 0}},
+    Land = {{0, 0}, {0.5, 1}, {1, 0}},
+    Attack66 = {{0, 0}, {0.1905, -0.32}, {0.381, 1}, {0.5714, 0.18}, {0.7619, 0.9}, {1, 0}},
+    Attack68 = {{0, 0}, {0.2083, -0.48}, {0.4583, 1}, {0.7083, 0.64}, {1, 0}},
+    Recover = {{0, 0}, {0.5, 1}, {1, 0}},
+    ReactLight = {{0, 0}, {0.5, 1}, {1, 0}},
+    ReactHeavyGround = {{0, 0}, {0.4667, 1}, {1, 1}},
+    HeavyRecover = {{0, 1}, {0.4, 0.7}, {1, 0}},
+    DeathAir = {{0, 0}, {0.4667, 1}, {1, 1}},
+    DeathGround = {{0, 0}, {0.4667, 1}, {1, 1}},
+    Remove = {{0, 1}, {1, 1}},
+}
+local floorTracks = {
+    Appear = {0.0016, 0.0156, 0.0445, 0.0728, 0.0995, 0.1246, 0.148, 0.1246, 0.0995, 0.0728, 0.0445, 0.0156, 0.0016},
+    IdleAlert = {0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016},
+    Step = {0.0016, 0.0002, 0.0088, 0.0142, 0.0146, 0.0101, 0.001, 0.0101, 0.0146, 0.0142, 0.0088, 0.0002, 0.0016, 0.0005, 0.0091, 0.0145, 0.015, 0.0106, 0.0014, 0.0106, 0.015, 0.0145, 0.0091, 0.0005, 0.0016},
+    GroupAdvance = {0.0016, 0.053, 0.1127, 0.1617, 0.1997, 0.2339, 0.2568, 0.2339, 0.1997, 0.1617, 0.1127, 0.053, 0.0016, 0.0533, 0.1131, 0.1623, 0.2004, 0.2343, 0.2572, 0.2343, 0.2004, 0.1623, 0.1131, 0.0533, 0.0016},
+    Turn = {0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016},
+    Hop = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    Fall = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    Land = {0.0016, 0.051, 0.1092, 0.1575, 0.1957, 0.2289, 0.2533, 0.2289, 0.1957, 0.1575, 0.1092, 0.051, 0.0016},
+    Attack66 = {0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016},
+    Attack68 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    Recover = {0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016},
+    ReactLight = {0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016, 0.0016},
+    ReactHeavyGround = {0.0016, 0.1624, 0.2875, 0.3554, 0.3526, 0.2859, 0.1537, -0.0367, -0.0367, -0.0367, -0.0367, -0.0367, -0.0367, -0.0367, -0.0367, -0.0367},
+    HeavyRecover = {-0.0367, 0.0358, 0.1021, 0.1617, 0.2141, 0.2588, 0.2956, 0.3366, 0.3585, 0.3616, 0.3436, 0.3047, 0.2453, 0.1754, 0.0881, 0.0016},
+    DeathAir = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    DeathGround = {0.0016, 0.1191, 0.2111, 0.25, 0.2346, 0.1742, 0.0668, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876},
+    Remove = {-0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876, -0.0876},
+}
+-- END SCULPT DATA
+
+local Scuzz = {}
+
+local function cosmetic(kind, name, parent)
+    local part = Instance.new(kind)
+    part.Name = name
+    part.Anchored = false
+    part.Massless = true
+    part.CanCollide = false
+    part.CanTouch = false
+    part.CanQuery = false
+    part.Parent = parent
+    return part
+end
+
+local function poseAmount(clip, t)
+    local keys = envelopes[clip]
+    if not keys then return 0 end
+    for index = 2, #keys do
+        local prior, nextKey = keys[index - 1], keys[index]
+        if t &lt;= nextKey[1] then
+            local alpha = (t - prior[1]) / (nextKey[1] - prior[1])
+            return prior[2] + alpha * (nextKey[2] - prior[2])
+        end
+    end
+    return keys[#keys][2]
+end
+
+local function floorHeight(clip, progress)
+    local track = floorTracks[clip]
+    if not track then return 0 end
+    local frame = 1 + progress * (#track - 1)
+    local first = math.floor(frame)
+    local prior = track[first]
+    return prior + ((track[first + 1] or prior) - prior) * (frame - first)
+end
+
+function Scuzz.attach(parent, anchor, groundOffset)
+    local model = Instance.new("Model")
+    model.Name = "ScuzzVisual"
+    local floor = CFrame.new(0, -(groundOffset or 2.25), 0)
+    local parts, origins, joints, rest = {}, {}, {}, {}
+    for _, entry in ipairs(pivots) do
+        local name, owner, pivot = table.unpack(entry)
+        local hub = cosmetic("Part", name, model)
+        hub.Size = V(0.05, 0.05, 0.05)
+        hub.Transparency = 1
+        hub.CastShadow = false
+        hub.CFrame = anchor.CFrame * floor * CFrame.new(pivot)
+        local joint = Instance.new("Motor6D")
+        joint.Name = name .. "Motor"
+        joint.Part0 = parts[owner] or anchor
+        joint.Part1 = hub
+        joint.C0 = if parts[owner] then CFrame.new(pivot - origins[owner]) else floor * CFrame.new(pivot)
+        joint:SetAttribute('SkinNeutral',joint.C0)
+        joint.Parent = hub
+        parts[name], origins[name], joints[name], rest[name] = hub, pivot, joint, joint.C0
+    end
+    for _, entry in ipairs(shapes) do
+        local name, bone, shade, start, finish, width, depth, tapered = table.unpack(entry)
+        local limb = parts[bone]
+        local part = cosmetic(if tapered then "WedgePart" else "Part", name, model)
+        if not tapered then part.Shape = Enum.PartType.Ball end
+        local axis = (finish - start).Unit
+        local guide = if math.abs(axis.X) &lt; 0.9 then Vector3.xAxis else Vector3.zAxis
+        local right = (guide - axis * guide:Dot(axis)).Unit
+        local back = -axis
+        local center = (start + finish) * 0.5 - origins[bone]
+        local frame = CFrame.fromMatrix(center, right, back:Cross(right), back)
+        part.Size = V(math.max(0.05, width), math.max(0.05, depth), math.max(0.05, (finish - start).Magnitude))
+        part.Color = colors[shade]
+        part.Material = Enum.Material.SmoothPlastic
+        part.CFrame = limb.CFrame * frame
+        local weld = Instance.new("WeldConstraint")
+        weld.Part0 = limb
+        weld.Part1 = part
+        weld.Parent = part
+    end
+    for _, entry in ipairs(sockets) do
+        local name, bone, pivot = table.unpack(entry)
+        local attachment = Instance.new("Attachment")
+        attachment.Name = name
+        attachment.Position = pivot - origins[bone]
+        attachment.Parent = parts[bone]
+    end
+    model.PrimaryPart = parts.Pelvis
+    model.Parent = parent
+    -- The caller owns fallback visibility, animation selection, lifetime and the physical actor.
+    local function pose(clip, phase)
+        local targets = poses[clip] or {}
+        local progress = math.clamp(phase or 0, 0, 1)
+        local amount = poseAmount(clip, progress)
+        for name, joint in pairs(joints) do
+            local offset = if name == "Pelvis" then floorHeight(clip, progress) else 0
+            local angles = (targets[name] or Vector3.zero) * math.rad(amount)
+            joint.C0 = rest[name] * CFrame.new(0, offset, 0) * CFrame.Angles(0, 0, angles.Z) * CFrame.Angles(0, angles.Y, 0) * CFrame.Angles(angles.X, 0, 0)
+        end
+    end
+    return {model = model, pose = pose}
+end
+
+return Scuzz
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="BTModelShadowCloudModel"><Properties><string name="Name">ShadowCloudModel</string><ProtectedString name="Source">-- BT-107. Closed-volume cosmetic fallback for the 0x62 BC/BD gas head.
+local Cloud = {}
+
+-- Local coordinates follow Roblox front (-Z). The lip faces screen right.
+local lobes = {
+    {0.15,1.02,0.23, 3.30,2.06,2.69, 107,143,27},
+    {1.33,0.18,0.12, 2.49,2.60,2.84, 85,126,29},
+    {0.76,-0.97,0.10, 2.53,2.14,2.66, 77,113,27},
+    {-1.28,0.65,0.18, 2.50,2.15,2.73, 112,150,32},
+    {-1.36,-0.88,0.35, 2.24,1.91,2.46, 71,111,24},
+    {0.23,0.02,1.01, 2.93,2.74,1.57, 85,123,29},
+}
+local function ball(model,name,base,offset,size,color,movable)
+    local part = Instance.new("Part")
+    part.Name = name
+    part.Shape = Enum.PartType.Ball
+    part.Size = size
+    part.Color = color
+    part.Material = Enum.Material.SmoothPlastic
+    part.CanCollide, part.CanTouch, part.CanQuery = false,false,false
+    part.Anchored, part.Massless = false,true
+    part.CFrame = base.CFrame * offset
+    part.Parent = model
+    local joint = Instance.new(movable and "Motor6D" or "Weld")
+    joint.Name = name .. "Joint"
+    joint.Part0, joint.Part1, joint.C0 = base,part,offset
+    if movable then joint:SetAttribute("Rest",offset) end
+    joint.Parent = part
+    return part
+end
+
+local mouth = CFrame.new(-1.04,-0.44,-1.32) * CFrame.Angles(0,0,-0.26)
+function Cloud.attach(parent,anchor)
+    local model = Instance.new("Model")
+    model.Name = "ShadowCloud"
+    local core = ball(model,"Core",anchor,CFrame.identity,Vector3.new(4.10,3.45,2.78),Color3.fromRGB(61,92,24),true)
+    model.PrimaryPart = core
+    for i,l in ipairs(lobes) do
+        local lobe = ball(model,"Lobe"..i,core,CFrame.new(l[1],l[2],l[3]),
+            Vector3.new(l[4],l[5],l[6]),Color3.fromRGB(l[7],l[8],l[9]),true)
+        for j = 1,3 do
+            local angle = i*1.7+j*2.09
+            local offset = CFrame.new(math.cos(angle)*l[4]*.28, math.sin(angle)*l[5]*.27, (i==6 and 1 or -1)*l[6]*.30)
+            ball(model,"Fold"..i.."_"..j,lobe,offset,Vector3.new(l[4]*.48,l[5]*.51,l[6]*.46),
+                Color3.fromRGB(l[7]+j*4,l[8]+j*4,l[9]),false)
+        end
+    end
+    local rim = ball(model,"MouthRim",core,mouth,Vector3.new(2.14,2.51,.72),Color3.fromRGB(95,134,24),true)
+    ball(model,"Gullet",rim,CFrame.new(0,0,-.18),Vector3.new(1.71,2.10,.46),Color3.fromRGB(21,32,11),false)
+    ball(model,"Throat",rim,CFrame.new(-.06,.03,-.26),Vector3.new(1.37,1.77,.35),Color3.fromRGB(10,15,8),false)
+    for _,sign in ipairs({-1,1}) do
+        local name = sign==1 and "MouthUpper" or "MouthLower"
+        ball(model,name,rim,CFrame.new(0,sign*1.04,-.12),Vector3.new(1.33,.42,.42),Color3.fromRGB(120,157,28),true)
+    end
+    for _,name in ipairs({"Aim","Mouth","GasOrigin","WindOrigin","HitFX"}) do
+        local socket = Instance.new("Attachment")
+        socket.Name = name
+        socket.Parent = name=="HitFX" and core or rim
+        socket.Position = name=="HitFX" and Vector3.new(0,.8,-1.22) or Vector3.new(0,0,-.55)
+    end
+    model.Parent = parent
+    return model
+end
+
+local function offset(model,name,cf)
+    local part = model:FindFirstChild(name)
+    local joint = part and part:FindFirstChild(name.."Joint")
+    if joint then joint.C0 = joint:GetAttribute("Rest") * cf end
+end
+
+function Cloud.pose(model,clip,phase)
+    local t = math.clamp(phase or 0,0,1)
+    local cycle,accent = math.sin(t*2*math.pi),math.sin(t*math.pi)
+    local squeeze,open,lift,tilt = 0,0,0,0
+    if clip=="GasTell" or clip=="WindTell" then squeeze=t; open=-t
+    elseif clip=="GasRelease" then squeeze=1-t; open=1.3*t
+    elseif clip=="GasRecover" then open=1.3*(1-t)
+    elseif clip=="WindBlow" then open=.8+.2*cycle
+    elseif clip=="WindStop" then open=.8*(1-t)
+    elseif clip=="MouthPulse" then open=accent
+    elseif clip=="TransitionBC" then squeeze=t; open=-t
+    elseif clip=="TransitionBD" then squeeze=1-t; open=t-1
+    elseif clip=="Turn" then tilt=.26*accent
+    elseif clip=="Drift" then lift=.11*cycle; tilt=.08*cycle
+    elseif clip=="HitLight" or clip=="HitHeavy" then tilt=accent*(clip=="HitHeavy" and -.32 or -.14)
+    elseif clip=="Defeat" then tilt=.36*t; squeeze=t; lift=-.35*t
+    else lift=.09*cycle end
+    offset(model,"Core",CFrame.new(0,lift,0)*CFrame.Angles(0,0,tilt))
+    for i,l in ipairs(lobes) do
+        offset(model,"Lobe"..i,CFrame.new(-l[1]*.12*squeeze,-l[2]*.12*squeeze,0))
+    end
+    offset(model,"MouthUpper",CFrame.new(0,.15*open,0))
+    offset(model,"MouthLower",CFrame.new(0,-.15*open,0))
+    offset(model,"MouthRim",CFrame.new(0,0,-.13*open))
+    if clip=="Defeat" or model:GetAttribute("Dispersing") then
+        local surface=model:FindFirstChild("ImportedGeometry") or model
+        for _,p in ipairs(surface:GetChildren()) do
+            if p:IsA("BasePart") then p.Transparency=clip=="Defeat" and t or 0 end
+        end
+        model:SetAttribute("Dispersing",clip=="Defeat")
+    end
+end
+
+function Cloud.attachGas(parent,anchor)
+    local model = Instance.new("Model")
+    model.Name = "GasCloud"
+    for i=1,4 do
+        local a=i*2.4
+        ball(model,"Puff"..i,anchor,CFrame.new(.30*math.cos(a),.21*math.sin(a),.19*i-.4),
+            Vector3.new(.85,.71,.76),Color3.fromRGB(143-i*10,164-i*8,47),false)
+    end
+    model.Parent=parent
+    return model
+end
+return Cloud
+
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="BTModelAirHazardModels"><Properties><string name="Name">AirHazardModels</string><ProtectedString name="Source">-- Geometry generated from assets/models/{RatPod,Meteorite}/design.py.
+local designs = {
+    RatPod = {
+        parts = {
+            {"PodHull", "Keel", "Ball", {2.25, 1.65, 4.82}, {0, -0.26, -0.17}, {10, 65, 76}, "Metal", {0, 0, 0}},
+            {"PodHull", "PressureHull", "Ball", {2.5, 2.18, 4.9}, {0, -0.02, -0.1}, {4, 164, 171}, "Metal", {0, 0, 0}},
+            {"PodHull", "NoseSkid", "Ball", {1.48, 0.5, 2.03}, {0, -0.12, -1.585}, {24, 201, 199}, "Metal", {-6, 0, 0}},
+            {"PodHull", "ChineL", "Ball", {0.36, 0.38, 3.23}, {-1.02, -0.25, -0.08}, {24, 99, 108}, "Metal", {0, 4, -5}},
+            {"PodHull", "IntakeL0", "Block", {0.1, 0.46, 0.085}, {-1.17, -0.3, 0.36}, {10, 65, 76}, "Metal", {17, 0, 0}},
+            {"PodHull", "IntakeL1", "Block", {0.1, 0.46, 0.085}, {-1.17, -0.3, 0.57}, {10, 65, 76}, "Metal", {17, 0, 0}},
+            {"PodHull", "IntakeL2", "Block", {0.1, 0.46, 0.085}, {-1.17, -0.3, 0.78}, {10, 65, 76}, "Metal", {17, 0, 0}},
+            {"Stabilizers", "FoilL", "Wedge", {0.79, 0.35, 1.5}, {-1.48, -0.37, 0.65}, {4, 164, 171}, "Metal", {-5, -15, 12}},
+            {"Stabilizers", "FoilEdgeL", "Ball", {0.16, 0.19, 1.16}, {-1.78, -0.4, 0.63}, {24, 201, 199}, "Metal", {-5, -15, 12}},
+            {"PodHull", "ChineR", "Ball", {0.36, 0.38, 3.23}, {1.02, -0.25, -0.08}, {24, 99, 108}, "Metal", {0, -4, 5}},
+            {"PodHull", "IntakeR0", "Block", {0.1, 0.46, 0.085}, {1.17, -0.3, 0.36}, {10, 65, 76}, "Metal", {17, 0, 0}},
+            {"PodHull", "IntakeR1", "Block", {0.1, 0.46, 0.085}, {1.17, -0.3, 0.57}, {10, 65, 76}, "Metal", {17, 0, 0}},
+            {"PodHull", "IntakeR2", "Block", {0.1, 0.46, 0.085}, {1.17, -0.3, 0.78}, {10, 65, 76}, "Metal", {17, 0, 0}},
+            {"Stabilizers", "FoilR", "Wedge", {0.79, 0.35, 1.5}, {1.48, -0.37, 0.65}, {4, 164, 171}, "Metal", {-5, 15, -12}},
+            {"Stabilizers", "FoilEdgeR", "Ball", {0.16, 0.19, 1.16}, {1.78, -0.4, 0.63}, {24, 201, 199}, "Metal", {-5, 15, -12}},
+            {"Cockpit", "CanopyFrame", "Ball", {1.98, 1.13, 3.23}, {0, 0.53, -0.49}, {24, 99, 108}, "Metal", {-13, 0, 0}},
+            {"Cockpit", "SmokedCanopy", "Ball", {1.87, 1.39, 3.03}, {0, 0.61, -0.5}, {12, 24, 49}, "SmoothPlastic", {-13, 0, 0}},
+            {"Cockpit", "ReflectedSky", "Ball", {0.33, 0.055, 1.27}, {0.45, 1.22, -0.56}, {65, 101, 135}, "SmoothPlastic", {-13, 0, -21}},
+            {"RearRing", "Collar0", "Block", {0.726807971, 0.32, 0.53}, {0, 1.05, 1.6}, {24, 99, 108}, "Metal", {0, 0, 0}},
+            {"RearRing", "Collar1", "Block", {0.726807971, 0.32, 0.53}, {0.617174515, 0.849467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -36}},
+            {"RearRing", "Collar2", "Block", {0.726807971, 0.32, 0.53}, {0.998609342, 0.324467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -72}},
+            {"RearRing", "Collar3", "Block", {0.726807971, 0.32, 0.53}, {0.998609342, -0.324467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -108}},
+            {"RearRing", "Collar4", "Block", {0.726807971, 0.32, 0.53}, {0.617174515, -0.849467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -144}},
+            {"RearRing", "Collar5", "Block", {0.726807971, 0.32, 0.53}, {1.28587914e-16, -1.05, 1.6}, {24, 99, 108}, "Metal", {0, 0, -180}},
+            {"RearRing", "Collar6", "Block", {0.726807971, 0.32, 0.53}, {-0.617174515, -0.849467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -216}},
+            {"RearRing", "Collar7", "Block", {0.726807971, 0.32, 0.53}, {-0.998609342, -0.324467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -252}},
+            {"RearRing", "Collar8", "Block", {0.726807971, 0.32, 0.53}, {-0.998609342, 0.324467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -288}},
+            {"RearRing", "Collar9", "Block", {0.726807971, 0.32, 0.53}, {-0.617174515, 0.849467844, 1.6}, {24, 99, 108}, "Metal", {0, 0, -324}},
+            {"RearRing", "RearRim0", "Block", {0.761417874, 0.32, 0.57}, {0, 1.1, 2.09}, {4, 164, 171}, "Metal", {0, 0, 0}},
+            {"RearRing", "RearRim1", "Block", {0.761417874, 0.32, 0.57}, {0.646563778, 0.889918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -36}},
+            {"RearRing", "RearRim2", "Block", {0.761417874, 0.32, 0.57}, {1.04616217, 0.339918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -72}},
+            {"RearRing", "RearRim3", "Block", {0.761417874, 0.32, 0.57}, {1.04616217, -0.339918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -108}},
+            {"RearRing", "RearRim4", "Block", {0.761417874, 0.32, 0.57}, {0.646563778, -0.889918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -144}},
+            {"RearRing", "RearRim5", "Block", {0.761417874, 0.32, 0.57}, {1.34711148e-16, -1.1, 2.09}, {4, 164, 171}, "Metal", {0, 0, -180}},
+            {"RearRing", "RearRim6", "Block", {0.761417874, 0.32, 0.57}, {-0.646563778, -0.889918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -216}},
+            {"RearRing", "RearRim7", "Block", {0.761417874, 0.32, 0.57}, {-1.04616217, -0.339918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -252}},
+            {"RearRing", "RearRim8", "Block", {0.761417874, 0.32, 0.57}, {-1.04616217, 0.339918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -288}},
+            {"RearRing", "RearRim9", "Block", {0.761417874, 0.32, 0.57}, {-0.646563778, 0.889918694, 2.09}, {4, 164, 171}, "Metal", {0, 0, -324}},
+            {"RearRing", "RimLip0", "Block", {0.685276087, 0.32, 0.26}, {0, 0.99, 2.47}, {24, 201, 199}, "Metal", {0, 0, 0}},
+            {"RearRing", "RimLip1", "Block", {0.685276087, 0.32, 0.26}, {0.5819074, 0.800926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -36}},
+            {"RearRing", "RimLip2", "Block", {0.685276087, 0.32, 0.26}, {0.941545951, 0.305926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -72}},
+            {"RearRing", "RimLip3", "Block", {0.685276087, 0.32, 0.26}, {0.941545951, -0.305926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -108}},
+            {"RearRing", "RimLip4", "Block", {0.685276087, 0.32, 0.26}, {0.5819074, -0.800926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -144}},
+            {"RearRing", "RimLip5", "Block", {0.685276087, 0.32, 0.26}, {1.21240033e-16, -0.99, 2.47}, {24, 201, 199}, "Metal", {0, 0, -180}},
+            {"RearRing", "RimLip6", "Block", {0.685276087, 0.32, 0.26}, {-0.5819074, -0.800926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -216}},
+            {"RearRing", "RimLip7", "Block", {0.685276087, 0.32, 0.26}, {-0.941545951, -0.305926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -252}},
+            {"RearRing", "RimLip8", "Block", {0.685276087, 0.32, 0.26}, {-0.941545951, 0.305926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -288}},
+            {"RearRing", "RimLip9", "Block", {0.685276087, 0.32, 0.26}, {-0.5819074, 0.800926824, 2.47}, {24, 201, 199}, "Metal", {0, 0, -324}},
+            {"RearRing", "Recess", "Cylinder", {0.15, 1.66, 1.66}, {0, 0, 2.01}, {10, 65, 76}, "Metal", {0, 90, 0}},
+            {"RearRing", "TurbineHub", "Cylinder", {0.1, 0.6, 0.6}, {0, 0, 2.14}, {73, 221, 225}, "Neon", {0, 90, 0}},
+        },
+        points = {PathMount = {0, 0, 0}, NoseDirection = {0, 0, -2.6}, Exhaust = {0, 0, 2.5}, TrailOrigin = {0, 0, 2.53}, ImpactVFX = {0, 0, -2.45}, BoundsCenter = {0, 0, 0}},
+    },
+    Meteorite = {
+        parts = {
+            {"HotCore", "GoldenLimb", "Ball", {2.49, 2.49, 2.3}, {0, 0, 0.24}, {255, 186, 30}, "SmoothPlastic", {0, 0, 0}},
+            {"HotCore", "WhiteFront", "Ball", {2.46, 2.46, 2.5}, {0, 0, 0}, {255, 249, 176}, "Neon", {0, 0, 0}},
+            {"HotCore", "Dimple0", "Ball", {0.22, 0.286, 0.076}, {0.877633721, 0.268422436, -0.83222242}, {233, 164, 36}, "SmoothPlastic", {12.6050715, -46.9825392, 0}},
+            {"HotCore", "Dimple1", "Ball", {0.14, 0.182, 0.076}, {0.430717365, -0.478984561, -1.06487207}, {233, 164, 36}, "SmoothPlastic", {-22.9183118, -22.345354, 0}},
+            {"HotCore", "Dimple2", "Ball", {0.23, 0.299, 0.076}, {-0.60614103, 0.674069442, -0.844856039}, {233, 164, 36}, "SmoothPlastic", {33.2315521, 36.0963411, 0}},
+            {"HotCore", "Dimple3", "Ball", {0.18, 0.234, 0.076}, {-0.7768309, -0.30430687, -0.918482802}, {233, 164, 36}, "SmoothPlastic", {-14.3239449, 40.6800035, 0}},
+            {"HotCore", "Dimple4", "Ball", {0.1, 0.13, 0.076}, {-0.303926566, 0.0614743782, -1.20962692}, {233, 164, 36}, "SmoothPlastic", {2.86478898, 14.3239449, 0}},
+            {"HotCore", "Dimple5", "Ball", {0.12, 0.156, 0.076}, {0.207852799, 0.865033686, -0.863171645}, {233, 164, 36}, "SmoothPlastic", {44.690708, -13.7509871, 0}},
+            {"HotCore", "Dimple6", "Ball", {0.14, 0.182, 0.076}, {-0.156001691, -0.744379279, -0.982394557}, {233, 164, 36}, "SmoothPlastic", {-37.2422567, 9.16732472, 0}},
+            {"FlameShell", "Tongue0_0", "Ball", {0.78, 0.7098, 1.386}, {0.78, 0, 0.48}, {255, 197, 43}, "SmoothPlastic", {-0, 9, 0}},
+            {"FlameShell", "Tongue0_1", "Ball", {0.59, 0.5369, 1.26231}, {0.876811371, 0.0982604182, 1.131}, {255, 197, 43}, "SmoothPlastic", {-1.0023164, 8.94401262, 0}},
+            {"FlameShell", "Tongue0_2", "Ball", {0.37, 0.3367, 1.15857}, {0.947789505, 0.197262929, 1.677}, {255, 197, 43}, "SmoothPlastic", {-1.83386671, 8.81118226, 0}},
+            {"FlameShell", "Tongue0_3", "Ball", {0.2, 0.182, 1.0668}, {1.00100167, 0.296532714, 2.16}, {255, 197, 43}, "SmoothPlastic", {-2.5563165, 8.62932477, 0}},
+            {"FlameShell", "Tongue1_0", "Ball", {0.78, 0.7098, 1.6236}, {0.551543289, 0.551543289, 0.48}, {255, 218, 64}, "SmoothPlastic", {-6.36396103, 6.36396103, 0}},
+            {"FlameShell", "Tongue1_1", "Ball", {0.59, 0.5369, 1.478706}, {0.550518658, 0.689479874, 1.2426}, {255, 218, 64}, "SmoothPlastic", {-7.0331167, 5.61562725, 0}},
+            {"FlameShell", "Tongue1_2", "Ball", {0.37, 0.3367, 1.357182}, {0.530702431, 0.809674341, 1.8822}, {255, 218, 64}, "SmoothPlastic", {-7.52718632, 4.93370714, 0}},
+            {"FlameShell", "Tongue1_3", "Ball", {0.2, 0.182, 1.24968}, {0.498134778, 0.917495364, 2.448}, {255, 218, 64}, "SmoothPlastic", {-7.90944279, 4.29426533, 0}},
+            {"FlameShell", "Tongue2_0", "Ball", {0.78, 0.7098, 1.221}, {4.77612252e-17, 0.78, 0.48}, {250, 162, 21}, "SmoothPlastic", {-9, 5.5109106e-16, 0}},
+            {"FlameShell", "Tongue2_1", "Ball", {0.59, 0.5369, 1.112035}, {-0.0982604182, 0.876811371, 1.0535}, {250, 162, 21}, "SmoothPlastic", {-8.94401262, -1.0023164, 0}},
+            {"FlameShell", "Tongue2_2", "Ball", {0.37, 0.3367, 1.020645}, {-0.197262929, 0.947789505, 1.5345}, {250, 162, 21}, "SmoothPlastic", {-8.81118226, -1.83386671, 0}},
+            {"FlameShell", "Tongue2_3", "Ball", {0.2, 0.182, 0.9398}, {-0.296532714, 1.00100167, 1.96}, {250, 162, 21}, "SmoothPlastic", {-8.62932477, -2.5563165, 0}},
+            {"FlameShell", "Tongue3_0", "Ball", {0.78, 0.7098, 1.518}, {-0.551543289, 0.551543289, 0.48}, {255, 197, 43}, "SmoothPlastic", {-6.36396103, -6.36396103, 0}},
+            {"FlameShell", "Tongue3_1", "Ball", {0.59, 0.5369, 1.38253}, {-0.689479874, 0.550518658, 1.193}, {255, 197, 43}, "SmoothPlastic", {-5.61562725, -7.0331167, 0}},
+            {"FlameShell", "Tongue3_2", "Ball", {0.37, 0.3367, 1.26891}, {-0.809674341, 0.530702431, 1.791}, {255, 197, 43}, "SmoothPlastic", {-4.93370714, -7.52718632, 0}},
+            {"FlameShell", "Tongue3_3", "Ball", {0.2, 0.182, 1.1684}, {-0.917495364, 0.498134778, 2.32}, {255, 197, 43}, "SmoothPlastic", {-4.29426533, -7.90944279, 0}},
+            {"FlameShell", "Tongue4_0", "Ball", {0.78, 0.7098, 1.7028}, {-0.78, 9.55224503e-17, 0.48}, {255, 218, 64}, "SmoothPlastic", {-1.10218212e-15, -9, 0}},
+            {"FlameShell", "Tongue4_1", "Ball", {0.59, 0.5369, 1.550838}, {-0.876811371, -0.0982604182, 1.2798}, {255, 218, 64}, "SmoothPlastic", {1.0023164, -8.94401262, 0}},
+            {"FlameShell", "Tongue4_2", "Ball", {0.37, 0.3367, 1.423386}, {-0.947789505, -0.197262929, 1.9506}, {255, 218, 64}, "SmoothPlastic", {1.83386671, -8.81118226, 0}},
+            {"FlameShell", "Tongue4_3", "Ball", {0.2, 0.182, 1.31064}, {-1.00100167, -0.296532714, 2.544}, {255, 218, 64}, "SmoothPlastic", {2.5563165, -8.62932477, 0}},
+            {"FlameShell", "Tongue5_0", "Ball", {0.78, 0.7098, 1.3728}, {-0.551543289, -0.551543289, 0.48}, {250, 162, 21}, "SmoothPlastic", {6.36396103, -6.36396103, 0}},
+            {"FlameShell", "Tongue5_1", "Ball", {0.59, 0.5369, 1.250288}, {-0.550518658, -0.689479874, 1.1248}, {250, 162, 21}, "SmoothPlastic", {7.0331167, -5.61562725, 0}},
+            {"FlameShell", "Tongue5_2", "Ball", {0.37, 0.3367, 1.147536}, {-0.530702431, -0.809674341, 1.6656}, {250, 162, 21}, "SmoothPlastic", {7.52718632, -4.93370714, 0}},
+            {"FlameShell", "Tongue5_3", "Ball", {0.2, 0.182, 1.05664}, {-0.498134778, -0.917495364, 2.144}, {250, 162, 21}, "SmoothPlastic", {7.90944279, -4.29426533, 0}},
+            {"FlameShell", "Tongue6_0", "Ball", {0.78, 0.7098, 1.5576}, {-1.43283676e-16, -0.78, 0.48}, {255, 197, 43}, "SmoothPlastic", {9, -1.65327318e-15, 0}},
+            {"FlameShell", "Tongue6_1", "Ball", {0.59, 0.5369, 1.418596}, {0.0982604182, -0.876811371, 1.2116}, {255, 197, 43}, "SmoothPlastic", {8.94401262, 1.0023164, 0}},
+            {"FlameShell", "Tongue6_2", "Ball", {0.37, 0.3367, 1.302012}, {0.197262929, -0.947789505, 1.8252}, {255, 197, 43}, "SmoothPlastic", {8.81118226, 1.83386671, 0}},
+            {"FlameShell", "Tongue6_3", "Ball", {0.2, 0.182, 1.19888}, {0.296532714, -1.00100167, 2.368}, {255, 197, 43}, "SmoothPlastic", {8.62932477, 2.5563165, 0}},
+            {"FlameShell", "Tongue7_0", "Ball", {0.78, 0.7098, 1.2936}, {0.551543289, -0.551543289, 0.48}, {255, 218, 64}, "SmoothPlastic", {6.36396103, 6.36396103, 0}},
+            {"FlameShell", "Tongue7_1", "Ball", {0.59, 0.5369, 1.178156}, {0.689479874, -0.550518658, 1.0876}, {255, 218, 64}, "SmoothPlastic", {5.61562725, 7.0331167, 0}},
+            {"FlameShell", "Tongue7_2", "Ball", {0.37, 0.3367, 1.081332}, {0.809674341, -0.530702431, 1.5972}, {255, 218, 64}, "SmoothPlastic", {4.93370714, 7.52718632, 0}},
+            {"FlameShell", "Tongue7_3", "Ball", {0.2, 0.182, 0.99568}, {0.917495364, -0.498134778, 2.048}, {255, 218, 64}, "SmoothPlastic", {4.29426533, 7.90944279, 0}},
+            {"FlameShell", "CentralFlare", "Ball", {1.5, 1.52, 3.22}, {0.08, 0.02, 1.33}, {255, 222, 67}, "SmoothPlastic", {1, 3, 0}},
+            {"FlameShell", "LongFlare", "Ball", {0.47, 0.38, 2.2}, {0.1, 0.19, 2.59}, {255, 194, 36}, "SmoothPlastic", {-5, -5, 0}},
+        },
+        points = {FlightCenter = {0, 0, 0}, Forward = {0, 0, -1.25}, TrailOrigin = {0, 0, 2.05}, ImpactVFX = {0, 0, -1.2}, AudioOrigin = {0, 0, 0}},
+    },
+}
+-- END OF GENERATED DESIGNS
+
+local AirHazardModels = {}
+local V = Vector3.new
+
+local function frame(position, angles)
+    local transform = CFrame.new(table.unpack(position))
+    if angles then
+        transform *= CFrame.Angles(math.rad(angles[1]), math.rad(angles[2]), math.rad(angles[3]))
+    end
+    return transform
+end
+
+local function cosmetic(part)
+    part.Anchored = false
+    part.Massless = true
+    part.CanCollide = false
+    part.CanTouch = false
+    part.CanQuery = false
+    part.CastShadow = false
+end
+
+local function weld(parent, child)
+    local joint = Instance.new("WeldConstraint")
+    joint.Part0 = parent
+    joint.Part1 = child
+    joint.Parent = child
+end
+
+local function point(parent, name, offset)
+    local node = Instance.new("Attachment")
+    node.Name = name
+    node.CFrame = offset
+    node.Parent = parent
+    return node
+end
+
+local function effects(kind, root)
+    local fiery = kind == "Meteorite"
+    local origin = root.TrailOrigin.CFrame
+    local width = fiery and .38 or .18
+    local trail = Instance.new("Trail")
+    trail.Name = "TrailEmitter"
+    trail.Attachment0 = point(root, "TrailLeft", origin * CFrame.new(-width, 0, 0))
+    trail.Attachment1 = point(root, "TrailRight", origin * CFrame.new(width, 0, 0))
+    trail.Color = ColorSequence.new(fiery and Color3.fromRGB(255, 218, 61) or Color3.fromRGB(85, 229, 233))
+    trail.Transparency = NumberSequence.new(.30, 1)
+    trail.WidthScale = NumberSequence.new(1, 0)
+    trail.LightEmission = .7
+    trail.FaceCamera = true
+    trail.Lifetime = fiery and .14 or .10
+    trail.MaxLength = fiery and 1.6 or 1
+    trail.Parent = root
+    if fiery then
+        local burst = Instance.new("ParticleEmitter")
+        burst.Name = "ImpactBurst"
+        burst.Enabled = false
+        burst.Rate = 0
+        burst.Lifetime = NumberRange.new(.12, .24)
+        burst.Speed = NumberRange.new(2, 5)
+        burst.SpreadAngle = Vector2.new(180, 180)
+        burst.LightEmission = 1
+        burst.Color = ColorSequence.new(Color3.fromRGB(255, 243, 137), Color3.fromRGB(255, 153, 27))
+        burst.Size = NumberSequence.new(.34, 0)
+        burst.Transparency = NumberSequence.new(.12, 1)
+        burst.Parent = root.ImpactVFX
+    end
+end
+
+-- The owner controls the hazard transform and lifetime. The fixed local nose is -Z.
+function AirHazardModels.attach(kind, parent, anchor)
+    local design = designs[kind]
+    if not design then return nil end
+    local model = Instance.new("Model")
+    model.Name = kind
+    local root = Instance.new("Part")
+    root.Name = "VisualRoot"
+    cosmetic(root)
+    root.Size = V(.1, .1, .1)
+    root.Transparency = 1
+    root.CFrame = anchor.CFrame
+    root.Parent = model
+    model.PrimaryPart = root
+    local mount = Instance.new("Weld")
+    mount.Name = "PathJoint"
+    mount.Part0 = anchor
+    mount.Part1 = root
+    mount.Parent = root
+    for _, spec in ipairs(design.parts) do
+        local section, name, shape, size, pos, color, material, angles = table.unpack(spec)
+        local group = model:FindFirstChild(section)
+        if not group then
+            group = Instance.new("Model")
+            group.Name = section
+            group.Parent = model
+        end
+        local part = Instance.new(shape == "Wedge" and "WedgePart" or "Part")
+        if part:IsA("Part") then part.Shape = Enum.PartType[shape] end
+        cosmetic(part)
+        part.Name = name
+        part.Size = V(table.unpack(size))
+        part.Color = Color3.fromRGB(table.unpack(color))
+        part.Material = Enum.Material[material]
+        part.CFrame = root.CFrame * frame(pos, angles)
+        part.Parent = group
+        weld(root, part)
+    end
+    for name, pos in pairs(design.points) do
+        local transform = frame(pos)
+        if name == "Exhaust" then transform *= CFrame.Angles(0, math.pi, 0) end
+        point(root, name, transform)
+    end
+    effects(kind, root)
+    model.Parent = parent
+    return model
+end
+
+-- Rotate only the visual mount when the course proxy keeps its original orientation.
+function AirHazardModels.face(model, velocity)
+    if velocity.Magnitude &lt; .001 then return end
+    local joint = model.PrimaryPart.PathJoint
+    local direction = joint.Part0.CFrame:VectorToObjectSpace(velocity.Unit)
+    local up = math.abs(direction.Y) &gt; .99 and Vector3.xAxis or Vector3.yAxis
+    joint.C0 = CFrame.lookAt(Vector3.zero, direction, up)
+end
+
+-- Single finite impact effect. Destroying the model also removes every effect.
+function AirHazardModels.impact(model)
+    if model:GetAttribute("ImpactShown") then return end
+    model:SetAttribute("ImpactShown", true)
+    local root = model.PrimaryPart
+    root.TrailEmitter.Enabled = false
+    local burst = root.ImpactVFX:FindFirstChild("ImpactBurst")
+    if burst then burst:Emit(8) end
+end
+
+return AirHazardModels
+</ProtectedString></Properties></Item></Item>
       <Item class="Folder" referent="BT48">
         <Properties>
           <string name="Name">CombatRuntime</string>
@@ -14321,7 +15225,7 @@ return World
       <Item class="ModuleScript" referent="BT85">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='ea53aebe5ad681b5a5caf298b0ceaffc77345a925ef46cdeb3ff7d009c663478'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='8be489561a02ae3641df2a087cc879ee1a715afbb3e8b27452a69f756acb6b9d'})
 </ProtectedString>
         </Properties>
       </Item>
@@ -17536,13 +18440,28 @@ function Gate:_request(entry)
         entry.state='Pending';entry.attempts=(entry.attempts or 0)+1
         for row in pairs(entry.waiters)do if row.entry==entry and self:_valid(row)then self:_apply(row,'Pending')end end
         local observed,failed={},false
+        local requests=parts
+        local probes={}
+        if selected.skin:GetAttribute('PreloadMaterialMaps') then
+            requests=table.clone(parts)
+            for _,property in ipairs({'ColorMap','NormalMap','RoughnessMap','MetalnessMap'}) do
+                local id=selected.skin:GetAttribute(property)
+                if id and id~='' then
+                    local image=Instance.new('ImageLabel')
+                    image.Image=id
+                    table.insert(probes,image)
+                    table.insert(requests,image)
+                end
+            end
+        end
         local ok=pcall(function()
-            self.provider:PreloadAsync(parts,function(id,status)
+            self.provider:PreloadAsync(requests,function(id,status)
                 local resource=key(id)
                 if resource and ids[resource]then observed[resource]=true end
                 if status~=self.success then failed=true end
             end)
         end)
+        for _,image in ipairs(probes) do image:Destroy() end
         for resource in pairs(ids)do if not observed[resource]then failed=true end end
         if entry.cancelled or self.destroyed or self.cache[entry.signature]~=entry then return end
         entry.state=ok and not failed and 'Ready'or'Failed'
@@ -17591,10 +18510,16 @@ function Gate:_refresh(row)
             connect(row.assetConnections,part:GetPropertyChangedSignal('MeshId'),refresh)
             connect(row.assetConnections,part:GetPropertyChangedSignal('TextureID'),refresh)
             connect(row.assetConnections,part:GetAttributeChangedSignal(self.contract.alpha),refresh)
-            for _,surface in ipairs(part:GetChildren())do if surface:IsA('SurfaceAppearance')then
-                include('C',surface.ColorMap,false)
-                connect(row.assetConnections,surface:GetPropertyChangedSignal('ColorMap'),refresh)
-            end end
+            if row.skin:GetAttribute('PreloadMaterialMaps') then
+                for _,property in ipairs({'ColorMap','NormalMap','RoughnessMap','MetalnessMap'}) do
+                    include(property,row.skin:GetAttribute(property),true)
+                end
+            else
+                for _,surface in ipairs(part:GetChildren())do if surface:IsA('SurfaceAppearance')then
+                    include('C',surface.ColorMap,false)
+                    connect(row.assetConnections,surface:GetPropertyChangedSignal('ColorMap'),refresh)
+                end end
+            end
         end
     end
     -- Explicit references support the serpent's external support collider. A

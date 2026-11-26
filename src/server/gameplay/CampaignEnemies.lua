@@ -8,6 +8,7 @@ local families={
     Raven={mode='Fly',attack='Swoop',range=28,speed=10},LargeRaven={mode='Fly',attack='Swoop',range=30,speed=8},
     Invader={mode='Ground',attack='StealLife',range=16,speed=9},
     RocketRat={mode='Ride',attack='DropObstacle',range=35,speed=14},
+    Scuzz={mode='Ground',attack='Attack66',range=10,speed=9},
     Snowman={mode='Ground',attack='Snowball',range=38,speed=4},
     SentryDrone={mode='Ground',attack='TwinBolt',range=40,speed=0},
     GasTurret={mode='Ground',attack='Gas',range=30,speed=0},
@@ -24,6 +25,8 @@ local families={
     FlyingHead={mode='Fly',attack='Swoop',range=25,speed=11},
 }
 local actions={
+    Attack66={tell=.4,active=.32,recovery=.55,reach=5,width=2.5,height=3,damage='PigJab'},
+    Attack68={tell=.55,active=.55,recovery=.7,lift=3,radius=2.2,damage='PigRush'},
     Swoop={tell=.4,active=.75,recovery=.6,lift=-3,radius=2.6,damage='DragonHeadbutt'},
     Leap={tell=.35,active=.7,recovery=.6,lift=5,radius=2.8,damage='PigRush'},
     StealLife={tell=.35,active=.7,recovery=.6,lift=5,radius=2.8},
@@ -200,6 +203,7 @@ function Enemies:_begin(id,e,name,direction,target)
     target=target or self:_nearest(id,dir)
     local q=target and self.world:position(target)
     if not q then q={x=p.x+dir.x*10,y=p.y,z=p.z+dir.z*10} end
+    if e.kind=='Scuzz' and name=='Attack66' and distance(p,q)>5 then name='Attack68' end
     local family=families[e.kind];local m=actions[name]
     if distance(p,q)>family.range then q={x=p.x+dir.x*family.range,y=p.y,z=p.z+dir.z*family.range};target=nil end
     if family.mode=='Ground' then q={x=q.x,y=p.y,z=q.z} end
@@ -257,7 +261,8 @@ function Enemies:_spawn(id,e,a,direction)
     local p={owner=id,actorId=e.actorId,mode=mode,position=origin,direction=dir,lastAt=a.at,created=a.at,
         expiresAt=a.at+(mode=='Obstacle' and 4 or mode=='GasCloud' and 2.5 or 2),
         speed=m.speed or 0,action=m.damage,hits={},groundY=a.destination.y}
-    self.projectiles[key]=p;self.world:projectile(key,origin,false,mode)
+    self.projectiles[key]=p
+    self.world:projectile(key,origin,false,mode,id)
 end
 function Enemies:_steal(id,e,s,target,hits)
     if hits[target] then return end;hits[target]=true

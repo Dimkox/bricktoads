@@ -1,0 +1,177 @@
+{
+  "issue": "BT-91",
+  "kind": "RatPod",
+  "units": "stud",
+  "metresPerStud": 0.28,
+  "up": "+Y",
+  "forward": "-Z",
+  "reference": "assets/concept-art/uhd-cast-2026-11-09/enemies-02-uhd.png",
+  "pivot": [
+    0,
+    0,
+    0
+  ],
+  "bounds": [
+    [
+      -2.082462178024074,
+      -1.2600000000000002,
+      -2.58
+    ],
+    [
+      2.082462178024074,
+      1.373656714963746,
+      2.6
+    ]
+  ],
+  "lods": [
+    {
+      "file": "RatPod-L0.glb",
+      "triangles": 2328,
+      "parts": {
+        "PodHull": 972,
+        "Stabilizers": 136,
+        "Cockpit": 780,
+        "RearRing": 440
+      }
+    },
+    {
+      "file": "RatPod-L1.glb",
+      "triangles": 1216,
+      "parts": {
+        "PodHull": 432,
+        "Stabilizers": 64,
+        "Cockpit": 312,
+        "RearRing": 408
+      }
+    },
+    {
+      "file": "RatPod-L2.glb",
+      "triangles": 588,
+      "parts": {
+        "PodHull": 156,
+        "Stabilizers": 56,
+        "Cockpit": 96,
+        "RearRing": 280
+      }
+    }
+  ],
+  "attachmentsCFrame": {
+    "PathMount": [
+      0,
+      0,
+      0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "NoseDirection": [
+      0,
+      0,
+      -2.6,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "Exhaust": [
+      0,
+      0,
+      2.5,
+      -1.0,
+      0.0,
+      1.2246467991473532e-16,
+      0.0,
+      1.0,
+      0.0,
+      -1.2246467991473532e-16,
+      0.0,
+      -1.0
+    ],
+    "TrailOrigin": [
+      0,
+      0,
+      2.53,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "ImpactVFX": [
+      0,
+      0,
+      -2.45,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "BoundsCenter": [
+      0,
+      0,
+      0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "states": [
+    "Dormant",
+    "Enter",
+    "CrossingForward",
+    "TurnAtBound",
+    "CrossingReturn",
+    "PassExit",
+    "Impact",
+    "Removed",
+    "Cleanup"
+  ],
+  "proxy": {
+    "authority": "course",
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "nominalBodySize": [
+      2.5,
+      2.2,
+      4.9
+    ],
+    "visualCollision": false,
+    "trailCollision": false
+  },
+  "textures": [
+    "color.png",
+    "normal.png",
+    "roughness-metalness.png"
+  ],
+  "impactBurst": null,
+  "assembly": "Roblox native primitives welded to VisualRoot; GLBs use the same authoring dimensions."
+}

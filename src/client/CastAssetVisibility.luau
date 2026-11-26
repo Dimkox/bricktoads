@@ -90,13 +90,28 @@ function Gate:_request(entry)
         entry.state='Pending';entry.attempts=(entry.attempts or 0)+1
         for row in pairs(entry.waiters)do if row.entry==entry and self:_valid(row)then self:_apply(row,'Pending')end end
         local observed,failed={},false
+        local requests=parts
+        local probes={}
+        if selected.skin:GetAttribute('PreloadMaterialMaps') then
+            requests=table.clone(parts)
+            for _,property in ipairs({'ColorMap','NormalMap','RoughnessMap','MetalnessMap'}) do
+                local id=selected.skin:GetAttribute(property)
+                if id and id~='' then
+                    local image=Instance.new('ImageLabel')
+                    image.Image=id
+                    table.insert(probes,image)
+                    table.insert(requests,image)
+                end
+            end
+        end
         local ok=pcall(function()
-            self.provider:PreloadAsync(parts,function(id,status)
+            self.provider:PreloadAsync(requests,function(id,status)
                 local resource=key(id)
                 if resource and ids[resource]then observed[resource]=true end
                 if status~=self.success then failed=true end
             end)
         end)
+        for _,image in ipairs(probes) do image:Destroy() end
         for resource in pairs(ids)do if not observed[resource]then failed=true end end
         if entry.cancelled or self.destroyed or self.cache[entry.signature]~=entry then return end
         entry.state=ok and not failed and 'Ready'or'Failed'
@@ -145,10 +160,16 @@ function Gate:_refresh(row)
             connect(row.assetConnections,part:GetPropertyChangedSignal('MeshId'),refresh)
             connect(row.assetConnections,part:GetPropertyChangedSignal('TextureID'),refresh)
             connect(row.assetConnections,part:GetAttributeChangedSignal(self.contract.alpha),refresh)
-            for _,surface in ipairs(part:GetChildren())do if surface:IsA('SurfaceAppearance')then
-                include('C',surface.ColorMap,false)
-                connect(row.assetConnections,surface:GetPropertyChangedSignal('ColorMap'),refresh)
-            end end
+            if row.skin:GetAttribute('PreloadMaterialMaps') then
+                for _,property in ipairs({'ColorMap','NormalMap','RoughnessMap','MetalnessMap'}) do
+                    include(property,row.skin:GetAttribute(property),true)
+                end
+            else
+                for _,surface in ipairs(part:GetChildren())do if surface:IsA('SurfaceAppearance')then
+                    include('C',surface.ColorMap,false)
+                    connect(row.assetConnections,surface:GetPropertyChangedSignal('ColorMap'),refresh)
+                end end
+            end
         end
     end
     -- Explicit references support the serpent's external support collider. A

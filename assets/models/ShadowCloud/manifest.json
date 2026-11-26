@@ -1,0 +1,353 @@
+{
+  "version": "1.0",
+  "issue": "BT-107",
+  "visualName": "Shadow Cloud",
+  "sourceGfx": "0xBD",
+  "sourceType": "0x62",
+  "runtimeKind": "Swellcheeks",
+  "visualSourceFrames": [
+    "0xBC",
+    "0xBD"
+  ],
+  "placement": "Level 12 authored gas placement, sourceVariant=3, platform 15",
+  "alternateSourceTypes": [
+    "0x5D",
+    "0x5E"
+  ],
+  "alternateWindPlacementVerified": false,
+  "gasEffect": {
+    "sourceType": "0x53",
+    "sourceGfxRevolution": "0xC5",
+    "runtimeKind": "GasCloud",
+    "ownsLifetime": "campaign projectile"
+  },
+  "coordinates": {
+    "units": "1 unit = 1 stud; import factor 1",
+    "up": "+Y",
+    "front": "-Z",
+    "pivot": "center of volume",
+    "targetDimensions": [
+      5.2,
+      4.2,
+      3.6
+    ]
+  },
+  "rig": {
+    "Root": {
+      "localTranslation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": null
+    },
+    "Core": {
+      "localTranslation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parent": "Root"
+    },
+    "Lobe1": {
+      "localTranslation": [
+        0.15,
+        1.02,
+        0.23
+      ],
+      "parent": "Core"
+    },
+    "Lobe2": {
+      "localTranslation": [
+        1.33,
+        0.18,
+        0.12
+      ],
+      "parent": "Core"
+    },
+    "Lobe3": {
+      "localTranslation": [
+        0.76,
+        -0.97,
+        0.1
+      ],
+      "parent": "Core"
+    },
+    "Lobe4": {
+      "localTranslation": [
+        -1.28,
+        0.65,
+        0.18
+      ],
+      "parent": "Core"
+    },
+    "Lobe5": {
+      "localTranslation": [
+        -1.36,
+        -0.88,
+        0.35
+      ],
+      "parent": "Core"
+    },
+    "Lobe6": {
+      "localTranslation": [
+        0.23,
+        0.02,
+        1.01
+      ],
+      "parent": "Core"
+    },
+    "MouthRim": {
+      "localTranslation": [
+        -1.04,
+        -0.44,
+        -1.33
+      ],
+      "parent": "Core"
+    },
+    "MouthUpper": {
+      "localTranslation": [
+        0.13,
+        1.02,
+        -0.28
+      ],
+      "parent": "MouthRim"
+    },
+    "MouthLower": {
+      "localTranslation": [
+        -0.13,
+        -1.02,
+        -0.28
+      ],
+      "parent": "MouthRim"
+    },
+    "Aim": {
+      "localTranslation": [
+        0.0,
+        0.0,
+        -0.55
+      ],
+      "parent": "MouthRim"
+    },
+    "Mouth": {
+      "localTranslation": [
+        0.0,
+        0.0,
+        -0.55
+      ],
+      "parent": "MouthRim"
+    },
+    "GasOrigin": {
+      "localTranslation": [
+        0.0,
+        0.0,
+        -0.55
+      ],
+      "parent": "MouthRim"
+    },
+    "WindOrigin": {
+      "localTranslation": [
+        0.0,
+        0.0,
+        -0.55
+      ],
+      "parent": "MouthRim"
+    },
+    "HitFX": {
+      "localTranslation": [
+        0.0,
+        0.8,
+        -1.22
+      ],
+      "parent": "Core"
+    }
+  },
+  "rigMethod": "GLB animates rigid node transforms. RBXMX uses 10 Motor6D joints and rigid welded lobe folds.",
+  "material": "Single opaque green skin with vertex albedo and UV detail. Blind throat uses the same material.",
+  "textureSizes": {
+    "ColorMap": [
+      1024,
+      1024
+    ],
+    "NormalMap": [
+      1024,
+      1024
+    ],
+    "RoughnessMap": [
+      512,
+      512
+    ],
+    "MetalnessMap": [
+      512,
+      512
+    ]
+  },
+  "geometry": {
+    "ShadowCloud_LOD0": {
+      "triangles": 5832,
+      "perMesh": {
+        "Core": 288,
+        "Lobe1": 720,
+        "Lobe2": 720,
+        "Lobe3": 720,
+        "Lobe4": 720,
+        "Lobe5": 720,
+        "Lobe6": 720,
+        "MouthRim": 648,
+        "MouthUpper": 288,
+        "MouthLower": 288
+      },
+      "boundsMin": [
+        -2.5266,
+        -2.0535,
+        -1.8469
+      ],
+      "boundsMax": [
+        2.6696,
+        2.0978,
+        1.8305
+      ]
+    },
+    "ShadowCloud_LOD1": {
+      "triangles": 2664,
+      "perMesh": {
+        "Core": 144,
+        "Lobe1": 288,
+        "Lobe2": 288,
+        "Lobe3": 288,
+        "Lobe4": 288,
+        "Lobe5": 288,
+        "Lobe6": 288,
+        "MouthRim": 504,
+        "MouthUpper": 144,
+        "MouthLower": 144
+      },
+      "boundsMin": [
+        -2.5112,
+        -2.0535,
+        -1.8447
+      ],
+      "boundsMax": [
+        2.6158,
+        2.0978,
+        1.8291
+      ]
+    },
+    "ShadowCloud_LOD2": {
+      "triangles": 1332,
+      "perMesh": {
+        "Core": 64,
+        "Lobe1": 136,
+        "Lobe2": 136,
+        "Lobe3": 136,
+        "Lobe4": 136,
+        "Lobe5": 136,
+        "Lobe6": 136,
+        "MouthRim": 324,
+        "MouthUpper": 64,
+        "MouthLower": 64
+      },
+      "boundsMin": [
+        -2.4927,
+        -2.0535,
+        -1.8412
+      ],
+      "boundsMax": [
+        2.5688,
+        2.0978,
+        1.7643
+      ]
+    },
+    "GasCloud": {
+      "triangles": 400,
+      "perMesh": {
+        "Root": 400
+      },
+      "boundsMin": [
+        -0.6152,
+        -0.5642,
+        -0.5938
+      ],
+      "boundsMax": [
+        0.7403,
+        0.5217,
+        0.7418
+      ]
+    }
+  },
+  "clips": {
+    "HoverIdle": {
+      "durationSeconds": 1.8,
+      "markersNormalized": {}
+    },
+    "Drift": {
+      "durationSeconds": 1.2,
+      "markersNormalized": {}
+    },
+    "Turn": {
+      "durationSeconds": 0.6,
+      "markersNormalized": {}
+    },
+    "MouthPulse": {
+      "durationSeconds": 0.6,
+      "markersNormalized": {}
+    },
+    "GasTell": {
+      "durationSeconds": 0.5,
+      "markersNormalized": {}
+    },
+    "GasRelease": {
+      "durationSeconds": 0.2,
+      "markersNormalized": {
+        "GasRelease": 0
+      }
+    },
+    "GasRecover": {
+      "durationSeconds": 0.9,
+      "markersNormalized": {
+        "RecoveryEnd": 1
+      }
+    },
+    "WindTell": {
+      "durationSeconds": 0.55,
+      "markersNormalized": {}
+    },
+    "WindBlow": {
+      "durationSeconds": 1.2,
+      "markersNormalized": {
+        "BlowOn": 0
+      }
+    },
+    "WindStop": {
+      "durationSeconds": 0.4,
+      "markersNormalized": {
+        "BlowOff": 0,
+        "RecoveryEnd": 1
+      }
+    },
+    "HitLight": {
+      "durationSeconds": 0.25,
+      "markersNormalized": {}
+    },
+    "HitHeavy": {
+      "durationSeconds": 0.45,
+      "markersNormalized": {}
+    },
+    "Defeat": {
+      "durationSeconds": 0.75,
+      "markersNormalized": {}
+    },
+    "TransitionBC": {
+      "durationSeconds": 0.32,
+      "markersNormalized": {}
+    },
+    "TransitionBD": {
+      "durationSeconds": 0.32,
+      "markersNormalized": {}
+    }
+  },
+  "playback": "Begin at BD. GasTell and TransitionBC compress towards BC. TransitionBD relaxes to BD. GasRelease and GasRecover follow server phases. Wind clips are presentation-only. Any live clip can be interrupted by Hit or Defeat. Return to HoverIdle after recovery. Defeat dispersal is rendered by runtime transparency.",
+  "roblox": "ShadowCloud.rbxmx and the Lua adapter use an offline sphere-and-joint rig with nested dark gullet relief. Detailed modeled throat and PBR assets are in the GLBs and Blender source.",
+  "checks": "Export budgets, data bounds, socket names, node clips, RBXMX references and physical flags verified offline. LOD0 imported into Blender 5.3.",
+  "assetPublication": "Local deliverables; no published MeshId, TextureId or AnimationId assigned."
+}

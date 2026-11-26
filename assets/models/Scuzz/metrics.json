@@ -1,0 +1,44 @@
+{
+  "lods": {
+    "Scuzz_LOD0": {
+      "vertices": 3347,
+      "triangles": 6378
+    },
+    "Scuzz_LOD1": {
+      "vertices": 1816,
+      "triangles": 3316
+    },
+    "Scuzz_LOD2": {
+      "vertices": 975,
+      "triangles": 1690
+    }
+  },
+  "joints": 14,
+  "actions": [
+    "Appear",
+    "IdleAlert",
+    "Step",
+    "GroupAdvance",
+    "Turn",
+    "Hop",
+    "Fall",
+    "Land",
+    "Attack66",
+    "Attack68",
+    "Recover",
+    "ReactLight",
+    "ReactHeavyGround",
+    "HeavyRecover",
+    "DeathAir",
+    "DeathGround",
+    "Remove"
+  ],
+  "sockets": [
+    "MuzzleAim",
+    "StrikeOrigin",
+    "JumpCenter",
+    "VfxHit",
+    "Ground_L",
+    "Ground_R"
+  ]
+}

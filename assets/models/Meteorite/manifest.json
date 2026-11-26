@@ -1,0 +1,160 @@
+{
+  "issue": "BT-95",
+  "kind": "Meteorite",
+  "units": "stud",
+  "metresPerStud": 0.28,
+  "up": "+Y",
+  "forward": "-Z",
+  "reference": "assets/concept-art/uhd-cast-2026-11-09/enemies-02-uhd.png",
+  "pivot": [
+    0,
+    0,
+    0
+  ],
+  "bounds": [
+    [
+      -1.245,
+      -1.245,
+      -1.25
+    ],
+    [
+      1.245,
+      1.245,
+      3.6345204688605763
+    ]
+  ],
+  "lods": [
+    {
+      "file": "Meteorite-L0.glb",
+      "triangles": 3180,
+      "parts": {
+        "HotCore": 1140,
+        "FlameShell": 2040
+      }
+    },
+    {
+      "file": "Meteorite-L1.glb",
+      "triangles": 1272,
+      "parts": {
+        "HotCore": 456,
+        "FlameShell": 816
+      }
+    },
+    {
+      "file": "Meteorite-L2.glb",
+      "triangles": 296,
+      "parts": {
+        "HotCore": 96,
+        "FlameShell": 200
+      }
+    }
+  ],
+  "attachmentsCFrame": {
+    "FlightCenter": [
+      0,
+      0,
+      0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "Forward": [
+      0,
+      0,
+      -1.25,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "TrailOrigin": [
+      0,
+      0,
+      2.05,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "ImpactVFX": [
+      0,
+      0,
+      -1.2,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "AudioOrigin": [
+      0,
+      0,
+      0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0,
+      -0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "states": [
+    "Neutral",
+    "WarningPreview",
+    "SpawnIgnite",
+    "Flight_A",
+    "Flight_B",
+    "ScrollStopped",
+    "Impact",
+    "PassExpire",
+    "Cleanup"
+  ],
+  "proxy": {
+    "authority": "course",
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "nominalBodySize": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "visualCollision": false,
+    "trailCollision": false
+  },
+  "textures": [
+    "color.png",
+    "normal.png",
+    "roughness-metalness.png"
+  ],
+  "impactBurst": {
+    "count": 8,
+    "maximumLifetime": 0.24
+  },
+  "assembly": "Roblox native primitives welded to VisualRoot; GLBs use the same authoring dimensions."
+}

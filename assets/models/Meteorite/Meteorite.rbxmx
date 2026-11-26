@@ -1,0 +1,2532 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Model" referent="RBXMeteorite">
+    <Properties>
+      <string name="Name">Meteorite</string>
+      <Ref name="PrimaryPart">RBXVisualRoot</Ref>
+    </Properties>
+    <Item class="Part" referent="RBXVisualRoot">
+      <Properties>
+        <string name="Name">VisualRoot</string>
+        <token name="shape">1</token>
+        <Vector3 name="size">
+          <X>0.1</X>
+          <Y>0.1</Y>
+          <Z>0.1</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>-0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>-0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <Color3uint8 name="Color3uint8">4278190080</Color3uint8>
+        <token name="Material">272</token>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Anchored">false</bool>
+        <bool name="CastShadow">false</bool>
+        <bool name="Massless">true</bool>
+        <float name="Transparency">1</float>
+      </Properties>
+      <Item class="Attachment" referent="RBXFlightCenter">
+        <Properties>
+          <string name="Name">FlightCenter</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>0</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Attachment" referent="RBXForward">
+        <Properties>
+          <string name="Name">Forward</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>0</Y>
+            <Z>-1.25</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Attachment" referent="RBXTrailOrigin">
+        <Properties>
+          <string name="Name">TrailOrigin</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>0</Y>
+            <Z>2.05</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Attachment" referent="RBXImpactVFX">
+        <Properties>
+          <string name="Name">ImpactVFX</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>0</Y>
+            <Z>-1.2</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+        <Item class="ParticleEmitter" referent="RBXImpactBurst">
+          <Properties>
+            <string name="Name">ImpactBurst</string>
+            <bool name="Enabled">false</bool>
+            <float name="Rate">0</float>
+            <NumberRange name="Lifetime">0.12 0.24</NumberRange>
+            <NumberRange name="Speed">2 5</NumberRange>
+            <ColorSequence name="Color">0 1 0.95 0.54 0 1 1 0.60 0.11 0</ColorSequence>
+            <NumberSequence name="Size">0 0.34 0 1 0 0</NumberSequence>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Attachment" referent="RBXAudioOrigin">
+        <Properties>
+          <string name="Name">AudioOrigin</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>0</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Attachment" referent="RBXTrailLeft">
+        <Properties>
+          <string name="Name">TrailLeft</string>
+          <CoordinateFrame name="CFrame">
+            <X>-0.38</X>
+            <Y>0</Y>
+            <Z>2.05</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Attachment" referent="RBXTrailRight">
+        <Properties>
+          <string name="Name">TrailRight</string>
+          <CoordinateFrame name="CFrame">
+            <X>0.38</X>
+            <Y>0</Y>
+            <Z>2.05</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Trail" referent="RBXTrailEmitter">
+        <Properties>
+          <string name="Name">TrailEmitter</string>
+          <Ref name="Attachment0">RBXTrailLeft</Ref>
+          <Ref name="Attachment1">RBXTrailRight</Ref>
+          <float name="Lifetime">0.14</float>
+          <float name="MaxLength">1.6</float>
+          <bool name="FaceCamera">true</bool>
+          <NumberSequence name="Transparency">0 0.3 0 1 1 0</NumberSequence>
+          <NumberSequence name="WidthScale">0 1 0 1 0 0</NumberSequence>
+          <ColorSequence name="Color">0 1 0.85 0.24 0 1 1 0.85 0.24 0</ColorSequence>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Model" referent="RBXHotCore">
+      <Properties>
+        <string name="Name">HotCore</string>
+      </Properties>
+      <Item class="Part" referent="RBXGoldenLimb">
+        <Properties>
+          <string name="Name">GoldenLimb</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>2.49</X>
+            <Y>2.49</Y>
+            <Z>2.3</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>0</Y>
+            <Z>0.24</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294949406</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldGoldenLimb">
+          <Properties>
+            <string name="Name">WeldGoldenLimb</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXGoldenLimb</Ref>
+            <CoordinateFrame name="C0">
+              <X>0</X>
+              <Y>0</Y>
+              <Z>0.24</Z>
+              <R00>1.0</R00>
+              <R01>-0.0</R01>
+              <R02>0.0</R02>
+              <R10>0.0</R10>
+              <R11>1.0</R11>
+              <R12>-0.0</R12>
+              <R20>0.0</R20>
+              <R21>0.0</R21>
+              <R22>1.0</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXWhiteFront">
+        <Properties>
+          <string name="Name">WhiteFront</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>2.46</X>
+            <Y>2.46</Y>
+            <Z>2.5</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>0</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294965680</Color3uint8>
+          <token name="Material">288</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldWhiteFront">
+          <Properties>
+            <string name="Name">WeldWhiteFront</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXWhiteFront</Ref>
+            <CoordinateFrame name="C0">
+              <X>0</X>
+              <Y>0</Y>
+              <Z>0</Z>
+              <R00>1.0</R00>
+              <R01>-0.0</R01>
+              <R02>0.0</R02>
+              <R10>0.0</R10>
+              <R11>1.0</R11>
+              <R12>-0.0</R12>
+              <R20>0.0</R20>
+              <R21>0.0</R21>
+              <R22>1.0</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXDimple0">
+        <Properties>
+          <string name="Name">Dimple0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.22</X>
+            <Y>0.28600000000000003</Y>
+            <Z>0.076</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.8776337208925998</X>
+            <Y>0.2684224363894693</Y>
+            <Z>-0.8322224200890356</Z>
+            <R00>0.6822212072876136</R00>
+            <R01>-0.0</R01>
+            <R02>-0.7311458297268958</R02>
+            <R10>-0.15955767883844993</R10>
+            <R11>0.9758974493306055</R11>
+            <R12>-0.14888087692415153</R12>
+            <R20>0.7135233503191868</R20>
+            <R21>0.21822962308086932</R21>
+            <R22>0.6657779360712284</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4293501988</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldDimple0">
+          <Properties>
+            <string name="Name">WeldDimple0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXDimple0</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.8776337208925998</X>
+              <Y>0.2684224363894693</Y>
+              <Z>-0.8322224200890356</Z>
+              <R00>0.6822212072876136</R00>
+              <R01>-0.0</R01>
+              <R02>-0.7311458297268958</R02>
+              <R10>-0.15955767883844993</R10>
+              <R11>0.9758974493306055</R11>
+              <R12>-0.14888087692415153</R12>
+              <R20>0.7135233503191868</R20>
+              <R21>0.21822962308086932</R21>
+              <R22>0.6657779360712284</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXDimple1">
+        <Properties>
+          <string name="Name">Dimple1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.14</X>
+            <Y>0.18200000000000002</Y>
+            <Z>0.076</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.4307173650363163</X>
+            <Y>-0.47898456103964016</Y>
+            <Z>-1.0648720725430634</Z>
+            <R00>0.924909059857313</R00>
+            <R01>-0.0</R01>
+            <R02>-0.3801884151231614</R02>
+            <R10>0.14805234238221462</R10>
+            <R11>0.9210609940028851</R11>
+            <R12>0.3601765528758873</R12>
+            <R20>0.3501767195417206</R20>
+            <R21>-0.3894183423086506</R21>
+            <R22>0.8518976580344506</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4293501988</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldDimple1">
+          <Properties>
+            <string name="Name">WeldDimple1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXDimple1</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.4307173650363163</X>
+              <Y>-0.47898456103964016</Y>
+              <Z>-1.0648720725430634</Z>
+              <R00>0.924909059857313</R00>
+              <R01>-0.0</R01>
+              <R02>-0.3801884151231614</R02>
+              <R10>0.14805234238221462</R10>
+              <R11>0.9210609940028851</R11>
+              <R12>0.3601765528758873</R12>
+              <R20>0.3501767195417206</R20>
+              <R21>-0.3894183423086506</R21>
+              <R22>0.8518976580344506</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXDimple2">
+        <Properties>
+          <string name="Name">Dimple2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.23</X>
+            <Y>0.29900000000000004</Y>
+            <Z>0.076</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.6061410300567994</X>
+            <Y>0.6740694422540044</Y>
+            <Z>-0.8448560385089354</Z>
+            <R00>0.8080275083121519</R00>
+            <R01>-0.0</R01>
+            <R02>0.5891447579422695</R02>
+            <R10>0.32286542958781794</R10>
+            <R11>0.8364626499151869</R11>
+            <R12>-0.4428184161413538</R12>
+            <R20>-0.4927975854120321</R20>
+            <R21>0.5480239367918736</R21>
+            <R22>0.6758848308071482</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4293501988</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldDimple2">
+          <Properties>
+            <string name="Name">WeldDimple2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXDimple2</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.6061410300567994</X>
+              <Y>0.6740694422540044</Y>
+              <Z>-0.8448560385089354</Z>
+              <R00>0.8080275083121519</R00>
+              <R01>-0.0</R01>
+              <R02>0.5891447579422695</R02>
+              <R10>0.32286542958781794</R10>
+              <R11>0.8364626499151869</R11>
+              <R12>-0.4428184161413538</R12>
+              <R20>-0.4927975854120321</R20>
+              <R21>0.5480239367918736</R21>
+              <R22>0.6758848308071482</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXDimple3">
+        <Properties>
+          <string name="Name">Dimple3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.18</X>
+            <Y>0.23399999999999999</Y>
+            <Z>0.076</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.7768309002889084</X>
+            <Y>-0.3043068698830632</Y>
+            <Z>-0.9184828022487387</Z>
+            <R00>0.7583618759905082</R00>
+            <R01>-0.0</R01>
+            <R02>0.6518337710215366</R02>
+            <R10>-0.16126625572653427</R10>
+            <R11>0.9689124217106447</R11>
+            <R12>0.18762173066773927</R12>
+            <R20>-0.6315698376332589</R20>
+            <R21>-0.24740395925452294</R21>
+            <R22>0.734786241798991</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4293501988</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldDimple3">
+          <Properties>
+            <string name="Name">WeldDimple3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXDimple3</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.7768309002889084</X>
+              <Y>-0.3043068698830632</Y>
+              <Z>-0.9184828022487387</Z>
+              <R00>0.7583618759905082</R00>
+              <R01>-0.0</R01>
+              <R02>0.6518337710215366</R02>
+              <R10>-0.16126625572653427</R10>
+              <R11>0.9689124217106447</R11>
+              <R12>0.18762173066773927</R12>
+              <R20>-0.6315698376332589</R20>
+              <R21>-0.24740395925452294</R21>
+              <R22>0.734786241798991</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXDimple4">
+        <Properties>
+          <string name="Name">Dimple4</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.1</X>
+            <Y>0.13</Y>
+            <Z>0.076</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.30392656553568653</X>
+            <Y>0.061474378202934346</Y>
+            <Z>-1.2096269168542797</Z>
+            <R00>0.9689124217106447</R00>
+            <R01>-0.0</R01>
+            <R02>0.24740395925452294</R02>
+            <R10>0.012365044357817809</R10>
+            <R11>0.9987502603949663</R11>
+            <R12>-0.048425437933139186</R12>
+            <R20>-0.2470947687282004</R20>
+            <R21>0.04997916927067834</R21>
+            <R22>0.9677015334834238</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4293501988</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldDimple4">
+          <Properties>
+            <string name="Name">WeldDimple4</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXDimple4</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.30392656553568653</X>
+              <Y>0.061474378202934346</Y>
+              <Z>-1.2096269168542797</Z>
+              <R00>0.9689124217106447</R00>
+              <R01>-0.0</R01>
+              <R02>0.24740395925452294</R02>
+              <R10>0.012365044357817809</R10>
+              <R11>0.9987502603949663</R11>
+              <R12>-0.048425437933139186</R12>
+              <R20>-0.2470947687282004</R20>
+              <R21>0.04997916927067834</R21>
+              <R22>0.9677015334834238</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXDimple5">
+        <Properties>
+          <string name="Name">Dimple5</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.12</X>
+            <Y>0.156</Y>
+            <Z>0.076</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.2078527986321936</X>
+            <Y>0.8650336856165046</Y>
+            <Z>-0.863171645384671</Z>
+            <R00>0.9713379748520296</R00>
+            <R01>-0.0</R01>
+            <R02>-0.23770262642713458</R02>
+            <R10>-0.1671713650560873</R10>
+            <R11>0.7109135380122773</R11>
+            <R12>-0.683122006801238</R12>
+            <R20>0.1689860151481249</R20>
+            <R21>0.7032794192004103</R21>
+            <R22>0.6905373163077367</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4293501988</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldDimple5">
+          <Properties>
+            <string name="Name">WeldDimple5</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXDimple5</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.2078527986321936</X>
+              <Y>0.8650336856165046</Y>
+              <Z>-0.863171645384671</Z>
+              <R00>0.9713379748520296</R00>
+              <R01>-0.0</R01>
+              <R02>-0.23770262642713458</R02>
+              <R10>-0.1671713650560873</R10>
+              <R11>0.7109135380122773</R11>
+              <R12>-0.683122006801238</R12>
+              <R20>0.1689860151481249</R20>
+              <R21>0.7032794192004103</R21>
+              <R22>0.6905373163077367</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXDimple6">
+        <Properties>
+          <string name="Name">Dimple6</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.14</X>
+            <Y>0.18200000000000002</Y>
+            <Z>0.076</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.1560016910123755</X>
+            <Y>-0.7443792790553286</Y>
+            <Z>-0.9823945572261678</Z>
+            <R00>0.9872272833756269</R00>
+            <R01>-0.0</R01>
+            <R02>0.15931820661424598</R02>
+            <R10>-0.09641721282918725</R10>
+            <R11>0.7960837985490559</R11>
+            <R12>0.5974565312706502</R12>
+            <R20>-0.12683064309949224</R20>
+            <R21>-0.6051864057360395</R21>
+            <R22>0.7859156457809343</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4293501988</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldDimple6">
+          <Properties>
+            <string name="Name">WeldDimple6</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXDimple6</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.1560016910123755</X>
+              <Y>-0.7443792790553286</Y>
+              <Z>-0.9823945572261678</Z>
+              <R00>0.9872272833756269</R00>
+              <R01>-0.0</R01>
+              <R02>0.15931820661424598</R02>
+              <R10>-0.09641721282918725</R10>
+              <R11>0.7960837985490559</R11>
+              <R12>0.5974565312706502</R12>
+              <R20>-0.12683064309949224</R20>
+              <R21>-0.6051864057360395</R21>
+              <R22>0.7859156457809343</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+    <Item class="Model" referent="RBXFlameShell">
+      <Properties>
+        <string name="Name">FlameShell</string>
+      </Properties>
+      <Item class="Part" referent="RBXTongue0_0">
+        <Properties>
+          <string name="Name">Tongue0_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.3860000000000001</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.78</X>
+            <Y>0.0</Y>
+            <Z>0.48</Z>
+            <R00>0.9876883405951378</R00>
+            <R01>-0.0</R01>
+            <R02>0.15643446504023087</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>-0.15643446504023087</R20>
+            <R21>0.0</R21>
+            <R22>0.9876883405951378</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue0_0">
+          <Properties>
+            <string name="Name">WeldTongue0_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue0_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.78</X>
+              <Y>0.0</Y>
+              <Z>0.48</Z>
+              <R00>0.9876883405951378</R00>
+              <R01>-0.0</R01>
+              <R02>0.15643446504023087</R02>
+              <R10>0.0</R10>
+              <R11>1.0</R11>
+              <R12>0.0</R12>
+              <R20>-0.15643446504023087</R20>
+              <R21>0.0</R21>
+              <R22>0.9876883405951378</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue0_1">
+        <Properties>
+          <string name="Name">Tongue0_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.2623100000000003</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.8768113709434732</X>
+            <Y>0.09826041819688754</Y>
+            <Z>1.131</Z>
+            <R00>0.9878407311584513</R00>
+            <R01>-0.0</R01>
+            <R02>0.15546925697492833</R02>
+            <R10>-0.002719597150719554</R10>
+            <R11>0.9998469887579017</R11>
+            <R12>0.017280129139978374</R12>
+            <R20>-0.1554454684308105</R20>
+            <R21>-0.0174928291524422</R21>
+            <R22>0.9876895804211814</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue0_1">
+          <Properties>
+            <string name="Name">WeldTongue0_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue0_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.8768113709434732</X>
+              <Y>0.09826041819688754</Y>
+              <Z>1.131</Z>
+              <R00>0.9878407311584513</R00>
+              <R01>-0.0</R01>
+              <R02>0.15546925697492833</R02>
+              <R10>-0.002719597150719554</R10>
+              <R11>0.9998469887579017</R11>
+              <R12>0.017280129139978374</R12>
+              <R20>-0.1554454684308105</R20>
+              <R21>-0.0174928291524422</R21>
+              <R22>0.9876895804211814</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue0_2">
+        <Properties>
+          <string name="Name">Tongue0_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.1585700000000003</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.947789505483516</X>
+            <Y>0.19726292934890707</Y>
+            <Z>1.6769999999999998</Z>
+            <R00>0.9881985047905973</R00>
+            <R01>-0.0</R01>
+            <R02>0.15317870325090138</R02>
+            <R10>-0.004901955552246406</R10>
+            <R11>0.9994878193134027</R11>
+            <R12>0.03162388141741473</R12>
+            <R20>-0.15310024807749825</R20>
+            <R21>-0.032001547527251054</R21>
+            <R22>0.9876923686019192</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue0_2">
+          <Properties>
+            <string name="Name">WeldTongue0_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue0_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.947789505483516</X>
+              <Y>0.19726292934890707</Y>
+              <Z>1.6769999999999998</Z>
+              <R00>0.9881985047905973</R00>
+              <R01>-0.0</R01>
+              <R02>0.15317870325090138</R02>
+              <R10>-0.004901955552246406</R10>
+              <R11>0.9994878193134027</R11>
+              <R12>0.03162388141741473</R12>
+              <R20>-0.15310024807749825</R20>
+              <R21>-0.032001547527251054</R21>
+              <R22>0.9876923686019192</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue0_3">
+        <Properties>
+          <string name="Name">Tongue0_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>1.0668</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>1.0010016730706843</X>
+            <Y>0.29653271406320597</Y>
+            <Z>2.16</Z>
+            <R00>0.9886797173012521</R00>
+            <R01>-0.0</R01>
+            <R02>0.15004138294855918</R02>
+            <R10>-0.006692046582431599</R10>
+            <R11>0.9990048651337414</R11>
+            <R12>0.04409643921739671</R12>
+            <R20>-0.1498920715370054</R20>
+            <R21>-0.04460133898343185</R21>
+            <R22>0.987695847643003</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue0_3">
+          <Properties>
+            <string name="Name">WeldTongue0_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue0_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>1.0010016730706843</X>
+              <Y>0.29653271406320597</Y>
+              <Z>2.16</Z>
+              <R00>0.9886797173012521</R00>
+              <R01>-0.0</R01>
+              <R02>0.15004138294855918</R02>
+              <R10>-0.006692046582431599</R10>
+              <R11>0.9990048651337414</R11>
+              <R12>0.04409643921739671</R12>
+              <R20>-0.1498920715370054</R20>
+              <R21>-0.04460133898343185</R21>
+              <R22>0.987695847643003</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue1_0">
+        <Properties>
+          <string name="Name">Tongue1_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.6236000000000002</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.5515432893255071</X>
+            <Y>0.5515432893255071</Y>
+            <Z>0.48</Z>
+            <R00>0.9938378363796561</R00>
+            <R01>-0.0</R01>
+            <R02>0.11084383149370122</R02>
+            <R10>-0.012286354980204032</R10>
+            <R11>0.9938378363796561</R11>
+            <R12>0.1101607936677312</R12>
+            <R20>-0.1101607936677312</R20>
+            <R21>-0.11084383149370122</R21>
+            <R22>0.987713645019796</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue1_0">
+          <Properties>
+            <string name="Name">WeldTongue1_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue1_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.5515432893255071</X>
+              <Y>0.5515432893255071</Y>
+              <Z>0.48</Z>
+              <R00>0.9938378363796561</R00>
+              <R01>-0.0</R01>
+              <R02>0.11084383149370122</R02>
+              <R10>-0.012286354980204032</R10>
+              <R11>0.9938378363796561</R11>
+              <R12>0.1101607936677312</R12>
+              <R20>-0.1101607936677312</R20>
+              <R21>-0.11084383149370122</R21>
+              <R22>0.987713645019796</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue1_1">
+        <Properties>
+          <string name="Name">Tongue1_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.478706</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.550518658186358</X>
+            <Y>0.6894798742448485</Y>
+            <Z>1.2426</Z>
+            <R00>0.9952007475224897</R00>
+            <R01>-0.0</R01>
+            <R02>0.09785434139923377</R02>
+            <R10>-0.011981580127212423</R10>
+            <R11>0.9924755459155001</R11>
+            <R12>0.1218553753323384</R12>
+            <R20>-0.09711804090040627</R20>
+            <R21>-0.12244301025264724</R21>
+            <R22>0.9877124051928967</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue1_1">
+          <Properties>
+            <string name="Name">WeldTongue1_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue1_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.550518658186358</X>
+              <Y>0.6894798742448485</Y>
+              <Z>1.2426</Z>
+              <R00>0.9952007475224897</R00>
+              <R01>-0.0</R01>
+              <R02>0.09785434139923377</R02>
+              <R10>-0.011981580127212423</R10>
+              <R11>0.9924755459155001</R11>
+              <R12>0.1218553753323384</R12>
+              <R20>-0.09711804090040627</R20>
+              <R21>-0.12244301025264724</R21>
+              <R22>0.9877124051928967</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue1_2">
+        <Properties>
+          <string name="Name">Tongue1_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.357182</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.5307024314455038</X>
+            <Y>0.8096743414841737</Y>
+            <Z>1.8821999999999999</Z>
+            <R00>0.9962948729513188</R00>
+            <R01>-0.0</R01>
+            <R02>0.08600305884627268</R02>
+            <R10>-0.011266109065239206</R10>
+            <R11>0.9913828162988235</R11>
+            <R12>0.130511249836722</R12>
+            <R20>-0.08526195468933126</R20>
+            <R21>-0.13099660891570106</R21>
+            <R22>0.987709617010557</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue1_2">
+          <Properties>
+            <string name="Name">WeldTongue1_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue1_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.5307024314455038</X>
+              <Y>0.8096743414841737</Y>
+              <Z>1.8821999999999999</Z>
+              <R00>0.9962948729513188</R00>
+              <R01>-0.0</R01>
+              <R02>0.08600305884627268</R02>
+              <R10>-0.011266109065239206</R10>
+              <R11>0.9913828162988235</R11>
+              <R12>0.130511249836722</R12>
+              <R20>-0.08526195468933126</R20>
+              <R21>-0.13099660891570106</R21>
+              <R22>0.987709617010557</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue1_3">
+        <Properties>
+          <string name="Name">Tongue1_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>1.24968</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.4981347780496158</X>
+            <Y>0.9174953639651048</Y>
+            <Z>2.448</Z>
+            <R00>0.997192633069175</R00>
+            <R01>-0.0</R01>
+            <R02>0.0748789192801657</R02>
+            <R10>-0.01030392244099372</R10>
+            <R11>0.990486797849802</R11>
+            <R12>0.1372214723269488</R12>
+            <R20>-0.07416658098426512</R20>
+            <R21>-0.13760778788006728</R21>
+            <R22>0.9877061379680997</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue1_3">
+          <Properties>
+            <string name="Name">WeldTongue1_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue1_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.4981347780496158</X>
+              <Y>0.9174953639651048</Y>
+              <Z>2.448</Z>
+              <R00>0.997192633069175</R00>
+              <R01>-0.0</R01>
+              <R02>0.0748789192801657</R02>
+              <R10>-0.01030392244099372</R10>
+              <R11>0.990486797849802</R11>
+              <R12>0.1372214723269488</R12>
+              <R20>-0.07416658098426512</R20>
+              <R21>-0.13760778788006728</R21>
+              <R22>0.9877061379680997</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue2_0">
+        <Properties>
+          <string name="Name">Tongue2_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.221</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>4.7761225166746774e-17</X>
+            <Y>0.78</Y>
+            <Z>0.48</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>9.61835346860895e-18</R02>
+            <R10>-1.5046419794296902e-18</R10>
+            <R11>0.9876883405951378</R11>
+            <R12>0.15643446504023087</R12>
+            <R20>-9.499935576667862e-18</R20>
+            <R21>-0.15643446504023087</R21>
+            <R22>0.9876883405951378</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue2_0">
+          <Properties>
+            <string name="Name">WeldTongue2_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue2_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>4.7761225166746774e-17</X>
+              <Y>0.78</Y>
+              <Z>0.48</Z>
+              <R00>1.0</R00>
+              <R01>-0.0</R01>
+              <R02>9.61835346860895e-18</R02>
+              <R10>-1.5046419794296902e-18</R10>
+              <R11>0.9876883405951378</R11>
+              <R12>0.15643446504023087</R12>
+              <R20>-9.499935576667862e-18</R20>
+              <R21>-0.15643446504023087</R21>
+              <R22>0.9876883405951378</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue2_1">
+        <Properties>
+          <string name="Name">Tongue2_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.112035</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.09826041819688743</X>
+            <Y>0.8768113709434732</Y>
+            <Z>1.0535</Z>
+            <R00>0.9998469887579017</R00>
+            <R01>-0.0</R01>
+            <R02>-0.01749282915244218</R02>
+            <R10>0.002719597150719551</R10>
+            <R11>0.9878407311584513</R11>
+            <R12>0.1554454684308105</R12>
+            <R20>0.017280129139978354</R20>
+            <R21>-0.15546925697492833</R21>
+            <R22>0.9876895804211814</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue2_1">
+          <Properties>
+            <string name="Name">WeldTongue2_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue2_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.09826041819688743</X>
+              <Y>0.8768113709434732</Y>
+              <Z>1.0535</Z>
+              <R00>0.9998469887579017</R00>
+              <R01>-0.0</R01>
+              <R02>-0.01749282915244218</R02>
+              <R10>0.002719597150719551</R10>
+              <R11>0.9878407311584513</R11>
+              <R12>0.1554454684308105</R12>
+              <R20>0.017280129139978354</R20>
+              <R21>-0.15546925697492833</R21>
+              <R22>0.9876895804211814</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue2_2">
+        <Properties>
+          <string name="Name">Tongue2_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.0206450000000002</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.1972629293489071</X>
+            <Y>0.947789505483516</Y>
+            <Z>1.5345</Z>
+            <R00>0.9994878193134027</R00>
+            <R01>-0.0</R01>
+            <R02>-0.03200154752725106</R02>
+            <R10>0.004901955552246407</R10>
+            <R11>0.9881985047905973</R11>
+            <R12>0.15310024807749825</R12>
+            <R20>0.031623881417414734</R20>
+            <R21>-0.15317870325090138</R21>
+            <R22>0.9876923686019192</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue2_2">
+          <Properties>
+            <string name="Name">WeldTongue2_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue2_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.1972629293489071</X>
+              <Y>0.947789505483516</Y>
+              <Z>1.5345</Z>
+              <R00>0.9994878193134027</R00>
+              <R01>-0.0</R01>
+              <R02>-0.03200154752725106</R02>
+              <R10>0.004901955552246407</R10>
+              <R11>0.9881985047905973</R11>
+              <R12>0.15310024807749825</R12>
+              <R20>0.031623881417414734</R20>
+              <R21>-0.15317870325090138</R21>
+              <R22>0.9876923686019192</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue2_3">
+        <Properties>
+          <string name="Name">Tongue2_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>0.9398000000000001</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.29653271406320597</X>
+            <Y>1.0010016730706843</Y>
+            <Z>1.9600000000000002</Z>
+            <R00>0.9990048651337414</R00>
+            <R01>-0.0</R01>
+            <R02>-0.04460133898343185</R02>
+            <R10>0.006692046582431599</R10>
+            <R11>0.9886797173012521</R11>
+            <R12>0.1498920715370054</R12>
+            <R20>0.04409643921739671</R20>
+            <R21>-0.15004138294855918</R21>
+            <R22>0.987695847643003</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue2_3">
+          <Properties>
+            <string name="Name">WeldTongue2_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue2_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.29653271406320597</X>
+              <Y>1.0010016730706843</Y>
+              <Z>1.9600000000000002</Z>
+              <R00>0.9990048651337414</R00>
+              <R01>-0.0</R01>
+              <R02>-0.04460133898343185</R02>
+              <R10>0.006692046582431599</R10>
+              <R11>0.9886797173012521</R11>
+              <R12>0.1498920715370054</R12>
+              <R20>0.04409643921739671</R20>
+              <R21>-0.15004138294855918</R21>
+              <R22>0.987695847643003</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue3_0">
+        <Properties>
+          <string name="Name">Tongue3_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.518</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.551543289325507</X>
+            <Y>0.5515432893255071</Y>
+            <Z>0.48</Z>
+            <R00>0.9938378363796561</R00>
+            <R01>-0.0</R01>
+            <R02>-0.11084383149370121</R02>
+            <R10>0.01228635498020403</R10>
+            <R11>0.9938378363796561</R11>
+            <R12>0.1101607936677312</R12>
+            <R20>0.11016079366773118</R20>
+            <R21>-0.11084383149370122</R21>
+            <R22>0.987713645019796</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue3_0">
+          <Properties>
+            <string name="Name">WeldTongue3_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue3_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.551543289325507</X>
+              <Y>0.5515432893255071</Y>
+              <Z>0.48</Z>
+              <R00>0.9938378363796561</R00>
+              <R01>-0.0</R01>
+              <R02>-0.11084383149370121</R02>
+              <R10>0.01228635498020403</R10>
+              <R11>0.9938378363796561</R11>
+              <R12>0.1101607936677312</R12>
+              <R20>0.11016079366773118</R20>
+              <R21>-0.11084383149370122</R21>
+              <R22>0.987713645019796</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue3_1">
+        <Properties>
+          <string name="Name">Tongue3_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.38253</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.6894798742448485</X>
+            <Y>0.550518658186358</Y>
+            <Z>1.193</Z>
+            <R00>0.9924755459155001</R00>
+            <R01>-0.0</R01>
+            <R02>-0.12244301025264724</R02>
+            <R10>0.011981580127212423</R10>
+            <R11>0.9952007475224897</R11>
+            <R12>0.09711804090040627</R12>
+            <R20>0.1218553753323384</R20>
+            <R21>-0.09785434139923377</R21>
+            <R22>0.9877124051928967</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue3_1">
+          <Properties>
+            <string name="Name">WeldTongue3_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue3_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.6894798742448485</X>
+              <Y>0.550518658186358</Y>
+              <Z>1.193</Z>
+              <R00>0.9924755459155001</R00>
+              <R01>-0.0</R01>
+              <R02>-0.12244301025264724</R02>
+              <R10>0.011981580127212423</R10>
+              <R11>0.9952007475224897</R11>
+              <R12>0.09711804090040627</R12>
+              <R20>0.1218553753323384</R20>
+              <R21>-0.09785434139923377</R21>
+              <R22>0.9877124051928967</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue3_2">
+        <Properties>
+          <string name="Name">Tongue3_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.26891</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.8096743414841737</X>
+            <Y>0.5307024314455037</Y>
+            <Z>1.7909999999999997</Z>
+            <R00>0.9913828162988235</R00>
+            <R01>-0.0</R01>
+            <R02>-0.13099660891570108</R02>
+            <R10>0.011266109065239208</R10>
+            <R11>0.9962948729513188</R11>
+            <R12>0.08526195468933125</R12>
+            <R20>0.13051124983672202</R20>
+            <R21>-0.08600305884627267</R21>
+            <R22>0.987709617010557</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue3_2">
+          <Properties>
+            <string name="Name">WeldTongue3_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue3_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.8096743414841737</X>
+              <Y>0.5307024314455037</Y>
+              <Z>1.7909999999999997</Z>
+              <R00>0.9913828162988235</R00>
+              <R01>-0.0</R01>
+              <R02>-0.13099660891570108</R02>
+              <R10>0.011266109065239208</R10>
+              <R11>0.9962948729513188</R11>
+              <R12>0.08526195468933125</R12>
+              <R20>0.13051124983672202</R20>
+              <R21>-0.08600305884627267</R21>
+              <R22>0.987709617010557</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue3_3">
+        <Properties>
+          <string name="Name">Tongue3_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>1.1683999999999999</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.9174953639651047</X>
+            <Y>0.4981347780496161</Y>
+            <Z>2.32</Z>
+            <R00>0.990486797849802</R00>
+            <R01>-0.0</R01>
+            <R02>-0.13760778788006725</R02>
+            <R10>0.010303922440993728</R10>
+            <R11>0.997192633069175</R11>
+            <R12>0.07416658098426518</R12>
+            <R20>0.13722147232694878</R20>
+            <R21>-0.07487891928016575</R21>
+            <R22>0.9877061379680997</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue3_3">
+          <Properties>
+            <string name="Name">WeldTongue3_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue3_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.9174953639651047</X>
+              <Y>0.4981347780496161</Y>
+              <Z>2.32</Z>
+              <R00>0.990486797849802</R00>
+              <R01>-0.0</R01>
+              <R02>-0.13760778788006725</R02>
+              <R10>0.010303922440993728</R10>
+              <R11>0.997192633069175</R11>
+              <R12>0.07416658098426518</R12>
+              <R20>0.13722147232694878</R20>
+              <R21>-0.07487891928016575</R21>
+              <R22>0.9877061379680997</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue4_0">
+        <Properties>
+          <string name="Name">Tongue4_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.7028</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.78</X>
+            <Y>9.552245033349355e-17</Y>
+            <Z>0.48</Z>
+            <R00>0.9876883405951378</R00>
+            <R01>-0.0</R01>
+            <R02>-0.15643446504023087</R02>
+            <R10>3.0092839588593803e-18</R10>
+            <R11>1.0</R11>
+            <R12>1.8999871153335723e-17</R12>
+            <R20>0.15643446504023087</R20>
+            <R21>-1.92367069372179e-17</R21>
+            <R22>0.9876883405951378</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue4_0">
+          <Properties>
+            <string name="Name">WeldTongue4_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue4_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.78</X>
+              <Y>9.552245033349355e-17</Y>
+              <Z>0.48</Z>
+              <R00>0.9876883405951378</R00>
+              <R01>-0.0</R01>
+              <R02>-0.15643446504023087</R02>
+              <R10>3.0092839588593803e-18</R10>
+              <R11>1.0</R11>
+              <R12>1.8999871153335723e-17</R12>
+              <R20>0.15643446504023087</R20>
+              <R21>-1.92367069372179e-17</R21>
+              <R22>0.9876883405951378</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue4_1">
+        <Properties>
+          <string name="Name">Tongue4_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.5508380000000002</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.8768113709434732</X>
+            <Y>-0.09826041819688755</Y>
+            <Z>1.2798</Z>
+            <R00>0.9878407311584513</R00>
+            <R01>-0.0</R01>
+            <R02>-0.15546925697492833</R02>
+            <R10>-0.0027195971507195547</R10>
+            <R11>0.9998469887579017</R11>
+            <R12>-0.017280129139978378</R12>
+            <R20>0.1554454684308105</R20>
+            <R21>0.017492829152442203</R21>
+            <R22>0.9876895804211814</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue4_1">
+          <Properties>
+            <string name="Name">WeldTongue4_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue4_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.8768113709434732</X>
+              <Y>-0.09826041819688755</Y>
+              <Z>1.2798</Z>
+              <R00>0.9878407311584513</R00>
+              <R01>-0.0</R01>
+              <R02>-0.15546925697492833</R02>
+              <R10>-0.0027195971507195547</R10>
+              <R11>0.9998469887579017</R11>
+              <R12>-0.017280129139978378</R12>
+              <R20>0.1554454684308105</R20>
+              <R21>0.017492829152442203</R21>
+              <R22>0.9876895804211814</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue4_2">
+        <Properties>
+          <string name="Name">Tongue4_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.4233860000000003</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.947789505483516</X>
+            <Y>-0.19726292934890705</Y>
+            <Z>1.9506</Z>
+            <R00>0.9881985047905973</R00>
+            <R01>-0.0</R01>
+            <R02>-0.15317870325090138</R02>
+            <R10>-0.004901955552246405</R10>
+            <R11>0.9994878193134027</R11>
+            <R12>-0.03162388141741472</R12>
+            <R20>0.15310024807749825</R20>
+            <R21>0.03200154752725105</R21>
+            <R22>0.9876923686019192</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue4_2">
+          <Properties>
+            <string name="Name">WeldTongue4_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue4_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.947789505483516</X>
+              <Y>-0.19726292934890705</Y>
+              <Z>1.9506</Z>
+              <R00>0.9881985047905973</R00>
+              <R01>-0.0</R01>
+              <R02>-0.15317870325090138</R02>
+              <R10>-0.004901955552246405</R10>
+              <R11>0.9994878193134027</R11>
+              <R12>-0.03162388141741472</R12>
+              <R20>0.15310024807749825</R20>
+              <R21>0.03200154752725105</R21>
+              <R22>0.9876923686019192</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue4_3">
+        <Properties>
+          <string name="Name">Tongue4_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>1.31064</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-1.0010016730706843</X>
+            <Y>-0.2965327140632057</Y>
+            <Z>2.544</Z>
+            <R00>0.9886797173012521</R00>
+            <R01>-0.0</R01>
+            <R02>-0.1500413829485592</R02>
+            <R10>-0.006692046582431593</R10>
+            <R11>0.9990048651337414</R11>
+            <R12>-0.044096439217396664</R12>
+            <R20>0.14989207153700543</R20>
+            <R21>0.0446013389834318</R21>
+            <R22>0.987695847643003</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue4_3">
+          <Properties>
+            <string name="Name">WeldTongue4_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue4_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>-1.0010016730706843</X>
+              <Y>-0.2965327140632057</Y>
+              <Z>2.544</Z>
+              <R00>0.9886797173012521</R00>
+              <R01>-0.0</R01>
+              <R02>-0.1500413829485592</R02>
+              <R10>-0.006692046582431593</R10>
+              <R11>0.9990048651337414</R11>
+              <R12>-0.044096439217396664</R12>
+              <R20>0.14989207153700543</R20>
+              <R21>0.0446013389834318</R21>
+              <R22>0.987695847643003</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue5_0">
+        <Properties>
+          <string name="Name">Tongue5_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.3728</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.5515432893255072</X>
+            <Y>-0.551543289325507</Y>
+            <Z>0.48</Z>
+            <R00>0.9938378363796561</R00>
+            <R01>-0.0</R01>
+            <R02>-0.11084383149370124</R02>
+            <R10>-0.012286354980204032</R10>
+            <R11>0.9938378363796561</R11>
+            <R12>-0.11016079366773118</R12>
+            <R20>0.11016079366773121</R20>
+            <R21>0.11084383149370121</R21>
+            <R22>0.987713645019796</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue5_0">
+          <Properties>
+            <string name="Name">WeldTongue5_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue5_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.5515432893255072</X>
+              <Y>-0.551543289325507</Y>
+              <Z>0.48</Z>
+              <R00>0.9938378363796561</R00>
+              <R01>-0.0</R01>
+              <R02>-0.11084383149370124</R02>
+              <R10>-0.012286354980204032</R10>
+              <R11>0.9938378363796561</R11>
+              <R12>-0.11016079366773118</R12>
+              <R20>0.11016079366773121</R20>
+              <R21>0.11084383149370121</R21>
+              <R22>0.987713645019796</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue5_1">
+        <Properties>
+          <string name="Name">Tongue5_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.2502880000000003</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.550518658186358</X>
+            <Y>-0.6894798742448485</Y>
+            <Z>1.1248</Z>
+            <R00>0.9952007475224897</R00>
+            <R01>-0.0</R01>
+            <R02>-0.09785434139923377</R02>
+            <R10>-0.011981580127212423</R10>
+            <R11>0.9924755459155001</R11>
+            <R12>-0.1218553753323384</R12>
+            <R20>0.09711804090040627</R20>
+            <R21>0.12244301025264724</R21>
+            <R22>0.9877124051928967</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue5_1">
+          <Properties>
+            <string name="Name">WeldTongue5_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue5_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.550518658186358</X>
+              <Y>-0.6894798742448485</Y>
+              <Z>1.1248</Z>
+              <R00>0.9952007475224897</R00>
+              <R01>-0.0</R01>
+              <R02>-0.09785434139923377</R02>
+              <R10>-0.011981580127212423</R10>
+              <R11>0.9924755459155001</R11>
+              <R12>-0.1218553753323384</R12>
+              <R20>0.09711804090040627</R20>
+              <R21>0.12244301025264724</R21>
+              <R22>0.9877124051928967</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue5_2">
+        <Properties>
+          <string name="Name">Tongue5_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.1475360000000001</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.5307024314455041</X>
+            <Y>-0.8096743414841735</Y>
+            <Z>1.6656</Z>
+            <R00>0.9962948729513188</R00>
+            <R01>-0.0</R01>
+            <R02>-0.08600305884627273</R02>
+            <R10>-0.01126610906523921</R10>
+            <R11>0.9913828162988235</R11>
+            <R12>-0.13051124983672197</R12>
+            <R20>0.0852619546893313</R20>
+            <R21>0.13099660891570103</R21>
+            <R22>0.987709617010557</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue5_2">
+          <Properties>
+            <string name="Name">WeldTongue5_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue5_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.5307024314455041</X>
+              <Y>-0.8096743414841735</Y>
+              <Z>1.6656</Z>
+              <R00>0.9962948729513188</R00>
+              <R01>-0.0</R01>
+              <R02>-0.08600305884627273</R02>
+              <R10>-0.01126610906523921</R10>
+              <R11>0.9913828162988235</R11>
+              <R12>-0.13051124983672197</R12>
+              <R20>0.0852619546893313</R20>
+              <R21>0.13099660891570103</R21>
+              <R22>0.987709617010557</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue5_3">
+        <Properties>
+          <string name="Name">Tongue5_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>1.05664</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-0.49813477804961576</X>
+            <Y>-0.9174953639651048</Y>
+            <Z>2.144</Z>
+            <R00>0.997192633069175</R00>
+            <R01>-0.0</R01>
+            <R02>-0.07487891928016568</R02>
+            <R10>-0.010303922440993719</R10>
+            <R11>0.990486797849802</R11>
+            <R12>-0.1372214723269488</R12>
+            <R20>0.07416658098426511</R20>
+            <R21>0.13760778788006728</R21>
+            <R22>0.9877061379680997</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294615573</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue5_3">
+          <Properties>
+            <string name="Name">WeldTongue5_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue5_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>-0.49813477804961576</X>
+              <Y>-0.9174953639651048</Y>
+              <Z>2.144</Z>
+              <R00>0.997192633069175</R00>
+              <R01>-0.0</R01>
+              <R02>-0.07487891928016568</R02>
+              <R10>-0.010303922440993719</R10>
+              <R11>0.990486797849802</R11>
+              <R12>-0.1372214723269488</R12>
+              <R20>0.07416658098426511</R20>
+              <R21>0.13760778788006728</R21>
+              <R22>0.9877061379680997</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue6_0">
+        <Properties>
+          <string name="Name">Tongue6_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.5576</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-1.4328367550024033e-16</X>
+            <Y>-0.78</Y>
+            <Z>0.48</Z>
+            <R00>1.0</R00>
+            <R01>-0.0</R01>
+            <R02>-2.8855060405826847e-17</R02>
+            <R10>-4.51392593828907e-18</R10>
+            <R11>0.9876883405951378</R11>
+            <R12>-0.15643446504023087</R12>
+            <R20>2.849980673000358e-17</R20>
+            <R21>0.15643446504023087</R21>
+            <R22>0.9876883405951378</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue6_0">
+          <Properties>
+            <string name="Name">WeldTongue6_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue6_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>-1.4328367550024033e-16</X>
+              <Y>-0.78</Y>
+              <Z>0.48</Z>
+              <R00>1.0</R00>
+              <R01>-0.0</R01>
+              <R02>-2.8855060405826847e-17</R02>
+              <R10>-4.51392593828907e-18</R10>
+              <R11>0.9876883405951378</R11>
+              <R12>-0.15643446504023087</R12>
+              <R20>2.849980673000358e-17</R20>
+              <R21>0.15643446504023087</R21>
+              <R22>0.9876883405951378</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue6_1">
+        <Properties>
+          <string name="Name">Tongue6_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.4185960000000002</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.09826041819688751</X>
+            <Y>-0.8768113709434732</Y>
+            <Z>1.2115999999999998</Z>
+            <R00>0.9998469887579017</R00>
+            <R01>-0.0</R01>
+            <R02>0.017492829152442196</R02>
+            <R10>0.0027195971507195534</R10>
+            <R11>0.9878407311584513</R11>
+            <R12>-0.1554454684308105</R12>
+            <R20>-0.01728012913997837</R20>
+            <R21>0.15546925697492833</R21>
+            <R22>0.9876895804211814</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue6_1">
+          <Properties>
+            <string name="Name">WeldTongue6_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue6_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.09826041819688751</X>
+              <Y>-0.8768113709434732</Y>
+              <Z>1.2115999999999998</Z>
+              <R00>0.9998469887579017</R00>
+              <R01>-0.0</R01>
+              <R02>0.017492829152442196</R02>
+              <R10>0.0027195971507195534</R10>
+              <R11>0.9878407311584513</R11>
+              <R12>-0.1554454684308105</R12>
+              <R20>-0.01728012913997837</R20>
+              <R21>0.15546925697492833</R21>
+              <R22>0.9876895804211814</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue6_2">
+        <Properties>
+          <string name="Name">Tongue6_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.3020120000000002</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.19726292934890655</X>
+            <Y>-0.9477895054835161</Y>
+            <Z>1.8251999999999997</Z>
+            <R00>0.9994878193134027</R00>
+            <R01>-0.0</R01>
+            <R02>0.03200154752725097</R02>
+            <R10>0.004901955552246393</R10>
+            <R11>0.9881985047905973</R11>
+            <R12>-0.15310024807749825</R12>
+            <R20>-0.031623881417414644</R20>
+            <R21>0.15317870325090138</R21>
+            <R22>0.9876923686019192</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue6_2">
+          <Properties>
+            <string name="Name">WeldTongue6_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue6_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.19726292934890655</X>
+              <Y>-0.9477895054835161</Y>
+              <Z>1.8251999999999997</Z>
+              <R00>0.9994878193134027</R00>
+              <R01>-0.0</R01>
+              <R02>0.03200154752725097</R02>
+              <R10>0.004901955552246393</R10>
+              <R11>0.9881985047905973</R11>
+              <R12>-0.15310024807749825</R12>
+              <R20>-0.031623881417414644</R20>
+              <R21>0.15317870325090138</R21>
+              <R22>0.9876923686019192</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue6_3">
+        <Properties>
+          <string name="Name">Tongue6_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>1.19888</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.2965327140632061</X>
+            <Y>-1.0010016730706843</Y>
+            <Z>2.368</Z>
+            <R00>0.9990048651337414</R00>
+            <R01>-0.0</R01>
+            <R02>0.044601338983431854</R02>
+            <R10>0.0066920465824316</R10>
+            <R11>0.9886797173012521</R11>
+            <R12>-0.1498920715370054</R12>
+            <R20>-0.04409643921739672</R20>
+            <R21>0.15004138294855918</R21>
+            <R22>0.987695847643003</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294952235</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue6_3">
+          <Properties>
+            <string name="Name">WeldTongue6_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue6_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.2965327140632061</X>
+              <Y>-1.0010016730706843</Y>
+              <Z>2.368</Z>
+              <R00>0.9990048651337414</R00>
+              <R01>-0.0</R01>
+              <R02>0.044601338983431854</R02>
+              <R10>0.0066920465824316</R10>
+              <R11>0.9886797173012521</R11>
+              <R12>-0.1498920715370054</R12>
+              <R20>-0.04409643921739672</R20>
+              <R21>0.15004138294855918</R21>
+              <R22>0.987695847643003</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue7_0">
+        <Properties>
+          <string name="Name">Tongue7_0</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.78</X>
+            <Y>0.7098000000000001</Y>
+            <Z>1.2936</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.551543289325507</X>
+            <Y>-0.5515432893255072</Y>
+            <Z>0.48</Z>
+            <R00>0.9938378363796561</R00>
+            <R01>-0.0</R01>
+            <R02>0.11084383149370118</R02>
+            <R10>0.012286354980204028</R10>
+            <R11>0.9938378363796561</R11>
+            <R12>-0.11016079366773121</R12>
+            <R20>-0.11016079366773115</R20>
+            <R21>0.11084383149370124</R21>
+            <R22>0.987713645019796</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue7_0">
+          <Properties>
+            <string name="Name">WeldTongue7_0</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue7_0</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.551543289325507</X>
+              <Y>-0.5515432893255072</Y>
+              <Z>0.48</Z>
+              <R00>0.9938378363796561</R00>
+              <R01>-0.0</R01>
+              <R02>0.11084383149370118</R02>
+              <R10>0.012286354980204028</R10>
+              <R11>0.9938378363796561</R11>
+              <R12>-0.11016079366773121</R12>
+              <R20>-0.11016079366773115</R20>
+              <R21>0.11084383149370124</R21>
+              <R22>0.987713645019796</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue7_1">
+        <Properties>
+          <string name="Name">Tongue7_1</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.59</X>
+            <Y>0.5369</Y>
+            <Z>1.1781560000000002</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.6894798742448485</X>
+            <Y>-0.5505186581863581</Y>
+            <Z>1.0876000000000001</Z>
+            <R00>0.9924755459155001</R00>
+            <R01>-0.0</R01>
+            <R02>0.12244301025264724</R02>
+            <R10>0.011981580127212425</R10>
+            <R11>0.9952007475224897</R11>
+            <R12>-0.09711804090040628</R12>
+            <R20>-0.1218553753323384</R20>
+            <R21>0.09785434139923378</R21>
+            <R22>0.9877124051928967</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue7_1">
+          <Properties>
+            <string name="Name">WeldTongue7_1</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue7_1</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.6894798742448485</X>
+              <Y>-0.5505186581863581</Y>
+              <Z>1.0876000000000001</Z>
+              <R00>0.9924755459155001</R00>
+              <R01>-0.0</R01>
+              <R02>0.12244301025264724</R02>
+              <R10>0.011981580127212425</R10>
+              <R11>0.9952007475224897</R11>
+              <R12>-0.09711804090040628</R12>
+              <R20>-0.1218553753323384</R20>
+              <R21>0.09785434139923378</R21>
+              <R22>0.9877124051928967</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue7_2">
+        <Properties>
+          <string name="Name">Tongue7_2</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.37</X>
+            <Y>0.3367</Y>
+            <Z>1.0813320000000002</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.8096743414841735</X>
+            <Y>-0.5307024314455041</Y>
+            <Z>1.5972</Z>
+            <R00>0.9913828162988235</R00>
+            <R01>-0.0</R01>
+            <R02>0.13099660891570103</R02>
+            <R10>0.01126610906523921</R10>
+            <R11>0.9962948729513188</R11>
+            <R12>-0.0852619546893313</R12>
+            <R20>-0.13051124983672197</R20>
+            <R21>0.08600305884627273</R21>
+            <R22>0.987709617010557</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue7_2">
+          <Properties>
+            <string name="Name">WeldTongue7_2</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue7_2</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.8096743414841735</X>
+              <Y>-0.5307024314455041</Y>
+              <Z>1.5972</Z>
+              <R00>0.9913828162988235</R00>
+              <R01>-0.0</R01>
+              <R02>0.13099660891570103</R02>
+              <R10>0.01126610906523921</R10>
+              <R11>0.9962948729513188</R11>
+              <R12>-0.0852619546893313</R12>
+              <R20>-0.13051124983672197</R20>
+              <R21>0.08600305884627273</R21>
+              <R22>0.987709617010557</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXTongue7_3">
+        <Properties>
+          <string name="Name">Tongue7_3</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.2</X>
+            <Y>0.18200000000000002</Y>
+            <Z>0.99568</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.9174953639651048</X>
+            <Y>-0.4981347780496158</Y>
+            <Z>2.048</Z>
+            <R00>0.990486797849802</R00>
+            <R01>-0.0</R01>
+            <R02>0.13760778788006728</R02>
+            <R10>0.01030392244099372</R10>
+            <R11>0.997192633069175</R11>
+            <R12>-0.07416658098426512</R12>
+            <R20>-0.1372214723269488</R20>
+            <R21>0.0748789192801657</R21>
+            <R22>0.9877061379680997</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294957632</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldTongue7_3">
+          <Properties>
+            <string name="Name">WeldTongue7_3</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXTongue7_3</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.9174953639651048</X>
+              <Y>-0.4981347780496158</Y>
+              <Z>2.048</Z>
+              <R00>0.990486797849802</R00>
+              <R01>-0.0</R01>
+              <R02>0.13760778788006728</R02>
+              <R10>0.01030392244099372</R10>
+              <R11>0.997192633069175</R11>
+              <R12>-0.07416658098426512</R12>
+              <R20>-0.1372214723269488</R20>
+              <R21>0.0748789192801657</R21>
+              <R22>0.9877061379680997</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXCentralFlare">
+        <Properties>
+          <string name="Name">CentralFlare</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>1.5</X>
+            <Y>1.52</Y>
+            <Z>3.22</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.08</X>
+            <Y>0.02</Y>
+            <Z>1.33</Z>
+            <R00>0.9986295347545738</R00>
+            <R01>-0.0</R01>
+            <R02>0.052335956242943835</R02>
+            <R10>0.0009133883796357411</R10>
+            <R11>0.9998476951563913</R11>
+            <R12>-0.017428488520812163</R12>
+            <R20>-0.05232798522331314</R20>
+            <R21>0.01745240643728351</R21>
+            <R22>0.9984774386394599</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294958659</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldCentralFlare">
+          <Properties>
+            <string name="Name">WeldCentralFlare</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXCentralFlare</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.08</X>
+              <Y>0.02</Y>
+              <Z>1.33</Z>
+              <R00>0.9986295347545738</R00>
+              <R01>-0.0</R01>
+              <R02>0.052335956242943835</R02>
+              <R10>0.0009133883796357411</R10>
+              <R11>0.9998476951563913</R11>
+              <R12>-0.017428488520812163</R12>
+              <R20>-0.05232798522331314</R20>
+              <R21>0.01745240643728351</R21>
+              <R22>0.9984774386394599</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBXLongFlare">
+        <Properties>
+          <string name="Name">LongFlare</string>
+          <token name="shape">0</token>
+          <Vector3 name="size">
+            <X>0.47</X>
+            <Y>0.38</Y>
+            <Z>2.2</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>0.1</X>
+            <Y>0.19</Y>
+            <Z>2.59</Z>
+            <R00>0.9961946980917455</R00>
+            <R01>-0.0</R01>
+            <R02>-0.08715574274765817</R02>
+            <R10>0.007596123493895969</R10>
+            <R11>0.9961946980917455</R11>
+            <R12>0.08682408883346517</R12>
+            <R20>0.08682408883346517</R20>
+            <R21>-0.08715574274765817</R21>
+            <R22>0.9924038765061041</R22>
+          </CoordinateFrame>
+          <Color3uint8 name="Color3uint8">4294951460</Color3uint8>
+          <token name="Material">272</token>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Anchored">false</bool>
+          <bool name="CastShadow">false</bool>
+          <bool name="Massless">true</bool>
+        </Properties>
+        <Item class="Weld" referent="RBXWeldLongFlare">
+          <Properties>
+            <string name="Name">WeldLongFlare</string>
+            <Ref name="Part0">RBXVisualRoot</Ref>
+            <Ref name="Part1">RBXLongFlare</Ref>
+            <CoordinateFrame name="C0">
+              <X>0.1</X>
+              <Y>0.19</Y>
+              <Z>2.59</Z>
+              <R00>0.9961946980917455</R00>
+              <R01>-0.0</R01>
+              <R02>-0.08715574274765817</R02>
+              <R10>0.007596123493895969</R10>
+              <R11>0.9961946980917455</R11>
+              <R12>0.08682408883346517</R12>
+              <R20>0.08682408883346517</R20>
+              <R21>-0.08715574274765817</R21>
+              <R22>0.9924038765061041</R22>
+            </CoordinateFrame>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+  </Item>
+</roblox>

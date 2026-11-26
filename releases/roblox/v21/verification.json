@@ -1,0 +1,103 @@
+{
+  "publication": {
+    "version": 21,
+    "placeId": "127067245911754",
+    "sha256": "a2f6ddcef4e6f4cc36e29b3f0e4d514f242ecafcefd76bb3978fa03a3afc5823",
+    "observedAt": "2026-11-27T02:05:30.257000+03:00",
+    "source": "v21/verification.json"
+  },
+  "universeId": "10777822493",
+  "downloadedReleaseByteExact": true,
+  "moderation": "Approved",
+  "models": {
+    "Scuzz": {
+      "issue": "BT-88",
+      "assetId": "71192236028656",
+      "revision": "2",
+      "moderation": "Approved"
+    },
+    "RatPod": {
+      "issue": "BT-91",
+      "assetId": "138389972582010",
+      "revision": "1",
+      "moderation": "Approved"
+    },
+    "Meteorite": {
+      "issue": "BT-95",
+      "assetId": "85366635220573",
+      "revision": "1",
+      "moderation": "Approved"
+    },
+    "ShadowCloud": {
+      "issue": "BT-107",
+      "assetId": "112664563553810",
+      "revision": "1",
+      "moderation": "Approved"
+    }
+  },
+  "sceneChunks": 1558,
+  "unchangedChunks": 1557,
+  "studioServer": {
+    "Meteorite": {
+      "imported": 2,
+      "visualParts": 46
+    },
+    "ShadowCloud": {
+      "imported": 10,
+      "visualParts": 40
+    },
+    "ScuzzVisual": {
+      "imported": 1,
+      "visualParts": 77
+    },
+    "RatPod": {
+      "imported": 4,
+      "visualParts": 55
+    }
+  },
+  "studioClient": {
+    "Meteorite": {
+      "visible": 2,
+      "meshes": 2,
+      "hidden": 43,
+      "fallback": 43
+    },
+    "ShadowCloud": {
+      "visible": 10,
+      "meshes": 10,
+      "hidden": 30,
+      "fallback": 30
+    },
+    "ScuzzVisual": {
+      "visible": 1,
+      "meshes": 1,
+      "hidden": 62,
+      "fallback": 62
+    },
+    "RatPod": {
+      "visible": 4,
+      "meshes": 4,
+      "hidden": 50,
+      "fallback": 50
+    }
+  },
+  "studioAttackPoses": {
+    "Gas": true,
+    "Attack66": true,
+    "Attack68": true
+  },
+  "tests": [
+    "campaign_modes",
+    "campaign_progression",
+    "campaign_race",
+    "campaign_roster",
+    "campaign_enemies",
+    "canonical_cast",
+    "cast_asset_visibility",
+    "four_model_hazards"
+  ],
+  "unverified": [
+    "physical mobile device",
+    "late join in a public production server"
+  ]
+}

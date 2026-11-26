@@ -65,7 +65,7 @@ function Modes.new(session,world,definition)
         actors={},supports={},blocks={},hazards={},objects={},now=session.now or 0,elapsed=0,discardedSeconds=0,
         complete=false,closed=false,room=1,bombIndex=1,race=definition.mode=='Race' and {elapsed=0} or nil,rotation=0,chaseLife=definition.course.chaseLife or 207,
         broken={},chaseProgress=-(definition.course.chaseGap or 32),projectiles={},emitterNext={},projectileSerial=0,
-        encounterFired={},vehicleGroup=definition.course.mount and {phase='Mounting',checkpoint=1,elapsed=0,speed=0,serial=0} or nil},Modes)
+        encounterFired={},airPasses={},vehicleGroup=definition.course.mount and {phase='Mounting',checkpoint=1,elapsed=0,speed=0,serial=0} or nil},Modes)
     for _,support in ipairs(self.course.supports or {}) do
         self.supports[#self.supports+1]={id=support.id,definition=support,position=pathPosition(support,0),previous=pathPosition(support,0)}
         for segment=2,support.segments or 1 do
@@ -654,6 +654,9 @@ function Modes:_hazards(s,old)
     if s.mounted and self.vehicleGroup and self.vehicleGroup.phase~='Riding' then return end
     for _,h in ipairs(self.hazards) do
         if h.active~=false and swept(old,s.position,h,h.previous) then
+            if (h.kind=='RatPod' or h.kind=='Meteorite') and self.world.campaignAirImpact then
+                self.world:campaignAirImpact(h.id)
+            end
             if self.definition.speederEntry and h.id==self.course.hazards[1].id then s.touchedFirstWall=true end
             if self.mode=='Speeder' or self.mode=='Surf' or self.mode=='Jet' or h.kind=='Spike' or h.kind=='RotatingSpike' or h.kind=='PipeCrusher' or h.kind=='MechanicalCrusher' then
                 self:_die(s,'CampaignCrash')
@@ -784,6 +787,49 @@ function Modes:interact(slot,now,action)
     end
     return 'OK'
 end
+-- One crossing per vehicle attempt. Retries recreate the visual and its trail.
+function Modes:_airPass(h,dt)
+    local group=self.vehicleGroup
+    local pass=self.airPasses[h.id]
+    if pass and (pass.serial~=group.serial or group.phase~='Riding') then
+        if self.objects[pass.id] and self.world.campaignRemove then self.world:campaignRemove(pass.id) end
+        self.objects[pass.id]=nil
+        self.airPasses[h.id]=nil
+        pass=nil
+    end
+    if group.phase~='Riding' then return end
+    if not pass then
+        for _,s in pairs(self.actors) do
+            if s.mounted and not s.finished and s.position.x>=h.x-46 and s.position.x<h.x+12 then
+                pass={start=self.elapsed,serial=group.serial,id=h.id..':'..group.serial}
+                self.airPasses[h.id]=pass
+                break
+            end
+        end
+    end
+    if not pass then return end
+    local t=(self.elapsed-pass.start)/2.4
+    if t>=1 then
+        if self.objects[pass.id] and self.world.campaignRemove then self.world:campaignRemove(pass.id) end
+        self.objects[pass.id]=nil
+        return
+    end
+    local function location(u)
+        local sign=h.crossingDirection
+        local pod=h.kind=='RatPod'
+        return point(h.x+(pod and 2*math.sin(2*math.pi*u) or 0),h.y,sign*(24-48*u))
+    end
+    local p=location(t)
+    local prev=location(math.max(0,t-dt/2.4))
+    local nextPoint=location(t+.001)
+    local row=copy(h)
+    row.id=pass.id
+    row.previous=prev
+    row.x,row.y,row.z=p.x,p.y,p.z
+    self.hazards[#self.hazards+1]=row
+    self:_object(pass.id,h.kind,p,size(h),{role='Hazard',hazard=true,
+        velocity={x=nextPoint.x-p.x,y=nextPoint.y-p.y,z=nextPoint.z-p.z}})
+end
 function Modes:_objects(dt)
     self.hazards={}
     self.walls={}
@@ -793,6 +839,10 @@ function Modes:_objects(dt)
         self:_object(wall.id,wall.kind,p,size(wall),{collidable=true,role='MovingWall'})
     end
     for _,h in ipairs(self.course.hazards or {}) do
+        if h.kind=='RatPod' or h.kind=='Meteorite' then
+            self:_airPass(h,dt)
+            continue
+        end
         local p=motionPosition(h,self.elapsed);local previous=motionPosition(h,self.elapsed-dt)
         local row=copy(h);row.x,row.y,row.z=p.x,p.y,p.z;row.previous=previous
         if h.kind=='Gas' or h.kind=='ElectricTrap' or h.kind=='ElectricGate' then row.active=math.sin(self.elapsed*2+(h.motion and h.motion.phase or 0))>.1 end

@@ -114,6 +114,15 @@ function Definition.build(index,seed)
             local z=jet and 0 or (v-2)*12;local depth=(jet or kind=='LowBarrier' or kind=='Log') and 44 or 12
             c.hazards[#c.hazards+1]=hazard('ride-'..n,kind,x,y+Definition.roadHeight(c,x),z,3,h,depth,
                 kind=='Rocket' and {axis='z',amplitude=8,period=2.4,phase=n} or nil)
+            if (index==3 and n==6) or (jet and section==7) then
+                local pod=index==3
+                local air=c.hazards[#c.hazards]
+                air.kind=pod and 'RatPod' or 'Meteorite'
+                air.w,air.h,air.d=pod and 3.8 or 2.5, pod and 2.8 or 2.5, pod and 5.2 or 2.5
+                air.z=0
+                air.y=(pod and 3 or 18)+Definition.roadHeight(c,x)
+                air.crossingDirection=n%2==0 and 1 or -1
+            end
             if section==4 or section==8 or (section==12 and n<12*sectors) then cp(x+12,c.mount.y+Definition.roadHeight(c,x+12),0,x+12-c.mount.x) end
             if index==3 and (section==2 or section==8) then c.ramps[#c.ramps+1]={id='ramp-'..n,x=x-10,y=1,z=0,w=10,h=2,d=12,launchSpeed=50} end
         end
@@ -200,6 +209,9 @@ function Definition.build(index,seed)
             if race<3 then cp(x,y+3,0,race) end
             c.hazards[#c.hazards+1]=hazard('race-gas-'..race,'Gas',-x,y+17,9,6,6,6)
         end
+        -- Authored group on the race landings; Giblet keeps his separate race body.
+        foe('Scuzz',-5,93,9)
+        foe('Scuzz',5,93,-9)
         foe('SentryDrone',0,75,7);foe('GasTurret',0,45,8);finish=point(c.bombs[3].position.x,3,0)
         d.bounds.minX=-60;d.bounds.maxX=60;d.bounds.maxY=140
     elseif index==11 then

@@ -3,6 +3,19 @@ local World = {}
 
 local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
+local ImportedSkin=require(script.Parent.ImportedModelSkin)
+local ScuzzModel=require(script.Parent.ScuzzModel)
+local ShadowCloudModel=require(script.Parent.ShadowCloudModel)
+
+local function shadowPlacement(level,id,kind)
+    if kind~='Swellcheeks' or not level then return false end
+    for _,zone in ipairs(level.zones or {}) do
+        for _,spawn in ipairs(zone.enemies) do
+            if spawn.id==id and spawn.kind==kind and spawn.sourceVariant==3 then return true end
+        end
+    end
+    return false
+end
 
 local function ownCompletedRig(actor)
     local root=actor.root
@@ -315,7 +328,7 @@ local function buildGeometry(self)
     local start = part(g, "StartSign", Vector3.new(1, 0.5, 1), CFrame.new(-63, 4.6, -15), COLORS.dark)
     start.Transparency = 1
     label(start, "FLOODED CAUSEWAY", 310, Vector3.new(0, 2.8, 0)).TextSize = 23
-    label(start, "FORWARD  →", 200, Vector3.new(0, 0.8, 0)).TextColor3 = COLORS.mint
+    label(start, "FORWARD  РІвЂ вЂ™", 200, Vector3.new(0, 0.8, 0)).TextColor3 = COLORS.mint
 
     self.gates = {}
     local function gate(x, title)
@@ -328,9 +341,9 @@ local function buildGeometry(self)
         self.gates[#self.gates + 1] = record
         return record
     end
-    gate(2, "I  ·  CLEAR THE CAUSEWAY")
-    gate(52, "II  ·  FLOODED COURTYARD")
-    self.exitGate = gate(108, "III  ·  CAUSEWAY GUARDIAN")
+    gate(2, "I  Р’В·  CLEAR THE CAUSEWAY")
+    gate(52, "II  Р’В·  FLOODED COURTYARD")
+    self.exitGate = gate(108, "III  Р’В·  CAUSEWAY GUARDIAN")
     local exitPad = part(g, "ExitPad", Vector3.new(12, 0.13, 20), CFrame.new(115, 0.09, 0), COLORS.mint, Enum.Material.Neon)
     exitPad.Transparency = 0.6
     self.exitPad = exitPad
@@ -400,7 +413,7 @@ local function buildRoute(self, level)
         local first, last = zone.platforms[1], zone.platforms[#zone.platforms]
         local x, y, z = first.x - first.w / 2 + 8, first.y + first.h / 2, first.z
         local sign = part(g, "DistrictSign", Vector3.new(0.8, 6, 0.8), CFrame.new(x, y + 3, z - first.d / 2 - 2), COLORS.dark, Enum.Material.Wood)
-        label(sign, tostring(index) .. "  ·  " .. string.upper(zone.name), 350, Vector3.new(0, 5, 0)).TextSize = 21
+        label(sign, tostring(index) .. "  Р’В·  " .. string.upper(zone.name), 350, Vector3.new(0, 5, 0)).TextSize = 21
         -- Large silhouettes identify districts from the moving camera without blocking jumps.
         for _,side in ipairs({-1, 1}) do
             local depth = z + side * (first.d / 2 + 4)
@@ -437,11 +450,11 @@ local function buildRoute(self, level)
                     local top = data.y + data.h / 2
                     part(g, "JumpEdge", Vector3.new(.45, .13, data.d - 1), CFrame.new(edge.x, top + .12, data.z), COLORS.amber, Enum.Material.Neon)
                     local marker = part(g, "JumpMarker", Vector3.new(1, .1, 1), CFrame.new(edge.x - 1, top + .15, data.z), COLORS.mint, Enum.Material.Neon)
-                    label(marker, "JUMP  →", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
+                    label(marker, "JUMP  РІвЂ вЂ™", 210, Vector3.new(0, 3.2, 0)).TextColor3 = COLORS.amber
                 end
             end
         end
-        self.gates[index] = gate(zone.gateX, last.z, last.y + last.h / 2, last.d, tostring(index) .. "  ·  " .. zone.name)
+        self.gates[index] = gate(zone.gateX, last.z, last.y + last.h / 2, last.d, tostring(index) .. "  Р’В·  " .. zone.name)
     end
     local boss = level.boss
     platform(boss.platform, #level.zones + 1, "GuardianCourt")
@@ -1106,8 +1119,26 @@ function World:spawnEnemy(id, kind, positionTable)
     actor.humanoid.WalkSpeed = isBoss and 0 or 8
     self.enemyKinds[id] = isBoss and "Boss" or "Drone"
     actor.castRequestedKind=kind~='Boss' and kind or nil
+    local shadow=shadowPlacement(self.config.Level,id,kind)
+    if kind=='Scuzz' or shadow then
+        for _,part in ipairs(actor.model:GetDescendants()) do
+            if part:IsA('BasePart') then part.Transparency=1 end
+        end
+        actor.castRequestedKind=nil
+        if shadow then
+            actor.shadowCloud=ShadowCloudModel.attach(actor.model,actor.root)
+            ImportedSkin.attach('ShadowCloud',actor.shadowCloud,actor.root)
+            actor.model:SetAttribute('VisualName','ShadowCloud')
+            actor.model:SetAttribute('SourceType',0x62)
+            actor.model:SetAttribute('SourceGfx',0xBD)
+        else
+            actor.scuzz=ScuzzModel.attach(actor.model,actor.root,3)
+            ImportedSkin.attach('Scuzz',actor.scuzz.model,actor.root,CFrame.new(0,-3,0))
+            actor.model:SetAttribute('SourceType',0x47)
+        end
+    end
     local importedCast=self.castAppearance and actor.castRequestedKind and self.castAppearance.attach(actor,kind)
-    if importedCast then
+    if importedCast or actor.scuzz or actor.shadowCloud then
         actor.model:SetAttribute('BossKind',campaignBoss and kind or nil)
     elseif self.campaignWorld and self.campaignWorldType.decorateActor and (campaignBoss or not speciesNames[kind]) then
         self.campaignWorldType.decorateActor(actor,kind)
@@ -1117,7 +1148,7 @@ function World:spawnEnemy(id, kind, positionTable)
         if not imported then boss(actor) end
     else drone(actor, kind) end
     local labelHeight=kind=="Walker" and 8.2 or (isBoss and 7.6 or 4.5)
-    actor.healthLabel = label(actor.root, "♥ ♥ ♥", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
+    actor.healthLabel = label(actor.root, "РІв„ўТђ РІв„ўТђ РІв„ўТђ", isBoss and 270 or 160, Vector3.new(0,labelHeight,0))
     actor.healthLabel.TextColor3 = isBoss and COLORS.amber or Color3.fromRGB(255, 164, 139)
     self:enemyHealth(id, 3, 3)
     -- The species art changes the assembly after BaseWorld pinned its basic rig.
@@ -1498,8 +1529,8 @@ function World:enemyHealth(id, raw, maximum)
             return
         end
         local symbols = {}
-        for n = 1, 3 do symbols[n] = n <= hearts and "♥" or "♡" end
-        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  ·  " or "") .. table.concat(symbols, " ")
+        for n = 1, 3 do symbols[n] = n <= hearts and "РІв„ўТђ" or "РІв„ўРЋ" end
+        a.healthLabel.Text = (self.enemyKinds[id] == "Boss" and "GUARDIAN  Р’В·  " or "") .. table.concat(symbols, " ")
     end
 end
 
@@ -1559,7 +1590,7 @@ function World:stage(name)
     if self.config.Level then
         local open = name == "Exit" or name == "Won"
         gateState(self.exitGate, open)
-        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or (open and "EXIT  →  STAND ON THE SEAL" or "CAUSEWAY GUARDIAN")
+        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or (open and "EXIT  РІвЂ вЂ™  STAND ON THE SEAL" or "CAUSEWAY GUARDIAN")
         self.exitGate.label.TextColor3 = open and COLORS.mint or COLORS.amber
         self.exitPad.Transparency = open and .12 or .78
         return
@@ -1576,11 +1607,11 @@ function World:stage(name)
         gate.label.TextTransparency = open and 0.65 or 0
     end
     if name == "Exit" or name == "Won" then
-        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or "EXIT  →  STAND ON THE SEAL"
+        self.exitGate.label.Text = name == "Won" and "CAUSEWAY CLEARED!" or "EXIT  РІвЂ вЂ™  STAND ON THE SEAL"
         self.exitGate.label.TextColor3 = COLORS.mint
         self.exitGate.label.TextTransparency = 0
     else
-        self.exitGate.label.Text = "III  ·  CAUSEWAY GUARDIAN"
+        self.exitGate.label.Text = "III  Р’В·  CAUSEWAY GUARDIAN"
         self.exitGate.label.TextColor3 = Color3.fromRGB(226, 244, 211)
     end
     self.exitPad.Transparency = progress >= 3 and 0.12 or 0.78
@@ -1594,7 +1625,11 @@ function World:atExit(heroId)
         and p.X >= 108 and math.abs(p.Z) <= 10
 end
 
-function World:projectile(id, positionTable, reflected, mode)
+function World:campaignAirImpact(id)
+    if self.campaignWorld then self.campaignWorld:airImpact(id) end
+end
+
+function World:projectile(id, positionTable, reflected, mode, shadowGas)
     if type(id) ~= "number" or id > -1000 or not positionTable then return false end
     local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z) + self.offset
     local a = self.actors[id]
@@ -1628,6 +1663,11 @@ function World:projectile(id, positionTable, reflected, mode)
     if mode=='StolenLife' or mode=='ReturningLife' then color,size=COLORS.mint,1.2
     elseif mode=='RavenClaw' then color,size=Color3.fromRGB(230,218,176),1.3
     elseif mode=='DeadRaven' then color,size=Color3.fromRGB(40,43,68),2 end
+    if mode=='GasCloud' and shadowGas and self.actors[shadowGas] and self.actors[shadowGas].shadowCloud and not a.shadowGas then
+        a.shadowGas=ShadowCloudModel.attachGas(a.model,a.root)
+        a.root.Transparency=1
+        a.halo.Transparency=1
+    end
     a.root.CFrame = CFrame.new(p)
     a.halo.CFrame = CFrame.new(p)
     a.root.Size = Vector3.new(size, size, size)
@@ -1644,7 +1684,7 @@ function World:projectile(id, positionTable, reflected, mode)
     a.model:SetAttribute("Pickup", mode == "Ground")
     a.model:SetAttribute("Carried", mode == "Carried")
     if mode == "Ground" and not a.pickupLabel then
-        a.pickupLabel = label(a.root, "BALL  ·  PICK UP", 190, Vector3.new(0, 2.7, 0))
+        a.pickupLabel = label(a.root, "BALL  Р’В·  PICK UP", 190, Vector3.new(0, 2.7, 0))
         a.pickupLabel.TextColor3 = Color3.fromRGB(255, 220, 71)
     end
     if a.pickupLabel then a.pickupLabel.Parent.Enabled = mode == "Ground" end
@@ -1817,7 +1857,7 @@ function World:clubItem(id, position)
     if not item then
         item = clubArt(self.clubItemFolder,'ClubItem_'..tostring(id),frame)
         item.model:SetAttribute('ClubId',id)
-        local text=label(item.root,"CLUB  ·  PICK UP",190,Vector3.new(0,1.4,0))
+        local text=label(item.root,"CLUB  Р’В·  PICK UP",190,Vector3.new(0,1.4,0))
         text.TextColor3,text.TextSize,text.Parent.MaxDistance=COLORS.mint,14,45
         pointLight(item.root,COLORS.mint,7,.4)
         self.clubItems[id]=item
@@ -1937,7 +1977,7 @@ function World:healingFly(id, position)
             Enum.PartType.Ball, Enum.Material.ForceField)
         aura.Transparency = .84
         pointLight(fly.root, COLORS.mint, 7, .55)
-        local text = label(fly.root, "FLY  ·  HEAL", 170, Vector3.new(0,1.6,0))
+        local text = label(fly.root, "FLY  Р’В·  HEAL", 170, Vector3.new(0,1.6,0))
         text.TextSize = 13
         text.TextColor3 = COLORS.mint
         text.Parent.MaxDistance = 38
@@ -2254,6 +2294,45 @@ function World:updatePresentation(session, dt, enemies, director)
     if self.guardianAppearance then
         for id,actor in pairs(self.actors) do
             if self.enemyKinds[id]=='Boss' then self.guardianAppearance.update(actor,self.presentationTime) end
+        end
+    end
+    for id,actor in pairs(self.actors) do
+        if actor.scuzz or actor.shadowCloud then
+            local machine=director and director.campaignEnemies
+            local state=machine and machine.states[id]
+            local attack=state and state.attack
+            local enemy=enemies and enemies[id]
+            local now=session.now
+            local clip=actor.shadowCloud and 'HoverIdle' or 'IdleAlert'
+            local phase=(now+math.abs(id)*.17)%1
+            if enemy and enemy.dead then
+                actor.modelDefeatedAt=actor.modelDefeatedAt or now
+                phase=math.clamp((now-actor.modelDefeatedAt)/.6,0,1)
+                clip=actor.shadowCloud and 'Defeat' or 'DeathGround'
+            elseif enemy and enemy.reactionUntil then
+                clip=enemy.heavyReaction and (actor.shadowCloud and 'HitHeavy' or 'ReactHeavyGround') or (actor.shadowCloud and 'HitLight' or 'ReactLight')
+                phase=math.clamp(1-(enemy.reactionUntil-now)/.5,0,1)
+            elseif attack and state.mode~='Ready' then
+                if state.mode=='Recovery' then
+                    clip=actor.shadowCloud and 'GasRecover' or 'Recover'
+                    phase=math.clamp((now-attack.untilAt)/attack.move.recovery,0,1)
+                elseif state.mode=='Tell' then
+                    clip=actor.shadowCloud and 'GasTell' or attack.name
+                    phase=math.clamp(1-(attack.at-now)/attack.move.tell,0,1)
+                    if actor.scuzz then phase*=.45 end
+                else
+                    clip=actor.shadowCloud and 'GasRelease' or attack.name
+                    phase=math.clamp((now-attack.at)/attack.move.active,0,1)
+                    if actor.scuzz then phase=.45+.55*phase end
+                end
+            elseif actor.scuzz and actor.root.AssemblyLinearVelocity.Magnitude>1 then
+                clip='GroupAdvance'
+            end
+            if actor.shadowCloud then ShadowCloudModel.pose(actor.shadowCloud,clip,phase)
+            else
+                actor.scuzz.pose(clip,phase)
+                ImportedSkin.poseScuzz(actor.scuzz.model)
+            end
         end
     end
     if self.castAppearance then

@@ -5,6 +5,8 @@ CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
 local CourseAppearance=require(script.Parent.CourseAppearance)
 local CoursePropAppearance=require(script.Parent.CoursePropAppearance)
+local ImportedSkin=require(script.Parent.ImportedModelSkin)
+local AirHazardModels=require(script.Parent.AirHazardModels)
 local Definition=require(script.Parent.CampaignDefinition)
 local palettes={
     Rope={45,63,78},Speeder={106,75,47},Ice={133,185,206},Surf={42,124,141},
@@ -108,8 +110,8 @@ function CampaignWorld.new(world,route)
     elseif route.mode=='Clinger' then
         for n,segment in ipairs(route.course.path or {}) do
             local p=segment.from
-            local arrow=segment.direction.x>0 and '→' or segment.direction.x<0 and '←'
-                or segment.direction.z>0 and '↓' or '↑'
+            local arrow=segment.direction.x>0 and 'в†’' or segment.direction.x<0 and 'в†ђ'
+                or segment.direction.z>0 and 'в†“' or 'в†‘'
             local marker=makePart(world.geometry,'CircuitDirection_'..n,Vector3.new(.3,.3,.3),
                 CFrame.new(p.x+segment.direction.x*5,p.y+.5,p.z+segment.direction.z*5)+world.offset,
                 Color3.fromRGB(221,230,114),false)
@@ -338,7 +340,14 @@ function CampaignWorld:object(id,kind,point,size,metadata)
             row.part.CFrame=CFrame.lookAt((a+b)/2,b)
         end
     end
-    if metadata.alpha then row.part.Transparency=metadata.alpha end
+    if kind=='RatPod' or kind=='Meteorite' then
+        if not row.airModel then
+            row.airModel=AirHazardModels.attach(kind,row.part,row.part)
+            ImportedSkin.attach(kind,row.airModel,row.airModel.PrimaryPart)
+        end
+        if metadata.velocity then AirHazardModels.face(row.airModel,vec(metadata.velocity,0)) end
+        row.part.Transparency=1
+    elseif metadata.alpha then row.part.Transparency=metadata.alpha end
     if row.label and metadata.label then row.label.Text=metadata.label end
     row.expiresAt=metadata.expiresAt
     if kind=='Serpent'then self:_serpent(row,self.now or 0)end
@@ -354,6 +363,10 @@ function CampaignWorld:object(id,kind,point,size,metadata)
     CourseAppearance.update(row,self.world.geometry,metadata,waterSurfaceY)
     CoursePropAppearance.update(row,self.world.geometry,metadata,self.now or 0)
     return row.part
+end
+function CampaignWorld:airImpact(id)
+    local row=self.objects[id]
+    if row and row.airModel then AirHazardModels.impact(row.airModel) end
 end
 function CampaignWorld:remove(id)
     local row=self.objects[id]

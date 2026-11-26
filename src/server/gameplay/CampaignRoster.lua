@@ -15,6 +15,7 @@ Roster.profiles={
     Invader=profile({},'levels_cfgs1.asm',{126,127,128},{loaderLife=255,lifeMode='LinkedLife',runtimeLife=15,
         adaptation='Ordinary one-life body; linked raw-eight theft and recoverable token, not linear sentinel HP',handler='main.asm:5472-5723'}),
     RocketRat=profile({15},'levels_cfgs1.asm',{196,197},{handler='main.asm:10088-10124'}),
+    Scuzz=profile({31,47},'levels_cfgs1.asm',{124,129},{handler='main.asm:18542-18715'}),
     Snowman=profile({15,31},'levels_cfgs1.asm',{263,271}),
     SentryDrone=profile({15},'levels_cfgs2.asm',{158}),
     Slug=profile({15},'levels_cfgs2.asm',{176}),
