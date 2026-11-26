@@ -126,6 +126,8 @@ local enum=setmetatable({},{__index=function(self,key)
     local group=setmetatable({},{__index=function(_,value) return value end}); rawset(self,key,group); return group
 end})
 local env=setmetatable({workspace=workspace,game={GetService=function(_,name) return name=='Workspace' and workspace or lighting end},
+    -- Decorative foliage positions are fixed in this coordinate and camera fixture.
+    Random={new=function() return {NextNumber=function(_,low,high) return (low+high)/2 end} end},
     OverlapParams={new=function() return {} end},
     Color3={fromRGB=function(...) return {...} end,new=function(...) return {...} end},Enum=enum,
     Instance={new=function(class) return node(class) end},Vector3={new=vector},
@@ -256,46 +258,144 @@ default:healingFly('shared-fly',nil)
 assert(firstFly.destroyed,'Explicit removal must destroy a fly without a catch effect')
 print('PASS healing flies are separate noncolliding group visuals with bounded catch effects and run cleanup')
 
-local defaultActor=actor(default,1,vector(-65,3,0)); defaultActor.model:SetAttribute('ActorId','same-id')
-local groupActor=actor(second,1,vector(35,13,512)); groupActor.model:SetAttribute('ActorId','same-id')
-local camera=Camera.new()
-camera:sync({runId='same-run',levelEpoch=1,groupId='G1',worldName='BrickToadsWorld',heroes={{actorId='same-id',status='Alive'}}})
-camera:refreshTargets(); assert(camera.models['same-id']==defaultActor.model)
-camera.mode='Free'; camera.freePosition=vector(1,2,3); camera.point=vector(3,2,1); camera.keys.W=true
-camera:sync({runId='same-run',levelEpoch=1,groupId='G2',worldName='BrickToadsWorld_G2',heroes={{actorId='same-id',status='Alive'}}})
-assert(camera.mode=='Follow' and camera.freePosition==nil and camera.point==nil and next(camera.keys)==nil,
-    'World/group switches must reset free camera and its held input even if run/epoch match')
-assert(next(camera.models or {})==nil and #camera.targets==0,'Old world targets must clear immediately')
-camera:refreshTargets(); assert(camera.models['same-id']==groupActor.model,'Camera resolves only the selected world')
-camera:sync({runId='same-run',levelEpoch=1,worldName='MissingGroup',heroes={{actorId='same-id',status='Alive'}}})
-camera:refreshTargets(); assert(next(camera.models)==nil,'A missing selected world must never fall back to a different group')
-camera:sync({runId='same-run',levelEpoch=1,worldName='MissingGroup',heroes={},cameraBounds=bounds})
-local view={SetAttribute=function() end}
-camera:step(.01,view)
-eq(view.CFrame.Position,121,35,542,'A group without loaded actors must keep its camera in its own arena')
-camera:sync({heroes={{actorId='same-id',status='Alive'}}})
-camera:refreshTargets(); assert(camera.models['same-id']==defaultActor.model,'Old snapshots retain default-world compatibility')
-print('PASS camera selects one world, clears cross-group state and never falls back from an explicit missing world')
-local introFolder=node('Folder','BossIntro',second.folder)
-for k,v in pairs({Active=true,IntroId='group2-intro',RunId='same-run',LevelEpoch=1,Counter=1,
-    Phase='BeforeCut',CameraCut=false,Focus=vector(115,19,512)})do introFolder:SetAttribute(k,v)end
-local introAttrs={};local introView={SetAttribute=function(_,k,v)introAttrs[k]=v end}
-camera:sync({runId='same-run',levelEpoch=1,groupId='G1',worldName='BrickToadsWorld',heroes={}})
-assert(not camera:stepIntro(.01,introView),'Another party intro must never move this camera')
-camera:sync({runId='same-run',levelEpoch=1,groupId='G2',worldName='BrickToadsWorld_G2',heroes={}})
-assert(camera:stepIntro(.01,introView) and introAttrs.BossIntroId=='group2-intro')
-local beforeCut=introView.CFrame.Position
-introFolder:SetAttribute('Counter',0xE0);introFolder:SetAttribute('CameraCut',true)
-assert(camera:stepIntro(.01,introView) and (introView.CFrame.Position-beforeCut).Magnitude>1,
-    'The source E0 marker must make an actual finite perspective cut')
-introFolder:SetAttribute('RunId','stale-run')
-assert(not camera:stepIntro(.01,introView) and introAttrs.BossIntroId==nil)
-introFolder:SetAttribute('RunId','same-run');camera.mode='Free';camera.freePosition=vector(1,2,3)
-assert(not camera:stepIntro(.01,introView),'Free spectators retain their chosen view')
-camera.mode='Follow';introFolder:SetAttribute('Counter',255)
-assert(not camera:stepIntro(.01,introView),'A finished intro cannot retain camera control')
-introFolder:Destroy();assert(not camera:stepIntro(.01,introView))
-print('PASS boss intro camera follows only current party/run and releases after cut completion or free view')
+do
+    local camera=Camera.new()
+    local function newView()
+        local view=node('Camera','Camera',workspace)
+        view.Focus=frame(-45,2,0)
+        workspace.CurrentCamera=view
+        return view
+    end
+    local view=newView()
+    local function step(label, touch)
+        -- Simulate a new orbit and zoom chosen by PlayerModule between updates.
+        local nativePose=frame(91,39,-106)
+        nativePose.LookVector=vector(1,0,0)
+        nativePose.RightVector=vector(0,0,1)
+        view.CFrame=nativePose
+        local nativeFocus=view.Focus
+        camera:step(.25,view,touch)
+        assert(view.CameraType==enum.CameraType.Custom,label..' must enable the Roblox camera')
+        assert(view.CFrame==nativePose and view.Focus==nativeFocus,label..' must preserve the native orbit and zoom')
+        return assert(view.CameraSubject,label..' needs a valid subject')
+    end
+    local function checkAnchor(subject)
+        assert(subject:IsA('BasePart') and subject.Parent and subject.Anchored and subject.Transparency==1,
+            'The camera needs a local invisible anchored subject')
+        assert(subject.CanCollide==false and subject.CanQuery==false and subject.CanTouch==false,
+            'The camera subject must not participate in collisions, touch or hit tests')
+    end
+    local lobby=step('Lobby before first snapshot')
+    checkAnchor(lobby)
+    eq(lobby.Position,-45,2,0)
+    local function addActor(world,slot,id)
+        local body=actor(world,slot,vector(slot,13,world.offset.Z))
+        body.model:SetAttribute('ActorId',id)
+        return body
+    end
+    local firstHero=addActor(default,1,'shared')
+    local hero=addActor(second,1,'shared')
+    local other=addActor(second,2,'other')
+    local state={actorId='shared',status='Alive',connected=true}
+    local otherState={actorId='other',status='Alive',connected=true}
+    local snapshot={runId='same-run',levelEpoch=1,groupId='G2',worldName=second.folder.Name,
+        heroes={state,otherState},cameraBounds=bounds}
+    for _,mode in ipairs({'Causeway','Rope','Speeder','Ice','Surf','Serpents','Jet','Ascent','Tubes','Race','Clinger','Tower','Finale'}) do
+        snapshot.level={mode=mode,modeState={mode=mode,actors={{actorId='shared',mounted=true}}}}
+        camera:sync(snapshot,state)
+        for _,size in ipairs({{1280,720,false},{390,844,true},{844,390,true}}) do
+            view.ViewportSize={X=size[1],Y=size[2]}
+            assert(step(mode,size[3])==hero.model.Head,mode..' must follow the controlled body in its own group')
+        end
+    end
+    local intro=node('Folder','BossIntro',second.folder)
+    for k,v in pairs({Active=true,IntroId='group2-intro',RunId='same-run',LevelEpoch=1,Focus=vector(115,19,512)}) do
+        intro:SetAttribute(k,v)
+    end
+    for _,counter in ipairs({1,0x30,0x64,0xE0,0xFF}) do
+        intro:SetAttribute('Counter',counter)
+        intro:SetAttribute('CameraCut',counter>=0xE0)
+        assert(step('Guardian intro')==hero.model.Head,'Guardian intro must retain the selected subject')
+    end
+    intro:Destroy()
+    local enemy=addActor(second,-1,'enemy')
+    enemy.model.Head:Destroy()
+    camera:sync(snapshot,{actorId='enemy',status='Alive',connected=true})
+    assert(step('Enemy role')==enemy.root,'A body without a head must follow its root')
+    camera:sync(snapshot,state)
+    assert(step('Return to controlled hero')==hero.model.Head)
+    hero.model:Destroy()
+    local pending=step('Respawn pending')
+    checkAnchor(pending)
+    eq(pending.Position,1,13,512,'Waiting for respawn must retain the last known position of the controlled body')
+    hero=addActor(second,1,'shared')
+    assert(step('Respawn')==hero.model.Head,'The replacement body must become the subject')
+    view=newView()
+    assert(step('CurrentCamera replacement')==hero.model.Head)
+    if SpeederReadySource then
+        local scope=setmetatable({snapshot=snapshot,mine=state,spectatorCamera=camera,
+            playable=function() return true end}, {__index=env})
+        local readyChunk=assert(loadstring(SpeederReadySource))
+        setfenv(readyChunk,scope)
+        local ready=readyChunk()
+        snapshot.mine=1
+        snapshot.level.modeState.vehicleGroup={phase='AwaitingEntryView'}
+        hero.model:SetAttribute('CampaignMode','Speeder')
+        local arrival=node('Part','CourseSupport_Arrival',second.geometry)
+        local plate=node('Part','Campaign_Speeder_vehicle-1',second.geometry)
+        plate.CFrame=hero.root.CFrame
+        plate.Transparency,plate.LocalTransparencyModifier=0,0
+        function view:WorldToViewportPoint() return vector(0,0,-1),false end
+        assert(ready(view),'A first-person rider can start with the loaded speeder below the screen')
+        view.CameraSubject=other.model.Head
+        assert(not ready(view),'Another rider cannot release this mount')
+        view.CameraSubject=hero.model.Head
+        hero.model.Parent=default.actorFolder
+        assert(not ready(view),'The viewed body must still belong to the selected group')
+        hero.model.Parent=second.actorFolder
+        plate.LocalTransparencyModifier=1
+        assert(not ready(view),'A hidden fallback still needs to wait for the visible rider deck')
+        local skin=node('Model','CourseVehicle_vehicle-1',second.geometry)
+        local deck=node('Part','RiderDeck',skin)
+        deck.Transparency,deck.LocalTransparencyModifier=0,0
+        assert(ready(view),'The loaded deck can release the ride while its fallback is hidden')
+        arrival:Destroy()
+        assert(not ready(view),'The arrival geometry must be loaded to release the ride')
+        skin:Destroy()
+        plate:Destroy()
+        print('PASS first-person speeder start waits for the current rider, selected world and ready course art')
+    end
+    camera:sync(snapshot)
+    camera:setEnabled(true)
+    assert(step('Spectator follow')==hero.model.Head)
+    camera:nextHero()
+    assert(step('Next hero')==other.model.Head)
+    view.Focus=frame(100,20,500)
+    camera:toggleFree(view)
+    local free=step('Free spectator')
+    checkAnchor(free)
+    eq(free.Position,100,20,500,'Free view starts at the current focus')
+    camera:setKey('W',true)
+    camera:setKey('E',true)
+    for _=1,100 do assert(step('Free spectator moving')==free) end
+    eq(free.Position,bounds.maxX,bounds.maxY,500,'Spectator flight follows the native heading and stops at its arena bounds')
+    camera:toggleFree(view)
+    assert(step('Return to hero')==other.model.Head)
+    camera:toggleFree(view)
+    camera:setKey('W',true)
+    snapshot.groupId,snapshot.worldName='G1',default.folder.Name
+    camera:sync(snapshot)
+    assert(not camera:isFree() and step('Change group')==firstHero.model.Head,
+        'Switching groups must leave free mode and follow only the newly selected arena')
+    snapshot.groupId,snapshot.worldName='missing','MissingGroup'
+    camera:sync(snapshot)
+    local missing=step('Waiting for selected world')
+    checkAnchor(missing)
+    eq(missing.Position,121,12,512,'A missing group must use its own bounds before its actors replicate')
+    camera:sync({heroes={state}})
+    assert(step('Default world snapshot')==firstHero.model.Head)
+    print('PASS native camera across all 13 modes, role changes, respawn, group selection, spectator flight and Guardian intro')
+end
 
 local route=World.new(Base,{FallY=-20,Level=source(LevelSource)},
     {name='RouteWorld',offset={x=100,y=10,z=1024}})

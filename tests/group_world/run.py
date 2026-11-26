@@ -24,6 +24,10 @@ prefix = "\n".join(
 )
 adapter = ROOT / 'src/server/gameplay/DragonWorld.lua'
 prefix += '\nlocal DragonWorldSource = [====[' + adapter.read_text(encoding='utf-8') + ']====]'
+client = (ROOT / 'src/client/BrickToadsClient.client.luau').read_text(encoding='utf-8')
+start = client.index('local function speederInView(')
+end = client.index('\nend\n', start) + len('\nend')
+prefix += '\nlocal SpeederReadySource = [====[' + client[start:end] + '\nreturn speederInView]====]'
 with tempfile.TemporaryDirectory(prefix="bricktoads-world-") as directory:
     runner = Path(directory) / "world_contracts.luau"
     runner.write_text(prefix + "\n" + (Path(__file__).with_name("contracts.luau")).read_text(encoding="utf-8"), encoding="utf-8")

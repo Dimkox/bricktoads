@@ -26,8 +26,9 @@ prefix+='local QueenManifest='+lua(queen)+'\n'
 (ROOT/'build').mkdir(exist_ok=True)
 with tempfile.TemporaryDirectory(prefix='cast-contracts-',dir=ROOT/'build') as directory:
     runner=Path(directory)/'cast.luau'
-    relative=os.path.relpath(ROOT/'src/server/gameplay/CanonicalCastPresentation',directory).replace('\\','/')
-    prefix+='local ActualPresentation=require('+json.dumps(relative)+')\n'
+    for alias,module in [('ActualPresentation','CanonicalCastPresentation'),('ActualWalker','CanonicalWalker')]:
+        relative=os.path.relpath(ROOT/'src/server/gameplay'/module,directory).replace('\\','/')
+        prefix+=f'local {alias}=require('+json.dumps(relative)+')\n'
     contracts=Path(__file__).with_name('contracts.luau').read_text(encoding='utf-8')
     queen_contracts=Path(__file__).with_name('queen_contracts.luau').read_text(encoding='utf-8')
     runner.write_text(prefix+helpers+contracts+'\n'+queen_contracts,encoding='utf-8')

@@ -26,8 +26,9 @@ end
 local function connect(list,event,fn)
     if event then list[#list+1]=event:Connect(fn)end
 end
+local visibility = if script then require(script.Parent:WaitForChild("CameraVisibility")) else require("./CameraVisibility")
 local function localAlpha(part,value)
-    pcall(function()part.LocalTransparencyModifier=value end)
+    pcall(visibility.set,part,value)
 end
 function Gate:_valid(row)
     return not self.destroyed and self.rows[row.skin]==row and row.skin.Parent==row.owner
@@ -41,7 +42,7 @@ end
 function Gate:_rememberFallback(row,part)
     local baseline=self.baselines[part]
     if not baseline then
-        baseline={value=finite(part.LocalTransparencyModifier)and part.LocalTransparencyModifier or 0,owners={}}
+        baseline={value=visibility.get(part),owners={}}
         self.baselines[part]=baseline
     end
     baseline.owners[row]=true
@@ -138,7 +139,7 @@ function Gate:_refresh(row)
     for _,part in ipairs(row.skin:GetDescendants())do
         if part:IsA('MeshPart')then
             parts[#parts+1]=part
-            if row.skinSaved[part]==nil then row.skinSaved[part]=finite(part.LocalTransparencyModifier)and part.LocalTransparencyModifier or 0 end
+            if row.skinSaved[part]==nil then row.skinSaved[part]=visibility.get(part) end
             if not finite(part:GetAttribute(self.contract.alpha))then complete=false end
             include('M',part.MeshId,true);include('T',part.TextureID,false)
             connect(row.assetConnections,part:GetPropertyChangedSignal('MeshId'),refresh)

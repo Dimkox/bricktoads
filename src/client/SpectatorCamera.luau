@@ -8,16 +8,6 @@ function SpectatorCamera.clampAxes(x, y, z, bounds)
         math.clamp(z, bounds.minZ, bounds.maxZ)
 end
 
-local function framedView(eye,focus,bounds)
-    if bounds then
-        local x,y,z=SpectatorCamera.clampAxes(eye.X,eye.Y,eye.Z,bounds)
-        local clipped=Vector3.new(x,y,z)
-        focus+=clipped-eye
-        eye=clipped
-    end
-    return CFrame.lookAt(eye,focus)
-end
-
 function SpectatorCamera.followTargets(heroes, models)
     local targets = {}
     for _, hero in ipairs(heroes or {}) do
@@ -30,7 +20,7 @@ end
 
 function SpectatorCamera.new()
     return setmetatable({mode = "Follow", enabled = false, keys = {}, targets = {},
-        touchX = 0, touchZ = 0, yaw = 0, pitch = -math.atan2(23, 30), refreshElapsed = 1}, SpectatorCamera)
+        touchX = 0, touchZ = 0, refreshElapsed = 1}, SpectatorCamera)
 end
 
 function SpectatorCamera:resetInput()
@@ -38,7 +28,10 @@ function SpectatorCamera:resetInput()
 end
 
 function SpectatorCamera:setEnabled(enabled)
-    if self.enabled and not enabled then self:resetInput() end
+    if self.enabled and not enabled then
+        self.mode, self.freePosition = "Follow", nil
+        self:resetInput()
+    end
     self.enabled = enabled == true
 end
 
@@ -47,19 +40,15 @@ function SpectatorCamera:sync(snapshot, controlled)
         or self.worldName ~= snapshot.worldName or self.groupId ~= snapshot.groupId then
         self.mode, self.selectedActorId, self.point, self.freePosition = "Follow", nil, nil, nil
         self.models, self.targets = {}, {}
-        self.introCameraId,self.introCounter,self.introShake=nil,nil,nil
+        self.followedModel = nil
         self:resetInput()
         self.refreshElapsed = 1
     end
     self.runId, self.levelEpoch = snapshot.runId, snapshot.levelEpoch
     self.worldName, self.groupId = snapshot.worldName, snapshot.groupId
     self.snapshot, self.controlled, self.bounds = snapshot, controlled, snapshot.cameraBounds
-    local mode=snapshot.level and snapshot.level.modeState
-    local serial=mode and mode.camera and mode.camera.rewindSerial
-    if serial~=nil and self.vehicleRewindSerial~=nil and serial~=self.vehicleRewindSerial then self.point=nil end
-    self.vehicleRewindSerial=serial
     if controlled and controlled.status == "Alive" and controlled.connected and not controlled.dying then
-        self.mode = "Follow"
+        self.mode, self.freePosition = "Follow", nil
         self:resetInput()
     end
 end
@@ -87,7 +76,7 @@ function SpectatorCamera:nextHero()
         if target.hero.actorId == self.selectedActorId then current = i; break end
     end
     self.selectedActorId = self.targets[current % #self.targets + 1].hero.actorId
-    self.mode, self.point = "Follow", nil
+    self.mode, self.freePosition = "Follow", nil
     self:resetInput()
     return self.selectedActorId
 end
@@ -99,13 +88,10 @@ end
 function SpectatorCamera:toggleFree(camera)
     if not self.enabled or not camera or not self.bounds then return end
     self:resetInput()
-    if self:isFree() then self.mode = "Follow"; self.point = nil; return end
+    if self:isFree() then self.mode, self.freePosition = "Follow", nil; return end
     self.mode = "Free"
-    local p, look = camera.CFrame.Position, camera.CFrame.LookVector
-    local x, y, z = SpectatorCamera.clampAxes(p.X, p.Y, p.Z, self.bounds)
-    self.freePosition = Vector3.new(x, y, z)
-    self.yaw = math.atan2(-look.X, -look.Z)
-    self.pitch = math.asin(math.clamp(look.Y, -1, 1))
+    local p = camera.Focus.Position
+    self.freePosition = Vector3.new(SpectatorCamera.clampAxes(p.X, p.Y, p.Z, self.bounds))
 end
 
 function SpectatorCamera:setKey(key, down)
@@ -116,88 +102,41 @@ function SpectatorCamera:setTouch(x, z)
     if self.enabled and self:isFree() then self.touchX, self.touchZ = x, z end
 end
 
-function SpectatorCamera:rotate(amount)
-    if self.enabled and self:isFree() then self.yaw += amount end
+-- A server-owned actor is not LocalPlayer.Character. Give CameraModule a real
+-- subject even before spawn, and leave its orbit, zoom and occlusion intact.
+function SpectatorCamera:anchorAt(position)
+    if not self.anchor then
+        local anchor = Instance.new("Part")
+        anchor.Name = "BrickToadsCameraFocus"
+        anchor.Size = Vector3.new(0.1, 0.1, 0.1)
+        anchor.Anchored, anchor.CanCollide, anchor.CanTouch, anchor.CanQuery = true, false, false, false
+        anchor.Transparency, anchor.CastShadow = 1, false
+        anchor.CFrame = CFrame.new(position)
+        anchor.Parent = workspace
+        self.anchor = anchor
+    elseif self.anchor.Position ~= position then
+        self.anchor.CFrame = CFrame.new(position)
+    end
+    return self.anchor
 end
 
-function SpectatorCamera:stepIntro(dt,camera)
-    local function release()
-        self.introCameraId,self.introCounter,self.introShake=nil,nil,nil
-        camera:SetAttribute('BossIntroId',nil)
-        return false
-    end
-    if self:isFree() or not self.worldName then return release() end
-    local world=workspace:FindFirstChild(self.worldName)
-    local intro=world and world:FindFirstChild('BossIntro')
-    if not intro or intro:GetAttribute('Active')~=true or intro:GetAttribute('RunId')~=self.runId
-        or intro:GetAttribute('LevelEpoch')~=self.levelEpoch then return release() end
-    local counter,id,focus=intro:GetAttribute('Counter'),intro:GetAttribute('IntroId'),intro:GetAttribute('Focus')
-    local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
-    local focusType=typeof(focus)
-    if not finite(counter) or counter%1~=0 or counter<1 or counter>=255 or type(id)~='string'
-        or (focusType~='Vector3' and focusType~='table')
-        or not finite(focus.X) or not finite(focus.Y) or not finite(focus.Z) then return release() end
-    if self.introCameraId~=id then
-        self.introCameraId,self.introCounter,self.introShake=id,counter,0
-    end
-    for _,mark in ipairs({0x30,0x64})do
-        if self.introCounter<mark and counter>=mark then self.introShake=.16 end
-    end
-    self.introCounter=counter
-    self.introShake=math.max(0,(self.introShake or 0)-math.clamp(dt,0,.1))
-    local cut=intro:GetAttribute('CameraCut')==true
-    local target,offset=focus,Vector3.new(-19,15,27)
-    if not cut then
-        local controlled=self.controlled
-        local model=controlled and self.models and self.models[controlled.actorId]
-        if not model and self.targets[1] then model=self.targets[1].model end
-        local root=model and model.Parent and model:FindFirstChild('HumanoidRootPart')
-        if root then
-            local distance=(root.Position-focus).Magnitude
-            target=(root.Position+focus)/2
-            offset=Vector3.new(14,math.max(16,distance*.35),math.max(28,distance*.7))
-        else offset=Vector3.new(15,18,30) end
-    end
-    -- Camera distance, short shake and perspective are authored3D adaptation.
-    -- The server's source counter determines the two impacts and the E0 cut.
-    local shake=math.sin((.16-self.introShake)*100)*self.introShake*1.25
-    camera.CFrame=framedView(target+offset+Vector3.new(shake,0,0),target,self.bounds)
-    camera:SetAttribute('BossIntroId',id)
-    return true
+function SpectatorCamera:moveFreeFocus(dt, camera)
+    local function down(key) return self.keys[key] and 1 or 0 end
+    local x = down("D") - down("A") + self.touchX
+    local z = down("S") - down("W") + self.touchZ
+    local lift = math.clamp(down("E") - down("Q") + down("Up") - down("Down"), -1, 1)
+    local length = math.max(1, math.sqrt(x*x + z*z))
+    local axis = camera.CFrame.RightVector
+    local right = Vector3.new(axis.X, 0, axis.Z)
+    right = right.Magnitude > 0.001 and right.Unit or Vector3.new(1, 0, 0)
+    local back = Vector3.new(-right.Z, 0, right.X)
+    local movement = (right*x + back*z) * (1/length) + Vector3.new(0, lift, 0)
+    local p = self.freePosition + movement * (math.min(dt, 0.1) * 34)
+    self.freePosition = Vector3.new(SpectatorCamera.clampAxes(p.X, p.Y, p.Z, self.bounds))
+    return self:anchorAt(self.freePosition)
 end
 
--- Use the short edge so rotating a phone keeps the same gameplay zoom.
-function SpectatorCamera.phoneFramingWeight(touchEnabled, viewport)
-    if not touchEnabled or not viewport or math.min(viewport.X, viewport.Y) <= 1 then return 0 end
-    return math.clamp((720 - math.min(viewport.X, viewport.Y)) / 180, 0, 1)
-end
-
-function SpectatorCamera:step(dt, camera, touchEnabled)
-    if not camera then return end
-    self.refreshElapsed += dt
-    if self.refreshElapsed >= 0.2 then self.refreshElapsed = 0; self:refreshTargets() end
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera:SetAttribute("SpectatorMode", self.mode)
-    if self:stepIntro(dt,camera) then return end
-    if self:isFree() and self.freePosition then
-        if self.enabled then
-            local function down(key) return self.keys[key] and 1 or 0 end
-            local x = down("D") - down("A") + self.touchX
-            local z = down("S") - down("W") + self.touchZ
-            local horizontal = Vector2.new(x, z)
-            if horizontal.Magnitude > 1 then horizontal = horizontal.Unit end
-            self.yaw += (down("Left") - down("Right")) * dt * 1.6
-            local forward = Vector3.new(-math.sin(self.yaw), 0, -math.cos(self.yaw))
-            local right = Vector3.new(math.cos(self.yaw), 0, -math.sin(self.yaw))
-            local lift = math.clamp(down("E") - down("Q") + down("Up") - down("Down"), -1, 1)
-            self.freePosition += (right * horizontal.X - forward * horizontal.Y + Vector3.new(0, lift, 0)) * math.min(dt, 0.1) * 34
-        end
-        local p = self.freePosition
-        local x, y, z = SpectatorCamera.clampAxes(p.X, p.Y, p.Z, self.bounds)
-        self.freePosition = Vector3.new(x, y, z)
-        camera.CFrame = CFrame.new(self.freePosition) * CFrame.Angles(0, self.yaw, 0) * CFrame.Angles(self.pitch, 0, 0)
-        return
-    end
+function SpectatorCamera:followSubject()
     local targetModel
     local controlled = self.controlled
     if controlled and controlled.status == "Alive" and controlled.connected and not controlled.dying then
@@ -210,50 +149,45 @@ function SpectatorCamera:step(dt, camera, touchEnabled)
             targetModel, self.selectedActorId = self.targets[1].model, self.targets[1].hero.actorId
         end
     end
-    local root = targetModel and targetModel.Parent and targetModel:FindFirstChild("HumanoidRootPart")
-    if root then
-        local viewport = camera.ViewportSize
-        local phone = SpectatorCamera.phoneFramingWeight(touchEnabled, viewport)
-        local target = root.Position + Vector3.new(0, 2 - phone, 0)
-        self.point = self.point and self.point:Lerp(target, 1 - math.exp(-dt * (7 + 6 * phone))) or target
-        local level=self.snapshot and self.snapshot.level
-        local mode=level and level.modeState
-        local actor
-        for _,candidate in ipairs(mode and mode.actors or {}) do
-            if candidate.actorId==targetModel:GetAttribute('ActorId') then actor=candidate;break end
-        end
-        local offset,focus=Vector3.new(0,23,30),self.point
-        local distanceScale = 1 - .42 * phone
-        if actor and not actor.finished then
-            if mode.mode=='Tower' then
-                local world=workspace:FindFirstChild(self.worldName)
-                local geometry=world and world:FindFirstChild('Geometry')
-                local core=geometry and geometry:FindFirstChild('SpireCore')
-                if core then
-                    local relative=self.point-core.Position
-                    local angle=math.atan2(relative.Z,relative.X)
-                    offset=Vector3.new(math.cos(angle)*43,19,math.sin(angle)*43)
-                end
-            elseif mode.mode=='Clinger' then offset=Vector3.new(0,46,5)
-            elseif mode.mode=='Rope' then offset=Vector3.new(0,8,43);focus=self.point+Vector3.new(0,-5,0)
-            elseif mode.mode=='Speeder' or mode.mode=='Surf' or mode.mode=='Jet' then
-                local narrow = phone > 0 and phone * math.clamp((1.1 - viewport.X / viewport.Y) / .55, 0, 1) or 0
-                -- In portrait, look along the road so approaching hazards stay in view.
-                offset=Vector3.new(10-39*narrow,16,43-15*narrow)
-                focus=self.point+Vector3.new(12-5*narrow,0,0)
-                distanceScale = 1 - .26 * phone
-            elseif mode.mode=='Tubes' or mode.mode=='Race' or mode.mode=='Ascent' then offset=Vector3.new(0,15,40) end
-        end
-        camera.CFrame = framedView(self.point + offset * distanceScale, focus, self.bounds)
-    elseif not self.point then
-        if self.worldName and self.bounds then
-            local bounds = self.bounds
-            local target = Vector3.new((bounds.minX + bounds.maxX) / 2, bounds.minY - 5, (bounds.minZ + bounds.maxZ) / 2)
-            camera.CFrame = framedView(target + Vector3.new(0, 23, 30), target, bounds)
-        else
-            camera.CFrame = CFrame.lookAt(Vector3.new(-55, 30, 36), Vector3.new(-45, 2, 0))
+    if targetModel and targetModel.Parent then
+        local head = targetModel:FindFirstChild("Head")
+        local subject = head and head:IsA("BasePart") and head or targetModel:FindFirstChild("HumanoidRootPart")
+        if subject then
+            self.point = subject.Position
+            self.followedModel = targetModel
+            return subject
         end
     end
+    self.followedModel = nil
+    if not self.point then
+        local bounds = self.worldName and self.bounds
+        self.point = bounds and Vector3.new((bounds.minX + bounds.maxX)/2, bounds.minY - 5, (bounds.minZ + bounds.maxZ)/2)
+            or Vector3.new(-45, 2, 0)
+    end
+    return self:anchorAt(self.point)
+end
+
+function SpectatorCamera:step(dt, camera)
+    if not camera then return end
+    self.refreshElapsed += dt
+    if self.refreshElapsed >= 0.2 then self.refreshElapsed = 0; self:refreshTargets() end
+    local subject
+    if self:isFree() and self.freePosition then
+        self.followedModel = nil
+        subject = self:moveFreeFocus(dt, camera)
+    else
+        subject = self:followSubject()
+    end
+    if camera.CameraSubject ~= subject then camera.CameraSubject = subject end
+    if camera.CameraType ~= Enum.CameraType.Custom then camera.CameraType = Enum.CameraType.Custom end
+    if self.camera ~= camera or self.reportedMode ~= self.mode then
+        camera:SetAttribute("SpectatorMode", self.mode)
+        self.camera, self.reportedMode = camera, self.mode
+    end
+end
+
+function SpectatorCamera:destroy()
+    if self.anchor then self.anchor:Destroy(); self.anchor = nil end
 end
 
 return SpectatorCamera

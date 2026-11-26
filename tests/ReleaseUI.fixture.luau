@@ -18,7 +18,7 @@ roleButtons={{button=node('Hero')},{button=node('Enemy')},{button=node('Watch')}
 heroCards={};partyRows={};heroRows={};enemyHearts={};mobileHearts={}
 directionButtons={};cameraButtons={}
 for _,name in ipairs({'Forward','Left','Right','Backward'}) do directionButtons[name]=node(name) end
-for _,name in ipairs({'Up','Down','Left','Right'}) do cameraButtons[name]=node(name) end
+for _,name in ipairs({'Up','Down'}) do cameraButtons[name]=node(name) end
 function position(item,x,y,w,h) item.Position=UDim2.fromOffset(x,y);item.Size=UDim2.fromOffset(w,h) end
 function enemyChoiceAllowed() return snapshot and snapshot.canChooseEnemy end
 function playable() return false end

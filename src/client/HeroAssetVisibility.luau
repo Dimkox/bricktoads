@@ -31,7 +31,10 @@ local function connect(list,event,fn)if event then list[#list+1]=event:Connect(f
 local function watchProperty(list,instance,property,refresh)
     return pcall(function()connect(list,assert(instance:GetPropertyChangedSignal(property)),refresh)end)
 end
-local function localAlpha(part,value)pcall(function()part.LocalTransparencyModifier=value end)end
+local visibility = if script then require(script.Parent:WaitForChild("CameraVisibility")) else require("./CameraVisibility")
+local function localAlpha(part,value)
+    pcall(visibility.set,part,value)
+end
 function Gate:_valid(row)
     return not self.destroyed and self.rows[row.skin]==row and row.skin.Parent==row.owner
         and row.skin:IsDescendantOf(self.workspace)and row.skin:GetAttribute('CanonicalHeroSkin')==true
@@ -46,7 +49,7 @@ end
 function Gate:_remember(row,part)
     local baseline=self.baselines[part]
     if not baseline then
-        baseline={value=alpha(part.LocalTransparencyModifier)and part.LocalTransparencyModifier or 0,owners={}}
+        baseline={value=visibility.get(part),owners={}}
         self.baselines[part]=baseline
     end
     baseline.owners[row]=true;return baseline.value
@@ -195,7 +198,7 @@ function Gate:_refresh(row)
     local baseParts,baseSet,targets={},{},{}
     row.unobservable={}
     for _,p in ipairs(row.skin:GetDescendants())do if p:IsA('MeshPart')then
-        if row.skinSaved[p]==nil then row.skinSaved[p]=alpha(p.LocalTransparencyModifier)and p.LocalTransparencyModifier or 0 end
+        if row.skinSaved[p]==nil then row.skinSaved[p]=visibility.get(p) end
         connect(row.assetConnections,p:GetAttributeChangedSignal('HeroVisibleTransparency'),refresh)
         for _,attribute in ipairs({'HeroExpectedMeshId','HeroExpectedTextureId','HeroExpectedSurfaceCount','HeroExpectedSurfaceMaps'})do
             connect(row.assetConnections,p:GetAttributeChangedSignal(attribute),refresh)

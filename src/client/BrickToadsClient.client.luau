@@ -25,6 +25,7 @@ local CastAssetVisibility = require(script.Parent:WaitForChild("CastAssetVisibil
 local HeroAssetVisibility = require(script.Parent:WaitForChild("HeroAssetVisibility"))
 local MovementInput = require(script.Parent:WaitForChild("MovementInput"))
 local RobloxInputBindings = require(script.Parent:WaitForChild("RobloxInputBindings"))
+local cameraVisibility = require(script.Parent:WaitForChild("CameraVisibility"))
 local spectatorCamera = SpectatorCamera.new()
 local combatFeedback = CombatFeedback.new()
 local gameAudio = GameAudio.new()
@@ -63,7 +64,7 @@ local pendingRole, pendingRoleAt = nil, 0
 local pendingEnemy, pendingEnemyAt = nil, 0
 local choosingEnemy = true
 local pendingView, pendingViewAt = nil, 0
-local cameraDragging, cameraStickInput = false, nil
+local cameraStickInput
 local cameraHolds = {}
 local actionPending, actionAt = false, 0
 local width, height = 900, 650
@@ -539,11 +540,10 @@ local cameraKnob = frame(cameraPad, "Knob", C.lime)
 cameraKnob.AnchorPoint, cameraKnob.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
 cameraKnob.Size = UDim2.fromScale(0.34, 0.34)
 corner(cameraKnob, 100)
-local cameraAxes = frame(cameraControls, "HeightAndYaw")
+local cameraAxes = frame(cameraControls, "Height")
 cameraAxes.BackgroundTransparency, cameraAxes.AnchorPoint = 1, Vector2.new(1, 1)
 local cameraButtons = {}
-for _, definition in ipairs({{key = "Up", text = "UP"}, {key = "Down", text = "DOWN"},
-    {key = "Left", text = "LEFT"}, {key = "Right", text = "RIGHT"}}) do
+for _, definition in ipairs({{key = "Up", text = "UP"}, {key = "Down", text = "DOWN"}}) do
     local cameraKey = definition.key
     local item = button(cameraAxes, cameraKey, definition.text, C.card, function() end)
     item.InputBegan:Connect(function(input)
@@ -573,7 +573,7 @@ local function resetInput()
     movementInput:reset()
     for _, item in pairs(directionButtons) do item.BackgroundColor3 = C.card end
     spectatorCamera:resetInput()
-    cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
+    cameraStickInput, cameraHolds = nil, {}
     cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
 end
 sendMovement = function()
@@ -638,6 +638,9 @@ gameplayBindings:bindPad(padSurface,UserInputService,function(x,z,begin)
     sendMovement()
 end)
 script.Destroying:Connect(function()
+    RunService:UnbindFromRenderStep("BrickToadsCameraSubject")
+    cameraVisibility.setHiddenActor(nil)
+    spectatorCamera:destroy()
     gameplayBindings:destroy()
     localInputs:Destroy()
     localization:destroy()
@@ -1017,7 +1020,7 @@ render = function()
     local canObserve = active and snapshot.canChooseView == true and snapshot.view == "Spectating" and not expanded and not groupPanel:isOpen()
     spectatorCamera:setEnabled(canObserve == true)
     if not canObserve then
-        cameraDragging, cameraStickInput, cameraHolds = false, nil, {}
+        cameraStickInput, cameraHolds = nil, {}
         cameraKnob.Position = UDim2.fromScale(0.5, 0.5)
     end
     cameraControls.Visible = canObserve == true and spectatorCamera:isFree()
@@ -1393,13 +1396,10 @@ layout = function()
     end
     cameraPad.Position, cameraPad.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(cameraPadSize, cameraPadSize)
     cameraPad.Visible, cameraAxes.Visible, cameraHint.Visible = isTouch, isTouch, not isTouch
-    cameraAxes.Position, cameraAxes.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(108, 108)
+    cameraAxes.Position, cameraAxes.Size = UDim2.new(1, -inset, 1, -bottom), UDim2.fromOffset(108, 50)
     position(cameraButtons.Up, 0, 0, 50, 50)
     position(cameraButtons.Down, 58, 0, 50, 50)
-    position(cameraButtons.Left, 0, 58, 50, 50)
-    position(cameraButtons.Right, 58, 58, 50, 50)
     cameraButtons.Up.TextSize, cameraButtons.Down.TextSize = 11, 11
-    cameraButtons.Left.TextSize, cameraButtons.Right.TextSize = 11, 11
     cameraHint.Position = UDim2.new(0.5, 0, 1, -bottom - spectatorHeight - 10)
     cameraHint.Size = UDim2.fromOffset(math.min(620, width - inset * 2), 40)
     local innerWidth, gapButtons = spectatorWidth - 28, 8
@@ -1481,15 +1481,11 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if cameraStickInput and (input == cameraStickInput or (cameraStickInput.UserInputType == Enum.UserInputType.MouseButton1
         and input.UserInputType == Enum.UserInputType.MouseMovement)) then dragCameraTo(input) end
-    if cameraDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        spectatorCamera:rotate(-input.Delta.X * 0.005)
-    end
 end)
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed or UserInputService:GetFocusedTextBox() then return end
     local key = input.KeyCode
     if spectatorCamera.enabled and spectatorCamera:isFree() then
-        if input.UserInputType == Enum.UserInputType.MouseButton2 then cameraDragging = true end
         if key == Enum.KeyCode.W or key == Enum.KeyCode.A or key == Enum.KeyCode.S or key == Enum.KeyCode.D
             or key == Enum.KeyCode.Q or key == Enum.KeyCode.E then spectatorCamera:setKey(key.Name, true) end
         return
@@ -1497,7 +1493,6 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 UserInputService.InputEnded:Connect(function(input)
     spectatorCamera:setKey(input.KeyCode.Name, false)
-    if input.UserInputType == Enum.UserInputType.MouseButton2 then cameraDragging = false end
     for held, key in pairs(cameraHolds) do
         if held == input or (held.UserInputType == Enum.UserInputType.MouseButton1
             and input.UserInputType == Enum.UserInputType.MouseButton1) then
@@ -1617,10 +1612,13 @@ local function speederInView(camera)
     local model = spectatorCamera.models and spectatorCamera.models[mine.actorId]
     local root = model and model:FindFirstChild("HumanoidRootPart")
     if not root or model:GetAttribute("CampaignMode") ~= "Speeder" then return false end
-    local _, onScreen = camera:WorldToViewportPoint(root.Position)
-    if not onScreen then return false end
     local world = workspace:FindFirstChild(snapshot.worldName)
-    local geometry = world and world:FindFirstChild("Geometry")
+    local actors = world and world:FindFirstChild("Actors")
+    if not actors or model.Parent ~= actors then return false end
+    -- The rider's body may be outside the viewport in first person.
+    local subject = camera.CameraSubject
+    if not subject or (subject ~= root and subject ~= model:FindFirstChild("Head")) then return false end
+    local geometry = world:FindFirstChild("Geometry")
     if not geometry or not geometry:FindFirstChild("CourseSupport_Arrival") then return false end
     local id = "vehicle-" .. snapshot.mine
     local plate = geometry:FindFirstChild("Campaign_Speeder_" .. id)
@@ -1630,6 +1628,9 @@ local function speederInView(camera)
     local deck = skin and skin:FindFirstChild("RiderDeck", true)
     return deck and deck:IsA("BasePart") and deck.Transparency < 1 and deck.LocalTransparencyModifier < 1
 end
+RunService:BindToRenderStep("BrickToadsCameraSubject", Enum.RenderPriority.Camera.Value - 1, function(dt)
+    spectatorCamera:step(dt, workspace.CurrentCamera)
+end)
 RunService.RenderStepped:Connect(function(dt)
     syncGameplayContext()
     -- Wait for both an authoritative entry route and an unobscured, bound HUD.
@@ -1671,7 +1672,8 @@ RunService.RenderStepped:Connect(function(dt)
         if actionPending and os.clock() - actionAt > 4 then actionPending = false; render() end
     end
     local camera = workspace.CurrentCamera
-    spectatorCamera:step(dt, camera, UserInputService.TouchEnabled)
+    local closeUp = camera and (camera.CFrame.Position - camera.Focus.Position).Magnitude < 1.25
+    cameraVisibility.setHiddenActor(closeUp and spectatorCamera.followedModel or nil)
     if snapshot and os.clock() - lastRideReady >= 2 and speederInView(camera) then
         lastRideReady = os.clock()
         sendIntent({kind="RideReady", runId=snapshot.runId})

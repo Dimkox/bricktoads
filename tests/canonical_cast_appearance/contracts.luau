@@ -1,6 +1,9 @@
 function Frame:GetComponents() return self.Position.X,self.Position.Y,self.Position.Z,1,0,0,0,1,0,0,0,1 end
-local env=setmetatable({script={Parent={CanonicalCastPresentation='Presentation'}},
-    require=function(name) assert(name=='Presentation');return ActualPresentation end,
+local env=setmetatable({script={Parent={CanonicalCastPresentation='Presentation',CanonicalWalker='Walker'}},
+    require=function(name)
+        if name=='Walker' then return ActualWalker end
+        assert(name=='Presentation');return ActualPresentation
+    end,
     game={GetService=function(_,name) assert(name=='CollectionService');return {
         AddTag=function(_,model,tag) model:SetAttribute('TestCollectionTag',tag) end} end},
     Instance={new=function(class) return node(class) end},CFrame=cf,Vector3={new=vector}},{__index=getfenv()})

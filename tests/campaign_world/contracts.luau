@@ -9,9 +9,12 @@ env.CFrame.new=function(...)
 end
 local ActualCourseAppearance=source(CourseAppearanceSource)
 local ActualCoursePropAppearance=source(CoursePropAppearanceSource)
-env.script={Parent={CourseAppearance='CourseAppearance',CoursePropAppearance='CoursePropAppearance'}}
+local ActualCampaignDefinition=source(CampaignDefinitionSource)
+env.script={Parent={CourseAppearance='CourseAppearance',CoursePropAppearance='CoursePropAppearance',
+    CampaignDefinition='CampaignDefinition'}}
 env.require=function(name)
     if name=='CourseAppearance'then return ActualCourseAppearance end
+    if name=='CampaignDefinition'then return ActualCampaignDefinition end
     assert(name=='CoursePropAppearance');return ActualCoursePropAppearance
 end
 function Frame:GetComponents()

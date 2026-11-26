@@ -15,6 +15,7 @@ sources = {
     'BaseWorldSource': 'src/stand/server/RobloxWorld.lua',
     'DragonWorldSource': 'src/server/gameplay/DragonWorld.lua',
     'CampaignWorldSource': 'src/server/gameplay/CampaignWorld.lua',
+    'CampaignDefinitionSource': 'src/server/gameplay/CampaignDefinition.lua',
     'CourseAppearanceSource': 'src/server/gameplay/CourseAppearance.lua',
     'CoursePropAppearanceSource': 'src/server/gameplay/CoursePropAppearance.lua',
     'SourceCombatSource': 'src/server/gameplay/SourceCombat.lua',
