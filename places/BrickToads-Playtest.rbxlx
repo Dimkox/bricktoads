@@ -15619,7 +15619,7 @@ return World
       <Item class="ModuleScript" referent="BT85">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='4a4c440bfcbec257a9332866f6f6d055dfef54bf4530493f624602aecdd20733'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='c031ecc3de606e00033ac73f0c12099121868f908c1e500536598aef69ed2d71'})
 </ProtectedString>
         </Properties>
       </Item>
@@ -20431,6 +20431,7 @@ function SpectatorCamera:sync(snapshot, controlled)
         self.mode, self.selectedActorId, self.point, self.freePosition = "Follow", nil, nil, nil
         self.models, self.targets = {}, {}
         self.followedModel = nil
+        self.entryFramed = false
         self:resetInput()
         self.refreshElapsed = 1
     end
@@ -20557,7 +20558,59 @@ function SpectatorCamera:followSubject()
     return self:anchorAt(self.point)
 end
 
+-- The old follow camera composed each course differently. Seed its orbit once,
+-- after the actor has streamed in, then leave rotation and zoom to CameraModule.
+function SpectatorCamera:frameEntry(camera)
+    local root = self.followedModel:FindFirstChild("HumanoidRootPart")
+    if not root then return end
+    local viewport = camera.ViewportSize
+    local shortEdge = math.min(viewport.X, viewport.Y)
+    if shortEdge &lt;= 1 then return end
+    local phone = game:GetService("UserInputService").TouchEnabled and math.clamp((720-shortEdge)/180, 0, 1) or 0
+    local point = root.Position + Vector3.new(0, 2-phone, 0)
+    local level = self.snapshot.level
+    local mode = level and (level.mode or (level.modeState and level.modeState.mode))
+    local offset, focus, scale = Vector3.new(0,23,30), point, 1-.42*phone
+    if mode == "Tower" then
+        local world = workspace:FindFirstChild(self.worldName)
+        local geometry = world and world:FindFirstChild("Geometry")
+        local core = geometry and geometry:FindFirstChild("SpireCore")
+        if not core then return end
+        local delta = point-core.Position
+        local angle = math.atan2(delta.Z, delta.X)
+        offset = Vector3.new(math.cos(angle)*43,19,math.sin(angle)*43)
+    elseif mode == "Clinger" then
+        offset = Vector3.new(0,46,5)
+    elseif mode == "Rope" then
+        offset, focus = Vector3.new(0,8,43), point+Vector3.new(0,-5,0)
+    elseif mode == "Speeder" or mode == "Surf" or mode == "Jet" then
+        local narrow = phone*math.clamp((1.1-viewport.X/viewport.Y)/.55,0,1)
+        offset, focus = Vector3.new(10-39*narrow,16,43-15*narrow), point+Vector3.new(12-5*narrow,0,0)
+        scale = 1-.26*phone
+    elseif mode == "Tubes" or mode == "Race" or mode == "Ascent" then
+        offset = Vector3.new(0,15,40)
+    end
+    local eye = point + offset*scale
+    local clipped = Vector3.new(SpectatorCamera.clampAxes(eye.X,eye.Y,eye.Z,self.bounds))
+    focus += clipped-eye
+    camera.CFrame, camera.Focus = CFrame.lookAt(clipped,focus), CFrame.new(focus)
+    local player = game:GetService("Players").LocalPlayer
+    self.zoomPlayer, self.minZoom, self.maxZoom = player, player.CameraMinZoomDistance, player.CameraMaxZoomDistance
+    local distance = math.clamp((clipped-focus).Magnitude,self.minZoom,self.maxZoom)
+    player.CameraMinZoomDistance, player.CameraMaxZoomDistance = distance, distance
+    self.entryFramed = true
+end
+
+function SpectatorCamera:releaseEntryZoom()
+    if self.zoomPlayer then
+        self.zoomPlayer.CameraMaxZoomDistance = self.maxZoom
+        self.zoomPlayer.CameraMinZoomDistance = self.minZoom
+        self.zoomPlayer = nil
+    end
+end
+
 function SpectatorCamera:step(dt, camera)
+    self:releaseEntryZoom()
     if not camera then return end
     self.refreshElapsed += dt
     if self.refreshElapsed &gt;= 0.2 then self.refreshElapsed = 0; self:refreshTargets() end
@@ -20570,6 +20623,9 @@ function SpectatorCamera:step(dt, camera)
     end
     if camera.CameraSubject ~= subject then camera.CameraSubject = subject end
     if camera.CameraType ~= Enum.CameraType.Custom then camera.CameraType = Enum.CameraType.Custom end
+    if not self.entryFramed and self.followedModel and self.snapshot and self.snapshot.status == "Active" then
+        self:frameEntry(camera)
+    end
     if self.camera ~= camera or self.reportedMode ~= self.mode then
         camera:SetAttribute("SpectatorMode", self.mode)
         self.camera, self.reportedMode = camera, self.mode
@@ -20577,6 +20633,7 @@ function SpectatorCamera:step(dt, camera)
 end
 
 function SpectatorCamera:destroy()
+    self:releaseEntryZoom()
     if self.anchor then self.anchor:Destroy(); self.anchor = nil end
 end
 
