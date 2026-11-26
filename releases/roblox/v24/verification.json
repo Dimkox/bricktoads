@@ -1,0 +1,49 @@
+{
+  "issue": "BT-129",
+  "publication": {
+    "version": 24,
+    "placeId": "127067245911754",
+    "sha256": "041b503062937aba846454d3aa5e49a7edaaeffd0100cc033e911dc0232fe84b",
+    "observedAt": "2026-11-27T02:46:39.728000+03:00",
+    "source": "v24/verification.json"
+  },
+  "cloud": {
+    "path": "assets/127067245911754/versions/24",
+    "createTime": "2026-11-26T23:46:39.728Z",
+    "creationContext": {
+      "creator": {
+        "userId": "11946162891"
+      }
+    },
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "published": true
+  },
+  "downloadedReleaseByteExact": true,
+  "studio": {
+    "modes": [
+      "Causeway",
+      "Rope",
+      "Speeder",
+      "Ice",
+      "Surf",
+      "Serpents",
+      "Jet",
+      "Ascent",
+      "Tubes",
+      "Race",
+      "Clinger",
+      "Tower",
+      "Finale"
+    ],
+    "checks": [
+      "entry direction and distance against legacy desktop offsets",
+      "manual CFrame retained on same level",
+      "native zoom limits restored",
+      "native CameraModule tracked Clinger for eight rendered frames"
+    ],
+    "nativeClingerFinalDistance": 46.27089
+  },
+  "gameplayChecksPassed": 78
+}
