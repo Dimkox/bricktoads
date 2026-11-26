@@ -1,0 +1,528 @@
+{
+  "jira": "https://ii-tonya.atlassian.net/browse/BT-121",
+  "date_moscow": "2026-11-27",
+  "title": "BrickToads campaign gameplay clips",
+  "source_repository_commit": "120c502ded57244feb8d2eb8525a998b973ac34b",
+  "local_capture_source_place_sha256": "f2e2350e2bd9a9e684eeb68e644ea4f51946c29b4607e6514df4f7144b970037",
+  "scope": "Local Studio playtests with a stage selector and an automated player. Two cuts use previously recorded v19 footage. Local delivery.",
+  "clips": [
+    {
+      "level": 1,
+      "title": "Flooded Causeway",
+      "file": "01-flooded-causeway.mp4",
+      "duration_s": 20.401,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 612,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -8.3,
+      "audio_mean_dbfs": -29.6,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        17.9,
+        29.9,
+        30.7,
+        20.5
+      ],
+      "bytes": 9918359,
+      "sha256": "7f0ea159e0d28a0aea2ed8d809e4f8ed8cec2a74fb5fe7292ab0cd393ba737cd",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "EF337CDD-19A3-4924-A583-AF1B39C41B1C",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728386919,
+          "duration_s": 21.144,
+          "frames_recorded": 628,
+          "camera": "game camera",
+          "stage_during_capture": 1,
+          "run_id": "6a4860c1-5bf1-4080-8d9b-efa09519bef7"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "title": "Echo Shaft",
+      "file": "02-echo-shaft.mp4",
+      "duration_s": 22.8,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "15/1",
+      "frames": 342,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -6.6,
+      "audio_mean_dbfs": -28.2,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        17.9,
+        118.3,
+        55.9,
+        52.2
+      ],
+      "bytes": 6351539,
+      "sha256": "b6701741792e5f916f1a46c2496334efbb76706271d0c76f01981632a19c82a2",
+      "capture_origin": "BT-118, 2026-11-25, v19",
+      "source_git_blob": "72fe6a6a734ffc1344a9963c4af5e6bf08cc1109",
+      "source_path": "assets/marketing/experience-page/BrickToads-Echo-Shaft-v19.mp4"
+    },
+    {
+      "level": 3,
+      "title": "Copper Rush",
+      "file": "03-copper-rush.mp4",
+      "duration_s": 20.003,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "15/1",
+      "frames": 299,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -8.0,
+      "audio_mean_dbfs": -30.0,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        34.9,
+        23.1,
+        37.2,
+        25.9
+      ],
+      "bytes": 12216315,
+      "sha256": "26f14e044eb780a0e88dd83d8f622291afbdc71fc945188c40ae05b9a415983b",
+      "capture_origin": "BT-118, 2026-11-25, v19",
+      "source_git_blob": "fa935a4208815cb322394d2fd491b280b8817098",
+      "source_path": "assets/marketing/experience-page/BrickToads-Copper-Rush-v19.mp4"
+    },
+    {
+      "level": 4,
+      "title": "Frostworks",
+      "file": "04-frostworks.mp4",
+      "duration_s": 9.98,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 299,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -18.0,
+      "audio_mean_dbfs": -32.0,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        21.9,
+        28.6,
+        30.3,
+        26.4
+      ],
+      "bytes": 3546296,
+      "sha256": "105079c03db63d1f600c80ea6becd95ba13348e525498b4ff2258241d854415b",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "7C788067-B3F0-4B53-AB54-2F150086AF9A",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728446348,
+          "duration_s": 10.204,
+          "frames_recorded": 302,
+          "camera": "game camera",
+          "stage_at_capture_start": 4,
+          "stage_at_capture_end": 4,
+          "run_id": "cb6a6afd-33fa-4517-997a-182135f25219"
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "title": "Tidal Foundry",
+      "file": "05-tidal-foundry.mp4",
+      "duration_s": 15.767,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 473,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -11.4,
+      "audio_mean_dbfs": -30.1,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        12.2,
+        15.1,
+        41.1,
+        9.2
+      ],
+      "bytes": 4291120,
+      "sha256": "04608525c8888a74b4d140eaacfa21cf6d39807e0844c23cc58ad90f2946f159",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "367D5086-D349-4C93-A555-03AC3A935C3E",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728459498,
+          "duration_s": 20.182,
+          "frames_recorded": 598,
+          "camera": "game camera",
+          "stage_at_capture_start": 5,
+          "stage_at_capture_end": 5,
+          "run_id": "831cf0ed-e378-404c-abec-680c55e36162"
+        }
+      ]
+    },
+    {
+      "level": 6,
+      "title": "Four Coil Vaults",
+      "file": "06-four-coil-vaults.mp4",
+      "duration_s": 14.9,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 447,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -18.0,
+      "audio_mean_dbfs": -32.0,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        12.6,
+        12.4,
+        8.1,
+        13.2
+      ],
+      "bytes": 3212613,
+      "sha256": "d3cb2b4a30095451b524fdaf823047400b150da181deef567e1bbbe976d12951",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "94E0A10A-4557-4DE0-ABBA-FBAA12877EDB",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728482231,
+          "duration_s": 19.216,
+          "frames_recorded": 562,
+          "camera": "game camera",
+          "stage_at_capture_start": 6,
+          "stage_at_capture_end": 6,
+          "run_id": "b0630af1-344a-4ff2-b9e1-2547f1e6bae7"
+        }
+      ]
+    },
+    {
+      "level": 7,
+      "title": "Ember Airway",
+      "file": "07-ember-airway.mp4",
+      "duration_s": 9.467,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 284,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -12.7,
+      "audio_mean_dbfs": -31.6,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        23.9,
+        22.0,
+        26.9,
+        31.8
+      ],
+      "bytes": 4157843,
+      "sha256": "eb6b9d86852ef48ae83d1e88289181ec2cc69493d633f3edb1c6dc0aed6778b6",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "8D55B1D4-B5C6-4FDB-93E5-895CA18C0E2E",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728504274,
+          "duration_s": 10.19,
+          "frames_recorded": 295,
+          "camera": "game camera",
+          "stage_at_capture_start": 7,
+          "stage_at_capture_end": 8,
+          "run_id": "8c9cd2a4-f303-446d-8076-e2c94e1ba700"
+        }
+      ],
+      "edit": "Cut before the transition to stage 8."
+    },
+    {
+      "level": 8,
+      "title": "Machine Ascent",
+      "file": "08-machine-ascent.mp4",
+      "duration_s": 17.267,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 518,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -9.0,
+      "audio_mean_dbfs": -28.9,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        55.5,
+        87.3,
+        52.1,
+        19.4
+      ],
+      "bytes": 5387407,
+      "sha256": "a4fb1ee05ae075001d8394d69e459a096fed97e191e2b983a8617eb41d8e66fb",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "A898BDC6-0596-408B-AAB4-D8F666763EA5",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728699542,
+          "duration_s": 13.198,
+          "frames_recorded": 390,
+          "camera": "closer follow view",
+          "stage_at_capture_start": 8,
+          "stage_at_capture_end": 8,
+          "run_id": "4dac5a0f-e70e-4209-82e2-528411b566a4"
+        },
+        {
+          "native_capture_id": "DF13224F-B65D-40A0-9948-224ACA0A00AF",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728517001,
+          "duration_s": 21.176,
+          "frames_recorded": 617,
+          "camera": "game camera",
+          "stage_at_capture_start": 8,
+          "stage_at_capture_end": 8,
+          "run_id": "2fa0f856-fff4-4274-9d0c-f7ed37def3eb"
+        }
+      ],
+      "edit": "Ascent and rooftop fight assembled from two captures of stage 8."
+    },
+    {
+      "level": 9,
+      "title": "Pressure Pipes",
+      "file": "09-pressure-pipes.mp4",
+      "duration_s": 20.767,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 623,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -5.6,
+      "audio_mean_dbfs": -30.7,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        15.7,
+        12.5,
+        16.4,
+        19.3
+      ],
+      "bytes": 4172828,
+      "sha256": "ad957cee89dfafd1f8c88ca011f5b60e154a4ce0dee70f112bfa475dc8302d0e",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "7A53942F-2A0F-4CD3-AB8A-997942A15563",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728541066,
+          "duration_s": 21.253,
+          "frames_recorded": 637,
+          "camera": "game camera",
+          "stage_at_capture_start": 9,
+          "stage_at_capture_end": 9,
+          "run_id": "cd9249dc-d5e3-437d-9791-1d69d72a5d0e"
+        }
+      ]
+    },
+    {
+      "level": 10,
+      "title": "Fuse Pursuit",
+      "file": "10-fuse-pursuit.mp4",
+      "duration_s": 15.0,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 450,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -10.6,
+      "audio_mean_dbfs": -28.6,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        73.4,
+        72.5,
+        63.7,
+        16.3
+      ],
+      "bytes": 4587409,
+      "sha256": "4f155eb6ec16626d960bdd9ae34a7031b231ddfe60217cd9f45c3292f5c575c0",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "88723BD7-2C53-48DD-8DD1-1A68C7ABF8BD",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728681797,
+          "duration_s": 15.23,
+          "frames_recorded": 455,
+          "camera": "closer follow view",
+          "stage_at_capture_start": 10,
+          "stage_at_capture_end": 10,
+          "run_id": "4ef27c83-c695-497d-9dc9-811e5167e0db"
+        }
+      ]
+    },
+    {
+      "level": 11,
+      "title": "Magnetic Circuit",
+      "file": "11-magnetic-circuit.mp4",
+      "duration_s": 14.8,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 444,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -17.7,
+      "audio_mean_dbfs": -33.1,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        19.2,
+        20.1,
+        20.3,
+        18.3
+      ],
+      "bytes": 5180849,
+      "sha256": "531662fd64adf4dc2489c1a8b926abfd56ba79ec73d71109762d5b23c56bc427",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "2543655B-4FE9-4B02-9C16-E76D6D1BF479",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728590829,
+          "duration_s": 20.18,
+          "frames_recorded": 606,
+          "camera": "game camera",
+          "stage_at_capture_start": 11,
+          "stage_at_capture_end": 11,
+          "run_id": "695b2dca-cc3f-4f90-90d5-7cf3460921bb"
+        }
+      ]
+    },
+    {
+      "level": 12,
+      "title": "Turning Spire",
+      "file": "12-turning-spire.mp4",
+      "duration_s": 12.933,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 388,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -12.5,
+      "audio_mean_dbfs": -31.7,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        28.6,
+        27.2,
+        34.7,
+        26.4
+      ],
+      "bytes": 7701634,
+      "sha256": "5a9721a8f1993f4a9f920cd359c47ca2c6ce2b379d5fa8120062e86cdf203c34",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "F536BA05-6861-43A9-9BF6-0D3C5C907A13",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728613597,
+          "duration_s": 13.22,
+          "frames_recorded": 389,
+          "camera": "game camera",
+          "stage_at_capture_start": 12,
+          "stage_at_capture_end": 12,
+          "run_id": "339caa7e-fb1e-4a9c-8a00-ebef61d47eae"
+        }
+      ]
+    },
+    {
+      "level": 13,
+      "title": "Last Eclipse",
+      "file": "13-last-eclipse.mp4",
+      "duration_s": 19.833,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "average_fps": "30/1",
+      "frames": 595,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_channels": 2,
+      "audio_peak_dbfs": -11.6,
+      "audio_mean_dbfs": -28.2,
+      "decoded_to_end": true,
+      "sampled_frame_differences": [
+        25.5,
+        39.8,
+        25.3,
+        28.2
+      ],
+      "bytes": 5254814,
+      "sha256": "3661bf878be2589ac8ddf8f45522be15aae07c8181e3762d10fbeb6db1fd50f1",
+      "capture_origin": "BT-121, 2026-11-27, local Studio playtest",
+      "takes": [
+        {
+          "native_capture_id": "DD7A00F1-D8FB-4D7C-9BEB-D719C3B913D3",
+          "status": "completed",
+          "capture_started_unix_ms": 1795728720743,
+          "duration_s": 20.425,
+          "frames_recorded": 589,
+          "camera": "closer follow view",
+          "stage_at_capture_start": 13,
+          "stage_at_capture_end": 13,
+          "run_id": "b1680ec4-6794-4b55-a0a5-b6ca233910cf"
+        }
+      ]
+    }
+  ],
+  "zip": {
+    "file": "BrickToads-13-levels.zip",
+    "bytes": 75980556,
+    "sha256": "6fc821c45450a1d443a2d0a5dd90c3f356d3dadd165a46f7cecf34a1019e9560"
+  },
+  "audio": "Original game audio in every clip.",
+  "checks": "Full FFmpeg decode of each video and audio stream. All 13 files have non-silent stereo audio and visible movement. Five evenly spread sample frames per file reviewed. ZIP CRC and SHA-256 of every extracted member verified.",
+  "roblox_studio_processes_after_close": 0
+}
