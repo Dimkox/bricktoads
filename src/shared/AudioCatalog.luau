@@ -3,6 +3,21 @@
 return {
     schema=1,
     assets={sfx='rbxassetid://75042258524153',music='rbxassetid://100771181568063'},
+    levelMusic={
+        Level1={assetId='rbxassetid://133738521705037',volume=.32},
+        Level2={assetId='rbxassetid://80866670516382',volume=.32},
+        Level3={assetId='rbxassetid://96241631472031',volume=.32},
+        Level4={assetId='rbxassetid://109261416652494',volume=.32},
+        Level5={assetId='rbxassetid://97155003640928',volume=.32},
+        Level6={assetId='rbxassetid://110477007791821',volume=.32},
+        Level7={assetId='rbxassetid://139779181517323',volume=.32},
+        Level8={assetId='rbxassetid://72263346423291',volume=.32},
+        Level9={assetId='rbxassetid://70440146304293',volume=.32},
+        Level10={assetId='rbxassetid://136706335266743',volume=.32},
+        Level11={assetId='rbxassetid://134854144845348',volume=.32},
+        Level12={assetId='rbxassetid://72985123012410',volume=.32},
+        Level13={assetId='rbxassetid://102308174919434',volume=.32},
+    },
     cues={
         Hit={start=0.180000000000,finish=0.400000000000,volume=0.40},
         Shield={start=0.580000000000,finish=0.755011337868,volume=0.40},

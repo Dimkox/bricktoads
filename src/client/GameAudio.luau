@@ -30,6 +30,14 @@ local function nativeFactory(deps)
         return {sound=sound,
             isLoaded=function() return sound.IsLoaded and sound.TimeLength>0 end,
             play=function(_,row,looped,volume)
+                local targetId=row.assetId or assetId
+                if sound.SoundId~=targetId then sound:Stop();sound.SoundId=targetId end
+                if row.assetId then
+                    if not sound.IsLoaded or sound.TimeLength<=0 then return false end
+                    sound:Stop();sound.PlaybackRegionsEnabled=false;sound.Looped=looped
+                    sound.Volume=volume;sound.TimePosition=0;sound:Play();return true
+                end
+                sound.PlaybackRegionsEnabled=true
                 if not sound.IsLoaded or sound.TimeLength<row.finish-.02 then return false end
                 sound:Stop();sound.PlaybackRegion=NumberRange.new(row.start,row.finish)
                 sound.LoopRegion=NumberRange.new(row.start,row.finish);sound.Looped=looped
@@ -104,14 +112,16 @@ function Audio:_music(data)
             local battle=level.stage=='Boss' or level.stage=='BossIntro'
                 or level.stage=='BossReady' and level.mode~='Clinger'
             local cue=(battle and 'Boss' or 'Level')..tostring(index)
-            if self.catalog.music and self.catalog.music[cue] then key=cue end
+            local levelKey='Level'..tostring(index)
+            if self.catalog.levelMusic and self.catalog.levelMusic[levelKey] then key=levelKey
+            elseif self.catalog.music and self.catalog.music[cue] then key=cue end
         end
     end
     if self.muted or self.musicMuted then key=nil end
     if key~=self.musicKey then
         call(self.music,'stop');self.musicKey=nil
-        local row=key and (self.catalog.music or {})[key]
-        if region(row) then local ok,played=call(self.music,'play',row,true,math.clamp(row.volume or .22,0,.5),key);if ok and played then self.musicKey=key end end
+        local row=key and ((self.catalog.levelMusic or {})[key] or (self.catalog.music or {})[key])
+        if row and (asset(row.assetId) or region(row)) then local ok,played=call(self.music,'play',row,true,math.clamp(row.volume or .22,0,.5),key);if ok and played then self.musicKey=key end end
     end
 end
 function Audio:_transitions(data,baseline,played)
