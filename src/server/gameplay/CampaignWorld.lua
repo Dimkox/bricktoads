@@ -3,6 +3,7 @@
 local CampaignWorld={}
 CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
+local CombatTrail=require(script.Parent.CombatTrail)
 local CourseAppearance=require(script.Parent.CourseAppearance)
 local CoursePropAppearance=require(script.Parent.CoursePropAppearance)
 local ImportedSkin=require(script.Parent.ImportedModelSkin)
@@ -297,6 +298,88 @@ function CampaignWorld.decorateActor(actor,kind)
         end
     end
 end
+local travelStyles={RatPod='dash',Meteorite='fire',Serpent='swim',Rocket='fire',Spike='metal',
+    Gear='spin',RotatingSpike='spin'}
+
+local function courseTrail(row,metadata)
+    local kind=row.kind
+    local style=travelStyles[kind]
+    if not style then return end
+    local target=row.part
+    local active=metadata.hazard~=false and metadata.alpha~=1
+    local position=target.Position
+    local moving=row.lastTrailPosition and (position-row.lastTrailPosition).Magnitude>.001
+    row.lastTrailPosition=position
+    if row.airModel then
+        -- Native fallbacks retain these welded exhaust parts under the imported skin.
+        target=row.airTrailPart
+        if not target then
+            target=row.airModel:FindFirstChild(kind=='RatPod' and 'TurbineHub' or 'LongFlare',true) or row.part
+            row.airTrailPart=target
+        end
+        active=active and not row.airModel:GetAttribute('ImpactShown')
+        moving=moving or (metadata.velocity and vec(metadata.velocity,0).Magnitude>.001)
+    elseif kind=='Rocket' then
+        active=active and metadata.role=='Projectile'
+        moving=moving or (metadata.visualVelocity and vec(metadata.visualVelocity,0).Magnitude>.001)
+    elseif kind=='Gear' or kind=='RotatingSpike' then
+        local skin=row.coursePropAppearance
+        if skin then
+            -- Follow the rotating rim even at the turning point of its vertical path.
+            local rim=skin.trailRim
+            if not rim then
+                local name=kind=='Gear' and 'Body' or 'Teeth'
+                for _,mesh in ipairs(skin.rows) do
+                    if mesh.motion and (mesh.part.Name==name or mesh.part.Name==name..'_1') then
+                        rim=mesh.part;skin.trailRim=rim;break
+                    end
+                end
+            end
+            if rim then target=rim;moving=true end
+        end
+    end
+    if moving and target==row.part and (kind=='Spike' or kind=='Gear') then
+        -- Vertical travel needs a horizontal ribbon width. Move this cosmetic
+        -- point with the prop rather than changing its collision orientation.
+        local frame=row.part.CFrame*CFrame.new(0,row.part.Size.Y*.3,0)*CFrame.Angles(0,0,math.pi/2)
+        if not row.travelTip then
+            row.travelTip=makePart(row.part,'TravelTrailTip',Vector3.new(1,1,1),frame,row.part.Color,false)
+            row.travelTip.Transparency=1;row.travelTip.CastShadow=false
+        end
+        row.travelTip.CFrame=frame
+        target=row.travelTip
+    end
+    if row.trailTarget and row.trailTarget~=target and row.trailTarget.Parent then
+        CombatTrail.set(row.trailTarget,row.trailTarget,style,false)
+    end
+    row.trailTarget=target
+    CombatTrail.set(target,target,style,active and moving==true)
+end
+
+-- A fixed spike cannot draw a ribbon while it stands still. Sweep a cosmetic tip
+-- outward once at the actual crash point, then let its two trail layers fade.
+function CampaignWorld:spikeContact(id,point)
+    local row=self.objects[id]
+    if not row or row.kind~='Spike' then return end
+    local part=row.part
+    local now=self.now or 0
+    if row.nextContactTrail and now<row.nextContactTrail then return end
+    row.nextContactTrail=now+.35
+    local offset=vec(point,0)+self.world.offset-part.Position
+    local half=part.Size*.5
+    local at=part.Position+Vector3.new(math.clamp(offset.X,-half.X,half.X),
+        math.clamp(offset.Y,-half.Y,half.Y),math.clamp(offset.Z,-half.Z,half.Z))
+    local normal=offset.Magnitude>.01 and offset.Unit or Vector3.yAxis
+    local displacement=normal*2.2+Vector3.new(0,1.1,0)
+    local up=math.abs(displacement.Unit.Y)>.98 and Vector3.xAxis or Vector3.yAxis
+    local tip=makePart(part,'ContactSpark',Vector3.new(.6,.6,.6),CFrame.lookAt(at,at+displacement,up),part.Color,false)
+    tip.Transparency=1;tip.CastShadow=false
+    CombatTrail.set(tip,tip,'metal',true)
+    game:GetService('TweenService'):Create(tip,TweenInfo.new(.22,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
+        {Position=at+displacement}):Play()
+    game:GetService('Debris'):AddItem(tip,.72)
+end
+
 function CampaignWorld:object(id,kind,point,size,metadata)
     if type(point)~='table' then return end
     metadata=metadata or {};size=size or {x=2,y=2,z=2}
@@ -362,11 +445,15 @@ function CampaignWorld:object(id,kind,point,size,metadata)
     end
     CourseAppearance.update(row,self.world.geometry,metadata,waterSurfaceY)
     CoursePropAppearance.update(row,self.world.geometry,metadata,self.now or 0)
+    courseTrail(row,metadata)
     return row.part
 end
 function CampaignWorld:airImpact(id)
     local row=self.objects[id]
-    if row and row.airModel then AirHazardModels.impact(row.airModel) end
+    if row and row.airModel then
+        AirHazardModels.impact(row.airModel)
+        if row.trailTarget then CombatTrail.set(row.trailTarget,row.trailTarget,travelStyles[row.kind],false) end
+    end
 end
 function CampaignWorld:remove(id)
     local row=self.objects[id]

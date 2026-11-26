@@ -641,6 +641,7 @@ function Modes:_die(s,reason)
         if not others then self.chaseNeedsReset=true end
     end
     if self.world.campaignRelease then self.world:campaignRelease(s.slot) end
+    return true
 end
 function Modes:vehicleObstacleHit(slot)
     local s=self.actors[slot]
@@ -659,7 +660,10 @@ function Modes:_hazards(s,old)
             end
             if self.definition.speederEntry and h.id==self.course.hazards[1].id then s.touchedFirstWall=true end
             if self.mode=='Speeder' or self.mode=='Surf' or self.mode=='Jet' or h.kind=='Spike' or h.kind=='RotatingSpike' or h.kind=='PipeCrusher' or h.kind=='MechanicalCrusher' then
-                self:_die(s,'CampaignCrash')
+                local crashed=self:_die(s,'CampaignCrash')
+                if crashed and h.kind=='Spike' and self.world.campaignSpikeContact then
+                    self.world:campaignSpikeContact(h.id,s.position)
+                end
             elseif not s.nextHit or self.now>=s.nextHit then
                 s.nextHit=self.now+.8;self.session:_hit(-9001,s.slot,'Dash')
                 self:_log('CampaignHazardHit',s.slot,{kind=h.kind,mode=self.mode})

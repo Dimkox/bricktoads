@@ -3310,6 +3310,7 @@ function Modes:_die(s,reason)
         if not others then self.chaseNeedsReset=true end
     end
     if self.world.campaignRelease then self.world:campaignRelease(s.slot) end
+    return true
 end
 function Modes:vehicleObstacleHit(slot)
     local s=self.actors[slot]
@@ -3328,7 +3329,10 @@ function Modes:_hazards(s,old)
             end
             if self.definition.speederEntry and h.id==self.course.hazards[1].id then s.touchedFirstWall=true end
             if self.mode=='Speeder' or self.mode=='Surf' or self.mode=='Jet' or h.kind=='Spike' or h.kind=='RotatingSpike' or h.kind=='PipeCrusher' or h.kind=='MechanicalCrusher' then
-                self:_die(s,'CampaignCrash')
+                local crashed=self:_die(s,'CampaignCrash')
+                if crashed and h.kind=='Spike' and self.world.campaignSpikeContact then
+                    self.world:campaignSpikeContact(h.id,s.position)
+                end
             elseif not s.nextHit or self.now&gt;=s.nextHit then
                 s.nextHit=self.now+.8;self.session:_hit(-9001,s.slot,'Dash')
                 self:_log('CampaignHazardHit',s.slot,{kind=h.kind,mode=self.mode})
@@ -4181,6 +4185,7 @@ return Roster
 local CampaignWorld={}
 CampaignWorld.__index=CampaignWorld
 local Workspace=game:GetService('Workspace')
+local CombatTrail=require(script.Parent.CombatTrail)
 local CourseAppearance=require(script.Parent.CourseAppearance)
 local CoursePropAppearance=require(script.Parent.CoursePropAppearance)
 local ImportedSkin=require(script.Parent.ImportedModelSkin)
@@ -4475,6 +4480,88 @@ function CampaignWorld.decorateActor(actor,kind)
         end
     end
 end
+local travelStyles={RatPod='dash',Meteorite='fire',Serpent='swim',Rocket='fire',Spike='metal',
+    Gear='spin',RotatingSpike='spin'}
+
+local function courseTrail(row,metadata)
+    local kind=row.kind
+    local style=travelStyles[kind]
+    if not style then return end
+    local target=row.part
+    local active=metadata.hazard~=false and metadata.alpha~=1
+    local position=target.Position
+    local moving=row.lastTrailPosition and (position-row.lastTrailPosition).Magnitude&gt;.001
+    row.lastTrailPosition=position
+    if row.airModel then
+        -- Native fallbacks retain these welded exhaust parts under the imported skin.
+        target=row.airTrailPart
+        if not target then
+            target=row.airModel:FindFirstChild(kind=='RatPod' and 'TurbineHub' or 'LongFlare',true) or row.part
+            row.airTrailPart=target
+        end
+        active=active and not row.airModel:GetAttribute('ImpactShown')
+        moving=moving or (metadata.velocity and vec(metadata.velocity,0).Magnitude&gt;.001)
+    elseif kind=='Rocket' then
+        active=active and metadata.role=='Projectile'
+        moving=moving or (metadata.visualVelocity and vec(metadata.visualVelocity,0).Magnitude&gt;.001)
+    elseif kind=='Gear' or kind=='RotatingSpike' then
+        local skin=row.coursePropAppearance
+        if skin then
+            -- Follow the rotating rim even at the turning point of its vertical path.
+            local rim=skin.trailRim
+            if not rim then
+                local name=kind=='Gear' and 'Body' or 'Teeth'
+                for _,mesh in ipairs(skin.rows) do
+                    if mesh.motion and (mesh.part.Name==name or mesh.part.Name==name..'_1') then
+                        rim=mesh.part;skin.trailRim=rim;break
+                    end
+                end
+            end
+            if rim then target=rim;moving=true end
+        end
+    end
+    if moving and target==row.part and (kind=='Spike' or kind=='Gear') then
+        -- Vertical travel needs a horizontal ribbon width. Move this cosmetic
+        -- point with the prop rather than changing its collision orientation.
+        local frame=row.part.CFrame*CFrame.new(0,row.part.Size.Y*.3,0)*CFrame.Angles(0,0,math.pi/2)
+        if not row.travelTip then
+            row.travelTip=makePart(row.part,'TravelTrailTip',Vector3.new(1,1,1),frame,row.part.Color,false)
+            row.travelTip.Transparency=1;row.travelTip.CastShadow=false
+        end
+        row.travelTip.CFrame=frame
+        target=row.travelTip
+    end
+    if row.trailTarget and row.trailTarget~=target and row.trailTarget.Parent then
+        CombatTrail.set(row.trailTarget,row.trailTarget,style,false)
+    end
+    row.trailTarget=target
+    CombatTrail.set(target,target,style,active and moving==true)
+end
+
+-- A fixed spike cannot draw a ribbon while it stands still. Sweep a cosmetic tip
+-- outward once at the actual crash point, then let its two trail layers fade.
+function CampaignWorld:spikeContact(id,point)
+    local row=self.objects[id]
+    if not row or row.kind~='Spike' then return end
+    local part=row.part
+    local now=self.now or 0
+    if row.nextContactTrail and now&lt;row.nextContactTrail then return end
+    row.nextContactTrail=now+.35
+    local offset=vec(point,0)+self.world.offset-part.Position
+    local half=part.Size*.5
+    local at=part.Position+Vector3.new(math.clamp(offset.X,-half.X,half.X),
+        math.clamp(offset.Y,-half.Y,half.Y),math.clamp(offset.Z,-half.Z,half.Z))
+    local normal=offset.Magnitude&gt;.01 and offset.Unit or Vector3.yAxis
+    local displacement=normal*2.2+Vector3.new(0,1.1,0)
+    local up=math.abs(displacement.Unit.Y)&gt;.98 and Vector3.xAxis or Vector3.yAxis
+    local tip=makePart(part,'ContactSpark',Vector3.new(.6,.6,.6),CFrame.lookAt(at,at+displacement,up),part.Color,false)
+    tip.Transparency=1;tip.CastShadow=false
+    CombatTrail.set(tip,tip,'metal',true)
+    game:GetService('TweenService'):Create(tip,TweenInfo.new(.22,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
+        {Position=at+displacement}):Play()
+    game:GetService('Debris'):AddItem(tip,.72)
+end
+
 function CampaignWorld:object(id,kind,point,size,metadata)
     if type(point)~='table' then return end
     metadata=metadata or {};size=size or {x=2,y=2,z=2}
@@ -4540,11 +4627,15 @@ function CampaignWorld:object(id,kind,point,size,metadata)
     end
     CourseAppearance.update(row,self.world.geometry,metadata,waterSurfaceY)
     CoursePropAppearance.update(row,self.world.geometry,metadata,self.now or 0)
+    courseTrail(row,metadata)
     return row.part
 end
 function CampaignWorld:airImpact(id)
     local row=self.objects[id]
-    if row and row.airModel then AirHazardModels.impact(row.airModel) end
+    if row and row.airModel then
+        AirHazardModels.impact(row.airModel)
+        if row.trailTarget then CombatTrail.set(row.trailTarget,row.trailTarget,travelStyles[row.kind],false) end
+    end
 end
 function CampaignWorld:remove(id)
     local row=self.objects[id]
@@ -8605,6 +8696,7 @@ local World = {}
 
 local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
+local CombatTrail=require(script.Parent.CombatTrail)
 local ImportedSkin=require(script.Parent.ImportedModelSkin)
 local ScuzzModel=require(script.Parent.ScuzzModel)
 local ShadowCloudModel=require(script.Parent.ShadowCloudModel)
@@ -9546,6 +9638,12 @@ function World:campaignObject(id,kind,point,size,metadata)
     if self.campaignWorld then return self.campaignWorld:object(id,kind,point,size,metadata) end
 end
 
+function World:campaignSpikeContact(id, position)
+    if self.campaignWorld and self.campaignWorld.spikeContact then
+        self.campaignWorld:spikeContact(id, position)
+    end
+end
+
 function World:campaignRemove(id)
     if self.campaignWorld then self.campaignWorld:remove(id) end
 end
@@ -10138,9 +10236,9 @@ end
 
 function World:bossShot(mode)
     local actor=self.actors[-99]
-    if actor and self.guardianAppearance then
-        self.guardianAppearance.shot(actor,mode,self.presentationTime or 0)
-    end
+    if not actor or (mode~='Bullet' and mode~='Heavy') then return end
+    if self.guardianAppearance then self.guardianAppearance.shot(actor, mode, self.presentationTime or 0) end
+    actor.cannonTrailUntil=(self.presentationTime or 0)+.13
 end
 
 function World:progress(zoneIndex, complete)
@@ -10231,6 +10329,10 @@ function World:campaignAirImpact(id)
     if self.campaignWorld then self.campaignWorld:airImpact(id) end
 end
 
+-- Shared projectile renderer receives the committed path from its original owner.
+local projectileTrail = {Bullet="fire", Heavy="fire", Thrown="rush", RoboBolt="electric",
+    Bolt="electric", Snowball="rush", GasCloud="gas", Obstacle="rush", ReturningLife="dash"}
+
 function World:projectile(id, positionTable, reflected, mode, shadowGas)
     if type(id) ~= "number" or id &gt; -1000 or not positionTable then return false end
     local p = Vector3.new(positionTable.x, positionTable.y, positionTable.z) + self.offset
@@ -10270,6 +10372,16 @@ function World:projectile(id, positionTable, reflected, mode, shadowGas)
         a.root.Transparency=1
         a.halo.Transparency=1
     end
+    local style=projectileTrail[mode]
+    local moved=a.trailPosition and (p-a.trailPosition).Magnitude&gt;.005
+    if style and moved then
+        CombatTrail.set(a.model,a.root,style,true)
+        a.projectileTrail=style
+    elseif a.projectileTrail then
+        CombatTrail.set(a.model,a.root,a.projectileTrail,false)
+        a.projectileTrail=nil
+    end
+    a.trailPosition=p
     a.root.CFrame = CFrame.new(p)
     a.halo.CFrame = CFrame.new(p)
     a.root.Size = Vector3.new(size, size, size)
@@ -10695,6 +10807,115 @@ local heroPoses = {
         Recovery={left=1.6,right=1.6,leftRoll=-.2,rightRoll=.2,hip=.25}},
 }
 
+-- Appendage names refer to the authored skin. The physical R6 limb remains a
+-- usable motion source when a client has only its fallback model.
+local actionTrail = {
+    Punch={"strike","RightHand"}, HeroJab={"strike","RightHand"}, HeroPowerPunch={"strike","RightHand"},
+    HeroUppercut={"strike","RightHand"}, HeroKick={"strike","RightFoot"}, HeroElbow={"strike","RightLowerArm"},
+    HeroBoot={"dash","RightFoot"}, Dash={"dash","Head"}, Club={"strike","RightHand"},
+    PigJab={"strike","RightArm"}, PigHeavy={"strike","RightArm"}, PigRush={"rush","Head"},
+    WalkerLight={"strike","RightFoot"}, WalkerHeavy={"strike","RightFoot"}, EnemyRunStrike={"rush","RightArm"},
+    DragonHeadbutt={"rush","Head"}, Attack66={"strike","RightArm"}, Attack68={"rush","Head"},
+    Swoop={"rush","RightWing"}, Leap={"rush","Body"}, StealLife={"rush","RightArm"},
+    DropObstacle={"rush","Weapon"}, Snowball={"strike","RightArm"}, TwinBolt={"electric","Weapon"},
+    Bolt={"electric","Weapon"}, Gas={"gas","Jaw"}, Snap={"strike","Jaw"}, Latch={"strike","Jaw"},
+    Shock={"electric","Tail"}, Lunge={"swim","Head"}, Bite={"swim","Jaw"}, Roll={"spin","Body"},
+    Explode={"fire","Body"}, Hop={"rush","Body"}, BellyDrop={"rush","Body"}, Burst={"fire","Weapon"},
+    Jump={"rush","Body"}, Charge={"rush","Head"}, Headbutt={"strike","Head"}, Bounce={"spin","Body"},
+    Sweep={"strike","RightArm"}, Spin={"spin","Hair"}, RaceRun={"rush","Tail"}, Cannon={"fire","Weapon"},
+}
+local r6Limb = {RightFoot="Right Leg", RightLeg="Right Leg", RightHand="Right Arm", RightArm="Right Arm",
+    RightLowerArm="Right Arm", RightWing="Right Arm", Head="Head", Jaw="Head"}
+local fallbackLimb = {RacingRat="RacerTail", BigBlag="BlagBelly", Buzzball="RadialSpike1",
+    GeneralSlaughter="GeneralHead", DarkQueen="QueenArm1", RoboManus="RobotCannon1",
+    GasTurret="CampaignWeapon", RetroBlaster="CampaignWeapon", Robot="CampaignWeapon",
+    RocketRat="CampaignWeapon", SaturnToadtrap="TrapJaw", Raven="RavenBeak", LargeRaven="RavenBeak"}
+
+local function actionPart(actor,kind,action,segment)
+    if action=="Cannon" then
+        local skin=actor.guardianAppearance
+        local gun=skin and skin.rows[skin.shotSerial%2==1 and 2 or 3]
+        return gun and gun.part or actor.model:FindFirstChild("CannonMouth") or actor.root
+    end
+    if actor.scuzz then
+        return actor.scuzz.model:FindFirstChild(action=="Attack66" and "KnucklesR" or "Nose") or actor.root
+    elseif actor.shadowCloud then
+        return actor.shadowCloud:FindFirstChild("MouthUpper") or actor.root
+    end
+    local skin=actor.appearance
+    if skin then
+        local morph=skin.morphs and skin.morphs[skin.activeMorph]
+        if morph and (skin.activeMorph=="PowerFist" or skin.activeMorph=="BigBoot") then return morph.part end
+        local limb=skin.geometryParts and skin.geometryParts[segment]
+        if limb then return limb.part end
+    end
+    local cast=actor.castAppearance
+    if cast and cast.walkerRig then
+        return cast.walkerRig.legs[2].foot.Part1
+    elseif cast and cast.joints then
+        if kind=="GasTurret" and action=="Gas" then segment="Weapon"
+        elseif kind=="Walker" and action=="EnemyRunStrike" then segment="RightFoot" end
+        local limb=cast.joints[segment] or cast.joints.Head or cast.joints.Body
+        if limb then return limb.part end
+    end
+    local name=fallbackLimb[kind]
+    return (name and actor.model:FindFirstChild(name)) or actor.model:FindFirstChild(r6Limb[segment] or "Torso") or actor.root
+end
+
+local function actorTrailAction(world,id,actor,session,enemy,director)
+    if not session or not actor.root.Parent or actor.humanoid.Health&lt;=0 or (enemy and (enemy.dead or enemy.reactionUntil))
+        or (world.enemyCarries[id] and world.enemyCarries[id].mode=="Carried") then return end
+    local combat=session.combat and session.combat[id]
+    if combat and (combat.deathAt or combat.reactionEnd) then return end
+    local now=session.now
+    local boss=director and director.boss
+    if boss and id==-99 and boss.state then
+        if boss.state=="Active" and boss.attack then return boss.attack.name end
+        return
+    end
+    if actor.cannonTrailUntil and world.presentationTime&lt;actor.cannonTrailUntil then return "Cannon" end
+    local machine=director and director.campaignEnemies
+    local family=machine and machine.states[id]
+    if family then
+        if family.mode=="Active" and family.attack then return family.attack.name end
+        return
+    end
+    local race=director and director.modes and director.modes.race
+    if race and id==race.enemyId then
+        if not (race.failed or race.closed or race.completeBombs or race.stunnedUntil)
+            and actor.campaignVelocity and actor.campaignVelocity.Magnitude&gt;1 then return "RaceRun" end
+        return
+    end
+    local clubId=actor.model:GetAttribute("EquippedClub")
+    local club=clubId and world.equippedClubs[clubId]
+    if club and club.owner==actor and club.swingUntil and world.presentationTime&lt;club.swingUntil then
+        return "Club",club.model:FindFirstChild("ImpactPlate")
+    end
+    local owner=enemy or combat
+    if owner then
+        if owner.strikeRecoveryUntil and now&lt;owner.strikeRecoveryUntil then
+            return owner.lastStrikeAction,actor.model:FindFirstChild("CampaignRavenClaw")
+        end
+        local swing=enemy and enemy.windup or combat and combat.attack
+        if swing and (swing.action=="Dash" or swing.action=="HeroBoot" or swing.action=="EnemyRunStrike")
+            and type(swing.at)=="number" and type(now)=="number" and now&gt;=swing.at-.09 then
+            return swing.action
+        end
+        if enemy and enemy.rushing and actor.root.AssemblyLinearVelocity.Magnitude&gt;1 then return "PigRush" end
+    end
+end
+
+local function updateActorTrail(world,id,actor,session,enemy,director)
+    local action,weapon=actorTrailAction(world,id,actor,session,enemy,director)
+    local spec=actionTrail[action]
+    local part=spec and (weapon or actionPart(actor,actor.castRequestedKind,action,spec[2]))
+    local style=spec and spec[1]
+    if actor.trailPart==part and actor.trailStyle==style then return end
+    if actor.trailPart then CombatTrail.set(actor.model,actor.trailPart,actor.trailStyle,false) end
+    actor.trailPart,actor.trailStyle=part,style
+    if part then CombatTrail.set(actor.model,part,style,true) end
+end
+
 function World:updatePresentation(session, dt, enemies, director)
     if self.campaignWorld then self.campaignWorld:step(session.now) end
     dt = math.clamp(tonumber(dt) or 0, 0, 0.1)
@@ -10996,6 +11217,12 @@ function World:updatePresentation(session, dt, enemies, director)
                 reactionProgress=reactionProgress,
                 carried=self.enemyCarries[id] and self.enemyCarries[id].mode=='Carried'})
         end end
+    end
+    if self.dragonFires then
+        for _,shot in pairs(self.dragonFires) do CombatTrail.set(shot,shot,"fire",true) end
+    end
+    for id,actor in pairs(self.actors) do
+        if id &gt; -1000 then updateActorTrail(self,id,actor,session,enemies and enemies[id],director) end
     end
 end
 
@@ -14288,6 +14515,173 @@ function AirHazardModels.impact(model)
 end
 
 return AirHazardModels
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="BT127CombatTrail"><Properties><string name="Name">CombatTrail</string><ProtectedString name="Source">-- BT-127. Replicated visual ribbons. The caller owns every action and its timing.
+local RunService = game:GetService("RunService")
+local CombatTrail = {}
+
+-- Relative width, lifetime in seconds, maximum length in studs, near/far colors.
+local function palette(width, life, length, near, far)
+    return {width=width, life=life, length=length, near=Color3.fromHex(near), far=Color3.fromHex(far)}
+end
+local styles = {
+    strike   = palette(.88, .16, 5, "FFF4B7", "FF8D42"),
+    rush     = palette(.86, .23, 8, "FFED88", "F16C4B"),
+    gas      = palette(.84, .31, 6, "DAF99A", "6A9D52"),
+    electric = palette(.61, .16, 7, "D8FAFF", "6085FF"),
+    fire     = palette(.80, .24, 8, "FFF09C", "FC5841"),
+    swim     = palette(.70, .29, 7, "C9FFFA", "459ACC"),
+    spin     = palette(.77, .21, 6, "F6D5FF", "AE79DF"),
+    dash     = palette(.74, .19, 8, "F4FFF7", "58C3D1"),
+    dust     = palette(.86, .26, 6, "FFE6BC", "B88866"),
+    metal    = palette(.59, .15, 6, "EDF7FF", "889AAE"),
+}
+
+local outerTexture = "rbxassetid://131809614576042"
+local function curve(start, middle, finish)
+    return NumberSequence.new({
+        NumberSequenceKeypoint.new(0,start),
+        NumberSequenceKeypoint.new(.48,middle),
+        NumberSequenceKeypoint.new(1,finish),
+    })
+end
+local edgeAlpha, centerAlpha = curve(.26,.58,1), curve(.12,.48,1)
+local edgeWidth, centerWidth = curve(1,.72,0), curve(.25,.13,0)
+
+local byOwner = {}
+local heartbeat
+
+local function layer(state, outer)
+    local trail = Instance.new("Trail")
+    trail.Name = outer and "CombatTrailSoftEdge" or "CombatTrailCore"
+    trail.Attachment0, trail.Attachment1 = state.top, state.bottom
+    trail.Color = ColorSequence.new(outer and state.profile.near or Color3.new(1,1,1),state.profile.far)
+    trail.WidthScale = outer and edgeWidth or centerWidth
+    trail.Transparency = outer and edgeAlpha or centerAlpha
+    trail.FaceCamera = true
+    trail.LightEmission = outer and .48 or .82
+    trail.LightInfluence = .15
+    trail.Lifetime = state.profile.life * (outer and 1 or .78)
+    trail.MinLength = .025
+    trail.MaxLength = state.profile.length
+    if outer then
+        trail.Texture = outerTexture
+        trail.TextureMode = Enum.TextureMode.Stretch
+    end
+    trail.Enabled = true
+    trail.Parent = state.part
+    return trail
+end
+
+local function discard(state)
+    state.edge:Destroy()
+    state.core:Destroy()
+    state.top:Destroy()
+    state.bottom:Destroy()
+    byOwner[state.owner] = nil
+end
+
+local function attachment(part, name, offset)
+    local point = Instance.new("Attachment")
+    point.Name = name
+    point.Position = offset
+    point.Parent = part
+    return point
+end
+
+local function update(state, dt)
+    if not state.owner.Parent or not state.part:IsDescendantOf(workspace) then
+        discard(state)
+        return
+    end
+    if state.fade then
+        state.fade -= dt
+        if state.fade &lt;= 0 then discard(state) end
+        return
+    end
+
+    local position = state.part.Position
+    local distance = (position - state.lastPosition).Magnitude
+    state.lastPosition = position
+    if distance &gt; state.profile.length then
+        -- A fresh replicated Instance also drops the history on observing clients.
+        state.edge:Destroy()
+        state.core:Destroy()
+        state.edge = layer(state,true)
+        state.core = layer(state,false)
+    end
+
+    if state.sampleTime then
+        -- Both hero and enemy run attacks can halt the physical actor before
+        -- the hit. Prefer motion of the visible limb, including its rotation.
+        state.sampleTime += dt
+        if (state.top.WorldPosition - state.startPoint).Magnitude &gt; .065 then
+            state.sampleTime = nil
+        elseif state.sampleTime &gt;= .045 then
+            state.sampleTime = nil
+            state.swing = 0
+        end
+    end
+    if state.swing then
+        state.swing = math.min(.18,state.swing + dt)
+        local phase = state.swing / .18
+        local shift = Vector3.new(math.sin(phase*math.pi)*.34, .12*math.sin(phase*math.pi), -state.reach*phase)
+        state.top.Position = state.half + shift
+        state.bottom.Position = -state.half + shift
+        if phase == 1 then state.swing = nil end
+    end
+end
+
+local function watch()
+    if heartbeat then return end
+    heartbeat = RunService.Heartbeat:Connect(function(dt)
+        for _,state in pairs(byOwner) do update(state,dt) end
+        if not next(byOwner) then
+            heartbeat:Disconnect()
+            heartbeat = nil
+        end
+    end)
+end
+
+-- A nil part/style on release matches the owner's current ribbon.
+function CombatTrail.set(owner, movingPart, style, active)
+    if not owner then return false end
+    local current = byOwner[owner]
+    if not active then
+        if current and not current.fade and (not movingPart or current.part == movingPart)
+                and (not style or current.style == style) then
+            current.edge.Enabled = false
+            current.core.Enabled = false
+            current.fade = current.profile.life
+        end
+        return false
+    end
+    local profile = styles[style]
+    if not profile or not movingPart or not movingPart:IsA("BasePart") then return false end
+    if current and not current.fade and current.part == movingPart and current.style == style then return true end
+    if current then discard(current) end
+
+    local size = movingPart.Size
+    local width = math.clamp(math.max(size.X,size.Y)*profile.width,.42,3.6)
+    local half = Vector3.new(0,width*.5,0)
+    local state = {owner=owner,part=movingPart,style=style,profile=profile,half=half,lastPosition=movingPart.Position}
+    -- Sample the rim of a turning gear even when its center stays in place.
+    local center = style == "spin" and Vector3.new(size.X*.31,0,size.Z*.24) or Vector3.new()
+    state.top = attachment(movingPart,"CombatTrailTop",center + half)
+    state.bottom = attachment(movingPart,"CombatTrailBottom",center - half)
+    state.edge = layer(state,true)
+    state.core = layer(state,false)
+    local actorSwing = owner ~= movingPart and (style == "strike" or style == "rush" or style == "dash")
+    if actorSwing or (style == "strike" and movingPart.Anchored) then
+        state.reach = math.clamp(width*.55+.5,.72,1.8)
+        state.sampleTime = 0
+        state.startPoint = state.top.WorldPosition
+    end
+    byOwner[owner] = state
+    watch()
+    return true
+end
+
+return CombatTrail
 </ProtectedString></Properties></Item></Item>
       <Item class="Folder" referent="BT48">
         <Properties>
@@ -15225,7 +15619,7 @@ return World
       <Item class="ModuleScript" referent="BT85">
         <Properties>
           <string name="Name">BuildInfo</string>
-          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='67561d05723b63f03ffeed58424af65993c5c0f82526a169b3bf8e5a54dc599b'})
+          <ProtectedString name="Source">return table.freeze({format=1,sourceSha256='8583312cd6becf7df9745ad245f78b0563172cc98cecfcaf24b7bf2c17a7faf4'})
 </ProtectedString>
         </Properties>
       </Item>
