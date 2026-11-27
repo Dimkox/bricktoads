@@ -211,6 +211,12 @@ function SpectatorCamera:frameEntry(camera)
     self.entryFramed = true
 end
 
+function SpectatorCamera:resetView()
+    self.mode, self.freePosition = "Follow", nil
+    self:resetInput()
+    self.entryFramed = false
+end
+
 function SpectatorCamera:releaseEntryZoom()
     if self.zoomPlayer then
         self.zoomPlayer.CameraMaxZoomDistance = self.maxZoom

@@ -14,6 +14,22 @@ local palettes={
     Serpents={71,111,69},Jet={125,65,44},Ascent={76,88,107},Tubes={61,105,114},
     Race={139,98,54},Clinger={106,76,141},Tower={85,107,108},Finale={87,53,103},
 }
+local finishes={
+    Rope='IronSide',Ice='Aluminium',Surf='PlankSide',Serpents='StoneBlockSide',
+    Jet='IronSide',Ascent='Aluminium',Tubes='Cement',Race='PlankSide',
+    Clinger='IronSide',Tower='Cement',Finale='StoneBlockSide',
+}
+local function textureSupport(p,mode)
+    local finish=finishes[mode]
+    if not finish then return end
+    local tile=Instance.new('Texture')
+    tile.Name='SurfaceDetail';tile.Face=Enum.NormalId.Top
+    tile.Texture='rbxasset://textures/ui/LegacyRbxGui/'..finish..'.png'
+    tile.StudsPerTileU=6;tile.StudsPerTileV=6
+    tile.Transparency=mode=='Ice' and .72 or .48
+    tile.Color3=p.Color:Lerp(Color3.new(1,1,1),.65)
+    tile.Parent=p
+end
 local function vec(p,default)
     return Vector3.new(p.x or p.w or default,p.y or p.h or default,p.z or p.d or default)
 end
@@ -71,6 +87,7 @@ function CampaignWorld.new(world,route)
                 end
             end
         end
+        textureSupport(p,route.mode)
         p:SetAttribute('SurfaceId',route.id..':'..index);p:SetAttribute('ZoneIndex',1)
         world.allFloors[#world.allFloors+1]=p;world.floors[#world.floors+1]=p
         return p
@@ -403,6 +420,10 @@ function CampaignWorld:object(id,kind,point,size,metadata)
             item:SetAttribute('SurfaceId',self.route.id..':dynamic:'..tostring(id));item:SetAttribute('ZoneIndex',1)
             self.world.allFloors[#self.world.allFloors+1]=item
             self.world.floors[#self.world.floors+1]=item
+        end
+        if surfaces[kind] and kind~='Serpent' then
+            local templates=game:GetService('ServerStorage'):FindFirstChild('BrickToadsCoursePropTemplates')
+            if not (templates and templates:FindFirstChild(kind)) then textureSupport(item,self.route.mode) end
         end
         row={kind=kind,part=item,id=id};self.objects[id]=row
         if metadata.label then row.label=caption(item,metadata.label) end

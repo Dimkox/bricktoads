@@ -374,6 +374,11 @@ local function buildRoute(self, level)
     local function platform(data, zoneIndex, surfaceId)
         local p = part(g, "DistrictSupport", Vector3.new(data.w, data.h, data.d), CFrame.new(data.x, data.y, data.z),
             zoneIndex == 4 and COLORS.dark or COLORS.stone, Enum.Material.Slate, true)
+        local paving = Instance.new("Texture")
+        paving.Name, paving.Face = "SurfaceDetail", Enum.NormalId.Top
+        paving.Texture = "rbxasset://textures/ui/LegacyRbxGui/StoneBlockSide.png"
+        paving.StudsPerTileU, paving.StudsPerTileV, paving.Transparency = 7, 7, .45
+        paving.Parent = p
         p:SetAttribute("SurfaceId", surfaceId)
         p:SetAttribute("ZoneIndex", zoneIndex)
         self.allFloors[#self.allFloors + 1] = p

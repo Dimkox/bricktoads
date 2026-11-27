@@ -1,6 +1,7 @@
 -- English source strings and curated Russian translations. No user display names.
 -- Roblox LocalizationTable entries; add supported languages to Values here.
 local Catalog={entries={
+    {Key="Reset camera",Source="Reset camera",Values={["en-us"]="Reset camera",["ru"]="Сброс камеры"}},
     {Key="Snake",Source="Snake",Values={["en-us"]="Snake",["ru"]="Змея"}},
     {Key="Walker",Source="Walker",Values={["en-us"]="Walker",["ru"]="Шагоход"}},
     {Key="Dragon",Source="Dragon",Values={["en-us"]="Dragon",["ru"]="Дракон"}},

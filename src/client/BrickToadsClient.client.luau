@@ -398,6 +398,14 @@ local mobileDetailsScroll = make("ScrollingFrame", "Details", mobileDetails, {
     ScrollBarImageColor3 = C.muted, ScrollingDirection = Enum.ScrollingDirection.Y,
     CanvasSize = UDim2.new(), ClipsDescendants = true,
 })
+do
+    local reset = button(hud, "ResetCamera", "Reset camera", C.card, function()
+        spectatorCamera:resetView()
+        render()
+        layout()
+    end)
+    reset.TextSize, reset.ZIndex = 12, 20
+end
 -- Audio controls: begin
 local audioButton = button(hud, "AudioButton", "Audio", C.card, function()
     audioOpen = not audioOpen
@@ -846,6 +854,8 @@ render = function()
     local modern = level.bossMechanic == "PickupThrow"
     overlay.Visible = snapshot ~= nil and not snapshot.entryPending and (not active or personalMenu == true)
     hud.Visible, controls.Visible = active == true and not personalMenu, playable() == true
+    hud.ResetCamera.Visible = active == true and not personalMenu
+    hud.ResetCamera.Text = T("Reset camera")
     syncAudioSettings(active == true and not personalMenu)
     fault.Visible = snapshot ~= nil and snapshot.fault ~= nil and snapshot.fault ~= false and not stopped
     resultBanner.Visible = completed == true or stopped == true
@@ -1181,7 +1191,7 @@ layout = function()
     mobileDetails.Visible = isTouch and mobileExpanded ~= nil
     mobileStatusArrow.Visible, mobileGoalArrow.Visible = not queuePriority, not queuePriority
     if queuePriority then mobileGoalDetail.Text = T("Boss queue · below") end
-    local rosterWidth = portrait and (width - inset * 2) or math.min(292, width * 0.43)
+    local rosterWidth = portrait and (width - inset * 2 - 68) or math.min(292, width * 0.43)
     local rowHeightHUD, gap = short and 45 or 62, short and 5 or 7
     local count = snapshot and math.min(#(snapshot.heroes or {}), 3) or 1
     local enemy = snapshot and snapshot.enemyRole
@@ -1225,8 +1235,8 @@ layout = function()
     if portrait then
         position(objective, inset, inset + rosterHeight + 2, width - inset * 2, 120)
     else
-        local objectiveWidth = math.min(420, width - rosterWidth - inset * 3)
-        position(objective, width - inset - objectiveWidth, inset, objectiveWidth, short and 112 or 126)
+        local objectiveWidth = math.min(420, width - rosterWidth - inset * 3 - 68)
+        position(objective, width - inset - objectiveWidth - 68, inset, objectiveWidth, short and 112 or 126)
     end
     stageLabel.Position, stageLabel.Size = UDim2.fromOffset(13, 9), UDim2.new(1, -26, 0, 17)
     objectiveLabel.Position, objectiveLabel.Size = UDim2.fromOffset(13, 29), UDim2.new(1, -26, 0, short and 33 or 40)
@@ -1266,11 +1276,11 @@ layout = function()
     keyboardHint.Position, keyboardHint.Size = UDim2.new(0, inset, 1, -bottom), UDim2.fromOffset(260, 42)
     if isTouch then
         local mobileInset, cardGap = width < 500 and 8 or 12, 8
-        local statusWidth, goalWidth = math.min(172, width - mobileInset * 2), math.min(260, width - mobileInset * 2)
-        local twoRows = statusWidth + goalWidth + cardGap + 52 > width - mobileInset * 2
+        local statusWidth, goalWidth = math.min(172, width - mobileInset * 2 - 120), math.min(260, width - mobileInset * 2)
+        local twoRows = statusWidth + goalWidth + cardGap + 120 > width - mobileInset * 2
         local goalY = mobileInset + (twoRows and 52 or 0)
         position(mobileStatus, mobileInset, mobileInset, statusWidth, 44)
-        position(mobileGoal, width - mobileInset - goalWidth - (twoRows and 0 or 52), goalY, goalWidth, 44)
+        position(mobileGoal, width - mobileInset - goalWidth - (twoRows and 0 or 120), goalY, goalWidth, 44)
         mobileHudBottom = goalY + 44
         position(mobileStatusTitle, 8, 1, statusWidth - 32, 21)
         position(mobileStatusDetail, 8, 23, statusWidth - 32, 17)
@@ -1454,6 +1464,8 @@ layout = function()
             if spectatorHeight < 200 then enemyChoiceNote.Size = UDim2.fromOffset(spectatorWidth - 140, 25) end
         end
     end
+    local cameraInset = isTouch and (width < 500 and 8 or 12) or inset
+    position(hud.ResetCamera, width-cameraInset-60-(isTouch and 52 or 0), cameraInset, 60, 44)
     layoutAudioSettings(width,height,isTouch,mobileHudBottom,inset,short and 112 or 126,contentWidth)
     groupPanel:layout(contentWidth, width, height, spectatorWidth)
     if queueSideBySide and hasCameraButtons and not expanded then
